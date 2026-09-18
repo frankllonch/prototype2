@@ -1,0 +1,23 @@
+{
+  "name": "claudia-valsells",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "claudiavalsells.com — static site built from the WordPress content. WordPress stays the CMS.",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "extract": "node --experimental-strip-types scripts/extract.ts",
+    "images": "node --experimental-strip-types scripts/images.ts",
+    "crop": "node --experimental-strip-types scripts/crop.ts",
+    "build": "node --experimental-strip-types src/build.ts",
+    "serve": "node --experimental-strip-types scripts/serve.ts",
+    "dev": "npm run build && npm run serve",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "node-html-parser": "^7.0.1",
+    "sharp": "^0.34.2",
+    "typescript": "^5.7.2"
+  }
+}

@@ -1,0 +1,76 @@
+/* ------------------------------------------------------------------ hero */
+
+/* A screen of empty ground under the wordmark. The stack is drawn over it by
+   transforming the grid's own tiles, so nothing here is laid out twice. */
+.hero { height: 100vh; }
+html:not(.js) .hero, .hero:empty:not([data-hero]) { height: 0; }
+
+/* ------------------------------------------------------------------ grid */
+
+/*
+ * Rows of one height, widths following the pictures, left-aligned with wide
+ * gutters — the designer's grid. `--unit` is the row height and the only thing
+ * the density control changes; each tile's width is `--unit × --a`.
+ */
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--gap);
+  padding: 0 var(--pad) var(--gap);
+}
+.grid:not([data-stack]) { padding-top: var(--gap); }
+
+.tile {
+  flex: 0 0 auto;
+  height: var(--unit);
+  width: calc(var(--unit) * var(--a));
+  transform-origin: center center;
+  transition: height 0.5s var(--ease), width 0.5s var(--ease);
+}
+.tile[hidden] { display: none; }
+.tile picture, .tile img { width: 100%; height: 100%; }
+.tile img { object-fit: contain; }
+
+/* While the stack is dispersing, tiles move every frame: no size transitions,
+   and a compositing hint. Cleared once they settle. */
+.grid.is-stacked .tile { transition: none; will-change: transform; }
+.grid.is-stacked { pointer-events: none; }
+
+@media (max-width: 599px) { .grid { --unit: 120px !important; } }
+
+/* --------------------------------------------------------- colour chart */
+
+.chart-plates { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap); padding: var(--gap) var(--pad) 0; }
+.chart-plate { margin: 0; }
+.chart-text { max-width: 40rem; padding: var(--gap) var(--pad); }
+@media (max-width: 699px) { .chart-plates { grid-template-columns: 1fr; } }
+
+.prose { font-size: 13px; line-height: 1.6; }
+.prose p { margin: 0 0 0.9em; }
+.prose a { border-bottom: 1px solid currentColor; }
+.prose strong { font-weight: 600; }
+
+/* ---------------------------------------------------------------- detail */
+
+.detail {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(12rem, 17rem) 1fr minmax(12rem, 17rem);
+  align-items: center;
+  gap: var(--pad);
+  padding: var(--bar) var(--pad) var(--pad);
+}
+.detail-back { grid-column: 1; align-self: start; color: var(--blue-soft); }
+.detail-back:hover { color: var(--blue); }
+.detail-plate { grid-column: 2; margin: 0; display: grid; place-items: center; }
+.detail-plate img { max-height: 74vh; width: auto; height: auto; max-width: 100%; }
+.detail-caption { grid-column: 3; font-size: 14px; }
+.detail-title { font-size: 20px; letter-spacing: -0.01em; margin-bottom: 0.4rem; }
+.detail-caption p { margin: 0 0 0.15rem; }
+.detail-pager { grid-column: 1 / -1; display: flex; justify-content: space-between; color: var(--blue-soft); }
+.detail-pager a:hover { color: var(--blue); }
+@media (max-width: 899px) {
+  .detail { grid-template-columns: 1fr; }
+  .detail-back, .detail-plate, .detail-caption { grid-column: 1; }
+}

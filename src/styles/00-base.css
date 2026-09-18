@@ -1,0 +1,124 @@
+/*
+ * Claudia Valsells — stylesheet.
+ *
+ * Three colours from the designer's mockups, one typeface. The work carries all
+ * the colour; the interface is blue type on near-white, and peach for About.
+ */
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/inter-normal.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: light;
+  --paper: #fafafa;
+  --blue: #003880;
+  --blue-soft: color-mix(in srgb, var(--blue) 55%, var(--paper));
+  --peach: #fcd090;
+
+  --sans: 'Inter', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  --pad: clamp(1.25rem, 4vw, 4rem);
+  --gap: clamp(1.5rem, 4.5vw, 5rem);
+  --bar: 5.5rem;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --veil-blur: 8px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--blue);
+  font-family: var(--sans);
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+}
+img, picture { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3 { font-weight: 500; margin: 0; }
+p { margin: 0 0 1em; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+::selection { background: var(--blue); color: var(--paper); }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+.skip-link { position: absolute; left: -999px; top: 0; z-index: 100; background: var(--blue); color: var(--paper); padding: 0.6rem 1rem; }
+.skip-link:focus { left: 0; }
+
+/* Small caps for every label on the site. */
+.menu, .controls, .wordmark, .about-close, .panel-close, .panel-year,
+.lightbox-close, .lightbox-count, .slider-count, .detail-back, .detail-pager {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+body.is-locked { overflow: hidden; }
+
+/* ---------------------------------------------------------------- top bar */
+
+.top {
+  position: fixed; inset: 0 0 auto 0; z-index: 40;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: start;
+  gap: var(--pad);
+  padding: 1.6rem var(--pad) 0;
+  pointer-events: none;
+}
+.top > * { pointer-events: auto; }
+.wordmark { justify-self: center; font-size: 13px; letter-spacing: 0.08em; white-space: nowrap; }
+.menu { display: flex; flex-wrap: wrap; gap: 0.35rem 1.4rem; color: var(--blue-soft); }
+.menu a { transition: color 0.2s var(--ease); }
+.menu a:hover, .menu a[aria-current='page'] { color: var(--blue); }
+.top-end { justify-self: end; }
+
+.controls { display: flex; flex-direction: column; align-items: flex-end; gap: 0.35rem; color: var(--blue-soft); }
+.control-group { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.2rem 1rem; }
+.control { transition: color 0.2s var(--ease); font-variant-numeric: tabular-nums; }
+.control:hover, .control.is-active { color: var(--blue); }
+
+@media (max-width: 799px) {
+  .top { grid-template-columns: 1fr; justify-items: center; gap: 0.6rem; padding-top: 1.2rem; }
+  .top-end, .controls { justify-self: center; align-items: center; }
+  .control-group { justify-content: center; }
+  .wordmark { order: -1; }
+  :root { --bar: 8.5rem; }
+}
+
+/* ----------------------------------------------------------- page titles */
+
+.page-title {
+  padding: var(--bar) var(--pad) 0;
+  font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--blue-soft);
+}
+
+/* ------------------------------------------------------------ text roll */
+
+/*
+ * Hover text roll on the menu and wordmark, after landonorris.com: each
+ * character is a span with its own text made transparent and two copies drawn
+ * by pseudo-elements, one in place and one held below. On hover the top rolls
+ * out while the lower rolls in, each character 25ms after the last.
+ */
+.roll { position: relative; display: inline-block; white-space: pre; color: transparent; overflow: hidden;
+  padding-bottom: 0.18em; margin-bottom: -0.18em; }
+.roll::before, .roll::after {
+  content: attr(data-ch); position: absolute; left: 0; top: 0; color: var(--roll-color, var(--blue));
+  transition: transform 260ms ease-in-out, opacity 260ms ease-in-out;
+  transition-delay: calc(var(--i) * 25ms);
+}
+.roll::after { transform: translateY(100%); opacity: 0; }
+[data-roll]:hover .roll::before { transform: translateY(-100%); opacity: 0; }
+[data-roll]:hover .roll::after { transform: translateY(0); opacity: 1; }
+/* The span's own text is transparent, so the copies take their colour from a
+   variable rather than inheriting it. */
+.menu a { --roll-color: var(--blue-soft); }
+.menu a:hover, .menu a[aria-current='page'] { --roll-color: var(--blue); }

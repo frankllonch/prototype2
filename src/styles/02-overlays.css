@@ -1,0 +1,141 @@
+/*
+ * Overlays. One veil, shared by About and the panels, blurring the page
+ * behind them lightly enough that the work stays visible.
+ */
+.panel-veil {
+  position: fixed; inset: 0; z-index: 60;
+  background: color-mix(in srgb, var(--paper) 55%, transparent);
+  backdrop-filter: blur(var(--veil-blur)) saturate(108%);
+  -webkit-backdrop-filter: blur(var(--veil-blur)) saturate(108%);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.panel-veil.is-open { opacity: 1; pointer-events: auto; }
+@supports not (backdrop-filter: blur(1px)) {
+  .panel-veil { background: color-mix(in srgb, var(--paper) 92%, transparent); }
+}
+
+/* Shared panel mechanics: fixed, scrollable, eased in over most of a second. */
+.panel, .about {
+  position: fixed; inset: 0; z-index: 70;
+  overflow-y: auto;
+  opacity: 0; visibility: hidden;
+  transform: translateY(24px);
+  transition:
+    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0s linear 0.9s;
+  -webkit-overflow-scrolling: touch;
+}
+.panel.is-open, .about.is-open { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+/* Without scripting the panels are plain anchor targets, so they must be visible. */
+html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transform: none; }
+
+/* ------------------------------------------------------------------ about */
+
+/*
+ * The designer's About: peach ground, five lines of blue, the artwork still
+ * faintly present through the blur beneath.
+ */
+.about {
+  display: grid; place-items: center;
+  background: color-mix(in srgb, var(--peach) 90%, transparent);
+  color: var(--blue);
+  text-align: center;
+}
+.about-lines p {
+  margin: 0;
+  font-size: clamp(1.5rem, 3.4vw, 2.75rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.32;
+}
+.about-close { position: fixed; top: 1.6rem; right: var(--pad); }
+html:not(.js) .about { display: none; }
+html:not(.js) .about:target { display: grid; position: static; opacity: 1; visibility: visible; transform: none; min-height: 100vh; }
+
+/* ----------------------------------------------------------------- panels */
+
+.panel { padding: var(--bar) 0 var(--gap); background: color-mix(in srgb, var(--paper) 40%, transparent); }
+.panel-head {
+  display: flex; align-items: baseline; gap: 0.75rem;
+  max-width: 62rem; margin: 0 auto var(--gap); padding: 0 var(--pad);
+}
+.panel-title { font-size: 20px; letter-spacing: -0.01em; }
+.panel-year { color: var(--blue-soft); }
+.panel-close { margin-inline: auto 0; color: var(--blue-soft); }
+.panel-close:hover { color: var(--blue); }
+.panel-text { max-width: 40rem; margin: var(--gap) auto 0; padding: 0 var(--pad); }
+.panel-text .prose { max-width: none; }
+
+/* ----------------------------------------------------------------- slider */
+
+.slider { --slide-h: clamp(16rem, 60vh, 44rem); }
+.slider-track {
+  display: flex; gap: var(--pad);
+  overflow-x: auto; overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  padding: 0 50vw;
+  scrollbar-width: none; cursor: grab; outline: none;
+}
+.slider-track::-webkit-scrollbar { display: none; }
+.slider-track.is-dragging { cursor: grabbing; scroll-snap-type: none; }
+.slider-track:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+.slide { flex: 0 0 auto; margin: 0; scroll-snap-align: center; }
+.slide picture, .slide img { height: var(--slide-h); width: auto; max-width: 92vw; }
+.slide figcaption { color: var(--blue-soft); margin-top: 0.35rem; }
+.slider-track img { user-select: none; -webkit-user-drag: none; pointer-events: none; }
+.slider-bar { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: var(--pad); }
+.slider-count { color: var(--blue-soft); font-variant-numeric: tabular-nums; }
+.slider-nav { padding: 0.2rem 0.4rem; color: var(--blue-soft); font-size: 14px; transition: color 0.2s var(--ease); }
+.slider-nav:hover { color: var(--blue); }
+@media (max-width: 899px) { .slider { --slide-h: clamp(12rem, 48vh, 24rem); } }
+
+/* --------------------------------------------------------------- lightbox */
+
+/*
+ * Five columns, mirrored: nav, a column the width of the caption, the plate,
+ * the caption, nav — so the painting sits on the exact centre of the screen.
+ */
+.lightbox {
+  --caption: minmax(12rem, 17rem);
+  position: fixed; inset: 0; z-index: 80;
+  display: grid;
+  grid-template-columns: auto var(--caption) 1fr var(--caption) auto;
+  align-items: center; gap: var(--pad);
+  padding: var(--bar) var(--pad) var(--pad);
+  opacity: 0; transition: opacity 0.28s var(--ease);
+}
+.lightbox.is-open { opacity: 1; }
+.lightbox[hidden] { display: none; }
+.lightbox-veil {
+  position: fixed; inset: 0;
+  background: color-mix(in srgb, var(--paper) 84%, transparent);
+  backdrop-filter: blur(var(--veil-blur)) saturate(108%);
+  -webkit-backdrop-filter: blur(var(--veil-blur)) saturate(108%);
+}
+/* The veil is positioned, so anything meant to sit in front must be positioned too. */
+.lightbox-plate, .lightbox-caption, .lightbox-nav { position: relative; z-index: 1; }
+.lightbox-close { position: fixed; top: 1.6rem; right: var(--pad); z-index: 1; }
+.lightbox-plate { grid-column: 3; display: grid; place-items: center; min-width: 0; min-height: 0; transition: opacity 0.2s var(--ease); }
+.lightbox.is-changing .lightbox-plate, .lightbox.is-changing .lightbox-caption { opacity: 0; }
+.lightbox-plate img { max-height: 74vh; max-width: 100%; width: auto; height: auto; }
+.lightbox-caption { grid-column: 4; transition: opacity 0.2s var(--ease); font-size: 14px; }
+.lightbox-title { font-size: 20px; letter-spacing: -0.01em; margin: 0 0 0.4rem; }
+.lightbox-meta { display: flex; flex-direction: column; gap: 0.15rem; margin: 0 0 0.9rem; }
+.lightbox-count { margin: 0; color: var(--blue-soft); font-variant-numeric: tabular-nums; }
+.lightbox-nav { align-self: center; width: clamp(2rem, 4vw, 3.5rem); height: 40vh; color: var(--blue-soft); font-size: 15px; transition: color 0.2s var(--ease); }
+.lightbox-nav:hover { color: var(--blue); }
+.lightbox-prev { grid-column: 1; }
+.lightbox-next { grid-column: 5; }
+@media (max-width: 899px) {
+  .lightbox { grid-template-columns: 1fr; grid-template-rows: 1fr auto; align-content: center; }
+  .lightbox-plate { grid-column: 1; grid-row: 1; }
+  .lightbox-caption { grid-column: 1; grid-row: 2; }
+  .lightbox-nav { display: none; }
+  .lightbox-plate img { max-height: 58vh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0.001ms !important; animation-duration: 0.001ms !important; }
+}
