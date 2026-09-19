@@ -10,4 +10,7 @@ git checkout -q -B gh-pages
 git add -A
 git -c user.name="Frank Llonch" -c user.email="llonchfrank@gmail.com" commit -q -m "Deploy" || true
 git push -f -q "https://github.com/frankllonch/$REPO.git" gh-pages
+cd ..
+# The Pages build carries /$REPO/ in every URL; put a root build back for local preview.
+npm run build >/dev/null
 echo "https://frankllonch.github.io/$REPO/"
