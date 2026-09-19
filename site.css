@@ -1,0 +1,344 @@
+/*
+ * Claudia Valsells — stylesheet.
+ *
+ * Three colours from the designer's mockups, one typeface. The work carries all
+ * the colour; the interface is blue type on near-white, and peach for About.
+ */
+@font-face {
+  font-family: 'Inter';
+  src: url('/prototype2/fonts/inter-normal.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: light;
+  --paper: #fafafa;
+  --blue: #003880;
+  --blue-soft: color-mix(in srgb, var(--blue) 55%, var(--paper));
+  --peach: #fcd090;
+
+  --sans: 'Inter', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  --pad: clamp(1.25rem, 4vw, 4rem);
+  --gap: clamp(1.5rem, 4.5vw, 5rem);
+  --bar: 5.5rem;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --veil-blur: 8px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--blue);
+  font-family: var(--sans);
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+}
+img, picture { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3 { font-weight: 500; margin: 0; }
+p { margin: 0 0 1em; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+::selection { background: var(--blue); color: var(--paper); }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+.skip-link { position: absolute; left: -999px; top: 0; z-index: 100; background: var(--blue); color: var(--paper); padding: 0.6rem 1rem; }
+.skip-link:focus { left: 0; }
+
+/* Small caps for every label on the site. */
+.menu, .controls, .wordmark, .about-close, .panel-close, .panel-year,
+.lightbox-close, .lightbox-count, .slider-count, .detail-back, .detail-pager {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+body.is-locked { overflow: hidden; }
+
+/* ---------------------------------------------------------------- top bar */
+
+.top {
+  position: fixed; inset: 0 0 auto 0; z-index: 40;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: start;
+  gap: var(--pad);
+  padding: 1.6rem var(--pad) 0;
+  pointer-events: none;
+}
+.top > * { pointer-events: auto; }
+.wordmark { justify-self: center; font-size: 13px; letter-spacing: 0.08em; white-space: nowrap; }
+.menu { display: flex; flex-wrap: wrap; gap: 0.35rem 1.4rem; color: var(--blue-soft); }
+.menu a { transition: color 0.2s var(--ease); }
+.menu a:hover, .menu a[aria-current='page'] { color: var(--blue); }
+.top-end { justify-self: end; }
+
+.controls { display: flex; flex-direction: column; align-items: flex-end; gap: 0.35rem; color: var(--blue-soft); }
+.control-group { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.2rem 1rem; }
+.control { transition: color 0.2s var(--ease); font-variant-numeric: tabular-nums; }
+.control:hover, .control.is-active { color: var(--blue); }
+
+@media (max-width: 799px) {
+  .top { grid-template-columns: 1fr; justify-items: center; gap: 0.6rem; padding-top: 1.2rem; }
+  .top-end, .controls { justify-self: center; align-items: center; }
+  .control-group { justify-content: center; }
+  .wordmark { order: -1; }
+  :root { --bar: 8.5rem; }
+}
+
+/* ----------------------------------------------------------- page titles */
+
+.page-title {
+  padding: var(--bar) var(--pad) 0;
+  font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--blue-soft);
+}
+
+/* ------------------------------------------------------------ text roll */
+
+/*
+ * Hover text roll on the menu and wordmark, after landonorris.com: each
+ * character is a span with its own text made transparent and two copies drawn
+ * by pseudo-elements, one in place and one held below. On hover the top rolls
+ * out while the lower rolls in, each character 25ms after the last.
+ */
+.roll { position: relative; display: inline-block; white-space: pre; color: transparent; overflow: hidden;
+  padding-bottom: 0.18em; margin-bottom: -0.18em; }
+.roll::before, .roll::after {
+  content: attr(data-ch); position: absolute; left: 0; top: 0; color: var(--roll-color, var(--blue));
+  transition: transform 260ms ease-in-out, opacity 260ms ease-in-out;
+  transition-delay: calc(var(--i) * 25ms);
+}
+.roll::after { transform: translateY(100%); opacity: 0; }
+[data-roll]:hover .roll::before { transform: translateY(-100%); opacity: 0; }
+[data-roll]:hover .roll::after { transform: translateY(0); opacity: 1; }
+/* The span's own text is transparent, so the copies take their colour from a
+   variable rather than inheriting it. */
+.menu a { --roll-color: var(--blue-soft); }
+.menu a:hover, .menu a[aria-current='page'] { --roll-color: var(--blue); }
+
+/* ------------------------------------------------------------------ hero */
+
+/* A screen of empty ground under the wordmark. The stack is drawn over it by
+   transforming the grid's own tiles, so nothing here is laid out twice. */
+.hero { height: 100vh; }
+html:not(.js) .hero, .hero:empty:not([data-hero]) { height: 0; }
+
+/* ------------------------------------------------------------------ grid */
+
+/*
+ * Rows of one height, widths following the pictures, left-aligned with wide
+ * gutters — the designer's grid. `--unit` is the row height and the only thing
+ * the density control changes; each tile's width is `--unit × --a`.
+ */
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--gap);
+  padding: 0 var(--pad) var(--gap);
+}
+.grid:not([data-stack]) { padding-top: var(--gap); }
+
+.tile {
+  flex: 0 0 auto;
+  height: var(--unit);
+  width: calc(var(--unit) * var(--a));
+  transform-origin: center center;
+  transition: height 0.5s var(--ease), width 0.5s var(--ease);
+}
+.tile[hidden] { display: none; }
+.tile picture, .tile img { width: 100%; height: 100%; }
+.tile img { object-fit: contain; }
+
+/* While the stack is dispersing, tiles move every frame: no size transitions,
+   and a compositing hint. Cleared once they settle. */
+.grid.is-stacked .tile { transition: none; will-change: transform; }
+.grid.is-stacked { pointer-events: none; }
+
+@media (max-width: 599px) { .grid { --unit: 120px !important; } }
+
+/* --------------------------------------------------------- colour chart */
+
+.chart-plates { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap); padding: var(--gap) var(--pad) 0; }
+.chart-plate { margin: 0; }
+.chart-text { max-width: 40rem; padding: var(--gap) var(--pad); }
+@media (max-width: 699px) { .chart-plates { grid-template-columns: 1fr; } }
+
+.prose { font-size: 13px; line-height: 1.6; }
+.prose p { margin: 0 0 0.9em; }
+.prose a { border-bottom: 1px solid currentColor; }
+.prose strong { font-weight: 600; }
+
+/* ---------------------------------------------------------------- detail */
+
+.detail {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(12rem, 17rem) 1fr minmax(12rem, 17rem);
+  align-items: center;
+  gap: var(--pad);
+  padding: var(--bar) var(--pad) var(--pad);
+}
+.detail-back { grid-column: 1; align-self: start; color: var(--blue-soft); }
+.detail-back:hover { color: var(--blue); }
+.detail-plate { grid-column: 2; margin: 0; display: grid; place-items: center; }
+.detail-plate img { max-height: 74vh; width: auto; height: auto; max-width: 100%; }
+.detail-caption { grid-column: 3; font-size: 14px; }
+.detail-title { font-size: 20px; letter-spacing: -0.01em; margin-bottom: 0.4rem; }
+.detail-caption p { margin: 0 0 0.15rem; }
+.detail-pager { grid-column: 1 / -1; display: flex; justify-content: space-between; color: var(--blue-soft); }
+.detail-pager a:hover { color: var(--blue); }
+@media (max-width: 899px) {
+  .detail { grid-template-columns: 1fr; }
+  .detail-back, .detail-plate, .detail-caption { grid-column: 1; }
+}
+
+/*
+ * Overlays. One veil, shared by About and the panels, blurring the page
+ * behind them lightly enough that the work stays visible.
+ */
+.panel-veil {
+  position: fixed; inset: 0; z-index: 60;
+  background: color-mix(in srgb, var(--paper) 55%, transparent);
+  backdrop-filter: blur(var(--veil-blur)) saturate(108%);
+  -webkit-backdrop-filter: blur(var(--veil-blur)) saturate(108%);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.panel-veil.is-open { opacity: 1; pointer-events: auto; }
+@supports not (backdrop-filter: blur(1px)) {
+  .panel-veil { background: color-mix(in srgb, var(--paper) 92%, transparent); }
+}
+
+/* Shared panel mechanics: fixed, scrollable, eased in over most of a second. */
+.panel, .about {
+  position: fixed; inset: 0; z-index: 70;
+  overflow-y: auto;
+  opacity: 0; visibility: hidden;
+  transform: translateY(24px);
+  transition:
+    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0s linear 0.9s;
+  -webkit-overflow-scrolling: touch;
+}
+.panel.is-open, .about.is-open { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+/* Without scripting the panels are plain anchor targets, so they must be visible. */
+html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transform: none; }
+
+/* ------------------------------------------------------------------ about */
+
+/*
+ * The designer's About: peach ground, five lines of blue, the artwork still
+ * faintly present through the blur beneath.
+ */
+.about {
+  display: grid; place-items: center;
+  background: color-mix(in srgb, var(--peach) 90%, transparent);
+  color: var(--blue);
+  text-align: center;
+}
+.about-lines p {
+  margin: 0;
+  font-size: clamp(1.5rem, 3.4vw, 2.75rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.32;
+}
+.about-close { position: fixed; top: 1.6rem; right: var(--pad); }
+html:not(.js) .about { display: none; }
+html:not(.js) .about:target { display: grid; position: static; opacity: 1; visibility: visible; transform: none; min-height: 100vh; }
+
+/* ----------------------------------------------------------------- panels */
+
+.panel { padding: var(--bar) 0 var(--gap); background: color-mix(in srgb, var(--paper) 40%, transparent); }
+.panel-head {
+  display: flex; align-items: baseline; gap: 0.75rem;
+  max-width: 62rem; margin: 0 auto var(--gap); padding: 0 var(--pad);
+}
+.panel-title { font-size: 20px; letter-spacing: -0.01em; }
+.panel-year { color: var(--blue-soft); }
+.panel-close { margin-inline: auto 0; color: var(--blue-soft); }
+.panel-close:hover { color: var(--blue); }
+.panel-text { max-width: 40rem; margin: var(--gap) auto 0; padding: 0 var(--pad); }
+.panel-text .prose { max-width: none; }
+
+/* ----------------------------------------------------------------- slider */
+
+.slider { --slide-h: clamp(16rem, 60vh, 44rem); }
+.slider-track {
+  display: flex; gap: var(--pad);
+  overflow-x: auto; overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  padding: 0 50vw;
+  scrollbar-width: none; cursor: grab; outline: none;
+}
+.slider-track::-webkit-scrollbar { display: none; }
+.slider-track.is-dragging { cursor: grabbing; scroll-snap-type: none; }
+.slider-track:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+.slide { flex: 0 0 auto; margin: 0; scroll-snap-align: center; }
+.slide picture, .slide img { height: var(--slide-h); width: auto; max-width: 92vw; }
+.slide figcaption { color: var(--blue-soft); margin-top: 0.35rem; }
+.slider-track img { user-select: none; -webkit-user-drag: none; pointer-events: none; }
+.slider-bar { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: var(--pad); }
+.slider-count { color: var(--blue-soft); font-variant-numeric: tabular-nums; }
+.slider-nav { padding: 0.2rem 0.4rem; color: var(--blue-soft); font-size: 14px; transition: color 0.2s var(--ease); }
+.slider-nav:hover { color: var(--blue); }
+@media (max-width: 899px) { .slider { --slide-h: clamp(12rem, 48vh, 24rem); } }
+
+/* --------------------------------------------------------------- lightbox */
+
+/*
+ * Five columns, mirrored: nav, a column the width of the caption, the plate,
+ * the caption, nav — so the painting sits on the exact centre of the screen.
+ */
+.lightbox {
+  --caption: minmax(12rem, 17rem);
+  position: fixed; inset: 0; z-index: 80;
+  display: grid;
+  grid-template-columns: auto var(--caption) 1fr var(--caption) auto;
+  align-items: center; gap: var(--pad);
+  padding: var(--bar) var(--pad) var(--pad);
+  opacity: 0; transition: opacity 0.28s var(--ease);
+}
+.lightbox.is-open { opacity: 1; }
+.lightbox[hidden] { display: none; }
+.lightbox-veil {
+  position: fixed; inset: 0;
+  background: color-mix(in srgb, var(--paper) 84%, transparent);
+  backdrop-filter: blur(var(--veil-blur)) saturate(108%);
+  -webkit-backdrop-filter: blur(var(--veil-blur)) saturate(108%);
+}
+/* The veil is positioned, so anything meant to sit in front must be positioned too. */
+.lightbox-plate, .lightbox-caption, .lightbox-nav { position: relative; z-index: 1; }
+.lightbox-close { position: fixed; top: 1.6rem; right: var(--pad); z-index: 1; }
+.lightbox-plate { grid-column: 3; display: grid; place-items: center; min-width: 0; min-height: 0; transition: opacity 0.2s var(--ease); }
+.lightbox.is-changing .lightbox-plate, .lightbox.is-changing .lightbox-caption { opacity: 0; }
+.lightbox-plate img { max-height: 74vh; max-width: 100%; width: auto; height: auto; }
+.lightbox-caption { grid-column: 4; transition: opacity 0.2s var(--ease); font-size: 14px; }
+.lightbox-title { font-size: 20px; letter-spacing: -0.01em; margin: 0 0 0.4rem; }
+.lightbox-meta { display: flex; flex-direction: column; gap: 0.15rem; margin: 0 0 0.9rem; }
+.lightbox-count { margin: 0; color: var(--blue-soft); font-variant-numeric: tabular-nums; }
+.lightbox-nav { align-self: center; width: clamp(2rem, 4vw, 3.5rem); height: 40vh; color: var(--blue-soft); font-size: 15px; transition: color 0.2s var(--ease); }
+.lightbox-nav:hover { color: var(--blue); }
+.lightbox-prev { grid-column: 1; }
+.lightbox-next { grid-column: 5; }
+@media (max-width: 899px) {
+  .lightbox { grid-template-columns: 1fr; grid-template-rows: 1fr auto; align-content: center; }
+  .lightbox-plate { grid-column: 1; grid-row: 1; }
+  .lightbox-caption { grid-column: 1; grid-row: 2; }
+  .lightbox-nav { display: none; }
+  .lightbox-plate img { max-height: 58vh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0.001ms !important; animation-duration: 0.001ms !important; }
+}
+
