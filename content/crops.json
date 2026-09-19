@@ -2,877 +2,990 @@
   "c6f3649eda23d4a8": {
     "status": "ok",
     "box": {
-      "left": 237,
-      "top": 627,
-      "width": 1177,
-      "height": 844
+      "left": 236,
+      "top": 640,
+      "width": 1172,
+      "height": 827
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 1.3945497630331753,
-    "metaAspect": 1.3839285714285714
+    "cropAspect": 1.4171704957678355,
+    "metaAspect": 1.3839285714285714,
+    "reason": "snapped",
+    "review": "confirmed on visual review"
   },
   "f6f7b4a3c2850ce3": {
     "status": "rejected",
-    "reason": "aspect 0.781 vs painting 0.857 (8.9% off)",
+    "reason": "aspect 0.782 vs painting 0.857 (8.8% off)",
     "box": {
-      "left": 287,
-      "top": 483,
-      "width": 1037,
-      "height": 1328
+      "left": 299,
+      "top": 487,
+      "width": 1023,
+      "height": 1309
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.7808734939759037,
-    "metaAspect": 0.8571428571428571
+    "cropAspect": 0.7815126050420168,
+    "metaAspect": 0.8571428571428571,
+    "review": "rescued: clean on visual review despite the dimension mismatch"
   },
   "a0568bf580954ac6": {
     "status": "ok",
     "box": {
-      "left": 268,
-      "top": 453,
-      "width": 1055,
-      "height": 1243
+      "left": 275,
+      "top": 462,
+      "width": 1039,
+      "height": 1227
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.8487530168946098,
-    "metaAspect": 0.8421052631578947
+    "cropAspect": 0.8467807660961695,
+    "metaAspect": 0.8421052631578947,
+    "reason": "snapped",
+    "review": "confirmed on visual review"
   },
   "84da8f4c88d30754": {
     "status": "ok",
     "box": {
-      "left": 279,
-      "top": 349,
-      "width": 1050,
+      "left": 283,
+      "top": 351,
+      "width": 1044,
       "height": 1283
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.818394388152767,
-    "metaAspect": 0.8125
+    "cropAspect": 0.813717848791894,
+    "metaAspect": 0.8125,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "4f3a7cd510833611": {
     "status": "rejected",
-    "reason": "aspect 0.788 vs painting 0.863 (8.7% off)",
+    "reason": "aspect 0.793 vs painting 0.863 (8.1% off)",
     "box": {
-      "left": 250,
-      "top": 547,
-      "width": 1050,
-      "height": 1333
+      "left": 251,
+      "top": 545,
+      "width": 1047,
+      "height": 1320
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.7876969242310577,
-    "metaAspect": 0.863013698630137
+    "cropAspect": 0.7931818181818182,
+    "metaAspect": 0.863013698630137,
+    "review": "rescued: clean on visual review despite the dimension mismatch"
   },
   "cb1da9b9f68f0e56": {
     "status": "ok",
     "box": {
-      "left": 162,
-      "top": 495,
-      "width": 1275,
-      "height": 1042
+      "left": 166,
+      "top": 496,
+      "width": 1270,
+      "height": 1036
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 1.223608445297505,
-    "metaAspect": 1.2272727272727273
+    "cropAspect": 1.225868725868726,
+    "metaAspect": 1.2272727272727273,
+    "reason": "snapped",
+    "review": "confirmed on visual review"
   },
   "825a0c2fc7d3f338": {
     "status": "rejected",
-    "reason": "aspect 0.798 vs painting 0.863 (7.6% off)",
+    "reason": "aspect 0.806 vs painting 0.863 (6.6% off)",
     "box": {
-      "left": 247,
-      "top": 547,
-      "width": 1053,
-      "height": 1320
+      "left": 246,
+      "top": 545,
+      "width": 1055,
+      "height": 1309
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.7977272727272727,
-    "metaAspect": 0.863013698630137
+    "cropAspect": 0.8059587471352178,
+    "metaAspect": 0.863013698630137,
+    "review": "rescued: clean on visual review despite the dimension mismatch"
   },
   "bd88dd994155fb53": {
     "status": "ok",
     "box": {
-      "left": 12,
-      "top": 527,
-      "width": 1577,
-      "height": 1860
+      "left": 5,
+      "top": 534,
+      "width": 1492,
+      "height": 1861
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.8478494623655914,
-    "metaAspect": 0.8289473684210527
+    "cropAspect": 0.8017195056421279,
+    "metaAspect": 0.8289473684210527,
+    "reason": "grown+snapped",
+    "review": "dropped: not a clean crop on visual review"
   },
   "79daf322662503aa": {
     "status": "ok",
     "box": {
-      "left": 363,
-      "top": 442,
-      "width": 854,
-      "height": 1053
+      "left": 365,
+      "top": 443,
+      "width": 848,
+      "height": 1052
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.8110161443494777,
-    "metaAspect": 0.8
+    "cropAspect": 0.8060836501901141,
+    "metaAspect": 0.8,
+    "reason": "snapped",
+    "review": "confirmed on visual review"
   },
   "2bc92910b70b25a1": {
     "status": "rejected",
-    "reason": "aspect 0.585 vs painting 0.857 (31.8% off)",
+    "reason": "aspect 0.623 vs painting 0.857 (27.3% off)",
     "box": {
-      "left": 176,
-      "top": 264,
-      "width": 1201,
-      "height": 2053
+      "left": 179,
+      "top": 366,
+      "width": 1158,
+      "height": 1858
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.584997564539698,
+    "cropAspect": 0.6232508073196986,
     "metaAspect": 0.8571428571428571
   },
   "9090a52648a45a76": {
     "status": "rejected",
     "reason": "aspect 0.766 vs painting 0.857 (10.7% off)",
     "box": {
-      "left": 210,
-      "top": 372,
-      "width": 1193,
-      "height": 1558
+      "left": 209,
+      "top": 370,
+      "width": 1195,
+      "height": 1561
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.7657252888318357,
-    "metaAspect": 0.8571428571428571
+    "cropAspect": 0.7655349135169763,
+    "metaAspect": 0.8571428571428571,
+    "review": "rescued: clean on visual review despite the dimension mismatch"
   },
   "4a2d92501f32ca1a": {
     "status": "rejected",
-    "reason": "aspect 0.779 vs painting 0.829 (6.0% off)",
+    "reason": "aspect 0.779 vs painting 0.829 (6.1% off)",
     "box": {
-      "left": 168,
-      "top": 396,
-      "width": 1286,
-      "height": 1651
+      "left": 167,
+      "top": 394,
+      "width": 1288,
+      "height": 1654
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.7789218655360388,
-    "metaAspect": 0.8289473684210527
+    "cropAspect": 0.7787182587666264,
+    "metaAspect": 0.8289473684210527,
+    "review": "rescued: clean on visual review despite the dimension mismatch"
   },
   "fcd0540a1c8fd8a8": {
     "status": "ok",
     "box": {
-      "left": 170,
-      "top": 301,
-      "width": 530,
-      "height": 626
+      "left": 172,
+      "top": 302,
+      "width": 526,
+      "height": 644
     },
     "imageAspect": 0.66640625,
-    "cropAspect": 0.8466453674121406,
-    "metaAspect": 0.844559585492228
+    "cropAspect": 0.8167701863354038,
+    "metaAspect": 0.844559585492228,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "1b142d1c7d633d61": {
     "status": "ok",
     "box": {
-      "left": 358,
-      "top": 431,
-      "width": 854,
-      "height": 1061
+      "left": 363,
+      "top": 433,
+      "width": 851,
+      "height": 1058
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.8049010367577757,
-    "metaAspect": 0.8
+    "cropAspect": 0.8043478260869565,
+    "metaAspect": 0.8,
+    "reason": "snapped",
+    "review": "confirmed on visual review"
   },
   "f3fd68b6ae4a390f": {
     "status": "rejected",
     "reason": "aspect 0.252 vs painting 0.857 (70.6% off)",
     "box": {
-      "left": 773,
-      "top": 15,
-      "width": 598,
-      "height": 2370
+      "left": 772,
+      "top": 13,
+      "width": 599,
+      "height": 2375
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.2523206751054852,
+    "cropAspect": 0.2522105263157895,
     "metaAspect": 0.8571428571428571
   },
   "0cb35503e6789d8c": {
-    "status": "rejected",
-    "reason": "aspect 0.927 vs painting 0.842 (10.1% off)",
+    "status": "ok",
     "box": {
-      "left": 243,
-      "top": 531,
-      "width": 1344,
-      "height": 1450
+      "left": 100,
+      "top": 534,
+      "width": 1487,
+      "height": 1861
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.926896551724138,
-    "metaAspect": 0.8421052631578947
+    "cropAspect": 0.799032778076303,
+    "metaAspect": 0.8421052631578947,
+    "reason": "grown+snapped",
+    "review": "dropped: not a clean crop on visual review"
   },
   "a517913f143c4532": {
     "status": "ok",
     "box": {
-      "left": 295,
-      "top": 501,
-      "width": 1018,
-      "height": 1219
+      "left": 302,
+      "top": 500,
+      "width": 1007,
+      "height": 1222
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.8351107465135357,
-    "metaAspect": 0.8
+    "cropAspect": 0.8240589198036007,
+    "metaAspect": 0.8,
+    "reason": "snapped",
+    "review": "confirmed on visual review"
   },
   "4c49b79b737ac3cb": {
     "status": "rejected",
-    "reason": "aspect 0.950 vs painting 0.842 (12.8% off)",
+    "reason": "aspect 0.764 vs painting 0.842 (9.3% off)",
     "box": {
-      "left": 165,
+      "left": 164,
       "top": 520,
-      "width": 1362,
-      "height": 1434
+      "width": 1431,
+      "height": 1874
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.9497907949790795,
+    "cropAspect": 0.763607257203842,
     "metaAspect": 0.8421052631578947
   },
   "538b312eb6fd6862": {
     "status": "ok",
     "box": {
-      "left": 303,
-      "top": 509,
-      "width": 1016,
+      "left": 302,
+      "top": 508,
+      "width": 1010,
       "height": 1217
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.8348397699260477,
-    "metaAspect": 0.8
+    "cropAspect": 0.8299096138044372,
+    "metaAspect": 0.8,
+    "reason": "snapped",
+    "review": "confirmed on visual review"
   },
   "afe549a39e46e804": {
     "status": "rejected",
-    "reason": "aspect 0.584 vs painting 0.800 (27.1% off)",
+    "reason": "aspect 0.638 vs painting 0.800 (20.3% off)",
     "box": {
-      "left": 279,
-      "top": 308,
-      "width": 971,
-      "height": 1664
+      "left": 280,
+      "top": 404,
+      "width": 938,
+      "height": 1471
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.5835336538461539,
+    "cropAspect": 0.637661454792658,
     "metaAspect": 0.8
   },
   "3dcfa5e9a3b1b5b1": {
     "status": "rejected",
-    "reason": "aspect 0.763 vs painting 0.833 (8.5% off)",
+    "reason": "aspect 0.767 vs painting 0.833 (7.9% off)",
     "box": {
-      "left": 416,
-      "top": 476,
-      "width": 775,
-      "height": 1016
+      "left": 421,
+      "top": 478,
+      "width": 771,
+      "height": 1005
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.7627952755905512,
-    "metaAspect": 0.8333333333333334
+    "cropAspect": 0.7671641791044777,
+    "metaAspect": 0.8333333333333334,
+    "review": "rescued: clean on visual review despite the dimension mismatch"
   },
   "2ddcb102a9a2ecce": {
     "status": "ok",
     "box": {
-      "left": 297,
-      "top": 403,
-      "width": 1018,
-      "height": 1288
+      "left": 5,
+      "top": 401,
+      "width": 1590,
+      "height": 1291
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.7903726708074534,
-    "metaAspect": 0.8
+    "cropAspect": 1.2316034082106895,
+    "metaAspect": 1.25,
+    "reason": "grown",
+    "review": "dropped: not a clean crop on visual review"
   },
   "8897e16513714890": {
     "status": "ok",
     "box": {
-      "left": 295,
-      "top": 405,
-      "width": 1016,
-      "height": 1264
+      "left": 296,
+      "top": 406,
+      "width": 1013,
+      "height": 1243
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.8037974683544303,
-    "metaAspect": 0.8
+    "cropAspect": 0.8149637972646823,
+    "metaAspect": 0.8,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "bfcda1e421c5f40d": {
     "status": "rejected",
-    "reason": "aspect 0.768 vs painting 0.833 (7.9% off)",
+    "reason": "aspect 0.779 vs painting 0.833 (6.5% off)",
     "box": {
-      "left": 422,
-      "top": 481,
-      "width": 770,
-      "height": 1003
+      "left": 424,
+      "top": 483,
+      "width": 766,
+      "height": 983
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.7676969092721835,
-    "metaAspect": 0.8333333333333334
+    "cropAspect": 0.7792472024415056,
+    "metaAspect": 0.8333333333333334,
+    "review": "rescued: clean on visual review despite the dimension mismatch"
   },
   "cb821e7ac3c5e403": {
     "status": "ok",
     "box": {
-      "left": 287,
-      "top": 403,
-      "width": 1018,
-      "height": 1286
+      "left": 291,
+      "top": 404,
+      "width": 1015,
+      "height": 1246
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.7916018662519441,
-    "metaAspect": 0.8
+    "cropAspect": 0.8146067415730337,
+    "metaAspect": 0.8,
+    "reason": "snapped",
+    "review": "confirmed on visual review"
   },
   "6e78f75309ede633": {
     "status": "ok",
     "box": {
-      "left": 266,
-      "top": 561,
-      "width": 1079,
-      "height": 870
+      "left": 273,
+      "top": 560,
+      "width": 1074,
+      "height": 864
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 1.2402298850574713,
-    "metaAspect": 1.2307692307692308
+    "cropAspect": 1.2430555555555556,
+    "metaAspect": 1.2307692307692308,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "466e663cbb8a4cf1": {
     "status": "rejected",
     "reason": "aspect 0.773 vs painting 0.833 (7.2% off)",
     "box": {
-      "left": 406,
-      "top": 481,
-      "width": 783,
-      "height": 1013
+      "left": 405,
+      "top": 480,
+      "width": 785,
+      "height": 1015
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.7729516288252715,
-    "metaAspect": 0.8333333333333334
+    "cropAspect": 0.7733990147783252,
+    "metaAspect": 0.8333333333333334,
+    "review": "rescued: clean on visual review despite the dimension mismatch"
   },
   "146ade60d5b24bdd": {
     "status": "rejected",
-    "reason": "aspect 0.758 vs painting 0.833 (9.1% off)",
+    "reason": "aspect 0.771 vs painting 0.833 (7.5% off)",
     "box": {
-      "left": 422,
-      "top": 473,
-      "width": 770,
-      "height": 1016
+      "left": 424,
+      "top": 475,
+      "width": 766,
+      "height": 994
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.7578740157480315,
+    "cropAspect": 0.7706237424547284,
     "metaAspect": 0.8333333333333334
   },
   "64a2b145d6850885": {
     "status": "ok",
     "box": {
-      "left": 274,
-      "top": 596,
-      "width": 1058,
-      "height": 952
+      "left": 283,
+      "top": 597,
+      "width": 1028,
+      "height": 928
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 1.111344537815126,
-    "metaAspect": 1.1666666666666667
+    "cropAspect": 1.1077586206896552,
+    "metaAspect": 1.1666666666666667,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "71c848b394254b54": {
     "status": "ok",
     "box": {
-      "left": 327,
-      "top": 445,
+      "left": 326,
+      "top": 446,
       "width": 989,
-      "height": 1227
+      "height": 1225
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.8060309698451508,
-    "metaAspect": 0.8125
+    "cropAspect": 0.8073469387755102,
+    "metaAspect": 0.8125,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "8fa84ca81dacf2c5": {
     "status": "rejected",
-    "reason": "aspect 1.108 vs painting 1.200 (7.7% off)",
+    "reason": "aspect 1.125 vs painting 1.200 (6.3% off)",
     "box": {
-      "left": 321,
-      "top": 518,
-      "width": 955,
-      "height": 862
+      "left": 320,
+      "top": 520,
+      "width": 957,
+      "height": 851
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 1.1078886310904872,
+    "cropAspect": 1.1245593419506463,
     "metaAspect": 1.2
   },
   "6b9c081e4493588a": {
     "status": "ok",
     "box": {
-      "left": 361,
-      "top": 570,
-      "width": 894,
-      "height": 1108
+      "left": 363,
+      "top": 571,
+      "width": 888,
+      "height": 1103
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.8068592057761733,
-    "metaAspect": 0.8125
+    "cropAspect": 0.8050770625566637,
+    "metaAspect": 0.8125,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "4d4c20afd606b527": {
     "status": "rejected",
-    "reason": "aspect 1.039 vs painting 1.278 (18.7% off)",
+    "reason": "aspect 1.050 vs painting 1.278 (17.8% off)",
     "box": {
-      "left": 321,
-      "top": 537,
-      "width": 989,
-      "height": 952
+      "left": 331,
+      "top": 544,
+      "width": 960,
+      "height": 914
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 1.0388655462184875,
-    "metaAspect": 1.2777777777777777
+    "cropAspect": 1.0503282275711159,
+    "metaAspect": 1.2777777777777777,
+    "review": "rescued: clean on visual review despite the dimension mismatch"
   },
   "7c3bb047468388b2": {
     "status": "ok",
     "box": {
-      "left": 424,
-      "top": 447,
-      "width": 780,
-      "height": 955
+      "left": 429,
+      "top": 448,
+      "width": 771,
+      "height": 954
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.8167539267015707,
-    "metaAspect": 0.8
+    "cropAspect": 0.8081761006289309,
+    "metaAspect": 0.8,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "b8d99bac011929bc": {
     "status": "rejected",
-    "reason": "aspect 1.024 vs painting 1.385 (26.0% off)",
+    "reason": "aspect 1.038 vs painting 1.385 (25.0% off)",
     "box": {
-      "left": 430,
-      "top": 622,
-      "width": 759,
-      "height": 741
+      "left": 440,
+      "top": 634,
+      "width": 732,
+      "height": 705
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 1.0242914979757085,
-    "metaAspect": 1.3846153846153846
+    "cropAspect": 1.0382978723404255,
+    "metaAspect": 1.3846153846153846,
+    "review": "rescued: clean on visual review despite the dimension mismatch"
   },
   "c189ca7388da81a3": {
     "status": "ok",
     "box": {
-      "left": 255,
-      "top": 516,
-      "width": 1111,
-      "height": 926
+      "left": 257,
+      "top": 523,
+      "width": 1097,
+      "height": 904
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 1.1997840172786176,
-    "metaAspect": 1.25
+    "cropAspect": 1.2134955752212389,
+    "metaAspect": 1.25,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "7df9b5f53e2fedd6": {
     "status": "ok",
     "box": {
-      "left": 247,
-      "top": 518,
-      "width": 1124,
-      "height": 926
+      "left": 254,
+      "top": 523,
+      "width": 1100,
+      "height": 914
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 1.2138228941684666,
-    "metaAspect": 1.25
+    "cropAspect": 1.2035010940919038,
+    "metaAspect": 1.25,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "517a3c32520b8e3a": {
     "status": "ok",
     "box": {
-      "left": 284,
-      "top": 591,
-      "width": 1061,
-      "height": 955
+      "left": 288,
+      "top": 595,
+      "width": 1036,
+      "height": 941
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 1.1109947643979057,
-    "metaAspect": 1.1666666666666667
+    "cropAspect": 1.1009564293304994,
+    "metaAspect": 1.1666666666666667,
+    "reason": "snapped",
+    "review": "confirmed on visual review"
   },
   "d880d4cbd0097fdc": {
     "status": "ok",
     "box": {
-      "left": 279,
-      "top": 601,
-      "width": 1040,
-      "height": 947
+      "left": 278,
+      "top": 600,
+      "width": 1042,
+      "height": 949
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 1.0982048574445618,
-    "metaAspect": 1.1666666666666667
+    "cropAspect": 1.0979978925184404,
+    "metaAspect": 1.1666666666666667,
+    "reason": "grown",
+    "review": "confirmed on visual review"
   },
   "0be23ea7c8dfec29": {
     "status": "ok",
     "box": {
-      "left": 279,
-      "top": 596,
-      "width": 1058,
-      "height": 950
+      "left": 286,
+      "top": 595,
+      "width": 1034,
+      "height": 938
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 1.1136842105263158,
-    "metaAspect": 1.1666666666666667
+    "cropAspect": 1.1023454157782515,
+    "metaAspect": 1.1666666666666667,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "38edbb4819d8b16a": {
-    "status": "rejected",
-    "reason": "aspect 0.795 vs painting 0.857 (7.2% off)",
+    "status": "ok",
     "box": {
-      "left": 364,
-      "top": 471,
-      "width": 886,
-      "height": 1114
+      "left": 365,
+      "top": 473,
+      "width": 883,
+      "height": 1074
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.7953321364452424,
-    "metaAspect": 0.8571428571428571
+    "cropAspect": 0.8221601489757915,
+    "metaAspect": 0.8571428571428571,
+    "reason": "snapped",
+    "review": "confirmed on visual review"
   },
   "a09d8ad7c0befc64": {
     "status": "ok",
     "box": {
-      "left": 300,
-      "top": 474,
-      "width": 1024,
-      "height": 1227
+      "left": 100,
+      "top": 476,
+      "width": 1400,
+      "height": 1225
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.8345558272208639,
-    "metaAspect": 0.8421052631578947
+    "cropAspect": 1.1428571428571428,
+    "metaAspect": 1.1875,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "238f00fad9addaf6": {
     "status": "ok",
     "box": {
-      "left": 424,
-      "top": 550,
-      "width": 762,
-      "height": 905
+      "left": 426,
+      "top": 552,
+      "width": 758,
+      "height": 904
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.8419889502762431,
-    "metaAspect": 0.8507462686567164
+    "cropAspect": 0.838495575221239,
+    "metaAspect": 0.8507462686567164,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "03951fbb306015ad": {
     "status": "ok",
     "box": {
-      "left": 395,
-      "top": 572,
-      "width": 825,
+      "left": 397,
+      "top": 571,
+      "width": 824,
       "height": 973
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.8478931140801644,
-    "metaAspect": 0.8571428571428571
+    "cropAspect": 0.8468653648509764,
+    "metaAspect": 0.8571428571428571,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "1caa1fa42c98147d": {
     "status": "rejected",
-    "reason": "aspect 0.779 vs painting 0.857 (9.1% off)",
+    "reason": "aspect 0.778 vs painting 0.857 (9.2% off)",
     "box": {
-      "left": 385,
-      "top": 477,
-      "width": 876,
-      "height": 1124
+      "left": 384,
+      "top": 475,
+      "width": 877,
+      "height": 1127
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.7793594306049823,
-    "metaAspect": 0.8571428571428571
+    "cropAspect": 0.7781721384205856,
+    "metaAspect": 0.8571428571428571,
+    "review": "rescued: clean on visual review despite the dimension mismatch"
   },
   "80fd80c7f6bd8488": {
     "status": "rejected",
-    "reason": "aspect 1.030 vs painting 1.278 (19.4% off)",
+    "reason": "aspect 1.055 vs painting 1.278 (17.5% off)",
     "box": {
-      "left": 321,
-      "top": 535,
-      "width": 992,
-      "height": 963
+      "left": 326,
+      "top": 541,
+      "width": 967,
+      "height": 917
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 1.0301142263759087,
-    "metaAspect": 1.2777777777777777
+    "cropAspect": 1.054525627044711,
+    "metaAspect": 1.2777777777777777,
+    "review": "rescued: clean on visual review despite the dimension mismatch"
   },
   "fb95e27173e8cb88": {
     "status": "rejected",
-    "reason": "aspect 1.047 vs painting 1.278 (18.1% off)",
+    "reason": "aspect 1.048 vs painting 1.278 (18.0% off)",
     "box": {
-      "left": 321,
-      "top": 535,
-      "width": 1011,
-      "height": 966
+      "left": 320,
+      "top": 534,
+      "width": 1013,
+      "height": 967
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 1.046583850931677,
-    "metaAspect": 1.2777777777777777
+    "cropAspect": 1.047569803516029,
+    "metaAspect": 1.2777777777777777,
+    "review": "rescued: clean on visual review despite the dimension mismatch"
   },
   "ff9ac5003e43fd22": {
     "status": "ok",
     "box": {
-      "left": 236,
-      "top": 622,
-      "width": 1290,
-      "height": 1061
+      "left": 263,
+      "top": 620,
+      "width": 1216,
+      "height": 1015
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 1.2158341187558908,
-    "metaAspect": 1.25
+    "cropAspect": 1.1980295566502464,
+    "metaAspect": 1.25,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "a35eb88d6ff1f830": {
     "status": "ok",
     "box": {
-      "left": 284,
-      "top": 458,
-      "width": 1185,
-      "height": 1391
+      "left": 339,
+      "top": 479,
+      "width": 1075,
+      "height": 1357
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.8519051042415529,
-    "metaAspect": 0.8225806451612904
+    "cropAspect": 0.7921886514369934,
+    "metaAspect": 0.8225806451612904,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "dcf11809c5fd88a9": {
     "status": "rejected",
-    "reason": "aspect 0.790 vs painting 0.857 (7.8% off)",
+    "reason": "aspect 0.791 vs painting 0.857 (7.7% off)",
     "box": {
-      "left": 316,
-      "top": 592,
-      "width": 981,
-      "height": 1241
+      "left": 315,
+      "top": 590,
+      "width": 983,
+      "height": 1243
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.790491539081386,
-    "metaAspect": 0.8571428571428571
+    "cropAspect": 0.7908286403861625,
+    "metaAspect": 0.8571428571428571,
+    "review": "rescued: clean on visual review despite the dimension mismatch"
   },
   "dca9f37fdd04a6ef": {
     "status": "ok",
     "box": {
-      "left": 329,
-      "top": 574,
-      "width": 1056,
-      "height": 1295
+      "left": 333,
+      "top": 573,
+      "width": 1046,
+      "height": 1284
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.8154440154440155,
-    "metaAspect": 0.8125
+    "cropAspect": 0.8146417445482866,
+    "metaAspect": 0.8125,
+    "reason": "snapped",
+    "review": "confirmed on visual review"
   },
   "41507732cf8ef092": {
     "status": "ok",
     "box": {
-      "left": 12,
-      "top": 699,
-      "width": 1544,
-      "height": 1849
+      "left": 10,
+      "top": 697,
+      "width": 1538,
+      "height": 1852
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.8350459707950243,
-    "metaAspect": 0.8
+    "cropAspect": 0.8304535637149028,
+    "metaAspect": 0.8,
+    "reason": "snapped",
+    "review": "dropped: not a clean crop on visual review"
   },
   "15e26ac5ea2ab3f3": {
     "status": "ok",
     "box": {
-      "left": 159,
-      "top": 630,
-      "width": 1363,
-      "height": 1118
+      "left": 169,
+      "top": 635,
+      "width": 1355,
+      "height": 1114
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 1.2191413237924866,
-    "metaAspect": 1.1666666666666667
+    "cropAspect": 1.2163375224416517,
+    "metaAspect": 1.1666666666666667,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "a3cc2277c7e59a4f": {
     "status": "ok",
     "box": {
-      "left": 221,
-      "top": 650,
-      "width": 1216,
-      "height": 991
+      "left": 262,
+      "top": 663,
+      "width": 1176,
+      "height": 976
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 1.2270433905146316,
-    "metaAspect": 1.263157894736842
+    "cropAspect": 1.2049180327868851,
+    "metaAspect": 1.263157894736842,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "36972821ce6b0d02": {
     "status": "ok",
     "box": {
-      "left": 379,
-      "top": 451,
-      "width": 937,
-      "height": 1146
+      "left": 390,
+      "top": 450,
+      "width": 928,
+      "height": 1134
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.8176265270506108,
-    "metaAspect": 0.8
+    "cropAspect": 0.818342151675485,
+    "metaAspect": 0.8,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "2793d079f032c161": {
     "status": "ok",
     "box": {
-      "left": 357,
-      "top": 437,
-      "width": 960,
-      "height": 1168
+      "left": 364,
+      "top": 436,
+      "width": 945,
+      "height": 1162
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.821917808219178,
-    "metaAspect": 0.8
+    "cropAspect": 0.8132530120481928,
+    "metaAspect": 0.8,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "e5aa4985ff3a69b9": {
     "status": "ok",
     "box": {
-      "left": 379,
-      "top": 446,
-      "width": 954,
-      "height": 1166
+      "left": 390,
+      "top": 447,
+      "width": 939,
+      "height": 1151
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.8181818181818182,
-    "metaAspect": 0.8
+    "cropAspect": 0.8158123370981755,
+    "metaAspect": 0.8,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "9bf84d3a2ed201e2": {
     "status": "ok",
     "box": {
-      "left": 371,
-      "top": 483,
-      "width": 960,
-      "height": 1168
+      "left": 384,
+      "top": 484,
+      "width": 942,
+      "height": 1157
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.821917808219178,
-    "metaAspect": 0.8
+    "cropAspect": 0.8141745894554884,
+    "metaAspect": 0.8,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "70c9098d851d7ba4": {
     "status": "ok",
     "box": {
-      "left": 354,
-      "top": 415,
-      "width": 988,
-      "height": 1205
+      "left": 361,
+      "top": 413,
+      "width": 976,
+      "height": 1179
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.8199170124481328,
-    "metaAspect": 0.8571428571428571
+    "cropAspect": 0.8278201865988125,
+    "metaAspect": 0.8571428571428571,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "d594db9e07375d4c": {
     "status": "ok",
     "box": {
-      "left": 331,
-      "top": 412,
-      "width": 1008,
-      "height": 1177
+      "left": 347,
+      "top": 410,
+      "width": 987,
+      "height": 1168
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.8564146134239592,
-    "metaAspect": 0.8571428571428571
+    "cropAspect": 0.8450342465753424,
+    "metaAspect": 0.8571428571428571,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "4fb3a12952b391db": {
     "status": "ok",
     "box": {
-      "left": 168,
-      "top": 778,
+      "left": 169,
+      "top": 777,
       "width": 1380,
-      "height": 1033
+      "height": 1032
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 1.3359148112294288,
-    "metaAspect": 1.368421052631579
+    "cropAspect": 1.3372093023255813,
+    "metaAspect": 1.368421052631579,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "57516de5f24fdc37": {
     "status": "ok",
     "box": {
-      "left": 190,
-      "top": 698,
-      "width": 1318,
-      "height": 1039
+      "left": 192,
+      "top": 700,
+      "width": 1315,
+      "height": 1018
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 1.2685274302213667,
-    "metaAspect": 1.28125
+    "cropAspect": 1.2917485265225934,
+    "metaAspect": 1.28125,
+    "reason": "snapped",
+    "review": "confirmed on visual review"
   },
   "91276fe1957c86e0": {
     "status": "ok",
     "box": {
-      "left": 289,
-      "top": 609,
-      "width": 1157,
-      "height": 1360
+      "left": 296,
+      "top": 607,
+      "width": 1142,
+      "height": 1346
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.850735294117647,
-    "metaAspect": 0.8421052631578947
+    "cropAspect": 0.8484398216939079,
+    "metaAspect": 0.8421052631578947,
+    "reason": "snapped",
+    "review": "confirmed on visual review"
   },
   "0d04a006c930daea": {
     "status": "ok",
     "box": {
-      "left": 264,
-      "top": 778,
-      "width": 1199,
-      "height": 957
+      "left": 274,
+      "top": 780,
+      "width": 1185,
+      "height": 947
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 1.2528735632183907,
-    "metaAspect": 1.2307692307692308
+    "cropAspect": 1.2513199577613516,
+    "metaAspect": 1.2307692307692308,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "af548000c0bd1fc7": {
     "status": "ok",
     "box": {
-      "left": 136,
-      "top": 721,
-      "width": 1329,
-      "height": 954
+      "left": 183,
+      "top": 740,
+      "width": 1261,
+      "height": 925
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 1.3930817610062893,
-    "metaAspect": 1.3846153846153846
+    "cropAspect": 1.3632432432432433,
+    "metaAspect": 1.3846153846153846,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "583e6e3517d7d515": {
     "status": "ok",
     "box": {
-      "left": 184,
-      "top": 664,
-      "width": 1276,
-      "height": 1033
+      "left": 220,
+      "top": 674,
+      "width": 1224,
+      "height": 1015
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 1.2352371732817038,
-    "metaAspect": 1.2307692307692308
+    "cropAspect": 1.205911330049261,
+    "metaAspect": 1.2307692307692308,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "ac32c6660765f1ba": {
     "status": "ok",
     "box": {
-      "left": 323,
-      "top": 543,
-      "width": 1067,
-      "height": 1312
+      "left": 328,
+      "top": 542,
+      "width": 1058,
+      "height": 1307
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.8132621951219512,
-    "metaAspect": 0.8125
+    "cropAspect": 0.809487375669472,
+    "metaAspect": 0.8125,
+    "reason": "snapped",
+    "review": "confirmed on visual review"
   },
   "ed652f2fbfb8b55a": {
     "status": "ok",
     "box": {
-      "left": 343,
-      "top": 581,
-      "width": 966,
+      "left": 344,
+      "top": 580,
+      "width": 965,
       "height": 1182
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.817258883248731,
-    "metaAspect": 0.8125
+    "cropAspect": 0.8164128595600677,
+    "metaAspect": 0.8125,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "7f8fb57de3171350": {
     "status": "ok",
     "box": {
-      "left": 372,
-      "top": 716,
-      "width": 958,
-      "height": 1108
+      "left": 376,
+      "top": 742,
+      "width": 917,
+      "height": 1079
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.8646209386281588,
-    "metaAspect": 0.8421052631578947
+    "cropAspect": 0.8498609823911029,
+    "metaAspect": 0.8421052631578947,
+    "reason": "snapped",
+    "review": "confirmed on visual review"
   },
   "d0a3e64d8ff96ba5": {
     "status": "ok",
     "box": {
-      "left": 289,
-      "top": 571,
-      "width": 1024,
-      "height": 741
+      "left": 291,
+      "top": 573,
+      "width": 1021,
+      "height": 737
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 1.3819163292847503,
-    "metaAspect": 1.3839285714285714
+    "cropAspect": 1.3853459972862958,
+    "metaAspect": 1.3839285714285714,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "aaff910e93933299": {
     "status": "rejected",
-    "reason": "aspect 0.781 vs painting 0.857 (8.9% off)",
+    "reason": "aspect 0.782 vs painting 0.857 (8.8% off)",
     "box": {
-      "left": 263,
-      "top": 557,
-      "width": 1037,
-      "height": 1328
+      "left": 272,
+      "top": 559,
+      "width": 1026,
+      "height": 1312
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.7808734939759037,
-    "metaAspect": 0.8571428571428571
+    "cropAspect": 0.7820121951219512,
+    "metaAspect": 0.8571428571428571,
+    "review": "rescued: clean on visual review despite the dimension mismatch"
   },
   "cfcb91517e2adeaf": {
     "status": "rejected",
@@ -881,102 +994,112 @@
   },
   "a17104e10a281fe5": {
     "status": "rejected",
-    "reason": "aspect 0.773 vs painting 0.857 (9.8% off)",
+    "reason": "aspect 0.773 vs painting 0.857 (9.9% off)",
     "box": {
-      "left": 422,
-      "top": 660,
-      "width": 757,
-      "height": 979
+      "left": 421,
+      "top": 659,
+      "width": 758,
+      "height": 981
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.7732379979570991,
+    "cropAspect": 0.7726809378185525,
     "metaAspect": 0.8571428571428571
   },
   "8fad03486513a37b": {
     "status": "rejected",
     "reason": "aspect 0.546 vs painting 0.857 (36.3% off)",
     "box": {
-      "left": 490,
-      "top": 739,
-      "width": 413,
-      "height": 757
+      "left": 489,
+      "top": 738,
+      "width": 414,
+      "height": 758
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.5455746367239102,
+    "cropAspect": 0.5461741424802111,
     "metaAspect": 0.8571428571428571
   },
   "d8e04f697873c6f6": {
     "status": "rejected",
-    "reason": "aspect 0.776 vs painting 0.857 (9.5% off)",
+    "reason": "aspect 0.780 vs painting 0.857 (9.0% off)",
     "box": {
-      "left": 414,
-      "top": 663,
-      "width": 757,
-      "height": 976
+      "left": 418,
+      "top": 662,
+      "width": 750,
+      "height": 962
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.7756147540983607,
+    "cropAspect": 0.7796257796257796,
     "metaAspect": 0.8571428571428571
   },
   "5963c4aeedd147ff": {
     "status": "ok",
     "box": {
-      "left": 451,
-      "top": 702,
-      "width": 1061,
-      "height": 1220
+      "left": 456,
+      "top": 707,
+      "width": 1037,
+      "height": 1203
     },
     "imageAspect": 0.8333333333333334,
-    "cropAspect": 0.8696721311475409,
-    "metaAspect": 0.9
+    "cropAspect": 0.8620116375727348,
+    "metaAspect": 0.9,
+    "reason": "snapped",
+    "review": "confirmed on visual review"
   },
   "966d0d7939e01653": {
     "status": "ok",
     "box": {
-      "left": 271,
-      "top": 774,
-      "width": 1053,
-      "height": 746
+      "left": 275,
+      "top": 776,
+      "width": 1047,
+      "height": 742
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 1.4115281501340482,
-    "metaAspect": 1.3909090909090909
+    "cropAspect": 1.4110512129380053,
+    "metaAspect": 1.3909090909090909,
+    "reason": "snapped",
+    "review": "confirmed on visual review"
   },
   "ee7ae094021e5399": {
     "status": "ok",
     "box": {
-      "left": 22,
-      "top": 1023,
-      "width": 2980,
-      "height": 2500
+      "left": 19,
+      "top": 1021,
+      "width": 2996,
+      "height": 2505
     },
     "imageAspect": 0.75,
-    "cropAspect": 1.192,
-    "metaAspect": 1.25
+    "cropAspect": 1.1960079840319362,
+    "metaAspect": 1.25,
+    "reason": "grown",
+    "review": "confirmed on visual review"
   },
   "4f107afb95871b3d": {
     "status": "ok",
     "box": {
-      "left": 12,
-      "top": 726,
-      "width": 1572,
-      "height": 1271
+      "left": 5,
+      "top": 724,
+      "width": 1583,
+      "height": 1274
     },
     "imageAspect": 0.6645833333333333,
-    "cropAspect": 1.2368214004720692,
-    "metaAspect": 1.2307692307692308
+    "cropAspect": 1.2425431711145998,
+    "metaAspect": 1.2307692307692308,
+    "reason": "grown",
+    "review": "confirmed on visual review"
   },
   "6f366a6cc6762364": {
     "status": "ok",
     "box": {
-      "left": 371,
-      "top": 847,
-      "width": 849,
-      "height": 976
+      "left": 384,
+      "top": 856,
+      "width": 822,
+      "height": 957
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.8698770491803278,
-    "metaAspect": 0.9
+    "cropAspect": 0.8589341692789969,
+    "metaAspect": 0.9,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "3756c0b25e64a093": {
     "status": "flat",
@@ -990,105 +1113,112 @@
   },
   "404ba263bc794077": {
     "status": "rejected",
-    "reason": "aspect 1.763 vs painting 1.391 (26.8% off)",
+    "reason": "aspect 1.640 vs painting 1.391 (17.9% off)",
     "box": {
-      "left": 352,
-      "top": 779,
-      "width": 1767,
-      "height": 1002
+      "left": 382,
+      "top": 782,
+      "width": 1633,
+      "height": 996
     },
     "imageAspect": 0.833203125,
-    "cropAspect": 1.7634730538922156,
+    "cropAspect": 1.6395582329317269,
     "metaAspect": 1.3909090909090909
   },
   "7c63fe7f2644e8b5": {
     "status": "rejected",
-    "reason": "aspect 2.087 vs painting 1.391 (50.0% off)",
+    "reason": "aspect 1.850 vs painting 1.391 (33.0% off)",
     "box": {
-      "left": 15,
-      "top": 779,
-      "width": 2074,
-      "height": 994
+      "left": 137,
+      "top": 782,
+      "width": 1830,
+      "height": 989
     },
     "imageAspect": 0.833203125,
-    "cropAspect": 2.086519114688129,
+    "cropAspect": 1.8503538928210312,
     "metaAspect": 1.3909090909090909
   },
   "86070b4a304d4015": {
     "status": "rejected",
-    "reason": "aspect 0.770 vs painting 1.000 (23.0% off)",
+    "reason": "aspect 0.788 vs painting 1.000 (21.2% off)",
     "box": {
-      "left": 6,
-      "top": 169,
-      "width": 788,
-      "height": 1024
+      "left": 5,
+      "top": 191,
+      "width": 790,
+      "height": 1003
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.76953125,
+    "cropAspect": 0.7876370887337986,
     "metaAspect": 1
   },
   "07a7cf8b21cf9fa2": {
     "status": "ok",
     "box": {
-      "left": 22,
-      "top": 1058,
-      "width": 2980,
-      "height": 2475
+      "left": 19,
+      "top": 1056,
+      "width": 2996,
+      "height": 2480
     },
     "imageAspect": 0.75,
-    "cropAspect": 1.204040404040404,
-    "metaAspect": 1.25
+    "cropAspect": 1.2080645161290322,
+    "metaAspect": 1.25,
+    "reason": "grown",
+    "review": "confirmed on visual review"
   },
   "0e0b9e2dbfbac0fa": {
-    "status": "rejected",
-    "reason": "aspect 1.319 vs painting 1.182 (11.6% off)",
+    "status": "ok",
     "box": {
-      "left": 108,
-      "top": 301,
-      "width": 488,
+      "left": 136,
+      "top": 302,
+      "width": 431,
       "height": 370
     },
     "imageAspect": 0.75,
-    "cropAspect": 1.318918918918919,
-    "metaAspect": 1.1818181818181819
+    "cropAspect": 1.164864864864865,
+    "metaAspect": 1.1818181818181819,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "004cf5a319935c98": {
     "status": "ok",
     "box": {
-      "left": 43,
-      "top": 132,
-      "width": 553,
-      "height": 577
+      "left": 44,
+      "top": 134,
+      "width": 523,
+      "height": 575
     },
     "imageAspect": 0.75,
-    "cropAspect": 0.9584055459272097,
-    "metaAspect": 0.9130434782608695
+    "cropAspect": 0.9095652173913044,
+    "metaAspect": 0.9130434782608695,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "d22b390bb96f14db": {
-    "status": "rejected",
-    "reason": "aspect 1.021 vs painting 1.095 (6.8% off)",
+    "status": "ok",
     "box": {
-      "left": 4,
-      "top": 135,
-      "width": 591,
+      "left": 32,
+      "top": 136,
+      "width": 532,
       "height": 579
     },
     "imageAspect": 0.75,
-    "cropAspect": 1.0207253886010363,
-    "metaAspect": 1.0952380952380953
+    "cropAspect": 0.918825561312608,
+    "metaAspect": 0.9130434782608695,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "ceebdf22c5794ada": {
-    "status": "rejected",
-    "reason": "aspect 1.003 vs painting 1.095 (8.4% off)",
+    "status": "ok",
     "box": {
-      "left": 13,
-      "top": 135,
-      "width": 582,
-      "height": 580
+      "left": 36,
+      "top": 137,
+      "width": 531,
+      "height": 579
     },
     "imageAspect": 0.75,
-    "cropAspect": 1.0034482758620689,
-    "metaAspect": 1.0952380952380953
+    "cropAspect": 0.917098445595855,
+    "metaAspect": 0.9130434782608695,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "98b339acfa029f5b": {
     "status": "flat",
@@ -1097,115 +1227,127 @@
   },
   "ead525252a6bebad": {
     "status": "rejected",
-    "reason": "aspect 1.106 vs painting 1.231 (10.2% off)",
+    "reason": "aspect 1.113 vs painting 1.231 (9.5% off)",
     "box": {
-      "left": 12,
-      "top": 489,
-      "width": 1579,
-      "height": 1428
+      "left": 5,
+      "top": 488,
+      "width": 1592,
+      "height": 1430
     },
     "imageAspect": 0.6675,
-    "cropAspect": 1.1057422969187676,
+    "cropAspect": 1.1132867132867132,
     "metaAspect": 1.2307692307692308
   },
   "1f238ad1d8b9ed3a": {
     "status": "rejected",
-    "reason": "aspect 1.092 vs painting 1.231 (11.3% off)",
+    "reason": "aspect 1.099 vs painting 1.231 (10.7% off)",
     "box": {
-      "left": 12,
-      "top": 465,
-      "width": 1579,
-      "height": 1446
+      "left": 5,
+      "top": 464,
+      "width": 1592,
+      "height": 1449
     },
     "imageAspect": 0.6675,
-    "cropAspect": 1.0919778699861686,
+    "cropAspect": 1.098688750862664,
     "metaAspect": 1.2307692307692308
   },
   "f953dd6c9ed8ce0d": {
     "status": "ok",
     "box": {
-      "left": 22,
-      "top": 1058,
-      "width": 2980,
-      "height": 2470
+      "left": 19,
+      "top": 1056,
+      "width": 2996,
+      "height": 2475
     },
     "imageAspect": 0.75,
-    "cropAspect": 1.2064777327935223,
-    "metaAspect": 1.25
+    "cropAspect": 1.2105050505050505,
+    "metaAspect": 1.25,
+    "reason": "grown",
+    "review": "confirmed on visual review"
   },
   "b82760ddbe9346b1": {
     "status": "ok",
     "box": {
-      "left": 22,
-      "top": 1073,
-      "width": 2980,
-      "height": 2450
+      "left": 19,
+      "top": 1071,
+      "width": 2996,
+      "height": 2455
     },
     "imageAspect": 0.75,
-    "cropAspect": 1.2163265306122448,
-    "metaAspect": 1.25
+    "cropAspect": 1.2203665987780041,
+    "metaAspect": 1.25,
+    "reason": "grown",
+    "review": "confirmed on visual review"
   },
   "908571beaa329002": {
-    "status": "rejected",
-    "reason": "aspect 1.300 vs painting 1.182 (10.0% off)",
+    "status": "ok",
     "box": {
-      "left": 115,
-      "top": 306,
-      "width": 481,
-      "height": 370
+      "left": 142,
+      "top": 307,
+      "width": 425,
+      "height": 369
     },
     "imageAspect": 0.75,
-    "cropAspect": 1.3,
-    "metaAspect": 1.1818181818181819
+    "cropAspect": 1.151761517615176,
+    "metaAspect": 1.1818181818181819,
+    "reason": "grown+snapped",
+    "review": "dropped: not a clean crop on visual review"
   },
   "c658d7f13d47150a": {
     "status": "ok",
     "box": {
-      "left": 69,
-      "top": 228,
-      "width": 449,
-      "height": 400
+      "left": 68,
+      "top": 227,
+      "width": 450,
+      "height": 402
     },
     "imageAspect": 0.8344923504867872,
-    "cropAspect": 1.1225,
-    "metaAspect": 1.1
+    "cropAspect": 1.1194029850746268,
+    "metaAspect": 1.1,
+    "reason": "grown",
+    "review": "confirmed on visual review"
   },
   "45d24138aed924ac": {
     "status": "ok",
     "box": {
-      "left": 153,
-      "top": 264,
-      "width": 310,
-      "height": 340
+      "left": 158,
+      "top": 269,
+      "width": 297,
+      "height": 330
     },
     "imageAspect": 0.8344923504867872,
-    "cropAspect": 0.9117647058823529,
-    "metaAspect": 0.9090909090909091
+    "cropAspect": 0.9,
+    "metaAspect": 0.9090909090909091,
+    "reason": "snapped",
+    "review": "confirmed on visual review"
   },
   "369f0eebdc937c10": {
     "status": "ok",
     "box": {
-      "left": 219,
-      "top": 143,
-      "width": 740,
-      "height": 857
+      "left": 220,
+      "top": 145,
+      "width": 738,
+      "height": 855
     },
     "imageAspect": 1.054481546572935,
-    "cropAspect": 0.8634772462077013,
-    "metaAspect": 0.8666666666666667
+    "cropAspect": 0.8631578947368421,
+    "metaAspect": 0.8666666666666667,
+    "reason": "snapped",
+    "review": "confirmed on visual review"
   },
   "8a5e678029d5329b": {
-    "status": "rejected",
-    "reason": "aspect 1.110 vs painting 1.000 (11.0% off)",
+    "status": "ok",
     "box": {
-      "left": 84,
-      "top": 122,
-      "width": 563,
+      "left": 117,
+      "top": 123,
+      "width": 513,
       "height": 507
     },
     "imageAspect": 0.7995735607675906,
-    "cropAspect": 1.1104536489151873,
-    "metaAspect": 1
+    "cropAspect": 1.0118343195266273,
+    "metaAspect": 1,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "94790520ec4c9cac": {
     "status": "flat",
@@ -1220,52 +1362,56 @@
   "4d6e3f4c2277adaf": {
     "status": "ok",
     "box": {
-      "left": 154,
-      "top": 159,
-      "width": 534,
-      "height": 683
+      "left": 156,
+      "top": 175,
+      "width": 514,
+      "height": 666
     },
     "imageAspect": 0.815,
-    "cropAspect": 0.7818448023426061,
-    "metaAspect": 0.7692307692307693
+    "cropAspect": 0.7717717717717718,
+    "metaAspect": 0.7692307692307693,
+    "reason": "snapped",
+    "review": "dropped: not a clean crop on visual review"
   },
   "181bb4bf21c19265": {
     "status": "rejected",
-    "reason": "aspect 0.192 vs painting 0.769 (75.1% off)",
+    "reason": "aspect 0.198 vs painting 0.769 (74.2% off)",
     "box": {
       "left": 584,
-      "top": 167,
-      "width": 112,
-      "height": 584
+      "top": 166,
+      "width": 116,
+      "height": 585
     },
     "imageAspect": 0.889,
-    "cropAspect": 0.1917808219178082,
+    "cropAspect": 0.19829059829059828,
     "metaAspect": 0.7692307692307693
   },
   "84600c907cf3f139": {
     "status": "rejected",
-    "reason": "aspect 0.700 vs painting 0.776 (9.7% off)",
+    "reason": "aspect 0.726 vs painting 0.776 (6.4% off)",
     "box": {
-      "left": 145,
-      "top": 155,
-      "width": 542,
-      "height": 774
+      "left": 153,
+      "top": 157,
+      "width": 527,
+      "height": 726
     },
     "imageAspect": 0.843,
-    "cropAspect": 0.7002583979328165,
+    "cropAspect": 0.7258953168044077,
     "metaAspect": 0.7758620689655172
   },
   "a95e39b0a74b09f5": {
     "status": "ok",
     "box": {
-      "left": 134,
-      "top": 157,
-      "width": 560,
-      "height": 728
+      "left": 153,
+      "top": 164,
+      "width": 527,
+      "height": 702
     },
     "imageAspect": 0.843,
-    "cropAspect": 0.7692307692307693,
-    "metaAspect": 0.7758620689655172
+    "cropAspect": 0.7507122507122507,
+    "metaAspect": 0.7758620689655172,
+    "reason": "snapped",
+    "review": "dropped: not a clean crop on visual review"
   },
   "884f588e34c22329": {
     "status": "flat",
@@ -1275,572 +1421,658 @@
   "6606470fe3eeb3f8": {
     "status": "ok",
     "box": {
-      "left": 148,
-      "top": 473,
-      "width": 1394,
-      "height": 1662
+      "left": 146,
+      "top": 472,
+      "width": 1397,
+      "height": 1666
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.838748495788207,
-    "metaAspect": 0.8571428571428571
+    "cropAspect": 0.8385354141656662,
+    "metaAspect": 0.8571428571428571,
+    "reason": "plain",
+    "review": "confirmed on visual review"
   },
   "2b015429ab5daadd": {
     "status": "ok",
     "box": {
-      "left": 134,
-      "top": 468,
-      "width": 1468,
-      "height": 1693
+      "left": 5,
+      "top": 467,
+      "width": 1697,
+      "height": 2087
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.8670998227997637,
-    "metaAspect": 0.8571428571428571
+    "cropAspect": 0.8131288931480594,
+    "metaAspect": 0.8571428571428571,
+    "reason": "grown",
+    "review": "confirmed on visual review"
   },
   "1d36d9c0b664ac82": {
     "status": "ok",
     "box": {
-      "left": 306,
-      "top": 532,
-      "width": 1118,
-      "height": 1360
+      "left": 305,
+      "top": 530,
+      "width": 1109,
+      "height": 1363
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.8220588235294117,
-    "metaAspect": 0.8
+    "cropAspect": 0.8136463683052091,
+    "metaAspect": 0.8,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "1c815bc3dde95d2b": {
     "status": "ok",
     "box": {
-      "left": 103,
+      "left": 5,
       "top": 479,
-      "width": 1445,
-      "height": 1682
+      "width": 1697,
+      "height": 2076
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.8590963139120095,
-    "metaAspect": 0.8571428571428571
+    "cropAspect": 0.8174373795761078,
+    "metaAspect": 0.8571428571428571,
+    "reason": "grown",
+    "review": "dropped: not a clean crop on visual review"
   },
   "3fb979cb3d894999": {
     "status": "ok",
     "box": {
-      "left": 298,
-      "top": 520,
-      "width": 1157,
-      "height": 1372
+      "left": 297,
+      "top": 522,
+      "width": 1151,
+      "height": 1369
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.8432944606413995,
-    "metaAspect": 0.8
+    "cropAspect": 0.8407596785975164,
+    "metaAspect": 0.8,
+    "reason": "snapped",
+    "review": "confirmed on visual review"
   },
   "30e2735c08eedaa5": {
     "status": "ok",
     "box": {
-      "left": 173,
-      "top": 781,
+      "left": 172,
+      "top": 780,
       "width": 1363,
-      "height": 1019
+      "height": 1015
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 1.337585868498528,
-    "metaAspect": 1.368421052631579
+    "cropAspect": 1.3428571428571427,
+    "metaAspect": 1.368421052631579,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "f69091f420e7f773": {
     "status": "ok",
     "box": {
-      "left": 142,
-      "top": 709,
-      "width": 1324,
-      "height": 962
+      "left": 172,
+      "top": 720,
+      "width": 1270,
+      "height": 939
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 1.3762993762993763,
-    "metaAspect": 1.3846153846153846
+    "cropAspect": 1.3525026624068157,
+    "metaAspect": 1.3846153846153846,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "4ee5ef84674d10c6": {
     "status": "ok",
     "box": {
-      "left": 170,
-      "top": 712,
-      "width": 1315,
-      "height": 962
+      "left": 192,
+      "top": 720,
+      "width": 1270,
+      "height": 947
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 1.366943866943867,
-    "metaAspect": 1.3846153846153846
+    "cropAspect": 1.341077085533263,
+    "metaAspect": 1.3846153846153846,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "58ac2a6a01d8788e": {
     "status": "ok",
     "box": {
-      "left": 230,
-      "top": 670,
-      "width": 1202,
-      "height": 974
+      "left": 260,
+      "top": 677,
+      "width": 1171,
+      "height": 967
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 1.2340862422997947,
-    "metaAspect": 1.263157894736842
+    "cropAspect": 1.2109617373319546,
+    "metaAspect": 1.263157894736842,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "5d86f96eb7003684": {
     "status": "ok",
     "box": {
-      "left": 267,
-      "top": 648,
-      "width": 1194,
-      "height": 1168
+      "left": 280,
+      "top": 649,
+      "width": 1176,
+      "height": 1154
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 1.0222602739726028,
-    "metaAspect": 1
+    "cropAspect": 1.0190641247833623,
+    "metaAspect": 1,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "2509f4eb5c9bd1c4": {
     "status": "ok",
     "box": {
-      "left": 314,
-      "top": 549,
-      "width": 1070,
-      "height": 1318
+      "left": 322,
+      "top": 547,
+      "width": 1060,
+      "height": 1304
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.8118361153262519,
-    "metaAspect": 0.8125
+    "cropAspect": 0.8128834355828221,
+    "metaAspect": 0.8125,
+    "reason": "snapped",
+    "review": "confirmed on visual review"
   },
   "2ae59f6e752dd2db": {
     "status": "ok",
     "box": {
-      "left": 334,
-      "top": 588,
-      "width": 1008,
-      "height": 1225
+      "left": 350,
+      "top": 587,
+      "width": 990,
+      "height": 1219
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.8228571428571428,
-    "metaAspect": 0.8125
+    "cropAspect": 0.8121410992616899,
+    "metaAspect": 0.8125,
+    "reason": "snapped",
+    "review": "confirmed on visual review"
   },
   "13ed2081724b16b6": {
     "status": "rejected",
-    "reason": "aspect 0.788 vs painting 0.857 (8.0% off)",
+    "reason": "aspect 0.788 vs painting 0.857 (8.1% off)",
     "box": {
-      "left": 385,
-      "top": 479,
-      "width": 886,
-      "height": 1124
+      "left": 384,
+      "top": 478,
+      "width": 888,
+      "height": 1127
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.7882562277580071,
-    "metaAspect": 0.8571428571428571
+    "cropAspect": 0.7879325643300799,
+    "metaAspect": 0.8571428571428571,
+    "review": "rescued: clean on visual review despite the dimension mismatch"
   },
   "05fce23b49823b65": {
     "status": "rejected",
-    "reason": "aspect 1.041 vs painting 1.385 (24.8% off)",
+    "reason": "aspect 1.039 vs painting 1.385 (24.9% off)",
     "box": {
-      "left": 435,
-      "top": 627,
-      "width": 765,
-      "height": 735
+      "left": 434,
+      "top": 626,
+      "width": 766,
+      "height": 737
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 1.0408163265306123,
-    "metaAspect": 1.3846153846153846
+    "cropAspect": 1.039348710990502,
+    "metaAspect": 1.3846153846153846,
+    "review": "rescued: clean on visual review despite the dimension mismatch"
   },
   "1abbcf902d5fce80": {
     "status": "rejected",
-    "reason": "aspect 1.055 vs painting 1.385 (23.8% off)",
+    "reason": "aspect 1.053 vs painting 1.385 (23.9% off)",
     "box": {
-      "left": 427,
-      "top": 635,
-      "width": 770,
-      "height": 730
+      "left": 426,
+      "top": 634,
+      "width": 771,
+      "height": 732
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 1.0547945205479452,
-    "metaAspect": 1.3846153846153846
+    "cropAspect": 1.0532786885245902,
+    "metaAspect": 1.3846153846153846,
+    "review": "rescued: clean on visual review despite the dimension mismatch"
   },
   "025c66f19bac9ab0": {
     "status": "ok",
     "box": {
-      "left": 219,
-      "top": 461,
-      "width": 1304,
-      "height": 1558
+      "left": 234,
+      "top": 460,
+      "width": 1270,
+      "height": 1555
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.8369704749679076,
-    "metaAspect": 0.8
+    "cropAspect": 0.8167202572347267,
+    "metaAspect": 0.8,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "0da592a4c134706a": {
     "status": "ok",
     "box": {
-      "left": 207,
-      "top": 541,
-      "width": 1262,
-      "height": 1490
+      "left": 228,
+      "top": 542,
+      "width": 1230,
+      "height": 1485
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.8469798657718121,
-    "metaAspect": 0.8
+    "cropAspect": 0.8282828282828283,
+    "metaAspect": 0.8,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "25f24c0c0b4125bb": {
     "status": "ok",
     "box": {
-      "left": 255,
-      "top": 552,
-      "width": 1194,
-      "height": 1445
+      "left": 89,
+      "top": 551,
+      "width": 1349,
+      "height": 1734
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.8262975778546713,
-    "metaAspect": 0.8125
+    "cropAspect": 0.7779700115340253,
+    "metaAspect": 0.8125,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "0cb7d53f742cf7ee": {
     "status": "rejected",
-    "reason": "aspect 1.161 vs painting 1.364 (14.9% off)",
+    "reason": "aspect 1.160 vs painting 1.364 (14.9% off)",
     "box": {
-      "left": 12,
-      "top": 805,
-      "width": 1654,
-      "height": 1425
+      "left": 11,
+      "top": 804,
+      "width": 1657,
+      "height": 1428
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 1.160701754385965,
+    "cropAspect": 1.1603641456582634,
     "metaAspect": 1.3636363636363635
   },
   "a9949b523714fb4c": {
     "status": "ok",
     "box": {
-      "left": 361,
-      "top": 524,
-      "width": 905,
-      "height": 1100
-    },
-    "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.8227272727272728,
-    "metaAspect": 0.8125
-  },
-  "f1d20e47a5060064": {
-    "status": "ok",
-    "box": {
-      "left": 213,
-      "top": 639,
-      "width": 1228,
-      "height": 1019
-    },
-    "imageAspect": 0.666796875,
-    "cropAspect": 1.2051030421982336,
-    "metaAspect": 1.263157894736842
-  },
-  "21a613d20e882512": {
-    "status": "ok",
-    "box": {
-      "left": 213,
-      "top": 647,
-      "width": 1239,
-      "height": 1008
-    },
-    "imageAspect": 0.666796875,
-    "cropAspect": 1.2291666666666667,
-    "metaAspect": 1.263157894736842
-  },
-  "28f4053bddb5250d": {
-    "status": "ok",
-    "box": {
-      "left": 372,
-      "top": 522,
+      "left": 373,
+      "top": 523,
       "width": 891,
       "height": 1103
     },
     "imageAspect": 0.6666666666666666,
     "cropAspect": 0.8077969174977334,
-    "metaAspect": 0.8125
+    "metaAspect": 0.8125,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
+  },
+  "f1d20e47a5060064": {
+    "status": "ok",
+    "box": {
+      "left": 234,
+      "top": 660,
+      "width": 1208,
+      "height": 990
+    },
+    "imageAspect": 0.666796875,
+    "cropAspect": 1.2202020202020203,
+    "metaAspect": 1.263157894736842,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
+  },
+  "21a613d20e882512": {
+    "status": "ok",
+    "box": {
+      "left": 237,
+      "top": 655,
+      "width": 1216,
+      "height": 1001
+    },
+    "imageAspect": 0.666796875,
+    "cropAspect": 1.2147852147852147,
+    "metaAspect": 1.263157894736842,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
+  },
+  "28f4053bddb5250d": {
+    "status": "ok",
+    "box": {
+      "left": 373,
+      "top": 523,
+      "width": 885,
+      "height": 1103
+    },
+    "imageAspect": 0.6666666666666666,
+    "cropAspect": 0.8023572076155938,
+    "metaAspect": 0.8125,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "8c4d27bf79ab9d00": {
     "status": "ok",
     "box": {
-      "left": 350,
-      "top": 460,
-      "width": 915,
-      "height": 1111
+      "left": 355,
+      "top": 462,
+      "width": 912,
+      "height": 1105
     },
     "imageAspect": 0.6666666666666666,
-    "cropAspect": 0.8235823582358236,
-    "metaAspect": 0.8
+    "cropAspect": 0.8253393665158371,
+    "metaAspect": 0.8,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "c57bf6982097fb93": {
     "status": "ok",
     "box": {
-      "left": 66,
-      "top": 673,
-      "width": 1524,
-      "height": 1109
+      "left": 84,
+      "top": 686,
+      "width": 1499,
+      "height": 1063
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 1.3742110009017132,
-    "metaAspect": 1.3636363636363635
+    "cropAspect": 1.4101599247412981,
+    "metaAspect": 1.3636363636363635,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "13c43ea8a2c6879d": {
     "status": "ok",
     "box": {
-      "left": 227,
-      "top": 447,
-      "width": 1278,
-      "height": 1589
+      "left": 231,
+      "top": 454,
+      "width": 1264,
+      "height": 1581
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.8042794210195091,
-    "metaAspect": 0.8125
+    "cropAspect": 0.799493991144845,
+    "metaAspect": 0.8125,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "76721779c72bbfae": {
     "status": "ok",
     "box": {
-      "left": 295,
-      "top": 653,
-      "width": 1151,
-      "height": 1154
+      "left": 299,
+      "top": 655,
+      "width": 1142,
+      "height": 1142
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.9974003466204506,
-    "metaAspect": 1
+    "cropAspect": 1,
+    "metaAspect": 1,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "1b433ee13065bebf": {
     "status": "rejected",
     "reason": "aspect 0.829 vs painting 0.900 (7.9% off)",
     "box": {
-      "left": 179,
-      "top": 550,
-      "width": 1343,
-      "height": 1620
+      "left": 178,
+      "top": 548,
+      "width": 1346,
+      "height": 1623
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.8290123456790124,
-    "metaAspect": 0.9
+    "cropAspect": 0.829328404189772,
+    "metaAspect": 0.9,
+    "review": "rescued: clean on visual review despite the dimension mismatch"
   },
   "9fe5571bb697c05d": {
     "status": "rejected",
-    "reason": "aspect 0.824 vs painting 0.900 (8.4% off)",
+    "reason": "aspect 0.825 vs painting 0.900 (8.4% off)",
     "box": {
-      "left": 176,
-      "top": 555,
-      "width": 1301,
-      "height": 1578
+      "left": 175,
+      "top": 554,
+      "width": 1304,
+      "height": 1581
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.8244613434727504,
-    "metaAspect": 0.9
+    "cropAspect": 0.8247944339025933,
+    "metaAspect": 0.9,
+    "review": "rescued: clean on visual review despite the dimension mismatch"
   },
   "74f5e656bebbb2b7": {
-    "status": "rejected",
-    "reason": "aspect 0.811 vs painting 0.900 (9.9% off)",
+    "status": "ok",
     "box": {
-      "left": 173,
-      "top": 550,
-      "width": 1346,
-      "height": 1659
+      "left": 5,
+      "top": 549,
+      "width": 1697,
+      "height": 2005
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.811332127787824,
-    "metaAspect": 0.9
+    "cropAspect": 0.8463840399002494,
+    "metaAspect": 0.9,
+    "reason": "grown",
+    "review": "dropped: not a clean crop on visual review"
   },
   "28de0b648ad00d1b": {
     "status": "ok",
     "box": {
-      "left": 105,
-      "top": 696,
-      "width": 1439,
-      "height": 1233
+      "left": 95,
+      "top": 695,
+      "width": 1434,
+      "height": 1199
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 1.167072181670722,
-    "metaAspect": 1.1666666666666667
+    "cropAspect": 1.1959966638865722,
+    "metaAspect": 1.1666666666666667,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "7bdf301917192f76": {
     "status": "ok",
     "box": {
-      "left": 216,
-      "top": 619,
-      "width": 1287,
-      "height": 1109
+      "left": 217,
+      "top": 624,
+      "width": 1284,
+      "height": 1092
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 1.1605049594229035,
-    "metaAspect": 1.1875
+    "cropAspect": 1.1758241758241759,
+    "metaAspect": 1.1875,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "aeda149a83200cbe": {
     "status": "ok",
     "box": {
-      "left": 255,
-      "top": 558,
-      "width": 1256,
-      "height": 1535
+      "left": 107,
+      "top": 560,
+      "width": 1493,
+      "height": 1875
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.8182410423452768,
-    "metaAspect": 0.821917808219178
+    "cropAspect": 0.7962666666666667,
+    "metaAspect": 0.821917808219178,
+    "reason": "grown+snapped",
+    "review": "dropped: not a clean crop on visual review"
   },
   "aac27f8277f78f77": {
     "status": "ok",
     "box": {
-      "left": 142,
-      "top": 696,
-      "width": 1411,
-      "height": 1228
+      "left": 95,
+      "top": 715,
+      "width": 1454,
+      "height": 1193
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 1.1490228013029316,
-    "metaAspect": 1.1875
+    "cropAspect": 1.2187761944677284,
+    "metaAspect": 1.1875,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "ff0cf6032150946b": {
     "status": "ok",
     "box": {
-      "left": 168,
-      "top": 550,
-      "width": 1357,
-      "height": 1595
+      "left": 166,
+      "top": 548,
+      "width": 1360,
+      "height": 1598
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.8507836990595611,
-    "metaAspect": 0.9
+    "cropAspect": 0.851063829787234,
+    "metaAspect": 0.9,
+    "reason": "grown",
+    "review": "confirmed on visual review"
   },
   "a7fc0bc8186731ab": {
     "status": "ok",
     "box": {
-      "left": 196,
-      "top": 650,
-      "width": 1343,
-      "height": 1115
+      "left": 200,
+      "top": 660,
+      "width": 1338,
+      "height": 1080
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 1.2044843049327354,
-    "metaAspect": 1.25
+    "cropAspect": 1.238888888888889,
+    "metaAspect": 1.25,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "8023468c6dc31e11": {
     "status": "ok",
     "box": {
-      "left": 156,
-      "top": 659,
-      "width": 1377,
-      "height": 1205
+      "left": 95,
+      "top": 672,
+      "width": 1425,
+      "height": 1171
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 1.1427385892116182,
-    "metaAspect": 1.1875
+    "cropAspect": 1.2169086251067465,
+    "metaAspect": 1.1875,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "091e8ff4fa68f72a": {
     "status": "ok",
     "box": {
-      "left": 106,
-      "top": 694,
-      "width": 1541,
-      "height": 1329
+      "left": 107,
+      "top": 692,
+      "width": 1510,
+      "height": 1295
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 1.1595184349134688,
-    "metaAspect": 1.2166666666666666
+    "cropAspect": 1.166023166023166,
+    "metaAspect": 1.2166666666666666,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "e2d167c8f9479188": {
     "status": "ok",
     "box": {
-      "left": 230,
-      "top": 589,
-      "width": 1236,
-      "height": 1346
+      "left": 243,
+      "top": 590,
+      "width": 1219,
+      "height": 1326
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.9182763744427934,
-    "metaAspect": 0.9
+    "cropAspect": 0.9193061840120663,
+    "metaAspect": 0.9,
+    "reason": "snapped",
+    "review": "confirmed on visual review"
   },
   "a51ab1bbc627f3c7": {
     "status": "ok",
     "box": {
-      "left": 80,
-      "top": 619,
-      "width": 1439,
-      "height": 1005
+      "left": 124,
+      "top": 620,
+      "width": 1377,
+      "height": 984
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 1.4318407960199004,
-    "metaAspect": 1.3636363636363635
+    "cropAspect": 1.399390243902439,
+    "metaAspect": 1.3636363636363635,
+    "reason": "snapped",
+    "review": "confirmed on visual review"
   },
   "b0eadd2d1b158779": {
     "status": "ok",
     "box": {
-      "left": 179,
-      "top": 527,
-      "width": 1332,
-      "height": 1626
+      "left": 178,
+      "top": 526,
+      "width": 1335,
+      "height": 1629
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.8191881918819188,
-    "metaAspect": 0.8571428571428571
+    "cropAspect": 0.8195211786372008,
+    "metaAspect": 0.8571428571428571,
+    "reason": "grown",
+    "review": "confirmed on visual review"
   },
   "9eda9241f565ce60": {
     "status": "ok",
     "box": {
-      "left": 193,
-      "top": 476,
-      "width": 1301,
-      "height": 1535
+      "left": 214,
+      "top": 477,
+      "width": 1264,
+      "height": 1524
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.847557003257329,
-    "metaAspect": 0.8
+    "cropAspect": 0.8293963254593176,
+    "metaAspect": 0.8,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "e526231ae1110f7f": {
     "status": "ok",
     "box": {
-      "left": 258,
-      "top": 475,
-      "width": 1194,
-      "height": 1453
+      "left": 271,
+      "top": 485,
+      "width": 1168,
+      "height": 1442
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.8217481073640743,
-    "metaAspect": 0.8125
+    "cropAspect": 0.8099861303744799,
+    "metaAspect": 0.8125,
+    "reason": "snapped",
+    "review": "confirmed on visual review"
   },
   "1da5360011314c99": {
     "status": "ok",
     "box": {
-      "left": 162,
-      "top": 628,
-      "width": 1357,
-      "height": 1126
+      "left": 95,
+      "top": 638,
+      "width": 1420,
+      "height": 1089
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 1.2051509769094138,
-    "metaAspect": 1.2307692307692308
+    "cropAspect": 1.3039485766758494,
+    "metaAspect": 1.2307692307692308,
+    "reason": "grown+snapped",
+    "review": "confirmed on visual review"
   },
   "aee21b9ab19a1dd1": {
     "status": "ok",
     "box": {
-      "left": 275,
-      "top": 481,
-      "width": 1166,
-      "height": 1448
+      "left": 279,
+      "top": 491,
+      "width": 1148,
+      "height": 1420
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 0.8052486187845304,
-    "metaAspect": 0.8024691358024691
+    "cropAspect": 0.8084507042253521,
+    "metaAspect": 0.8024691358024691,
+    "reason": "snapped",
+    "review": "confirmed on visual review"
   },
   "8e2cfbd9625e5763": {
     "status": "ok",
     "box": {
-      "left": 170,
-      "top": 676,
-      "width": 1355,
-      "height": 1075
+      "left": 192,
+      "top": 677,
+      "width": 1326,
+      "height": 1046
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 1.2604651162790699,
-    "metaAspect": 1.2625
+    "cropAspect": 1.2676864244741874,
+    "metaAspect": 1.2625,
+    "reason": "snapped",
+    "review": "confirmed on visual review"
   },
   "38ecab8ef56b6232": {
     "status": "ok",
     "box": {
-      "left": 170,
-      "top": 664,
-      "width": 1355,
-      "height": 1095
+      "left": 183,
+      "top": 672,
+      "width": 1335,
+      "height": 1077
     },
     "imageAspect": 0.666796875,
-    "cropAspect": 1.2374429223744292,
-    "metaAspect": 1.2345679012345678
+    "cropAspect": 1.2395543175487465,
+    "metaAspect": 1.2345679012345678,
+    "reason": "snapped",
+    "review": "confirmed on visual review"
   }
 }

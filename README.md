@@ -66,8 +66,13 @@ wall, floor often visible. `scripts/crop.ts` finds the painting and cuts it out:
    painting's catalogued dimensions within 6%. A crop that fails is thrown away
    — a wrong crop is worse than none.
 
-Every accepted crop was then reviewed visually, and every near-miss rejection
-re-judged, before `content/crops.final.json` was written. The image pipeline
+Every accepted crop was then reviewed visually on contact sheets, and every
+near-miss rejection re-judged: 110 passed the automated check, 10 of those were
+dropped on review (wall left around the painting, floor at the bottom), and 20
+near misses were rescued (clean crops of framed canvases whose listed size is
+the canvas alone). 120 of the 154 works are served from their crop; 6 were
+already flat reproductions; 28 stay as photographs (angled shots, close-ups,
+leaning canvases with floor). `content/crops.json` records every decision. The image pipeline
 renders those ids from the crop under a distinct key (`<id>c-…`), so nothing
 rendered from the uncropped photograph is ever reused by mistake.
 

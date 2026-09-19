@@ -27,14 +27,21 @@ import type { Dataset, Project } from '../src/content/types.ts';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const CACHE = path.join(ROOT, 'content', 'raw', 'media');
-const OUT = path.join(ROOT, 'content', 'raw', 'crops');
-const REPORT = path.join(ROOT, 'content', 'crops.json');
+/** `CROP_OUT=name` writes to content/raw/<name> and content/<name>.json — for comparing runs. */
+const RUN = process.env.CROP_OUT ?? 'crops';
+const OUT = path.join(ROOT, 'content', 'raw', RUN);
+const REPORT = path.join(ROOT, 'content', `${RUN}.json`);
 
 const WORK_WIDTH = 600;      // analysis resolution
 const WALL_TOLERANCE = 34;   // RGB distance from wall colour to count as "object"
 const ASPECT_TOLERANCE = 0.06;
 const FLAT_TOLERANCE = 0.05; // image already matches the painting: nothing to crop
-const MARGIN = 0.004;        // inset, as a fraction of the crop, to shave wall slivers
+const MARGIN = 0.003;        // final inset, as a fraction of the crop
+const SNAP_REACH = 0.06;     // how far inward (fraction of the box) an edge may snap to the frame
+const SNAP_DENSITY = 0.45;   // an edge line is "the frame" once this share of it is object
+const FINE_TOLERANCE = 16;   // a finer mask that sees a pale wooden frame against a white wall
+const GROW_REACH = 0.32;     // how far outward (fraction of the box) to look for that frame
+const GROW_DENSITY = 0.5;
 
 export type CropStatus = 'ok' | 'flat' | 'rejected' | 'no-dimensions' | 'no-image';
 
@@ -100,10 +107,10 @@ function wallColour({ data, width, height, channels }: Raster): [number, number,
   return [median(r), median(g), median(b)];
 }
 
-function objectMask(raster: Raster, wall: [number, number, number]): Uint8Array {
+function objectMask(raster: Raster, wall: [number, number, number], tolerance = WALL_TOLERANCE): Uint8Array {
   const { data, width, height, channels } = raster;
   const mask = new Uint8Array(width * height);
-  const t2 = WALL_TOLERANCE * WALL_TOLERANCE;
+  const t2 = tolerance * tolerance;
   for (let p = 0; p < width * height; p++) {
     const i = p * channels;
     const dr = data[i]! - wall[0], dg = data[i + 1]! - wall[1], db = data[i + 2]! - wall[2];
@@ -203,6 +210,79 @@ function paintingBox(mask: Uint8Array, width: number, height: number): Box | nul
   return merged;
 }
 
+/**
+ * Snap each side of the box inward to the first line that is mostly object.
+ * The component's bounding box is set by its outermost pixels, which can be a
+ * shadow, a nail or a stray highlight a few percent outside the frame; the frame
+ * itself is a dense straight line. Walking inward until a line is at least
+ * SNAP_DENSITY object finds it.
+ */
+function snapToFrame(mask: Uint8Array, width: number, box: Box): Box {
+  const w = boxW(box), h = boxH(box);
+  const reachX = Math.floor(w * SNAP_REACH), reachY = Math.floor(h * SNAP_REACH);
+
+  const colDensity = (x: number) => {
+    let on = 0;
+    for (let y = box.y0; y <= box.y1; y++) on += mask[y * width + x]!;
+    return on / h;
+  };
+  const rowDensity = (y: number) => {
+    let on = 0;
+    for (let x = box.x0; x <= box.x1; x++) on += mask[y * width + x]!;
+    return on / w;
+  };
+
+  const out = { ...box };
+  for (let i = 0; i < reachX && colDensity(out.x0) < SNAP_DENSITY; i++) out.x0++;
+  for (let i = 0; i < reachX && colDensity(out.x1) < SNAP_DENSITY; i++) out.x1--;
+  for (let i = 0; i < reachY && rowDensity(out.y0) < SNAP_DENSITY; i++) out.y0++;
+  for (let i = 0; i < reachY && rowDensity(out.y1) < SNAP_DENSITY; i++) out.y1--;
+  return out;
+}
+
+/**
+ * Grow each side outward to a frame the coarse mask could not see.
+ *
+ * A work on paper is often matted white inside a pale wooden frame. To the
+ * coarse mask the mat is wall, so the component is only the coloured passage
+ * in the middle — a crop that would cut into the piece. On a finer mask the
+ * frame shows as a dense straight line with sparse wall beyond it; if such a
+ * line exists within reach, the box grows out to it. The dimension check still
+ * decides whether the grown box is the painting.
+ */
+function growToFrame(fine: Uint8Array, width: number, height: number, box: Box): Box {
+  const w = boxW(box), h = boxH(box);
+  const reachX = Math.floor(w * GROW_REACH), reachY = Math.floor(h * GROW_REACH);
+  const out = { ...box };
+
+  const colDensity = (x: number) => {
+    let on = 0;
+    for (let y = box.y0; y <= box.y1; y++) on += fine[y * width + x]!;
+    return on / h;
+  };
+  const rowDensity = (y: number) => {
+    let on = 0;
+    for (let x = box.x0; x <= box.x1; x++) on += fine[y * width + x]!;
+    return on / w;
+  };
+  /** Outermost dense line within reach that has sparse wall just beyond it. */
+  const seek = (from: number, step: number, limit: number, density: (i: number) => number, bound: number) => {
+    let hit = from;
+    for (let d = 1; d <= limit; d++) {
+      const i = from + d * step;
+      if (i < 0 || i >= bound) break;
+      const beyond = i + 2 * step;
+      if (density(i) >= GROW_DENSITY && (beyond < 0 || beyond >= bound || density(beyond) < 0.15)) hit = i;
+    }
+    return hit;
+  };
+  out.x0 = seek(box.x0, -1, reachX, colDensity, width);
+  out.x1 = seek(box.x1, +1, reachX, colDensity, width);
+  out.y0 = seek(box.y0, -1, reachY, rowDensity, height);
+  out.y1 = seek(box.y1, +1, reachY, rowDensity, height);
+  return out;
+}
+
 /* --------------------------------------------------------------- driver */
 
 async function analyse(file: string, project: Project): Promise<CropRecord> {
@@ -228,25 +308,48 @@ async function analyse(file: string, project: Project): Promise<CropRecord> {
   const raster: Raster = { data, width: info.width, height: info.height, channels: info.channels };
 
   const wall = wallColour(raster);
-  const mask = close(objectMask(raster, wall), info.width, info.height, 2);
-  const box = paintingBox(mask, info.width, info.height);
-  if (!box) return { status: 'rejected', reason: 'no painting found', imageAspect };
+  const raw = objectMask(raster, wall);
+  const fine = objectMask(raster, wall, FINE_TOLERANCE);
+  const mask = close(raw, info.width, info.height, 2);
+  const found = paintingBox(mask, info.width, info.height);
+  if (!found) return { status: 'rejected', reason: 'no painting found', imageAspect };
+  // Candidates in order of preference. Snapping runs on the raw mask: closing
+  // thickens edges and would pull a snap outward.
+  const grown = growToFrame(fine, info.width, info.height, found);
+  const candidates: ReadonlyArray<readonly [Box, string]> = [
+    [snapToFrame(raw, info.width, grown), 'grown+snapped'],
+    [grown, 'grown'],
+    [snapToFrame(raw, info.width, found), 'snapped'],
+    [found, 'plain'],
+  ];
 
-  const coverage = (boxW(box) * boxH(box)) / (info.width * info.height);
+  const coverage = (boxW(found) * boxH(found)) / (info.width * info.height);
   if (coverage > 0.96) return { status: 'rejected', reason: 'crop is the whole image', imageAspect };
   if (coverage < 0.06) return { status: 'rejected', reason: 'crop too small', imageAspect };
 
-  // Back to full resolution, shaving a hair off each edge.
-  const fx0 = box.x0 / scale, fy0 = box.y0 / scale;
-  const fw = boxW(box) / scale, fh = boxH(box) / scale;
-  const left = Math.round(fx0 + fw * MARGIN);
-  const top = Math.round(fy0 + fh * MARGIN);
-  const width = Math.round(fw * (1 - 2 * MARGIN));
-  const height = Math.round(fh * (1 - 2 * MARGIN));
+  /** Back to full resolution, shaving a hair off each edge. */
+  const toFull = (b: Box) => {
+    const fx0 = b.x0 / scale, fy0 = b.y0 / scale;
+    const fw = boxW(b) / scale, fh = boxH(b) / scale;
+    const left = Math.round(fx0 + fw * MARGIN);
+    const top = Math.round(fy0 + fh * MARGIN);
+    const width = Math.round(fw * (1 - 2 * MARGIN));
+    const height = Math.round(fh * (1 - 2 * MARGIN));
+    return { left, top, width: Math.min(width, meta.width - left), height: Math.min(height, meta.height - top) };
+  };
 
-  const cropAspect = width / height;
-  const check = aspectError(cropAspect, dims);
-  const full = { left, top, width: Math.min(width, meta.width - left), height: Math.min(height, meta.height - top) };
+  // First candidate that matches the painting's dimensions wins; otherwise the
+  // closest miss is kept for review.
+  let best: { full: ReturnType<typeof toFull>; check: ReturnType<typeof aspectError>; how: string } | null = null;
+  for (const [candidate, how] of candidates) {
+    const full = toFull(candidate);
+    const check = aspectError(full.width / full.height, dims);
+    if (!best || check.error < best.check.error) best = { full, check, how };
+    if (check.error <= ASPECT_TOLERANCE) { best = { full, check, how }; break; }
+  }
+  const { full, check, how } = best!;
+  const cropAspect = full.width / full.height;
+
   if (check.error > ASPECT_TOLERANCE) {
     // The box is kept: a near miss may still be a clean crop of a framed canvas
     // whose listed dimensions are the canvas alone. A reviewer decides.
@@ -257,7 +360,7 @@ async function analyse(file: string, project: Project): Promise<CropRecord> {
     };
   }
 
-  return { status: 'ok', box: full, imageAspect, cropAspect, metaAspect: check.metaAspect };
+  return { status: 'ok', box: full, imageAspect, cropAspect, metaAspect: check.metaAspect, reason: how };
 }
 
 async function contactSheets(items: Array<{ id: string; file: string; box: CropRecord['box'] }>, prefix: string) {
