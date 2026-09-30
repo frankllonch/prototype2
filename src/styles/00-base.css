@@ -30,6 +30,7 @@
   --blue: var(--ink);                 /* alias kept for the About panel */
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --hover: 0.55s;                     /* one duration for every hover on the site */
   --veil-blur: 8px;
 }
 
@@ -96,16 +97,16 @@ body.is-locked { overflow: hidden; }
 /* Spread rather than bunched: the mockup sets the five items evenly across the
    width to the right of the wordmark. */
 .menu { display: flex; justify-content: space-around; gap: 1rem; color: var(--ink-soft); }
-.menu a { transition: color 0.2s var(--ease); }
+.menu a { transition: color var(--hover) var(--ease); }
 .menu a:hover, .menu a[aria-current='page'] { color: var(--ink); }
 
-/* Density sits at the foot of the page: the top belongs to the menu. */
+/* Density sits with the year rail down the left edge, not off on its own. */
 .controls {
-  position: fixed; right: var(--pad); bottom: 1.3rem; z-index: 30;
+  position: fixed; left: var(--pad); bottom: 1.6rem; z-index: 30;
   display: flex; gap: 1.3rem; color: var(--ink-soft);
   transition: opacity 0.8s var(--ease);
 }
-.control { transition: color 0.2s var(--ease); font-variant-numeric: tabular-nums; }
+.control { transition: color var(--hover) var(--ease); font-variant-numeric: tabular-nums; }
 .control:hover, .control.is-active { color: var(--ink); }
 
 @media (max-width: 899px) {
@@ -137,18 +138,20 @@ body.is-locked { overflow: hidden; }
   will-change: transform;
 }
 .cursor.is-visible { opacity: 1; }
+/* Centred on the pointer, because it *is* the pointer while it shows. */
 .cursor-label {
   display: inline-block;
-  background: var(--ink);
-  color: var(--paper);
-  padding: 0.3rem 0.5rem;
+  color: var(--ink);
   white-space: nowrap;
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   font-weight: 500;
-  transform: translate(0.9rem, 0.9rem);
+  transform: translate(-50%, -50%);
 }
+/* The arrow steps aside over a painting — but only once the script that
+   replaces it is actually running. */
+.has-cursor .tile { cursor: none; }
 @media (hover: none), (pointer: coarse) { .cursor { display: none; } }
 
 /* ------------------------------------------------------------ text roll */

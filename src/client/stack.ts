@@ -23,7 +23,6 @@ import { reduceMotion } from './env.ts';
  *    ends with the transforms cleared and the grid interactive.
  */
 const SCROLL_SPAN = 0.85;   // fraction of a viewport height over which the pile disperses
-const REVEAL = 0.42;        // progress at which the year rail is shown, for good
 const FRONT = 0.38;         // height of the front painting, as a fraction of the viewport
 const VISIBLE = 12;         // tiles given their own offset in the pile; the rest sit behind
 const WATCHDOG = 4000;      // ms: if the pile cannot be measured by now, show the grid
@@ -60,6 +59,8 @@ export function initStack(): void {
   let measured = false;
   /** Set once the pile has been given up on; it never runs again. */
   let disabled = false;
+  /** Whether the grid was fully settled on the previous frame. */
+  let settled = false;
 
   const clearTransforms = () => {
     for (const tile of tiles) {
@@ -109,17 +110,27 @@ export function initStack(): void {
     const h = window.innerHeight;
     const p = Math.min(1, Math.max(0, window.scrollY / (h * SCROLL_SPAN)));
 
-    // The rail is shown well before the pile has finished resolving, and stays
-    // shown: scrolling back up re-gathers the paintings but must not take the
-    // navigation away again.
-    if (p >= REVEAL) reveal();
-
     if (p >= 1) {
       // Settled. Clear the transforms, but stay listening — scrolling back up
       // gathers the pile again.
-      grid.classList.remove('is-stacked');
-      clearTransforms();
+      if (!settled) {
+        settled = true;
+        grid.classList.remove('is-stacked');
+        clearTransforms();
+        reveal();
+      }
       return;
+    }
+
+    // Coming back out of the settled state. The grid may have changed shape
+    // while it was settled — a different density, whose size transition has
+    // since finished — so the targets are re-taken before a single frame is
+    // drawn from them. Skipping this is what sent the paintings flying after a
+    // density change.
+    if (settled) {
+      settled = false;
+      measure();
+      hide();
     }
 
     grid.classList.add('is-stacked');
@@ -141,6 +152,7 @@ export function initStack(): void {
   function giveUp() {
     if (disabled) return;
     disabled = true;
+    settled = true;
     clearTransforms();
     grid!.classList.remove('is-stacked');
     window.clearTimeout(watchdog);
@@ -149,6 +161,15 @@ export function initStack(): void {
 
   const schedule = () => { if (!frame && !disabled) frame = requestAnimationFrame(render); };
   const relayout = () => { if (disabled) return; measure(); schedule(); };
+  /**
+   * Density changes animate the tiles' size, so the layout is not final for
+   * half a second. Measure now for a first approximation and again once the
+   * transition has run out.
+   */
+  const relayoutAfterResize = () => {
+    relayout();
+    window.setTimeout(relayout, 560);
+  };
 
   const watchdog = window.setTimeout(() => { if (!measured) giveUp(); }, WATCHDOG);
 
@@ -156,7 +177,7 @@ export function initStack(): void {
   window.addEventListener('resize', relayout, { passive: true });
   // The grid can change shape under the pile (density). Re-measure, never reuse
   // stale targets.
-  grid.addEventListener('gridchange', relayout);
+  grid.addEventListener('gridchange', relayoutAfterResize);
   window.addEventListener('load', relayout);
   void document.fonts.ready.then(relayout);
 
@@ -164,14 +185,26 @@ export function initStack(): void {
 }
 
 /**
- * Show whatever waits for the pile — the year rail and the density control.
- * One-way, and called on every path, including the ones where no pile ever
- * runs, so nothing can be left hidden behind an animation that did not happen.
+ * Show the controls that wait for the pile — the year rail and the density
+ * steps. Called on every path, including the ones where no pile ever runs, so
+ * nothing can be left hidden behind an animation that did not happen.
+ *
+ * `stackdone` fires only the first time: it is what listeners wire themselves
+ * up on, and they should not be wired twice.
  */
-let revealed = false;
+let wired = false;
 function reveal(): void {
-  if (revealed) return;
-  revealed = true;
   document.documentElement.classList.remove('stack-running');
+  if (wired) return;
+  wired = true;
   document.dispatchEvent(new CustomEvent('stackdone'));
+}
+
+/**
+ * The pile is forming again. The controls go away with it, and anything keyed
+ * to the settled grid — a chosen year, say — is dropped.
+ */
+function hide(): void {
+  document.documentElement.classList.add('stack-running');
+  document.dispatchEvent(new CustomEvent('stackrestart'));
 }

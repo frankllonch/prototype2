@@ -1,8 +1,9 @@
 import { finePointer, reduceMotion } from './env.ts';
 
 /**
- * A label that follows the pointer and names the work under it — its title and
- * year, read from the tile's own data attributes.
+ * Over a painting the pointer *becomes* its name — title and year, read from
+ * the tile's own data attributes, drawn where the arrow would be. The arrow is
+ * hidden for as long as the label stands in for it.
  *
  * It is decoration, never the only way to learn what a painting is: the same
  * title is the tile's accessible name, so a keyboard or screen-reader user gets
@@ -12,6 +13,10 @@ export function initCursor(): void {
   const cursor = document.querySelector<HTMLElement>('[data-cursor]');
   const label = cursor?.querySelector<HTMLElement>('.cursor-label');
   if (!cursor || !label || !finePointer.matches) return;
+
+  // Only now is it safe to take the arrow away over a tile: without this class
+  // a browser that never runs the script would leave people with no pointer.
+  document.documentElement.classList.add('has-cursor');
 
   let targetX = 0, targetY = 0, x = 0, y = 0;
   let active = false;
@@ -48,6 +53,8 @@ export function initCursor(): void {
       const text = year ? `${title}, ${year}` : title;
       if (label.textContent !== text) label.textContent = text;
       if (!active) { active = true; cursor.classList.add('is-visible'); }
+      // Snap rather than trail while it is standing in for the pointer.
+      x = targetX; y = targetY;
     } else if (active) {
       active = false;
       cursor.classList.remove('is-visible');

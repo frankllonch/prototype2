@@ -121,16 +121,45 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
  * rather than repeats.
  */
 /*
- * About is a takeover, not a veil. The peach belongs to the title screen; the
- * biography below it reads as a page — indigo on white — and the two are joined
- * by a fade rather than a cut.
+ * About is a takeover, not a veil.
+ *
+ * The title screen cycles through the palette the paintings gave us — the same
+ * colours as the year rail — changing ground and type together, stepping rather
+ * than sweeping so it reads as a blink. Both colours are custom properties, so
+ * the fade below can begin from whichever one is currently showing.
+ *
+ * Registering them makes the animation well-defined rather than relying on the
+ * discrete fallback for unregistered properties.
  */
+@property --blink-bg { syntax: '<color>'; inherits: true; initial-value: #fcd090; }
+@property --blink-fg { syntax: '<color>'; inherits: true; initial-value: #003880; }
+
+@keyframes about-blink {
+  0%     { --blink-bg: #fcd090; --blink-fg: #003880; }
+  16.6%  { --blink-bg: #003880; --blink-fg: #fcd090; }
+  33.3%  { --blink-bg: #0b6140; --blink-fg: #dac192; }
+  50%    { --blink-bg: #bc703f; --blink-fg: #ffffff; }
+  66.6%  { --blink-bg: #0a5769; --blink-fg: #fcd090; }
+  83.3%  { --blink-bg: #843b32; --blink-fg: #dac192; }
+  100%   { --blink-bg: #fcd090; --blink-fg: #003880; }
+}
+
 .about {
   background: var(--paper);
   color: var(--ink);
+  animation: about-blink 18s steps(1, end) infinite;
 }
-.about-close { position: fixed; top: 1.6rem; right: var(--pad); z-index: 2; color: var(--blue); }
 
+.about-close {
+  position: fixed; top: 1.6rem; right: var(--pad); z-index: 2;
+  color: var(--ink);
+  /* Legible over the blink and over the white page below it alike. */
+  background: color-mix(in srgb, var(--paper) 78%, transparent);
+  padding: 0.3rem 0.5rem;
+}
+
+/* Exactly one screen of colour: the turn to white is something you scroll into,
+   never something visible the moment About is opened. */
 .about-lines {
   min-height: 100vh;
   display: grid;
@@ -139,7 +168,9 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   text-align: center;
   padding: var(--bar) var(--pad);
   position: relative;
-  background: linear-gradient(var(--peach) 76%, var(--paper));
+  background: var(--blink-bg);
+  color: var(--blink-fg);
+  transition: background-color 0.9s var(--ease), color 0.9s var(--ease);
 }
 .about-lines p {
   margin: 0;
@@ -148,9 +179,14 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   letter-spacing: -0.02em;
   line-height: 1.32;
 }
-.about-more { position: absolute; bottom: 2rem; opacity: 0.55; }
+.about-more { position: absolute; bottom: 2rem; opacity: 0.6; }
+
+/* The turn from colour to page, beginning at whatever the blink is showing. */
+.about-fade { height: 46vh; background: linear-gradient(var(--blink-bg), var(--paper)); }
 
 .about-body {
+  background: var(--paper);
+  color: var(--ink);
   display: grid;
   grid-template-columns: minmax(0, 34rem) minmax(0, 0.7fr);
   gap: var(--gap);

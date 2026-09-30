@@ -12,6 +12,13 @@ interface LayoutProps {
   readonly rail?: Html;
   /** Grid density control. */
   readonly controls?: Html;
+  /**
+   * Content that must sit above the page: the detail panels. `main` is its own
+   * stacking context — the opening pile gives its tiles a z-index, which would
+   * otherwise compete with the overlays — so anything meant to rise above the
+   * veil has to live outside it.
+   */
+  readonly overlays?: Html;
   readonly children: Html;
 }
 
@@ -86,6 +93,8 @@ function aboutOverlay(): Html {
       ${bio ? html`<span class="about-more" aria-hidden="true">Scroll</span>` : ''}
     </div>
 
+    ${bio ? html`<div class="about-fade" aria-hidden="true"></div>` : ''}
+
     ${bio
       ? html`<div class="about-body">
           <div class="about-text">${raw(bio)}</div>
@@ -118,7 +127,7 @@ function lightbox(): Html {
   </div>`;
 }
 
-export function layout({ title, description, path, rail, controls, children }: LayoutProps): Html {
+export function layout({ title, description, path, rail, controls, overlays, children }: LayoutProps): Html {
   const fullTitle = title === 'Claudia Valsells' ? title : `${title} — Claudia Valsells`;
   const modules = CLIENT_MODULES.map((m) => withBase(`/js/${m}.js`));
   return raw(`<!doctype html>
@@ -138,6 +147,7 @@ ${modules.map((m) => `<link rel="modulepreload" href="${m}" />`).join('\n')}
 ${topBar(path).__html}
 ${rail ? rail.__html : ''}
 <main id="main">${children.__html}</main>
+${overlays ? overlays.__html : ''}
 ${controls ? controls.__html : ''}
 <div class="cursor" data-cursor aria-hidden="true"><span class="cursor-label"></span></div>
 <div class="panel-veil" data-panel-veil></div>

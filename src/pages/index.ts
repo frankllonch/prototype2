@@ -58,10 +58,10 @@ export function panelGridPage(opts: {
     title: opts.title,
     path: opts.path,
     controls: gridControls(),
+    overlays: panels(opts.kind, opts.items),
     children: html`
       <h1 class="page-title" data-roll>${opts.title}</h1>
       ${grid({ items: gridItems, basePath: opts.path.replace(/\/$/, ''), panels: opts.kind, eagerCount: gridItems.length })}
-      ${panels(opts.kind, opts.items)}
     `,
   });
 }
