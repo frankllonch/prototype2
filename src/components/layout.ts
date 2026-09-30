@@ -33,11 +33,26 @@ const MENU = [
 
 /** Client modules, in boot order. Preloaded so the first interaction is instant. */
 const CLIENT_MODULES = [
-  'env', 'text-roll', 'controls', 'stack', 'years', 'panels', 'panel-scroll', 'lightbox', 'cursor', 'index',
+  'env', 'text-roll', 'transitions', 'controls', 'stack', 'years', 'panels', 'panel-scroll',
+  'lightbox', 'cursor', 'index',
 ] as const;
 
 /** The designer's About: five lines, set in blue on peach. */
 const ABOUT_LINES = ['CLAUDIA VALSELLS', '1969', 'Alzueta Gallery', 'Barcelona, Spain', '© All Rights Reserved'];
+
+/**
+ * The opening screen, shown once a session while the site loads: the same five
+ * lines as About, throbbing through the palette.
+ *
+ * Rendered on every page but hidden by the head script on all but the first, so
+ * the decision is made before anything is painted rather than as a flash that is
+ * then taken back.
+ */
+function loadingScreen(): Html {
+  return html`<div class="loader" data-loader aria-hidden="true">
+    ${join(ABOUT_LINES.map((line) => html`<p>${line}</p>`))}
+  </div>`;
+}
 
 function topBar(path: string): Html {
   return html`<header class="top">
@@ -96,15 +111,17 @@ function aboutOverlay(): Html {
 
     ${bio
       ? html`<div class="about-body">
-          <div class="about-text">${raw(bio)}</div>
-          <div class="about-figures">
-            ${join(
-              images.slice(0, 2).map(
-                (image) => html`<figure class="about-figure">
-                  ${responsiveImage({ image, sizes: '(max-width: 899px) 88vw, 30vw' })}
-                </figure>`,
-              ),
-            )}
+          <div class="about-inner">
+            <div class="about-text">${raw(bio)}</div>
+            <div class="about-figures">
+              ${join(
+                images.slice(0, 2).map(
+                  (image) => html`<figure class="about-figure">
+                    ${responsiveImage({ image, sizes: '(max-width: 899px) 88vw, 30vw' })}
+                  </figure>`,
+                ),
+              )}
+            </div>
           </div>
         </div>`
       : ''}
@@ -139,9 +156,15 @@ ${description ? `<meta name="description" content="${description.replace(/"/g, '
 <link rel="preload" href="${withBase('/fonts/inter-normal.woff2')}" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="${withBase('/site.css')}" />
 ${modules.map((m) => `<link rel="modulepreload" href="${m}" />`).join('\n')}
-<script>document.documentElement.classList.add('js')</script>
+<script>document.documentElement.classList.add('js');
+// The loading screen belongs to arriving at the site, not to each page of it.
+// Decided here, before the first paint, so pages after the first never show it
+// even for a frame.
+try { if (sessionStorage.getItem('cv-seen')) document.documentElement.classList.add('loaded') } catch (e) {}</script>
 </head>
 <body>
+${loadingScreen().__html}
+<div class="page-veil" aria-hidden="true"></div>
 <a class="skip-link" href="#main">Skip to content</a>
 ${topBar(path).__html}
 ${rail ? rail.__html : ''}

@@ -59,10 +59,12 @@ async function main() {
 
   await writePage('', artworkPage(works, yearColours));
   await writePage('exhibitions', panelGridPage({
-    title: 'Exhibitions', path: '/exhibitions/', kind: 'exhibition', items: exhibitions.map(exhibitionItem),
+    title: 'Exhibitions', path: '/exhibitions/', kind: 'exhibition',
+    items: exhibitions.map(exhibitionItem), composition: 'feed',
   }));
   await writePage('collaborations', panelGridPage({
-    title: 'Collaborations', path: '/collaborations/', kind: 'collaboration', items: collaborations.map(collaborationItem),
+    title: 'Collaborations', path: '/collaborations/', kind: 'collaboration',
+    items: collaborations.map(collaborationItem), composition: 'justified',
   }));
   if (colourChart) await writePage('colour-chart', colourChartPage(colourChart));
 

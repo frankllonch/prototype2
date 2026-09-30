@@ -22,7 +22,12 @@ import { reduceMotion } from './env.ts';
  *    measure that never happened, the watchdog — disables the pile for good and
  *    ends with the transforms cleared and the grid interactive.
  */
-const SCROLL_SPAN = 0.85;   // fraction of a viewport height over which the pile disperses
+/**
+ * Fraction of a viewport height over which the pile disperses. Exported because
+ * the year rail has to know where the pile lets go: scrolling to a year above
+ * that point would gather the paintings back up under the reader.
+ */
+export const SCROLL_SPAN = 0.85;
 const FRONT = 0.38;         // height of the front painting, as a fraction of the viewport
 const VISIBLE = 12;         // tiles given their own offset in the pile; the rest sit behind
 const WATCHDOG = 4000;      // ms: if the pile cannot be measured by now, show the grid

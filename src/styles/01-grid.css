@@ -28,6 +28,26 @@ html:not(.js) .hero, .hero:empty:not([data-hero]) { height: 0; }
    specific selector does not quietly win over it. */
 .grid:not([data-stack]):not(.grid-justified) { padding-top: var(--gap); }
 
+/*
+ * Half a screen of paper between the pile settling and the first painting.
+ *
+ * It buys two things. The opening stops running straight into the grid — the
+ * pile resolves, and then the sheet arrives, instead of both happening in the
+ * same 120 pixels. And it is what makes the first year reachable: to bring a
+ * year to the middle of the screen you scroll to half a viewport above it, and
+ * for the earliest year that landed inside the pile's own stretch of scroll, so
+ * choosing it gathered the paintings back up instead. With this the first year
+ * sits at 1.5 viewports and centring it needs 1.0 — clear of the 0.85 the pile
+ * finishes at, at every window size, since all three scale together.
+ *
+ * Only where the pile actually runs. `stack.ts` deletes the hero on every path
+ * where it does not — reduced motion, or no tiles to pile — and the sibling
+ * selector goes with it, so the runway is not left standing above nothing.
+ * `html.js` covers the remaining case: with no scripting the hero is collapsed
+ * rather than removed, and there is no opening to make room for either.
+ */
+html.js .hero[data-hero] + .grid[data-stack] { padding-top: 50vh; }
+
 .tile {
   flex: 0 0 auto;
   height: var(--unit);

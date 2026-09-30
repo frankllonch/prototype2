@@ -35,30 +35,129 @@
 }
 
 /*
- * Moving between pages cross-fades rather than cutting. The old page fades out
- * as the new one fades in, so the site reads as one surface instead of a set of
- * documents. Browsers without cross-document view transitions simply navigate.
+ * Moving between pages fades rather than cutting: the page you are leaving goes
+ * out, the one you arrive at comes in, so the site reads as one surface instead
+ * of a set of documents.
+ *
+ * This was `@view-transition` and it did nothing in practice. Cross-document
+ * view transitions are skipped without a word whenever the browser has not
+ * implemented them, and they cannot be feature-detected from script, so there
+ * was no way even to know. The entrance is now a plain animation that every
+ * browser runs, and the exit is `client/transitions.ts` holding the navigation
+ * back for the length of the fade.
+ *
+ * What fades is a sheet of paper over the page, not the page itself. Fading
+ * `body` looked identical and was wrong twice over: `body` is the containing
+ * block for the menu, the panels, the lightbox and the pointer label, all of
+ * which are fixed — and an opacity animation, even one that finishes at 1, keeps
+ * a stacking context on the element for as long as it fills. That context
+ * trapped the menu's `difference` blend against the body's own background
+ * instead of the page, so the type came out raw peach rather than the indigo it
+ * resolves to over paper.
+ *
+ * The entrance needs no script, so a failure to load one cannot leave the page
+ * covered; the exit is script, so a failure there is just an ordinary
+ * navigation.
  */
-@view-transition { navigation: auto; }
-::view-transition-old(root) { animation: fade-out 0.32s var(--ease) both; }
-::view-transition-new(root) { animation: fade-in 0.42s var(--ease) 0.06s both; }
-@keyframes fade-out { to { opacity: 0; } }
-@keyframes fade-in { from { opacity: 0; } }
+.page-veil {
+  position: fixed; inset: 0; z-index: 150;
+  background: var(--paper);
+  pointer-events: none;
+  opacity: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .page-veil { animation: veil-out 0.6s var(--ease) both; }
+  /* Naming a different animation rather than clearing this one: replacing the
+     name restarts it from its own first frame, where removing it would leave
+     the transition to guess what it was fading from. */
+  html.is-leaving .page-veil { animation: veil-in 0.42s var(--ease) both; }
+}
+@keyframes veil-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes veil-in { from { opacity: 0; } to { opacity: 1; } }
 
 /*
- * The other half of it: the page cross-fades, and then the content of the new
- * one settles in rather than being there already. A rise of a few pixels and a
- * short stagger is enough — anything more and it reads as a slideshow.
+ * The other half of it: the page fades in, and then its content settles rather
+ * than being there already. A rise of a few pixels and a short stagger is
+ * enough — anything more and it reads as a slideshow.
  *
  * Not on the artwork index, which has the pile to arrive with, and not for
  * anyone who has asked for less movement.
  */
-@keyframes settle-in { from { opacity: 0; transform: translateY(14px); } }
+@keyframes settle-in { from { opacity: 0; transform: translateY(18px); } }
 @media (prefers-reduced-motion: no-preference) {
-  .feed-column, .reader-page .reader {
-    animation: settle-in 0.8s var(--ease) both;
+  .feed-column, .reader-page .reader, .grid-justified, .detail {
+    animation: settle-in 0.9s var(--ease) 0.1s both;
   }
-  .feed-column:nth-child(2) { animation-delay: 0.12s; }
+  .feed-column:nth-child(2) { animation-delay: 0.25s; }
+}
+
+/* ---------------------------------------------------------------- loading */
+
+/*
+ * The first arrival of a session: the About title, blinking through the palette,
+ * while the page loads behind it.
+ *
+ * It has to be able to clear itself without script. The fade-out is a plain
+ * animation on a delay, so a browser that never runs a line of JavaScript still
+ * gets the page — the script only brings that moment forward once the load has
+ * actually finished. Anything else risks a blank site, which is a far worse
+ * failure than a loading screen nobody wanted.
+ *
+ * `visibility` rather than `display` in the final frame, so it stops taking
+ * clicks and leaves the tab order without the animation having to be undone.
+ */
+.loader {
+  position: fixed; inset: 0; z-index: 200;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  text-align: center;
+  gap: 0.1rem;
+  padding: var(--bar) var(--pad);
+  background: var(--blink-bg);
+  color: var(--blink-fg);
+  /* Fast enough to throb — the opposite of About, which holds each colour. */
+  animation:
+    about-blink 3s ease-in-out infinite,
+    loader-out 0.75s var(--ease) 2.9s both;
+}
+.loader p {
+  margin: 0;
+  font-size: clamp(1.5rem, 3.4vw, 2.75rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.32;
+}
+/*
+ * Once the load is done the script brings that exit forward by naming a
+ * different animation in the exit's slot, exactly as `.page-veil` does.
+ *
+ * Shortening the delay instead does not work, and looked as though it did.
+ * Changing `animation-delay` or `animation-duration` retimes an animation but
+ * leaves its start time alone, so its local clock still reads the 1.6s or more
+ * that has actually elapsed — already past the end of the shortened run. The
+ * screen jumped to the last frame in one step rather than fading over it.
+ * A new name is a new animation, which starts at its own first frame; the blink
+ * keeps its name and its position in the list, so it carries on mid-turn instead
+ * of snapping back to peach.
+ */
+.loader.is-done {
+  animation-name: about-blink, loader-now;
+  animation-delay: 0s, 0s;
+  animation-duration: 3s, 0.55s;
+}
+/* Same frames, two names: one for the delayed fallback, one for the early exit. */
+@keyframes loader-out { to { opacity: 0; visibility: hidden; } }
+@keyframes loader-now { to { opacity: 0; visibility: hidden; } }
+/*
+ * Never shown at all: already seen once this session, motion turned down, or no
+ * scripting — in the last case nothing would be there to take it away early, and
+ * a loading screen in front of a page that has already loaded is only a delay.
+ */
+html.loaded .loader,
+html:not(.js) .loader { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .loader { display: none; }
 }
 
 *, *::before, *::after { box-sizing: border-box; }

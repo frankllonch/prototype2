@@ -45,17 +45,19 @@ export function artworkPage(works: readonly Project[], years: readonly YearColou
 }
 
 /**
- * Exhibitions and collaborations: the two-column feed, each tile opening a panel.
+ * Exhibitions and collaborations: a grid of projects, each tile opening a panel.
  *
- * A handful of projects rather than an archive, so they are shown at their own
- * proportions in two staggered columns instead of on the contact sheet the
- * paintings use.
+ * The two differ in composition. Exhibitions are installation views — rooms,
+ * mostly, of varying shape — and read better in the two staggered columns after
+ * nachoalegre.com. Collaborations are a set of objects, and read better justified
+ * into rows, where they line up and can be compared.
  */
 export function panelGridPage(opts: {
   readonly title: string;
   readonly path: string;
   readonly kind: string;
   readonly items: readonly PanelItem[];
+  readonly composition: 'feed' | 'justified';
 }): Html {
   const gridItems: GridItem[] = opts.items
     .filter((i) => i.images[0])
@@ -71,7 +73,8 @@ export function panelGridPage(opts: {
         items: gridItems,
         basePath: opts.path.replace(/\/$/, ''),
         panels: opts.kind,
-        feed: true,
+        feed: opts.composition === 'feed',
+        justified: opts.composition === 'justified',
         eagerCount: gridItems.length,
       })}
     `,

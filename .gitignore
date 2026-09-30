@@ -1,3 +1,4 @@
 node_modules/
 dist/
 content/raw/
+.DS_Store
