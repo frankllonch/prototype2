@@ -31,84 +31,75 @@
 /* Without scripting the panels are plain anchor targets, so they must be visible. */
 html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transform: none; }
 
-/* ----------------------------------------------------------------- panels */
+/* ----------------------------------------------------------------- reader */
 
 /*
- * The detail composition, after bofill.com: the text runs down one column and
- * the photograph holds the other. The figure column is sticky, so the picture
- * stays put while the words move past it; which photograph shows follows the
- * reader's progress (client/panel-scroll.ts).
+ * The reading composition, shared by the detail panels and the Colour Chart.
+ *
+ * The panel carries no box of its own — an edge-to-edge sheet with a soft ground
+ * and nothing that reads as a floating card over the blurred page behind it.
  */
-/* Opaque enough to read a long text over: the blurred grid behind should be
-   a sense of where you are, not competition for the words. */
-.panel { background: color-mix(in srgb, var(--paper) 78%, transparent); padding: var(--bar) 0 var(--gap); }
-
+.panel { background: color-mix(in srgb, var(--paper) 90%, transparent); padding: 0 0 var(--gap); }
 .panel-close { position: fixed; top: 1.6rem; right: var(--pad); z-index: 2; color: var(--ink-soft); }
 .panel-close:hover { color: var(--ink); }
+.reader-page { padding-bottom: var(--gap); }
 
-.panel-inner {
+.reader {
   display: grid;
-  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
-  gap: var(--gap);
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(2rem, 5vw, 5rem);
   align-items: start;
-  max-width: 92rem;
+  /* Wider than a page of prose: this is the whole screen's work. */
+  max-width: 108rem;
   margin: 0 auto;
-  padding: 0 var(--pad);
+  padding: calc(var(--bar) + var(--gap)) var(--pad) 0;
 }
 
-/* The title stays with you, as the sticky label does on bofill.com: the text
-   runs out long before the photographs do, and the left column would otherwise
-   be empty for most of the scroll. The counter sits here with it, so there is
-   always something live on that side. */
-.panel-head {
-  position: sticky;
-  top: var(--bar);
-  margin-bottom: var(--gap);
-  padding-bottom: 0.6rem;
-  background: linear-gradient(var(--paper) 78%, transparent);
+/* The title stays with you, as the sticky label does on bofill.com. No ground
+   behind it: a panel of its own colour was the visible box. */
+.reader-head { position: sticky; top: var(--bar); margin-bottom: clamp(1.5rem, 3vw, 2.5rem); }
+.reader-title { font-size: clamp(1.4rem, 3vw, 2.4rem); letter-spacing: -0.02em; line-height: 1.1; }
+.reader-year, .reader-counter {
+  display: block; margin: 0.35rem 0 0; color: var(--ink-soft);
+  font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; font-variant-numeric: tabular-nums;
 }
-.panel-title { font-size: clamp(1.2rem, 2.4vw, 1.9rem); letter-spacing: -0.015em; }
-.panel-year { display: block; margin-top: 0.3rem; color: var(--ink-soft); }
-.panel-text { max-width: 34rem; padding-bottom: 12vh; }
-.panel-text .prose { max-width: none; }
 
-.panel-figures { --slot: 30vh; }
-.panel-figure { margin: 0; }
-.panel-figure figcaption { color: var(--ink-soft); margin-top: 0.4rem; }
-.panel-figure img { width: 100%; height: auto; }
+.reader-text { padding-bottom: 12vh; }
+/* Larger than the rest of the site: this is the one place on it made for reading. */
+.reader-text .prose { max-width: 36rem; font-size: 16px; line-height: 1.62; }
+.reader-text .prose p { margin: 0 0 1.1em; }
 
 /*
- * Only once the script is driving them do the figures stack on top of each
- * other; until then they are an ordinary column beside the text, which is what
- * a reader without scripting gets.
- *
- * The column is given a slot per photograph — that height is the scroll runway
- * the effect needs — while the stage inside it sticks to the top of the panel.
+ * The figure column gets a little height of its own so a short text still has
+ * somewhere to move through its photographs — but `min-height`, so a long text
+ * governs and the two columns run out together instead of the pictures
+ * outlasting the words.
  */
-/* `min-height`, not `height`: when the text is the longer of the two it should
-   govern, and the figures simply stick for as long as it runs. */
-.panel-figures.is-live { min-height: min(calc(var(--n) * var(--slot)), 360vh); }
-.panel-figures.is-live .panel-sticky { position: sticky; top: var(--bar); }
-.panel-figures.is-live .panel-stage {
-  position: relative;
-  height: calc(100vh - var(--bar) - 7rem);
-}
-.panel-figures.is-live .panel-figure {
+.reader-figures { --slot: 16vh; }
+.reader-figure { margin: 0; }
+.reader-figure figcaption { color: var(--ink-soft); margin-top: 0.4rem; font-size: 11px; }
+.reader-figure img { width: 100%; height: auto; }
+
+.reader-figures.is-live { min-height: min(calc(var(--n) * var(--slot)), 150vh); }
+.reader-figures.is-live .reader-sticky { position: sticky; top: var(--bar); }
+.reader-figures.is-live .reader-stage { position: relative; height: calc(100vh - var(--bar) - 3rem); }
+.reader-figures.is-live .reader-figure {
   position: absolute; inset: 0;
   display: grid; align-content: center; justify-items: center;
   opacity: 0;
-  transition: opacity 0.55s var(--ease);
+  transition: opacity 0.6s var(--ease);
 }
-.panel-figures.is-live .panel-figure.is-current { opacity: 1; }
-.panel-figures.is-live .panel-figure picture,
-.panel-figures.is-live .panel-figure img { max-height: calc(100vh - var(--bar) - 7rem); width: auto; max-width: 100%; }
-.panel-counter { margin: 0.5rem 0 0; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.reader-figures.is-live .reader-figure.is-current { opacity: 1; }
+.reader-figures.is-live .reader-figure picture,
+.reader-figures.is-live .reader-figure img {
+  max-height: calc(100vh - var(--bar) - 5rem); width: auto; max-width: 100%;
+}
 
 @media (max-width: 899px) {
-  .panel-inner { grid-template-columns: 1fr; }
-  .panel-figures { --slot: 46vh; }
-  .panel-figures.is-live .panel-stage { height: 58vh; }
-  .panel-text { padding-bottom: var(--gap); }
+  .reader { grid-template-columns: 1fr; }
+  .reader-figures { --slot: 30vh; }
+  .reader-figures.is-live .reader-stage { height: 58vh; }
+  .reader-text { padding-bottom: var(--gap); }
 }
 
 /* ------------------------------------------------------------------ about */

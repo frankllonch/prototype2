@@ -24,7 +24,9 @@ html:not(.js) .hero, .hero:empty:not([data-hero]) { height: 0; }
   padding: 0 var(--pad) 62vh var(--rail);
 }
 @media (max-width: 899px) { .grid { padding-left: var(--pad); padding-bottom: 58vh; } }
-.grid:not([data-stack]) { padding-top: var(--gap); }
+/* The justified grid sets its own padding; excluded here so this more
+   specific selector does not quietly win over it. */
+.grid:not([data-stack]):not(.grid-justified) { padding-top: var(--gap); }
 
 .tile {
   flex: 0 0 auto;
@@ -68,14 +70,31 @@ html:not(.js) .hero, .hero:empty:not([data-hero]) { height: 0; }
 .grid.is-stacked .tile { transition: none; will-change: transform; }
 .grid.is-stacked { pointer-events: none; }
 
-@media (max-width: 599px) { .grid { --unit: 120px !important; } }
+@media (max-width: 599px) { .grid:not(.grid-justified) { --unit: 120px !important; } }
+
+/*
+ * A handful of items rather than 154, and no size for the reader to choose:
+ * these fill the width in justified rows. Each tile grows in proportion to its
+ * aspect ratio, so every row resolves to one height and fills the line exactly.
+ * The scale factor on `flex-grow` matters — flexbox only distributes all of a
+ * line's free space when the grow factors on it sum to at least 1, and a lone
+ * landscape tile would otherwise stop short of the edge.
+ */
+.grid-justified {
+  padding: calc(var(--bar) + var(--gap)) var(--pad) var(--gap);
+}
+.grid-justified .tile {
+  height: auto;
+  width: auto;
+  flex-grow: calc(var(--a) * 10);
+  flex-shrink: 1;
+  flex-basis: calc(var(--a) * 22rem);
+  /* Room under each row for the name to appear on hover. */
+  margin-bottom: 1.5rem;
+}
+.grid-justified .tile picture, .grid-justified .tile img { width: 100%; height: auto; }
 
 /* --------------------------------------------------------- colour chart */
-
-.chart-plates { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap); padding: var(--gap) var(--pad) 0; }
-.chart-plate { margin: 0; }
-.chart-text { max-width: 40rem; padding: var(--gap) var(--pad); }
-@media (max-width: 699px) { .chart-plates { grid-template-columns: 1fr; } }
 
 .prose { font-size: 13px; line-height: 1.6; }
 .prose p { margin: 0 0 0.9em; }

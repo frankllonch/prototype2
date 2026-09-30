@@ -28,7 +28,7 @@ const MENU = [
   { label: 'Artwork', href: '/' },
   { label: 'Collaborations', href: '/collaborations/' },
   { label: 'Exhibitions', href: '/exhibitions/' },
-  { label: "What's Colour", href: '/colour-chart/' },
+  { label: 'Colour Chart', href: '/colour-chart/' },
 ] as const;
 
 /** Client modules, in boot order. Preloaded so the first interaction is instant. */

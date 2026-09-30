@@ -30,6 +30,12 @@ interface GridProps {
   readonly panels?: string;
   /** Animate the grid out of a stack on the first scroll. */
   readonly stack?: boolean;
+  /**
+   * Fill the width in justified rows instead of the fixed-height contact sheet.
+   * Used where there are a handful of items rather than 154, and where the size
+   * is not the reader's to choose.
+   */
+  readonly justified?: boolean;
   /** Leading tiles to load eagerly — the ones visible in the stack. */
   readonly eagerCount?: number;
 }
@@ -81,13 +87,13 @@ function tile(
  * only thing the density control changes; every tile's width is `--unit × --a`.
  */
 export function grid({
-  items, basePath, lightbox = false, panels, stack = false, eagerCount = 14,
+  items, basePath, lightbox = false, panels, stack = false, justified = false, eagerCount = 14,
 }: GridProps): Html {
   // The first tile of each year carries that year's anchor, so the rail can be
   // plain links and still work with scripting off.
   const seen = new Set<number>();
   return html`<div
-    class="grid"
+    class="grid${justified ? ' grid-justified' : ''}"
     data-grid
     ${lightbox ? html`data-lightbox-source` : ''}
     ${stack ? html`data-stack` : ''}

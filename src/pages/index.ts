@@ -3,6 +3,7 @@ import { layout } from '../components/layout.ts';
 import { grid, gridControls, type GridItem } from '../components/gallery.ts';
 import { responsiveImage } from '../components/image.ts';
 import { panels, type PanelItem } from '../components/panels.ts';
+import { editorialBody } from '../components/editorial.ts';
 import { yearRail } from '../components/years.ts';
 import type { YearColour } from '../content/load.ts';
 import { describeImage } from '../content/describe.ts';
@@ -57,11 +58,16 @@ export function panelGridPage(opts: {
   return layout({
     title: opts.title,
     path: opts.path,
-    controls: gridControls(),
     overlays: panels(opts.kind, opts.items),
     children: html`
-      <h1 class="page-title" data-roll>${opts.title}</h1>
-      ${grid({ items: gridItems, basePath: opts.path.replace(/\/$/, ''), panels: opts.kind, eagerCount: gridItems.length })}
+      <h1 class="sr-only">${opts.title}</h1>
+      ${grid({
+        items: gridItems,
+        basePath: opts.path.replace(/\/$/, ''),
+        panels: opts.kind,
+        justified: true,
+        eagerCount: gridItems.length,
+      })}
     `,
   });
 }
@@ -77,21 +83,15 @@ export const collaborationItem = (p: Project): PanelItem => ({
   rows: p.rows,
 });
 
-/** Colour Chart, on its own page: the three photographs, then the text. */
+/** The Colour Chart, read the same way as an exhibition. */
 export function colourChartPage(page: Project): Html {
-  const text = page.rows.flatMap((r) => r.columns).filter((c) => c.kind === 'text');
   return layout({
     title: 'Colour Chart',
     path: '/colour-chart/',
     children: html`
-      <h1 class="page-title" data-roll>Colour Chart</h1>
-      <div class="chart-plates">
-        ${join(page.images.slice(0, 3).map((image) => html`<figure class="chart-plate">
-          ${responsiveImage({ image, sizes: '(max-width: 700px) 92vw, 30vw' })}
-        </figure>`))}
-      </div>
-      <div class="chart-text">
-        ${join(text.map((c) => html`<div class="prose">${raw(c.kind === 'text' ? c.html : '')}</div>`))}
+      <h1 class="sr-only">Colour Chart</h1>
+      <div class="reader-page">
+        ${editorialBody({ title: 'Colour Chart', images: page.images, rows: page.rows })}
       </div>
     `,
   });

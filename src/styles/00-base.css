@@ -67,8 +67,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 
 /* Small caps for every label on the site. */
-.menu, .controls, .wordmark, .about-close, .panel-close, .panel-year,
-.lightbox-close, .lightbox-count, .panel-counter, .year-label,
+.menu, .controls, .wordmark, .about-close, .panel-close,
+.lightbox-close, .lightbox-count, .year-label,
 .detail-back, .detail-pager, .about-more {
   font-size: 11px;
   letter-spacing: 0.06em;
@@ -80,6 +80,15 @@ body.is-locked { overflow: hidden; }
 
 /* ---------------------------------------------------------------- top bar */
 
+/*
+ * The bar has no ground of its own. Instead the type is drawn as the negative of
+ * whatever passes under it — after huyml.co — so it stays legible over a dark
+ * painting and a light one alike, and over nothing at all.
+ *
+ * The trick is the source colour. `difference` computes |backdrop − source| per
+ * channel, so over white paper a source of (255, 199, 127) resolves to exactly
+ * (0, 56, 128): the indigo. Over a painting it becomes that painting's negative.
+ */
 .top {
   position: fixed; inset: 0 0 auto 0; z-index: 40;
   display: grid;
@@ -88,17 +97,17 @@ body.is-locked { overflow: hidden; }
   gap: var(--pad);
   padding: 1.6rem var(--pad) 1rem;
   pointer-events: none;
-  /* The grid scrolls under the bar, so it needs a ground of its own — faded out
-     at the bottom so it reads as air rather than a band. */
-  background: linear-gradient(var(--paper) 62%, color-mix(in srgb, var(--paper) 0%, transparent));
+  mix-blend-mode: difference;
 }
 .top > * { pointer-events: auto; }
 .wordmark { font-size: 13px; letter-spacing: 0.08em; white-space: nowrap; }
 /* Spread rather than bunched: the mockup sets the five items evenly across the
    width to the right of the wordmark. */
-.menu { display: flex; justify-content: space-around; gap: 1rem; color: var(--ink-soft); }
-.menu a { transition: color var(--hover) var(--ease); }
-.menu a:hover, .menu a[aria-current='page'] { color: var(--ink); }
+.menu { display: flex; justify-content: space-around; gap: 1rem; }
+/* Source colours chosen so that, over white, they resolve to the indigo and to
+   a softer tint of it. */
+.wordmark, .menu a:hover, .menu a[aria-current='page'] { color: rgb(255, 199, 127); }
+.menu a { color: rgb(127, 95, 60); transition: color var(--hover) var(--ease); }
 
 /* Density sits with the year rail down the left edge, not off on its own. */
 .controls {
@@ -113,14 +122,6 @@ body.is-locked { overflow: hidden; }
   .top { grid-template-columns: 1fr; justify-items: center; gap: 0.7rem; padding: 1.2rem var(--pad) 0.9rem; }
   .menu { flex-wrap: wrap; justify-content: center; gap: 0.35rem 1.1rem; }
   :root { --bar: 8rem; }
-}
-
-/* ----------------------------------------------------------- page titles */
-
-.page-title {
-  padding: var(--bar) var(--pad) 0;
-  font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
-  color: var(--ink-soft);
 }
 
 /* ------------------------------------------------------------- cursor */
@@ -141,7 +142,10 @@ body.is-locked { overflow: hidden; }
 /* Centred on the pointer, because it *is* the pointer while it shows. */
 .cursor-label {
   display: inline-block;
-  color: var(--ink);
+  /* Same trick as the menu: indigo over paper, the negative over a painting, so
+     the name is legible over a dark canvas and a pale one alike. */
+  color: rgb(255, 199, 127);
+  mix-blend-mode: difference;
   white-space: nowrap;
   font-size: 11px;
   letter-spacing: 0.06em;
@@ -174,5 +178,8 @@ body.is-locked { overflow: hidden; }
 [data-roll]:hover .roll::after { transform: translateY(0); opacity: 1; }
 /* The span's own text is transparent, so the copies take their colour from a
    variable rather than inheriting it. */
-.menu a { --roll-color: var(--ink-soft); }
-.menu a:hover, .menu a[aria-current='page'] { --roll-color: var(--ink); }
+/* The roll draws its copies from a variable rather than from `currentColor`:
+   the character span's own text is transparent — that is how the roll works —
+   so `currentColor` inside it is transparent too, and the copies vanished. */
+.menu a { --roll-color: rgb(127, 95, 60); }
+.wordmark, .menu a:hover, .menu a[aria-current='page'] { --roll-color: rgb(255, 199, 127); }
