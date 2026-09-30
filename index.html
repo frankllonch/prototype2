@@ -15,6 +15,7 @@
 <link rel="modulepreload" href="/prototype2/js/panels.js" />
 <link rel="modulepreload" href="/prototype2/js/panel-scroll.js" />
 <link rel="modulepreload" href="/prototype2/js/lightbox.js" />
+<link rel="modulepreload" href="/prototype2/js/cursor.js" />
 <link rel="modulepreload" href="/prototype2/js/index.js" />
 <script>document.documentElement.classList.add('js')</script>
 </head>
@@ -95,7 +96,7 @@
     data-grid
     data-lightbox-source
     data-stack
-    style="--unit:230px"
+    style="--unit:96px"
   ><a
     class="tile"
     href="/prototype2/artwork/untitled-2026-162x130cm/"
@@ -4105,12 +4106,13 @@
 <div class="controls" data-controls>
     <div class="control-group" role="group" aria-label="Grid size">
       <button type="button" class="control"
-            data-density="380" aria-pressed="false">24</button><button type="button" class="control is-active"
-            data-density="230" aria-pressed="true">60</button><button type="button" class="control"
-            data-density="140" aria-pressed="false">154</button>
+            data-density="240" aria-pressed="false">24</button><button type="button" class="control"
+            data-density="150" aria-pressed="false">60</button><button type="button" class="control is-active"
+            data-density="96" aria-pressed="true">154</button>
     </div>
     
   </div>
+<div class="cursor" data-cursor aria-hidden="true"><span class="cursor-label"></span></div>
 <div class="panel-veil" data-panel-veil></div>
 <section class="about" id="about" data-panel aria-label="About">
     <a class="about-close" href="#" data-panel-close>Close</a>
