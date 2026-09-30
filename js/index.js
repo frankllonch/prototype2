@@ -5,12 +5,14 @@
 import { initTextRoll } from './text-roll.js';
 import { initControls } from './controls.js';
 import { initStack } from './stack.js';
-import { initSliders } from './slider.js';
+import { initYears } from './years.js';
 import { initPanels } from './panels.js';
+import { initPanelScroll } from './panel-scroll.js';
 import { initLightbox } from './lightbox.js';
 initTextRoll();
 initControls();
 initStack();
-initSliders();
+initYears();
 initPanels();
+initPanelScroll();
 initLightbox();

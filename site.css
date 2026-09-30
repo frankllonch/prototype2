@@ -14,15 +14,20 @@
 
 :root {
   color-scheme: light;
-  --paper: #fafafa;
-  --blue: #003880;
-  --blue-soft: color-mix(in srgb, var(--blue) 55%, var(--paper));
+  /* Sampled from the designer's mockups. The ground is white so the paintings
+     carry every colour on the page; the chrome is a quiet slate blue. */
+  --paper: #ffffff;
+  --ink: #44626f;
+  --ink-soft: #7f93a3;
+  /* The About panel keeps its own pair, straight from the third mockup. */
   --peach: #fcd090;
+  --blue: #003880;
 
   --sans: 'Inter', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
   --pad: clamp(1.25rem, 4vw, 4rem);
   --gap: clamp(1.5rem, 4.5vw, 5rem);
   --bar: 5.5rem;
+  --rail: clamp(9rem, 14vw, 17rem);   /* width kept clear for the year rail */
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --veil-blur: 8px;
@@ -33,7 +38,7 @@ html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
   background: var(--paper);
-  color: var(--blue);
+  color: var(--ink);
   font-family: var(--sans);
   font-size: 12px;
   line-height: 1.5;
@@ -45,14 +50,21 @@ a { color: inherit; text-decoration: none; }
 h1, h2, h3 { font-weight: 500; margin: 0; }
 p { margin: 0 0 1em; }
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
-::selection { background: var(--blue); color: var(--paper); }
-:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
-.skip-link { position: absolute; left: -999px; top: 0; z-index: 100; background: var(--blue); color: var(--paper); padding: 0.6rem 1rem; }
+::selection { background: var(--ink); color: var(--paper); }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.skip-link { position: absolute; left: -999px; top: 0; z-index: 100; background: var(--ink); color: var(--paper); padding: 0.6rem 1rem; }
 .skip-link:focus { left: 0; }
+/* Present for screen readers and search engines, absent on screen. */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  margin: -1px; padding: 0; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap;
+}
 
 /* Small caps for every label on the site. */
 .menu, .controls, .wordmark, .about-close, .panel-close, .panel-year,
-.lightbox-close, .lightbox-count, .slider-count, .detail-back, .detail-pager {
+.lightbox-close, .lightbox-count, .panel-counter, .year-label,
+.detail-back, .detail-pager, .about-more {
   font-size: 11px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -66,30 +78,36 @@ body.is-locked { overflow: hidden; }
 .top {
   position: fixed; inset: 0 0 auto 0; z-index: 40;
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: start;
+  grid-template-columns: auto 1fr;
+  align-items: baseline;
   gap: var(--pad);
-  padding: 1.6rem var(--pad) 0;
+  padding: 1.6rem var(--pad) 1rem;
   pointer-events: none;
+  /* The grid scrolls under the bar, so it needs a ground of its own — faded out
+     at the bottom so it reads as air rather than a band. */
+  background: linear-gradient(var(--paper) 62%, color-mix(in srgb, var(--paper) 0%, transparent));
 }
 .top > * { pointer-events: auto; }
-.wordmark { justify-self: center; font-size: 13px; letter-spacing: 0.08em; white-space: nowrap; }
-.menu { display: flex; flex-wrap: wrap; gap: 0.35rem 1.4rem; color: var(--blue-soft); }
+.wordmark { font-size: 13px; letter-spacing: 0.08em; white-space: nowrap; }
+/* Spread rather than bunched: the mockup sets the five items evenly across the
+   width to the right of the wordmark. */
+.menu { display: flex; justify-content: space-around; gap: 1rem; color: var(--ink-soft); }
 .menu a { transition: color 0.2s var(--ease); }
-.menu a:hover, .menu a[aria-current='page'] { color: var(--blue); }
-.top-end { justify-self: end; }
+.menu a:hover, .menu a[aria-current='page'] { color: var(--ink); }
 
-.controls { display: flex; flex-direction: column; align-items: flex-end; gap: 0.35rem; color: var(--blue-soft); }
-.control-group { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.2rem 1rem; }
+/* Density sits at the foot of the page: the top belongs to the menu. */
+.controls {
+  position: fixed; right: var(--pad); bottom: 1.3rem; z-index: 30;
+  display: flex; gap: 1.3rem; color: var(--ink-soft);
+  transition: opacity 0.8s var(--ease);
+}
 .control { transition: color 0.2s var(--ease); font-variant-numeric: tabular-nums; }
-.control:hover, .control.is-active { color: var(--blue); }
+.control:hover, .control.is-active { color: var(--ink); }
 
-@media (max-width: 799px) {
-  .top { grid-template-columns: 1fr; justify-items: center; gap: 0.6rem; padding-top: 1.2rem; }
-  .top-end, .controls { justify-self: center; align-items: center; }
-  .control-group { justify-content: center; }
-  .wordmark { order: -1; }
-  :root { --bar: 8.5rem; }
+@media (max-width: 899px) {
+  .top { grid-template-columns: 1fr; justify-items: center; gap: 0.7rem; padding: 1.2rem var(--pad) 0.9rem; }
+  .menu { flex-wrap: wrap; justify-content: center; gap: 0.35rem 1.1rem; }
+  :root { --bar: 8rem; }
 }
 
 /* ----------------------------------------------------------- page titles */
@@ -97,7 +115,7 @@ body.is-locked { overflow: hidden; }
 .page-title {
   padding: var(--bar) var(--pad) 0;
   font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
-  color: var(--blue-soft);
+  color: var(--ink-soft);
 }
 
 /* ------------------------------------------------------------ text roll */
@@ -111,7 +129,7 @@ body.is-locked { overflow: hidden; }
 .roll { position: relative; display: inline-block; white-space: pre; color: transparent; overflow: hidden;
   padding-bottom: 0.18em; margin-bottom: -0.18em; }
 .roll::before, .roll::after {
-  content: attr(data-ch); position: absolute; left: 0; top: 0; color: var(--roll-color, var(--blue));
+  content: attr(data-ch); position: absolute; left: 0; top: 0; color: var(--roll-color, var(--ink));
   transition: transform 260ms ease-in-out, opacity 260ms ease-in-out;
   transition-delay: calc(var(--i) * 25ms);
 }
@@ -120,8 +138,8 @@ body.is-locked { overflow: hidden; }
 [data-roll]:hover .roll::after { transform: translateY(0); opacity: 1; }
 /* The span's own text is transparent, so the copies take their colour from a
    variable rather than inheriting it. */
-.menu a { --roll-color: var(--blue-soft); }
-.menu a:hover, .menu a[aria-current='page'] { --roll-color: var(--blue); }
+.menu a { --roll-color: var(--ink-soft); }
+.menu a:hover, .menu a[aria-current='page'] { --roll-color: var(--ink); }
 
 /* ------------------------------------------------------------------ hero */
 
@@ -142,8 +160,10 @@ html:not(.js) .hero, .hero:empty:not([data-hero]) { height: 0; }
   flex-wrap: wrap;
   align-items: flex-start;
   gap: var(--gap);
-  padding: 0 var(--pad) var(--gap);
+  /* Left inset clears the year rail; the mockup starts the grid well in. */
+  padding: 0 var(--pad) var(--gap) var(--rail);
 }
+@media (max-width: 899px) { .grid { padding-left: var(--pad); padding-bottom: 5rem; } }
 .grid:not([data-stack]) { padding-top: var(--gap); }
 
 .tile {
@@ -186,22 +206,22 @@ html:not(.js) .hero, .hero:empty:not([data-hero]) { height: 0; }
   gap: var(--pad);
   padding: var(--bar) var(--pad) var(--pad);
 }
-.detail-back { grid-column: 1; align-self: start; color: var(--blue-soft); }
-.detail-back:hover { color: var(--blue); }
+.detail-back { grid-column: 1; align-self: start; color: var(--ink-soft); }
+.detail-back:hover { color: var(--ink); }
 .detail-plate { grid-column: 2; margin: 0; display: grid; place-items: center; }
 .detail-plate img { max-height: 74vh; width: auto; height: auto; max-width: 100%; }
 .detail-caption { grid-column: 3; font-size: 14px; }
 .detail-title { font-size: 20px; letter-spacing: -0.01em; margin-bottom: 0.4rem; }
 .detail-caption p { margin: 0 0 0.15rem; }
-.detail-pager { grid-column: 1 / -1; display: flex; justify-content: space-between; color: var(--blue-soft); }
-.detail-pager a:hover { color: var(--blue); }
+.detail-pager { grid-column: 1 / -1; display: flex; justify-content: space-between; color: var(--ink-soft); }
+.detail-pager a:hover { color: var(--ink); }
 @media (max-width: 899px) {
   .detail { grid-template-columns: 1fr; }
   .detail-back, .detail-plate, .detail-caption { grid-column: 1; }
 }
 
 /*
- * Overlays. One veil, shared by About and the panels, blurring the page
+ * Overlays. One veil, shared by About and the detail panels, blurring the page
  * behind them lightly enough that the work stays visible.
  */
 .panel-veil {
@@ -233,17 +253,107 @@ html:not(.js) .hero, .hero:empty:not([data-hero]) { height: 0; }
 /* Without scripting the panels are plain anchor targets, so they must be visible. */
 html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transform: none; }
 
+/* ----------------------------------------------------------------- panels */
+
+/*
+ * The detail composition, after bofill.com: the text runs down one column and
+ * the photograph holds the other. The figure column is sticky, so the picture
+ * stays put while the words move past it; which photograph shows follows the
+ * reader's progress (client/panel-scroll.ts).
+ */
+/* Opaque enough to read a long text over: the blurred grid behind should be
+   a sense of where you are, not competition for the words. */
+.panel { background: color-mix(in srgb, var(--paper) 78%, transparent); padding: var(--bar) 0 var(--gap); }
+
+.panel-close { position: fixed; top: 1.6rem; right: var(--pad); z-index: 2; color: var(--ink-soft); }
+.panel-close:hover { color: var(--ink); }
+
+.panel-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+  gap: var(--gap);
+  align-items: start;
+  max-width: 92rem;
+  margin: 0 auto;
+  padding: 0 var(--pad);
+}
+
+/* The title stays with you, as the sticky label does on bofill.com: the text
+   runs out long before the photographs do, and the left column would otherwise
+   be empty for most of the scroll. */
+.panel-head {
+  position: sticky;
+  top: var(--bar);
+  margin-bottom: var(--gap);
+  padding-bottom: 0.6rem;
+  background: linear-gradient(var(--paper) 78%, transparent);
+}
+.panel-title { font-size: clamp(1.2rem, 2.4vw, 1.9rem); letter-spacing: -0.015em; }
+.panel-year { display: block; margin-top: 0.3rem; color: var(--ink-soft); }
+.panel-text { max-width: 34rem; padding-bottom: 12vh; }
+.panel-text .prose { max-width: none; }
+
+.panel-figures { --slot: 62vh; }
+.panel-figure { margin: 0; }
+.panel-figure figcaption { color: var(--ink-soft); margin-top: 0.4rem; }
+.panel-figure img { width: 100%; height: auto; }
+
+/*
+ * Only once the script is driving them do the figures stack on top of each
+ * other; until then they are an ordinary column beside the text, which is what
+ * a reader without scripting gets.
+ *
+ * The column is given a slot per photograph — that height is the scroll runway
+ * the effect needs — while the stage inside it sticks to the top of the panel.
+ */
+.panel-figures.is-live { height: min(calc(var(--n) * var(--slot)), 800vh); }
+.panel-figures.is-live .panel-sticky { position: sticky; top: var(--bar); }
+.panel-figures.is-live .panel-stage {
+  position: relative;
+  height: calc(100vh - var(--bar) - 7rem);
+}
+.panel-figures.is-live .panel-figure {
+  position: absolute; inset: 0;
+  display: grid; align-content: center; justify-items: center;
+  opacity: 0;
+  transition: opacity 0.55s var(--ease);
+}
+.panel-figures.is-live .panel-figure.is-current { opacity: 1; }
+.panel-figures.is-live .panel-figure picture,
+.panel-figures.is-live .panel-figure img { max-height: calc(100vh - var(--bar) - 7rem); width: auto; max-width: 100%; }
+.panel-counter { margin: 0.8rem 0 0; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+
+@media (max-width: 899px) {
+  .panel-inner { grid-template-columns: 1fr; }
+  .panel-figures { --slot: 46vh; }
+  .panel-figures.is-live .panel-stage { height: 58vh; }
+  .panel-text { padding-bottom: var(--gap); }
+}
+
 /* ------------------------------------------------------------------ about */
 
 /*
- * The designer's About: peach ground, five lines of blue, the artwork still
- * faintly present through the blur beneath.
+ * About opens over whatever page you are on. The first screen is the designer's
+ * five lines on peach; scrolling on brings the biography the source site
+ * carries. Same two-column idea as a detail panel — but here the photographs
+ * travel with the text instead of holding still, so the two read as relatives
+ * rather than repeats.
  */
+/* Opaque: About is a takeover, not a veil over the work. */
 .about {
-  display: grid; place-items: center;
-  background: color-mix(in srgb, var(--peach) 90%, transparent);
+  background: var(--peach);
   color: var(--blue);
+}
+.about-close { position: fixed; top: 1.6rem; right: var(--pad); z-index: 2; color: var(--blue); }
+
+.about-lines {
+  min-height: 100vh;
+  display: grid;
+  align-content: center;
+  justify-items: center;
   text-align: center;
+  padding: var(--bar) var(--pad);
+  position: relative;
 }
 .about-lines p {
   margin: 0;
@@ -252,46 +362,31 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   letter-spacing: -0.02em;
   line-height: 1.32;
 }
-.about-close { position: fixed; top: 1.6rem; right: var(--pad); }
+.about-more { position: absolute; bottom: 2rem; opacity: 0.55; }
+
+.about-body {
+  display: grid;
+  grid-template-columns: minmax(0, 34rem) minmax(0, 0.7fr);
+  gap: var(--gap);
+  align-items: start;
+  max-width: 78rem;
+  margin: 0 auto;
+  padding: 0 var(--pad) calc(var(--gap) * 2);
+}
+.about-text > * { margin: 0 0 0.9em; font-size: 13px; line-height: 1.65; }
+.about-text strong { font-weight: 600; }
+.about-text a { border-bottom: 1px solid currentColor; }
+.about-figures { display: flex; flex-direction: column; gap: var(--gap); position: sticky; top: var(--bar); }
+.about-figure { margin: 0; }
+.about-figure img { width: 100%; height: auto; }
+
+@media (max-width: 899px) {
+  .about-body { grid-template-columns: 1fr; }
+  .about-figures { position: static; }
+}
+
 html:not(.js) .about { display: none; }
-html:not(.js) .about:target { display: grid; position: static; opacity: 1; visibility: visible; transform: none; min-height: 100vh; }
-
-/* ----------------------------------------------------------------- panels */
-
-.panel { padding: var(--bar) 0 var(--gap); background: color-mix(in srgb, var(--paper) 40%, transparent); }
-.panel-head {
-  display: flex; align-items: baseline; gap: 0.75rem;
-  max-width: 62rem; margin: 0 auto var(--gap); padding: 0 var(--pad);
-}
-.panel-title { font-size: 20px; letter-spacing: -0.01em; }
-.panel-year { color: var(--blue-soft); }
-.panel-close { margin-inline: auto 0; color: var(--blue-soft); }
-.panel-close:hover { color: var(--blue); }
-.panel-text { max-width: 40rem; margin: var(--gap) auto 0; padding: 0 var(--pad); }
-.panel-text .prose { max-width: none; }
-
-/* ----------------------------------------------------------------- slider */
-
-.slider { --slide-h: clamp(16rem, 60vh, 44rem); }
-.slider-track {
-  display: flex; gap: var(--pad);
-  overflow-x: auto; overscroll-behavior-x: contain;
-  scroll-snap-type: x mandatory;
-  padding: 0 50vw;
-  scrollbar-width: none; cursor: grab; outline: none;
-}
-.slider-track::-webkit-scrollbar { display: none; }
-.slider-track.is-dragging { cursor: grabbing; scroll-snap-type: none; }
-.slider-track:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
-.slide { flex: 0 0 auto; margin: 0; scroll-snap-align: center; }
-.slide picture, .slide img { height: var(--slide-h); width: auto; max-width: 92vw; }
-.slide figcaption { color: var(--blue-soft); margin-top: 0.35rem; }
-.slider-track img { user-select: none; -webkit-user-drag: none; pointer-events: none; }
-.slider-bar { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: var(--pad); }
-.slider-count { color: var(--blue-soft); font-variant-numeric: tabular-nums; }
-.slider-nav { padding: 0.2rem 0.4rem; color: var(--blue-soft); font-size: 14px; transition: color 0.2s var(--ease); }
-.slider-nav:hover { color: var(--blue); }
-@media (max-width: 899px) { .slider { --slide-h: clamp(12rem, 48vh, 24rem); } }
+html:not(.js) .about:target { display: block; position: static; opacity: 1; visibility: visible; transform: none; }
 
 /* --------------------------------------------------------------- lightbox */
 
@@ -325,9 +420,9 @@ html:not(.js) .about:target { display: grid; position: static; opacity: 1; visib
 .lightbox-caption { grid-column: 4; transition: opacity 0.2s var(--ease); font-size: 14px; }
 .lightbox-title { font-size: 20px; letter-spacing: -0.01em; margin: 0 0 0.4rem; }
 .lightbox-meta { display: flex; flex-direction: column; gap: 0.15rem; margin: 0 0 0.9rem; }
-.lightbox-count { margin: 0; color: var(--blue-soft); font-variant-numeric: tabular-nums; }
-.lightbox-nav { align-self: center; width: clamp(2rem, 4vw, 3.5rem); height: 40vh; color: var(--blue-soft); font-size: 15px; transition: color 0.2s var(--ease); }
-.lightbox-nav:hover { color: var(--blue); }
+.lightbox-count { margin: 0; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.lightbox-nav { align-self: center; width: clamp(2rem, 4vw, 3.5rem); height: 40vh; color: var(--ink-soft); font-size: 15px; transition: color 0.2s var(--ease); }
+.lightbox-nav:hover { color: var(--ink); }
 .lightbox-prev { grid-column: 1; }
 .lightbox-next { grid-column: 5; }
 @media (max-width: 899px) {
@@ -340,5 +435,88 @@ html:not(.js) .about:target { display: grid; position: static; opacity: 1; visib
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: 0.001ms !important; animation-duration: 0.001ms !important; }
+}
+
+/*
+ * The year rail: a column of colour swatches down the left edge, one per year,
+ * each in a colour sampled from that year's own paintings (scripts/palette.ts).
+ *
+ * At rest it is a stack of short bars. The year you are looking at is drawn
+ * longer and names itself; hovering any of them draws it longer still. Clicking
+ * jumps to that year in the grid.
+ *
+ * It is hidden while the opening pile is still moving — `stack-running` is set
+ * by the script and removed when the grid has settled — so the rail cannot be
+ * touched, or re-measured against, mid-animation.
+ */
+.years {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  transition: opacity 0.8s var(--ease);
+}
+
+.year {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  /* The hit area is the whole row, not just the bar. */
+  padding: 2px 0;
+}
+
+.year-swatch {
+  display: block;
+  width: 46px;
+  height: 13px;
+  background: var(--c);
+  transition: width 0.4s var(--ease);
+}
+
+.year-label {
+  color: var(--ink);
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 0.3s var(--ease), transform 0.4s var(--ease);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* The current year names itself; hovering any year reaches further out. */
+.year.is-current .year-swatch { width: 78px; }
+.year.is-current .year-label { opacity: 1; transform: none; }
+.years:hover .year.is-current:not(:hover) .year-swatch { width: 46px; }
+.years:hover .year.is-current:not(:hover) .year-label { opacity: 0; transform: translateX(-4px); }
+.year:hover .year-swatch, .year:focus-visible .year-swatch { width: 110px; }
+.year:hover .year-label, .year:focus-visible .year-label { opacity: 1; transform: none; }
+
+/* Nothing that waits on the opening animation may be reachable before it ends. */
+.stack-running .years,
+.stack-running .controls { opacity: 0; pointer-events: none; }
+
+@media (max-width: 899px) {
+  /* No room for a rail beside the grid on a phone: it lies along the foot. */
+  .years {
+    top: auto; bottom: 0; left: 0; right: 0;
+    transform: none;
+    flex-direction: row;
+    justify-content: center;
+    gap: 3px;
+    padding: 0.6rem var(--pad);
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .year { flex-direction: column; gap: 0.25rem; }
+  .year-swatch { width: 13px; height: 22px; transition: height 0.4s var(--ease); }
+  .year.is-current .year-swatch, .year:hover .year-swatch { width: 13px; height: 34px; }
+  .year-label { display: none; }
+  .year.is-current .year-label { display: block; opacity: 1; transform: none; font-size: 9px; }
+  /* Clear of the rail along the foot, and centred rather than tucked in a corner. */
+  .controls { bottom: 5.4rem; right: auto; left: 0; justify-content: center; width: 100%; }
 }
 

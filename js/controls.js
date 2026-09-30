@@ -1,7 +1,7 @@
 /**
- * The controls above a grid: density (row height) and, on the artwork page, a
- * year filter. Density is one custom property; the filter is a `hidden` toggle.
- * Either change fires `gridchange` on the grid so the stack can re-measure.
+ * The density control: three grid sizes. It sets one custom property, and fires
+ * `gridchange` so the opening pile re-measures against the new layout rather
+ * than against stale targets.
  */
 export function initControls() {
     const grid = document.querySelector('[data-grid]');
@@ -21,17 +21,6 @@ export function initControls() {
         button.addEventListener('click', () => {
             grid.style.setProperty('--unit', `${button.dataset.density}px`);
             press(densities, button);
-            changed();
-        });
-    }
-    const years = root.querySelectorAll('[data-year-filter]');
-    const tiles = grid.querySelectorAll('.tile');
-    for (const button of years) {
-        button.addEventListener('click', () => {
-            const year = button.dataset.yearFilter;
-            for (const tile of tiles)
-                tile.hidden = year !== 'all' && tile.dataset.year !== year;
-            press(years, button);
             changed();
         });
     }
