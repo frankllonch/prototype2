@@ -30,6 +30,7 @@
   --blue: var(--ink);                 /* alias kept for the About panel */
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --hover: 0.55s;                     /* one duration for every hover on the site */
   --veil-blur: 8px;
 }
 
@@ -96,16 +97,16 @@ body.is-locked { overflow: hidden; }
 /* Spread rather than bunched: the mockup sets the five items evenly across the
    width to the right of the wordmark. */
 .menu { display: flex; justify-content: space-around; gap: 1rem; color: var(--ink-soft); }
-.menu a { transition: color 0.2s var(--ease); }
+.menu a { transition: color var(--hover) var(--ease); }
 .menu a:hover, .menu a[aria-current='page'] { color: var(--ink); }
 
-/* Density sits at the foot of the page: the top belongs to the menu. */
+/* Density sits with the year rail down the left edge, not off on its own. */
 .controls {
-  position: fixed; right: var(--pad); bottom: 1.3rem; z-index: 30;
+  position: fixed; left: var(--pad); bottom: 1.6rem; z-index: 30;
   display: flex; gap: 1.3rem; color: var(--ink-soft);
   transition: opacity 0.8s var(--ease);
 }
-.control { transition: color 0.2s var(--ease); font-variant-numeric: tabular-nums; }
+.control { transition: color var(--hover) var(--ease); font-variant-numeric: tabular-nums; }
 .control:hover, .control.is-active { color: var(--ink); }
 
 @media (max-width: 899px) {
@@ -137,18 +138,20 @@ body.is-locked { overflow: hidden; }
   will-change: transform;
 }
 .cursor.is-visible { opacity: 1; }
+/* Centred on the pointer, because it *is* the pointer while it shows. */
 .cursor-label {
   display: inline-block;
-  background: var(--ink);
-  color: var(--paper);
-  padding: 0.3rem 0.5rem;
+  color: var(--ink);
   white-space: nowrap;
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   font-weight: 500;
-  transform: translate(0.9rem, 0.9rem);
+  transform: translate(-50%, -50%);
 }
+/* The arrow steps aside over a painting — but only once the script that
+   replaces it is actually running. */
+.has-cursor .tile { cursor: none; }
 @media (hover: none), (pointer: coarse) { .cursor { display: none; } }
 
 /* ------------------------------------------------------------ text roll */
@@ -221,7 +224,21 @@ html:not(.js) .hero, .hero:empty:not([data-hero]) { height: 0; }
   opacity: 0.38;
   pointer-events: none;
 }
-.tile { transition: height 0.5s var(--ease), width 0.5s var(--ease), opacity 0.45s var(--ease), filter 0.45s var(--ease); }
+.tile {
+  transition:
+    height 0.5s var(--ease), width 0.5s var(--ease),
+    opacity 0.45s var(--ease), filter 0.45s var(--ease);
+}
+
+/*
+ * Hovering a painting softens it, slowly — after tylermitchell.co. Slight
+ * enough to read as attention rather than as a effect, and slow enough that
+ * crossing the sheet quickly does not strobe.
+ */
+.tile picture, .tile img { transition: filter 0.7s var(--ease), opacity 0.7s var(--ease); }
+.tile:hover img { filter: blur(1.6px); opacity: 0.82; }
+/* A dimmed tile is already pushed back; hovering must not fight that. */
+.tile.is-dimmed:hover img { filter: none; opacity: 1; }
 .tile picture, .tile img { width: 100%; height: 100%; }
 .tile img { object-fit: contain; }
 
@@ -391,16 +408,45 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
  * rather than repeats.
  */
 /*
- * About is a takeover, not a veil. The peach belongs to the title screen; the
- * biography below it reads as a page — indigo on white — and the two are joined
- * by a fade rather than a cut.
+ * About is a takeover, not a veil.
+ *
+ * The title screen cycles through the palette the paintings gave us — the same
+ * colours as the year rail — changing ground and type together, stepping rather
+ * than sweeping so it reads as a blink. Both colours are custom properties, so
+ * the fade below can begin from whichever one is currently showing.
+ *
+ * Registering them makes the animation well-defined rather than relying on the
+ * discrete fallback for unregistered properties.
  */
+@property --blink-bg { syntax: '<color>'; inherits: true; initial-value: #fcd090; }
+@property --blink-fg { syntax: '<color>'; inherits: true; initial-value: #003880; }
+
+@keyframes about-blink {
+  0%     { --blink-bg: #fcd090; --blink-fg: #003880; }
+  16.6%  { --blink-bg: #003880; --blink-fg: #fcd090; }
+  33.3%  { --blink-bg: #0b6140; --blink-fg: #dac192; }
+  50%    { --blink-bg: #bc703f; --blink-fg: #ffffff; }
+  66.6%  { --blink-bg: #0a5769; --blink-fg: #fcd090; }
+  83.3%  { --blink-bg: #843b32; --blink-fg: #dac192; }
+  100%   { --blink-bg: #fcd090; --blink-fg: #003880; }
+}
+
 .about {
   background: var(--paper);
   color: var(--ink);
+  animation: about-blink 18s steps(1, end) infinite;
 }
-.about-close { position: fixed; top: 1.6rem; right: var(--pad); z-index: 2; color: var(--blue); }
 
+.about-close {
+  position: fixed; top: 1.6rem; right: var(--pad); z-index: 2;
+  color: var(--ink);
+  /* Legible over the blink and over the white page below it alike. */
+  background: color-mix(in srgb, var(--paper) 78%, transparent);
+  padding: 0.3rem 0.5rem;
+}
+
+/* Exactly one screen of colour: the turn to white is something you scroll into,
+   never something visible the moment About is opened. */
 .about-lines {
   min-height: 100vh;
   display: grid;
@@ -409,7 +455,9 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   text-align: center;
   padding: var(--bar) var(--pad);
   position: relative;
-  background: linear-gradient(var(--peach) 76%, var(--paper));
+  background: var(--blink-bg);
+  color: var(--blink-fg);
+  transition: background-color 0.9s var(--ease), color 0.9s var(--ease);
 }
 .about-lines p {
   margin: 0;
@@ -418,9 +466,14 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   letter-spacing: -0.02em;
   line-height: 1.32;
 }
-.about-more { position: absolute; bottom: 2rem; opacity: 0.55; }
+.about-more { position: absolute; bottom: 2rem; opacity: 0.6; }
+
+/* The turn from colour to page, beginning at whatever the blink is showing. */
+.about-fade { height: 46vh; background: linear-gradient(var(--blink-bg), var(--paper)); }
 
 .about-body {
+  background: var(--paper);
+  color: var(--ink);
   display: grid;
   grid-template-columns: minmax(0, 34rem) minmax(0, 0.7fr);
   gap: var(--gap);

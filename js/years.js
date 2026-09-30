@@ -55,6 +55,11 @@ export function initYears() {
         if (event.key === 'Escape' && focused)
             focus('');
     });
+    // Scrolling back to the opening gathers the paintings again; a year held in
+    // focus from before would otherwise still be dimming most of them when the
+    // grid comes back.
+    document.addEventListener('stackrestart', () => { if (focused)
+        focus(''); });
     // Mark the year currently under the top of the viewport.
     const start = () => {
         const anchors = links
