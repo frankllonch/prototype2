@@ -1,12 +1,12 @@
 import { reduceMotion } from './env.js';
 /**
  * The opening: every painting gathered into one pile in the middle of the
- * screen, dispersing into the grid as you scroll.
+ * screen, dispersing into the grid as you scroll — and gathering back into it
+ * when you scroll up again.
  *
- * The grid is the real layout; the pile is a transform on each tile. At the top
- * of the page each tile is translated and scaled onto the pile; over the first
- * screen of scrolling those transforms ease to nothing and the tiles are simply
- * where the grid put them. Nothing is laid out twice.
+ * The grid is the real layout; the pile is a transform on each tile. Nothing is
+ * laid out twice, and the effect is a pure function of the scroll position, so
+ * it runs in both directions with no state to get out of step.
  *
  * Three rules keep it from breaking:
  *
@@ -18,13 +18,14 @@ import { reduceMotion } from './env.js';
  *    reload; landing mid-animation with a half-built grid is what left the
  *    paintings invisible. The page takes scroll restoration into its own hands.
  * 3. **Never leave a tile hidden.** Any failure path — zero-height tiles, a
- *    measure that never happened, the watchdog — ends with the transforms
- *    cleared and the grid interactive.
+ *    measure that never happened, the watchdog — disables the pile for good and
+ *    ends with the transforms cleared and the grid interactive.
  */
 const SCROLL_SPAN = 0.85; // fraction of a viewport height over which the pile disperses
+const REVEAL = 0.42; // progress at which the year rail is shown, for good
 const FRONT = 0.38; // height of the front painting, as a fraction of the viewport
 const VISIBLE = 12; // tiles given their own offset in the pile; the rest sit behind
-const WATCHDOG = 4000; // ms: if the pile has not resolved by now, give up and show the grid
+const WATCHDOG = 4000; // ms: if the pile cannot be measured by now, show the grid
 /** Small, fixed offsets for the front of the pile — the fanned look in the mockup. */
 const OFFSETS = [
     [0, 0], [0.035, -0.06], [-0.045, -0.02], [0.02, 0.055], [-0.03, 0.06],
@@ -37,13 +38,13 @@ export function initStack() {
     const root = document.documentElement;
     // Pages without a pile (exhibitions, collaborations) must not wait for one.
     if (!grid || !hero) {
-        finish();
+        reveal();
         return;
     }
     const tiles = [...grid.querySelectorAll('.tile')];
     if (!tiles.length || reduceMotion.matches) {
         hero.remove();
-        finish();
+        reveal();
         return;
     }
     root.classList.add('stack-running');
@@ -54,8 +55,9 @@ export function initStack() {
     let targets = [];
     let live = [];
     let frame = 0;
-    let done = false;
     let measured = false;
+    /** Set once the pile has been given up on; it never runs again. */
+    let disabled = false;
     const clearTransforms = () => {
         for (const tile of tiles) {
             tile.style.transform = '';
@@ -63,6 +65,8 @@ export function initStack() {
         }
     };
     const measure = () => {
+        if (disabled)
+            return;
         // Clear first: a transformed element reports its transformed box, and the
         // whole pile is computed from where the tiles *would* sit without it.
         clearTransforms();
@@ -86,22 +90,34 @@ export function initStack() {
     const ease = (p) => 1 - Math.pow(1 - p, 3);
     const render = () => {
         frame = 0;
-        if (done)
+        if (disabled)
             return;
+        // Without a trustworthy measurement there is nothing sensible to draw, so
+        // try once more and otherwise sit this frame out — the grid is already in
+        // its real positions. Only the watchdog gives up for good; abandoning the
+        // pile on a single early frame would lose it to nothing worse than a slow
+        // first layout.
+        if (!measured) {
+            measure();
+            if (!measured)
+                return;
+        }
         const h = window.innerHeight;
         const p = Math.min(1, Math.max(0, window.scrollY / (h * SCROLL_SPAN)));
-        const e = ease(p);
-        // Without a trustworthy measurement there is nothing sensible to draw, so
-        // show the grid rather than scatter the tiles on bad numbers.
-        if (!measured) {
-            finishNow();
-            return;
-        }
-        if (e >= 1) {
-            finishNow();
+        // The rail is shown well before the pile has finished resolving, and stays
+        // shown: scrolling back up re-gathers the paintings but must not take the
+        // navigation away again.
+        if (p >= REVEAL)
+            reveal();
+        if (p >= 1) {
+            // Settled. Clear the transforms, but stay listening — scrolling back up
+            // gathers the pile again.
+            grid.classList.remove('is-stacked');
+            clearTransforms();
             return;
         }
         grid.classList.add('is-stacked');
+        const e = ease(p);
         const cx = window.innerWidth / 2;
         const cy = window.scrollY + h * 0.54;
         live.forEach((tile, i) => {
@@ -113,36 +129,41 @@ export function initStack() {
             tile.style.zIndex = String(live.length - i);
         });
     };
-    /** The pile has resolved: drop every transform and hand the page over. */
-    function finishNow() {
-        if (done)
+    /** The pile cannot be drawn: stop trying, and leave the grid usable. */
+    function giveUp() {
+        if (disabled)
             return;
-        done = true;
+        disabled = true;
         clearTransforms();
         grid.classList.remove('is-stacked');
         window.clearTimeout(watchdog);
-        finish();
+        reveal();
     }
-    const schedule = () => { if (!frame && !done)
+    const schedule = () => { if (!frame && !disabled)
         frame = requestAnimationFrame(render); };
-    const relayout = () => { if (done)
+    const relayout = () => { if (disabled)
         return; measure(); schedule(); };
-    const watchdog = window.setTimeout(finishNow, WATCHDOG);
+    const watchdog = window.setTimeout(() => { if (!measured)
+        giveUp(); }, WATCHDOG);
     window.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', relayout, { passive: true });
-    // The grid can change shape under the pile (density, filter). Re-measure, never
-    // reuse stale targets.
+    // The grid can change shape under the pile (density). Re-measure, never reuse
+    // stale targets.
     grid.addEventListener('gridchange', relayout);
     window.addEventListener('load', relayout);
     void document.fonts.ready.then(relayout);
     relayout();
 }
 /**
- * Reveal whatever waits for the pile — the year rail and the grid controls.
- * Called on every path, including the ones where no pile ever runs, so nothing
- * can be left hidden behind an animation that did not happen.
+ * Show whatever waits for the pile — the year rail and the density control.
+ * One-way, and called on every path, including the ones where no pile ever
+ * runs, so nothing can be left hidden behind an animation that did not happen.
  */
-function finish() {
+let revealed = false;
+function reveal() {
+    if (revealed)
+        return;
+    revealed = true;
     document.documentElement.classList.remove('stack-running');
     document.dispatchEvent(new CustomEvent('stackdone'));
 }
