@@ -14,20 +14,20 @@
 
 :root {
   color-scheme: light;
-  /* Sampled from the designer's mockups. The ground is white so the paintings
-     carry every colour on the page; the chrome is a quiet slate blue. */
+  /* From the designer's mockups. The ground is white so the paintings carry
+     every colour on the page; the type is the indigo of the wordmark, with a
+     tint of the same hue for anything inactive — never a different colour. */
   --paper: #ffffff;
-  --ink: #44626f;
-  --ink-soft: #7f93a3;
-  /* The About panel keeps its own pair, straight from the third mockup. */
+  --ink: #003880;
+  --ink-soft: color-mix(in srgb, var(--ink) 48%, var(--paper));
   --peach: #fcd090;
-  --blue: #003880;
 
   --sans: 'Inter', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
   --pad: clamp(1.25rem, 4vw, 4rem);
   --gap: clamp(1.5rem, 4.5vw, 5rem);
   --bar: 5.5rem;
   --rail: clamp(9rem, 14vw, 17rem);   /* width kept clear for the year rail */
+  --blue: var(--ink);                 /* alias kept for the About panel */
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --veil-blur: 8px;
@@ -46,6 +46,10 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 img, picture { display: block; max-width: 100%; }
+/* The pile stacks its tiles with z-index while it animates. Without a stacking
+   context of its own here, those values compete with the overlays and the
+   artwork draws over the About panel. */
+main { isolation: isolate; }
 a { color: inherit; text-decoration: none; }
 h1, h2, h3 { font-weight: 500; margin: 0; }
 p { margin: 0 0 1em; }

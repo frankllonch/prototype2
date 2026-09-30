@@ -17,10 +17,13 @@ html:not(.js) .hero, .hero:empty:not([data-hero]) { height: 0; }
   flex-wrap: wrap;
   align-items: flex-start;
   gap: var(--gap);
-  /* Left inset clears the year rail; the mockup starts the grid well in. */
-  padding: 0 var(--pad) var(--gap) var(--rail);
+  /* Left inset clears the year rail; the mockup starts the grid well in.
+     The tail is deliberate: without it the last years sit too close to the
+     bottom for the rail to bring them to the top, and clicking them did
+     nothing. */
+  padding: 0 var(--pad) 62vh var(--rail);
 }
-@media (max-width: 899px) { .grid { padding-left: var(--pad); padding-bottom: 5rem; } }
+@media (max-width: 899px) { .grid { padding-left: var(--pad); padding-bottom: 58vh; } }
 .grid:not([data-stack]) { padding-top: var(--gap); }
 
 .tile {

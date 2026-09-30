@@ -58,7 +58,8 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 
 /* The title stays with you, as the sticky label does on bofill.com: the text
    runs out long before the photographs do, and the left column would otherwise
-   be empty for most of the scroll. */
+   be empty for most of the scroll. The counter sits here with it, so there is
+   always something live on that side. */
 .panel-head {
   position: sticky;
   top: var(--bar);
@@ -71,7 +72,7 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .panel-text { max-width: 34rem; padding-bottom: 12vh; }
 .panel-text .prose { max-width: none; }
 
-.panel-figures { --slot: 62vh; }
+.panel-figures { --slot: 30vh; }
 .panel-figure { margin: 0; }
 .panel-figure figcaption { color: var(--ink-soft); margin-top: 0.4rem; }
 .panel-figure img { width: 100%; height: auto; }
@@ -84,7 +85,9 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
  * The column is given a slot per photograph — that height is the scroll runway
  * the effect needs — while the stage inside it sticks to the top of the panel.
  */
-.panel-figures.is-live { height: min(calc(var(--n) * var(--slot)), 800vh); }
+/* `min-height`, not `height`: when the text is the longer of the two it should
+   govern, and the figures simply stick for as long as it runs. */
+.panel-figures.is-live { min-height: min(calc(var(--n) * var(--slot)), 360vh); }
 .panel-figures.is-live .panel-sticky { position: sticky; top: var(--bar); }
 .panel-figures.is-live .panel-stage {
   position: relative;
@@ -99,7 +102,7 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .panel-figures.is-live .panel-figure.is-current { opacity: 1; }
 .panel-figures.is-live .panel-figure picture,
 .panel-figures.is-live .panel-figure img { max-height: calc(100vh - var(--bar) - 7rem); width: auto; max-width: 100%; }
-.panel-counter { margin: 0.8rem 0 0; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.panel-counter { margin: 0.5rem 0 0; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
 
 @media (max-width: 899px) {
   .panel-inner { grid-template-columns: 1fr; }
@@ -117,10 +120,14 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
  * travel with the text instead of holding still, so the two read as relatives
  * rather than repeats.
  */
-/* Opaque: About is a takeover, not a veil over the work. */
+/*
+ * About is a takeover, not a veil. The peach belongs to the title screen; the
+ * biography below it reads as a page — indigo on white — and the two are joined
+ * by a fade rather than a cut.
+ */
 .about {
-  background: var(--peach);
-  color: var(--blue);
+  background: var(--paper);
+  color: var(--ink);
 }
 .about-close { position: fixed; top: 1.6rem; right: var(--pad); z-index: 2; color: var(--blue); }
 
@@ -132,6 +139,7 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   text-align: center;
   padding: var(--bar) var(--pad);
   position: relative;
+  background: linear-gradient(var(--peach) 76%, var(--paper));
 }
 .about-lines p {
   margin: 0;

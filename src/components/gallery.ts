@@ -40,11 +40,11 @@ interface GridProps {
  * at that size, so the control reads as a count rather than a pixel value.
  */
 export const DENSITIES = [
-  { unit: 240, label: 24 },
-  { unit: 150, label: 60 },
-  { unit: 96, label: 154 },
+  { unit: 380, label: 24 },
+  { unit: 230, label: 60 },
+  { unit: 140, label: 154 },
 ] as const;
-export const DEFAULT_DENSITY = 2;
+export const DEFAULT_DENSITY = 1;
 
 function tile(
   item: GridItem, basePath: string, index: number, priority: boolean, panels?: string, anchor?: number,

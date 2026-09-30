@@ -40,6 +40,9 @@ export function panels(kind: string, items: readonly PanelItem[]): Html {
               <header class="panel-head">
                 <h2 class="panel-title">${item.title}</h2>
                 ${item.year ? html`<span class="panel-year">${item.year}</span>` : ''}
+                ${item.images.length > 1
+                  ? html`<p class="panel-counter" data-figure-count data-template="{n} / {total}"></p>`
+                  : ''}
               </header>
               ${join(text.map((c) => html`<div class="prose">${raw(c.kind === 'text' ? c.html : '')}</div>`))}
             </div>
@@ -56,9 +59,6 @@ export function panels(kind: string, items: readonly PanelItem[]): Html {
                     ),
                   )}
                 </div>
-                ${item.images.length > 1
-                  ? html`<p class="panel-counter" data-figure-count data-template="{n} / {total}"></p>`
-                  : ''}
               </div>
             </div>
           </div>
