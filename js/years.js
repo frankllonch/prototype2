@@ -55,6 +55,20 @@ export function initYears() {
         if (event.key === 'Escape' && focused)
             focus('');
     });
+    /*
+     * Clicking away drops the year — the most natural way out. A click that lands
+     * on a painting is left alone: that one is opening the work, not dismissing
+     * the selection. Bound on pointerdown so it settles before the tile's own
+     * click handler runs.
+     */
+    document.addEventListener('pointerdown', (event) => {
+        if (!focused)
+            return;
+        const target = event.target;
+        if (target?.closest('.tile') || target?.closest('[data-years]'))
+            return;
+        focus('');
+    });
     // Scrolling back to the opening gathers the paintings again; a year held in
     // focus from before would otherwise still be dimming most of them when the
     // grid comes back.
