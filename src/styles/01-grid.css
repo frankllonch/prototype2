@@ -17,8 +17,10 @@ html:not(.js) .hero, .hero:empty:not([data-hero]) { height: 0; }
   flex-wrap: wrap;
   align-items: flex-start;
   gap: var(--gap);
-  padding: 0 var(--pad) var(--gap);
+  /* Left inset clears the year rail; the mockup starts the grid well in. */
+  padding: 0 var(--pad) var(--gap) var(--rail);
 }
+@media (max-width: 899px) { .grid { padding-left: var(--pad); padding-bottom: 5rem; } }
 .grid:not([data-stack]) { padding-top: var(--gap); }
 
 .tile {
@@ -61,15 +63,15 @@ html:not(.js) .hero, .hero:empty:not([data-hero]) { height: 0; }
   gap: var(--pad);
   padding: var(--bar) var(--pad) var(--pad);
 }
-.detail-back { grid-column: 1; align-self: start; color: var(--blue-soft); }
-.detail-back:hover { color: var(--blue); }
+.detail-back { grid-column: 1; align-self: start; color: var(--ink-soft); }
+.detail-back:hover { color: var(--ink); }
 .detail-plate { grid-column: 2; margin: 0; display: grid; place-items: center; }
 .detail-plate img { max-height: 74vh; width: auto; height: auto; max-width: 100%; }
 .detail-caption { grid-column: 3; font-size: 14px; }
 .detail-title { font-size: 20px; letter-spacing: -0.01em; margin-bottom: 0.4rem; }
 .detail-caption p { margin: 0 0 0.15rem; }
-.detail-pager { grid-column: 1 / -1; display: flex; justify-content: space-between; color: var(--blue-soft); }
-.detail-pager a:hover { color: var(--blue); }
+.detail-pager { grid-column: 1 / -1; display: flex; justify-content: space-between; color: var(--ink-soft); }
+.detail-pager a:hover { color: var(--ink); }
 @media (max-width: 899px) {
   .detail { grid-template-columns: 1fr; }
   .detail-back, .detail-plate, .detail-caption { grid-column: 1; }

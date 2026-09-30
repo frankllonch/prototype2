@@ -32,6 +32,9 @@ export function initPanels(): void {
     veil.classList.add('is-open');
     panel.classList.add('is-open');
     panel.scrollTop = 0;
+    // The figure column follows the scroll, so it has to be told that the
+    // scroll just went back to the top.
+    panel.dispatchEvent(new CustomEvent('panelopen'));
     document.body.classList.add('is-locked');
     panel.querySelector<HTMLElement>('[data-panel-close]')?.focus({ preventScroll: true });
   };

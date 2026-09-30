@@ -9,7 +9,7 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import ts from 'typescript';
 import type { Html } from './components/html.ts';
-import { collaborations, colourChart, exhibitions, works, workYears } from './content/load.ts';
+import { collaborations, colourChart, exhibitions, works, yearColours } from './content/load.ts';
 import { BASE } from './content/paths.ts';
 import {
   artworkDetailPage, artworkPage, collaborationItem, colourChartPage, exhibitionItem, panelGridPage,
@@ -57,7 +57,7 @@ async function main() {
   }
   await buildAssets();
 
-  await writePage('', artworkPage(works, workYears));
+  await writePage('', artworkPage(works, yearColours));
   await writePage('exhibitions', panelGridPage({
     title: 'Exhibitions', path: '/exhibitions/', kind: 'exhibition', items: exhibitions.map(exhibitionItem),
   }));
@@ -71,7 +71,7 @@ async function main() {
   }
 
   console.log(
-    `Built ${pagesWritten} pages: artwork (${works.length} works, ${workYears.length} years), ` +
+    `Built ${pagesWritten} pages: artwork (${works.length} works, ${yearColours.length} years), ` +
     `exhibitions (${exhibitions.length}), collaborations (${collaborations.length}), colour chart.` +
     (BASE ? `\nBase path: ${BASE}` : ''),
   );

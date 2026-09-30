@@ -4,7 +4,9 @@
   "private": true,
   "type": "module",
   "description": "claudiavalsells.com — static site built from the WordPress content. WordPress stays the CMS.",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "extract": "node --experimental-strip-types scripts/extract.ts",
     "images": "node --experimental-strip-types scripts/images.ts",
@@ -12,7 +14,8 @@
     "build": "node --experimental-strip-types src/build.ts",
     "serve": "node --experimental-strip-types scripts/serve.ts",
     "dev": "npm run build && npm run serve",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "palette": "node --experimental-strip-types scripts/palette.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",

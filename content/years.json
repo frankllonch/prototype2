@@ -1,0 +1,57 @@
+[
+  {
+    "year": 2026,
+    "colour": "#11504b",
+    "count": 18
+  },
+  {
+    "year": 2025,
+    "colour": "#bc703f",
+    "count": 42
+  },
+  {
+    "year": 2024,
+    "colour": "#0b6140",
+    "count": 26
+  },
+  {
+    "year": 2023,
+    "colour": "#194427",
+    "count": 14
+  },
+  {
+    "year": 2022,
+    "colour": "#0a5769",
+    "count": 9
+  },
+  {
+    "year": 2021,
+    "colour": "#b88926",
+    "count": 16
+  },
+  {
+    "year": 2020,
+    "colour": "#6e271e",
+    "count": 14
+  },
+  {
+    "year": 2019,
+    "colour": "#4b1a1d",
+    "count": 7
+  },
+  {
+    "year": 2018,
+    "colour": "#2b2d15",
+    "count": 1
+  },
+  {
+    "year": 2017,
+    "colour": "#05198c",
+    "count": 5
+  },
+  {
+    "year": 2016,
+    "colour": "#ab3a31",
+    "count": 2
+  }
+]

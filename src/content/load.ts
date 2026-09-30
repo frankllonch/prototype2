@@ -44,8 +44,17 @@ function hydrate(project: Project, manifest: Record<string, ManifestEntry>): Pro
   return { ...project, rows, images, ...(images[0] ? { cover: images[0] } : {}) };
 }
 
+export interface YearColour {
+  readonly year: number;
+  readonly colour: string;
+  readonly count: number;
+}
+
 const dataset = readJson<Dataset>('content/projects.json');
 const manifest = readJson<Record<string, ManifestEntry>>('content/images.json');
+
+/** One colour per year, sampled from that year's paintings by scripts/palette.ts. */
+export const yearColours: readonly YearColour[] = readJson<YearColour[]>('content/years.json');
 
 const projects: readonly Project[] = dataset.projects.map((p) => hydrate(p, manifest));
 const by = (kind: Project['kind']) => projects.filter((p) => p.kind === kind);
@@ -65,8 +74,5 @@ const longform = (slug: string) => by('page').find((p) => p.slug === slug);
 
 export const exhibitions: readonly Exhibition[] = splitExhibitions(longform('whats-color-exhibitions'));
 export const colourChart: Project | undefined = longform('colour-chart');
+export const aboutPage: Project | undefined = longform('about');
 
-/** Distinct years across the paintings, newest first — drives the year filter. */
-export const workYears: readonly number[] = [
-  ...new Set(works.map((w) => w.metadata.year).filter((y): y is number => typeof y === 'number')),
-].sort((a, b) => b - a);

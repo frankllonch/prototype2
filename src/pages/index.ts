@@ -3,6 +3,8 @@ import { layout } from '../components/layout.ts';
 import { grid, gridControls, type GridItem } from '../components/gallery.ts';
 import { responsiveImage } from '../components/image.ts';
 import { panels, type PanelItem } from '../components/panels.ts';
+import { yearRail } from '../components/years.ts';
+import type { YearColour } from '../content/load.ts';
 import { describeImage } from '../content/describe.ts';
 import { displayTitle } from '../content/title.ts';
 import { withBase } from '../content/paths.ts';
@@ -26,13 +28,15 @@ const workItem = (p: Project): GridItem => ({
  * The start page. The wordmark, then every painting gathered into one stack;
  * scrolling disperses the stack into the grid, which is where the tiles live.
  */
-export function artworkPage(works: readonly Project[], years: readonly number[]): Html {
+export function artworkPage(works: readonly Project[], years: readonly YearColour[]): Html {
   return layout({
     title: 'Claudia Valsells',
     description: TAGLINE,
     path: '/',
-    controls: gridControls(years),
+    rail: yearRail(years),
+    controls: gridControls(),
     children: html`
+      <h1 class="sr-only">Claudia Valsells — Artwork</h1>
       <div class="hero" data-hero aria-hidden="true"></div>
       ${grid({ items: works.filter((w) => w.cover).map(workItem), basePath: '/artwork', lightbox: true, stack: true })}
     `,

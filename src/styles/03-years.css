@@ -1,0 +1,82 @@
+/*
+ * The year rail: a column of colour swatches down the left edge, one per year,
+ * each in a colour sampled from that year's own paintings (scripts/palette.ts).
+ *
+ * At rest it is a stack of short bars. The year you are looking at is drawn
+ * longer and names itself; hovering any of them draws it longer still. Clicking
+ * jumps to that year in the grid.
+ *
+ * It is hidden while the opening pile is still moving — `stack-running` is set
+ * by the script and removed when the grid has settled — so the rail cannot be
+ * touched, or re-measured against, mid-animation.
+ */
+.years {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  transition: opacity 0.8s var(--ease);
+}
+
+.year {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  /* The hit area is the whole row, not just the bar. */
+  padding: 2px 0;
+}
+
+.year-swatch {
+  display: block;
+  width: 46px;
+  height: 13px;
+  background: var(--c);
+  transition: width 0.4s var(--ease);
+}
+
+.year-label {
+  color: var(--ink);
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 0.3s var(--ease), transform 0.4s var(--ease);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* The current year names itself; hovering any year reaches further out. */
+.year.is-current .year-swatch { width: 78px; }
+.year.is-current .year-label { opacity: 1; transform: none; }
+.years:hover .year.is-current:not(:hover) .year-swatch { width: 46px; }
+.years:hover .year.is-current:not(:hover) .year-label { opacity: 0; transform: translateX(-4px); }
+.year:hover .year-swatch, .year:focus-visible .year-swatch { width: 110px; }
+.year:hover .year-label, .year:focus-visible .year-label { opacity: 1; transform: none; }
+
+/* Nothing that waits on the opening animation may be reachable before it ends. */
+.stack-running .years,
+.stack-running .controls { opacity: 0; pointer-events: none; }
+
+@media (max-width: 899px) {
+  /* No room for a rail beside the grid on a phone: it lies along the foot. */
+  .years {
+    top: auto; bottom: 0; left: 0; right: 0;
+    transform: none;
+    flex-direction: row;
+    justify-content: center;
+    gap: 3px;
+    padding: 0.6rem var(--pad);
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .year { flex-direction: column; gap: 0.25rem; }
+  .year-swatch { width: 13px; height: 22px; transition: height 0.4s var(--ease); }
+  .year.is-current .year-swatch, .year:hover .year-swatch { width: 13px; height: 34px; }
+  .year-label { display: none; }
+  .year.is-current .year-label { display: block; opacity: 1; transform: none; font-size: 9px; }
+  /* Clear of the rail along the foot, and centred rather than tucked in a corner. */
+  .controls { bottom: 5.4rem; right: auto; left: 0; justify-content: center; width: 100%; }
+}

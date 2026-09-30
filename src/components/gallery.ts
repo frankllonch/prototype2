@@ -46,11 +46,17 @@ export const DENSITIES = [
 ] as const;
 export const DEFAULT_DENSITY = 2;
 
-function tile(item: GridItem, basePath: string, index: number, priority: boolean, panels?: string): Html {
+function tile(
+  item: GridItem, basePath: string, index: number, priority: boolean, panels?: string, anchor?: number,
+): Html {
   const name = displayTitle(item.title, 'work');
+  // A tile that raises a panel points at the panel's own anchor — there is no
+  // page behind it — so the link is real with or without scripting.
+  const href = panels ? `#${panels}-${item.slug}` : withBase(`${basePath}/${item.slug}/`);
   return html`<a
     class="tile"
-    href="${withBase(`${basePath}/${item.slug}/`)}"
+    href="${href}"
+    ${anchor ? html`id="year-${anchor}"` : ''}
     style="--a:${aspectOf(item.image).toFixed(4)}"
     ${panels ? html`data-panel-open="${panels}-${item.slug}"` : ''}
     data-title="${name}"
@@ -77,13 +83,22 @@ function tile(item: GridItem, basePath: string, index: number, priority: boolean
 export function grid({
   items, basePath, lightbox = false, panels, stack = false, eagerCount = 14,
 }: GridProps): Html {
+  // The first tile of each year carries that year's anchor, so the rail can be
+  // plain links and still work with scripting off.
+  const seen = new Set<number>();
   return html`<div
     class="grid"
     data-grid
     ${lightbox ? html`data-lightbox-source` : ''}
     ${stack ? html`data-stack` : ''}
     style="--unit:${DENSITIES[DEFAULT_DENSITY]!.unit}px"
-  >${join(items.map((item, i) => tile(item, basePath, i, i < eagerCount, panels)))}</div>`;
+  >${join(
+    items.map((item, i) => {
+      const first = item.year !== undefined && !seen.has(item.year);
+      if (first) seen.add(item.year!);
+      return tile(item, basePath, i, i < eagerCount, panels, first ? item.year : undefined);
+    }),
+  )}</div>`;
 }
 
 /** Density steps and, optionally, a year filter — set in small caps above the grid. */

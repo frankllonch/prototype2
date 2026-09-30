@@ -5,13 +5,15 @@
 import { initTextRoll } from './text-roll.ts';
 import { initControls } from './controls.ts';
 import { initStack } from './stack.ts';
-import { initSliders } from './slider.ts';
+import { initYears } from './years.ts';
 import { initPanels } from './panels.ts';
+import { initPanelScroll } from './panel-scroll.ts';
 import { initLightbox } from './lightbox.ts';
 
 initTextRoll();
 initControls();
 initStack();
-initSliders();
+initYears();
 initPanels();
+initPanelScroll();
 initLightbox();
