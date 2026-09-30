@@ -2,9 +2,9 @@
  * Detail panels, after bofill.com: the text scrolls, the photograph stays.
  *
  * The images are stacked in one sticky column and only one is shown at a time.
- * Which one follows the reader's progress through the text — progress 0 to 1
- * maps across the images — so a project with three photographs and one with
- * twenty-seven both work without any per-project tuning.
+ * Which one follows the reader's progress — progress 0 to 1 maps across the
+ * images — so a project with three photographs and one with twenty-seven both
+ * work without any per-project tuning. The picture never moves; it only changes.
  *
  * With scripting off the same markup is a plain column of figures beside the
  * text: nothing is hidden behind this file.
@@ -47,7 +47,13 @@ export function initPanelScroll(): void {
       const span = spanOf();
       // A panel short enough not to scroll simply shows its first photograph.
       const progress = span > 8 ? Math.min(1, Math.max(0, scrollTopOf() / span)) : 0;
-      show(Math.min(figures.length - 1, Math.floor(progress * figures.length * 0.9999)));
+      // Eased, not linear. A linear map changes the picture every equal slice of
+      // scroll, which reads as a flicker-book; this holds the opening photograph
+      // for about twice as long as the rest — the one you are looking at while
+      // you read the beginning of the text — and lets the later ones come more
+      // readily once you are moving.
+      const eased = Math.pow(progress, 1.4);
+      show(Math.min(figures.length - 1, Math.floor(eased * figures.length * 0.9999)));
     };
 
     // Throttled on the clock rather than an animation frame: this only swaps a

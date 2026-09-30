@@ -44,7 +44,13 @@ export function artworkPage(works: readonly Project[], years: readonly YearColou
   });
 }
 
-/** Exhibitions and collaborations: the same grid, each tile opening a panel. */
+/**
+ * Exhibitions and collaborations: the two-column feed, each tile opening a panel.
+ *
+ * A handful of projects rather than an archive, so they are shown at their own
+ * proportions in two staggered columns instead of on the contact sheet the
+ * paintings use.
+ */
 export function panelGridPage(opts: {
   readonly title: string;
   readonly path: string;
@@ -65,7 +71,7 @@ export function panelGridPage(opts: {
         items: gridItems,
         basePath: opts.path.replace(/\/$/, ''),
         panels: opts.kind,
-        justified: true,
+        feed: true,
         eagerCount: gridItems.length,
       })}
     `,

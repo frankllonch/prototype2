@@ -124,3 +124,41 @@ html:not(.js) .hero, .hero:empty:not([data-hero]) { height: 0; }
   .detail { grid-template-columns: 1fr; }
   .detail-back, .detail-plate, .detail-caption { grid-column: 1; }
 }
+
+/* ------------------------------------------------------------------- feed */
+
+/*
+ * Two columns, offset, pictures at their own proportions — the composition on
+ * nachoalegre.com. Nothing is cropped to a common height and nothing is
+ * justified to the line: the shapes of the works are the rhythm.
+ *
+ * The second column starts lower than the first, so scrolling never brings two
+ * pictures level with each other and the eye is given somewhere to travel.
+ */
+.grid-feed {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 clamp(1.5rem, 5vw, 5rem);
+  align-items: start;
+  padding: calc(var(--bar) + var(--gap)) var(--pad) 20vh;
+}
+.feed-column {
+  display: flex;
+  flex-direction: column;
+  /* Wide enough that one work is finished before the next begins, and that the
+     name has room to appear under it on hover. */
+  gap: clamp(4rem, 10vw, 10rem);
+}
+.feed-column + .feed-column { margin-top: clamp(7rem, 18vw, 18rem); }
+
+/* Undo the contact sheet's fixed row height: here the picture sets its own. */
+.grid-feed .tile { height: auto; width: 100%; }
+.grid-feed .tile picture, .grid-feed .tile img { width: 100%; height: auto; }
+.grid-feed .tile img { object-fit: contain; }
+
+/* Stacked, the stagger would only push the second half of the works down the
+   page for no reason. */
+@media (max-width: 699px) {
+  .grid-feed { grid-template-columns: 1fr; }
+  .feed-column + .feed-column { margin-top: clamp(4rem, 10vw, 10rem); }
+}

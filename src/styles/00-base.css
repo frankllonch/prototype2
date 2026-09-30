@@ -34,6 +34,33 @@
   --veil-blur: 8px;
 }
 
+/*
+ * Moving between pages cross-fades rather than cutting. The old page fades out
+ * as the new one fades in, so the site reads as one surface instead of a set of
+ * documents. Browsers without cross-document view transitions simply navigate.
+ */
+@view-transition { navigation: auto; }
+::view-transition-old(root) { animation: fade-out 0.32s var(--ease) both; }
+::view-transition-new(root) { animation: fade-in 0.42s var(--ease) 0.06s both; }
+@keyframes fade-out { to { opacity: 0; } }
+@keyframes fade-in { from { opacity: 0; } }
+
+/*
+ * The other half of it: the page cross-fades, and then the content of the new
+ * one settles in rather than being there already. A rise of a few pixels and a
+ * short stagger is enough — anything more and it reads as a slideshow.
+ *
+ * Not on the artwork index, which has the pile to arrive with, and not for
+ * anyone who has asked for less movement.
+ */
+@keyframes settle-in { from { opacity: 0; transform: translateY(14px); } }
+@media (prefers-reduced-motion: no-preference) {
+  .feed-column, .reader-page .reader {
+    animation: settle-in 0.8s var(--ease) both;
+  }
+  .feed-column:nth-child(2) { animation-delay: 0.12s; }
+}
+
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
 body {
@@ -131,26 +158,38 @@ body.is-locked { overflow: hidden; }
  * can never intercept the click it is describing; hidden entirely on touch,
  * where the caption has nothing to follow.
  */
+/*
+ * The blend goes on the container, not on the label. `.cursor` is a stacking
+ * context of its own (fixed, z-indexed), so a blend applied inside it would mix
+ * with the container's own empty backdrop and simply render its raw colour —
+ * which is why the label came out peach instead of the negative of the work.
+ */
 .cursor {
   position: fixed; top: 0; left: 0; z-index: 90;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.22s var(--ease);
   will-change: transform;
+  mix-blend-mode: difference;
 }
 .cursor.is-visible { opacity: 1; }
 /* Centred on the pointer, because it *is* the pointer while it shows. */
 .cursor-label {
   display: inline-block;
-  /* Same trick as the menu: indigo over paper, the negative over a painting, so
-     the name is legible over a dark canvas and a pale one alike. */
-  color: rgb(255, 199, 127);
-  mix-blend-mode: difference;
+  /*
+   * White, where the menu uses peach. With `difference` the result is
+   * |backdrop − source|, so white gives 255 − backdrop: the photographic
+   * negative of whatever the pointer is over, and the furthest any single
+   * colour can get from the picture underneath it. The menu wants peach because
+   * it is mostly over paper and peach resolves there to the house indigo; the
+   * pointer is always over a painting, where contrast matters more than hue.
+   */
+  color: #ffffff;
   white-space: nowrap;
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  font-weight: 500;
+  font-weight: 600;
   transform: translate(-50%, -50%);
 }
 /* The arrow steps aside over a painting — but only once the script that

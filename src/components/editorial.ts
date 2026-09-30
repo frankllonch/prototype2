@@ -14,11 +14,15 @@ export interface EditorialProps {
  * the photograph holds the other.
  *
  * Only one figure shows at a time and which one follows the reader's progress
- * (`client/panel-scroll.ts`), so the picture stays put while the words move past
- * it. The figure column is given a little height of its own — enough that a
- * short text still has somewhere to move through its photographs — but the text
- * governs whenever it is the longer of the two, so the two columns run out
- * together rather than the images outlasting the words.
+ * (`client/panel-scroll.ts`), so the picture holds its place on the screen while
+ * the words travel past it. `data-multi` marks the case where that is worth
+ * arranging: with two or more photographs the figure column claims enough scroll
+ * of its own to pin itself (see `.reader-figures` in the stylesheet), and with
+ * one there is nothing to move through, so the text governs.
+ *
+ * The count of photographs sits in the figure column rather than under the
+ * title: it belongs to the pictures, and that column is the one that holds still,
+ * so it stays in view for as long as it is telling you something.
  *
  * Shared by the exhibition and collaboration panels and by the Colour Chart, so
  * everything that is read rather than browsed is read the same way.
@@ -31,14 +35,11 @@ export function editorialBody({ title, year, images, rows }: EditorialProps): Ht
       <header class="reader-head">
         <h2 class="reader-title">${title}</h2>
         ${year ? html`<span class="reader-year">${year}</span>` : ''}
-        ${images.length > 1
-          ? html`<p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>`
-          : ''}
       </header>
       ${join(text.map((c) => html`<div class="prose">${raw(c.kind === 'text' ? c.html : '')}</div>`))}
     </div>
 
-    <div class="reader-figures" data-figures style="--n:${images.length}">
+    <div class="reader-figures" data-figures ${images.length > 1 ? 'data-multi' : ''} style="--n:${images.length}">
       <div class="reader-sticky">
         <div class="reader-stage">
           ${join(
@@ -50,6 +51,9 @@ export function editorialBody({ title, year, images, rows }: EditorialProps): Ht
             ),
           )}
         </div>
+        ${images.length > 1
+          ? html`<p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>`
+          : ''}
       </div>
     </div>
   </div>`;

@@ -36,6 +36,13 @@ interface GridProps {
    * is not the reader's to choose.
    */
   readonly justified?: boolean;
+  /**
+   * Two staggered columns at their natural proportions, after nachoalegre.com.
+   * For the sections that are a handful of projects rather than an archive: the
+   * pictures get to be different shapes and sizes instead of being cut to one
+   * row height, which is the whole point of the composition.
+   */
+  readonly feed?: boolean;
   /** Leading tiles to load eagerly — the ones visible in the stack. */
   readonly eagerCount?: number;
 }
@@ -87,11 +94,26 @@ function tile(
  * only thing the density control changes; every tile's width is `--unit × --a`.
  */
 export function grid({
-  items, basePath, lightbox = false, panels, stack = false, justified = false, eagerCount = 14,
+  items, basePath, lightbox = false, panels, stack = false, justified = false, feed = false, eagerCount = 14,
 }: GridProps): Html {
   // The first tile of each year carries that year's anchor, so the rail can be
   // plain links and still work with scripting off.
   const seen = new Set<number>();
+
+  /*
+   * The feed is two columns of whole items rather than one wrapping run, so the
+   * items are dealt out alternately here rather than left to CSS columns: those
+   * would break a tile across a column boundary, and the order has to stay the
+   * reading order for the keyboard.
+   */
+  if (feed) {
+    const tiles = items.map((item, i) => tile(item, basePath, i, i < eagerCount, panels));
+    const columns = [tiles.filter((_, i) => i % 2 === 0), tiles.filter((_, i) => i % 2 === 1)];
+    return html`<div class="grid grid-feed" data-grid ${lightbox ? html`data-lightbox-source` : ''}>${join(
+      columns.map((column) => html`<div class="feed-column">${join(column)}</div>`),
+    )}</div>`;
+  }
+
   return html`<div
     class="grid${justified ? ' grid-justified' : ''}"
     data-grid

@@ -76,10 +76,10 @@ function aboutText(): string {
 
 /**
  * About opens over whatever page you are on. The first screen is the designer's
- * five lines on peach; scrolling on reveals the biography the source site
- * carries — text in one column, the studio photographs flowing down the other.
- * The same two-column idea as a detail panel, but the pictures move with the
- * words here instead of holding still.
+ * five lines, blinking through the palette; scrolling draws the biography up over
+ * it — text in one column, the studio photographs down the other. The same
+ * two-column idea as a detail panel, but the pictures move with the words here
+ * instead of holding still.
  */
 function aboutOverlay(): Html {
   const bio = aboutText();
@@ -88,12 +88,11 @@ function aboutOverlay(): Html {
   return html`<section class="about" id="about" data-panel aria-label="About">
     <a class="about-close" href="#" data-panel-close>Close</a>
 
+    <div class="about-colour" aria-hidden="true"></div>
     <div class="about-lines">
       ${join(ABOUT_LINES.map((line) => html`<p>${line}</p>`))}
       ${bio ? html`<span class="about-more" aria-hidden="true">Scroll</span>` : ''}
     </div>
-
-    ${bio ? html`<div class="about-fade" aria-hidden="true"></div>` : ''}
 
     ${bio
       ? html`<div class="about-body">
