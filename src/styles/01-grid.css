@@ -31,9 +31,21 @@ html:not(.js) .hero, .hero:empty:not([data-hero]) { height: 0; }
   height: var(--unit);
   width: calc(var(--unit) * var(--a));
   transform-origin: center center;
-  transition: height 0.5s var(--ease), width 0.5s var(--ease);
 }
 .tile[hidden] { display: none; }
+
+/*
+ * Choosing a year pushes every other one back rather than hiding it: the sheet
+ * keeps its shape and its place, and the year you asked for is the only thing
+ * in focus. Blur is only applied when a year is actually chosen, so the resting
+ * grid never pays for it.
+ */
+.tile.is-dimmed {
+  filter: blur(2.5px);
+  opacity: 0.38;
+  pointer-events: none;
+}
+.tile { transition: height 0.5s var(--ease), width 0.5s var(--ease), opacity 0.45s var(--ease), filter 0.45s var(--ease); }
 .tile picture, .tile img { width: 100%; height: 100%; }
 .tile img { object-fit: contain; }
 

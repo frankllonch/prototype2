@@ -122,6 +122,35 @@ body.is-locked { overflow: hidden; }
   color: var(--ink-soft);
 }
 
+/* ------------------------------------------------------------- cursor */
+
+/*
+ * The label that follows the pointer over a painting. Pointer-events off, so it
+ * can never intercept the click it is describing; hidden entirely on touch,
+ * where the caption has nothing to follow.
+ */
+.cursor {
+  position: fixed; top: 0; left: 0; z-index: 90;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.22s var(--ease);
+  will-change: transform;
+}
+.cursor.is-visible { opacity: 1; }
+.cursor-label {
+  display: inline-block;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0.3rem 0.5rem;
+  white-space: nowrap;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 500;
+  transform: translate(0.9rem, 0.9rem);
+}
+@media (hover: none), (pointer: coarse) { .cursor { display: none; } }
+
 /* ------------------------------------------------------------ text roll */
 
 /*

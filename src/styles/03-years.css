@@ -55,6 +55,12 @@
 .year:hover .year-swatch, .year:focus-visible .year-swatch { width: 110px; }
 .year:hover .year-label, .year:focus-visible .year-label { opacity: 1; transform: none; }
 
+/* While a year is in focus the rail says so: the chosen swatch stays out and
+   named, and the rest step back. */
+.years.is-focused .year:not([aria-pressed='true']) .year-swatch { opacity: 0.4; }
+.years.is-focused .year[aria-pressed='true'] .year-swatch { width: 110px; }
+.years.is-focused .year[aria-pressed='true'] .year-label { opacity: 1; transform: none; }
+
 /* Nothing that waits on the opening animation may be reachable before it ends. */
 .stack-running .years,
 .stack-running .controls { opacity: 0; pointer-events: none; }

@@ -9,6 +9,7 @@ import { initYears } from './years.ts';
 import { initPanels } from './panels.ts';
 import { initPanelScroll } from './panel-scroll.ts';
 import { initLightbox } from './lightbox.ts';
+import { initCursor } from './cursor.ts';
 
 initTextRoll();
 initControls();
@@ -17,3 +18,4 @@ initYears();
 initPanels();
 initPanelScroll();
 initLightbox();
+initCursor();

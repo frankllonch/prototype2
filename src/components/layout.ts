@@ -26,7 +26,7 @@ const MENU = [
 
 /** Client modules, in boot order. Preloaded so the first interaction is instant. */
 const CLIENT_MODULES = [
-  'env', 'text-roll', 'controls', 'stack', 'years', 'panels', 'panel-scroll', 'lightbox', 'index',
+  'env', 'text-roll', 'controls', 'stack', 'years', 'panels', 'panel-scroll', 'lightbox', 'cursor', 'index',
 ] as const;
 
 /** The designer's About: five lines, set in blue on peach. */
@@ -139,6 +139,7 @@ ${topBar(path).__html}
 ${rail ? rail.__html : ''}
 <main id="main">${children.__html}</main>
 ${controls ? controls.__html : ''}
+<div class="cursor" data-cursor aria-hidden="true"><span class="cursor-label"></span></div>
 <div class="panel-veil" data-panel-veil></div>
 ${aboutOverlay().__html}
 ${lightbox().__html}

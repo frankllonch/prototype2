@@ -17,16 +17,41 @@ export function initYears(): void {
   const links = [...rail.querySelectorAll<HTMLAnchorElement>('.year')];
   if (!links.length) return;
 
+  const grid = document.querySelector<HTMLElement>('[data-grid]');
+  const tiles = grid ? [...grid.querySelectorAll<HTMLElement>('.tile')] : [];
+
+  /**
+   * Focusing a year dims every painting from another one, so the year you asked
+   * for is the only thing in focus. Choosing the same year again clears it, as
+   * does Escape.
+   */
+  let focused = '';
+  const focus = (year: string) => {
+    focused = year;
+    for (const tile of tiles) tile.classList.toggle('is-dimmed', Boolean(year) && tile.dataset.year !== year);
+    for (const link of links) link.setAttribute('aria-pressed', String(link.dataset.year === year));
+    rail.classList.toggle('is-focused', Boolean(year));
+  };
+
   for (const link of links) {
+    link.setAttribute('aria-pressed', 'false');
     link.addEventListener('click', (event) => {
       if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
-      const target = document.getElementById(`year-${link.dataset.year}`);
+      const year = link.dataset.year!;
+      const target = document.getElementById(`year-${year}`);
       if (!target) return;
       event.preventDefault();
+
+      if (focused === year) { focus(''); return; }
+      focus(year);
       target.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'start' });
-      history.replaceState(null, '', `#year-${link.dataset.year}`);
+      history.replaceState(null, '', `#year-${year}`);
     });
   }
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && focused) focus('');
+  });
 
   // Mark the year currently under the top of the viewport.
   const start = () => {
