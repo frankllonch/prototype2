@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="/prototype2/site.css" />
 <link rel="modulepreload" href="/prototype2/js/env.js" />
 <link rel="modulepreload" href="/prototype2/js/text-roll.js" />
+<link rel="modulepreload" href="/prototype2/js/transitions.js" />
 <link rel="modulepreload" href="/prototype2/js/controls.js" />
 <link rel="modulepreload" href="/prototype2/js/stack.js" />
 <link rel="modulepreload" href="/prototype2/js/years.js" />
@@ -17,9 +18,17 @@
 <link rel="modulepreload" href="/prototype2/js/lightbox.js" />
 <link rel="modulepreload" href="/prototype2/js/cursor.js" />
 <link rel="modulepreload" href="/prototype2/js/index.js" />
-<script>document.documentElement.classList.add('js')</script>
+<script>document.documentElement.classList.add('js');
+// The loading screen belongs to arriving at the site, not to each page of it.
+// Decided here, before the first paint, so pages after the first never show it
+// even for a frame.
+try { if (sessionStorage.getItem('cv-seen')) document.documentElement.classList.add('loaded') } catch (e) {}</script>
 </head>
 <body>
+<div class="loader" data-loader aria-hidden="true">
+    <p>CLAUDIA VALSELLS</p><p>1969</p><p>Alzueta Gallery</p><p>Barcelona, Spain</p><p>© All Rights Reserved</p>
+  </div>
+<div class="page-veil" aria-hidden="true"></div>
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="top">
     <a class="wordmark" href="/prototype2/" data-roll>CLAUDIA VALSELLS</a>
@@ -53,37 +62,37 @@
     </nav>
   </header>
 <nav class="years" data-years aria-label="Jump to year">
-    <a class="year" href="#year-2026" data-year="2026" style="--c:#11504b">
+    <a class="year" href="#year-2026" data-year="2026" style="--c:#0f4f4b">
           <span class="year-swatch" aria-hidden="true"></span>
           <span class="year-label">2026</span>
-        </a><a class="year" href="#year-2025" data-year="2025" style="--c:#bc703f">
+        </a><a class="year" href="#year-2025" data-year="2025" style="--c:#b96e3d">
           <span class="year-swatch" aria-hidden="true"></span>
           <span class="year-label">2025</span>
-        </a><a class="year" href="#year-2024" data-year="2024" style="--c:#0b6140">
+        </a><a class="year" href="#year-2024" data-year="2024" style="--c:#0b603f">
           <span class="year-swatch" aria-hidden="true"></span>
           <span class="year-label">2024</span>
         </a><a class="year" href="#year-2023" data-year="2023" style="--c:#194427">
           <span class="year-swatch" aria-hidden="true"></span>
           <span class="year-label">2023</span>
-        </a><a class="year" href="#year-2022" data-year="2022" style="--c:#0a5769">
+        </a><a class="year" href="#year-2022" data-year="2022" style="--c:#06637a">
           <span class="year-swatch" aria-hidden="true"></span>
           <span class="year-label">2022</span>
-        </a><a class="year" href="#year-2021" data-year="2021" style="--c:#b88926">
+        </a><a class="year" href="#year-2021" data-year="2021" style="--c:#b88927">
           <span class="year-swatch" aria-hidden="true"></span>
           <span class="year-label">2021</span>
-        </a><a class="year" href="#year-2020" data-year="2020" style="--c:#6e271e">
+        </a><a class="year" href="#year-2020" data-year="2020" style="--c:#6f271e">
           <span class="year-swatch" aria-hidden="true"></span>
           <span class="year-label">2020</span>
-        </a><a class="year" href="#year-2019" data-year="2019" style="--c:#4b1a1d">
+        </a><a class="year" href="#year-2019" data-year="2019" style="--c:#4a1a1d">
           <span class="year-swatch" aria-hidden="true"></span>
           <span class="year-label">2019</span>
         </a><a class="year" href="#year-2018" data-year="2018" style="--c:#2b2d15">
           <span class="year-swatch" aria-hidden="true"></span>
           <span class="year-label">2018</span>
-        </a><a class="year" href="#year-2017" data-year="2017" style="--c:#05198c">
+        </a><a class="year" href="#year-2017" data-year="2017" style="--c:#05198b">
           <span class="year-swatch" aria-hidden="true"></span>
           <span class="year-label">2017</span>
-        </a><a class="year" href="#year-2016" data-year="2016" style="--c:#ab3a31">
+        </a><a class="year" href="#year-2016" data-year="2016" style="--c:#a9382f">
           <span class="year-swatch" aria-hidden="true"></span>
           <span class="year-label">2016</span>
         </a>
@@ -101,7 +110,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2026-162x130cm/"
     id="year-2026"
-    style="--a:0.8085"
+    style="--a:0.8110"
     
     data-title="Untitled"
     data-year="2026"
@@ -112,14 +121,14 @@
     data-index="0"
     aria-label="Untitled, 2026"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/aee21b9ab19a1dd1c-400.avif 400w, /media/aee21b9ab19a1dd1c-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/aee21b9ab19a1dd1c-400.webp 400w, /media/aee21b9ab19a1dd1c-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/aee21b9ab19a1dd1c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/aee21b9ab19a1dd1c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/aee21b9ab19a1dd1c-800.jpg"
+        src="/media/aee21b9ab19a1dd1c-400.jpg"
         alt=""
-        width="1148"
-        height="1420"
-        style="aspect-ratio:1148 / 1420"
+        width="725"
+        height="894"
+        style="aspect-ratio:725 / 894"
         loading="eager"
         fetchpriority="high"
       />
@@ -127,7 +136,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2026-130x160cm/"
     
-    style="--a:1.3039"
+    style="--a:1.2471"
     
     data-title="Untitled"
     data-year="2026"
@@ -143,9 +152,9 @@
       <img
         src="/media/1da5360011314c99c-800.jpg"
         alt=""
-        width="1420"
-        height="1089"
-        style="aspect-ratio:1420 / 1089"
+        width="1085"
+        height="870"
+        style="aspect-ratio:1085 / 870"
         loading="eager"
         fetchpriority="high"
       />
@@ -153,7 +162,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2026-160x130cm/"
     
-    style="--a:0.8100"
+    style="--a:0.8113"
     
     data-title="Untitled"
     data-year="2026"
@@ -164,14 +173,14 @@
     data-index="2"
     aria-label="Untitled, 2026"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/e526231ae1110f7fc-400.avif 400w, /media/e526231ae1110f7fc-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/e526231ae1110f7fc-400.webp 400w, /media/e526231ae1110f7fc-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/e526231ae1110f7fc-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/e526231ae1110f7fc-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/e526231ae1110f7fc-800.jpg"
+        src="/media/e526231ae1110f7fc-400.jpg"
         alt=""
-        width="1168"
-        height="1442"
-        style="aspect-ratio:1168 / 1442"
+        width="718"
+        height="885"
+        style="aspect-ratio:718 / 885"
         loading="eager"
         fetchpriority="high"
       />
@@ -179,7 +188,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2026-160x190cm-2/"
     
-    style="--a:1.2188"
+    style="--a:1.1853"
     
     data-title="Untitled"
     data-year="2026"
@@ -195,9 +204,9 @@
       <img
         src="/media/aac27f8277f78f77c-800.jpg"
         alt=""
-        width="1454"
-        height="1193"
-        style="aspect-ratio:1454 / 1193"
+        width="1017"
+        height="858"
+        style="aspect-ratio:1017 / 858"
         loading="eager"
         fetchpriority="high"
       />
@@ -205,7 +214,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2026-73x60cm/"
     
-    style="--a:0.6668"
+    style="--a:0.8356"
     
     data-title="Untitled"
     data-year="2026"
@@ -216,14 +225,14 @@
     data-index="4"
     aria-label="Untitled, 2026"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/aeda149a83200cbe-400.avif 400w, /media/aeda149a83200cbe-800.avif 800w, /media/aeda149a83200cbe-1600.avif 1600w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/aeda149a83200cbe-400.webp 400w, /media/aeda149a83200cbe-800.webp 800w, /media/aeda149a83200cbe-1600.webp 1600w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/aeda149a83200cbec-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/aeda149a83200cbec-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/aeda149a83200cbe-1600.jpg"
+        src="/media/aeda149a83200cbec-400.jpg"
         alt=""
-        width="1707"
-        height="2560"
-        style="aspect-ratio:1707 / 2560"
+        width="559"
+        height="669"
+        style="aspect-ratio:559 / 669"
         loading="eager"
         fetchpriority="high"
       />
@@ -231,7 +240,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2026-160x190-cm/"
     
-    style="--a:1.1758"
+    style="--a:1.1837"
     
     data-title="Untitled"
     data-year="2026"
@@ -247,9 +256,9 @@
       <img
         src="/media/7bdf301917192f76c-800.jpg"
         alt=""
-        width="1284"
-        height="1092"
-        style="aspect-ratio:1284 / 1092"
+        width="1063"
+        height="898"
+        style="aspect-ratio:1063 / 898"
         loading="eager"
         fetchpriority="high"
       />
@@ -257,7 +266,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2026-60x70cm/"
     
-    style="--a:1.1960"
+    style="--a:1.2076"
     
     data-title="Untitled"
     data-year="2026"
@@ -273,9 +282,9 @@
       <img
         src="/media/28de0b648ad00d1bc-800.jpg"
         alt=""
-        width="1434"
-        height="1199"
-        style="aspect-ratio:1434 / 1199"
+        width="1012"
+        height="838"
+        style="aspect-ratio:1012 / 838"
         loading="eager"
         fetchpriority="high"
       />
@@ -283,7 +292,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2026-160x190cm/"
     
-    style="--a:1.2169"
+    style="--a:1.1896"
     
     data-title="Untitled"
     data-year="2026"
@@ -299,9 +308,9 @@
       <img
         src="/media/8023468c6dc31e11c-800.jpg"
         alt=""
-        width="1425"
-        height="1171"
-        style="aspect-ratio:1425 / 1171"
+        width="1010"
+        height="849"
+        style="aspect-ratio:1010 / 849"
         loading="eager"
         fetchpriority="high"
       />
@@ -309,7 +318,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2026-81x100cm/"
     
-    style="--a:1.2396"
+    style="--a:1.2281"
     
     data-title="Untitled"
     data-year="2026"
@@ -325,9 +334,9 @@
       <img
         src="/media/38ecab8ef56b6232c-800.jpg"
         alt=""
-        width="1335"
-        height="1077"
-        style="aspect-ratio:1335 / 1077"
+        width="1077"
+        height="877"
+        style="aspect-ratio:1077 / 877"
         loading="eager"
         fetchpriority="high"
       />
@@ -335,7 +344,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2026-80x100cm-2/"
     
-    style="--a:1.2677"
+    style="--a:1.2291"
     
     data-title="Untitled"
     data-year="2026"
@@ -351,9 +360,9 @@
       <img
         src="/media/8e2cfbd9625e5763c-800.jpg"
         alt=""
-        width="1326"
-        height="1046"
-        style="aspect-ratio:1326 / 1046"
+        width="1105"
+        height="899"
+        style="aspect-ratio:1105 / 899"
         loading="eager"
         fetchpriority="high"
       />
@@ -361,7 +370,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2026-70x63cm-4/"
     
-    style="--a:0.6668"
+    style="--a:0.8336"
     
     data-title="Untitled"
     data-year="2026"
@@ -372,14 +381,14 @@
     data-index="10"
     aria-label="Untitled, 2026"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/74f5e656bebbb2b7-400.avif 400w, /media/74f5e656bebbb2b7-800.avif 800w, /media/74f5e656bebbb2b7-1600.avif 1600w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/74f5e656bebbb2b7-400.webp 400w, /media/74f5e656bebbb2b7-800.webp 800w, /media/74f5e656bebbb2b7-1600.webp 1600w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/74f5e656bebbb2b7c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/74f5e656bebbb2b7c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/74f5e656bebbb2b7-1600.jpg"
+        src="/media/74f5e656bebbb2b7c-400.jpg"
         alt=""
-        width="1707"
-        height="2560"
-        style="aspect-ratio:1707 / 2560"
+        width="566"
+        height="679"
+        style="aspect-ratio:566 / 679"
         loading="eager"
         fetchpriority="high"
       />
@@ -387,7 +396,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2026-70x63cm-3/"
     
-    style="--a:0.8248"
+    style="--a:0.8335"
     
     data-title="Untitled"
     data-year="2026"
@@ -398,14 +407,14 @@
     data-index="11"
     aria-label="Untitled, 2026"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/9fe5571bb697c05dc-400.avif 400w, /media/9fe5571bb697c05dc-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/9fe5571bb697c05dc-400.webp 400w, /media/9fe5571bb697c05dc-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/9fe5571bb697c05dc-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/9fe5571bb697c05dc-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/9fe5571bb697c05dc-800.jpg"
+        src="/media/9fe5571bb697c05dc-400.jpg"
         alt=""
-        width="1304"
-        height="1581"
-        style="aspect-ratio:1304 / 1581"
+        width="711"
+        height="853"
+        style="aspect-ratio:711 / 853"
         loading="eager"
         fetchpriority="high"
       />
@@ -413,7 +422,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2026-70x63cm-2/"
     
-    style="--a:0.8293"
+    style="--a:0.8338"
     
     data-title="Untitled"
     data-year="2026"
@@ -429,9 +438,9 @@
       <img
         src="/media/1b433ee13065bebfc-800.jpg"
         alt=""
-        width="1346"
-        height="1623"
-        style="aspect-ratio:1346 / 1623"
+        width="1184"
+        height="1420"
+        style="aspect-ratio:1184 / 1420"
         loading="eager"
         fetchpriority="high"
       />
@@ -439,7 +448,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2026-80x100cm/"
     
-    style="--a:1.2389"
+    style="--a:1.2205"
     
     data-title="Untitled"
     data-year="2026"
@@ -455,9 +464,9 @@
       <img
         src="/media/a7fc0bc8186731abc-800.jpg"
         alt=""
-        width="1338"
-        height="1080"
-        style="aspect-ratio:1338 / 1080"
+        width="1074"
+        height="880"
+        style="aspect-ratio:1074 / 880"
         loading="eager"
         fetchpriority="high"
       />
@@ -465,7 +474,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2026-70x63cm/"
     
-    style="--a:0.8511"
+    style="--a:0.8351"
     
     data-title="Untitled"
     data-year="2026"
@@ -476,14 +485,14 @@
     data-index="14"
     aria-label="Untitled, 2026"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/ff0cf6032150946bc-400.avif 400w, /media/ff0cf6032150946bc-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/ff0cf6032150946bc-400.webp 400w, /media/ff0cf6032150946bc-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/ff0cf6032150946bc-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/ff0cf6032150946bc-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/ff0cf6032150946bc-800.jpg"
+        src="/media/ff0cf6032150946bc-400.jpg"
         alt=""
-        width="1360"
-        height="1598"
-        style="aspect-ratio:1360 / 1598"
+        width="709"
+        height="849"
+        style="aspect-ratio:709 / 849"
         loading="lazy"
         decoding="async"
       />
@@ -491,7 +500,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2026-60x73cm/"
     
-    style="--a:1.1660"
+    style="--a:1.2044"
     
     data-title="Untitled"
     data-year="2026"
@@ -507,9 +516,9 @@
       <img
         src="/media/091e8ff4fa68f72ac-800.jpg"
         alt=""
-        width="1510"
-        height="1295"
-        style="aspect-ratio:1510 / 1295"
+        width="937"
+        height="778"
+        style="aspect-ratio:937 / 778"
         loading="lazy"
         decoding="async"
       />
@@ -517,7 +526,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2026-200x180-cm/"
     
-    style="--a:0.9193"
+    style="--a:0.9052"
     
     data-title="Untitled"
     data-year="2026"
@@ -533,9 +542,9 @@
       <img
         src="/media/e2d167c8f9479188c-800.jpg"
         alt=""
-        width="1219"
-        height="1326"
-        style="aspect-ratio:1219 / 1326"
+        width="821"
+        height="907"
+        style="aspect-ratio:821 / 907"
         loading="lazy"
         decoding="async"
       />
@@ -543,7 +552,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2026-110x150cm/"
     
-    style="--a:1.3994"
+    style="--a:1.3922"
     
     data-title="Untitled"
     data-year="2026"
@@ -559,9 +568,9 @@
       <img
         src="/media/a51ab1bbc627f3c7c-800.jpg"
         alt=""
-        width="1377"
-        height="984"
-        style="aspect-ratio:1377 / 984"
+        width="1175"
+        height="844"
+        style="aspect-ratio:1175 / 844"
         loading="lazy"
         decoding="async"
       />
@@ -569,7 +578,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-70x60-cm/"
     id="year-2025"
-    style="--a:0.8195"
+    style="--a:0.8293"
     
     data-title="Untitled"
     data-year="2025"
@@ -580,14 +589,14 @@
     data-index="18"
     aria-label="Untitled, 2025"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/b0eadd2d1b158779c-400.avif 400w, /media/b0eadd2d1b158779c-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/b0eadd2d1b158779c-400.webp 400w, /media/b0eadd2d1b158779c-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/b0eadd2d1b158779c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/b0eadd2d1b158779c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/b0eadd2d1b158779c-800.jpg"
+        src="/media/b0eadd2d1b158779c-400.jpg"
         alt=""
-        width="1335"
-        height="1629"
-        style="aspect-ratio:1335 / 1629"
+        width="651"
+        height="785"
+        style="aspect-ratio:651 / 785"
         loading="lazy"
         decoding="async"
       />
@@ -621,7 +630,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-160x130cm-8/"
     
-    style="--a:0.7780"
+    style="--a:0.8111"
     
     data-title="Untitled"
     data-year="2025"
@@ -632,14 +641,14 @@
     data-index="20"
     aria-label="Untitled, 2025"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/25f24c0c0b4125bbc-400.avif 400w, /media/25f24c0c0b4125bbc-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/25f24c0c0b4125bbc-400.webp 400w, /media/25f24c0c0b4125bbc-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/25f24c0c0b4125bbc-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/25f24c0c0b4125bbc-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/25f24c0c0b4125bbc-800.jpg"
+        src="/media/25f24c0c0b4125bbc-400.jpg"
         alt=""
-        width="1349"
-        height="1734"
-        style="aspect-ratio:1349 / 1734"
+        width="597"
+        height="736"
+        style="aspect-ratio:597 / 736"
         loading="lazy"
         decoding="async"
       />
@@ -647,7 +656,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-100x80cm-9/"
     
-    style="--a:0.8294"
+    style="--a:0.8208"
     
     data-title="Untitled"
     data-year="2025"
@@ -658,14 +667,14 @@
     data-index="21"
     aria-label="Untitled, 2025"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/9eda9241f565ce60c-400.avif 400w, /media/9eda9241f565ce60c-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/9eda9241f565ce60c-400.webp 400w, /media/9eda9241f565ce60c-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/9eda9241f565ce60c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/9eda9241f565ce60c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/9eda9241f565ce60c-800.jpg"
+        src="/media/9eda9241f565ce60c-400.jpg"
         alt=""
-        width="1264"
-        height="1524"
-        style="aspect-ratio:1264 / 1524"
+        width="719"
+        height="876"
+        style="aspect-ratio:719 / 876"
         loading="lazy"
         decoding="async"
       />
@@ -673,7 +682,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-100x80cm-8/"
     
-    style="--a:0.8283"
+    style="--a:0.8209"
     
     data-title="Untitled"
     data-year="2025"
@@ -689,9 +698,9 @@
       <img
         src="/media/0da592a4c134706ac-800.jpg"
         alt=""
-        width="1230"
-        height="1485"
-        style="aspect-ratio:1230 / 1485"
+        width="1228"
+        height="1496"
+        style="aspect-ratio:1228 / 1496"
         loading="lazy"
         decoding="async"
       />
@@ -699,7 +708,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-100x80cm-7/"
     
-    style="--a:0.8167"
+    style="--a:0.8197"
     
     data-title="Untitled"
     data-year="2025"
@@ -710,14 +719,14 @@
     data-index="23"
     aria-label="Untitled, 2025"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/025c66f19bac9ab0c-400.avif 400w, /media/025c66f19bac9ab0c-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/025c66f19bac9ab0c-400.webp 400w, /media/025c66f19bac9ab0c-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/025c66f19bac9ab0c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/025c66f19bac9ab0c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/025c66f19bac9ab0c-800.jpg"
+        src="/media/025c66f19bac9ab0c-400.jpg"
         alt=""
-        width="1270"
-        height="1555"
-        style="aspect-ratio:1270 / 1555"
+        width="714"
+        height="871"
+        style="aspect-ratio:714 / 871"
         loading="lazy"
         decoding="async"
       />
@@ -725,7 +734,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-110-x-150cm/"
     
-    style="--a:1.4102"
+    style="--a:1.3936"
     
     data-title="Untitled"
     data-year="2025"
@@ -741,9 +750,9 @@
       <img
         src="/media/c57bf6982097fb93c-800.jpg"
         alt=""
-        width="1499"
-        height="1063"
-        style="aspect-ratio:1499 / 1063"
+        width="1218"
+        height="874"
+        style="aspect-ratio:1218 / 874"
         loading="lazy"
         decoding="async"
       />
@@ -777,7 +786,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-70x60cm-7/"
     
-    style="--a:0.6668"
+    style="--a:0.8301"
     
     data-title="Untitled"
     data-year="2025"
@@ -788,14 +797,14 @@
     data-index="26"
     aria-label="Untitled, 2025"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/1c815bc3dde95d2b-400.avif 400w, /media/1c815bc3dde95d2b-800.avif 800w, /media/1c815bc3dde95d2b-1600.avif 1600w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/1c815bc3dde95d2b-400.webp 400w, /media/1c815bc3dde95d2b-800.webp 800w, /media/1c815bc3dde95d2b-1600.webp 1600w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/1c815bc3dde95d2bc-400.avif 400w, /media/1c815bc3dde95d2bc-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/1c815bc3dde95d2bc-400.webp 400w, /media/1c815bc3dde95d2bc-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/1c815bc3dde95d2b-1600.jpg"
+        src="/media/1c815bc3dde95d2bc-800.jpg"
         alt=""
-        width="1707"
-        height="2560"
-        style="aspect-ratio:1707 / 2560"
+        width="928"
+        height="1118"
+        style="aspect-ratio:928 / 1118"
         loading="lazy"
         decoding="async"
       />
@@ -803,7 +812,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-70x60cm-6/"
     
-    style="--a:0.8131"
+    style="--a:0.8346"
     
     data-title="Untitled"
     data-year="2025"
@@ -814,14 +823,14 @@
     data-index="27"
     aria-label="Untitled, 2025"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/2b015429ab5daaddc-400.avif 400w, /media/2b015429ab5daaddc-800.avif 800w, /media/2b015429ab5daaddc-1600.avif 1600w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/2b015429ab5daaddc-400.webp 400w, /media/2b015429ab5daaddc-800.webp 800w, /media/2b015429ab5daaddc-1600.webp 1600w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/2b015429ab5daaddc-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/2b015429ab5daaddc-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/2b015429ab5daaddc-1600.jpg"
+        src="/media/2b015429ab5daaddc-400.jpg"
         alt=""
-        width="1697"
-        height="2087"
-        style="aspect-ratio:1697 / 2087"
+        width="545"
+        height="653"
+        style="aspect-ratio:545 / 653"
         loading="lazy"
         decoding="async"
       />
@@ -829,7 +838,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-70x60cm-5/"
     
-    style="--a:0.8385"
+    style="--a:0.8294"
     
     data-title="Untitled"
     data-year="2025"
@@ -840,14 +849,14 @@
     data-index="28"
     aria-label="Untitled, 2025"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/6606470fe3eeb3f8c-400.avif 400w, /media/6606470fe3eeb3f8c-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/6606470fe3eeb3f8c-400.webp 400w, /media/6606470fe3eeb3f8c-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/6606470fe3eeb3f8c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/6606470fe3eeb3f8c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/6606470fe3eeb3f8c-800.jpg"
+        src="/media/6606470fe3eeb3f8c-400.jpg"
         alt=""
-        width="1397"
-        height="1666"
-        style="aspect-ratio:1397 / 1666"
+        width="676"
+        height="815"
+        style="aspect-ratio:676 / 815"
         loading="lazy"
         decoding="async"
       />
@@ -855,7 +864,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-100x80cm-5/"
     
-    style="--a:0.8408"
+    style="--a:0.8144"
     
     data-title="Untitled"
     data-year="2025"
@@ -866,14 +875,14 @@
     data-index="29"
     aria-label="Untitled, 2025"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/3fb979cb3d894999c-400.avif 400w, /media/3fb979cb3d894999c-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/3fb979cb3d894999c-400.webp 400w, /media/3fb979cb3d894999c-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/3fb979cb3d894999c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/3fb979cb3d894999c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/3fb979cb3d894999c-800.jpg"
+        src="/media/3fb979cb3d894999c-400.jpg"
         alt=""
-        width="1151"
-        height="1369"
-        style="aspect-ratio:1151 / 1369"
+        width="737"
+        height="905"
+        style="aspect-ratio:737 / 905"
         loading="lazy"
         decoding="async"
       />
@@ -881,7 +890,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-160x130cm-6/"
     
-    style="--a:0.7995"
+    style="--a:0.8116"
     
     data-title="Untitled"
     data-year="2025"
@@ -892,14 +901,14 @@
     data-index="30"
     aria-label="Untitled, 2025"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/13c43ea8a2c6879dc-400.avif 400w, /media/13c43ea8a2c6879dc-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/13c43ea8a2c6879dc-400.webp 400w, /media/13c43ea8a2c6879dc-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/13c43ea8a2c6879dc-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/13c43ea8a2c6879dc-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/13c43ea8a2c6879dc-800.jpg"
+        src="/media/13c43ea8a2c6879dc-400.jpg"
         alt=""
-        width="1264"
-        height="1581"
-        style="aspect-ratio:1264 / 1581"
+        width="715"
+        height="881"
+        style="aspect-ratio:715 / 881"
         loading="lazy"
         decoding="async"
       />
@@ -907,7 +916,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-130x160cm/"
     
-    style="--a:1.2513"
+    style="--a:1.2490"
     
     data-title="Untitled"
     data-year="2025"
@@ -918,14 +927,14 @@
     data-index="31"
     aria-label="Untitled, 2025"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/0d04a006c930daeac-400.avif 400w, /media/0d04a006c930daeac-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/0d04a006c930daeac-400.webp 400w, /media/0d04a006c930daeac-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/0d04a006c930daeac-400.avif 400w, /media/0d04a006c930daeac-800.avif 800w, /media/0d04a006c930daeac-1600.avif 1600w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/0d04a006c930daeac-400.webp 400w, /media/0d04a006c930daeac-800.webp 800w, /media/0d04a006c930daeac-1600.webp 1600w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/0d04a006c930daeac-800.jpg"
+        src="/media/0d04a006c930daeac-1600.jpg"
         alt=""
-        width="1185"
-        height="947"
-        style="aspect-ratio:1185 / 947"
+        width="1916"
+        height="1534"
+        style="aspect-ratio:1916 / 1534"
         loading="lazy"
         decoding="async"
       />
@@ -933,7 +942,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025/"
     
-    style="--a:0.8484"
+    style="--a:0.8417"
     
     data-title="Untitled"
     data-year="2025"
@@ -944,14 +953,14 @@
     data-index="32"
     aria-label="Untitled, 2025"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/91276fe1957c86e0c-400.avif 400w, /media/91276fe1957c86e0c-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/91276fe1957c86e0c-400.webp 400w, /media/91276fe1957c86e0c-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/91276fe1957c86e0c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/91276fe1957c86e0c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/91276fe1957c86e0c-800.jpg"
+        src="/media/91276fe1957c86e0c-400.jpg"
         alt=""
-        width="1142"
-        height="1346"
-        style="aspect-ratio:1142 / 1346"
+        width="755"
+        height="897"
+        style="aspect-ratio:755 / 897"
         loading="lazy"
         decoding="async"
       />
@@ -959,7 +968,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-205x160cm/"
     
-    style="--a:1.2917"
+    style="--a:1.2791"
     
     data-title="Untitled"
     data-year="2025"
@@ -975,9 +984,9 @@
       <img
         src="/media/57516de5f24fdc37c-800.jpg"
         alt=""
-        width="1315"
-        height="1018"
-        style="aspect-ratio:1315 / 1018"
+        width="1155"
+        height="903"
+        style="aspect-ratio:1155 / 903"
         loading="lazy"
         decoding="async"
       />
@@ -985,7 +994,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-260x190cm-2/"
     
-    style="--a:1.3372"
+    style="--a:1.3600"
     
     data-title="Untitled"
     data-year="2025"
@@ -1001,9 +1010,9 @@
       <img
         src="/media/4fb3a12952b391dbc-800.jpg"
         alt=""
-        width="1380"
-        height="1032"
-        style="aspect-ratio:1380 / 1032"
+        width="1209"
+        height="889"
+        style="aspect-ratio:1209 / 889"
         loading="lazy"
         decoding="async"
       />
@@ -1011,7 +1020,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-26x36cm-3/"
     
-    style="--a:1.3632"
+    style="--a:1.3467"
     
     data-title="Untitled"
     data-year="2025"
@@ -1027,9 +1036,9 @@
       <img
         src="/media/af548000c0bd1fc7c-800.jpg"
         alt=""
-        width="1261"
-        height="925"
-        style="aspect-ratio:1261 / 925"
+        width="1173"
+        height="871"
+        style="aspect-ratio:1173 / 871"
         loading="lazy"
         decoding="async"
       />
@@ -1037,7 +1046,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-260x190cm/"
     
-    style="--a:1.3429"
+    style="--a:1.3583"
     
     data-title="Untitled"
     data-year="2025"
@@ -1053,9 +1062,9 @@
       <img
         src="/media/30e2735c08eedaa5c-800.jpg"
         alt=""
-        width="1363"
-        height="1015"
-        style="aspect-ratio:1363 / 1015"
+        width="1213"
+        height="893"
+        style="aspect-ratio:1213 / 893"
         loading="lazy"
         decoding="async"
       />
@@ -1063,7 +1072,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-26x32cm/"
     
-    style="--a:1.2059"
+    style="--a:1.1853"
     
     data-title="Untitled"
     data-year="2025"
@@ -1079,9 +1088,9 @@
       <img
         src="/media/583e6e3517d7d515c-800.jpg"
         alt=""
-        width="1224"
-        height="1015"
-        style="aspect-ratio:1224 / 1015"
+        width="1030"
+        height="869"
+        style="aspect-ratio:1030 / 869"
         loading="lazy"
         decoding="async"
       />
@@ -1089,7 +1098,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-100x80cm-4/"
     
-    style="--a:0.8133"
+    style="--a:0.8141"
     
     data-title="Untitled"
     data-year="2025"
@@ -1100,14 +1109,14 @@
     data-index="38"
     aria-label="Untitled, 2025"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/2793d079f032c161c-400.avif 400w, /media/2793d079f032c161c-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/2793d079f032c161c-400.webp 400w, /media/2793d079f032c161c-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/2793d079f032c161c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/2793d079f032c161c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/2793d079f032c161c-800.jpg"
+        src="/media/2793d079f032c161c-400.jpg"
         alt=""
-        width="945"
-        height="1162"
-        style="aspect-ratio:945 / 1162"
+        width="727"
+        height="893"
+        style="aspect-ratio:727 / 893"
         loading="lazy"
         decoding="async"
       />
@@ -1115,7 +1124,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-26x36cm-2/"
     
-    style="--a:1.3525"
+    style="--a:1.3407"
     
     data-title="Untitled"
     data-year="2025"
@@ -1131,9 +1140,9 @@
       <img
         src="/media/f69091f420e7f773c-800.jpg"
         alt=""
-        width="1270"
-        height="939"
-        style="aspect-ratio:1270 / 939"
+        width="1149"
+        height="857"
+        style="aspect-ratio:1149 / 857"
         loading="lazy"
         decoding="async"
       />
@@ -1167,7 +1176,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-26x36cm/"
     
-    style="--a:1.3411"
+    style="--a:1.3429"
     
     data-title="Untitled"
     data-year="2025"
@@ -1183,9 +1192,9 @@
       <img
         src="/media/4ee5ef84674d10c6c-800.jpg"
         alt=""
-        width="1270"
-        height="947"
-        style="aspect-ratio:1270 / 947"
+        width="1171"
+        height="872"
+        style="aspect-ratio:1171 / 872"
         loading="lazy"
         decoding="async"
       />
@@ -1193,7 +1202,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-150x150cm-3/"
     
-    style="--a:1.0000"
+    style="--a:1.0045"
     
     data-title="Untitled"
     data-year="2025"
@@ -1209,9 +1218,9 @@
       <img
         src="/media/76721779c72bbfaec-800.jpg"
         alt=""
-        width="1142"
-        height="1142"
-        style="aspect-ratio:1142 / 1142"
+        width="899"
+        height="895"
+        style="aspect-ratio:899 / 895"
         loading="lazy"
         decoding="async"
       />
@@ -1219,7 +1228,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-100x80cm-2/"
     
-    style="--a:0.8183"
+    style="--a:0.8178"
     
     data-title="Untitled"
     data-year="2025"
@@ -1230,14 +1239,14 @@
     data-index="43"
     aria-label="Untitled, 2025"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/36972821ce6b0d02c-400.avif 400w, /media/36972821ce6b0d02c-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/36972821ce6b0d02c-400.webp 400w, /media/36972821ce6b0d02c-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/36972821ce6b0d02c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/36972821ce6b0d02c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/36972821ce6b0d02c-800.jpg"
+        src="/media/36972821ce6b0d02c-400.jpg"
         alt=""
-        width="928"
-        height="1134"
-        style="aspect-ratio:928 / 1134"
+        width="736"
+        height="900"
+        style="aspect-ratio:736 / 900"
         loading="lazy"
         decoding="async"
       />
@@ -1245,7 +1254,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-38x48/"
     
-    style="--a:1.2202"
+    style="--a:1.1907"
     
     data-title="Untitled"
     data-year="2025"
@@ -1261,9 +1270,9 @@
       <img
         src="/media/f1d20e47a5060064c-800.jpg"
         alt=""
-        width="1208"
-        height="990"
-        style="aspect-ratio:1208 / 990"
+        width="1074"
+        height="902"
+        style="aspect-ratio:1074 / 902"
         loading="lazy"
         decoding="async"
       />
@@ -1271,7 +1280,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-100x80cm/"
     
-    style="--a:0.8142"
+    style="--a:0.8173"
     
     data-title="Untitled"
     data-year="2025"
@@ -1282,14 +1291,14 @@
     data-index="45"
     aria-label="Untitled, 2025"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/9bf84d3a2ed201e2c-400.avif 400w, /media/9bf84d3a2ed201e2c-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/9bf84d3a2ed201e2c-400.webp 400w, /media/9bf84d3a2ed201e2c-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/9bf84d3a2ed201e2c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/9bf84d3a2ed201e2c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/9bf84d3a2ed201e2c-800.jpg"
+        src="/media/9bf84d3a2ed201e2c-400.jpg"
         alt=""
-        width="942"
-        height="1157"
-        style="aspect-ratio:942 / 1157"
+        width="729"
+        height="892"
+        style="aspect-ratio:729 / 892"
         loading="lazy"
         decoding="async"
       />
@@ -1297,7 +1306,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-38x48cm-3/"
     
-    style="--a:1.2148"
+    style="--a:1.1931"
     
     data-title="Untitled"
     data-year="2025"
@@ -1313,9 +1322,9 @@
       <img
         src="/media/21a613d20e882512c-800.jpg"
         alt=""
-        width="1216"
-        height="1001"
-        style="aspect-ratio:1216 / 1001"
+        width="1075"
+        height="901"
+        style="aspect-ratio:1075 / 901"
         loading="lazy"
         decoding="async"
       />
@@ -1323,7 +1332,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-70x60cm-4/"
     
-    style="--a:0.8278"
+    style="--a:0.8311"
     
     data-title="Untitled"
     data-year="2025"
@@ -1334,14 +1343,14 @@
     data-index="47"
     aria-label="Untitled, 2025"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/70c9098d851d7ba4c-400.avif 400w, /media/70c9098d851d7ba4c-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/70c9098d851d7ba4c-400.webp 400w, /media/70c9098d851d7ba4c-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/70c9098d851d7ba4c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/70c9098d851d7ba4c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/70c9098d851d7ba4c-800.jpg"
+        src="/media/70c9098d851d7ba4c-400.jpg"
         alt=""
-        width="976"
-        height="1179"
-        style="aspect-ratio:976 / 1179"
+        width="738"
+        height="888"
+        style="aspect-ratio:738 / 888"
         loading="lazy"
         decoding="async"
       />
@@ -1349,7 +1358,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-150x150cm/"
     
-    style="--a:1.0191"
+    style="--a:1.0034"
     
     data-title="Untitled"
     data-year="2025"
@@ -1365,9 +1374,9 @@
       <img
         src="/media/5d86f96eb7003684c-800.jpg"
         alt=""
-        width="1176"
-        height="1154"
-        style="aspect-ratio:1176 / 1154"
+        width="893"
+        height="890"
+        style="aspect-ratio:893 / 890"
         loading="lazy"
         decoding="async"
       />
@@ -1375,7 +1384,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-70x60cm-3/"
     
-    style="--a:0.8450"
+    style="--a:0.8256"
     
     data-title="Untitled"
     data-year="2025"
@@ -1386,14 +1395,14 @@
     data-index="49"
     aria-label="Untitled, 2025"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/d594db9e07375d4cc-400.avif 400w, /media/d594db9e07375d4cc-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/d594db9e07375d4cc-400.webp 400w, /media/d594db9e07375d4cc-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/d594db9e07375d4cc-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/d594db9e07375d4cc-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/d594db9e07375d4cc-800.jpg"
+        src="/media/d594db9e07375d4cc-400.jpg"
         alt=""
-        width="987"
-        height="1168"
-        style="aspect-ratio:987 / 1168"
+        width="743"
+        height="900"
+        style="aspect-ratio:743 / 900"
         loading="lazy"
         decoding="async"
       />
@@ -1401,7 +1410,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-160x130cm-5/"
     
-    style="--a:0.8129"
+    style="--a:0.8076"
     
     data-title="Untitled"
     data-year="2025"
@@ -1412,14 +1421,14 @@
     data-index="50"
     aria-label="Untitled, 2025"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/2509f4eb5c9bd1c4c-400.avif 400w, /media/2509f4eb5c9bd1c4c-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/2509f4eb5c9bd1c4c-400.webp 400w, /media/2509f4eb5c9bd1c4c-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/2509f4eb5c9bd1c4c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/2509f4eb5c9bd1c4c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/2509f4eb5c9bd1c4c-800.jpg"
+        src="/media/2509f4eb5c9bd1c4c-400.jpg"
         alt=""
-        width="1060"
-        height="1304"
-        style="aspect-ratio:1060 / 1304"
+        width="726"
+        height="899"
+        style="aspect-ratio:726 / 899"
         loading="lazy"
         decoding="async"
       />
@@ -1427,7 +1436,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-38x48-cm/"
     
-    style="--a:1.2049"
+    style="--a:1.1918"
     
     data-title="Untitled"
     data-year="2025"
@@ -1443,9 +1452,9 @@
       <img
         src="/media/a3cc2277c7e59a4fc-800.jpg"
         alt=""
-        width="1176"
-        height="976"
-        style="aspect-ratio:1176 / 976"
+        width="1075"
+        height="902"
+        style="aspect-ratio:1075 / 902"
         loading="lazy"
         decoding="async"
       />
@@ -1453,7 +1462,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-60x70cm/"
     
-    style="--a:1.2163"
+    style="--a:1.2089"
     
     data-title="Untitled"
     data-year="2025"
@@ -1469,9 +1478,9 @@
       <img
         src="/media/15e26ac5ea2ab3f3c-800.jpg"
         alt=""
-        width="1355"
-        height="1114"
-        style="aspect-ratio:1355 / 1114"
+        width="1088"
+        height="900"
+        style="aspect-ratio:1088 / 900"
         loading="lazy"
         decoding="async"
       />
@@ -1479,7 +1488,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-160x130-cm/"
     
-    style="--a:0.8146"
+    style="--a:0.8071"
     
     data-title="Untitled"
     data-year="2025"
@@ -1490,14 +1499,14 @@
     data-index="53"
     aria-label="Untitled, 2025"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/dca9f37fdd04a6efc-400.avif 400w, /media/dca9f37fdd04a6efc-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/dca9f37fdd04a6efc-400.webp 400w, /media/dca9f37fdd04a6efc-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/dca9f37fdd04a6efc-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/dca9f37fdd04a6efc-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/dca9f37fdd04a6efc-800.jpg"
+        src="/media/dca9f37fdd04a6efc-400.jpg"
         alt=""
-        width="1046"
-        height="1284"
-        style="aspect-ratio:1046 / 1284"
+        width="732"
+        height="907"
+        style="aspect-ratio:732 / 907"
         loading="lazy"
         decoding="async"
       />
@@ -1505,7 +1514,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-160x130cm-3/"
     
-    style="--a:0.8121"
+    style="--a:0.8073"
     
     data-title="Untitled"
     data-year="2025"
@@ -1516,14 +1525,14 @@
     data-index="54"
     aria-label="Untitled, 2025"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/2ae59f6e752dd2dbc-400.avif 400w, /media/2ae59f6e752dd2dbc-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/2ae59f6e752dd2dbc-400.webp 400w, /media/2ae59f6e752dd2dbc-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/2ae59f6e752dd2dbc-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/2ae59f6e752dd2dbc-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/2ae59f6e752dd2dbc-800.jpg"
+        src="/media/2ae59f6e752dd2dbc-400.jpg"
         alt=""
-        width="990"
-        height="1219"
-        style="aspect-ratio:990 / 1219"
+        width="725"
+        height="898"
+        style="aspect-ratio:725 / 898"
         loading="lazy"
         decoding="async"
       />
@@ -1531,7 +1540,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-160x130cm-4/"
     
-    style="--a:0.8095"
+    style="--a:0.8093"
     
     data-title="Untitled"
     data-year="2025"
@@ -1542,14 +1551,14 @@
     data-index="55"
     aria-label="Untitled, 2025"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/ac32c6660765f1bac-400.avif 400w, /media/ac32c6660765f1bac-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/ac32c6660765f1bac-400.webp 400w, /media/ac32c6660765f1bac-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/ac32c6660765f1bac-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/ac32c6660765f1bac-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/ac32c6660765f1bac-800.jpg"
+        src="/media/ac32c6660765f1bac-400.jpg"
         alt=""
-        width="1058"
-        height="1307"
-        style="aspect-ratio:1058 / 1307"
+        width="730"
+        height="902"
+        style="aspect-ratio:730 / 902"
         loading="lazy"
         decoding="async"
       />
@@ -1557,7 +1566,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-38x48cm/"
     
-    style="--a:1.2110"
+    style="--a:1.1936"
     
     data-title="Untitled"
     data-year="2025"
@@ -1573,9 +1582,9 @@
       <img
         src="/media/58ac2a6a01d8788ec-800.jpg"
         alt=""
-        width="1171"
-        height="967"
-        style="aspect-ratio:1171 / 967"
+        width="1079"
+        height="904"
+        style="aspect-ratio:1079 / 904"
         loading="lazy"
         decoding="async"
       />
@@ -1583,7 +1592,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-100x80cm-2025-2/"
     
-    style="--a:0.6668"
+    style="--a:1.2316"
     
     data-title="Untitled"
     data-year="2025"
@@ -1594,14 +1603,14 @@
     data-index="57"
     aria-label="Untitled, 2025"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/41507732cf8ef092-400.avif 400w, /media/41507732cf8ef092-800.avif 800w, /media/41507732cf8ef092-1600.avif 1600w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/41507732cf8ef092-400.webp 400w, /media/41507732cf8ef092-800.webp 800w, /media/41507732cf8ef092-1600.webp 1600w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/41507732cf8ef092c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/41507732cf8ef092c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/41507732cf8ef092-1600.jpg"
+        src="/media/41507732cf8ef092c-400.jpg"
         alt=""
-        width="1707"
-        height="2560"
-        style="aspect-ratio:1707 / 2560"
+        width="601"
+        height="488"
+        style="aspect-ratio:601 / 488"
         loading="lazy"
         decoding="async"
       />
@@ -1609,7 +1618,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-31x255cm/"
     
-    style="--a:0.7922"
+    style="--a:0.8374"
     
     data-title="Untitled"
     data-year="2025"
@@ -1620,14 +1629,14 @@
     data-index="58"
     aria-label="Untitled, 2025"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/a35eb88d6ff1f830c-400.avif 400w, /media/a35eb88d6ff1f830c-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/a35eb88d6ff1f830c-400.webp 400w, /media/a35eb88d6ff1f830c-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/a35eb88d6ff1f830c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/a35eb88d6ff1f830c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/a35eb88d6ff1f830c-800.jpg"
+        src="/media/a35eb88d6ff1f830c-400.jpg"
         alt=""
-        width="1075"
-        height="1357"
-        style="aspect-ratio:1075 / 1357"
+        width="623"
+        height="744"
+        style="aspect-ratio:623 / 744"
         loading="lazy"
         decoding="async"
       />
@@ -1635,7 +1644,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2025-40x50cm/"
     
-    style="--a:1.1980"
+    style="--a:1.2021"
     
     data-title="Untitled"
     data-year="2025"
@@ -1651,9 +1660,9 @@
       <img
         src="/media/ff9ac5003e43fd22c-800.jpg"
         alt=""
-        width="1216"
-        height="1015"
-        style="aspect-ratio:1216 / 1015"
+        width="1023"
+        height="851"
+        style="aspect-ratio:1023 / 851"
         loading="lazy"
         decoding="async"
       />
@@ -1661,7 +1670,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-70x60cm/"
     id="year-2024"
-    style="--a:0.7908"
+    style="--a:0.8261"
     
     data-title="Untitled"
     data-year="2024"
@@ -1672,14 +1681,14 @@
     data-index="60"
     aria-label="Untitled, 2024"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/dcf11809c5fd88a9c-400.avif 400w, /media/dcf11809c5fd88a9c-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/dcf11809c5fd88a9c-400.webp 400w, /media/dcf11809c5fd88a9c-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/dcf11809c5fd88a9c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/dcf11809c5fd88a9c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/dcf11809c5fd88a9c-800.jpg"
+        src="/media/dcf11809c5fd88a9c-400.jpg"
         alt=""
-        width="983"
-        height="1243"
-        style="aspect-ratio:983 / 1243"
+        width="665"
+        height="805"
+        style="aspect-ratio:665 / 805"
         loading="lazy"
         decoding="async"
       />
@@ -1765,7 +1774,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2024-70x60cm-5/"
     
-    style="--a:0.7782"
+    style="--a:0.8262"
     
     data-title="Untitled"
     data-year="2024"
@@ -1776,14 +1785,14 @@
     data-index="64"
     aria-label="Untitled, 2024"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/1caa1fa42c98147dc-400.avif 400w, /media/1caa1fa42c98147dc-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/1caa1fa42c98147dc-400.webp 400w, /media/1caa1fa42c98147dc-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/1caa1fa42c98147dc-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/1caa1fa42c98147dc-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/1caa1fa42c98147dc-800.jpg"
+        src="/media/1caa1fa42c98147dc-400.jpg"
         alt=""
-        width="877"
-        height="1127"
-        style="aspect-ratio:877 / 1127"
+        width="694"
+        height="840"
+        style="aspect-ratio:694 / 840"
         loading="lazy"
         decoding="async"
       />
@@ -1791,7 +1800,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2024-70x60cm-4/"
     
-    style="--a:0.7879"
+    style="--a:0.8270"
     
     data-title="Untitled"
     data-year="2024"
@@ -1802,14 +1811,14 @@
     data-index="65"
     aria-label="Untitled, 2024"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/13ed2081724b16b6c-400.avif 400w, /media/13ed2081724b16b6c-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/13ed2081724b16b6c-400.webp 400w, /media/13ed2081724b16b6c-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/13ed2081724b16b6c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/13ed2081724b16b6c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/13ed2081724b16b6c-800.jpg"
+        src="/media/13ed2081724b16b6c-400.jpg"
         alt=""
-        width="888"
-        height="1127"
-        style="aspect-ratio:888 / 1127"
+        width="698"
+        height="844"
+        style="aspect-ratio:698 / 844"
         loading="lazy"
         decoding="async"
       />
@@ -1843,7 +1852,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2024-46x36cm-3/"
     
-    style="--a:1.0545"
+    style="--a:1.1845"
     
     data-title="Untitled"
     data-year="2024"
@@ -1859,9 +1868,9 @@
       <img
         src="/media/80fd80c7f6bd8488c-800.jpg"
         alt=""
-        width="967"
-        height="917"
-        style="aspect-ratio:967 / 917"
+        width="950"
+        height="802"
+        style="aspect-ratio:950 / 802"
         loading="lazy"
         decoding="async"
       />
@@ -1869,7 +1878,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2024-46x36cm-2/"
     
-    style="--a:1.0476"
+    style="--a:1.1979"
     
     data-title="Untitled"
     data-year="2024"
@@ -1885,9 +1894,9 @@
       <img
         src="/media/fb95e27173e8cb88c-800.jpg"
         alt=""
-        width="1013"
-        height="967"
-        style="aspect-ratio:1013 / 967"
+        width="914"
+        height="763"
+        style="aspect-ratio:914 / 763"
         loading="lazy"
         decoding="async"
       />
@@ -1895,7 +1904,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2024-46x36cm/"
     
-    style="--a:1.0503"
+    style="--a:1.1852"
     
     data-title="Untitled"
     data-year="2024"
@@ -1911,9 +1920,9 @@
       <img
         src="/media/4d4c20afd606b527c-800.jpg"
         alt=""
-        width="960"
-        height="914"
-        style="aspect-ratio:960 / 914"
+        width="947"
+        height="799"
+        style="aspect-ratio:947 / 799"
         loading="lazy"
         decoding="async"
       />
@@ -1921,7 +1930,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2024-60x70cm-2/"
     
-    style="--a:1.1023"
+    style="--a:1.2014"
     
     data-title="Untitled"
     data-year="2024"
@@ -1932,14 +1941,14 @@
     data-index="70"
     aria-label="Untitled, 2024"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/0be23ea7c8dfec29c-400.avif 400w, /media/0be23ea7c8dfec29c-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/0be23ea7c8dfec29c-400.webp 400w, /media/0be23ea7c8dfec29c-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/0be23ea7c8dfec29c-400.avif 400w, /media/0be23ea7c8dfec29c-800.avif 800w, /media/0be23ea7c8dfec29c-1600.avif 1600w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/0be23ea7c8dfec29c-400.webp 400w, /media/0be23ea7c8dfec29c-800.webp 800w, /media/0be23ea7c8dfec29c-1600.webp 1600w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/0be23ea7c8dfec29c-800.jpg"
+        src="/media/0be23ea7c8dfec29c-1600.jpg"
         alt=""
-        width="1034"
-        height="938"
-        style="aspect-ratio:1034 / 938"
+        width="1694"
+        height="1410"
+        style="aspect-ratio:1694 / 1410"
         loading="lazy"
         decoding="async"
       />
@@ -1947,7 +1956,7 @@
     class="tile"
     href="/prototype2/artwork/utitled-2024-60x70cm/"
     
-    style="--a:1.0980"
+    style="--a:1.2099"
     
     data-title="Utitled"
     data-year="2024"
@@ -1963,9 +1972,9 @@
       <img
         src="/media/d880d4cbd0097fdcc-800.jpg"
         alt=""
-        width="1042"
-        height="949"
-        style="aspect-ratio:1042 / 949"
+        width="980"
+        height="810"
+        style="aspect-ratio:980 / 810"
         loading="lazy"
         decoding="async"
       />
@@ -1973,7 +1982,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2024-60x70/"
     
-    style="--a:1.1010"
+    style="--a:1.2108"
     
     data-title="Untitled"
     data-year="2024"
@@ -1989,9 +1998,9 @@
       <img
         src="/media/517a3c32520b8e3ac-800.jpg"
         alt=""
-        width="1036"
-        height="941"
-        style="aspect-ratio:1036 / 941"
+        width="988"
+        height="816"
+        style="aspect-ratio:988 / 816"
         loading="lazy"
         decoding="async"
       />
@@ -1999,7 +2008,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2024-60x70cm/"
     
-    style="--a:1.1078"
+    style="--a:1.2121"
     
     data-title="Untitled"
     data-year="2024"
@@ -2015,9 +2024,9 @@
       <img
         src="/media/64a2b145d6850885c-800.jpg"
         alt=""
-        width="1028"
-        height="928"
-        style="aspect-ratio:1028 / 928"
+        width="1000"
+        height="825"
+        style="aspect-ratio:1000 / 825"
         loading="lazy"
         decoding="async"
       />
@@ -2025,7 +2034,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2024-80x100cm-2/"
     
-    style="--a:1.2035"
+    style="--a:1.2250"
     
     data-title="Untitled"
     data-year="2024"
@@ -2041,9 +2050,9 @@
       <img
         src="/media/7df9b5f53e2fedd6c-800.jpg"
         alt=""
-        width="1100"
-        height="914"
-        style="aspect-ratio:1100 / 914"
+        width="1078"
+        height="880"
+        style="aspect-ratio:1078 / 880"
         loading="lazy"
         decoding="async"
       />
@@ -2051,7 +2060,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2024-80x100cm/"
     
-    style="--a:1.2135"
+    style="--a:1.2328"
     
     data-title="Untitled"
     data-year="2024"
@@ -2067,9 +2076,9 @@
       <img
         src="/media/c189ca7388da81a3c-800.jpg"
         alt=""
-        width="1097"
-        height="904"
-        style="aspect-ratio:1097 / 904"
+        width="1091"
+        height="885"
+        style="aspect-ratio:1091 / 885"
         loading="lazy"
         decoding="async"
       />
@@ -2077,7 +2086,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2024-26x36cm-3/"
     
-    style="--a:1.0393"
+    style="--a:1.2619"
     
     data-title="Untitled"
     data-year="2024"
@@ -2088,14 +2097,14 @@
     data-index="76"
     aria-label="Untitled, 2024"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/05fce23b49823b65c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/05fce23b49823b65c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/05fce23b49823b65c-400.avif 400w, /media/05fce23b49823b65c-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/05fce23b49823b65c-400.webp 400w, /media/05fce23b49823b65c-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/05fce23b49823b65c-400.jpg"
+        src="/media/05fce23b49823b65c-800.jpg"
         alt=""
-        width="766"
-        height="737"
-        style="aspect-ratio:766 / 737"
+        width="901"
+        height="714"
+        style="aspect-ratio:901 / 714"
         loading="lazy"
         decoding="async"
       />
@@ -2103,7 +2112,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2024-26x36cm-2/"
     
-    style="--a:1.0533"
+    style="--a:1.2663"
     
     data-title="Untitled"
     data-year="2024"
@@ -2114,14 +2123,14 @@
     data-index="77"
     aria-label="Untitled, 2024"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/1abbcf902d5fce80c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/1abbcf902d5fce80c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/1abbcf902d5fce80c-400.avif 400w, /media/1abbcf902d5fce80c-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/1abbcf902d5fce80c-400.webp 400w, /media/1abbcf902d5fce80c-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/1abbcf902d5fce80c-400.jpg"
+        src="/media/1abbcf902d5fce80c-800.jpg"
         alt=""
-        width="771"
-        height="732"
-        style="aspect-ratio:771 / 732"
+        width="1550"
+        height="1224"
+        style="aspect-ratio:1550 / 1224"
         loading="lazy"
         decoding="async"
       />
@@ -2129,7 +2138,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2024-26x36cm/"
     
-    style="--a:1.0383"
+    style="--a:1.2520"
     
     data-title="Untitled"
     data-year="2024"
@@ -2140,14 +2149,14 @@
     data-index="78"
     aria-label="Untitled, 2024"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/b8d99bac011929bcc-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/b8d99bac011929bcc-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/b8d99bac011929bcc-400.avif 400w, /media/b8d99bac011929bcc-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/b8d99bac011929bcc-400.webp 400w, /media/b8d99bac011929bcc-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/b8d99bac011929bcc-400.jpg"
+        src="/media/b8d99bac011929bcc-800.jpg"
         alt=""
-        width="732"
-        height="705"
-        style="aspect-ratio:732 / 705"
+        width="934"
+        height="746"
+        style="aspect-ratio:934 / 746"
         loading="lazy"
         decoding="async"
       />
@@ -2207,7 +2216,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2024-100x80/"
     
-    style="--a:0.6667"
+    style="--a:0.8215"
     
     data-title="Untitled"
     data-year="2024"
@@ -2218,14 +2227,14 @@
     data-index="81"
     aria-label="Untitled, 2024"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/2ddcb102a9a2ecce-400.avif 400w, /media/2ddcb102a9a2ecce-800.avif 800w, /media/2ddcb102a9a2ecce-1600.avif 1600w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/2ddcb102a9a2ecce-400.webp 400w, /media/2ddcb102a9a2ecce-800.webp 800w, /media/2ddcb102a9a2ecce-1600.webp 1600w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/2ddcb102a9a2eccec-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/2ddcb102a9a2eccec-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/2ddcb102a9a2ecce-1600.jpg"
+        src="/media/2ddcb102a9a2eccec-400.jpg"
         alt=""
-        width="1600"
-        height="2400"
-        style="aspect-ratio:1600 / 2400"
+        width="718"
+        height="874"
+        style="aspect-ratio:718 / 874"
         loading="lazy"
         decoding="async"
       />
@@ -2285,7 +2294,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2024-70x60cm/"
     
-    style="--a:0.8222"
+    style="--a:0.8241"
     
     data-title="Untitled"
     data-year="2024"
@@ -2296,14 +2305,14 @@
     data-index="84"
     aria-label="Untitled, 2024"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/38edbb4819d8b16ac-400.avif 400w, /media/38edbb4819d8b16ac-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/38edbb4819d8b16ac-400.webp 400w, /media/38edbb4819d8b16ac-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/38edbb4819d8b16ac-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/38edbb4819d8b16ac-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/38edbb4819d8b16ac-800.jpg"
+        src="/media/38edbb4819d8b16ac-400.jpg"
         alt=""
-        width="883"
-        height="1074"
-        style="aspect-ratio:883 / 1074"
+        width="740"
+        height="898"
+        style="aspect-ratio:740 / 898"
         loading="lazy"
         decoding="async"
       />
@@ -2337,7 +2346,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2023-60x50-cm/"
     id="year-2023"
-    style="--a:0.7672"
+    style="--a:0.8149"
     
     data-title="Untitled"
     data-year="2023"
@@ -2353,9 +2362,9 @@
       <img
         src="/media/3dcfa5e9a3b1b5b1c-400.jpg"
         alt=""
-        width="771"
-        height="1005"
-        style="aspect-ratio:771 / 1005"
+        width="691"
+        height="848"
+        style="aspect-ratio:691 / 848"
         loading="lazy"
         decoding="async"
       />
@@ -2389,7 +2398,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2023-60x50cm-3/"
     
-    style="--a:0.7734"
+    style="--a:0.8184"
     
     data-title="Untitled"
     data-year="2023"
@@ -2405,9 +2414,9 @@
       <img
         src="/media/466e663cbb8a4cf1c-400.jpg"
         alt=""
-        width="785"
-        height="1015"
-        style="aspect-ratio:785 / 1015"
+        width="685"
+        height="837"
+        style="aspect-ratio:685 / 837"
         loading="lazy"
         decoding="async"
       />
@@ -2441,7 +2450,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2023-60x50cm/"
     
-    style="--a:0.7792"
+    style="--a:0.8224"
     
     data-title="Untitled"
     data-year="2023"
@@ -2457,9 +2466,9 @@
       <img
         src="/media/bfcda1e421c5f40dc-400.jpg"
         alt=""
-        width="766"
-        height="983"
-        style="aspect-ratio:766 / 983"
+        width="704"
+        height="856"
+        style="aspect-ratio:704 / 856"
         loading="lazy"
         decoding="async"
       />
@@ -2467,7 +2476,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2023-190x160cm-2/"
     
-    style="--a:1.1429"
+    style="--a:0.8486"
     
     data-title="Untitled"
     data-year="2023"
@@ -2478,14 +2487,14 @@
     data-index="91"
     aria-label="Untitled, 2023"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/a09d8ad7c0befc64c-400.avif 400w, /media/a09d8ad7c0befc64c-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/a09d8ad7c0befc64c-400.webp 400w, /media/a09d8ad7c0befc64c-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/a09d8ad7c0befc64c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/a09d8ad7c0befc64c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/a09d8ad7c0befc64c-800.jpg"
+        src="/media/a09d8ad7c0befc64c-400.jpg"
         alt=""
-        width="1400"
-        height="1225"
-        style="aspect-ratio:1400 / 1225"
+        width="762"
+        height="898"
+        style="aspect-ratio:762 / 898"
         loading="lazy"
         decoding="async"
       />
@@ -2519,7 +2528,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2023-67x57cm/"
     
-    style="--a:0.8385"
+    style="--a:0.8285"
     
     data-title="Untitled"
     data-year="2023"
@@ -2535,9 +2544,9 @@
       <img
         src="/media/238f00fad9addaf6c-400.jpg"
         alt=""
-        width="758"
-        height="904"
-        style="aspect-ratio:758 / 904"
+        width="744"
+        height="898"
+        style="aspect-ratio:744 / 898"
         loading="lazy"
         decoding="async"
       />
@@ -2545,7 +2554,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2023-190x160cm/"
     
-    style="--a:0.6667"
+    style="--a:0.8434"
     
     data-title="Untitled"
     data-year="2023"
@@ -2556,14 +2565,14 @@
     data-index="94"
     aria-label="Untitled, 2023"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/0cb35503e6789d8c-400.avif 400w, /media/0cb35503e6789d8c-800.avif 800w, /media/0cb35503e6789d8c-1600.avif 1600w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/0cb35503e6789d8c-400.webp 400w, /media/0cb35503e6789d8c-800.webp 800w, /media/0cb35503e6789d8c-1600.webp 1600w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/0cb35503e6789d8cc-400.avif 400w, /media/0cb35503e6789d8cc-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/0cb35503e6789d8cc-400.webp 400w, /media/0cb35503e6789d8cc-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/0cb35503e6789d8c-1600.jpg"
+        src="/media/0cb35503e6789d8cc-800.jpg"
         alt=""
-        width="1600"
-        height="2400"
-        style="aspect-ratio:1600 / 2400"
+        width="894"
+        height="1060"
+        style="aspect-ratio:894 / 1060"
         loading="lazy"
         decoding="async"
       />
@@ -2571,7 +2580,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2023-100x80cm-4/"
     
-    style="--a:0.8241"
+    style="--a:0.8124"
     
     data-title="Untitled"
     data-year="2023"
@@ -2582,14 +2591,14 @@
     data-index="95"
     aria-label="Untitled, 2023"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/a517913f143c4532c-400.avif 400w, /media/a517913f143c4532c-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/a517913f143c4532c-400.webp 400w, /media/a517913f143c4532c-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/a517913f143c4532c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/a517913f143c4532c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/a517913f143c4532c-800.jpg"
+        src="/media/a517913f143c4532c-400.jpg"
         alt=""
-        width="1007"
-        height="1222"
-        style="aspect-ratio:1007 / 1222"
+        width="736"
+        height="906"
+        style="aspect-ratio:736 / 906"
         loading="lazy"
         decoding="async"
       />
@@ -2597,7 +2606,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2023-70x60cm-4/"
     
-    style="--a:0.8469"
+    style="--a:0.8245"
     
     data-title="Untitled"
     data-year="2023"
@@ -2608,14 +2617,14 @@
     data-index="96"
     aria-label="Untitled, 2023"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/03951fbb306015adc-400.avif 400w, /media/03951fbb306015adc-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/03951fbb306015adc-400.webp 400w, /media/03951fbb306015adc-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/03951fbb306015adc-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/03951fbb306015adc-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/03951fbb306015adc-800.jpg"
+        src="/media/03951fbb306015adc-400.jpg"
         alt=""
-        width="824"
-        height="973"
-        style="aspect-ratio:824 / 973"
+        width="747"
+        height="906"
+        style="aspect-ratio:747 / 906"
         loading="lazy"
         decoding="async"
       />
@@ -2623,7 +2632,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2023-100x80cm-3/"
     
-    style="--a:0.8299"
+    style="--a:0.8137"
     
     data-title="Untitled"
     data-year="2023"
@@ -2634,14 +2643,14 @@
     data-index="97"
     aria-label="Untitled, 2023"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/538b312eb6fd6862c-400.avif 400w, /media/538b312eb6fd6862c-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/538b312eb6fd6862c-400.webp 400w, /media/538b312eb6fd6862c-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/538b312eb6fd6862c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/538b312eb6fd6862c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/538b312eb6fd6862c-800.jpg"
+        src="/media/538b312eb6fd6862c-400.jpg"
         alt=""
-        width="1010"
-        height="1217"
-        style="aspect-ratio:1010 / 1217"
+        width="738"
+        height="907"
+        style="aspect-ratio:738 / 907"
         loading="lazy"
         decoding="async"
       />
@@ -2701,7 +2710,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2022-163x193cm/"
     id="year-2022"
-    style="--a:0.8168"
+    style="--a:0.8379"
     
     data-title="Untitled"
     data-year="2022"
@@ -2717,9 +2726,9 @@
       <img
         src="/media/fcd0540a1c8fd8a8c-400.jpg"
         alt=""
-        width="526"
-        height="644"
-        style="aspect-ratio:526 / 644"
+        width="739"
+        height="882"
+        style="aspect-ratio:739 / 882"
         loading="lazy"
         decoding="async"
       />
@@ -2727,7 +2736,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2022-76x63cm-4/"
     
-    style="--a:0.7787"
+    style="--a:0.8338"
     
     data-title="Untitled"
     data-year="2022"
@@ -2738,14 +2747,14 @@
     data-index="101"
     aria-label="Untitled, 2022"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/4a2d92501f32ca1ac-400.avif 400w, /media/4a2d92501f32ca1ac-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/4a2d92501f32ca1ac-400.webp 400w, /media/4a2d92501f32ca1ac-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/4a2d92501f32ca1ac-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/4a2d92501f32ca1ac-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/4a2d92501f32ca1ac-800.jpg"
+        src="/media/4a2d92501f32ca1ac-400.jpg"
         alt=""
-        width="1288"
-        height="1654"
-        style="aspect-ratio:1288 / 1654"
+        width="662"
+        height="794"
+        style="aspect-ratio:662 / 794"
         loading="lazy"
         decoding="async"
       />
@@ -2753,7 +2762,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2022-70x60cm-4/"
     
-    style="--a:0.7655"
+    style="--a:0.8309"
     
     data-title="Untitled"
     data-year="2022"
@@ -2764,14 +2773,14 @@
     data-index="102"
     aria-label="Untitled, 2022"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/9090a52648a45a76c-400.avif 400w, /media/9090a52648a45a76c-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/9090a52648a45a76c-400.webp 400w, /media/9090a52648a45a76c-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/9090a52648a45a76c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/9090a52648a45a76c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/9090a52648a45a76c-800.jpg"
+        src="/media/9090a52648a45a76c-400.jpg"
         alt=""
-        width="1195"
-        height="1561"
-        style="aspect-ratio:1195 / 1561"
+        width="678"
+        height="816"
+        style="aspect-ratio:678 / 816"
         loading="lazy"
         decoding="async"
       />
@@ -2805,7 +2814,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2022-76x63cm-2/"
     
-    style="--a:0.6667"
+    style="--a:0.8305"
     
     data-title="Untitled"
     data-year="2022"
@@ -2816,14 +2825,14 @@
     data-index="104"
     aria-label="Untitled, 2022"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/bd88dd994155fb53-400.avif 400w, /media/bd88dd994155fb53-800.avif 800w, /media/bd88dd994155fb53-1600.avif 1600w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/bd88dd994155fb53-400.webp 400w, /media/bd88dd994155fb53-800.webp 800w, /media/bd88dd994155fb53-1600.webp 1600w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/bd88dd994155fb53c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/bd88dd994155fb53c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/bd88dd994155fb53-1600.jpg"
+        src="/media/bd88dd994155fb53c-400.jpg"
         alt=""
-        width="1600"
-        height="2400"
-        style="aspect-ratio:1600 / 2400"
+        width="397"
+        height="478"
+        style="aspect-ratio:397 / 478"
         loading="lazy"
         decoding="async"
       />
@@ -2883,7 +2892,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2022-73-x-63-cm/"
     
-    style="--a:0.8060"
+    style="--a:0.8460"
     
     data-title="Untitled"
     data-year="2022"
@@ -2894,14 +2903,14 @@
     data-index="107"
     aria-label="Untitled, 2022"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/825a0c2fc7d3f338c-400.avif 400w, /media/825a0c2fc7d3f338c-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/825a0c2fc7d3f338c-400.webp 400w, /media/825a0c2fc7d3f338c-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/825a0c2fc7d3f338c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/825a0c2fc7d3f338c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/825a0c2fc7d3f338c-800.jpg"
+        src="/media/825a0c2fc7d3f338c-400.jpg"
         alt=""
-        width="1055"
-        height="1309"
-        style="aspect-ratio:1055 / 1309"
+        width="725"
+        height="857"
+        style="aspect-ratio:725 / 857"
         loading="lazy"
         decoding="async"
       />
@@ -2909,7 +2918,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2022-73-x-63cm/"
     
-    style="--a:0.7932"
+    style="--a:0.8427"
     
     data-title="Untitled"
     data-year="2022"
@@ -2920,14 +2929,14 @@
     data-index="108"
     aria-label="Untitled, 2022"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/4f3a7cd510833611c-400.avif 400w, /media/4f3a7cd510833611c-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/4f3a7cd510833611c-400.webp 400w, /media/4f3a7cd510833611c-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/4f3a7cd510833611c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/4f3a7cd510833611c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/4f3a7cd510833611c-800.jpg"
+        src="/media/4f3a7cd510833611c-400.jpg"
         alt=""
-        width="1047"
-        height="1320"
-        style="aspect-ratio:1047 / 1320"
+        width="718"
+        height="852"
+        style="aspect-ratio:718 / 852"
         loading="lazy"
         decoding="async"
       />
@@ -2961,7 +2970,7 @@
     class="tile"
     href="/prototype2/artwork/dialogues-n12-2021/"
     
-    style="--a:0.7815"
+    style="--a:0.8325"
     
     data-title="Dialogues N12"
     data-year="2021"
@@ -2972,14 +2981,14 @@
     data-index="110"
     aria-label="Dialogues N12, 2021"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/f6f7b4a3c2850ce3c-400.avif 400w, /media/f6f7b4a3c2850ce3c-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/f6f7b4a3c2850ce3c-400.webp 400w, /media/f6f7b4a3c2850ce3c-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/f6f7b4a3c2850ce3c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/f6f7b4a3c2850ce3c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/f6f7b4a3c2850ce3c-800.jpg"
+        src="/media/f6f7b4a3c2850ce3c-400.jpg"
         alt=""
-        width="1023"
-        height="1309"
-        style="aspect-ratio:1023 / 1309"
+        width="706"
+        height="848"
+        style="aspect-ratio:706 / 848"
         loading="lazy"
         decoding="async"
       />
@@ -2987,7 +2996,7 @@
     class="tile"
     href="/prototype2/artwork/dialogues-n14-2021/"
     
-    style="--a:0.7820"
+    style="--a:0.8275"
     
     data-title="Dialogues N14"
     data-year="2021"
@@ -2998,14 +3007,14 @@
     data-index="111"
     aria-label="Dialogues N14, 2021"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/aaff910e93933299c-400.avif 400w, /media/aaff910e93933299c-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/aaff910e93933299c-400.webp 400w, /media/aaff910e93933299c-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/aaff910e93933299c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/aaff910e93933299c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/aaff910e93933299c-800.jpg"
+        src="/media/aaff910e93933299c-400.jpg"
         alt=""
-        width="1026"
-        height="1312"
-        style="aspect-ratio:1026 / 1312"
+        width="705"
+        height="852"
+        style="aspect-ratio:705 / 852"
         loading="lazy"
         decoding="async"
       />
@@ -3013,7 +3022,7 @@
     class="tile"
     href="/prototype2/artwork/color-dialgogues-iv-2021-2/"
     
-    style="--a:1.4172"
+    style="--a:1.4055"
     
     data-title="Color Dialgogues IV"
     data-year="2021"
@@ -3029,9 +3038,9 @@
       <img
         src="/media/c6f3649eda23d4a8c-800.jpg"
         alt=""
-        width="1172"
-        height="827"
-        style="aspect-ratio:1172 / 827"
+        width="1272"
+        height="905"
+        style="aspect-ratio:1272 / 905"
         loading="lazy"
         decoding="async"
       />
@@ -3039,7 +3048,7 @@
     class="tile"
     href="/prototype2/artwork/color-dialogues-iii-2021/"
     
-    style="--a:0.8468"
+    style="--a:0.8418"
     
     data-title="Color Dialogues III"
     data-year="2021"
@@ -3050,14 +3059,14 @@
     data-index="113"
     aria-label="Color Dialogues III, 2021"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/a0568bf580954ac6c-400.avif 400w, /media/a0568bf580954ac6c-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/a0568bf580954ac6c-400.webp 400w, /media/a0568bf580954ac6c-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/a0568bf580954ac6c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/a0568bf580954ac6c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/a0568bf580954ac6c-800.jpg"
+        src="/media/a0568bf580954ac6c-400.jpg"
         alt=""
-        width="1039"
-        height="1227"
-        style="aspect-ratio:1039 / 1227"
+        width="761"
+        height="904"
+        style="aspect-ratio:761 / 904"
         loading="lazy"
         decoding="async"
       />
@@ -3117,7 +3126,7 @@
     class="tile"
     href="/prototype2/artwork/untitled-2021-70x60-cm-3/"
     
-    style="--a:0.8499"
+    style="--a:0.8519"
     
     data-title="Untitled"
     data-year="2021"
@@ -3128,14 +3137,14 @@
     data-index="116"
     aria-label="Untitled, 2021"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/7f8fb57de3171350c-400.avif 400w, /media/7f8fb57de3171350c-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/7f8fb57de3171350c-400.webp 400w, /media/7f8fb57de3171350c-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/7f8fb57de3171350c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/7f8fb57de3171350c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/7f8fb57de3171350c-800.jpg"
+        src="/media/7f8fb57de3171350c-400.jpg"
         alt=""
-        width="917"
-        height="1079"
-        style="aspect-ratio:917 / 1079"
+        width="759"
+        height="891"
+        style="aspect-ratio:759 / 891"
         loading="lazy"
         decoding="async"
       />
@@ -3507,7 +3516,7 @@
     class="tile"
     href="/prototype2/artwork/acrylic-on-canvas-160x130cm/"
     
-    style="--a:1.2425"
+    style="--a:0.8176"
     
     data-title="Acrylic on canvas"
     data-year="2020"
@@ -3518,14 +3527,14 @@
     data-index="131"
     aria-label="Acrylic on canvas, 2020"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/4f107afb95871b3dc-400.avif 400w, /media/4f107afb95871b3dc-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/4f107afb95871b3dc-400.webp 400w, /media/4f107afb95871b3dc-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/4f107afb95871b3dc-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/4f107afb95871b3dc-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/4f107afb95871b3dc-800.jpg"
+        src="/media/4f107afb95871b3dc-400.jpg"
         alt=""
-        width="1583"
-        height="1274"
-        style="aspect-ratio:1583 / 1274"
+        width="735"
+        height="899"
+        style="aspect-ratio:735 / 899"
         loading="lazy"
         decoding="async"
       />
@@ -3533,7 +3542,7 @@
     class="tile"
     href="/prototype2/artwork/gouache-on-paper-100x80-2/"
     
-    style="--a:1.1960"
+    style="--a:0.7351"
     
     data-title="Gouache on paper"
     data-year="2020"
@@ -3544,14 +3553,14 @@
     data-index="132"
     aria-label="Gouache on paper, 2020"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/ee7ae094021e5399c-400.avif 400w, /media/ee7ae094021e5399c-800.avif 800w, /media/ee7ae094021e5399c-1600.avif 1600w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/ee7ae094021e5399c-400.webp 400w, /media/ee7ae094021e5399c-800.webp 800w, /media/ee7ae094021e5399c-1600.webp 1600w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/ee7ae094021e5399c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/ee7ae094021e5399c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/ee7ae094021e5399c-1600.jpg"
+        src="/media/ee7ae094021e5399c-400.jpg"
         alt=""
-        width="2996"
-        height="2505"
-        style="aspect-ratio:2996 / 2505"
+        width="655"
+        height="891"
+        style="aspect-ratio:655 / 891"
         loading="lazy"
         decoding="async"
       />
@@ -3559,7 +3568,7 @@
     class="tile"
     href="/prototype2/artwork/gouache-on-paper-100x80-3/"
     
-    style="--a:1.2081"
+    style="--a:0.7428"
     
     data-title="Gouache on paper"
     data-year="2020"
@@ -3570,14 +3579,14 @@
     data-index="133"
     aria-label="Gouache on paper, 2020"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/07a7cf8b21cf9fa2c-400.avif 400w, /media/07a7cf8b21cf9fa2c-800.avif 800w, /media/07a7cf8b21cf9fa2c-1600.avif 1600w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/07a7cf8b21cf9fa2c-400.webp 400w, /media/07a7cf8b21cf9fa2c-800.webp 800w, /media/07a7cf8b21cf9fa2c-1600.webp 1600w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/07a7cf8b21cf9fa2c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/07a7cf8b21cf9fa2c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/07a7cf8b21cf9fa2c-1600.jpg"
+        src="/media/07a7cf8b21cf9fa2c-400.jpg"
         alt=""
-        width="2996"
-        height="2480"
-        style="aspect-ratio:2996 / 2480"
+        width="667"
+        height="898"
+        style="aspect-ratio:667 / 898"
         loading="lazy"
         decoding="async"
       />
@@ -3585,7 +3594,7 @@
     class="tile"
     href="/prototype2/artwork/gouache-on-paper-100x80-4/"
     
-    style="--a:1.2204"
+    style="--a:0.7364"
     
     data-title="Gouache on paper"
     data-year="2020"
@@ -3596,14 +3605,14 @@
     data-index="134"
     aria-label="Gouache on paper, 2020"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/b82760ddbe9346b1c-400.avif 400w, /media/b82760ddbe9346b1c-800.avif 800w, /media/b82760ddbe9346b1c-1600.avif 1600w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/b82760ddbe9346b1c-400.webp 400w, /media/b82760ddbe9346b1c-800.webp 800w, /media/b82760ddbe9346b1c-1600.webp 1600w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/b82760ddbe9346b1c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/b82760ddbe9346b1c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/b82760ddbe9346b1c-1600.jpg"
+        src="/media/b82760ddbe9346b1c-400.jpg"
         alt=""
-        width="2996"
-        height="2455"
-        style="aspect-ratio:2996 / 2455"
+        width="665"
+        height="903"
+        style="aspect-ratio:665 / 903"
         loading="lazy"
         decoding="async"
       />
@@ -3611,7 +3620,7 @@
     class="tile"
     href="/prototype2/artwork/gouache-on-paper-100x80/"
     
-    style="--a:1.2105"
+    style="--a:0.7370"
     
     data-title="Gouache on paper"
     data-year="2020"
@@ -3622,14 +3631,14 @@
     data-index="135"
     aria-label="Gouache on paper, 2020"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/f953dd6c9ed8ce0dc-400.avif 400w, /media/f953dd6c9ed8ce0dc-800.avif 800w, /media/f953dd6c9ed8ce0dc-1600.avif 1600w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/f953dd6c9ed8ce0dc-400.webp 400w, /media/f953dd6c9ed8ce0dc-800.webp 800w, /media/f953dd6c9ed8ce0dc-1600.webp 1600w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/f953dd6c9ed8ce0dc-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/f953dd6c9ed8ce0dc-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/f953dd6c9ed8ce0dc-1600.jpg"
+        src="/media/f953dd6c9ed8ce0dc-400.jpg"
         alt=""
-        width="2996"
-        height="2475"
-        style="aspect-ratio:2996 / 2475"
+        width="664"
+        height="901"
+        style="aspect-ratio:664 / 901"
         loading="lazy"
         decoding="async"
       />
@@ -3793,7 +3802,7 @@
     class="tile"
     href="/prototype2/artwork/gouache-on-paper-65x55cm-4/"
     
-    style="--a:1.1649"
+    style="--a:0.8492"
     
     data-title="Gouache on paper 65x55cm (4)"
     data-year="2019"
@@ -3804,14 +3813,14 @@
     data-index="142"
     aria-label="Gouache on paper 65x55cm (4), 2019"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/0e0b9e2dbfbac0fac-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/0e0b9e2dbfbac0fac-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/0e0b9e2dbfbac0fac-400.avif 400w, /media/0e0b9e2dbfbac0fac-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/0e0b9e2dbfbac0fac-400.webp 400w, /media/0e0b9e2dbfbac0fac-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/0e0b9e2dbfbac0fac-400.jpg"
+        src="/media/0e0b9e2dbfbac0fac-800.jpg"
         alt=""
-        width="431"
-        height="370"
-        style="aspect-ratio:431 / 370"
+        width="1306"
+        height="1538"
+        style="aspect-ratio:1306 / 1538"
         loading="lazy"
         decoding="async"
       />
@@ -3819,7 +3828,7 @@
     class="tile"
     href="/prototype2/artwork/goauche-on-paper-65x55-cm-2/"
     
-    style="--a:0.7500"
+    style="--a:0.8535"
     
     data-title="Goauche on paper 65×55 cm (2)"
     data-year="2019"
@@ -3830,14 +3839,14 @@
     data-index="143"
     aria-label="Goauche on paper 65×55 cm (2), 2019"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/908571beaa329002-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/908571beaa329002-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/908571beaa329002c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/908571beaa329002c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/908571beaa329002-400.jpg"
+        src="/media/908571beaa329002c-400.jpg"
         alt=""
-        width="600"
-        height="800"
-        style="aspect-ratio:600 / 800"
+        width="769"
+        height="901"
+        style="aspect-ratio:769 / 901"
         loading="lazy"
         decoding="async"
       />
@@ -3845,7 +3854,7 @@
     class="tile"
     href="/prototype2/artwork/collage-and-gouache-on-paper-110x100-2/"
     
-    style="--a:1.1194"
+    style="--a:0.9578"
     
     data-title="Collage and gouache on paper"
     data-year="2019"
@@ -3856,14 +3865,14 @@
     data-index="144"
     aria-label="Collage and gouache on paper, 2019"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/c658d7f13d47150ac-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/c658d7f13d47150ac-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/c658d7f13d47150ac-400.avif 400w, /media/c658d7f13d47150ac-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/c658d7f13d47150ac-400.webp 400w, /media/c658d7f13d47150ac-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/c658d7f13d47150ac-400.jpg"
+        src="/media/c658d7f13d47150ac-800.jpg"
         alt=""
-        width="450"
-        height="402"
-        style="aspect-ratio:450 / 402"
+        width="862"
+        height="900"
+        style="aspect-ratio:862 / 900"
         loading="lazy"
         decoding="async"
       />
@@ -3923,7 +3932,7 @@
     class="tile"
     href="/prototype2/artwork/acrylic-on-canvas-180x180/"
     id="year-2017"
-    style="--a:1.0118"
+    style="--a:1.0011"
     
     data-title="Acrylic on canvas"
     data-year="2017"
@@ -3934,14 +3943,14 @@
     data-index="147"
     aria-label="Acrylic on canvas, 2017"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/8a5e678029d5329bc-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/8a5e678029d5329bc-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/8a5e678029d5329bc-400.avif 400w, /media/8a5e678029d5329bc-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/8a5e678029d5329bc-400.webp 400w, /media/8a5e678029d5329bc-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/8a5e678029d5329bc-400.jpg"
+        src="/media/8a5e678029d5329bc-800.jpg"
         alt="arte contemporaneo en Barcelona"
-        width="513"
-        height="507"
-        style="aspect-ratio:513 / 507"
+        width="904"
+        height="903"
+        style="aspect-ratio:904 / 903"
         loading="lazy"
         decoding="async"
       />
@@ -4079,7 +4088,7 @@
     class="tile"
     href="/prototype2/artwork/works-2016-6/"
     
-    style="--a:0.8430"
+    style="--a:0.7749"
     
     data-title="works 2016 (116×90)"
     data-year="2016"
@@ -4090,14 +4099,14 @@
     data-index="153"
     aria-label="works 2016 (116×90), 2016"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/media/a95e39b0a74b09f5-400.avif 400w, /media/a95e39b0a74b09f5-800.avif 800w" sizes="(max-width: 599px) 40vw, 260px" />
-      <source type="image/webp" srcset="/media/a95e39b0a74b09f5-400.webp 400w, /media/a95e39b0a74b09f5-800.webp 800w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/avif" srcset="/media/a95e39b0a74b09f5c-400.avif 400w" sizes="(max-width: 599px) 40vw, 260px" />
+      <source type="image/webp" srcset="/media/a95e39b0a74b09f5c-400.webp 400w" sizes="(max-width: 599px) 40vw, 260px" />
       <img
-        src="/media/a95e39b0a74b09f5-800.jpg"
+        src="/media/a95e39b0a74b09f5c-400.jpg"
         alt="acrílico contemporaneo actual"
-        width="843"
-        height="1000"
-        style="aspect-ratio:843 / 1000"
+        width="678"
+        height="875"
+        style="aspect-ratio:678 / 875"
         loading="lazy"
         decoding="async"
       />
@@ -4118,18 +4127,18 @@
 <section class="about" id="about" data-panel aria-label="About">
     <a class="about-close" href="#" data-panel-close>Close</a>
 
+    <div class="about-colour" aria-hidden="true"></div>
     <div class="about-lines">
       <p>CLAUDIA VALSELLS</p><p>1969</p><p>Alzueta Gallery</p><p>Barcelona, Spain</p><p>© All Rights Reserved</p>
       <span class="about-more" aria-hidden="true">Scroll</span>
     </div>
 
-    <div class="about-fade" aria-hidden="true"></div>
-
     <div class="about-body">
-          <div class="about-text"><p><span><b>Claudia Valsells (1969) Barcelona, Spain<span> </span></b></span></p> <p><span>Claudia is an artist specialized in color. A multidisciplinary creator, she discovered painting through her own instinct for color. Her formation as a mural painter gave her a professional opportunity, and her passion in color her own artistic language.<span> </span></span></p> <p><span>Based on her reflections as an artist, her experience in color prediction and mural painting, brings to all her work, with color as a primary tool, an identifiable language.</span></p> <p><span>She began her artistic career painting and soon realized that she had a natural ability with color. In her own words, ‘All I have done throughout my career has been to cultivate this natural gift.<span> </span>First as a mural painter, then designing color charts and prescribing color and finally as an artist’.</span></p> <p><span>The tireless search for the reason of color and its form has obsessed artists throughout history, from the very creation of pictorial expression. Claudia Valsells knows about this and she aims to portray this into her artwork.</span></p> <p><span>In her beginnings as a colorist she worked on commissions, for architects, and on projects of different scales advising and prescribing color. Soon she founded her own Studio, under the name of ‘Arts&Claus’, in allegory to the ‘Arts&Craft’ movement where she always found a lot of inspiration. She specialized in mural painting, color applied to architecture, and interior design for 20 years on projects in Spain and abroad. Her role was to convey the value of color and its texture in the decoration of interior spaces working closely with professionals in the fields of art, design, and architecture. It was in this context, working close with architects and designers,<span> </span>that she found out the communication between professionals was based by the painting companies, relegated the work of the colorist to the background due to ignorance or fear clients to make a mistake or be branded as eccentric. It was then when Claudia Valsells created a specific chromatic selection, a COLOUR CHART, with more than 200 references, which have been used as color comunication tools by Spain’s best architects.</span></p> <p><span>Her work has two very defined characteristics: on the one hand her chromatic instinct, a gift of colors and on the other her ability to select, group and interact colors creating a chromatic language of her own.</span></p> <p><span>The common denominator of all her work is color, and her obsession with the way colors interact with each other. The interaction of color occurs when two or more colors are combined in a composition. The combination of colors varies its own appearance and it is in these moments when Claudia decides to put one color next to another in order to influence its perception and achieve the desired visual experience. For Claudia the interaction of color is a key concept in her work as an artist and as a colorist and allows her to experiment and explore an ever new visual and emotional perception of colors in each work and commission.</span></p> <p><span>Her most personal and ongoing project emerged from the pandemic in 2020 where she launched a ‘Color glossary’ through the question ‘What’s color?’ to people of thought, philosophers, historians, thinkers, writers, and other artists, in order to think of color in a broader context. She wanted to discover the notion of color as it is thought of by others. She opened a dialogue to grasp new ways of seeing colors, other perspectives, but mostly to better understand the reason of color and its form, and this way to understand better human being.</span></p> <p><span>This project has been represented in three solo shows, one in Barcelona ( 2020) and the other two in Madrid ( 2021, 2022) since then<span> </span></span></p> <p><span>Currently she combines her activity as an artist with colour prescription in the areas of design and architecture.<span> </span></span></p> <p><span>Her work is represented, in Spain and abroad, by the Barcelona gallery owner Miquel Alzueta. <a href="http://alzuetagallery.com">ALZUETA GALLERY </a></span></p> <p>PRIVATE COLLECTIONS</p> <div> <div> <div> <div> <p>Fundació Vilacases (Barcelona)</p> <p>Fundació Banc Sabadell (Barcelona)</p> <p>Collection Hayot (France)</p> <p>Martinez Collection (Mexico-US)</p> <p>Niederberghaus Collection (Germany)</p> <p>Collection Richard (France)</p> <p>Smith Collection (Wyoming, US)</p> <p>EXHIBITIONS & ART FAIRS</p> <p>_2026 June_July, Palau de Casavells, ‘<i>Shift Towards Coincidnce’, </i>Group exhibition</p> <p>_2026 June_July, New York, <em>‘Abstract paintings’</em>, Scroll Ny , Group exhibition</p> <p>_2026 May _ June, Paris, ‘<em>Moll de l’os’ peintures 2026</em>, Alzueta Gallery Paris</p> <p>_2026 February, Zona Maco CDMX Mexico with Alzueta Gallery</p> <p>_2025 October, Estampa contemporary art fair, Madrid with Alzueta Gallery</p> <p>-2025 April, <em>‘Míra’m no deixis de mirar-me’</em> Solo show at Palau de Casavells with Alzueta Gallery</p> <p>-2025 March, ‘Marco, límite y lugar’, Madrid with Alzueta Gallery, Group Exhibition</p> <p>-2024 November, Luxemburg art week with Alzueta Gallery</p> </div> <p>-2024 July, Gallery_br, Tetbury, UK, ‘Painting as a gift from color’, solo show</p> <div> <p>-2024 February, ZONA MACO with Alzueta Gallery</p> <p>-2024 January, Alzueta Gallery Séneca, ‘ What abstract art means to me? ‘ Group exhibition</p> <p>-2023 November, Alzueta Gallery Madrid, «La terre est bleue comme une orange», Group exhibition</p> <p>-2023 September, Alzueta Gallery Turó, <em>‘Transitions’ </em>solo show</p> </div> <p>-2023 February, Art Rotterdam, Contemporary Art Fair</p> <div> <p>-2021 December, Alzueta Gallery Madrid, ‘Color Dialogues’ Solo Exhibition</p> <p>-2021 December, Espacio Pavillion, Madrid, 2nd Edition ‘What’s color?’</p> <p>-2021 October, Alzueta Gallery, Madrid, Estampa Contemporary Art Fair</p> <p>-2021 September, Alzueta Gallery, Paris, Art Paris Fair</p> </div> </div> </div> </div> <p>-2021 June, Alzueta Gallery, Madrid, Art Madrid Feria</p> <p>-2020 December, Alzueta Gallery, Barcelona, Solo Exhibition, ‘What’s color?’</p> <p><span>-2020 February, Alzueta Gallery, Barcelona, Aoo&Claudia Valsells ‘Silla8’ show</span></p> <p><span>-2019 November, Solo Exhibition, Almost Perfect, Tokyo, Japan</span></p> <p><span>-2019 October, Art Élysées-Art & Design, París.</span></p> <p><span>-2019 April, Art Paris Grand Palais, París.</span></p> <p><span>-2019 April, Almoneda, Ifema feria de Madrid, Palau de Casavells, Madrid.</span></p> <p><span>-2019 March, AFF Art Fair Brussels</span></p> <p><span>-2019 March, Art Madrid, Madrid</span></p> <p><span>-2018 November, T10 at Alzueta Gallery, Barcelona</span></p> <p><span>-2018 November, Palau de Casavells, solo exhibition, Girona, Spain</span></p> <p><span>-2018 Art fair Hamburg</span></p> <p><span>-2018 Art Elysees París</span></p> <p><span>-2018 Art fair Stockholm</span></p> <p><span>-2018 Contemporary Art Fair Just LX, Portugal</span></p> <p><span>-2018 Almoneda Antik Passion, Madrid</span></p> <p><span>-2018 Art Fair Grand Palais, París</span></p> <p><span>-2018 Eurantica art fair, Brussels</span></p> <p><span>-2018 Art Madrid, Madrid</span></p> <p><span>-2017/07 Uterqüe Art Essays AW2017</span></p> <p><span>-2017/03 Art París, International Art Fair, París</span></p> <p><span>-2017/02 Alzueta Gallery «Color y forma» solo exhibition, Barcelona</span></p> <p><span>-2017/02 Art Madrid, Madrid</span></p> <p><span>-2016/12 <a href="http://www.axelpairon-gallery.com">Galeria Axel Pairon</a> exposición colectiva.</span></p> <p><span>-2016/11 Antica Namur, Belgium</span></p> <p><span>-2016/10 Art Élysées, International Art Fair, París</span></p> <p><span>-2016/06 Scope Basel, Basel art fair</span></p> <p><span>-2007 <a href="http://www.palaudecasavells.com/" target="_blank" rel="noopener noreferrer">Palau de Casavells</a>, Baix Empordà, Solo exhibition , May 2007</span></p> <p><span>-2005 <a href="http://galeriamiquelalzueta.es/home/" target="_blank" rel="noopener noreferrer">Galeria Miquel Alzueta</a>, Barcelona, Solo exhibition, March 2005 – «Expresions de Mur». Abstract Informalism paintings.</span></p> <p><span>-2000/04 <a href="http://www.vincon.com/es/" target="_blank" rel="noopener noreferrer">Sala Vinçon</a>, Barcelona, Solo exhibition, Abril 2000 «El color no existe, existe la luz»/ «The color doesn’t exist, just the light». Individual exhibition where the interaction of the public with the installation was essential. I tried to demonstrate through personal experimentation that color only exists if there is light.<br> </span></p> <p>INQUIRES PLEASE CONTACT TO: editorial@alzuetagallery.com</p> <p><span>images:</span></p> <p><span>© yosigo_yosigo</span></p> <p><span>© Martina Domenech ( below)</span></p></div>
-          <div class="about-figures">
-            <figure class="about-figure">
-                  <picture class="">
+          <div class="about-inner">
+            <div class="about-text"><p><span><b>Claudia Valsells (1969) Barcelona, Spain<span> </span></b></span></p> <p><span>Claudia is an artist specialized in color. A multidisciplinary creator, she discovered painting through her own instinct for color. Her formation as a mural painter gave her a professional opportunity, and her passion in color her own artistic language.<span> </span></span></p> <p><span>Based on her reflections as an artist, her experience in color prediction and mural painting, brings to all her work, with color as a primary tool, an identifiable language.</span></p> <p><span>She began her artistic career painting and soon realized that she had a natural ability with color. In her own words, ‘All I have done throughout my career has been to cultivate this natural gift.<span> </span>First as a mural painter, then designing color charts and prescribing color and finally as an artist’.</span></p> <p><span>The tireless search for the reason of color and its form has obsessed artists throughout history, from the very creation of pictorial expression. Claudia Valsells knows about this and she aims to portray this into her artwork.</span></p> <p><span>In her beginnings as a colorist she worked on commissions, for architects, and on projects of different scales advising and prescribing color. Soon she founded her own Studio, under the name of ‘Arts&Claus’, in allegory to the ‘Arts&Craft’ movement where she always found a lot of inspiration. She specialized in mural painting, color applied to architecture, and interior design for 20 years on projects in Spain and abroad. Her role was to convey the value of color and its texture in the decoration of interior spaces working closely with professionals in the fields of art, design, and architecture. It was in this context, working close with architects and designers,<span> </span>that she found out the communication between professionals was based by the painting companies, relegated the work of the colorist to the background due to ignorance or fear clients to make a mistake or be branded as eccentric. It was then when Claudia Valsells created a specific chromatic selection, a COLOUR CHART, with more than 200 references, which have been used as color comunication tools by Spain’s best architects.</span></p> <p><span>Her work has two very defined characteristics: on the one hand her chromatic instinct, a gift of colors and on the other her ability to select, group and interact colors creating a chromatic language of her own.</span></p> <p><span>The common denominator of all her work is color, and her obsession with the way colors interact with each other. The interaction of color occurs when two or more colors are combined in a composition. The combination of colors varies its own appearance and it is in these moments when Claudia decides to put one color next to another in order to influence its perception and achieve the desired visual experience. For Claudia the interaction of color is a key concept in her work as an artist and as a colorist and allows her to experiment and explore an ever new visual and emotional perception of colors in each work and commission.</span></p> <p><span>Her most personal and ongoing project emerged from the pandemic in 2020 where she launched a ‘Color glossary’ through the question ‘What’s color?’ to people of thought, philosophers, historians, thinkers, writers, and other artists, in order to think of color in a broader context. She wanted to discover the notion of color as it is thought of by others. She opened a dialogue to grasp new ways of seeing colors, other perspectives, but mostly to better understand the reason of color and its form, and this way to understand better human being.</span></p> <p><span>This project has been represented in three solo shows, one in Barcelona ( 2020) and the other two in Madrid ( 2021, 2022) since then<span> </span></span></p> <p><span>Currently she combines her activity as an artist with colour prescription in the areas of design and architecture.<span> </span></span></p> <p><span>Her work is represented, in Spain and abroad, by the Barcelona gallery owner Miquel Alzueta. <a href="http://alzuetagallery.com">ALZUETA GALLERY </a></span></p> <p>PRIVATE COLLECTIONS</p> <div> <div> <div> <div> <p>Fundació Vilacases (Barcelona)</p> <p>Fundació Banc Sabadell (Barcelona)</p> <p>Collection Hayot (France)</p> <p>Martinez Collection (Mexico-US)</p> <p>Niederberghaus Collection (Germany)</p> <p>Collection Richard (France)</p> <p>Smith Collection (Wyoming, US)</p> <p>EXHIBITIONS & ART FAIRS</p> <p>_2026 June_July, Palau de Casavells, ‘<i>Shift Towards Coincidnce’, </i>Group exhibition</p> <p>_2026 June_July, New York, <em>‘Abstract paintings’</em>, Scroll Ny , Group exhibition</p> <p>_2026 May _ June, Paris, ‘<em>Moll de l’os’ peintures 2026</em>, Alzueta Gallery Paris</p> <p>_2026 February, Zona Maco CDMX Mexico with Alzueta Gallery</p> <p>_2025 October, Estampa contemporary art fair, Madrid with Alzueta Gallery</p> <p>-2025 April, <em>‘Míra’m no deixis de mirar-me’</em> Solo show at Palau de Casavells with Alzueta Gallery</p> <p>-2025 March, ‘Marco, límite y lugar’, Madrid with Alzueta Gallery, Group Exhibition</p> <p>-2024 November, Luxemburg art week with Alzueta Gallery</p> </div> <p>-2024 July, Gallery_br, Tetbury, UK, ‘Painting as a gift from color’, solo show</p> <div> <p>-2024 February, ZONA MACO with Alzueta Gallery</p> <p>-2024 January, Alzueta Gallery Séneca, ‘ What abstract art means to me? ‘ Group exhibition</p> <p>-2023 November, Alzueta Gallery Madrid, «La terre est bleue comme une orange», Group exhibition</p> <p>-2023 September, Alzueta Gallery Turó, <em>‘Transitions’ </em>solo show</p> </div> <p>-2023 February, Art Rotterdam, Contemporary Art Fair</p> <div> <p>-2021 December, Alzueta Gallery Madrid, ‘Color Dialogues’ Solo Exhibition</p> <p>-2021 December, Espacio Pavillion, Madrid, 2nd Edition ‘What’s color?’</p> <p>-2021 October, Alzueta Gallery, Madrid, Estampa Contemporary Art Fair</p> <p>-2021 September, Alzueta Gallery, Paris, Art Paris Fair</p> </div> </div> </div> </div> <p>-2021 June, Alzueta Gallery, Madrid, Art Madrid Feria</p> <p>-2020 December, Alzueta Gallery, Barcelona, Solo Exhibition, ‘What’s color?’</p> <p><span>-2020 February, Alzueta Gallery, Barcelona, Aoo&Claudia Valsells ‘Silla8’ show</span></p> <p><span>-2019 November, Solo Exhibition, Almost Perfect, Tokyo, Japan</span></p> <p><span>-2019 October, Art Élysées-Art & Design, París.</span></p> <p><span>-2019 April, Art Paris Grand Palais, París.</span></p> <p><span>-2019 April, Almoneda, Ifema feria de Madrid, Palau de Casavells, Madrid.</span></p> <p><span>-2019 March, AFF Art Fair Brussels</span></p> <p><span>-2019 March, Art Madrid, Madrid</span></p> <p><span>-2018 November, T10 at Alzueta Gallery, Barcelona</span></p> <p><span>-2018 November, Palau de Casavells, solo exhibition, Girona, Spain</span></p> <p><span>-2018 Art fair Hamburg</span></p> <p><span>-2018 Art Elysees París</span></p> <p><span>-2018 Art fair Stockholm</span></p> <p><span>-2018 Contemporary Art Fair Just LX, Portugal</span></p> <p><span>-2018 Almoneda Antik Passion, Madrid</span></p> <p><span>-2018 Art Fair Grand Palais, París</span></p> <p><span>-2018 Eurantica art fair, Brussels</span></p> <p><span>-2018 Art Madrid, Madrid</span></p> <p><span>-2017/07 Uterqüe Art Essays AW2017</span></p> <p><span>-2017/03 Art París, International Art Fair, París</span></p> <p><span>-2017/02 Alzueta Gallery «Color y forma» solo exhibition, Barcelona</span></p> <p><span>-2017/02 Art Madrid, Madrid</span></p> <p><span>-2016/12 <a href="http://www.axelpairon-gallery.com">Galeria Axel Pairon</a> exposición colectiva.</span></p> <p><span>-2016/11 Antica Namur, Belgium</span></p> <p><span>-2016/10 Art Élysées, International Art Fair, París</span></p> <p><span>-2016/06 Scope Basel, Basel art fair</span></p> <p><span>-2007 <a href="http://www.palaudecasavells.com/" target="_blank" rel="noopener noreferrer">Palau de Casavells</a>, Baix Empordà, Solo exhibition , May 2007</span></p> <p><span>-2005 <a href="http://galeriamiquelalzueta.es/home/" target="_blank" rel="noopener noreferrer">Galeria Miquel Alzueta</a>, Barcelona, Solo exhibition, March 2005 – «Expresions de Mur». Abstract Informalism paintings.</span></p> <p><span>-2000/04 <a href="http://www.vincon.com/es/" target="_blank" rel="noopener noreferrer">Sala Vinçon</a>, Barcelona, Solo exhibition, Abril 2000 «El color no existe, existe la luz»/ «The color doesn’t exist, just the light». Individual exhibition where the interaction of the public with the installation was essential. I tried to demonstrate through personal experimentation that color only exists if there is light.<br> </span></p> <p>INQUIRES PLEASE CONTACT TO: editorial@alzuetagallery.com</p> <p><span>images:</span></p> <p><span>© yosigo_yosigo</span></p> <p><span>© Martina Domenech ( below)</span></p></div>
+            <div class="about-figures">
+              <figure class="about-figure">
+                    <picture class="">
       <source type="image/avif" srcset="/media/0d2c1af6977621e4-400.avif 400w, /media/0d2c1af6977621e4-800.avif 800w" sizes="(max-width: 899px) 88vw, 30vw" />
       <source type="image/webp" srcset="/media/0d2c1af6977621e4-400.webp 400w, /media/0d2c1af6977621e4-800.webp 800w" sizes="(max-width: 899px) 88vw, 30vw" />
       <img
@@ -4142,8 +4151,8 @@
         decoding="async"
       />
     </picture>
-                </figure><figure class="about-figure">
-                  <picture class="">
+                  </figure><figure class="about-figure">
+                    <picture class="">
       <source type="image/avif" srcset="/media/790d2d2760032466-400.avif 400w, /media/790d2d2760032466-800.avif 800w, /media/790d2d2760032466-1600.avif 1600w" sizes="(max-width: 899px) 88vw, 30vw" />
       <source type="image/webp" srcset="/media/790d2d2760032466-400.webp 400w, /media/790d2d2760032466-800.webp 800w, /media/790d2d2760032466-1600.webp 1600w" sizes="(max-width: 899px) 88vw, 30vw" />
       <img
@@ -4156,7 +4165,8 @@
         decoding="async"
       />
     </picture>
-                </figure>
+                  </figure>
+            </div>
           </div>
         </div>
   </section>

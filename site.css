@@ -34,6 +34,175 @@
   --veil-blur: 8px;
 }
 
+/*
+ * Moving between pages fades rather than cutting: the page you are leaving goes
+ * out, the one you arrive at comes in, so the site reads as one surface instead
+ * of a set of documents.
+ *
+ * This was `@view-transition` and it did nothing in practice. Cross-document
+ * view transitions are skipped without a word whenever the browser has not
+ * implemented them, and they cannot be feature-detected from script, so there
+ * was no way even to know. The entrance is now a plain animation that every
+ * browser runs, and the exit is `client/transitions.ts` holding the navigation
+ * back for the length of the fade.
+ *
+ * What fades is a sheet of paper over the page, not the page itself. Fading
+ * `body` looked identical and was wrong twice over: `body` is the containing
+ * block for the menu, the panels, the lightbox and the pointer label, all of
+ * which are fixed — and an opacity animation, even one that finishes at 1, keeps
+ * a stacking context on the element for as long as it fills. That context
+ * trapped the menu's `difference` blend against the body's own background
+ * instead of the page, so the type came out raw peach rather than the indigo it
+ * resolves to over paper.
+ *
+ * The entrance needs no script, so a failure to load one cannot leave the page
+ * covered; the exit is script, so a failure there is just an ordinary
+ * navigation.
+ *
+ * `backwards`, not `both`. Filling forwards keeps the animation in effect for
+ * the life of the page, which on an opacity animation means a stacking context
+ * that never goes away — the same thing that trapped the menu's blend when this
+ * was on `body`. Falling back to the resting state is both safer and the state
+ * we want anyway.
+ */
+.page-veil {
+  position: fixed; inset: 0; z-index: 150;
+  background: var(--paper);
+  pointer-events: none;
+  opacity: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .page-veil { animation: veil-out 0.6s var(--ease) backwards; }
+  /* Naming a different animation rather than clearing this one: replacing the
+     name restarts it from its own first frame, where removing it would leave
+     the transition to guess what it was fading from. Forwards here, because
+     this one has to hold the page covered until the navigation commits. */
+  html.is-leaving .page-veil { animation: veil-in 0.42s var(--ease) both; }
+}
+@keyframes veil-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes veil-in { from { opacity: 0; } to { opacity: 1; } }
+
+/*
+ * And the guarantee underneath all of it.
+ *
+ * Everything above hides something and then reveals it by finishing. That is a
+ * single point of failure for the whole page: an animation that never starts, or
+ * starts and never advances, leaves a site that has loaded perfectly behind an
+ * opaque sheet with its content at zero opacity. I have watched this page do
+ * exactly that — fully loaded, every image fetched, nothing in the console, and
+ * nothing on screen — because the document's animation timeline had not begun.
+ * A tab that loads while in the background is the ordinary way to meet it.
+ *
+ * So nothing is allowed to depend on an animation completing. `transitions.ts`
+ * sets this class on a timer well after the longest entrance would have ended,
+ * and it cancels the entrances outright. In the normal case the animations have
+ * already finished and this changes nothing that can be seen; in the bad case it
+ * is the difference between the site and a blank page.
+ *
+ * `:not(.is-leaving)` so it never cancels the exit, which is meant to hold.
+ */
+html.is-revealed:not(.is-leaving) .page-veil,
+html.is-revealed .feed-column,
+html.is-revealed .reader-page .reader,
+html.is-revealed .grid-justified,
+html.is-revealed .detail { animation-name: none; }
+
+/*
+ * The other half of it: the page fades in, and then its content settles rather
+ * than being there already. A rise of a few pixels and a short stagger is
+ * enough — anything more and it reads as a slideshow.
+ *
+ * Not on the artwork index, which has the pile to arrive with, and not for
+ * anyone who has asked for less movement.
+ */
+@keyframes settle-in { from { opacity: 0; transform: translateY(18px); } }
+@media (prefers-reduced-motion: no-preference) {
+  .feed-column, .reader-page .reader, .grid-justified, .detail {
+    /* Backwards, so the page's resting state is visible and upright: nothing is
+       left holding a transform, and nothing stays hidden if the animation does
+       not run. See the reveal guarantee above. */
+    animation: settle-in 0.9s var(--ease) 0.1s backwards;
+  }
+  .feed-column:nth-child(2) { animation-delay: 0.25s; }
+}
+
+/* ---------------------------------------------------------------- loading */
+
+/*
+ * The first arrival of a session: the About title, blinking through the palette,
+ * while the page loads behind it.
+ *
+ * It has to be able to clear itself without script. The fade-out is a plain
+ * animation on a delay, so a browser that never runs a line of JavaScript still
+ * gets the page — the script only brings that moment forward once the load has
+ * actually finished. Anything else risks a blank site, which is a far worse
+ * failure than a loading screen nobody wanted.
+ *
+ * `visibility` rather than `display` in the final frame, so it stops taking
+ * clicks and leaves the tab order without the animation having to be undone.
+ */
+.loader {
+  position: fixed; inset: 0; z-index: 200;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  text-align: center;
+  gap: 0.1rem;
+  padding: var(--bar) var(--pad);
+  background: var(--blink-bg);
+  color: var(--blink-fg);
+  /*
+   * A strobe: six colours in under two seconds, so it flashes rather than turns.
+   * The opposite of About, which holds each colour for a second and a half.
+   *
+   * Not faster than this on purpose. The keyframes hold and then cut, so the
+   * rate you see is one change per 0.3s — about three a second, which is where
+   * the guidance on flashing stops. Anyone who has asked for less movement gets
+   * no loading screen at all rather than a slower one.
+   */
+  animation:
+    about-blink 1.8s ease-in-out infinite,
+    loader-out 0.75s var(--ease) 2.9s both;
+}
+.loader p {
+  margin: 0;
+  font-size: clamp(1.5rem, 3.4vw, 2.75rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.32;
+}
+/*
+ * Once the load is done the script brings that exit forward by naming a
+ * different animation in the exit's slot, exactly as `.page-veil` does.
+ *
+ * Shortening the delay instead does not work, and looked as though it did.
+ * Changing `animation-delay` or `animation-duration` retimes an animation but
+ * leaves its start time alone, so its local clock still reads the 1.6s or more
+ * that has actually elapsed — already past the end of the shortened run. The
+ * screen jumped to the last frame in one step rather than fading over it.
+ * A new name is a new animation, which starts at its own first frame; the blink
+ * keeps its name and its position in the list, so it carries on mid-turn instead
+ * of snapping back to peach.
+ */
+.loader.is-done {
+  animation-name: about-blink, loader-now;
+  animation-delay: 0s, 0s;
+  animation-duration: 1.8s, 0.55s;
+}
+/* Same frames, two names: one for the delayed fallback, one for the early exit. */
+@keyframes loader-out { to { opacity: 0; visibility: hidden; } }
+@keyframes loader-now { to { opacity: 0; visibility: hidden; } }
+/*
+ * Never shown at all: already seen once this session, motion turned down, or no
+ * scripting — in the last case nothing would be there to take it away early, and
+ * a loading screen in front of a page that has already loaded is only a delay.
+ */
+html.loaded .loader,
+html:not(.js) .loader { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .loader { display: none; }
+}
+
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
 body {
@@ -131,26 +300,38 @@ body.is-locked { overflow: hidden; }
  * can never intercept the click it is describing; hidden entirely on touch,
  * where the caption has nothing to follow.
  */
+/*
+ * The blend goes on the container, not on the label. `.cursor` is a stacking
+ * context of its own (fixed, z-indexed), so a blend applied inside it would mix
+ * with the container's own empty backdrop and simply render its raw colour —
+ * which is why the label came out peach instead of the negative of the work.
+ */
 .cursor {
   position: fixed; top: 0; left: 0; z-index: 90;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.22s var(--ease);
   will-change: transform;
+  mix-blend-mode: difference;
 }
 .cursor.is-visible { opacity: 1; }
 /* Centred on the pointer, because it *is* the pointer while it shows. */
 .cursor-label {
   display: inline-block;
-  /* Same trick as the menu: indigo over paper, the negative over a painting, so
-     the name is legible over a dark canvas and a pale one alike. */
-  color: rgb(255, 199, 127);
-  mix-blend-mode: difference;
+  /*
+   * White, where the menu uses peach. With `difference` the result is
+   * |backdrop − source|, so white gives 255 − backdrop: the photographic
+   * negative of whatever the pointer is over, and the furthest any single
+   * colour can get from the picture underneath it. The menu wants peach because
+   * it is mostly over paper and peach resolves there to the house indigo; the
+   * pointer is always over a painting, where contrast matters more than hue.
+   */
+  color: #ffffff;
   white-space: nowrap;
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  font-weight: 500;
+  font-weight: 600;
   transform: translate(-50%, -50%);
 }
 /* The arrow steps aside over a painting — but only once the script that
@@ -213,6 +394,33 @@ html:not(.js) .hero, .hero:empty:not([data-hero]) { height: 0; }
 /* The justified grid sets its own padding; excluded here so this more
    specific selector does not quietly win over it. */
 .grid:not([data-stack]):not(.grid-justified) { padding-top: var(--gap); }
+
+/*
+ * Half a screen of paper between the pile settling and the first painting.
+ *
+ * It buys two things: the opening stops running straight into the grid, and the
+ * early years become reachable — to bring a year to the middle of the screen you
+ * scroll to half a viewport above it, and without any runway that landed inside
+ * the pile's own stretch of scroll, so choosing it gathered the paintings back
+ * up instead.
+ *
+ * The amount is a compromise, and it cannot be anything else. The pile lets go
+ * at 0.85 of a viewport, so for the first year to centre, the grid has to start
+ * below 1.35 — which would put its top row more than half a screen down at the
+ * moment the pile resolves, and the paintings visibly sink as they spread. Those
+ * two wants pull in opposite directions by exactly the half-viewport that
+ * centring costs. This sits nearer the opening, which is seen on every visit:
+ * the first row lands around a third of the way down, and every year from the
+ * second onward still centres. The earliest comes to rest near the top instead,
+ * which is as close to the middle as a year with only a screen above it can get.
+ *
+ * Only where the pile actually runs. `stack.ts` deletes the hero on every path
+ * where it does not — reduced motion, or no tiles to pile — and the sibling
+ * selector goes with it, so the runway is not left standing above nothing.
+ * `html.js` covers the remaining case: with no scripting the hero is collapsed
+ * rather than removed, and there is no opening to make room for either.
+ */
+html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
 
 .tile {
   flex: 0 0 auto;
@@ -311,6 +519,44 @@ html:not(.js) .hero, .hero:empty:not([data-hero]) { height: 0; }
   .detail-back, .detail-plate, .detail-caption { grid-column: 1; }
 }
 
+/* ------------------------------------------------------------------- feed */
+
+/*
+ * Two columns, offset, pictures at their own proportions — the composition on
+ * nachoalegre.com. Nothing is cropped to a common height and nothing is
+ * justified to the line: the shapes of the works are the rhythm.
+ *
+ * The second column starts lower than the first, so scrolling never brings two
+ * pictures level with each other and the eye is given somewhere to travel.
+ */
+.grid-feed {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 clamp(1.5rem, 5vw, 5rem);
+  align-items: start;
+  padding: calc(var(--bar) + var(--gap)) var(--pad) 20vh;
+}
+.feed-column {
+  display: flex;
+  flex-direction: column;
+  /* Wide enough that one work is finished before the next begins, and that the
+     name has room to appear under it on hover. */
+  gap: clamp(4rem, 10vw, 10rem);
+}
+.feed-column + .feed-column { margin-top: clamp(7rem, 18vw, 18rem); }
+
+/* Undo the contact sheet's fixed row height: here the picture sets its own. */
+.grid-feed .tile { height: auto; width: 100%; }
+.grid-feed .tile picture, .grid-feed .tile img { width: 100%; height: auto; }
+.grid-feed .tile img { object-fit: contain; }
+
+/* Stacked, the stagger would only push the second half of the works down the
+   page for no reason. */
+@media (max-width: 699px) {
+  .grid-feed { grid-template-columns: 1fr; }
+  .feed-column + .feed-column { margin-top: clamp(4rem, 10vw, 10rem); }
+}
+
 /*
  * Overlays. One veil, shared by About and the detail panels, blurring the page
  * behind them lightly enough that the work stays visible.
@@ -355,7 +601,21 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .panel { background: color-mix(in srgb, var(--paper) 90%, transparent); padding: 0 0 var(--gap); }
 .panel-close { position: fixed; top: 1.6rem; right: var(--pad); z-index: 2; color: var(--ink-soft); }
 .panel-close:hover { color: var(--ink); }
+/*
+ * The Colour Chart scrolls the page itself rather than sitting in a panel, so
+ * its text passes under the menu — and the menu's difference blend over a line
+ * of type leaves both of them unreadable. A strip of paper, fixed under the bar,
+ * keeps the crossing clean, and gives the menu the white ground it resolves to
+ * the house indigo over. Behind the bar, so the blend is unaffected.
+ */
 .reader-page { padding-bottom: var(--gap); }
+.reader-page::before {
+  content: '';
+  position: fixed; inset: 0 0 auto 0; height: var(--bar);
+  background: var(--paper);
+  z-index: 39;
+  pointer-events: none;
+}
 
 .reader {
   display: grid;
@@ -368,9 +628,13 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   padding: calc(var(--bar) + var(--gap)) var(--pad) 0;
 }
 
-/* The title stays with you, as the sticky label does on bofill.com. No ground
-   behind it: a panel of its own colour was the visible box. */
-.reader-head { position: sticky; top: var(--bar); margin-bottom: clamp(1.5rem, 3vw, 2.5rem); }
+/*
+ * The title travels with the text rather than pinning above it. Pinned, and with
+ * no ground of its own to hide what passed beneath — a ground was the visible box
+ * — the prose scrolled straight through it and the two were legible at once.
+ * The picture is the thing that holds still here; the words all move together.
+ */
+.reader-head { margin-bottom: clamp(1.5rem, 3vw, 2.5rem); }
 .reader-title { font-size: clamp(1.4rem, 3vw, 2.4rem); letter-spacing: -0.02em; line-height: 1.1; }
 .reader-year, .reader-counter {
   display: block; margin: 0.35rem 0 0; color: var(--ink-soft);
@@ -383,26 +647,48 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .reader-text .prose p { margin: 0 0 1.1em; }
 
 /*
- * The figure column gets a little height of its own so a short text still has
- * somewhere to move through its photographs — but `min-height`, so a long text
- * governs and the two columns run out together instead of the pictures
- * outlasting the words.
+ * The figure column is given scroll of its own, and this is the whole trick.
+ *
+ * `position: sticky` only engages once there is more than a viewport to scroll
+ * through: below that the panel simply scrolls, and the photograph travels up
+ * the screen with the words — which is exactly what was wrong before. Most of
+ * these texts are a paragraph or two, well under a screen, so the runway has to
+ * be guaranteed here rather than left to the text's length.
+ *
+ * Hence a floor, not just a ceiling: at least 170vh so the picture is certainly
+ * pinned, a slot per photograph beyond that, and a cap so a project with
+ * twenty-seven of them does not become a corridor. Only where there is more than
+ * one photograph — a single one has nothing to move through and the text can
+ * govern.
  */
-.reader-figures { --slot: 16vh; }
+.reader-figures { --slot: 30vh; }
 .reader-figure { margin: 0; }
 .reader-figure figcaption { color: var(--ink-soft); margin-top: 0.4rem; font-size: 11px; }
 .reader-figure img { width: 100%; height: auto; }
 
-.reader-figures.is-live { min-height: min(calc(var(--n) * var(--slot)), 150vh); }
+.reader-figures.is-live[data-multi] {
+  min-height: clamp(170vh, calc(var(--n) * var(--slot)), 260vh);
+}
+/*
+ * …and it stretches to the height of the text beside it. Without this the
+ * column ends where its own content does, the sticky releases, and the picture
+ * scrolls away for the last part of the text — which is the one place you would
+ * most notice it moving. `min-height` supplies the runway when the text is
+ * short; this supplies it when the text is long.
+ */
+.reader-figures.is-live { align-self: stretch; }
 .reader-figures.is-live .reader-sticky { position: sticky; top: var(--bar); }
 .reader-figures.is-live .reader-stage { position: relative; height: calc(100vh - var(--bar) - 3rem); }
 .reader-figures.is-live .reader-figure {
   position: absolute; inset: 0;
   display: grid; align-content: center; justify-items: center;
   opacity: 0;
-  transition: opacity 0.6s var(--ease);
+  /* Slow enough to read as one picture dissolving into the next in the same
+     place, rather than as something arriving. */
+  transition: opacity 0.9s var(--ease);
 }
 .reader-figures.is-live .reader-figure.is-current { opacity: 1; }
+.reader-counter { text-align: center; }
 .reader-figures.is-live .reader-figure picture,
 .reader-figures.is-live .reader-figure img {
   max-height: calc(100vh - var(--bar) - 5rem); width: auto; max-width: 100%;
@@ -428,53 +714,75 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
  * About is a takeover, not a veil.
  *
  * The title screen cycles through the palette the paintings gave us — the same
- * colours as the year rail — changing ground and type together, stepping rather
- * than sweeping so it reads as a blink. Both colours are custom properties, so
- * the fade below can begin from whichever one is currently showing.
+ * colours as the year rail, ground and type changing together.
  *
- * Registering them makes the animation well-defined rather than relying on the
- * discrete fallback for unregistered properties.
+ * Each colour *holds* and then blends quickly into the next, rather than cutting
+ * or sweeping: a cut was harsh and a constant sweep never let a colour be itself.
+ * Holding and turning is what reads as a blink. The colours are registered custom
+ * properties so the keyframes interpolate them properly instead of falling back
+ * to the discrete behaviour unregistered properties get.
  */
 @property --blink-bg { syntax: '<color>'; inherits: true; initial-value: #fcd090; }
 @property --blink-fg { syntax: '<color>'; inherits: true; initial-value: #003880; }
 
 @keyframes about-blink {
-  0%     { --blink-bg: #fcd090; --blink-fg: #003880; }
-  16.6%  { --blink-bg: #003880; --blink-fg: #fcd090; }
-  33.3%  { --blink-bg: #0b6140; --blink-fg: #dac192; }
-  50%    { --blink-bg: #bc703f; --blink-fg: #ffffff; }
-  66.6%  { --blink-bg: #0a5769; --blink-fg: #fcd090; }
-  83.3%  { --blink-bg: #843b32; --blink-fg: #dac192; }
-  100%   { --blink-bg: #fcd090; --blink-fg: #003880; }
+  0%,   14%  { --blink-bg: #fcd090; --blink-fg: #003880; }
+  16.6%, 31% { --blink-bg: #003880; --blink-fg: #fcd090; }
+  33.3%, 47% { --blink-bg: #0b6140; --blink-fg: #dac192; }
+  50%,   64% { --blink-bg: #bc703f; --blink-fg: #ffffff; }
+  66.6%, 81% { --blink-bg: #0a5769; --blink-fg: #fcd090; }
+  83.3%, 97% { --blink-bg: #843b32; --blink-fg: #dac192; }
+  100%       { --blink-bg: #fcd090; --blink-fg: #003880; }
 }
 
 .about {
   background: var(--paper);
   color: var(--ink);
-  animation: about-blink 18s steps(1, end) infinite;
+  /* Each colour holds for about a second and a half and then turns. Quick enough
+     to be a blink rather than a slow wash, slow enough not to throb — the
+     loading screen is the one that throbs, on the same keyframes at a fifth of
+     the length. */
+  animation: about-blink 9s ease-in-out infinite;
 }
 
 .about-close {
-  position: fixed; top: 1.6rem; right: var(--pad); z-index: 2;
+  position: fixed; top: 1.6rem; right: var(--pad); z-index: 3;
   color: var(--ink);
   /* Legible over the blink and over the white page below it alike. */
   background: color-mix(in srgb, var(--paper) 78%, transparent);
   padding: 0.3rem 0.5rem;
 }
 
-/* Exactly one screen of colour: the turn to white is something you scroll into,
-   never something visible the moment About is opened. */
+/*
+ * Scrolling from the colour into the biography, in three layers.
+ *
+ * The ground is sticky and holds the colour. The lines sit on top of it in normal
+ * flow — pulled back over it by a negative margin — so they scroll up and away
+ * while the colour stays. The biography follows, opaque, and draws itself up over
+ * the ground.
+ *
+ * So the words leave before the page arrives, and the page meets a plain field of
+ * colour rather than cutting through a line of type. Nothing lies between the two
+ * grounds: no gradient band to look washed out, and no second element carrying the
+ * same colour that could fall out of step with the blink and show its edges —
+ * which is what was being seen as boxes appearing whenever the colour turned.
+ */
+.about-colour {
+  position: sticky; top: 0;
+  height: 100vh;
+  background: var(--blink-bg);
+}
 .about-lines {
+  /* Back over the ground it is written on. */
+  margin-top: -100vh;
+  position: relative; z-index: 1;
   min-height: 100vh;
   display: grid;
   align-content: center;
   justify-items: center;
   text-align: center;
   padding: var(--bar) var(--pad);
-  position: relative;
-  background: var(--blink-bg);
   color: var(--blink-fg);
-  transition: background-color 0.9s var(--ease), color 0.9s var(--ease);
 }
 .about-lines p {
   margin: 0;
@@ -483,23 +791,39 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   letter-spacing: -0.02em;
   line-height: 1.32;
 }
-.about-more { position: absolute; bottom: 2rem; opacity: 0.6; }
+.about-more { position: absolute; bottom: 2rem; left: 0; right: 0; opacity: 0.6; }
 
-/* The turn from colour to page, beginning at whatever the blink is showing. */
-.about-fade { height: 46vh; background: linear-gradient(var(--blink-bg), var(--paper)); }
-
+/*
+ * The covering has to reach both edges of the screen, so the white is on the
+ * full-width block and the measure is set by the wrapper inside it.
+ *
+ * It used to be one element, centred and given a full-bleed `::before` at
+ * `inset: 0 -50vw`. That did reach the edges, but half a viewport of it hung off
+ * each side, and the panel scrolls — so it scrolled sideways. The rule below is
+ * the same idea without anything sticking out of the box.
+ */
 .about-body {
+  /* Above the sticky colour, and opaque, so it is the thing doing the covering. */
+  position: relative; z-index: 2;
   background: var(--paper);
   color: var(--ink);
+  /* A beat of plain colour after the lines have gone and before the page
+     arrives, so the two never share the screen. */
+  margin-top: 22vh;
+  padding: 14vh 0 calc(var(--gap) * 2);
+}
+.about-inner {
   display: grid;
   grid-template-columns: minmax(0, 34rem) minmax(0, 0.7fr);
   gap: var(--gap);
   align-items: start;
   max-width: 78rem;
   margin: 0 auto;
-  padding: 0 var(--pad) calc(var(--gap) * 2);
+  padding: 0 var(--pad);
 }
-.about-text > * { margin: 0 0 0.9em; font-size: 13px; line-height: 1.65; }
+/* Nothing here is meant to be reachable sideways. */
+.about { overflow-x: hidden; }
+.about-text > * { margin: 0 0 0.9em; font-size: 14px; line-height: 1.68; }
 .about-text strong { font-weight: 600; }
 .about-text a { border-bottom: 1px solid currentColor; }
 .about-figures { display: flex; flex-direction: column; gap: var(--gap); position: sticky; top: var(--bar); }
@@ -507,8 +831,14 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .about-figure img { width: 100%; height: auto; }
 
 @media (max-width: 899px) {
-  .about-body { grid-template-columns: 1fr; }
+  .about-inner { grid-template-columns: 1fr; }
   .about-figures { position: static; }
+}
+
+/* Sticky covering is motion; without it the two simply sit one after the other. */
+@media (prefers-reduced-motion: reduce) {
+  .about { animation: none; }
+  .about-colour { position: static; }
 }
 
 html:not(.js) .about { display: none; }
@@ -527,9 +857,19 @@ html:not(.js) .about:target { display: block; position: static; opacity: 1; visi
   grid-template-columns: auto var(--caption) 1fr var(--caption) auto;
   align-items: center; gap: var(--pad);
   padding: var(--bar) var(--pad) var(--pad);
-  opacity: 0; transition: opacity 0.28s var(--ease);
+  /* Opening a painting is the same kind of move as opening a panel, and was a
+     third of the length of one. Matched to it, so nothing on the site arrives
+     faster than anything else.
+
+     `pointer-events` goes with the opacity, as on the veil above: a fading
+     lightbox still fills the screen, and while it fades it would take every
+     click meant for the sheet behind it. At a fifth of a second that was barely
+     noticeable; at six tenths it is a dead page. */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s var(--ease);
 }
-.lightbox.is-open { opacity: 1; }
+.lightbox.is-open { opacity: 1; pointer-events: auto; }
 .lightbox[hidden] { display: none; }
 .lightbox-veil {
   position: fixed; inset: 0;
@@ -540,10 +880,10 @@ html:not(.js) .about:target { display: block; position: static; opacity: 1; visi
 /* The veil is positioned, so anything meant to sit in front must be positioned too. */
 .lightbox-plate, .lightbox-caption, .lightbox-nav { position: relative; z-index: 1; }
 .lightbox-close { position: fixed; top: 1.6rem; right: var(--pad); z-index: 1; }
-.lightbox-plate { grid-column: 3; display: grid; place-items: center; min-width: 0; min-height: 0; transition: opacity 0.2s var(--ease); }
+.lightbox-plate { grid-column: 3; display: grid; place-items: center; min-width: 0; min-height: 0; transition: opacity 0.42s var(--ease); }
 .lightbox.is-changing .lightbox-plate, .lightbox.is-changing .lightbox-caption { opacity: 0; }
 .lightbox-plate img { max-height: 74vh; max-width: 100%; width: auto; height: auto; }
-.lightbox-caption { grid-column: 4; transition: opacity 0.2s var(--ease); font-size: 14px; }
+.lightbox-caption { grid-column: 4; transition: opacity 0.42s var(--ease); font-size: 14px; }
 .lightbox-title { font-size: 20px; letter-spacing: -0.01em; margin: 0 0 0.4rem; }
 .lightbox-meta { display: flex; flex-direction: column; gap: 0.15rem; margin: 0 0 0.9rem; }
 .lightbox-count { margin: 0; color: var(--ink-soft); font-variant-numeric: tabular-nums; }

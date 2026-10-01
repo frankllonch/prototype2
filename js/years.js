@@ -1,7 +1,8 @@
 import { reduceMotion } from './env.js';
+import { SCROLL_SPAN } from './stack.js';
 /**
- * The year rail. Clicking a swatch scrolls to that year in the grid; the swatch
- * of the year you are looking at stays marked as you scroll.
+ * The year rail. Clicking a swatch brings that year to the middle of the screen;
+ * the swatch of the year you are looking at stays marked as you scroll.
  *
  * The links are plain anchors to ids in the grid, so this only adds the smooth
  * scroll and the current-year marking. It also never runs while the opening
@@ -18,6 +19,21 @@ export function initYears() {
         return;
     const grid = document.querySelector('[data-grid]');
     const tiles = grid ? [...grid.querySelectorAll('.tile')] : [];
+    /*
+     * Changing the density animates every tile's size for half a second, so
+     * anything measured inside that window is an interpolated position rather than
+     * where the year is going to be — and the rail would scroll to it. The same
+     * allowance the pile gives itself for the same transition.
+     */
+    let settledAt = 0;
+    grid?.addEventListener('gridchange', () => { settledAt = performance.now() + 560; });
+    const afterRelayout = (run) => {
+        const wait = settledAt - performance.now();
+        if (wait > 0)
+            window.setTimeout(run, wait);
+        else
+            run();
+    };
     /**
      * Focusing a year dims every painting from another one, so the year you asked
      * for is the only thing in focus. Choosing the same year again clears it, as
@@ -31,6 +47,30 @@ export function initYears() {
         for (const link of links)
             link.setAttribute('aria-pressed', String(link.dataset.year === year));
         rail.classList.toggle('is-focused', Boolean(year));
+    };
+    /**
+     * Where to scroll so a year sits in the middle of the screen.
+     *
+     * Two things stop it being simply "half a viewport above the year". The pile
+     * only lets go after `SCROLL_SPAN` of scrolling, so anything above that would
+     * gather the paintings back up — and take the year selection with it, since
+     * that is what `stackrestart` is for. And the last years have nothing much
+     * below them, so the page runs out before they reach the middle.
+     *
+     * Both are clamps rather than failures: the year comes as close to the centre
+     * as the page allows. `scrollIntoView` could do neither, which is why this is
+     * worked out by hand.
+     */
+    const centreOn = (target) => {
+        const box = target.getBoundingClientRect();
+        const wanted = box.top + window.scrollY + box.height / 2 - window.innerHeight / 2;
+        // Keyed on the hero, not on `data-stack`: the attribute is still there when
+        // the pile is turned off for reduced motion, but `stack.ts` removes the hero,
+        // and a floor held against an opening that never runs would scroll straight
+        // past the newest year and put it out of reach altogether.
+        const floor = document.querySelector('[data-hero]') ? window.innerHeight * SCROLL_SPAN + 8 : 0;
+        const ceiling = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+        return Math.max(0, Math.min(Math.max(floor, wanted), ceiling));
     };
     for (const link of links) {
         link.setAttribute('aria-pressed', 'false');
@@ -47,7 +87,9 @@ export function initYears() {
                 return;
             }
             focus(year);
-            target.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'start' });
+            afterRelayout(() => {
+                window.scrollTo({ top: centreOn(target), behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+            });
             history.replaceState(null, '', `#year-${year}`);
         });
     }
@@ -82,7 +124,10 @@ export function initYears() {
         if (!anchors.length)
             return;
         const update = () => {
-            const probe = window.innerHeight * 0.25;
+            // Measured at the middle of the screen, which is where choosing a year now
+            // puts it — probing near the top would mark a different year than the one
+            // the click just centred.
+            const probe = window.innerHeight * 0.5;
             let current = anchors[0];
             for (const anchor of anchors) {
                 if (anchor.el.getBoundingClientRect().top <= probe)

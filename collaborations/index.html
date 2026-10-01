@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="/prototype2/site.css" />
 <link rel="modulepreload" href="/prototype2/js/env.js" />
 <link rel="modulepreload" href="/prototype2/js/text-roll.js" />
+<link rel="modulepreload" href="/prototype2/js/transitions.js" />
 <link rel="modulepreload" href="/prototype2/js/controls.js" />
 <link rel="modulepreload" href="/prototype2/js/stack.js" />
 <link rel="modulepreload" href="/prototype2/js/years.js" />
@@ -17,9 +18,17 @@
 <link rel="modulepreload" href="/prototype2/js/lightbox.js" />
 <link rel="modulepreload" href="/prototype2/js/cursor.js" />
 <link rel="modulepreload" href="/prototype2/js/index.js" />
-<script>document.documentElement.classList.add('js')</script>
+<script>document.documentElement.classList.add('js');
+// The loading screen belongs to arriving at the site, not to each page of it.
+// Decided here, before the first paint, so pages after the first never show it
+// even for a frame.
+try { if (sessionStorage.getItem('cv-seen')) document.documentElement.classList.add('loaded') } catch (e) {}</script>
 </head>
 <body>
+<div class="loader" data-loader aria-hidden="true">
+    <p>CLAUDIA VALSELLS</p><p>1969</p><p>Alzueta Gallery</p><p>Barcelona, Spain</p><p>© All Rights Reserved</p>
+  </div>
+<div class="page-veil" aria-hidden="true"></div>
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="top">
     <a class="wordmark" href="/prototype2/" data-roll>CLAUDIA VALSELLS</a>
@@ -461,12 +470,11 @@
       <header class="reader-head">
         <h2 class="reader-title">3rd ‘What’s color?’ / Llibreria Terranova</h2>
         <span class="reader-year">2024</span>
-        <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
       </header>
       <div class="prose"><div><div><div> </div></div><div><div> </div></div><div><div> </div></div></div><div><div><div> </div></div><div><div> </div></div><div><div> </div></div></div><div><div><div> </div></div><div><div> </div></div><div><div> </div></div></div><div><div><div> </div></div><div><div> </div></div><div><div> </div></div></div><div><div><div> </div></div><div><div> </div></div><div><div> </div></div></div><div><div><div></div></div><div><div></div></div><div><div></div></div></div></div><div class="prose"><div> </div></div><div class="prose"><div> </div></div><div class="prose"><div> </div></div><div class="prose"><div> </div></div><div class="prose"><div> </div></div><div class="prose"><div> </div></div><div class="prose"><div> </div></div><div class="prose"><div> </div></div><div class="prose"><div> </div></div><div class="prose"><div> </div></div><div class="prose"><div> </div></div><div class="prose"><div> </div></div><div class="prose"><div> </div></div><div class="prose"><div> </div></div><div class="prose"><div> </div></div><div class="prose"><div></div></div><div class="prose"><div></div></div><div class="prose"><div></div></div><div class="prose"><p><strong>WHAT’S COLOR? 3rd edition</strong><br> Terranova Bookstore<br> 07/04 _28/04</p> <p><em>‘*WHAT’S COLOR?</em><strong><em>‘</em></strong> is a personal project I started in 2020 where I assign a color to people who inspire and admire me and whom I ask about their personal relationship with color. I presented this third edition at Llibreria Terranova in Barcelona during April 2024.</p> <div> <div> <div> <div></div> </div> </div> </div> <div> <div> <div> <div> <p><strong>MARC GÓMEZ del MORAL, DIRECTOR DE FOTOGRAFÍA / AC320 ARENA</strong></p> </div> </div> <div> <div> <p>“No puedo disociar el color de la luz, el color como el resultado de una serie de capas infinitas que parten de una o de varias fuentes de luz y que reflejan y que difuminan y que tiñen y que terminan en nuestro ojo. Esa superposición de capas infinitas hacen que cada color sea fruto de un momento único e irrepetible. El color es el presente, el color es el aquí y el ahora, el color es un instante.”</p> <p><strong>JOSE JAVIER SERRANO, Yosigo, FOTÓGRAFO / AC259 AZUL PISCINA</strong></p> <p>‘’Para mi el color es la luz. Siempre me ha fascinado que un mismo objeto, textura o paisaje no tengan un color en sí mismo, sino que vayan absorbiendo diferentes frecuencias de luz. También es pertenencia y asociación de ideas. Por ejemplo para mi el azul representa muchas cosas, y diría que todas buenas. Lo asocio a mi tierra (por el mar y la costa), a mi equipo de fútbol (la bandera es azul y blanca), es un color primario (sencillez), y pese a ser a priori un tono frío a mi me aporta mucha calma y armonía.’’</p> <p><strong>LUCIA BONED LIBRERA / AC033 AZUL CELESTE OSCURO</strong></p> <p>‘’La luz del sol ‘’</p> </div> </div> </div> </div> <div> <div> <div> <div> <p><strong>ISABEL MARTINEZ, isabelitavirtual , DIRECTORA CREATIVA / AC 193 FRESA</strong></p> </div> </div> <div> <div> <p>‘’El color es para mí como la sal en un plato. Un ingrediente que eleva la experiencia sensorial, la intensifica. A veces, es la expresión del alma, como si la música se pudiera ver.’’</p> <p><strong>ALBERT RIERA GALCERÁN, ARTISTA / AC16 ROSA INTENS</strong></p> <p>‘Per a mi el color es l’atracció, la manera en la que em relaciono amb el que em rodeja i el que determina en gran part les meves sensacions y emocions.’</p> <p><strong>MARIA MEDEM, ILUSTRADORA Y DIBUJANTE DE CÒMIC/ AC016 LILA MAGENTA</strong></p> <p>‘Es algo indispensable. Para mi está ligado a la memoria y los recuerdos, y lo necesito para transmitir emociones y construir atmósferas.’</p> <p><strong>ANA CUBA, FOTÓGRAFA / AC80 MANDARINA</strong></p> <p>‘El color para mí es un aspecto de nuestra realidad a la que se le pueden asignar tantos significados que, en mi caso como fotógrafa, es mi lenguaje favorito para trasladar lo que quiero decir en imágenes. Sería como las vocales en el abecedario.’</p> </div> </div> </div> </div> <div> <div> <div> <div> <p><strong>JULIA RUIZ CABELLO, ARQUITECTA, OCRE ROJIZO AC075</strong> ̈</p> <p>El color es una ventana ̈ Para mí el color es un elemento de muchos rostros que permanece en constante proceso de cambio según el material, el lugar o el paso del tiempo. Esta característica tan relativa y singular me hace relacionarlo directamente con la influencia del color en la memoria y en mis recuerdos. Los colores son una ventana a mi vida y mis experiencias. Son parte de quién soy.</p> <p><strong>RAQUEL QUEVEDO, DISEÑADORA y ARTISTA / AC299 GRIS PERLA</strong></p> <p>Color «colors.» 1. Una memoria habitada viajando a la velocidad de la luz 2. «jerg.» Un abrazo de la sombra</p> <p><strong>JOSÉ QUINTANAR, ARTISTA y EDITOR / AC267 AMARILLO</strong></p> <p>‘El color es un material El color es una ilusión El color es una bandera El color es una elección El color es caprichoso El color es una respuesta. El color es diversión.’</p> <p><strong>LUÍS CERVERÓ, REALIZADOR Y LIBRERO / AC 250 AZUL PROFUNDO</strong></p> <p>‘Me gusta pensar en el color como un lenguaje. Un lenguaje secreto, íntimo y muchas veces inconsciente que todos los objetos y superficies emplean para lanzar un mensaje al mundo. Desde ese punto de vista, me interesa mucho la lectura científica que nos dice que toda superficie absorbe unas ondas y las que no le interesan las repele, o las devuelve hacia el exterior, y esas son las que se traducen en el color que proyectan y nuestros ojos ven. Así que en cierto sentido, el color es el reverso negativo de lo que cada superficie decide guardar en su interior, de aquello que acoge y conserva. Y esta decisión de toda superficie de quedarse para sí un determinado espectro de ondas tiene algo de poético que es a la vez muy sencillo y extremadamente misterioso.</p> <p>En esta misma línea, me encanta pensar en la oscuridad como un silencio, un momento en el que absolutamente todos los objetos se relajan, dejan de gritar al mundo su personalidad intrínseca, para unirse en un discurso común en el que todos se ponen de acuerdo. Me encanta observar como la luz desaparece y todos los elementos del espacio físico en el que te encuentras se unifican, como dándose la mano y respirando aliviados. En pocas palabras, me encanta pensar en el color como algo vivo, alterable y ligado a las circunstancias que lo rodean.’<img></p> </div> </div> </div> </div> <div> <div> <div> <div> <p><strong>ÁLVARO GALMÉS, ARQUITECTO, ESCRITOR Y ARTISTA PLÁSTICO / AC065 OCRE AMARILLO</strong></p> <p>Como dice Goethe, los colores son las alegrías y los sufrimientos de la luz, por eso es blanca en lo exultante y negra en la insatisfacción. Pero entre ambos extremos está el conjunto de los estados emocionales de la naturaleza, desplegados en todas sus gamas y en los infinitos matices del color. Un vocabulario ubérrimo, incomparablemente más rico que el de nuestra expresión emocional. El color es el lenguaje que la naturaleza utiliza para hablar consigo misma, lenguaje que no se nos ha dado a conocer, pero que, por un prodigio de generosidad, se nos ha permitido contemplar. En consecuencia, nos sentimos desbordados e impotentes, y para mitigar esta impotencia, nos desgañitamos al intentar participar en esa conversación, en cierto sentido nos comportamos como recién nacidos que contemplan fascinados las conversaciones de sus mayores, pero que nada entienden y, aun así, se intentan inmiscuir. Desconocemos incluso cómo se articula una palabra o una oración, pero qué necesidad tan profunda tenemos de intervenir, por eso balbuceamos con el color en nuestras ciudades, en nuestras casas, en nuestras ropas y en nuestros cuerpos, con el objetivo de entrometernos y contribuir a esa conversación eterna con la que la naturaleza se despliega.’</p> <p><strong>JUAN DIEGO VALERA , FOTÓGRAFO, / AC096 VERDE GRIS</strong></p> <p>‘El color es una fuente de inspiración y contrastes. Es inseguridad, duda y cuestionamiento. Daltonismo.’</p> <p><strong>BELEN GAYÁN, PRODUCTORA EJECUTIVA / AC049 BLAU VERD</strong></p> <p>‘El color és emoció, vibració, estímul . També es opinió i percepció. Color i llum es fonen per expressar un tot. ‘</p> <p><strong>ARNAU BLANCH, FOTÓGRAFO /AC037 AZUL PLOMO</strong></p> <p>‘Para mí, el color es un elemento más para jugar en el proceso creativo. En fotografía, puedes jugar con cómo distribuyes la luz y la oscuridad en el “frame» generando una composición concreta. Esta composición también se ve afectada por el color. Así luz, oscuridad y color terminan siendo los pilares sobre los que puedes trabajar a la hora de componer una fotografía.’</p> </div> </div> </div> </div> <div> <div> <div> <div> <p><strong>MARTA D.RIEZU, ESCRITORA / AC263 VERDE</strong></p> </div> </div> <div> <div> <p>‘Para mí el color es, ante todo, símbolo. Antropología, historia, psicoanálisis, misterio. No es una ciencia exacta (esa es su gracia), sino una ensoñación en la que cada mirada tiene el camino libre. El verde siempre es verde, pero su significación emocional cambia de acuerdo a dónde lo encuentro. El color me enfrenta a imágenes poéticas, intuiciones y metáforas. Forma parte de un mundo espiritual que es eterno.’</p> <p><strong>CRISTINA STOLHE, FOTÓGRAFA / VERDE OSCURO CASI NEGRO AC39</strong></p> <p>‘El color es libertad, una búsqueda y un encuentro, supongo que tiene que ver con la identidad ‘</p> </div> </div> </div> </div> <div><img></div></div>
     </div>
 
-    <div class="reader-figures" data-figures style="--n:27">
+    <div class="reader-figures" data-figures data-multi style="--n:27">
       <div class="reader-sticky">
         <div class="reader-stage">
           <figure class="reader-figure is-current">
@@ -876,6 +884,7 @@
                 
               </figure>
         </div>
+        <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
       </div>
     </div>
   </div>
@@ -886,12 +895,11 @@
       <header class="reader-head">
         <h2 class="reader-title">Terra Rossa</h2>
         <span class="reader-year">2024</span>
-        <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
       </header>
       <div class="prose"><p>“Terra Rossa” is a group exhibition inspired by the use of clay as a primordial and universal element for the creation of the first design artefacts, especially common in the Mediterranean region. Curated by <a href="https://www.juliaesque.com"><strong>Júlia Esqué</strong></a> with a concept by <strong>Apartamento Studios</strong>, the centrepiece of the installation is a monumental pyramid with 80 jugs made by 16 creatives.</p> <p>The artistic ‘alterations’ have been carried out in collaboration with the ceramist <a href="https://www.instagram.com/eloibonadona/?locale=es_LA&hl=am-et"><strong>Eloi Bonadona</strong></a>.</p> <p>In the words of the curator <strong>Júlia Esqué</strong>“<i>Exploring the symbiotic relationship between earth and clay in relation to food we uncover a profound narrative of sustenance and nourishment. Earth provides raw ingredients and clay transforms them into vessels that elevate the experience. These objects become conduits that bridge our connection to the land and the artisans. They become vessels for cultural and artistic significance, reflecting the creativity and craftsmanship of societies throughout history</i>.”</p> <p>My intervention examined the meaning related to the ‘readymade’ color: the color purchased in the store instead of hand-mixed.</p> <p><i>‘’Color of red clay, rich with red iron oxides. </i><i>Clay is a Mediterranean element, very characteristic…»</i></p> <p><i>Words that describe the color ‘brown earth’ and invite you to touche it. </i><i>Descriptions that help us to perceive and understand color, to feel it. </i><i>Words that are also the name of the color itself.</i></p> <p><i>So what happens when colors are described by codes, numbers?</i></p> <p><i>Is the emotional part of the color lost?</i></p> <p><i>Does the perception we have of that color change?</i></p> <p><i>I had chosen 5 colors with a reference to explore the impact of mass-produced color on contemporary art. References that openly testify to the status of painting as a product manufactured in series and standardized.</i></p> <p><i>The dialogue is precisely between the natural clay color base with the almost provocative color sample and its reference.</i></p> <p>photos by @Francesco Stelitano</p> <p>Concept by Apartamento Studios</p> <p>Curated by Júlia Esqué</p> <p>Creative Partners: Eloi Bonadona, Carles Llarch and Max Milà</p></div>
     </div>
 
-    <div class="reader-figures" data-figures style="--n:5">
+    <div class="reader-figures" data-figures data-multi style="--n:5">
       <div class="reader-sticky">
         <div class="reader-stage">
           <figure class="reader-figure is-current">
@@ -971,6 +979,7 @@
                 
               </figure>
         </div>
+        <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
       </div>
     </div>
   </div>
@@ -981,12 +990,11 @@
       <header class="reader-head">
         <h2 class="reader-title">Color Chart El Taller de Arquitectura ( RBTA )</h2>
         <span class="reader-year">2024</span>
-        <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
       </header>
       <div class="prose"><p><span>The use of colors in RBTA’s projects is never an anecdote and there are no arbitrary nuances. All colors are the result of an artistically and urbanistically conceived design.</span></p> <p><span>It is specifically in this chromatic conext that I was asked to make a colour chart based on the use of colour by RBTA throughout its history.</span></p> <p><span>For the last two years I have been observing, gathering and creating a colour guide that aims to be a chromatic tool for the studio’s projects.</span></p> <p><span>The Color Chart, composed of 100 colors and is divided into 21 color families, is an effort of chromatic synthesis to delimit and guide the colour prescriptions of the studio and has been developed as a framework of action for the color prescriptions of the materials involved in a project.</span></p> <p>interview at <a href="https://www.bofill.com/journal/to-work-with-certainty/">bofill.com</a></p></div>
     </div>
 
-    <div class="reader-figures" data-figures style="--n:3">
+    <div class="reader-figures" data-figures data-multi style="--n:3">
       <div class="reader-sticky">
         <div class="reader-stage">
           <figure class="reader-figure is-current">
@@ -1036,6 +1044,7 @@
                 
               </figure>
         </div>
+        <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
       </div>
     </div>
   </div>
@@ -1046,12 +1055,11 @@
       <header class="reader-head">
         <h2 class="reader-title">Color palette for Santa &amp; Cole, 2023-on going</h2>
         <span class="reader-year">2023</span>
-        <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
       </header>
       <div class="prose"><p><a href="https://www.santacole.com/es/m64/"><strong>Santa & Cole</strong></a> is a Spanish global editor of design products whose quality is recognizable at the touch of a hand, and that enriches people’s lives.</p> <p>A while ago I started a collaboration with Santa&cole, a love color story!.</p> <p><strong>In their own words the project consisted in: </strong></p> <p>«Santa & Cole has presented eight new colours for the M64 lamp, result of the chromatic study developed by colourist Claudia Valsells</p> <p>Claudia Valsells defines a chromatic universe that will give a new vision to the timelessness of Santa & Cole’s catalogue. A new visual and emotional perception of the M64</p> <p>The collaboration between Santa & Cole and Claudia Valsells presents a careful selection of eight new colours that reveal a new visual and emotional perception of the M64 lamp, designed in 1964 by maestro Miguel Milá. Maintaining the formal timelessness characteristic of this design icon, the new palette is born from Valsells’ intuition and her profound understanding on how colours interact.</p> <p><strong>The interplay of colour:</strong></p> <p>As a colourist, I approached my chromatic studies through a constant juxtaposition of colours. The key lies in placing one colour next to another, so as to influence their perception and achieve the desired visual experience. Rather than simply an individual selection of colours, the new palette represents a careful study of their combination. Demonstrating the close relationship between light and colour, the inside of the screens is covered in white, a detail that softens the light reflection.</p> <p>This collaboration seeks to add another layer of meaning to an existing product by emphasising the light interaction between the colours of the screens and how they engage with the space they are placed in.</p> <p>During the colour study, I developed the interaction of the selected colours to present the collection as chromatic harmonies. From this exercise, six new Neoseries, the art editions of Santa & Cole were born.</p> <p>more info at<a href="https://www.santacole.com/es/neoseries/colour-scheme-i-n-00240/"> Claudia Valsells ‘Color Schemes’</a></p> <p><span>© Jara Varela @jara_varela / Campaign images</span></p> <p><span>© Enric Badrinas @enricbadrinas / Studio images </span></p></div>
     </div>
 
-    <div class="reader-figures" data-figures style="--n:9">
+    <div class="reader-figures" data-figures data-multi style="--n:9">
       <div class="reader-sticky">
         <div class="reader-stage">
           <figure class="reader-figure is-current">
@@ -1191,6 +1199,7 @@
                 
               </figure>
         </div>
+        <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
       </div>
     </div>
   </div>
@@ -1201,12 +1210,11 @@
       <header class="reader-head">
         <h2 class="reader-title">Artist Residence</h2>
         <span class="reader-year">2022</span>
-        <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
       </header>
       <div class="prose"><p><strong>ARTIST RESIDENCY</strong></p> <p>at @brava_arts</p> <p>with @alzuetagallery</p> <p>BRAVA! is where @alzueta_gallery has its creation center where develops its artistic residency program to support the creativity and work of contemporary artist of our time. I was so glad to be there, 500m industrial building to work in the heart of Costa Brava.</p> <p><a href="https://www.instagram.com/alzueta_artistsresidency/" target="_blank" rel="noopener">@alzueta_artistsresidency</a> <a href="https://www.instagram.com/alzueta_gallery/" target="_blank" rel="noopener">@alzueta_gallery</a> <a href="https://www.instagram.com/brava_arts/" target="_blank" rel="noopener">@brava_arts</a></p> <p><a href="https://www.instagram.com/explore/tags/bravaperformingarts/" target="_blank" rel="noopener">#bravaperformingarts</a> <a href="https://www.instagram.com/explore/tags/artisticresidency/" target="_blank" rel="noopener">#artisticresidency</a> <a href="https://www.instagram.com/explore/tags/hubofcreativity/" target="_blank" rel="noopener">#hubofcreativity</a> <a href="https://www.instagram.com/explore/tags/contemporaryarte/" target="_blank" rel="noopener">#contemporaryarte</a> <a href="https://www.instagram.com/explore/tags/alzuetagalleryartistresidency/" target="_blank" rel="noopener">#alzuetagalleryartistresidency</a> <a href="https://www.instagram.com/explore/tags/alzuetagallery/" target="_blank" rel="noopener">#alzuetagallery</a> <a href="https://www.instagram.com/explore/tags/artistresidency/" target="_blank" rel="noopener">#artistresidency</a> <a href="https://www.instagram.com/explore/tags/contemporaryart/" target="_blank" rel="noopener">#contemporaryart</a> <a href="https://www.instagram.com/explore/tags/contemporaryartgallery/" target="_blank" rel="noopener">#contemporaryartgallery</a> <a href="https://www.instagram.com/explore/tags/alzuetagalleryartists/" target="_blank" rel="noopener">#alzuetagalleryartists</a> <a href="https://www.instagram.com/explore/tags/palaudecasavells/" target="_blank" rel="noopener">#palaudecasavells</a> <a href="https://www.instagram.com/explore/tags/baixemporda/" target="_blank" rel="noopener">#baixemporda</a> <a href="https://www.instagram.com/explore/tags/originalwork/" target="_blank" rel="noopener">#originalwork</a> <a href="https://www.instagram.com/explore/tags/originalart/" target="_blank" rel="noopener">#originalart</a> <a href="https://www.instagram.com/explore/tags/uniqueart/" target="_blank" rel="noopener">#uniqueart</a> <a href="https://www.instagram.com/explore/tags/claudiavalsells/" target="_blank" rel="noopener">#claudiavalsells</a> <a href="https://www.instagram.com/explore/tags/claudiavalsellsartist/" target="_blank" rel="noopener">#claudiavalsellsartist</a></p> <p>photos <a href="https://www.juditbou.com">Judit Bou </a></p></div>
     </div>
 
-    <div class="reader-figures" data-figures style="--n:6">
+    <div class="reader-figures" data-figures data-multi style="--n:6">
       <div class="reader-sticky">
         <div class="reader-stage">
           <figure class="reader-figure is-current">
@@ -1301,6 +1309,7 @@
                 
               </figure>
         </div>
+        <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
       </div>
     </div>
   </div>
@@ -1311,12 +1320,11 @@
       <header class="reader-head">
         <h2 class="reader-title">Kamanar, 10 chairs, 10 artists</h2>
         <span class="reader-year">2022</span>
-        <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
       </header>
       <div class="prose"><p><span><strong>Kamanar</strong></span></p> <p>A collective exhibition, a choral and solidarity action.</p> <p>10 chairs intervened by 10 artists. The intervention of each artist is inspired by anecdotes and stories, which help us to explain the pillars of the project, to understand the context of this rural area of Senegal and to know better its people.</p> <p><a href="https://foundawtion.org"><strong>Foundawtion</strong></a>, was born between the architecture studio Dawoffice, in Barcelona, and the Senegalese population of Thionck Essyl. A non-profit organization to carry out projects that meet architectural needs in economically disadvantaged areas.</p> <p><strong>Chaise S</strong> is the chair for the students of the CEM <strong>Kamanar School</strong>. It is part of a collection of school furniture that has sought the most optimal relationship between efficiency and comfort, prioritizing making things as easy as possible for every step of the process: from design, choice of materials, construction and/or maintenance.</p> <p>Designed between Barcelona and Thionck Essyl by <a href="http://marcmorro.com"><strong>Marc Morro</strong></a> for <strong>Foundawtion and CEM Kamanar</strong>. And just like the architecture of the school, the production of these pieces has been carried out with local materials and workers.</p> <p>photos <a href="http://yosigo_yosigo">https://yosigo.es</a></p></div>
     </div>
 
-    <div class="reader-figures" data-figures style="--n:4">
+    <div class="reader-figures" data-figures data-multi style="--n:4">
       <div class="reader-sticky">
         <div class="reader-stage">
           <figure class="reader-figure is-current">
@@ -1381,6 +1389,7 @@
                 
               </figure>
         </div>
+        <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
       </div>
     </div>
   </div>
@@ -1391,12 +1400,11 @@
       <header class="reader-head">
         <h2 class="reader-title">Tones collection</h2>
         <span class="reader-year">2022</span>
-        <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
       </header>
       <div class="prose"><p>TONES COLLECTION for NANI MARQUINA <span>consists of four carpet models with color as a central tool.</span></p> <p><span>The Tones rugs arise from the exploration and subsequent reinterpretation of the traditional way of constructing a rug, where an outer frame with a series of central elements has always predominated. With the Pieces model, the exercise is the opposite, in it I distribute the remnants in the center, I compose it in a melodic way showing my creative process.</span></p> <p><span>The collection boasts an infinite richness of tonalities, highlighting the chromatic harmony that in a certain way refers to musical notes.</span></p> <p><span>The colors of the Tones collection are born from the instruments of an orchestra, the tan colors of the stringed instruments, the colors of the wind instruments, the grays and blues, the ochers of the percussion, etc. From this chromatic universe the forms appeared and then I only had to play to compose them in a way that was reproducible in different scales and harmonies.</span></p> <p><span>Going from my usual medium, painting, to the nuances and textures provided by fibers and wool has been a very interesting challenge.</span></p> <p>To discover the collection link <a href="https://nanimarquina.com/es/">Nani Marquina </a></p></div>
     </div>
 
-    <div class="reader-figures" data-figures style="--n:6">
+    <div class="reader-figures" data-figures data-multi style="--n:6">
       <div class="reader-sticky">
         <div class="reader-stage">
           <figure class="reader-figure is-current">
@@ -1491,6 +1499,7 @@
                 
               </figure>
         </div>
+        <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
       </div>
     </div>
   </div>
@@ -1501,12 +1510,11 @@
       <header class="reader-head">
         <h2 class="reader-title">Trainings _Silences</h2>
         <span class="reader-year">2021</span>
-        <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
       </header>
       <div class="prose"><p>SILENCES_TRAININGS a @dadabarcelona project_ at MAMT</p> <p>WORKSHOPS FOR ADULTS STRUCTURED ALONG THESE FOUR AXIS.</p> <p>Movement / Sonority / Presence / Otherness</p> <p>«We believe that establishing links between different disciplines and enjoying the silence in each of them brings clarity, calm and well-being. With this project we would like to shed some light, to feel that there is another possibility, to offer a new horizon: we want to teach everyone to stop! To find alternative paths in the noise and speed – of society – that avoids reflection in favour of constant evasion.<span> </span></p> <p>We also want to leave a useful mark: to read the silence of others or of spaces and to be able to interpret them, to communicate without the need for speech or to create silence through presence.<span> </span></p> <p>And finally, to set ourselves a challenge: to learn to take the time to do things, to know how to waste time and to find our own silences!» .</p> <p><strong>Otherness</strong></p> <p>We face silence from our creation and transform it into a dialogue with ourselves. We consider silence as part of the creative processes and we generate a moment of connection with ourselves and with others; we try to generate a new value in our daily life, through our actions, in the little things that form our self.</p> <div> <div> <div> <div> <div> <div> <div> <div> <p><strong>Podcast 62_ </strong></p> <p>CLÀUDIA VALSELLS Artista / Artist</p> <p><em>Silence when contemplating</em></p> </div> </div> </div> </div> <p>/<br> Silence for me… is the space that surrounds us when there is no hurry, no effort, nor expectations: a beginning. Silence would be a beginning. This silence understood as a state of calm – a slow and leisurely state – is not a sign of our time and should be a universal right.<br> /<br> To my work… When I work in the studio, when I don’t do, I am in silence and this silence gives me a lot of strength.<br> /<br> An image of silence… would be to contemplate a desert landscape, to contemplate a blank sheet of paper, to contemplate!</p> </div> <p><a href="http://www.silencis.org">@silencis</a> a <a href="http://www.dadabarcelona.com">dadabarcelona</a> project at <a href="https://www.dipta.cat/mamt">MAMT </a></p> <p>photos <a href="https://www.instagram.com/hleb_hleb/">@hleb_masha </a></p> </div> </div> </div></div>
     </div>
 
-    <div class="reader-figures" data-figures style="--n:9">
+    <div class="reader-figures" data-figures data-multi style="--n:9">
       <div class="reader-sticky">
         <div class="reader-stage">
           <figure class="reader-figure is-current">
@@ -1646,6 +1654,7 @@
                 
               </figure>
         </div>
+        <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
       </div>
     </div>
   </div>
@@ -1656,12 +1665,11 @@
       <header class="reader-head">
         <h2 class="reader-title">Silla 8 AOO 2019-2020</h2>
         <span class="reader-year">2019</span>
-        <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
       </header>
       <div class="prose"><p><span><span>SIETE SILLAS 8, </span></span></p> <p><span><span>an AOO EXERCISE IN ‘COLOURING’ WITH CLAUDIA VALSELLS</span></span></p> <p>A project with AOO where I created and designed the different colour combinations for ‘8 Chair’.</p> <p><span>The 8 Chair is the result of an AOO exercise where flat sheets of plywood are bent, under pressure and in a simple way, using different structures as support, achieving instantaneously and without moulds to generate what ends up being seats and backs. The resulting piece is formed by two frames joined together and stripped of any decorative element that, together with the backrest and seat, generate a comfortable, lightweight and plastically unique chair.</span></p> <p><span>To enhance its visual uniqueness, the artist Claudia Valsells has developed a series of colour combinations that denote her exploration of beauty. The chair transmits us the tactility of the work through the palette; because what can be touched is tangible and brings us closer to its reality. Each chair is painted in more than one color to emphasize the meaning of each one when it enters in contrast with the others.</span></p> <p><span>This proposal is the result of a collaboration that normally does not occur in the world of art and design, is a dialogue between disciplines that converge in a common and unlikely end point for each of the participants and also an excuse between two professionals that ends with a good friendship.</span></p> <p><span>If we had to design a chair we would talk about the conceptual and formal process of an object. If we had to talk about colour we would talk about texture and paint, about tones and shades. And here we talk about adding two languages and a single idea: a series of chairs shaped in a plastic exercise and the chromatic development that enhances, perhaps, their uniqueness. The object is raised piece by piece and is given a different value: the sense is decontextualized and a new proposal grows.</span></p> <p>—<br> Material: Structure in solid poplar and seat and back in poplar plywood<br> Finish: Pigment applied by brush and finished with semi-matt water-based varnish.</p> <p>images © <a href="http://www.yosigo.es">yosigoyosigo </a></p> <p><a href="http://aoobarcelona.com">www.aoobarcelona.com</a></p></div>
     </div>
 
-    <div class="reader-figures" data-figures style="--n:11">
+    <div class="reader-figures" data-figures data-multi style="--n:11">
       <div class="reader-sticky">
         <div class="reader-stage">
           <figure class="reader-figure is-current">
@@ -1831,6 +1839,7 @@
                 
               </figure>
         </div>
+        <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
       </div>
     </div>
   </div>
@@ -1841,12 +1850,11 @@
       <header class="reader-head">
         <h2 class="reader-title">Edges Collection</h2>
         <span class="reader-year">2019</span>
-        <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
       </header>
       <div class="prose"><p><span>EDGES COLLECTION </span></p> <p>An exclusive collection I designed for Design Within Reach, edited by Nani Marquina</p> <p><em>«The abstract forms of this piece ‘Edges’ have significant value, a dichotomy between structure and form, a singular balance.» <span>Claudia Valsells</span></em></p> <p><a href="https://www.dwr.com/new-arrivals/edges-rug/2516264.html?lang=en_US"><span>on sale at Design Within Reach </span></a></p></div>
     </div>
 
-    <div class="reader-figures" data-figures style="--n:11">
+    <div class="reader-figures" data-figures data-multi style="--n:11">
       <div class="reader-sticky">
         <div class="reader-stage">
           <figure class="reader-figure is-current">
@@ -2016,6 +2024,7 @@
                 
               </figure>
         </div>
+        <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
       </div>
     </div>
   </div>
@@ -2026,12 +2035,11 @@
       <header class="reader-head">
         <h2 class="reader-title">dadàbarcelona</h2>
         <span class="reader-year">2018</span>
-        <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
       </header>
       <div class="prose"><p><strong>Art to build</strong></p> <p>Idea and project © DadàBarcelona</p> <p>Esther Rovira Carbonell</p> <p><span>Images © Iris Humm</span></p> <p>To build is to create what we inhabit and what inhabits us.</p> <p><span>We want to be building in new ways without forgetting that we are constantly building ourselves.</span></p> <p>Dada Barcelona summer workshops, always collaboarates with a social project that can open children to other realities and help them build a new consciousness of the world that surrounds them.</p> <p>This year, Marc Morro, who, through his NGO Foundation, has worked to build furniture for schools in Senegal. My role was to color the pieces that were built. I decide the black and white color palette and let children paint free different shapes with just this two colors. As the pieces were painted separately, 0nce the chairs were assembled got different identities. letting each one a little bit of all.</p></div>
     </div>
 
-    <div class="reader-figures" data-figures style="--n:9">
+    <div class="reader-figures" data-figures data-multi style="--n:9">
       <div class="reader-sticky">
         <div class="reader-stage">
           <figure class="reader-figure is-current">
@@ -2171,6 +2179,7 @@
                 
               </figure>
         </div>
+        <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
       </div>
     </div>
   </div>
@@ -2181,12 +2190,11 @@
       <header class="reader-head">
         <h2 class="reader-title">Uterqüe Art Essays</h2>
         <span class="reader-year">2017</span>
-        <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
       </header>
       <div class="prose"><div> <video><source><a href="https://www.claudiavalsells.com/wp-content/uploads/2019/04/Claudia_Valsells-Uterque_Art_Essays.mp4">https://www.claudiavalsells.com/wp-content/uploads/2019/04/Claudia_Valsells-Uterque_Art_Essays.mp4</a></video></div></div><div class="prose"><p>URTERQÜE ART ESSAYS AW2017</p> <p>“Creativity, Art and Fashion. Synonyms of a search for beauty, the effort to tell a unique and personal story. Disciplines that have joined in history, that have mixed and created together; they can’t be understood separately. Style is architecture. Creativity is a second skin. And fashion is, always, art .”</p> <p>Uterqüe Art Essays was a project I carried out in 2017 for Inditex company during the autumn and winter collection.</p> <p>Two big artworks sized 250x200m each in acrylic on canvas reproducing color harmonies. This two big artworks were used as background for the photo shoot and at the same time as a color palette for the collection.</p> <p>Creative direction and design by Play&Type Studio. Edtited by Uterqüe.</p> <p>All the artworks are made by Claudia Valsells</p> <p>images © Cesc Nogueres</p></div>
     </div>
 
-    <div class="reader-figures" data-figures style="--n:9">
+    <div class="reader-figures" data-figures data-multi style="--n:9">
       <div class="reader-sticky">
         <div class="reader-stage">
           <figure class="reader-figure is-current">
@@ -2326,6 +2334,7 @@
                 
               </figure>
         </div>
+        <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
       </div>
     </div>
   </div>
@@ -2336,12 +2345,11 @@
       <header class="reader-head">
         <h2 class="reader-title">dadàbarcelona</h2>
         <span class="reader-year">2017</span>
-        <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
       </header>
       <div class="prose"><p><strong>Art to look </strong></p> <p>Idea and project</p> <p>© DadàBarcelona</p> <p>Esther Rovira Carbonell</p> <p><span>images © Iris Humm</span></p> <p>“To look is an act of choice”</p> <p>John Berger</p> <p><em>I had the opportunity to collaborate for two consecutive years at DadàBarcelona workshops, artistic summer projects developed around an important topic and divided into two weeks: one to discover creative languages and the other to produce an artistic project. The workshops are triangulated into movement sound and art.</em></p></div>
     </div>
 
-    <div class="reader-figures" data-figures style="--n:6">
+    <div class="reader-figures" data-figures data-multi style="--n:6">
       <div class="reader-sticky">
         <div class="reader-stage">
           <figure class="reader-figure is-current">
@@ -2436,6 +2444,7 @@
                 
               </figure>
         </div>
+        <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
       </div>
     </div>
   </div>
@@ -2446,12 +2455,11 @@
       <header class="reader-head">
         <h2 class="reader-title">Solidary Fulard design 2017-2026</h2>
         <span class="reader-year">2017</span>
-        <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
       </header>
       <div class="prose"><p><span><span>SOLIDARY FULARD for VALLE D’HEBRON CAMPUS SINCE 2017 TO 2026</span></span></p> <p>There have been 7 designs for 9 consecutive years collaborating in the campaign for women’s cancer research.</p> <p><span>I was invited to participate in this project by the Top model and friend Judit Mascó who, together with other personalities, allows the campaign to reach more audiences. Sale and distribution in Natura stores throughout Spain or online at @naturaselection.</span></p> <p><span><a href="https://naturaselection.com/collections/productos-solidarios/products/panuelo-contra-el-cancer">Click here to buy solidary fulard.</a> </span></p></div>
     </div>
 
-    <div class="reader-figures" data-figures style="--n:10">
+    <div class="reader-figures" data-figures data-multi style="--n:10">
       <div class="reader-sticky">
         <div class="reader-stage">
           <figure class="reader-figure is-current">
@@ -2606,6 +2614,7 @@
                 
               </figure>
         </div>
+        <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
       </div>
     </div>
   </div>
@@ -2616,12 +2625,11 @@
       <header class="reader-head">
         <h2 class="reader-title">Color Atlas for Muralla Roja 2016-2020</h2>
         <span class="reader-year">2016</span>
-        <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
       </header>
       <div class="prose"><div></div> <p>LA MURALLA ROJA ( The Red Wall)</p> <p>Research and realization of the restored color scheme from Ricardo Bofill’s building, ‘La Muralla Roja’.</p> <p>photos by @gregoricivera and @garatehausmann</p> <p>«Within the context of La Manzanera, La Muralla Roja (The Red Wall) asks to be considered as a case apart. It embodies a clear reference to the popular architecture of the Arab Mediterranean, in particular to the adobe towers of North Africa. The Red Wall is like a fortress which marks a vertical silhouette following the contour lines of the rocky cliff.</p> <p>With this building, RBTA wanted to break the post-Renaissance division between public and private spaces reinterpreting the Mediterranean tradition of the Kasbah. The labyrinth of this recreated Kasbah corresponds to a precise geometric plan based on the typology of…</p> <div><a href="https://ricardobofill.com/projects/la-muralla-roja/">READ FULL ARTICLE</a></div> <div> <p>ARCHITECT RICARDO BOFILL</p> <p>YEAR: 1973<br> LOCATION: CALPE, ALICANTE, SPAIN</p> </div></div>
     </div>
 
-    <div class="reader-figures" data-figures style="--n:6">
+    <div class="reader-figures" data-figures data-multi style="--n:6">
       <div class="reader-sticky">
         <div class="reader-stage">
           <figure class="reader-figure is-current">
@@ -2716,6 +2724,7 @@
                 
               </figure>
         </div>
+        <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
       </div>
     </div>
   </div>
@@ -2727,18 +2736,18 @@
 <section class="about" id="about" data-panel aria-label="About">
     <a class="about-close" href="#" data-panel-close>Close</a>
 
+    <div class="about-colour" aria-hidden="true"></div>
     <div class="about-lines">
       <p>CLAUDIA VALSELLS</p><p>1969</p><p>Alzueta Gallery</p><p>Barcelona, Spain</p><p>© All Rights Reserved</p>
       <span class="about-more" aria-hidden="true">Scroll</span>
     </div>
 
-    <div class="about-fade" aria-hidden="true"></div>
-
     <div class="about-body">
-          <div class="about-text"><p><span><b>Claudia Valsells (1969) Barcelona, Spain<span> </span></b></span></p> <p><span>Claudia is an artist specialized in color. A multidisciplinary creator, she discovered painting through her own instinct for color. Her formation as a mural painter gave her a professional opportunity, and her passion in color her own artistic language.<span> </span></span></p> <p><span>Based on her reflections as an artist, her experience in color prediction and mural painting, brings to all her work, with color as a primary tool, an identifiable language.</span></p> <p><span>She began her artistic career painting and soon realized that she had a natural ability with color. In her own words, ‘All I have done throughout my career has been to cultivate this natural gift.<span> </span>First as a mural painter, then designing color charts and prescribing color and finally as an artist’.</span></p> <p><span>The tireless search for the reason of color and its form has obsessed artists throughout history, from the very creation of pictorial expression. Claudia Valsells knows about this and she aims to portray this into her artwork.</span></p> <p><span>In her beginnings as a colorist she worked on commissions, for architects, and on projects of different scales advising and prescribing color. Soon she founded her own Studio, under the name of ‘Arts&Claus’, in allegory to the ‘Arts&Craft’ movement where she always found a lot of inspiration. She specialized in mural painting, color applied to architecture, and interior design for 20 years on projects in Spain and abroad. Her role was to convey the value of color and its texture in the decoration of interior spaces working closely with professionals in the fields of art, design, and architecture. It was in this context, working close with architects and designers,<span> </span>that she found out the communication between professionals was based by the painting companies, relegated the work of the colorist to the background due to ignorance or fear clients to make a mistake or be branded as eccentric. It was then when Claudia Valsells created a specific chromatic selection, a COLOUR CHART, with more than 200 references, which have been used as color comunication tools by Spain’s best architects.</span></p> <p><span>Her work has two very defined characteristics: on the one hand her chromatic instinct, a gift of colors and on the other her ability to select, group and interact colors creating a chromatic language of her own.</span></p> <p><span>The common denominator of all her work is color, and her obsession with the way colors interact with each other. The interaction of color occurs when two or more colors are combined in a composition. The combination of colors varies its own appearance and it is in these moments when Claudia decides to put one color next to another in order to influence its perception and achieve the desired visual experience. For Claudia the interaction of color is a key concept in her work as an artist and as a colorist and allows her to experiment and explore an ever new visual and emotional perception of colors in each work and commission.</span></p> <p><span>Her most personal and ongoing project emerged from the pandemic in 2020 where she launched a ‘Color glossary’ through the question ‘What’s color?’ to people of thought, philosophers, historians, thinkers, writers, and other artists, in order to think of color in a broader context. She wanted to discover the notion of color as it is thought of by others. She opened a dialogue to grasp new ways of seeing colors, other perspectives, but mostly to better understand the reason of color and its form, and this way to understand better human being.</span></p> <p><span>This project has been represented in three solo shows, one in Barcelona ( 2020) and the other two in Madrid ( 2021, 2022) since then<span> </span></span></p> <p><span>Currently she combines her activity as an artist with colour prescription in the areas of design and architecture.<span> </span></span></p> <p><span>Her work is represented, in Spain and abroad, by the Barcelona gallery owner Miquel Alzueta. <a href="http://alzuetagallery.com">ALZUETA GALLERY </a></span></p> <p>PRIVATE COLLECTIONS</p> <div> <div> <div> <div> <p>Fundació Vilacases (Barcelona)</p> <p>Fundació Banc Sabadell (Barcelona)</p> <p>Collection Hayot (France)</p> <p>Martinez Collection (Mexico-US)</p> <p>Niederberghaus Collection (Germany)</p> <p>Collection Richard (France)</p> <p>Smith Collection (Wyoming, US)</p> <p>EXHIBITIONS & ART FAIRS</p> <p>_2026 June_July, Palau de Casavells, ‘<i>Shift Towards Coincidnce’, </i>Group exhibition</p> <p>_2026 June_July, New York, <em>‘Abstract paintings’</em>, Scroll Ny , Group exhibition</p> <p>_2026 May _ June, Paris, ‘<em>Moll de l’os’ peintures 2026</em>, Alzueta Gallery Paris</p> <p>_2026 February, Zona Maco CDMX Mexico with Alzueta Gallery</p> <p>_2025 October, Estampa contemporary art fair, Madrid with Alzueta Gallery</p> <p>-2025 April, <em>‘Míra’m no deixis de mirar-me’</em> Solo show at Palau de Casavells with Alzueta Gallery</p> <p>-2025 March, ‘Marco, límite y lugar’, Madrid with Alzueta Gallery, Group Exhibition</p> <p>-2024 November, Luxemburg art week with Alzueta Gallery</p> </div> <p>-2024 July, Gallery_br, Tetbury, UK, ‘Painting as a gift from color’, solo show</p> <div> <p>-2024 February, ZONA MACO with Alzueta Gallery</p> <p>-2024 January, Alzueta Gallery Séneca, ‘ What abstract art means to me? ‘ Group exhibition</p> <p>-2023 November, Alzueta Gallery Madrid, «La terre est bleue comme une orange», Group exhibition</p> <p>-2023 September, Alzueta Gallery Turó, <em>‘Transitions’ </em>solo show</p> </div> <p>-2023 February, Art Rotterdam, Contemporary Art Fair</p> <div> <p>-2021 December, Alzueta Gallery Madrid, ‘Color Dialogues’ Solo Exhibition</p> <p>-2021 December, Espacio Pavillion, Madrid, 2nd Edition ‘What’s color?’</p> <p>-2021 October, Alzueta Gallery, Madrid, Estampa Contemporary Art Fair</p> <p>-2021 September, Alzueta Gallery, Paris, Art Paris Fair</p> </div> </div> </div> </div> <p>-2021 June, Alzueta Gallery, Madrid, Art Madrid Feria</p> <p>-2020 December, Alzueta Gallery, Barcelona, Solo Exhibition, ‘What’s color?’</p> <p><span>-2020 February, Alzueta Gallery, Barcelona, Aoo&Claudia Valsells ‘Silla8’ show</span></p> <p><span>-2019 November, Solo Exhibition, Almost Perfect, Tokyo, Japan</span></p> <p><span>-2019 October, Art Élysées-Art & Design, París.</span></p> <p><span>-2019 April, Art Paris Grand Palais, París.</span></p> <p><span>-2019 April, Almoneda, Ifema feria de Madrid, Palau de Casavells, Madrid.</span></p> <p><span>-2019 March, AFF Art Fair Brussels</span></p> <p><span>-2019 March, Art Madrid, Madrid</span></p> <p><span>-2018 November, T10 at Alzueta Gallery, Barcelona</span></p> <p><span>-2018 November, Palau de Casavells, solo exhibition, Girona, Spain</span></p> <p><span>-2018 Art fair Hamburg</span></p> <p><span>-2018 Art Elysees París</span></p> <p><span>-2018 Art fair Stockholm</span></p> <p><span>-2018 Contemporary Art Fair Just LX, Portugal</span></p> <p><span>-2018 Almoneda Antik Passion, Madrid</span></p> <p><span>-2018 Art Fair Grand Palais, París</span></p> <p><span>-2018 Eurantica art fair, Brussels</span></p> <p><span>-2018 Art Madrid, Madrid</span></p> <p><span>-2017/07 Uterqüe Art Essays AW2017</span></p> <p><span>-2017/03 Art París, International Art Fair, París</span></p> <p><span>-2017/02 Alzueta Gallery «Color y forma» solo exhibition, Barcelona</span></p> <p><span>-2017/02 Art Madrid, Madrid</span></p> <p><span>-2016/12 <a href="http://www.axelpairon-gallery.com">Galeria Axel Pairon</a> exposición colectiva.</span></p> <p><span>-2016/11 Antica Namur, Belgium</span></p> <p><span>-2016/10 Art Élysées, International Art Fair, París</span></p> <p><span>-2016/06 Scope Basel, Basel art fair</span></p> <p><span>-2007 <a href="http://www.palaudecasavells.com/" target="_blank" rel="noopener noreferrer">Palau de Casavells</a>, Baix Empordà, Solo exhibition , May 2007</span></p> <p><span>-2005 <a href="http://galeriamiquelalzueta.es/home/" target="_blank" rel="noopener noreferrer">Galeria Miquel Alzueta</a>, Barcelona, Solo exhibition, March 2005 – «Expresions de Mur». Abstract Informalism paintings.</span></p> <p><span>-2000/04 <a href="http://www.vincon.com/es/" target="_blank" rel="noopener noreferrer">Sala Vinçon</a>, Barcelona, Solo exhibition, Abril 2000 «El color no existe, existe la luz»/ «The color doesn’t exist, just the light». Individual exhibition where the interaction of the public with the installation was essential. I tried to demonstrate through personal experimentation that color only exists if there is light.<br> </span></p> <p>INQUIRES PLEASE CONTACT TO: editorial@alzuetagallery.com</p> <p><span>images:</span></p> <p><span>© yosigo_yosigo</span></p> <p><span>© Martina Domenech ( below)</span></p></div>
-          <div class="about-figures">
-            <figure class="about-figure">
-                  <picture class="">
+          <div class="about-inner">
+            <div class="about-text"><p><span><b>Claudia Valsells (1969) Barcelona, Spain<span> </span></b></span></p> <p><span>Claudia is an artist specialized in color. A multidisciplinary creator, she discovered painting through her own instinct for color. Her formation as a mural painter gave her a professional opportunity, and her passion in color her own artistic language.<span> </span></span></p> <p><span>Based on her reflections as an artist, her experience in color prediction and mural painting, brings to all her work, with color as a primary tool, an identifiable language.</span></p> <p><span>She began her artistic career painting and soon realized that she had a natural ability with color. In her own words, ‘All I have done throughout my career has been to cultivate this natural gift.<span> </span>First as a mural painter, then designing color charts and prescribing color and finally as an artist’.</span></p> <p><span>The tireless search for the reason of color and its form has obsessed artists throughout history, from the very creation of pictorial expression. Claudia Valsells knows about this and she aims to portray this into her artwork.</span></p> <p><span>In her beginnings as a colorist she worked on commissions, for architects, and on projects of different scales advising and prescribing color. Soon she founded her own Studio, under the name of ‘Arts&Claus’, in allegory to the ‘Arts&Craft’ movement where she always found a lot of inspiration. She specialized in mural painting, color applied to architecture, and interior design for 20 years on projects in Spain and abroad. Her role was to convey the value of color and its texture in the decoration of interior spaces working closely with professionals in the fields of art, design, and architecture. It was in this context, working close with architects and designers,<span> </span>that she found out the communication between professionals was based by the painting companies, relegated the work of the colorist to the background due to ignorance or fear clients to make a mistake or be branded as eccentric. It was then when Claudia Valsells created a specific chromatic selection, a COLOUR CHART, with more than 200 references, which have been used as color comunication tools by Spain’s best architects.</span></p> <p><span>Her work has two very defined characteristics: on the one hand her chromatic instinct, a gift of colors and on the other her ability to select, group and interact colors creating a chromatic language of her own.</span></p> <p><span>The common denominator of all her work is color, and her obsession with the way colors interact with each other. The interaction of color occurs when two or more colors are combined in a composition. The combination of colors varies its own appearance and it is in these moments when Claudia decides to put one color next to another in order to influence its perception and achieve the desired visual experience. For Claudia the interaction of color is a key concept in her work as an artist and as a colorist and allows her to experiment and explore an ever new visual and emotional perception of colors in each work and commission.</span></p> <p><span>Her most personal and ongoing project emerged from the pandemic in 2020 where she launched a ‘Color glossary’ through the question ‘What’s color?’ to people of thought, philosophers, historians, thinkers, writers, and other artists, in order to think of color in a broader context. She wanted to discover the notion of color as it is thought of by others. She opened a dialogue to grasp new ways of seeing colors, other perspectives, but mostly to better understand the reason of color and its form, and this way to understand better human being.</span></p> <p><span>This project has been represented in three solo shows, one in Barcelona ( 2020) and the other two in Madrid ( 2021, 2022) since then<span> </span></span></p> <p><span>Currently she combines her activity as an artist with colour prescription in the areas of design and architecture.<span> </span></span></p> <p><span>Her work is represented, in Spain and abroad, by the Barcelona gallery owner Miquel Alzueta. <a href="http://alzuetagallery.com">ALZUETA GALLERY </a></span></p> <p>PRIVATE COLLECTIONS</p> <div> <div> <div> <div> <p>Fundació Vilacases (Barcelona)</p> <p>Fundació Banc Sabadell (Barcelona)</p> <p>Collection Hayot (France)</p> <p>Martinez Collection (Mexico-US)</p> <p>Niederberghaus Collection (Germany)</p> <p>Collection Richard (France)</p> <p>Smith Collection (Wyoming, US)</p> <p>EXHIBITIONS & ART FAIRS</p> <p>_2026 June_July, Palau de Casavells, ‘<i>Shift Towards Coincidnce’, </i>Group exhibition</p> <p>_2026 June_July, New York, <em>‘Abstract paintings’</em>, Scroll Ny , Group exhibition</p> <p>_2026 May _ June, Paris, ‘<em>Moll de l’os’ peintures 2026</em>, Alzueta Gallery Paris</p> <p>_2026 February, Zona Maco CDMX Mexico with Alzueta Gallery</p> <p>_2025 October, Estampa contemporary art fair, Madrid with Alzueta Gallery</p> <p>-2025 April, <em>‘Míra’m no deixis de mirar-me’</em> Solo show at Palau de Casavells with Alzueta Gallery</p> <p>-2025 March, ‘Marco, límite y lugar’, Madrid with Alzueta Gallery, Group Exhibition</p> <p>-2024 November, Luxemburg art week with Alzueta Gallery</p> </div> <p>-2024 July, Gallery_br, Tetbury, UK, ‘Painting as a gift from color’, solo show</p> <div> <p>-2024 February, ZONA MACO with Alzueta Gallery</p> <p>-2024 January, Alzueta Gallery Séneca, ‘ What abstract art means to me? ‘ Group exhibition</p> <p>-2023 November, Alzueta Gallery Madrid, «La terre est bleue comme une orange», Group exhibition</p> <p>-2023 September, Alzueta Gallery Turó, <em>‘Transitions’ </em>solo show</p> </div> <p>-2023 February, Art Rotterdam, Contemporary Art Fair</p> <div> <p>-2021 December, Alzueta Gallery Madrid, ‘Color Dialogues’ Solo Exhibition</p> <p>-2021 December, Espacio Pavillion, Madrid, 2nd Edition ‘What’s color?’</p> <p>-2021 October, Alzueta Gallery, Madrid, Estampa Contemporary Art Fair</p> <p>-2021 September, Alzueta Gallery, Paris, Art Paris Fair</p> </div> </div> </div> </div> <p>-2021 June, Alzueta Gallery, Madrid, Art Madrid Feria</p> <p>-2020 December, Alzueta Gallery, Barcelona, Solo Exhibition, ‘What’s color?’</p> <p><span>-2020 February, Alzueta Gallery, Barcelona, Aoo&Claudia Valsells ‘Silla8’ show</span></p> <p><span>-2019 November, Solo Exhibition, Almost Perfect, Tokyo, Japan</span></p> <p><span>-2019 October, Art Élysées-Art & Design, París.</span></p> <p><span>-2019 April, Art Paris Grand Palais, París.</span></p> <p><span>-2019 April, Almoneda, Ifema feria de Madrid, Palau de Casavells, Madrid.</span></p> <p><span>-2019 March, AFF Art Fair Brussels</span></p> <p><span>-2019 March, Art Madrid, Madrid</span></p> <p><span>-2018 November, T10 at Alzueta Gallery, Barcelona</span></p> <p><span>-2018 November, Palau de Casavells, solo exhibition, Girona, Spain</span></p> <p><span>-2018 Art fair Hamburg</span></p> <p><span>-2018 Art Elysees París</span></p> <p><span>-2018 Art fair Stockholm</span></p> <p><span>-2018 Contemporary Art Fair Just LX, Portugal</span></p> <p><span>-2018 Almoneda Antik Passion, Madrid</span></p> <p><span>-2018 Art Fair Grand Palais, París</span></p> <p><span>-2018 Eurantica art fair, Brussels</span></p> <p><span>-2018 Art Madrid, Madrid</span></p> <p><span>-2017/07 Uterqüe Art Essays AW2017</span></p> <p><span>-2017/03 Art París, International Art Fair, París</span></p> <p><span>-2017/02 Alzueta Gallery «Color y forma» solo exhibition, Barcelona</span></p> <p><span>-2017/02 Art Madrid, Madrid</span></p> <p><span>-2016/12 <a href="http://www.axelpairon-gallery.com">Galeria Axel Pairon</a> exposición colectiva.</span></p> <p><span>-2016/11 Antica Namur, Belgium</span></p> <p><span>-2016/10 Art Élysées, International Art Fair, París</span></p> <p><span>-2016/06 Scope Basel, Basel art fair</span></p> <p><span>-2007 <a href="http://www.palaudecasavells.com/" target="_blank" rel="noopener noreferrer">Palau de Casavells</a>, Baix Empordà, Solo exhibition , May 2007</span></p> <p><span>-2005 <a href="http://galeriamiquelalzueta.es/home/" target="_blank" rel="noopener noreferrer">Galeria Miquel Alzueta</a>, Barcelona, Solo exhibition, March 2005 – «Expresions de Mur». Abstract Informalism paintings.</span></p> <p><span>-2000/04 <a href="http://www.vincon.com/es/" target="_blank" rel="noopener noreferrer">Sala Vinçon</a>, Barcelona, Solo exhibition, Abril 2000 «El color no existe, existe la luz»/ «The color doesn’t exist, just the light». Individual exhibition where the interaction of the public with the installation was essential. I tried to demonstrate through personal experimentation that color only exists if there is light.<br> </span></p> <p>INQUIRES PLEASE CONTACT TO: editorial@alzuetagallery.com</p> <p><span>images:</span></p> <p><span>© yosigo_yosigo</span></p> <p><span>© Martina Domenech ( below)</span></p></div>
+            <div class="about-figures">
+              <figure class="about-figure">
+                    <picture class="">
       <source type="image/avif" srcset="/media/0d2c1af6977621e4-400.avif 400w, /media/0d2c1af6977621e4-800.avif 800w" sizes="(max-width: 899px) 88vw, 30vw" />
       <source type="image/webp" srcset="/media/0d2c1af6977621e4-400.webp 400w, /media/0d2c1af6977621e4-800.webp 800w" sizes="(max-width: 899px) 88vw, 30vw" />
       <img
@@ -2751,8 +2760,8 @@
         decoding="async"
       />
     </picture>
-                </figure><figure class="about-figure">
-                  <picture class="">
+                  </figure><figure class="about-figure">
+                    <picture class="">
       <source type="image/avif" srcset="/media/790d2d2760032466-400.avif 400w, /media/790d2d2760032466-800.avif 800w, /media/790d2d2760032466-1600.avif 1600w" sizes="(max-width: 899px) 88vw, 30vw" />
       <source type="image/webp" srcset="/media/790d2d2760032466-400.webp 400w, /media/790d2d2760032466-800.webp 800w, /media/790d2d2760032466-1600.webp 1600w" sizes="(max-width: 899px) 88vw, 30vw" />
       <img
@@ -2765,7 +2774,8 @@
         decoding="async"
       />
     </picture>
-                </figure>
+                  </figure>
+            </div>
           </div>
         </div>
   </section>

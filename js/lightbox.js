@@ -11,7 +11,8 @@ import { isPlainClick, reduceMotion } from './env.js';
  * History: opening pushes one entry, moving between works replaces it. Back
  * therefore leaves the lightbox in a single press.
  */
-const FADE = 200;
+/** Must match `.lightbox-plate`'s transition in the stylesheet. */
+const FADE = 420;
 const SWIPE = 48;
 const PLATE_SIZES = '(max-width: 900px) 92vw, 46vw';
 export function initLightbox() {
@@ -29,6 +30,15 @@ export function initLightbox() {
     let current = -1;
     let ticket = 0;
     let pending = 0;
+    /**
+     * The close teardown, held so reopening can cancel it. An unowned one belongs
+     * to the close it was started by and knows nothing of what happened since: a
+     * painting opened inside its window was torn down under the reader, and the
+     * scroll lock went with it.
+     */
+    let teardown = 0;
+    /** Whether the lightbox is meant to be on screen right now. */
+    let shown = false;
     let openedAt = '';
     const fill = (tile, index, total) => {
         plate.replaceChildren(largePicture(tile));
@@ -69,23 +79,34 @@ export function initLightbox() {
         }, FADE);
     };
     const open = (tile) => {
+        // A close still counting down belongs to the painting that was on screen
+        // before this one, and would otherwise empty the plate under it.
+        window.clearTimeout(teardown);
+        shown = true;
         openedAt = location.pathname + location.search;
         box.hidden = false;
         document.body.classList.add('is-locked');
         current = -1;
         show(tiles().indexOf(tile), false);
-        requestAnimationFrame(() => box.classList.add('is-open'));
+        // Opened on the next frame so the fade has a value to start from — and only
+        // if it has not been closed again in the meantime, or the class would be put
+        // back on something already shutting.
+        requestAnimationFrame(() => { if (shown)
+            box.classList.add('is-open'); });
         history.pushState({ lightbox: true }, '', tile.getAttribute('href') ?? location.href);
         nextBtn.focus({ preventScroll: true });
     };
     const close = (restore) => {
         if (box.hidden)
             return;
+        shown = false;
         ticket++;
         window.clearTimeout(pending);
+        window.clearTimeout(teardown);
         box.classList.remove('is-open', 'is-changing');
         document.body.classList.remove('is-locked');
-        window.setTimeout(() => { box.hidden = true; plate.replaceChildren(); }, 260);
+        // Held until the fade has finished, or the painting vanishes mid-close.
+        teardown = window.setTimeout(() => { box.hidden = true; plate.replaceChildren(); }, 620);
         if (restore && openedAt)
             history.replaceState({}, '', openedAt);
         tiles()[current]?.focus({ preventScroll: true });
