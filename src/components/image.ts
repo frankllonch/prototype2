@@ -1,4 +1,5 @@
 import { html, type Html } from './html.ts';
+import { withBase } from '../content/paths.ts';
 import type { ProjectImage } from '../content/types.ts';
 
 interface ImageProps {
@@ -16,8 +17,15 @@ interface ImageProps {
   readonly alt?: string;
 }
 
+/**
+ * The manifest stores every variant at the root (`/media/…`), because that is
+ * where they sit on disk. Served from a subdirectory — which is how GitHub Pages
+ * serves a project site — each one needs the prefix, exactly as every link and
+ * stylesheet does. Missing it here cost the deployed site all 370 of its images
+ * while every page around them loaded perfectly.
+ */
 const srcset = (variants: readonly { width: number; url: string }[]) =>
-  variants.map((v) => `${v.url} ${v.width}w`).join(', ');
+  variants.map((v) => `${withBase(v.url)} ${v.width}w`).join(', ');
 
 /**
  * Responsive `<picture>` with AVIF → WebP → JPEG fallbacks.
@@ -32,7 +40,7 @@ export function responsiveImage({ image, sizes, priority = false, className, alt
   if (!image.variants) {
     // No rendered variants (the pipeline has not run, or the source 404'd).
     return html`<img
-      class="${className ?? ''}" src="${image.source}" alt="${altText}"
+      class="${className ?? ''}" src="${withBase(image.source)}" alt="${altText}"
       style="aspect-ratio:${ratio}" loading="lazy" decoding="async" />`;
   }
 
@@ -41,7 +49,7 @@ export function responsiveImage({ image, sizes, priority = false, className, alt
       <source type="image/avif" srcset="${srcset(avif)}" sizes="${sizes}" />
       <source type="image/webp" srcset="${srcset(webp)}" sizes="${sizes}" />
       <img
-        src="${fallback}"
+        src="${withBase(fallback)}"
         alt="${altText}"
         width="${image.width}"
         height="${image.height}"

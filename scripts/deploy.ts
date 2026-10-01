@@ -26,15 +26,20 @@ import path from 'node:path';
 const ROOT = path.resolve(import.meta.dirname, '..');
 const DIST = path.join(ROOT, 'dist');
 
-/** Output only. Never main, and the guard below makes sure of it. */
-const BRANCH = 'gh-pages';
+/**
+ * Output only. Never main, and the guard below makes sure of it — typed wide on
+ * purpose, so the check is against whatever this is edited to rather than against
+ * a literal the compiler has already decided the answer for.
+ */
+const BRANCH: string = 'gh-pages';
 
 function git(args: string[], cwd: string): string {
   return execFileSync('git', args, { cwd, encoding: 'utf8' }).trim();
 }
 
+/** For questions whose answer may be "no": git writes to stderr, which is not news. */
 function tryGit(args: string[], cwd: string): string | null {
-  try { return git(args, cwd); } catch { return null; }
+  try { return execFileSync('git', args, { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim(); } catch { return null; }
 }
 
 async function main() {
@@ -73,7 +78,14 @@ async function main() {
   if (!existsSync(path.join(DIST, '.git'))) {
     console.log(`Preparing ${path.relative(ROOT, DIST)} as a ${BRANCH} checkout`);
     git(['init', '-q', '-b', BRANCH], DIST);
+  }
+  // Set every run rather than only at init. A dist/.git left over from an earlier
+  // attempt has no remote, and the push then fails after the whole build — which
+  // is a long way to go to find out.
+  if (tryGit(['remote', 'get-url', 'origin'], DIST) === null) {
     git(['remote', 'add', 'origin', remote], DIST);
+  } else {
+    git(['remote', 'set-url', 'origin', remote], DIST);
   }
   // The source repository ignores dist/ wholesale; this one must not inherit that.
   await writeFile(path.join(DIST, '.gitignore'), '.git/\n');
