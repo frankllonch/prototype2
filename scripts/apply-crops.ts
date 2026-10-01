@@ -12,6 +12,10 @@
  * Anything it replaces is kept in content/raw/crops-generated/, so this is
  * reversible. Reads content/recortadas.json for the matches; pass --exclude with
  * a comma-separated list of indices to leave particular ones alone.
+ *
+ * With --from-uncropped it takes content/raw/uncropped/ instead, where each file
+ * carries its painting's id in its name and so needs no matching at all. That is
+ * the path for the ones cropped by hand from `uncropped.ts`.
  */
 import { copyFile, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
@@ -28,6 +32,39 @@ const CROP_LIST = path.join(ROOT, 'content', 'crops.final.json');
 /** Matches below this are not written without being named explicitly. */
 const MIN_SCORE = 0.55;
 
+const UNCROPPED = path.join(ROOT, 'content', 'raw', 'uncropped');
+const MEDIA = path.join(ROOT, 'content', 'raw', 'media');
+
+/**
+ * The hand-cropped files from `uncropped.ts`, which carry their painting's id in
+ * the filename and so need no matching.
+ *
+ * A file the same size as the photograph it came from has not been cropped yet,
+ * and writing it would replace a painting's image with the very photograph we are
+ * trying to get away from — quietly, and looking like success. Those are skipped
+ * unless asked for explicitly.
+ */
+async function fromUncropped(force: boolean) {
+  if (!existsSync(UNCROPPED)) return { rows: [] as any[], untouched: [] as string[] };
+  const files = (await readdir(UNCROPPED)).filter((f) => /\[[0-9a-f]{8,}\]/.test(f));
+  const rows: any[] = [];
+  const untouched: string[] = [];
+
+  for (const file of files) {
+    const id = /\[([0-9a-f]{8,})\]/.exec(file)![1]!;
+    const here = await sharp(path.join(UNCROPPED, file)).metadata();
+    let original: { width?: number; height?: number } = {};
+    for (const ext of ['.jpg', '.jpeg', '.png', '.webp']) {
+      const p = path.join(MEDIA, id + ext);
+      if (existsSync(p)) { original = await sharp(p).metadata(); break; }
+    }
+    const unchanged = here.width === original.width && here.height === original.height;
+    if (unchanged && !force) { untouched.push(file); continue; }
+    rows.push({ file, id, title: file.replace(/^\d+ /, '').replace(/ \[.*$/, ''), score: 1, source: UNCROPPED });
+  }
+  return { rows, untouched };
+}
+
 async function main() {
   const args = process.argv.slice(2);
   const excludeArg = args.find((a) => a.startsWith('--exclude='));
@@ -35,11 +72,24 @@ async function main() {
     (excludeArg?.split('=')[1] ?? '').split(',').map((s) => s.trim()).filter(Boolean),
   );
   const dryRun = args.includes('--dry-run');
+  const useUncropped = args.includes('--from-uncropped');
+  const force = args.includes('--force');
 
-  const report = JSON.parse(await readFile(REPORT, 'utf8'));
-  // The review sheets are numbered by ascending score, so an exclusion given as
-  // a sheet index means the same crop here.
-  const byScore = [...report.crops].filter((c: any) => c.id).sort((a: any, b: any) => a.score - b.score);
+  let byScore: any[];
+  let untouched: string[] = [];
+  let sourceDir = RECORTADAS;
+
+  if (useUncropped) {
+    const found = await fromUncropped(force);
+    byScore = found.rows;
+    untouched = found.untouched;
+    sourceDir = UNCROPPED;
+  } else {
+    const report = JSON.parse(await readFile(REPORT, 'utf8'));
+    // The review sheets are numbered by ascending score, so an exclusion given as
+    // a sheet index means the same crop here.
+    byScore = [...report.crops].filter((c: any) => c.id).sort((a: any, b: any) => a.score - b.score);
+  }
 
   await mkdir(KEEP, { recursive: true });
   await mkdir(CROPS, { recursive: true });
@@ -60,7 +110,7 @@ async function main() {
       continue;
     }
 
-    const source = path.join(RECORTADAS, crop.file);
+    const source = path.join(sourceDir, crop.file);
     const target = path.join(CROPS, `${crop.id}.jpg`);
 
     if (!dryRun) {
@@ -81,7 +131,9 @@ async function main() {
     await writeFile(CROP_LIST, JSON.stringify([...final].sort(), null, 2));
   }
 
-  const available = (await readdir(RECORTADAS)).filter((f) => f.toLowerCase().endsWith('.png')).length;
+  const available = useUncropped
+    ? byScore.length + untouched.length
+    : (await readdir(RECORTADAS)).filter((f) => f.toLowerCase().endsWith('.png')).length;
   console.log(`${dryRun ? '[dry run] ' : ''}${written} of ${available} hand-made crops in place`);
   console.log(`  ${added} paintings newly cropped, ${written - added} replacing a generated crop`);
   console.log(`  ${kept} generated crops kept in ${path.relative(ROOT, KEEP)}`);
@@ -89,6 +141,11 @@ async function main() {
   if (skippedRows.length) {
     console.log(`\n  ${skipped} left alone:`);
     for (const row of skippedRows) console.log(`    ${row}`);
+  }
+  if (untouched.length) {
+    console.log(`\n  ${untouched.length} still the same size as the photograph — not cropped yet, so left alone:`);
+    for (const f of untouched) console.log(`    ${f}`);
+    console.log('  (--force to write them anyway)');
   }
   if (!dryRun) console.log('\nRun `npm run images` then `npm run build`.');
 }

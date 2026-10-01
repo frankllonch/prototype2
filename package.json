@@ -14,9 +14,11 @@
     "match-crops": "node --experimental-strip-types scripts/match-crops.ts",
     "match-review": "node --experimental-strip-types scripts/match-review.ts",
     "apply-crops": "node --experimental-strip-types scripts/apply-crops.ts",
+    "uncropped": "node --experimental-strip-types scripts/uncropped.ts",
     "build": "node --experimental-strip-types src/build.ts",
     "serve": "node --experimental-strip-types scripts/serve.ts",
     "dev": "npm run build && npm run serve",
+    "deploy": "node --experimental-strip-types scripts/deploy.ts",
     "typecheck": "tsc --noEmit",
     "palette": "node --experimental-strip-types scripts/palette.ts"
   },
