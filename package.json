@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "private": true,
   "type": "module",
-  "description": "claudiavalsells.com — static site built from the WordPress content. WordPress stays the CMS.",
+  "description": "claudiavalsells.com \u2014 static site built from the WordPress content. WordPress stays the CMS.",
   "engines": {
     "node": ">=22"
   },
@@ -11,6 +11,9 @@
     "extract": "node --experimental-strip-types scripts/extract.ts",
     "images": "node --experimental-strip-types scripts/images.ts",
     "crop": "node --experimental-strip-types scripts/crop.ts",
+    "match-crops": "node --experimental-strip-types scripts/match-crops.ts",
+    "match-review": "node --experimental-strip-types scripts/match-review.ts",
+    "apply-crops": "node --experimental-strip-types scripts/apply-crops.ts",
     "build": "node --experimental-strip-types src/build.ts",
     "serve": "node --experimental-strip-types scripts/serve.ts",
     "dev": "npm run build && npm run serve",

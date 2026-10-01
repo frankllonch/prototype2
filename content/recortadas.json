@@ -1,0 +1,3229 @@
+{
+  "matchedAt": "2026-10-01T08:32:17.959Z",
+  "crops": [
+    {
+      "file": "Screenshot 2026-09-30 at 15.56.58.png",
+      "id": "0be23ea7c8dfec29",
+      "title": "UNTITLED 2024, 60X70CM",
+      "score": 0.8383352272727274,
+      "margin": 0.2523030303030305,
+      "rank": 0,
+      "box": {
+        "left": 0.1891891891891892,
+        "top": 0.26785714285714285,
+        "width": 0.6216216216216216,
+        "height": 0.3392857142857143
+      },
+      "alternatives": [
+        {
+          "id": "0be23ea7c8dfec29",
+          "title": "UNTITLED 2024, 60X70CM",
+          "score": 0.8383352272727274
+        },
+        {
+          "id": "a3cc2277c7e59a4f",
+          "title": "UNTITLED 2025, 38X48 CM",
+          "score": 0.5860321969696969
+        },
+        {
+          "id": "a9949b523714fb4c",
+          "title": "UNTITLED 2024, 160X130CM",
+          "score": 0.5763200757575757
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 15.57.35.png",
+      "id": "0cb35503e6789d8c",
+      "title": "UNTITLED 2023, 190X160cm",
+      "score": 0.895717803030303,
+      "margin": 0.24042045454545447,
+      "rank": 0,
+      "box": {
+        "left": 0.16216216216216217,
+        "top": 0.21428571428571427,
+        "width": 0.7027027027027027,
+        "height": 0.5535714285714286
+      },
+      "alternatives": [
+        {
+          "id": "0cb35503e6789d8c",
+          "title": "UNTITLED 2023, 190X160cm",
+          "score": 0.895717803030303
+        },
+        {
+          "id": "28f4053bddb5250d",
+          "title": "UNTITLED 2024, 160X130CM",
+          "score": 0.6552973484848486
+        },
+        {
+          "id": "fcd0540a1c8fd8a8",
+          "title": "Untitled 2022, 193x163cm",
+          "score": 0.6319223484848484
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 15.57.55.png",
+      "id": "0d04a006c930daea",
+      "title": "UNTITLED 2025, 130X160CM",
+      "score": 0.867530303030303,
+      "margin": 0.2525454545454545,
+      "rank": 0,
+      "box": {
+        "left": 0.1891891891891892,
+        "top": 0.32142857142857145,
+        "width": 0.6216216216216216,
+        "height": 0.32142857142857145
+      },
+      "alternatives": [
+        {
+          "id": "0d04a006c930daea",
+          "title": "UNTITLED 2025, 130X160CM",
+          "score": 0.867530303030303
+        },
+        {
+          "id": "28de0b648ad00d1b",
+          "title": "UNTITLED 2026, 60X70CM",
+          "score": 0.6149848484848485
+        },
+        {
+          "id": "4fb3a12952b391db",
+          "title": "UNTITLED 2025, 260X190CM",
+          "score": 0.6032272727272727
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 15.58.04.png",
+      "id": "0da592a4c134706a",
+      "title": "UNTITLED 2025, 100X80CM",
+      "score": 0.8757556818181819,
+      "margin": 0.2905340909090909,
+      "rank": 0,
+      "box": {
+        "left": 0.13513513513513514,
+        "top": 0.21428571428571427,
+        "width": 0.7027027027027027,
+        "height": 0.5714285714285714
+      },
+      "alternatives": [
+        {
+          "id": "0da592a4c134706a",
+          "title": "UNTITLED 2025, 100X80CM",
+          "score": 0.8757556818181819
+        },
+        {
+          "id": "76721779c72bbfae",
+          "title": "UNTITLED 2025, 150X150CM",
+          "score": 0.585221590909091
+        },
+        {
+          "id": "ff0cf6032150946b",
+          "title": "UNTITLED 2026, 70X63CM",
+          "score": 0.5655587121212121
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 15.58.26.png",
+      "id": "0e0b9e2dbfbac0fa",
+      "title": "Gouache on paper 65x55cm (4)",
+      "score": 0.7795909090909091,
+      "margin": 0.06701136363636373,
+      "rank": 0,
+      "box": {
+        "left": 0.23809523809523808,
+        "top": 0.35714285714285715,
+        "width": 0.5476190476190477,
+        "height": 0.48214285714285715
+      },
+      "alternatives": [
+        {
+          "id": "0e0b9e2dbfbac0fa",
+          "title": "Gouache on paper 65x55cm (4)",
+          "score": 0.7795909090909091
+        },
+        {
+          "id": "908571beaa329002",
+          "title": "Goauche on paper 65×55 cm (2)",
+          "score": 0.7125795454545454
+        },
+        {
+          "id": "41507732cf8ef092",
+          "title": "Untitled 2025, 80x100cm",
+          "score": 0.6537537878787879
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 15.58.40.png",
+      "id": "1abbcf902d5fce80",
+      "title": "UNTITLED 2024, 26X36CM",
+      "score": 0.8407632575757575,
+      "margin": 0.2299545454545454,
+      "rank": 0,
+      "box": {
+        "left": 0.32432432432432434,
+        "top": 0.2857142857142857,
+        "width": 0.3783783783783784,
+        "height": 0.19642857142857142
+      },
+      "alternatives": [
+        {
+          "id": "1abbcf902d5fce80",
+          "title": "UNTITLED 2024, 26X36CM",
+          "score": 0.8407632575757575
+        },
+        {
+          "id": "4c49b79b737ac3cb",
+          "title": "UNTITLED 2023, 160X190CM",
+          "score": 0.6108087121212121
+        },
+        {
+          "id": "0da592a4c134706a",
+          "title": "UNTITLED 2025, 100X80CM",
+          "score": 0.603592803030303
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 15.58.51.png",
+      "id": "1b433ee13065bebf",
+      "title": "UNTITLED 2026, 70X63CM",
+      "score": 0.8008939393939394,
+      "margin": 0.08546969696969697,
+      "rank": 0,
+      "box": {
+        "left": 0.16216216216216217,
+        "top": 0.21428571428571427,
+        "width": 0.7027027027027027,
+        "height": 0.5535714285714286
+      },
+      "alternatives": [
+        {
+          "id": "1b433ee13065bebf",
+          "title": "UNTITLED 2026, 70X63CM",
+          "score": 0.8008939393939394
+        },
+        {
+          "id": "aac27f8277f78f77",
+          "title": "UNTITLED 2026, 160X190CM",
+          "score": 0.7154242424242424
+        },
+        {
+          "id": "4fb3a12952b391db",
+          "title": "UNTITLED 2025, 260X190CM",
+          "score": 0.6285113636363636
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 15.59.02.png",
+      "id": "1c815bc3dde95d2b",
+      "title": "UNTITLED 2025, 70X60CM",
+      "score": 0.8665435606060606,
+      "margin": 0.2609242424242425,
+      "rank": 0,
+      "box": {
+        "left": 0.13513513513513514,
+        "top": 0.17857142857142858,
+        "width": 0.7567567567567568,
+        "height": 0.6071428571428571
+      },
+      "alternatives": [
+        {
+          "id": "1c815bc3dde95d2b",
+          "title": "UNTITLED 2025, 70X60CM",
+          "score": 0.8665435606060606
+        },
+        {
+          "id": "2ae59f6e752dd2db",
+          "title": "UNTITLED 2025, 160X130CM",
+          "score": 0.6056193181818181
+        },
+        {
+          "id": "091e8ff4fa68f72a",
+          "title": "UNTITLED 2026, 60X73CM",
+          "score": 0.5973238636363636
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 15.59.33.png",
+      "id": "1caa1fa42c98147d",
+      "title": "UNTITLED 2024, 70X60CM",
+      "score": 0.8838503787878788,
+      "margin": 0.29838257575757576,
+      "rank": 0,
+      "box": {
+        "left": 0.24324324324324326,
+        "top": 0.21428571428571427,
+        "width": 0.5405405405405406,
+        "height": 0.42857142857142855
+      },
+      "alternatives": [
+        {
+          "id": "1caa1fa42c98147d",
+          "title": "UNTITLED 2024, 70X60CM",
+          "score": 0.8838503787878788
+        },
+        {
+          "id": "5d86f96eb7003684",
+          "title": "UNTITLED 2025, 150X150CM",
+          "score": 0.585467803030303
+        },
+        {
+          "id": "3fb979cb3d894999",
+          "title": "UNTITLED 2025, 100X80CM",
+          "score": 0.5191268939393939
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 15.59.51.png",
+      "id": "1da5360011314c99",
+      "title": "UNTITLED 2026, 130X160CM",
+      "score": 0.8348484848484848,
+      "margin": 0.1202727272727272,
+      "rank": 0,
+      "box": {
+        "left": 0.10810810810810811,
+        "top": 0.26785714285714285,
+        "width": 0.7567567567567568,
+        "height": 0.39285714285714285
+      },
+      "alternatives": [
+        {
+          "id": "1da5360011314c99",
+          "title": "UNTITLED 2026, 130X160CM",
+          "score": 0.8348484848484848
+        },
+        {
+          "id": "1b433ee13065bebf",
+          "title": "UNTITLED 2026, 70X63CM",
+          "score": 0.7145757575757576
+        },
+        {
+          "id": "091e8ff4fa68f72a",
+          "title": "UNTITLED 2026, 60X73CM",
+          "score": 0.6519583333333334
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.00.01.png",
+      "id": "2ae59f6e752dd2db",
+      "title": "UNTITLED 2025, 160X130CM",
+      "score": 0.8528125,
+      "margin": 0.2517765151515151,
+      "rank": 0,
+      "box": {
+        "left": 0.1891891891891892,
+        "top": 0.21428571428571427,
+        "width": 0.6216216216216216,
+        "height": 0.5
+      },
+      "alternatives": [
+        {
+          "id": "2ae59f6e752dd2db",
+          "title": "UNTITLED 2025, 160X130CM",
+          "score": 0.8528125
+        },
+        {
+          "id": "84da8f4c88d30754",
+          "title": "COLOR DIALOGUES V, 2021",
+          "score": 0.6010359848484849
+        },
+        {
+          "id": "91276fe1957c86e0",
+          "title": "UNTITLED 2025, 190x160cm",
+          "score": 0.5638087121212121
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.00.10.png",
+      "id": "2b015429ab5daadd",
+      "title": "UNTITLED 2025, 70X60CM",
+      "score": 0.7908257575757576,
+      "margin": 0.26562121212121204,
+      "rank": 0,
+      "box": {
+        "left": 0.13513513513513514,
+        "top": 0.17857142857142858,
+        "width": 0.7567567567567568,
+        "height": 0.6071428571428571
+      },
+      "alternatives": [
+        {
+          "id": "2b015429ab5daadd",
+          "title": "UNTITLED 2025, 70X60CM",
+          "score": 0.7908257575757576
+        },
+        {
+          "id": "9bf84d3a2ed201e2",
+          "title": "UNTITLED 2025, 100X80CM",
+          "score": 0.5252045454545455
+        },
+        {
+          "id": "36972821ce6b0d02",
+          "title": "UNTITLED 2025, 100X80CM",
+          "score": 0.5106818181818182
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.00.13.png",
+      "id": "2ddcb102a9a2ecce",
+      "title": "UNTITLED 2024, 100X80",
+      "score": 0.8289829545454546,
+      "margin": 0.19679545454545455,
+      "rank": 0,
+      "box": {
+        "left": 0.1891891891891892,
+        "top": 0.17857142857142858,
+        "width": 0.6216216216216216,
+        "height": 0.5
+      },
+      "alternatives": [
+        {
+          "id": "2ddcb102a9a2ecce",
+          "title": "UNTITLED 2024, 100X80",
+          "score": 0.8289829545454546
+        },
+        {
+          "id": "cb821e7ac3c5e403",
+          "title": "UNTITLED 2024, 100X80CM",
+          "score": 0.6321875
+        },
+        {
+          "id": "4a2d92501f32ca1a",
+          "title": "Untitled 2022, 76x63cm",
+          "score": 0.6195776515151515
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.00.30.png",
+      "id": "3dcfa5e9a3b1b5b1",
+      "title": "UNTITLED 2023, 60X50 cm",
+      "score": 0.8357859848484849,
+      "margin": 0.16974621212121221,
+      "rank": 0,
+      "box": {
+        "left": 0.2702702702702703,
+        "top": 0.21428571428571427,
+        "width": 0.4594594594594595,
+        "height": 0.375
+      },
+      "alternatives": [
+        {
+          "id": "3dcfa5e9a3b1b5b1",
+          "title": "UNTITLED 2023, 60X50 cm",
+          "score": 0.8357859848484849
+        },
+        {
+          "id": "6b9c081e4493588a",
+          "title": "UNTITLED 2024, 160X130 CM",
+          "score": 0.6660397727272727
+        },
+        {
+          "id": "8fa84ca81dacf2c5",
+          "title": "Untitled 2023, 50x60cm",
+          "score": 0.6279337121212121
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.00.40.png",
+      "id": "3fb979cb3d894999",
+      "title": "UNTITLED 2025, 100X80CM",
+      "score": 0.8211439393939394,
+      "margin": 0.1649090909090909,
+      "rank": 0,
+      "box": {
+        "left": 0.1891891891891892,
+        "top": 0.21428571428571427,
+        "width": 0.6216216216216216,
+        "height": 0.5
+      },
+      "alternatives": [
+        {
+          "id": "3fb979cb3d894999",
+          "title": "UNTITLED 2025, 100X80CM",
+          "score": 0.8211439393939394
+        },
+        {
+          "id": "e526231ae1110f7f",
+          "title": "UNTITLED 2026, 160X130CM",
+          "score": 0.6562348484848485
+        },
+        {
+          "id": "30e2735c08eedaa5",
+          "title": "UNTITLED 2025, 260X190CM",
+          "score": 0.6239848484848485
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.00.49.png",
+      "id": "4a2d92501f32ca1a",
+      "title": "Untitled 2022, 76x63cm",
+      "score": 0.8422499999999999,
+      "margin": 0.20956439393939386,
+      "rank": 0,
+      "box": {
+        "left": 0.13513513513513514,
+        "top": 0.17857142857142858,
+        "width": 0.7567567567567568,
+        "height": 0.6071428571428571
+      },
+      "alternatives": [
+        {
+          "id": "4a2d92501f32ca1a",
+          "title": "Untitled 2022, 76x63cm",
+          "score": 0.8422499999999999
+        },
+        {
+          "id": "8c4d27bf79ab9d00",
+          "title": "UNTITLED 2024, 100X80CM",
+          "score": 0.6326856060606061
+        },
+        {
+          "id": "6e78f75309ede633",
+          "title": "Untitled 2024, 130x160cm",
+          "score": 0.5586363636363636
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.01.00.png",
+      "id": "4d4c20afd606b527",
+      "title": "UNTITLED 2024, 46X36CM",
+      "score": 0.7730075757575757,
+      "margin": 0.23413257575757573,
+      "rank": 0,
+      "box": {
+        "left": 0.2702702702702703,
+        "top": 0.2857142857142857,
+        "width": 0.4594594594594595,
+        "height": 0.25
+      },
+      "alternatives": [
+        {
+          "id": "4d4c20afd606b527",
+          "title": "UNTITLED 2024, 46X36CM",
+          "score": 0.7730075757575757
+        },
+        {
+          "id": "4c49b79b737ac3cb",
+          "title": "UNTITLED 2023, 160X190CM",
+          "score": 0.538875
+        },
+        {
+          "id": "f69091f420e7f773",
+          "title": "UNTITLED 2025, 26X36CM",
+          "score": 0.5309090909090909
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.01.09.png",
+      "id": "4ee5ef84674d10c6",
+      "title": "UNTITLED 2025, 26X36CM",
+      "score": 0.8909431818181818,
+      "margin": 0.1987727272727272,
+      "rank": 0,
+      "box": {
+        "left": 0.10810810810810811,
+        "top": 0.26785714285714285,
+        "width": 0.7567567567567568,
+        "height": 0.375
+      },
+      "alternatives": [
+        {
+          "id": "4ee5ef84674d10c6",
+          "title": "UNTITLED 2025, 26X36CM",
+          "score": 0.8909431818181818
+        },
+        {
+          "id": "a7fc0bc8186731ab",
+          "title": "UNTITLED 2026, 80X100CM",
+          "score": 0.6921704545454546
+        },
+        {
+          "id": "4fb3a12952b391db",
+          "title": "UNTITLED 2025, 260X190CM",
+          "score": 0.6855492424242424
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.01.21.png",
+      "id": "4f3a7cd510833611",
+      "title": "Untitled 2022, 73 x 63cm",
+      "score": 0.7882916666666666,
+      "margin": 0.17661363636363636,
+      "rank": 0,
+      "box": {
+        "left": 0.16216216216216217,
+        "top": 0.25,
+        "width": 0.6216216216216216,
+        "height": 0.48214285714285715
+      },
+      "alternatives": [
+        {
+          "id": "4f3a7cd510833611",
+          "title": "Untitled 2022, 73 x 63cm",
+          "score": 0.7882916666666666
+        },
+        {
+          "id": "afe549a39e46e804",
+          "title": "UNTITLED 2023, 100X80cm",
+          "score": 0.6116780303030303
+        },
+        {
+          "id": "825a0c2fc7d3f338",
+          "title": "Untitled 2022, 73 x 63 cm",
+          "score": 0.6047045454545454
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.01.38.png",
+      "id": "4f107afb95871b3d",
+      "title": "Acrylic on canvas 160x130cm",
+      "score": 0.8271287878787879,
+      "margin": 0.23136742424242418,
+      "rank": 0,
+      "box": {
+        "left": 0.1891891891891892,
+        "top": 0.32142857142857145,
+        "width": 0.6216216216216216,
+        "height": 0.5
+      },
+      "alternatives": [
+        {
+          "id": "4f107afb95871b3d",
+          "title": "Acrylic on canvas 160x130cm",
+          "score": 0.8271287878787879
+        },
+        {
+          "id": "9090a52648a45a76",
+          "title": "Untitled 2022, 70x60cm",
+          "score": 0.5957613636363637
+        },
+        {
+          "id": "9bf84d3a2ed201e2",
+          "title": "UNTITLED 2025, 100X80CM",
+          "score": 0.5891590909090909
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.01.51.png",
+      "id": "4fb3a12952b391db",
+      "title": "UNTITLED 2025, 260X190CM",
+      "score": 0.8799602272727273,
+      "margin": 0.20100757575757566,
+      "rank": 0,
+      "box": {
+        "left": 0.13513513513513514,
+        "top": 0.32142857142857145,
+        "width": 0.7567567567567568,
+        "height": 0.375
+      },
+      "alternatives": [
+        {
+          "id": "4fb3a12952b391db",
+          "title": "UNTITLED 2025, 260X190CM",
+          "score": 0.8799602272727273
+        },
+        {
+          "id": "57516de5f24fdc37",
+          "title": "UNTITLED 2025, 205X160CM",
+          "score": 0.6789526515151516
+        },
+        {
+          "id": "c57bf6982097fb93",
+          "title": "UNTITLED 2025, 110 X 150CM",
+          "score": 0.6598844696969697
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.02.09.png",
+      "id": "5d86f96eb7003684",
+      "title": "UNTITLED 2025, 150X150CM",
+      "score": 0.8455852272727273,
+      "margin": 0.19186363636363646,
+      "rank": 0,
+      "box": {
+        "left": 0.21621621621621623,
+        "top": 0.26785714285714285,
+        "width": 0.6216216216216216,
+        "height": 0.4107142857142857
+      },
+      "alternatives": [
+        {
+          "id": "5d86f96eb7003684",
+          "title": "UNTITLED 2025, 150X150CM",
+          "score": 0.8455852272727273
+        },
+        {
+          "id": "ed652f2fbfb8b55a",
+          "title": "UNTITLED 2021, 160X130CM",
+          "score": 0.6537215909090909
+        },
+        {
+          "id": "28f4053bddb5250d",
+          "title": "UNTITLED 2024, 160X130CM",
+          "score": 0.6403806818181819
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.02.16.png",
+      "id": "05fce23b49823b65",
+      "title": "UNTITLED 2024, 26X36CM",
+      "score": 0.8311988636363636,
+      "margin": 0.16530681818181825,
+      "rank": 0,
+      "box": {
+        "left": 0.2702702702702703,
+        "top": 0.2857142857142857,
+        "width": 0.4594594594594595,
+        "height": 0.23214285714285715
+      },
+      "alternatives": [
+        {
+          "id": "05fce23b49823b65",
+          "title": "UNTITLED 2024, 26X36CM",
+          "score": 0.8311988636363636
+        },
+        {
+          "id": "4c49b79b737ac3cb",
+          "title": "UNTITLED 2023, 160X190CM",
+          "score": 0.6658920454545454
+        },
+        {
+          "id": "71c848b394254b54",
+          "title": "Untitled 2024, 160×130 cm",
+          "score": 0.628089015151515
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.02.30.png",
+      "id": "07a7cf8b21cf9fa2",
+      "title": "Gouache on paper 100x80cm",
+      "score": 0.7347840909090909,
+      "margin": 0.11535984848484848,
+      "rank": 0,
+      "box": {
+        "left": 0.19047619047619047,
+        "top": 0.25,
+        "width": 0.6190476190476191,
+        "height": 0.625
+      },
+      "alternatives": [
+        {
+          "id": "07a7cf8b21cf9fa2",
+          "title": "Gouache on paper 100x80cm",
+          "score": 0.7347840909090909
+        },
+        {
+          "id": "b82760ddbe9346b1",
+          "title": "Gouache on paper 100x80cm",
+          "score": 0.6194242424242424
+        },
+        {
+          "id": "ee7ae094021e5399",
+          "title": "Gouache on paper 100x80cm",
+          "score": 0.6134810606060606
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.02.42.png",
+      "id": "7bdf301917192f76",
+      "title": "UNTITLED 2026, 160X190 CM",
+      "score": 0.7623655303030303,
+      "margin": 0.1606704545454546,
+      "rank": 0,
+      "box": {
+        "left": 0.13513513513513514,
+        "top": 0.26785714285714285,
+        "width": 0.7027027027027027,
+        "height": 0.39285714285714285
+      },
+      "alternatives": [
+        {
+          "id": "7bdf301917192f76",
+          "title": "UNTITLED 2026, 160X190 CM",
+          "score": 0.7623655303030303
+        },
+        {
+          "id": "c57bf6982097fb93",
+          "title": "UNTITLED 2025, 110 X 150CM",
+          "score": 0.6016950757575757
+        },
+        {
+          "id": "2509f4eb5c9bd1c4",
+          "title": "UNTITLED 2025, 160X130CM",
+          "score": 0.5826875
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.02.54.png",
+      "id": "7df9b5f53e2fedd6",
+      "title": "UNTITLED 2024, 80X100CM",
+      "score": 0.8961609848484848,
+      "margin": 0.2779318181818182,
+      "rank": 0,
+      "box": {
+        "left": 0.16216216216216217,
+        "top": 0.21428571428571427,
+        "width": 0.7027027027027027,
+        "height": 0.375
+      },
+      "alternatives": [
+        {
+          "id": "7df9b5f53e2fedd6",
+          "title": "UNTITLED 2024, 80X100CM",
+          "score": 0.8961609848484848
+        },
+        {
+          "id": "a09d8ad7c0befc64",
+          "title": "UNTITLED 2023, 190X160CM",
+          "score": 0.6182291666666666
+        },
+        {
+          "id": "2509f4eb5c9bd1c4",
+          "title": "UNTITLED 2025, 160X130CM",
+          "score": 0.5580738636363636
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.03.03.png",
+      "id": "7f8fb57de3171350",
+      "title": "UNTITLED 2021, 190 x 160 CM",
+      "score": 0.8791439393939394,
+      "margin": 0.4116439393939394,
+      "rank": 0,
+      "box": {
+        "left": 0.24324324324324326,
+        "top": 0.32142857142857145,
+        "width": 0.5405405405405406,
+        "height": 0.4107142857142857
+      },
+      "alternatives": [
+        {
+          "id": "7f8fb57de3171350",
+          "title": "UNTITLED 2021, 190 x 160 CM",
+          "score": 0.8791439393939394
+        },
+        {
+          "id": "2793d079f032c161",
+          "title": "UNTITLED 2025, 100X80CM",
+          "score": 0.4675
+        },
+        {
+          "id": "1b433ee13065bebf",
+          "title": "UNTITLED 2026, 70X63CM",
+          "score": 0.44452272727272724
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.03.12.png",
+      "id": "8a5e678029d5329b",
+      "title": "Acrylic on canvas 180×180",
+      "score": 0.7958522727272728,
+      "margin": 0.22731818181818186,
+      "rank": 0,
+      "box": {
+        "left": 0.15555555555555556,
+        "top": 0.10714285714285714,
+        "width": 0.6888888888888889,
+        "height": 0.5535714285714286
+      },
+      "alternatives": [
+        {
+          "id": "8a5e678029d5329b",
+          "title": "Acrylic on canvas 180×180",
+          "score": 0.7958522727272728
+        },
+        {
+          "id": "45d24138aed924ac",
+          "title": "Collage&gouache on paper 110×100",
+          "score": 0.5685340909090909
+        },
+        {
+          "id": "0e0b9e2dbfbac0fa",
+          "title": "Gouache on paper 65x55cm (4)",
+          "score": 0.4983068181818182
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.03.25.png",
+      "id": "8e2cfbd9625e5763",
+      "title": "UNTITLED 2026, 80X101CM",
+      "score": 0.9411856060606061,
+      "margin": 0.2610075757575758,
+      "rank": 0,
+      "box": {
+        "left": 0.16216216216216217,
+        "top": 0.26785714285714285,
+        "width": 0.7027027027027027,
+        "height": 0.375
+      },
+      "alternatives": [
+        {
+          "id": "8e2cfbd9625e5763",
+          "title": "UNTITLED 2026, 80X101CM",
+          "score": 0.9411856060606061
+        },
+        {
+          "id": "28de0b648ad00d1b",
+          "title": "UNTITLED 2026, 60X70CM",
+          "score": 0.6801780303030303
+        },
+        {
+          "id": "4fb3a12952b391db",
+          "title": "UNTITLED 2025, 260X190CM",
+          "score": 0.6711628787878787
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.03.43.png",
+      "id": "9bf84d3a2ed201e2",
+      "title": "UNTITLED 2025, 100X80CM",
+      "score": 0.8628068181818181,
+      "margin": 0.2156818181818182,
+      "rank": 0,
+      "box": {
+        "left": 0.21621621621621623,
+        "top": 0.21428571428571427,
+        "width": 0.5405405405405406,
+        "height": 0.42857142857142855
+      },
+      "alternatives": [
+        {
+          "id": "9bf84d3a2ed201e2",
+          "title": "UNTITLED 2025, 100X80CM",
+          "score": 0.8628068181818181
+        },
+        {
+          "id": "e526231ae1110f7f",
+          "title": "UNTITLED 2026, 160X130CM",
+          "score": 0.647125
+        },
+        {
+          "id": "8c4d27bf79ab9d00",
+          "title": "UNTITLED 2024, 100X80CM",
+          "score": 0.5876174242424242
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.03.52.png",
+      "id": "9eda9241f565ce60",
+      "title": "UNTITLED 2025, 100X80CM",
+      "score": 0.8885833333333333,
+      "margin": 0.21993560606060591,
+      "rank": 0,
+      "box": {
+        "left": 0.16216216216216217,
+        "top": 0.17857142857142858,
+        "width": 0.7027027027027027,
+        "height": 0.5714285714285714
+      },
+      "alternatives": [
+        {
+          "id": "9eda9241f565ce60",
+          "title": "UNTITLED 2025, 100X80CM",
+          "score": 0.8885833333333333
+        },
+        {
+          "id": "e2d167c8f9479188",
+          "title": "UNTITLED 2026, 200X180 CM",
+          "score": 0.6686477272727274
+        },
+        {
+          "id": "ed652f2fbfb8b55a",
+          "title": "UNTITLED 2021, 160X130CM",
+          "score": 0.5678219696969697
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.04.01.png",
+      "id": "9fe5571bb697c05d",
+      "title": "UNTITLED 2026, 70X63CM",
+      "score": 0.8739659090909091,
+      "margin": 0.44995075757575764,
+      "rank": 0,
+      "box": {
+        "left": 0.16216216216216217,
+        "top": 0.25,
+        "width": 0.7027027027027027,
+        "height": 0.5535714285714286
+      },
+      "alternatives": [
+        {
+          "id": "9fe5571bb697c05d",
+          "title": "UNTITLED 2026, 70X63CM",
+          "score": 0.8739659090909091
+        },
+        {
+          "id": "0da592a4c134706a",
+          "title": "UNTITLED 2025, 100X80CM",
+          "score": 0.42401515151515146
+        },
+        {
+          "id": "a0568bf580954ac6",
+          "title": "COLOR DIALOGUES III, 2021",
+          "score": 0.4150530303030303
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.04.10.png",
+      "id": "13c43ea8a2c6879d",
+      "title": "UNTITLED 2025, 160X130CM",
+      "score": 0.8016590909090909,
+      "margin": 0.2445984848484849,
+      "rank": 0,
+      "box": {
+        "left": 0.16216216216216217,
+        "top": 0.17857142857142858,
+        "width": 0.7027027027027027,
+        "height": 0.5714285714285714
+      },
+      "alternatives": [
+        {
+          "id": "13c43ea8a2c6879d",
+          "title": "UNTITLED 2025, 160X130CM",
+          "score": 0.8016590909090909
+        },
+        {
+          "id": "25f24c0c0b4125bb",
+          "title": "UNTITLED 2025, 160X130CM",
+          "score": 0.557060606060606
+        },
+        {
+          "id": "ff0cf6032150946b",
+          "title": "UNTITLED 2026, 70X63CM",
+          "score": 0.5535454545454546
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.04.18.png",
+      "id": "13ed2081724b16b6",
+      "title": "UNTITLED 2024, 70X60CM",
+      "score": 0.8742064393939394,
+      "margin": 0.3140113636363636,
+      "rank": 0,
+      "box": {
+        "left": 0.24324324324324326,
+        "top": 0.21428571428571427,
+        "width": 0.5405405405405406,
+        "height": 0.42857142857142855
+      },
+      "alternatives": [
+        {
+          "id": "13ed2081724b16b6",
+          "title": "UNTITLED 2024, 70X60CM",
+          "score": 0.8742064393939394
+        },
+        {
+          "id": "c189ca7388da81a3",
+          "title": "UNTITLED 2024, 80X100CM",
+          "score": 0.5601950757575758
+        },
+        {
+          "id": "41507732cf8ef092",
+          "title": "Untitled 2025, 80x100cm",
+          "score": 0.5377329545454546
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.04.29.png",
+      "id": "15e26ac5ea2ab3f3",
+      "title": "UNTITLED 2025, 60X70CM",
+      "score": 0.8934905303030303,
+      "margin": 0.19352272727272724,
+      "rank": 0,
+      "box": {
+        "left": 0.16216216216216217,
+        "top": 0.26785714285714285,
+        "width": 0.7027027027027027,
+        "height": 0.39285714285714285
+      },
+      "alternatives": [
+        {
+          "id": "15e26ac5ea2ab3f3",
+          "title": "UNTITLED 2025, 60X70CM",
+          "score": 0.8934905303030303
+        },
+        {
+          "id": "a17104e10a281fe5",
+          "title": "UNTITLED 2021, 70X60 cm",
+          "score": 0.699967803030303
+        },
+        {
+          "id": "aaff910e93933299",
+          "title": "DIALOGUES N14, 2021",
+          "score": 0.6991799242424241
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.04.38.png",
+      "id": "21a613d20e882512",
+      "title": "UNTITLED 2025, 38X48CM",
+      "score": 0.887594696969697,
+      "margin": 0.30467424242424235,
+      "rank": 0,
+      "box": {
+        "left": 0.1891891891891892,
+        "top": 0.26785714285714285,
+        "width": 0.6216216216216216,
+        "height": 0.3392857142857143
+      },
+      "alternatives": [
+        {
+          "id": "21a613d20e882512",
+          "title": "UNTITLED 2025, 38X48CM",
+          "score": 0.887594696969697
+        },
+        {
+          "id": "fb95e27173e8cb88",
+          "title": "UNTITLED 2024, 46X36CM",
+          "score": 0.5829204545454546
+        },
+        {
+          "id": "7f8fb57de3171350",
+          "title": "UNTITLED 2021, 190 x 160 CM",
+          "score": 0.5714810606060605
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.04.47.png",
+      "id": "025c66f19bac9ab0",
+      "title": "UNTITLED 2025, 100X80CM",
+      "score": 0.9087443181818182,
+      "margin": 0.3795151515151516,
+      "rank": 0,
+      "box": {
+        "left": 0.16216216216216217,
+        "top": 0.17857142857142858,
+        "width": 0.7027027027027027,
+        "height": 0.5714285714285714
+      },
+      "alternatives": [
+        {
+          "id": "025c66f19bac9ab0",
+          "title": "UNTITLED 2025, 100X80CM",
+          "score": 0.9087443181818182
+        },
+        {
+          "id": "76721779c72bbfae",
+          "title": "UNTITLED 2025, 150X150CM",
+          "score": 0.5292291666666666
+        },
+        {
+          "id": "ff0cf6032150946b",
+          "title": "UNTITLED 2026, 70X63CM",
+          "score": 0.479717803030303
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.04.56.png",
+      "id": "25f24c0c0b4125bb",
+      "title": "UNTITLED 2025, 160X130CM",
+      "score": 0.850467803030303,
+      "margin": 0.20674242424242417,
+      "rank": 0,
+      "box": {
+        "left": 0.1891891891891892,
+        "top": 0.25,
+        "width": 0.6216216216216216,
+        "height": 0.5
+      },
+      "alternatives": [
+        {
+          "id": "25f24c0c0b4125bb",
+          "title": "UNTITLED 2025, 160X130CM",
+          "score": 0.850467803030303
+        },
+        {
+          "id": "28f4053bddb5250d",
+          "title": "UNTITLED 2024, 160X130CM",
+          "score": 0.6437253787878788
+        },
+        {
+          "id": "cb1da9b9f68f0e56",
+          "title": "DIALOGUES IN BETWEEN II, 2021",
+          "score": 0.5969299242424242
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.05.03.png",
+      "id": "28de0b648ad00d1b",
+      "title": "UNTITLED 2026, 60X70CM",
+      "score": 0.8400795454545454,
+      "margin": 0.1664545454545454,
+      "rank": 0,
+      "box": {
+        "left": 0.10810810810810811,
+        "top": 0.26785714285714285,
+        "width": 0.8108108108108109,
+        "height": 0.44642857142857145
+      },
+      "alternatives": [
+        {
+          "id": "28de0b648ad00d1b",
+          "title": "UNTITLED 2026, 60X70CM",
+          "score": 0.8400795454545454
+        },
+        {
+          "id": "c57bf6982097fb93",
+          "title": "UNTITLED 2025, 110 X 150CM",
+          "score": 0.673625
+        },
+        {
+          "id": "0d04a006c930daea",
+          "title": "UNTITLED 2025, 130X160CM",
+          "score": 0.6479318181818181
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.05.13.png",
+      "id": "30e2735c08eedaa5",
+      "title": "UNTITLED 2025, 260X190CM",
+      "score": 0.7582253787878788,
+      "margin": 0.07982954545454546,
+      "rank": 0,
+      "box": {
+        "left": 0.08108108108108109,
+        "top": 0.32142857142857145,
+        "width": 0.8108108108108109,
+        "height": 0.39285714285714285
+      },
+      "alternatives": [
+        {
+          "id": "30e2735c08eedaa5",
+          "title": "UNTITLED 2025, 260X190CM",
+          "score": 0.7582253787878788
+        },
+        {
+          "id": "25f24c0c0b4125bb",
+          "title": "UNTITLED 2025, 160X130CM",
+          "score": 0.6783958333333333
+        },
+        {
+          "id": "c6f3649eda23d4a8",
+          "title": "COLOR DIALGOGUES IV, 2021",
+          "score": 0.6331912878787879
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.05.22.png",
+      "id": "38ecab8ef56b6232",
+      "title": "UNTITLED 2026, 81X100CM",
+      "score": 0.9091837121212121,
+      "margin": 0.09161363636363629,
+      "rank": 0,
+      "box": {
+        "left": 0.10810810810810811,
+        "top": 0.26785714285714285,
+        "width": 0.7567567567567568,
+        "height": 0.4107142857142857
+      },
+      "alternatives": [
+        {
+          "id": "38ecab8ef56b6232",
+          "title": "UNTITLED 2026, 81X100CM",
+          "score": 0.9091837121212121
+        },
+        {
+          "id": "4fb3a12952b391db",
+          "title": "UNTITLED 2025, 260X190CM",
+          "score": 0.8175700757575758
+        },
+        {
+          "id": "30e2735c08eedaa5",
+          "title": "UNTITLED 2025, 260X190CM",
+          "score": 0.7889829545454545
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.05.31.png",
+      "id": "38edbb4819d8b16a",
+      "title": "UNTITLED 2024, 70X60CM",
+      "score": 0.8497329545454545,
+      "margin": 0.25049999999999994,
+      "rank": 0,
+      "box": {
+        "left": 0.21621621621621623,
+        "top": 0.21428571428571427,
+        "width": 0.5405405405405406,
+        "height": 0.42857142857142855
+      },
+      "alternatives": [
+        {
+          "id": "38edbb4819d8b16a",
+          "title": "UNTITLED 2024, 70X60CM",
+          "score": 0.8497329545454545
+        },
+        {
+          "id": "ed652f2fbfb8b55a",
+          "title": "UNTITLED 2021, 160X130CM",
+          "score": 0.5992329545454546
+        },
+        {
+          "id": "8c4d27bf79ab9d00",
+          "title": "UNTITLED 2024, 100X80CM",
+          "score": 0.5710435606060607
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.05.42.png",
+      "id": "58ac2a6a01d8788e",
+      "title": "UNTITLED 2025, 38X48CM",
+      "score": 0.860157196969697,
+      "margin": 0.211844696969697,
+      "rank": 0,
+      "box": {
+        "left": 0.16216216216216217,
+        "top": 0.26785714285714285,
+        "width": 0.7027027027027027,
+        "height": 0.39285714285714285
+      },
+      "alternatives": [
+        {
+          "id": "58ac2a6a01d8788e",
+          "title": "UNTITLED 2025, 38X48CM",
+          "score": 0.860157196969697
+        },
+        {
+          "id": "4ee5ef84674d10c6",
+          "title": "UNTITLED 2025, 26X36CM",
+          "score": 0.6483125
+        },
+        {
+          "id": "57516de5f24fdc37",
+          "title": "UNTITLED 2025, 205X160CM",
+          "score": 0.6323314393939394
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.05.49.png",
+      "id": "64a2b145d6850885",
+      "title": "UNTITLED 2024, 60X70CM",
+      "score": 0.9047594696969697,
+      "margin": 0.26751136363636363,
+      "rank": 0,
+      "box": {
+        "left": 0.21621621621621623,
+        "top": 0.26785714285714285,
+        "width": 0.5405405405405406,
+        "height": 0.30357142857142855
+      },
+      "alternatives": [
+        {
+          "id": "64a2b145d6850885",
+          "title": "UNTITLED 2024, 60X70CM",
+          "score": 0.9047594696969697
+        },
+        {
+          "id": "c189ca7388da81a3",
+          "title": "UNTITLED 2024, 80X100CM",
+          "score": 0.6372481060606061
+        },
+        {
+          "id": "5d86f96eb7003684",
+          "title": "UNTITLED 2025, 150X150CM",
+          "score": 0.6133276515151516
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.05.57.png",
+      "id": "70c9098d851d7ba4",
+      "title": "Untitled 2025, 70x60cm",
+      "score": 0.8427575757575758,
+      "margin": 0.251473484848485,
+      "rank": 0,
+      "box": {
+        "left": 0.21621621621621623,
+        "top": 0.16071428571428573,
+        "width": 0.5405405405405406,
+        "height": 0.42857142857142855
+      },
+      "alternatives": [
+        {
+          "id": "70c9098d851d7ba4",
+          "title": "Untitled 2025, 70x60cm",
+          "score": 0.8427575757575758
+        },
+        {
+          "id": "f3fd68b6ae4a390f",
+          "title": "UNTITLED 2023, 70X60cm",
+          "score": 0.5912840909090908
+        },
+        {
+          "id": "bd88dd994155fb53",
+          "title": "Untitled 2022, 76x63cm",
+          "score": 0.5487234848484848
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.06.06.png",
+      "id": "74f5e656bebbb2b7",
+      "title": "UNTITLED 2026, 70X63CM",
+      "score": 0.7804034090909091,
+      "margin": 0.14037121212121217,
+      "rank": 0,
+      "box": {
+        "left": 0.13513513513513514,
+        "top": 0.21428571428571427,
+        "width": 0.7027027027027027,
+        "height": 0.5535714285714286
+      },
+      "alternatives": [
+        {
+          "id": "74f5e656bebbb2b7",
+          "title": "UNTITLED 2026, 70X63CM",
+          "score": 0.7804034090909091
+        },
+        {
+          "id": "28de0b648ad00d1b",
+          "title": "UNTITLED 2026, 60X70CM",
+          "score": 0.6400321969696969
+        },
+        {
+          "id": "0d04a006c930daea",
+          "title": "UNTITLED 2025, 130X160CM",
+          "score": 0.5779867424242424
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.06.15.png",
+      "id": "80fd80c7f6bd8488",
+      "title": "UNTITLED 2024, 46X36CM",
+      "score": 0.8595397727272727,
+      "margin": 0.24509090909090903,
+      "rank": 0,
+      "box": {
+        "left": 0.1891891891891892,
+        "top": 0.21428571428571427,
+        "width": 0.6216216216216216,
+        "height": 0.3392857142857143
+      },
+      "alternatives": [
+        {
+          "id": "80fd80c7f6bd8488",
+          "title": "UNTITLED 2024, 46X36CM",
+          "score": 0.8595397727272727
+        },
+        {
+          "id": "fcd0540a1c8fd8a8",
+          "title": "Untitled 2022, 193x163cm",
+          "score": 0.6144488636363636
+        },
+        {
+          "id": "c189ca7388da81a3",
+          "title": "UNTITLED 2024, 80X100CM",
+          "score": 0.5886193181818182
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.06.23.png",
+      "id": "091e8ff4fa68f72a",
+      "title": "UNTITLED 2026, 60X73CM",
+      "score": 0.8639678030303031,
+      "margin": 0.1896022727272728,
+      "rank": 0,
+      "box": {
+        "left": 0.10810810810810811,
+        "top": 0.26785714285714285,
+        "width": 0.8108108108108109,
+        "height": 0.44642857142857145
+      },
+      "alternatives": [
+        {
+          "id": "091e8ff4fa68f72a",
+          "title": "UNTITLED 2026, 60X73CM",
+          "score": 0.8639678030303031
+        },
+        {
+          "id": "c57bf6982097fb93",
+          "title": "UNTITLED 2025, 110 X 150CM",
+          "score": 0.6743655303030303
+        },
+        {
+          "id": "28f4053bddb5250d",
+          "title": "UNTITLED 2024, 160X130CM",
+          "score": 0.6602291666666666
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.06.32.png",
+      "id": "238f00fad9addaf6",
+      "title": "UNTITLED 2023, 67X57CM",
+      "score": 0.8055208333333334,
+      "margin": 0.050674242424242455,
+      "rank": 0,
+      "box": {
+        "left": 0.2702702702702703,
+        "top": 0.21428571428571427,
+        "width": 0.4594594594594595,
+        "height": 0.375
+      },
+      "alternatives": [
+        {
+          "id": "238f00fad9addaf6",
+          "title": "UNTITLED 2023, 67X57CM",
+          "score": 0.8055208333333334
+        },
+        {
+          "id": "0cb7d53f742cf7ee",
+          "title": "UNTITLED 2025, 110X150CM",
+          "score": 0.7548465909090909
+        },
+        {
+          "id": "afe549a39e46e804",
+          "title": "UNTITLED 2023, 100X80cm",
+          "score": 0.6851231060606061
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.06.40.png",
+      "id": "466e663cbb8a4cf1",
+      "title": "UNTITLED 2023, 60X50CM",
+      "score": 0.8332651515151515,
+      "margin": 0.16078409090909085,
+      "rank": 0,
+      "box": {
+        "left": 0.2702702702702703,
+        "top": 0.21428571428571427,
+        "width": 0.4594594594594595,
+        "height": 0.375
+      },
+      "alternatives": [
+        {
+          "id": "466e663cbb8a4cf1",
+          "title": "UNTITLED 2023, 60X50CM",
+          "score": 0.8332651515151515
+        },
+        {
+          "id": "d880d4cbd0097fdc",
+          "title": "UTITLED 2024, 60X70CM",
+          "score": 0.6724810606060606
+        },
+        {
+          "id": "c189ca7388da81a3",
+          "title": "UNTITLED 2024, 80X100CM",
+          "score": 0.6498409090909091
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.06.48.png",
+      "id": "517a3c32520b8e3a",
+      "title": "UNTITLED 2024, 60X70",
+      "score": 0.8486666666666667,
+      "margin": 0.3092689393939394,
+      "rank": 0,
+      "box": {
+        "left": 0.16216216216216217,
+        "top": 0.26785714285714285,
+        "width": 0.6216216216216216,
+        "height": 0.3392857142857143
+      },
+      "alternatives": [
+        {
+          "id": "517a3c32520b8e3a",
+          "title": "UNTITLED 2024, 60X70",
+          "score": 0.8486666666666667
+        },
+        {
+          "id": "0d04a006c930daea",
+          "title": "UNTITLED 2025, 130X160CM",
+          "score": 0.5393977272727273
+        },
+        {
+          "id": "884f588e34c22329",
+          "title": "UNTITLED 2021, 220X270CM",
+          "score": 0.48454166666666665
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.06.56.png",
+      "id": "538b312eb6fd6862",
+      "title": "UNTITLED 2023, 100X80cm",
+      "score": 0.8587859848484849,
+      "margin": 0.2340416666666667,
+      "rank": 0,
+      "box": {
+        "left": 0.1891891891891892,
+        "top": 0.21428571428571427,
+        "width": 0.6216216216216216,
+        "height": 0.5
+      },
+      "alternatives": [
+        {
+          "id": "538b312eb6fd6862",
+          "title": "UNTITLED 2023, 100X80cm",
+          "score": 0.8587859848484849
+        },
+        {
+          "id": "8c4d27bf79ab9d00",
+          "title": "UNTITLED 2024, 100X80CM",
+          "score": 0.6247443181818182
+        },
+        {
+          "id": "2793d079f032c161",
+          "title": "UNTITLED 2025, 100X80CM",
+          "score": 0.5991458333333333
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.07.04.png",
+      "id": "583e6e3517d7d515",
+      "title": "UNTITLED 2025, 26X32CM",
+      "score": 0.9007215909090909,
+      "margin": 0.35637878787878785,
+      "rank": 0,
+      "box": {
+        "left": 0.16216216216216217,
+        "top": 0.26785714285714285,
+        "width": 0.7027027027027027,
+        "height": 0.39285714285714285
+      },
+      "alternatives": [
+        {
+          "id": "583e6e3517d7d515",
+          "title": "UNTITLED 2025, 26X32CM",
+          "score": 0.9007215909090909
+        },
+        {
+          "id": "76721779c72bbfae",
+          "title": "UNTITLED 2025, 150X150CM",
+          "score": 0.544342803030303
+        },
+        {
+          "id": "0da592a4c134706a",
+          "title": "UNTITLED 2025, 100X80CM",
+          "score": 0.4094223484848485
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.07.12.png",
+      "id": "825a0c2fc7d3f338",
+      "title": "Untitled 2022, 73 x 63 cm",
+      "score": 0.8244299242424242,
+      "margin": 0.2844318181818182,
+      "rank": 0,
+      "box": {
+        "left": 0.16216216216216217,
+        "top": 0.25,
+        "width": 0.6216216216216216,
+        "height": 0.48214285714285715
+      },
+      "alternatives": [
+        {
+          "id": "825a0c2fc7d3f338",
+          "title": "Untitled 2022, 73 x 63 cm",
+          "score": 0.8244299242424242
+        },
+        {
+          "id": "fcd0540a1c8fd8a8",
+          "title": "Untitled 2022, 193x163cm",
+          "score": 0.539998106060606
+        },
+        {
+          "id": "0cb35503e6789d8c",
+          "title": "UNTITLED 2023, 190X160cm",
+          "score": 0.5247329545454545
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.07.21.png",
+      "id": "2509f4eb5c9bd1c4",
+      "title": "UNTITLED 2025, 160X130CM",
+      "score": 0.8908882575757576,
+      "margin": 0.2721287878787879,
+      "rank": 0,
+      "box": {
+        "left": 0.1891891891891892,
+        "top": 0.21428571428571427,
+        "width": 0.6216216216216216,
+        "height": 0.5
+      },
+      "alternatives": [
+        {
+          "id": "2509f4eb5c9bd1c4",
+          "title": "UNTITLED 2025, 160X130CM",
+          "score": 0.8908882575757576
+        },
+        {
+          "id": "91276fe1957c86e0",
+          "title": "UNTITLED 2025, 190x160cm",
+          "score": 0.6187594696969697
+        },
+        {
+          "id": "76721779c72bbfae",
+          "title": "UNTITLED 2025, 150X150CM",
+          "score": 0.5297708333333333
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.07.30.png",
+      "id": "2793d079f032c161",
+      "title": "UNTITLED 2025, 100X80CM",
+      "score": 0.851467803030303,
+      "margin": 0.21293560606060602,
+      "rank": 0,
+      "box": {
+        "left": 0.21621621621621623,
+        "top": 0.16071428571428573,
+        "width": 0.5405405405405406,
+        "height": 0.44642857142857145
+      },
+      "alternatives": [
+        {
+          "id": "2793d079f032c161",
+          "title": "UNTITLED 2025, 100X80CM",
+          "score": 0.851467803030303
+        },
+        {
+          "id": "f3fd68b6ae4a390f",
+          "title": "UNTITLED 2023, 70X60cm",
+          "score": 0.638532196969697
+        },
+        {
+          "id": "7f8fb57de3171350",
+          "title": "UNTITLED 2021, 190 x 160 CM",
+          "score": 0.543876893939394
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.07.38.png",
+      "id": "03951fbb306015ad",
+      "title": "UNTITLED 2023, 70X60cm",
+      "score": 0.8543901515151515,
+      "margin": 0.08850378787878788,
+      "rank": 0,
+      "box": {
+        "left": 0.2702702702702703,
+        "top": 0.26785714285714285,
+        "width": 0.4594594594594595,
+        "height": 0.375
+      },
+      "alternatives": [
+        {
+          "id": "03951fbb306015ad",
+          "title": "UNTITLED 2023, 70X60cm",
+          "score": 0.8543901515151515
+        },
+        {
+          "id": "a17104e10a281fe5",
+          "title": "UNTITLED 2021, 70X60 cm",
+          "score": 0.7658863636363636
+        },
+        {
+          "id": "afe549a39e46e804",
+          "title": "UNTITLED 2023, 100X80cm",
+          "score": 0.7349318181818182
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.07.47.png",
+      "id": "9090a52648a45a76",
+      "title": "Untitled 2022, 70x60cm",
+      "score": 0.8853503787878788,
+      "margin": 0.2693333333333333,
+      "rank": 0,
+      "box": {
+        "left": 0.13513513513513514,
+        "top": 0.14285714285714285,
+        "width": 0.7567567567567568,
+        "height": 0.6071428571428571
+      },
+      "alternatives": [
+        {
+          "id": "9090a52648a45a76",
+          "title": "Untitled 2022, 70x60cm",
+          "score": 0.8853503787878788
+        },
+        {
+          "id": "5d86f96eb7003684",
+          "title": "UNTITLED 2025, 150X150CM",
+          "score": 0.6160170454545455
+        },
+        {
+          "id": "4d6e3f4c2277adaf",
+          "title": "RECENT WORKS 2017 (130×100)",
+          "score": 0.5752443181818181
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.07.56.png",
+      "id": "57516de5f24fdc37",
+      "title": "UNTITLED 2025, 205X160CM",
+      "score": 0.8850549242424243,
+      "margin": 0.18483712121212126,
+      "rank": 0,
+      "box": {
+        "left": 0.08108108108108109,
+        "top": 0.26785714285714285,
+        "width": 0.8108108108108109,
+        "height": 0.4107142857142857
+      },
+      "alternatives": [
+        {
+          "id": "57516de5f24fdc37",
+          "title": "UNTITLED 2025, 205X160CM",
+          "score": 0.8850549242424243
+        },
+        {
+          "id": "4fb3a12952b391db",
+          "title": "UNTITLED 2025, 260X190CM",
+          "score": 0.700217803030303
+        },
+        {
+          "id": "0d04a006c930daea",
+          "title": "UNTITLED 2025, 130X160CM",
+          "score": 0.6354678030303029
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.08.07.png",
+      "id": "91276fe1957c86e0",
+      "title": "UNTITLED 2025, 190x160cm",
+      "score": 0.882875,
+      "margin": 0.24609848484848473,
+      "rank": 0,
+      "box": {
+        "left": 0.16216216216216217,
+        "top": 0.21428571428571427,
+        "width": 0.7027027027027027,
+        "height": 0.5535714285714286
+      },
+      "alternatives": [
+        {
+          "id": "91276fe1957c86e0",
+          "title": "UNTITLED 2025, 190x160cm",
+          "score": 0.882875
+        },
+        {
+          "id": "2509f4eb5c9bd1c4",
+          "title": "UNTITLED 2025, 160X130CM",
+          "score": 0.6367765151515152
+        },
+        {
+          "id": "25f24c0c0b4125bb",
+          "title": "UNTITLED 2025, 160X130CM",
+          "score": 0.6200643939393939
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.08.16.png",
+      "id": "908571beaa329002",
+      "title": "Goauche on paper 65×55 cm (2)",
+      "score": 0.7391553030303031,
+      "margin": 0.018246212121212135,
+      "rank": 0,
+      "box": {
+        "left": 0.23809523809523808,
+        "top": 0.35714285714285715,
+        "width": 0.5476190476190477,
+        "height": 0.48214285714285715
+      },
+      "alternatives": [
+        {
+          "id": "908571beaa329002",
+          "title": "Goauche on paper 65×55 cm (2)",
+          "score": 0.7391553030303031
+        },
+        {
+          "id": "0e0b9e2dbfbac0fa",
+          "title": "Gouache on paper 65x55cm (4)",
+          "score": 0.7209090909090909
+        },
+        {
+          "id": "d22b390bb96f14db",
+          "title": "Collage&gouache on paper 115×105 cm",
+          "score": 0.6934810606060606
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.08.25.png",
+      "id": "6606470fe3eeb3f8",
+      "title": "UNTITLED 2025, 70X60CM",
+      "score": 0.8345662878787878,
+      "margin": 0.23439772727272723,
+      "rank": 0,
+      "box": {
+        "left": 0.13513513513513514,
+        "top": 0.17857142857142858,
+        "width": 0.7567567567567568,
+        "height": 0.6071428571428571
+      },
+      "alternatives": [
+        {
+          "id": "6606470fe3eeb3f8",
+          "title": "UNTITLED 2025, 70X60CM",
+          "score": 0.8345662878787878
+        },
+        {
+          "id": "e526231ae1110f7f",
+          "title": "UNTITLED 2026, 160X130CM",
+          "score": 0.6001685606060606
+        },
+        {
+          "id": "30e2735c08eedaa5",
+          "title": "UNTITLED 2025, 260X190CM",
+          "score": 0.5674602272727273
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.08.33.png",
+      "id": "8023468c6dc31e11",
+      "title": "UNTITLED 2026, 160X190CM",
+      "score": 0.8084810606060606,
+      "margin": 0.21484848484848484,
+      "rank": 0,
+      "box": {
+        "left": 0.16216216216216217,
+        "top": 0.26785714285714285,
+        "width": 0.7567567567567568,
+        "height": 0.42857142857142855
+      },
+      "alternatives": [
+        {
+          "id": "8023468c6dc31e11",
+          "title": "UNTITLED 2026, 160X190CM",
+          "score": 0.8084810606060606
+        },
+        {
+          "id": "28f4053bddb5250d",
+          "title": "UNTITLED 2024, 160X130CM",
+          "score": 0.5936325757575758
+        },
+        {
+          "id": "2509f4eb5c9bd1c4",
+          "title": "UNTITLED 2025, 160X130CM",
+          "score": 0.5220303030303031
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.08.42.png",
+      "id": "36972821ce6b0d02",
+      "title": "UNTITLED 2025, 100X80CM",
+      "score": 0.8572537878787879,
+      "margin": 0.2644015151515152,
+      "rank": 0,
+      "box": {
+        "left": 0.21621621621621623,
+        "top": 0.16071428571428573,
+        "width": 0.5405405405405406,
+        "height": 0.42857142857142855
+      },
+      "alternatives": [
+        {
+          "id": "36972821ce6b0d02",
+          "title": "UNTITLED 2025, 100X80CM",
+          "score": 0.8572537878787879
+        },
+        {
+          "id": "79daf322662503aa",
+          "title": "UNTITLED 2022, 165 x 132",
+          "score": 0.5928522727272727
+        },
+        {
+          "id": "84da8f4c88d30754",
+          "title": "COLOR DIALOGUES V, 2021",
+          "score": 0.5897575757575757
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.08.50.png",
+      "id": "41507732cf8ef092",
+      "title": "Untitled 2025, 80x100cm",
+      "score": 0.9240454545454545,
+      "margin": 0.20246212121212115,
+      "rank": 0,
+      "box": {
+        "left": 0.13513513513513514,
+        "top": 0.26785714285714285,
+        "width": 0.7567567567567568,
+        "height": 0.4107142857142857
+      },
+      "alternatives": [
+        {
+          "id": "41507732cf8ef092",
+          "title": "Untitled 2025, 80x100cm",
+          "score": 0.9240454545454545
+        },
+        {
+          "id": "517a3c32520b8e3a",
+          "title": "UNTITLED 2024, 60X70",
+          "score": 0.7215833333333334
+        },
+        {
+          "id": "5d86f96eb7003684",
+          "title": "UNTITLED 2025, 150X150CM",
+          "score": 0.6184507575757576
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.08.53.png",
+      "id": "76721779c72bbfae",
+      "title": "UNTITLED 2025, 150X150CM",
+      "score": 0.8293011363636363,
+      "margin": 0.23820833333333324,
+      "rank": 0,
+      "box": {
+        "left": 0.21621621621621623,
+        "top": 0.26785714285714285,
+        "width": 0.6216216216216216,
+        "height": 0.4107142857142857
+      },
+      "alternatives": [
+        {
+          "id": "76721779c72bbfae",
+          "title": "UNTITLED 2025, 150X150CM",
+          "score": 0.8293011363636363
+        },
+        {
+          "id": "2509f4eb5c9bd1c4",
+          "title": "UNTITLED 2025, 160X130CM",
+          "score": 0.5910928030303031
+        },
+        {
+          "id": "ff0cf6032150946b",
+          "title": "UNTITLED 2026, 70X63CM",
+          "score": 0.5754981060606061
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.09.06.png",
+      "id": "a3cc2277c7e59a4f",
+      "title": "UNTITLED 2025, 38X48 CM",
+      "score": 0.8838162878787879,
+      "margin": 0.23059469696969703,
+      "rank": 0,
+      "box": {
+        "left": 0.21621621621621623,
+        "top": 0.26785714285714285,
+        "width": 0.6216216216216216,
+        "height": 0.3392857142857143
+      },
+      "alternatives": [
+        {
+          "id": "a3cc2277c7e59a4f",
+          "title": "UNTITLED 2025, 38X48 CM",
+          "score": 0.8838162878787879
+        },
+        {
+          "id": "2509f4eb5c9bd1c4",
+          "title": "UNTITLED 2025, 160X130CM",
+          "score": 0.6532215909090908
+        },
+        {
+          "id": "0be23ea7c8dfec29",
+          "title": "UNTITLED 2024, 60X70CM",
+          "score": 0.5660056818181818
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.09.13.png",
+      "id": "a7fc0bc8186731ab",
+      "title": "UNTITLED 2026, 80X100CM",
+      "score": 0.8541496212121212,
+      "margin": 0.12100757575757581,
+      "rank": 0,
+      "box": {
+        "left": 0.13513513513513514,
+        "top": 0.26785714285714285,
+        "width": 0.7567567567567568,
+        "height": 0.4107142857142857
+      },
+      "alternatives": [
+        {
+          "id": "a7fc0bc8186731ab",
+          "title": "UNTITLED 2026, 80X100CM",
+          "score": 0.8541496212121212
+        },
+        {
+          "id": "4fb3a12952b391db",
+          "title": "UNTITLED 2025, 260X190CM",
+          "score": 0.7331420454545454
+        },
+        {
+          "id": "ff9ac5003e43fd22",
+          "title": "UNTITLED 2025, 40X50CM",
+          "score": 0.6990397727272727
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.09.21.png",
+      "id": "a09d8ad7c0befc64",
+      "title": "UNTITLED 2023, 190X160CM",
+      "score": 0.8578238636363636,
+      "margin": 0.2702916666666667,
+      "rank": 0,
+      "box": {
+        "left": 0.1891891891891892,
+        "top": 0.21428571428571427,
+        "width": 0.6216216216216216,
+        "height": 0.48214285714285715
+      },
+      "alternatives": [
+        {
+          "id": "a09d8ad7c0befc64",
+          "title": "UNTITLED 2023, 190X160CM",
+          "score": 0.8578238636363636
+        },
+        {
+          "id": "aaff910e93933299",
+          "title": "DIALOGUES N14, 2021",
+          "score": 0.5875321969696969
+        },
+        {
+          "id": "e526231ae1110f7f",
+          "title": "UNTITLED 2026, 160X130CM",
+          "score": 0.5415359848484849
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.09.29.png",
+      "id": "a35eb88d6ff1f830",
+      "title": "UNTITLED 2025, 31X25,5CM",
+      "score": 0.9329450757575758,
+      "margin": 0.3539204545454545,
+      "rank": 0,
+      "box": {
+        "left": 0.2702702702702703,
+        "top": 0.21428571428571427,
+        "width": 0.4594594594594595,
+        "height": 0.35714285714285715
+      },
+      "alternatives": [
+        {
+          "id": "a35eb88d6ff1f830",
+          "title": "UNTITLED 2025, 31X25,5CM",
+          "score": 0.9329450757575758
+        },
+        {
+          "id": "af548000c0bd1fc7",
+          "title": "UNTITLED 2025, 26X36CM",
+          "score": 0.5790246212121213
+        },
+        {
+          "id": "f69091f420e7f773",
+          "title": "UNTITLED 2025, 26X36CM",
+          "score": 0.5397670454545455
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.09.38.png",
+      "id": "a51ab1bbc627f3c7",
+      "title": "Untitled 2026, 110x150cm",
+      "score": 0.6868901515151515,
+      "margin": 0.11154545454545461,
+      "rank": 0,
+      "box": {
+        "left": 0.13513513513513514,
+        "top": 0.26785714285714285,
+        "width": 0.7027027027027027,
+        "height": 0.3392857142857143
+      },
+      "alternatives": [
+        {
+          "id": "a51ab1bbc627f3c7",
+          "title": "Untitled 2026, 110x150cm",
+          "score": 0.6868901515151515
+        },
+        {
+          "id": "76721779c72bbfae",
+          "title": "UNTITLED 2025, 150X150CM",
+          "score": 0.5753446969696969
+        },
+        {
+          "id": "a0568bf580954ac6",
+          "title": "COLOR DIALOGUES III, 2021",
+          "score": 0.5736553030303031
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.09.47.png",
+      "id": "a95e39b0a74b09f5",
+      "title": "works 2016 (116×90)",
+      "score": 0.8075909090909091,
+      "margin": 0.041772727272727295,
+      "rank": 0,
+      "box": {
+        "left": 0.19148936170212766,
+        "top": 0.07142857142857142,
+        "width": 0.7021276595744681,
+        "height": 0.7678571428571429
+      },
+      "alternatives": [
+        {
+          "id": "a95e39b0a74b09f5",
+          "title": "works 2016 (116×90)",
+          "score": 0.8075909090909091
+        },
+        {
+          "id": "d22b390bb96f14db",
+          "title": "Collage&gouache on paper 115×105 cm",
+          "score": 0.7658181818181818
+        },
+        {
+          "id": "ceebdf22c5794ada",
+          "title": "Collage&gouache on paper 115x105cm",
+          "score": 0.712939393939394
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.09.57.png",
+      "id": "a0568bf580954ac6",
+      "title": "COLOR DIALOGUES III, 2021",
+      "score": 0.8135984848484848,
+      "margin": 0.20323106060606067,
+      "rank": 0,
+      "box": {
+        "left": 0.16216216216216217,
+        "top": 0.21428571428571427,
+        "width": 0.6216216216216216,
+        "height": 0.48214285714285715
+      },
+      "alternatives": [
+        {
+          "id": "a0568bf580954ac6",
+          "title": "COLOR DIALOGUES III, 2021",
+          "score": 0.8135984848484848
+        },
+        {
+          "id": "cb1da9b9f68f0e56",
+          "title": "DIALOGUES IN BETWEEN II, 2021",
+          "score": 0.6103674242424242
+        },
+        {
+          "id": "84da8f4c88d30754",
+          "title": "COLOR DIALOGUES V, 2021",
+          "score": 0.6086136363636363
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.10.07.png",
+      "id": "a517913f143c4532",
+      "title": "UNTITLED 2023, 100X80cm",
+      "score": 0.911280303030303,
+      "margin": 0.38525,
+      "rank": 0,
+      "box": {
+        "left": 0.21621621621621623,
+        "top": 0.21428571428571427,
+        "width": 0.6216216216216216,
+        "height": 0.5
+      },
+      "alternatives": [
+        {
+          "id": "a517913f143c4532",
+          "title": "UNTITLED 2023, 100X80cm",
+          "score": 0.911280303030303
+        },
+        {
+          "id": "1f238ad1d8b9ed3a",
+          "title": "Mixed technique 160x130cm",
+          "score": 0.5260303030303031
+        },
+        {
+          "id": "a0568bf580954ac6",
+          "title": "COLOR DIALOGUES III, 2021",
+          "score": 0.4721590909090909
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.10.15.png",
+      "id": "aac27f8277f78f77",
+      "title": "UNTITLED 2026, 160X190CM",
+      "score": 0.9189924242424242,
+      "margin": 0.1445643939393939,
+      "rank": 0,
+      "box": {
+        "left": 0.10810810810810811,
+        "top": 0.26785714285714285,
+        "width": 0.8108108108108109,
+        "height": 0.44642857142857145
+      },
+      "alternatives": [
+        {
+          "id": "aac27f8277f78f77",
+          "title": "UNTITLED 2026, 160X190CM",
+          "score": 0.9189924242424242
+        },
+        {
+          "id": "7f8fb57de3171350",
+          "title": "UNTITLED 2021, 190 x 160 CM",
+          "score": 0.7744280303030303
+        },
+        {
+          "id": "c57bf6982097fb93",
+          "title": "UNTITLED 2025, 110 X 150CM",
+          "score": 0.7653068181818181
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.10.23.png",
+      "id": "aaff910e93933299",
+      "title": "DIALOGUES N14, 2021",
+      "score": 0.8185795454545455,
+      "margin": 0.14741666666666675,
+      "rank": 0,
+      "box": {
+        "left": 0.13513513513513514,
+        "top": 0.21428571428571427,
+        "width": 0.7027027027027027,
+        "height": 0.5535714285714286
+      },
+      "alternatives": [
+        {
+          "id": "aaff910e93933299",
+          "title": "DIALOGUES N14, 2021",
+          "score": 0.8185795454545455
+        },
+        {
+          "id": "0cb7d53f742cf7ee",
+          "title": "UNTITLED 2025, 110X150CM",
+          "score": 0.6711628787878787
+        },
+        {
+          "id": "fcd0540a1c8fd8a8",
+          "title": "Untitled 2022, 193x163cm",
+          "score": 0.626125
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.10.42.png",
+      "id": "ac32c6660765f1ba",
+      "title": "UNTITLED 2025, 160X130CM",
+      "score": 0.8415795454545455,
+      "margin": 0.23282196969696978,
+      "rank": 0,
+      "box": {
+        "left": 0.1891891891891892,
+        "top": 0.21428571428571427,
+        "width": 0.6216216216216216,
+        "height": 0.5
+      },
+      "alternatives": [
+        {
+          "id": "ac32c6660765f1ba",
+          "title": "UNTITLED 2025, 160X130CM",
+          "score": 0.8415795454545455
+        },
+        {
+          "id": "70c9098d851d7ba4",
+          "title": "Untitled 2025, 70x60cm",
+          "score": 0.6087575757575757
+        },
+        {
+          "id": "3fb979cb3d894999",
+          "title": "UNTITLED 2025, 100X80CM",
+          "score": 0.5713787878787879
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.10.49.png",
+      "id": "aeda149a83200cbe",
+      "title": "UNTITLED 2026, 73X60CM",
+      "score": 0.9247481060606061,
+      "margin": 0.42879545454545454,
+      "rank": 0,
+      "box": {
+        "left": 0.16216216216216217,
+        "top": 0.21428571428571427,
+        "width": 0.7027027027027027,
+        "height": 0.5535714285714286
+      },
+      "alternatives": [
+        {
+          "id": "aeda149a83200cbe",
+          "title": "UNTITLED 2026, 73X60CM",
+          "score": 0.9247481060606061
+        },
+        {
+          "id": "a51ab1bbc627f3c7",
+          "title": "Untitled 2026, 110x150cm",
+          "score": 0.49595265151515155
+        },
+        {
+          "id": "84da8f4c88d30754",
+          "title": "COLOR DIALOGUES V, 2021",
+          "score": 0.4623314393939394
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.11.00.png",
+      "id": "aee21b9ab19a1dd1",
+      "title": "UNTITLED 2026, 162X130CM",
+      "score": 0.8031098484848485,
+      "margin": 0.16578409090909085,
+      "rank": 0,
+      "box": {
+        "left": 0.1891891891891892,
+        "top": 0.21428571428571427,
+        "width": 0.6216216216216216,
+        "height": 0.5
+      },
+      "alternatives": [
+        {
+          "id": "aee21b9ab19a1dd1",
+          "title": "UNTITLED 2026, 162X130CM",
+          "score": 0.8031098484848485
+        },
+        {
+          "id": "ff0cf6032150946b",
+          "title": "UNTITLED 2026, 70X63CM",
+          "score": 0.6373257575757576
+        },
+        {
+          "id": "25f24c0c0b4125bb",
+          "title": "UNTITLED 2025, 160X130CM",
+          "score": 0.5942537878787879
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.11.07.png",
+      "id": "af548000c0bd1fc7",
+      "title": "UNTITLED 2025, 26X36CM",
+      "score": 0.846405303030303,
+      "margin": 0.19221590909090913,
+      "rank": 0,
+      "box": {
+        "left": 0.10810810810810811,
+        "top": 0.26785714285714285,
+        "width": 0.7567567567567568,
+        "height": 0.375
+      },
+      "alternatives": [
+        {
+          "id": "af548000c0bd1fc7",
+          "title": "UNTITLED 2025, 26X36CM",
+          "score": 0.846405303030303
+        },
+        {
+          "id": "71c848b394254b54",
+          "title": "Untitled 2024, 160×130 cm",
+          "score": 0.6541893939393939
+        },
+        {
+          "id": "a35eb88d6ff1f830",
+          "title": "UNTITLED 2025, 31X25,5CM",
+          "score": 0.6046136363636363
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.11.17.png",
+      "id": "b0eadd2d1b158779",
+      "title": "UNTITLED 2025, 70X60 CM",
+      "score": 0.8332632575757576,
+      "margin": 0.3026022727272727,
+      "rank": 0,
+      "box": {
+        "left": 0.13513513513513514,
+        "top": 0.21428571428571427,
+        "width": 0.7027027027027027,
+        "height": 0.5535714285714286
+      },
+      "alternatives": [
+        {
+          "id": "b0eadd2d1b158779",
+          "title": "UNTITLED 2025, 70X60 CM",
+          "score": 0.8332632575757576
+        },
+        {
+          "id": "025c66f19bac9ab0",
+          "title": "UNTITLED 2025, 100X80CM",
+          "score": 0.5306609848484849
+        },
+        {
+          "id": "2b015429ab5daadd",
+          "title": "UNTITLED 2025, 70X60CM",
+          "score": 0.4899640151515152
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.11.24.png",
+      "id": "b8d99bac011929bc",
+      "title": "Untitled 2024, 26x36cm",
+      "score": 0.9027784090909091,
+      "margin": 0.2501628787878788,
+      "rank": 0,
+      "box": {
+        "left": 0.32432432432432434,
+        "top": 0.2857142857142857,
+        "width": 0.3783783783783784,
+        "height": 0.19642857142857142
+      },
+      "alternatives": [
+        {
+          "id": "b8d99bac011929bc",
+          "title": "Untitled 2024, 26x36cm",
+          "score": 0.9027784090909091
+        },
+        {
+          "id": "af548000c0bd1fc7",
+          "title": "UNTITLED 2025, 26X36CM",
+          "score": 0.6526155303030303
+        },
+        {
+          "id": "71c848b394254b54",
+          "title": "Untitled 2024, 160×130 cm",
+          "score": 0.631782196969697
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.11.34.png",
+      "id": "b82760ddbe9346b1",
+      "title": "Gouache on paper 100x80cm",
+      "score": 0.7581306818181819,
+      "margin": 0.11257575757575766,
+      "rank": 0,
+      "box": {
+        "left": 0.16666666666666666,
+        "top": 0.25,
+        "width": 0.6190476190476191,
+        "height": 0.625
+      },
+      "alternatives": [
+        {
+          "id": "b82760ddbe9346b1",
+          "title": "Gouache on paper 100x80cm",
+          "score": 0.7581306818181819
+        },
+        {
+          "id": "ee7ae094021e5399",
+          "title": "Gouache on paper 100x80cm",
+          "score": 0.6455549242424242
+        },
+        {
+          "id": "07a7cf8b21cf9fa2",
+          "title": "Gouache on paper 100x80cm",
+          "score": 0.6373882575757576
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.11.41.png",
+      "id": "bd88dd994155fb53",
+      "title": "Untitled 2022, 76x63cm",
+      "score": 0.8561761363636364,
+      "margin": 0.32021590909090913,
+      "rank": 0,
+      "box": {
+        "left": 0.21621621621621623,
+        "top": 0.21428571428571427,
+        "width": 0.5405405405405406,
+        "height": 0.42857142857142855
+      },
+      "alternatives": [
+        {
+          "id": "bd88dd994155fb53",
+          "title": "Untitled 2022, 76x63cm",
+          "score": 0.8561761363636364
+        },
+        {
+          "id": "e5aa4985ff3a69b9",
+          "title": "UNTITLED 2025, 100X80CM",
+          "score": 0.5359602272727273
+        },
+        {
+          "id": "13c43ea8a2c6879d",
+          "title": "UNTITLED 2025, 160X130CM",
+          "score": 0.5295208333333333
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.12.13.png",
+      "id": "bfcda1e421c5f40d",
+      "title": "UNTITLED 2023, 60X50CM",
+      "score": 0.8457556818181818,
+      "margin": 0.2247424242424242,
+      "rank": 0,
+      "box": {
+        "left": 0.2702702702702703,
+        "top": 0.21428571428571427,
+        "width": 0.4594594594594595,
+        "height": 0.375
+      },
+      "alternatives": [
+        {
+          "id": "bfcda1e421c5f40d",
+          "title": "UNTITLED 2023, 60X50CM",
+          "score": 0.8457556818181818
+        },
+        {
+          "id": "a35eb88d6ff1f830",
+          "title": "UNTITLED 2025, 31X25,5CM",
+          "score": 0.6210132575757576
+        },
+        {
+          "id": "b8d99bac011929bc",
+          "title": "Untitled 2024, 26x36cm",
+          "score": 0.5722897727272727
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.12.24.png",
+      "id": "c6f3649eda23d4a8",
+      "title": "COLOR DIALGOGUES IV, 2021",
+      "score": 0.7708446969696969,
+      "margin": 0.1442575757575757,
+      "rank": 0,
+      "box": {
+        "left": 0.16216216216216217,
+        "top": 0.26785714285714285,
+        "width": 0.7027027027027027,
+        "height": 0.32142857142857145
+      },
+      "alternatives": [
+        {
+          "id": "c6f3649eda23d4a8",
+          "title": "COLOR DIALGOGUES IV, 2021",
+          "score": 0.7708446969696969
+        },
+        {
+          "id": "84da8f4c88d30754",
+          "title": "COLOR DIALOGUES V, 2021",
+          "score": 0.6265871212121212
+        },
+        {
+          "id": "91276fe1957c86e0",
+          "title": "UNTITLED 2025, 190x160cm",
+          "score": 0.6156590909090909
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.12.32.png",
+      "id": "c57bf6982097fb93",
+      "title": "UNTITLED 2025, 110 X 150CM",
+      "score": 0.8181458333333333,
+      "margin": 0.15159469696969696,
+      "rank": 0,
+      "box": {
+        "left": 0.10810810810810811,
+        "top": 0.26785714285714285,
+        "width": 0.8108108108108109,
+        "height": 0.39285714285714285
+      },
+      "alternatives": [
+        {
+          "id": "c57bf6982097fb93",
+          "title": "UNTITLED 2025, 110 X 150CM",
+          "score": 0.8181458333333333
+        },
+        {
+          "id": "28f4053bddb5250d",
+          "title": "UNTITLED 2024, 160X130CM",
+          "score": 0.6665511363636364
+        },
+        {
+          "id": "0d04a006c930daea",
+          "title": "UNTITLED 2025, 130X160CM",
+          "score": 0.6247556818181819
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.12.40.png",
+      "id": "c189ca7388da81a3",
+      "title": "UNTITLED 2024, 80X100CM",
+      "score": 0.9268674242424242,
+      "margin": 0.20331439393939388,
+      "rank": 0,
+      "box": {
+        "left": 0.16216216216216217,
+        "top": 0.21428571428571427,
+        "width": 0.7027027027027027,
+        "height": 0.375
+      },
+      "alternatives": [
+        {
+          "id": "c189ca7388da81a3",
+          "title": "UNTITLED 2024, 80X100CM",
+          "score": 0.9268674242424242
+        },
+        {
+          "id": "64a2b145d6850885",
+          "title": "UNTITLED 2024, 60X70CM",
+          "score": 0.7235530303030303
+        },
+        {
+          "id": "d22b390bb96f14db",
+          "title": "Collage&gouache on paper 115×105 cm",
+          "score": 0.5972878787878788
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.12.51.png",
+      "id": "c658d7f13d47150a",
+      "title": "Collage and gouache on paper 110×100",
+      "score": 0.7344431818181818,
+      "margin": 0.06459848484848485,
+      "rank": 0,
+      "box": {
+        "left": 0.19148936170212766,
+        "top": 0.2857142857142857,
+        "width": 0.7021276595744681,
+        "height": 0.6071428571428571
+      },
+      "alternatives": [
+        {
+          "id": "c658d7f13d47150a",
+          "title": "Collage and gouache on paper 110×100",
+          "score": 0.7344431818181818
+        },
+        {
+          "id": "41507732cf8ef092",
+          "title": "Untitled 2025, 80x100cm",
+          "score": 0.669844696969697
+        },
+        {
+          "id": "517a3c32520b8e3a",
+          "title": "UNTITLED 2024, 60X70",
+          "score": 0.6476174242424242
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.13.08.png",
+      "id": "d594db9e07375d4c",
+      "title": "UNTITLED 2025, 70X60CM",
+      "score": 0.8331761363636363,
+      "margin": 0.2679090909090909,
+      "rank": 0,
+      "box": {
+        "left": 0.21621621621621623,
+        "top": 0.16071428571428573,
+        "width": 0.5405405405405406,
+        "height": 0.42857142857142855
+      },
+      "alternatives": [
+        {
+          "id": "d594db9e07375d4c",
+          "title": "UNTITLED 2025, 70X60CM",
+          "score": 0.8331761363636363
+        },
+        {
+          "id": "e5aa4985ff3a69b9",
+          "title": "UNTITLED 2025, 100X80CM",
+          "score": 0.5652670454545454
+        },
+        {
+          "id": "2b015429ab5daadd",
+          "title": "UNTITLED 2025, 70X60CM",
+          "score": 0.5616534090909091
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.13.16.png",
+      "id": "d880d4cbd0097fdc",
+      "title": "UTITLED 2024, 60X70CM",
+      "score": 0.9171893939393939,
+      "margin": 0.1359924242424242,
+      "rank": 0,
+      "box": {
+        "left": 0.1891891891891892,
+        "top": 0.26785714285714285,
+        "width": 0.6216216216216216,
+        "height": 0.3392857142857143
+      },
+      "alternatives": [
+        {
+          "id": "d880d4cbd0097fdc",
+          "title": "UTITLED 2024, 60X70CM",
+          "score": 0.9171893939393939
+        },
+        {
+          "id": "c189ca7388da81a3",
+          "title": "UNTITLED 2024, 80X100CM",
+          "score": 0.7811969696969697
+        },
+        {
+          "id": "466e663cbb8a4cf1",
+          "title": "UNTITLED 2023, 60X50CM",
+          "score": 0.7611401515151515
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.13.26.png",
+      "id": "dca9f37fdd04a6ef",
+      "title": "UNTITLED 2025, 160X130 CM",
+      "score": 0.8658958333333333,
+      "margin": 0.2470681818181818,
+      "rank": 0,
+      "box": {
+        "left": 0.1891891891891892,
+        "top": 0.21428571428571427,
+        "width": 0.6216216216216216,
+        "height": 0.5
+      },
+      "alternatives": [
+        {
+          "id": "dca9f37fdd04a6ef",
+          "title": "UNTITLED 2025, 160X130 CM",
+          "score": 0.8658958333333333
+        },
+        {
+          "id": "30e2735c08eedaa5",
+          "title": "UNTITLED 2025, 260X190CM",
+          "score": 0.6188276515151515
+        },
+        {
+          "id": "ac32c6660765f1ba",
+          "title": "UNTITLED 2025, 160X130CM",
+          "score": 0.6028503787878787
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.13.37.png",
+      "id": "dcf11809c5fd88a9",
+      "title": "UNTITLED 2025, 70X60CM",
+      "score": 0.8068314393939394,
+      "margin": 0.26934848484848484,
+      "rank": 0,
+      "box": {
+        "left": 0.21621621621621623,
+        "top": 0.26785714285714285,
+        "width": 0.5405405405405406,
+        "height": 0.42857142857142855
+      },
+      "alternatives": [
+        {
+          "id": "dcf11809c5fd88a9",
+          "title": "UNTITLED 2025, 70X60CM",
+          "score": 0.8068314393939394
+        },
+        {
+          "id": "7f8fb57de3171350",
+          "title": "UNTITLED 2021, 190 x 160 CM",
+          "score": 0.5374829545454546
+        },
+        {
+          "id": "1caa1fa42c98147d",
+          "title": "UNTITLED 2024, 70X60CM",
+          "score": 0.5262367424242425
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.13.46.png",
+      "id": "e2d167c8f9479188",
+      "title": "UNTITLED 2026, 200X180 CM",
+      "score": 0.8327215909090909,
+      "margin": 0.16431439393939395,
+      "rank": 0,
+      "box": {
+        "left": 0.16216216216216217,
+        "top": 0.21428571428571427,
+        "width": 0.7027027027027027,
+        "height": 0.5178571428571429
+      },
+      "alternatives": [
+        {
+          "id": "e2d167c8f9479188",
+          "title": "UNTITLED 2026, 200X180 CM",
+          "score": 0.8327215909090909
+        },
+        {
+          "id": "9eda9241f565ce60",
+          "title": "UNTITLED 2025, 100X80CM",
+          "score": 0.668407196969697
+        },
+        {
+          "id": "a7fc0bc8186731ab",
+          "title": "UNTITLED 2026, 80X100CM",
+          "score": 0.5495359848484849
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.14.00.png",
+      "id": "e526231ae1110f7f",
+      "title": "UNTITLED 2026, 160X130CM",
+      "score": 0.8001306818181818,
+      "margin": 0.15367045454545447,
+      "rank": 0,
+      "box": {
+        "left": 0.16216216216216217,
+        "top": 0.17857142857142858,
+        "width": 0.7027027027027027,
+        "height": 0.5714285714285714
+      },
+      "alternatives": [
+        {
+          "id": "e526231ae1110f7f",
+          "title": "UNTITLED 2026, 160X130CM",
+          "score": 0.8001306818181818
+        },
+        {
+          "id": "c57bf6982097fb93",
+          "title": "UNTITLED 2025, 110 X 150CM",
+          "score": 0.6464602272727273
+        },
+        {
+          "id": "28f4053bddb5250d",
+          "title": "UNTITLED 2024, 160X130CM",
+          "score": 0.6234185606060606
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.14.13.png",
+      "id": "ee7ae094021e5399",
+      "title": "Gouache on paper 100x80cm",
+      "score": 0.7896571969696969,
+      "margin": 0.1413333333333333,
+      "rank": 0,
+      "box": {
+        "left": 0.16666666666666666,
+        "top": 0.25,
+        "width": 0.6190476190476191,
+        "height": 0.625
+      },
+      "alternatives": [
+        {
+          "id": "ee7ae094021e5399",
+          "title": "Gouache on paper 100x80cm",
+          "score": 0.7896571969696969
+        },
+        {
+          "id": "b82760ddbe9346b1",
+          "title": "Gouache on paper 100x80cm",
+          "score": 0.6483238636363636
+        },
+        {
+          "id": "ed652f2fbfb8b55a",
+          "title": "UNTITLED 2021, 160X130CM",
+          "score": 0.6362405303030303
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.14.31.png",
+      "id": "f1d20e47a5060064",
+      "title": "UNTITLED 2025, 38X48",
+      "score": 0.8546098484848486,
+      "margin": 0.3133295454545455,
+      "rank": 0,
+      "box": {
+        "left": 0.13513513513513514,
+        "top": 0.26785714285714285,
+        "width": 0.7027027027027027,
+        "height": 0.39285714285714285
+      },
+      "alternatives": [
+        {
+          "id": "f1d20e47a5060064",
+          "title": "UNTITLED 2025, 38X48",
+          "score": 0.8546098484848486
+        },
+        {
+          "id": "c189ca7388da81a3",
+          "title": "UNTITLED 2024, 80X100CM",
+          "score": 0.5412803030303031
+        },
+        {
+          "id": "8023468c6dc31e11",
+          "title": "UNTITLED 2026, 160X190CM",
+          "score": 0.5372613636363637
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.14.42.png",
+      "id": "f6f7b4a3c2850ce3",
+      "title": "DIALOGUES N12, 2021",
+      "score": 0.8301477272727273,
+      "margin": 0.21528409090909095,
+      "rank": 0,
+      "box": {
+        "left": 0.1891891891891892,
+        "top": 0.21428571428571427,
+        "width": 0.6216216216216216,
+        "height": 0.5
+      },
+      "alternatives": [
+        {
+          "id": "f6f7b4a3c2850ce3",
+          "title": "DIALOGUES N12, 2021",
+          "score": 0.8301477272727273
+        },
+        {
+          "id": "e5aa4985ff3a69b9",
+          "title": "UNTITLED 2025, 100X80CM",
+          "score": 0.6148636363636364
+        },
+        {
+          "id": "aee21b9ab19a1dd1",
+          "title": "UNTITLED 2026, 162X130CM",
+          "score": 0.6119848484848485
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.14.53.png",
+      "id": "f953dd6c9ed8ce0d",
+      "title": "Gouache on paper 100x80cm",
+      "score": 0.7410340909090909,
+      "margin": 0.05714393939393947,
+      "rank": 0,
+      "box": {
+        "left": 0.19047619047619047,
+        "top": 0.25,
+        "width": 0.6190476190476191,
+        "height": 0.625
+      },
+      "alternatives": [
+        {
+          "id": "f953dd6c9ed8ce0d",
+          "title": "Gouache on paper 100x80cm",
+          "score": 0.7410340909090909
+        },
+        {
+          "id": "b82760ddbe9346b1",
+          "title": "Gouache on paper 100x80cm",
+          "score": 0.6838901515151514
+        },
+        {
+          "id": "ee7ae094021e5399",
+          "title": "Gouache on paper 100x80cm",
+          "score": 0.6448522727272727
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.15.04.png",
+      "id": "f69091f420e7f773",
+      "title": "UNTITLED 2025, 26X36CM",
+      "score": 0.8803162878787879,
+      "margin": 0.318405303030303,
+      "rank": 0,
+      "box": {
+        "left": 0.1891891891891892,
+        "top": 0.32142857142857145,
+        "width": 0.6216216216216216,
+        "height": 0.30357142857142855
+      },
+      "alternatives": [
+        {
+          "id": "f69091f420e7f773",
+          "title": "UNTITLED 2025, 26X36CM",
+          "score": 0.8803162878787879
+        },
+        {
+          "id": "ff9ac5003e43fd22",
+          "title": "UNTITLED 2025, 40X50CM",
+          "score": 0.5619109848484849
+        },
+        {
+          "id": "af548000c0bd1fc7",
+          "title": "UNTITLED 2025, 26X36CM",
+          "score": 0.5489488636363636
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.15.36.png",
+      "id": "fb95e27173e8cb88",
+      "title": "UNTITLED 2024, 46X36CM",
+      "score": 0.9230549242424242,
+      "margin": 0.14471212121212118,
+      "rank": 0,
+      "box": {
+        "left": 0.1891891891891892,
+        "top": 0.21428571428571427,
+        "width": 0.6216216216216216,
+        "height": 0.3392857142857143
+      },
+      "alternatives": [
+        {
+          "id": "fb95e27173e8cb88",
+          "title": "UNTITLED 2024, 46X36CM",
+          "score": 0.9230549242424242
+        },
+        {
+          "id": "21a613d20e882512",
+          "title": "UNTITLED 2025, 38X48CM",
+          "score": 0.778342803030303
+        },
+        {
+          "id": "aac27f8277f78f77",
+          "title": "UNTITLED 2026, 160X190CM",
+          "score": 0.7385662878787879
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.15.46.png",
+      "id": "fcd0540a1c8fd8a8",
+      "title": "Untitled 2022, 193x163cm",
+      "score": 0.8474943181818182,
+      "margin": 0.2977916666666667,
+      "rank": 0,
+      "box": {
+        "left": 0.1891891891891892,
+        "top": 0.25,
+        "width": 0.6216216216216216,
+        "height": 0.48214285714285715
+      },
+      "alternatives": [
+        {
+          "id": "fcd0540a1c8fd8a8",
+          "title": "Untitled 2022, 193x163cm",
+          "score": 0.8474943181818182
+        },
+        {
+          "id": "4c49b79b737ac3cb",
+          "title": "UNTITLED 2023, 160X190CM",
+          "score": 0.5497026515151515
+        },
+        {
+          "id": "0cb35503e6789d8c",
+          "title": "UNTITLED 2023, 190X160cm",
+          "score": 0.47936174242424234
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.16.05.png",
+      "id": "ff0cf6032150946b",
+      "title": "UNTITLED 2026, 70X63CM",
+      "score": 0.772530303030303,
+      "margin": 0.1156060606060606,
+      "rank": 0,
+      "box": {
+        "left": 0.13513513513513514,
+        "top": 0.21428571428571427,
+        "width": 0.7567567567567568,
+        "height": 0.6071428571428571
+      },
+      "alternatives": [
+        {
+          "id": "ff0cf6032150946b",
+          "title": "UNTITLED 2026, 70X63CM",
+          "score": 0.772530303030303
+        },
+        {
+          "id": "25f24c0c0b4125bb",
+          "title": "UNTITLED 2025, 160X130CM",
+          "score": 0.6569242424242424
+        },
+        {
+          "id": "091e8ff4fa68f72a",
+          "title": "UNTITLED 2026, 60X73CM",
+          "score": 0.5985151515151514
+        }
+      ]
+    },
+    {
+      "file": "Screenshot 2026-09-30 at 16.16.14.png",
+      "id": "ff9ac5003e43fd22",
+      "title": "UNTITLED 2025, 40X50CM",
+      "score": 0.9071098484848484,
+      "margin": 0.3683674242424243,
+      "rank": 0,
+      "box": {
+        "left": 0.21621621621621623,
+        "top": 0.26785714285714285,
+        "width": 0.6216216216216216,
+        "height": 0.3392857142857143
+      },
+      "alternatives": [
+        {
+          "id": "ff9ac5003e43fd22",
+          "title": "UNTITLED 2025, 40X50CM",
+          "score": 0.9071098484848484
+        },
+        {
+          "id": "76721779c72bbfae",
+          "title": "UNTITLED 2025, 150X150CM",
+          "score": 0.5387424242424241
+        },
+        {
+          "id": "57516de5f24fdc37",
+          "title": "UNTITLED 2025, 205X160CM",
+          "score": 0.49909848484848485
+        }
+      ]
+    }
+  ]
+}

@@ -1,17 +1,17 @@
 [
   {
     "year": 2026,
-    "colour": "#11504b",
+    "colour": "#0f4f4b",
     "count": 18
   },
   {
     "year": 2025,
-    "colour": "#bc703f",
+    "colour": "#b96e3d",
     "count": 42
   },
   {
     "year": 2024,
-    "colour": "#0b6140",
+    "colour": "#0b603f",
     "count": 26
   },
   {
@@ -21,22 +21,22 @@
   },
   {
     "year": 2022,
-    "colour": "#0a5769",
+    "colour": "#06637a",
     "count": 9
   },
   {
     "year": 2021,
-    "colour": "#b88926",
+    "colour": "#b88927",
     "count": 16
   },
   {
     "year": 2020,
-    "colour": "#6e271e",
+    "colour": "#6f271e",
     "count": 14
   },
   {
     "year": 2019,
-    "colour": "#4b1a1d",
+    "colour": "#4a1a1d",
     "count": 7
   },
   {
@@ -46,12 +46,12 @@
   },
   {
     "year": 2017,
-    "colour": "#05198c",
+    "colour": "#05198b",
     "count": 5
   },
   {
     "year": 2016,
-    "colour": "#ab3a31",
+    "colour": "#a9382f",
     "count": 2
   }
 ]
