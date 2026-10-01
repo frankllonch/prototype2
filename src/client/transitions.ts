@@ -19,6 +19,17 @@ const OUT_MS = 420;
 const LEAVE_GUARD = 700;
 /** If the navigation has not happened by now, assume it never will. */
 const ABANDONED = 6000;
+/**
+ * When to stop trusting the entrance animations and simply show the page.
+ *
+ * Comfortably past the longest of them (0.1 + 0.9), so in the ordinary case the
+ * animations have finished and this changes nothing visible. It exists for the
+ * case where they never advance at all — a document whose animation timeline has
+ * not started, which is what a tab loaded in the background is — where without it
+ * a perfectly loaded page sits behind an opaque sheet with its content at zero
+ * opacity, looking for all the world as though it failed to load.
+ */
+const REVEAL_GUARD = 1600;
 
 export function initTransitions(): void {
   loader();
@@ -48,6 +59,9 @@ export function initTransitions(): void {
   window.addEventListener('pageshow', arrive);
   window.addEventListener('popstate', arrive);
   arrive();
+
+  // Armed before anything else can fail: whatever happens below, the page shows.
+  window.setTimeout(() => root.classList.add('is-revealed'), REVEAL_GUARD);
 
   if (reduceMotion.matches) return;
 
