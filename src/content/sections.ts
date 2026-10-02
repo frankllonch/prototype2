@@ -24,6 +24,8 @@ export interface Exhibition {
   /** When, as two months or one. */
   readonly from?: string;
   readonly to?: string;
+  /** "Solo show" / "Group show", where the source says so. */
+  readonly kind?: string;
 }
 
 const strip = (html: string): string =>
@@ -98,22 +100,49 @@ function monthName(raw: string): string | undefined {
 function datesOf(body: string): { from?: string; to?: string } {
   const text = body.replace(/\s+/g, ' ');
 
-  const range = new RegExp(`\\b(?:from\\s+)?(${MONTH_RE})\\s*\\d{0,2}\\s*(?:to|–|—|-)\\s*(${MONTH_RE})\\b`, 'i').exec(text);
+  /*
+   * `(?!\d)` after the day is what keeps a year from being read as one. "APRIL to
+   * JUNE 2025" would otherwise give "June 20", because two digits of 2025 match a
+   * day perfectly well — a show would be given a date it never had.
+   */
+  const day = '(?:(\\d{1,2})(?!\\d))?';
+  const range = new RegExp(
+    `\\b(?:from\\s+)?(${MONTH_RE})\\s*${day}\\s*(?:to|–|—|-)\\s*(${MONTH_RE})\\s*${day}`, 'i',
+  ).exec(text);
   if (range) {
-    const from = monthName(range[1]!), to = monthName(range[2]!);
-    if (from && to) return from === to ? { from } : { from, to };
+    const a = monthName(range[1]!), b = monthName(range[3]!);
+    if (a && b) {
+      const from = range[2] ? `${a} ${range[2]}` : a;
+      const to = range[4] ? `${b} ${range[4]}` : b;
+      return from === to ? { from } : { from, to };
+    }
   }
 
-  // "12/2021 to 01/2022"
-  const numeric = /\b(\d{1,2})\/(?:19|20)\d{2}\s*(?:to|–|—|-)\s*(\d{1,2})\/(?:19|20)\d{2}/.exec(text);
+  /*
+   * "12/2021 to 01/2022". Both years are kept, because this is the one run of the
+   * six that crosses a new year: months alone render as "December to January"
+   * under a single year in the margin, which reads backwards and states a date the
+   * source does not.
+   */
+  const numeric = /\b(\d{1,2})\/((?:19|20)\d{2})\s*(?:to|–|—|-)\s*(\d{1,2})\/((?:19|20)\d{2})/.exec(text);
   if (numeric) {
-    const from = monthName(numeric[1]!), to = monthName(numeric[2]!);
-    if (from && to) return { from, to };
+    const a = monthName(numeric[1]!), b = monthName(numeric[3]!);
+    if (a && b) {
+      return numeric[2] === numeric[4]
+        ? { from: a, to: b }
+        : { from: `${a} ${numeric[2]}`, to: `${b} ${numeric[4]}` };
+    }
   }
 
   const single = new RegExp(`\\b(${MONTH_RE})\\b`, 'i').exec(text);
   const only = single ? monthName(single[1]!) : undefined;
   return only ? { from: only } : {};
+}
+
+/** "Solo show", "Group show" — stated by five of the six, and worth keeping. */
+function kindOf(body: string): string | undefined {
+  const found = /\b(solo|group)\s+show\b/i.exec(body);
+  return found ? `${titleCase(found[1]!)} show` : undefined;
 }
 
 /**
@@ -134,7 +163,7 @@ function venueOf(body: string, title: string): string | undefined {
     const parts: string[] = [];
     for (const piece of raw.split(/\s*[,/]\s*/)) {
       const part = piece.replace(/\s+/g, ' ').trim().replace(/^[-–—]+|[-–—]+$/g, '');
-      if (!part || part.length > 28 || !/[a-z]/i.test(part)) continue;
+      if (!part || part.length > 40 || !/[a-z]/i.test(part)) continue;
       // "Alzueta Gallery Madrid, MADRID" says Madrid twice.
       if (parts.some((p) => p.toLowerCase().includes(part.toLowerCase()))) continue;
       parts.push(part);
@@ -188,39 +217,59 @@ function firstBlock(html: string): { block: string; rest: string } | null {
   return null;
 }
 
+/** Words that carry no fact, so their absence from the restatement proves nothing. */
+const FILLER = new Set([
+  'a', 'an', 'and', 'at', 'by', 'de', 'des', 'el', 'en', 'for', 'from', 'in', 'is', 'la', 'of',
+  'on', 'or', 'the', 'to', 'with', 's',
+]);
+
+/**
+ * Every fact a block states, as bare tokens.
+ *
+ * Numeric months are written out first, so "12/2021" and "December 2021" are
+ * recognised as the same statement, and abbreviations are expanded for the same
+ * reason — "sept" is September.
+ */
+function facts(value: string): string[] {
+  const expanded = strip(value)
+    .replace(/\b(\d{1,2})\/((?:19|20)\d{2})\b/g, (_, m: string, y: string) => `${monthName(m) ?? m} ${y}`)
+    .replace(new RegExp(`\\b(${MONTH_RE})\\b`, 'gi'), (m) => monthName(m) ?? m);
+  return [...new Set(
+    expanded.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().split(' ')
+      .filter((word) => word && !FILLER.has(word)),
+  )];
+}
+
 /**
  * Drops the masthead the source repeats at the top of each exhibition — its
- * title, its address, its dates — now that the panel states those itself. Left
- * in, every exhibition opens by saying twice what it is.
+ * title, its address, its dates — now that the panel states those itself.
  *
- * Only ever from the front, only short blocks, and at most a few: a rule that
- * can eat prose is not worth the tidiness.
+ * It must *prove* that before removing anything. A block goes only when every
+ * fact in it is still said somewhere the reader can see: by the panel's own
+ * header, or by the prose that remains. Anything else stays, and the page says it
+ * twice.
+ *
+ * This is the rule, not a precaution. Deciding by shape instead — short block,
+ * looks like a date — is what quietly took "May 27 to June 20" off Moll de l'os
+ * and left "December to January 2021" standing for a show that ran into 2022.
+ * Saying something twice is untidy; dropping it is wrong, and tidiness is not
+ * worth a date this gallery never gave.
  */
-function stripMasthead(html: string, title: string, venue?: string): string {
-  const norm = (value: string) => strip(value).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
-  const wanted = norm(title);
-  const place = venue ? norm(venue) : '';
-
+function stripMasthead(html: string, restated: string): string {
   let rest = html;
+
   for (let dropped = 0; dropped < 4; dropped++) {
     const split = firstBlock(rest);
     if (!split) break;
-    const text = norm(split.block);
-    const words = text ? text.split(' ').length : 0;
 
-    // Either way round: a masthead may be shorter than the title we parsed out of
-    // it, or longer — "Moll de l'os" over "Claudia Valsells" is one block. The
-    // word count is what keeps this off prose that merely mentions the title.
-    const isTitle = Boolean(text)
-      && (text === wanted || (words <= 14 && (wanted.includes(text) || text.includes(wanted))));
-    const isVenue = Boolean(place) && Boolean(text) && (place.includes(text) || text.includes(place));
-    const isWhen = words > 0 && words <= 14
-      && new RegExp(`^(?:solo show|group show)\\b|\\b${MONTH_RE}\\b|\\b(?:19|20)\\d{2}\\b`, 'i').test(text);
+    const stated = split.block.replace(/<[^>]+>/g, ' ').trim();
+    if (!stated) { rest = split.rest; continue; }   // an empty wrapper
 
-    if (!text) { rest = split.rest; continue; }   // an empty wrapper
-    if (!isTitle && !isVenue && !isWhen) break;
+    const kept = new Set([...facts(restated), ...facts(split.rest)]);
+    if (!facts(split.block).every((fact) => kept.has(fact))) break;
     rest = split.rest;
   }
+
   return rest.trim() ? rest : html;
 }
 
@@ -265,16 +314,20 @@ export function splitExhibitions(page: Project | undefined): readonly Exhibition
       r.columns.flatMap((c) => (c.kind === 'images' ? [...c.images] : [])),
     );
     const venue = venueOf(body.slice(0, 300), title);
+    const when = datesOf(body.slice(0, 300));
+    const kind = kindOf(body.slice(0, 300));
 
-    // The masthead is taken off the prose, not out of the dataset: the facts it
-    // carried are stated by the panel instead, from the fields derived below.
+    // Everything the panel will state in its own hand. The masthead may only be
+    // taken off the prose where it says nothing this does not.
+    const restated = [title, venue, kind, when.from, when.to, year].filter(Boolean).join(' ');
+
     let mastheadGone = false;
     const prose: Row[] = rows.map((r) => ({
       ...r,
       columns: r.columns.map((c) => {
         if (c.kind !== 'text' || mastheadGone) return c;
         mastheadGone = true;
-        return { ...c, html: stripMasthead(c.html, title, venue) };
+        return { ...c, html: stripMasthead(c.html, restated) };
       }),
     }));
 
@@ -287,8 +340,9 @@ export function splitExhibitions(page: Project | undefined): readonly Exhibition
       ...(images[0] ? { cover: images[0] } : {}),
       summary: body.slice(0, 260),
       // Read from the opening of the text, where every one of them states it.
-      ...datesOf(body.slice(0, 300)),
+      ...when,
       ...(venue ? { venue } : {}),
+      ...(kind ? { kind } : {}),
     });
   });
 

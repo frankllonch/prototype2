@@ -59,24 +59,51 @@ function vivid(hex: string): string {
     else if (max === g) h = ((b - r) / d + 2) / 6;
     else h = ((r - g) / d + 4) / 6;
   }
-  const l = Math.min(0.5, Math.max(0.4, (max + min) / 2));
   const s = Math.max(0.62, d === 0 ? 0 : (max + min) / 2 > 0.5 ? d / (2 - max - min) : d / (max + min));
-
   const k = (t: number) => (t + 12) % 12;
-  const a = s * Math.min(l, 1 - l);
-  const f = (t: number) => l - a * Math.max(-1, Math.min(k(t) - 3, Math.min(9 - k(t), 1)));
-  const to = (v: number) => Math.round(Math.min(1, Math.max(0, v)) * 255).toString(16).padStart(2, '0');
   const hh = h * 12;
-  return `#${to(f(hh))}${to(f(hh + 8))}${to(f(hh + 4))}`;
+  const at = (l: number) => {
+    const a = s * Math.min(l, 1 - l);
+    const f = (t: number) => l - a * Math.max(-1, Math.min(k(t) - 3, Math.min(9 - k(t), 1)));
+    return [f(hh), f(hh + 8), f(hh + 4)] as const;
+  };
+
+  /*
+   * Bright enough to read as a hue, dark enough to read at all.
+   *
+   * Lifting lightness alone gave a green at 2.6:1 against the paper — the row
+   * answered the pointer by becoming harder to read than before it was touched.
+   * So lightness comes down from its brightest until the contrast clears 4.5:1,
+   * which is the threshold this type size needs. A hue that is already legible is
+   * not darkened; the hue itself is never changed.
+   */
+  const channel = (v: number) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+  const luminance = ([r2, g2, b2]: readonly number[]) =>
+    0.2126 * channel(r2!) + 0.7152 * channel(g2!) + 0.0722 * channel(b2!);
+
+  let best = at(Math.min(0.5, Math.max(0.4, (max + min) / 2)));
+  for (let l = 0.5; l >= 0.16; l -= 0.01) {
+    best = at(l);
+    if (1.05 / (luminance(best) + 0.05) >= 4.5) break;
+  }
+
+  const to = (v: number) => Math.round(Math.min(1, Math.max(0, v)) * 255).toString(16).padStart(2, '0');
+  return `#${to(best[0]!)}${to(best[1]!)}${to(best[2]!)}`;
 }
 
 function row(item: ExhibitionRow): Html {
   const when = dates(item);
+  /*
+   * No `aria-label`. One was here and it quietly dropped the dates: a label
+   * replaces the whole subtree, so the months a sighted reader sees in their own
+   * column were never announced. Letting the name compute from the visible text
+   * says everything the row says, and cannot drift away from it later. The
+   * photograph is `aria-hidden`, so it adds nothing to that name.
+   */
   return html`<a
     class="exh"
     href="#exhibition-${item.slug}"
     data-panel-open="exhibition-${item.slug}"
-    aria-label="${item.title}${item.venue ? `, ${item.venue}` : ''}${item.year ? `, ${item.year}` : ''}"
   >
     <span class="exh-name">
       <span class="exh-title">${item.title}</span>
@@ -101,7 +128,10 @@ function row(item: ExhibitionRow): Html {
  */
 function dates(item: ExhibitionRow): Html {
   if (!item.from) return html``;
-  if (!item.to) return html`<em>${item.from}</em>`;
-  return html`<span class="exh-span"><span class="exh-lead">From</span> <em>${item.from}</em></span>
+  // The year already stands at the right margin, so the opening month does not
+  // repeat it — only the end does, and only when the run crosses into a new one.
+  const from = item.year ? item.from.replace(new RegExp(`\\s*${item.year}$`), '') : item.from;
+  if (!item.to) return html`<em>${from}</em>`;
+  return html`<span class="exh-span"><span class="exh-lead">From</span> <em>${from}</em></span>
     <span class="exh-span"><span class="exh-lead">To</span> <em>${item.to}</em></span>`;
 }

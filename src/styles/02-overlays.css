@@ -398,3 +398,10 @@ html:not(.js) .about:target { display: block; position: static; opacity: 1; visi
 @supports not selector(:has(*)) {
   .panel { background: color-mix(in srgb, var(--paper) 86%, transparent); }
 }
+.reader-kind {
+  margin: 0.55rem 0 0;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}

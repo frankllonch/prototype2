@@ -12,6 +12,7 @@ export interface PanelItem {
   readonly venue?: string;
   readonly from?: string;
   readonly to?: string;
+  readonly kind?: string;
 }
 
 /**

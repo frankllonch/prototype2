@@ -91,6 +91,7 @@ export const exhibitionItem = (e: Exhibition): PanelItem => ({
   ...(e.venue !== undefined ? { venue: e.venue } : {}),
   ...(e.from !== undefined ? { from: e.from } : {}),
   ...(e.to !== undefined ? { to: e.to } : {}),
+  ...(e.kind !== undefined ? { kind: e.kind } : {}),
 });
 
 /**
