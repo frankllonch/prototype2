@@ -189,3 +189,95 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
   .grid-feed { grid-template-columns: 1fr; }
   .feed-column + .feed-column { margin-top: clamp(4rem, 10vw, 10rem); }
 }
+
+/* ------------------------------------------------------- exhibitions list */
+
+/*
+ * The exhibitions index, after the designer's layout: a line per show rather
+ * than a gallery of them. Name and place at the left, the run of dates and the
+ * year at the right, a rule between each, and a great deal of air.
+ *
+ * The photograph sits in the gap between the name and the dates and is only
+ * brought up on hover, so the page reads as a table — which is what a list of
+ * exhibitions is — until you reach for a row.
+ */
+.exh-list {
+  --exh-hover: var(--ink);
+  max-width: 100rem;
+  margin: 0 auto;
+  padding: calc(var(--bar) + var(--gap)) var(--pad) 18vh;
+}
+
+.exh {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 10rem minmax(0, 15rem) 4.5rem;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 3rem);
+  /* Tall enough to hold the photograph without the row changing height when it
+     appears — a list that jumps as the pointer crosses it is unusable. */
+  min-height: 8.5rem;
+  padding: 1.6rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
+  color: var(--ink);
+  transition: color 0.45s var(--ease);
+}
+.exh:first-child { border-top: 1px solid color-mix(in srgb, var(--ink) 18%, transparent); }
+
+.exh-name { display: grid; gap: 0.1rem; min-width: 0; }
+.exh-title, .exh-venue {
+  font-size: clamp(0.95rem, 1.15vw, 1.15rem);
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  line-height: 1.25;
+}
+.exh-title { font-weight: 700; }
+.exh-venue { font-weight: 500; }
+
+.exh-when, .exh-year {
+  font-size: clamp(0.95rem, 1.15vw, 1.15rem);
+  text-transform: uppercase;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.exh-when { display: flex; gap: clamp(0.5rem, 1.6vw, 1.6rem); }
+.exh-span { white-space: nowrap; }
+/* The months lean, the words that introduce them stay upright. */
+.exh-when em, .reader-when em { font-style: italic; }
+.exh-lead { font-style: normal; }
+.exh-year { text-align: right; }
+
+/* Shown on hover, never moving anything: the cell is always this size. */
+.exh-plate {
+  display: block;
+  height: 5.2rem;
+  opacity: 0;
+  transition: opacity 0.45s var(--ease);
+}
+.exh-plate picture, .exh-plate img { width: 100%; height: 100%; }
+.exh-plate img { object-fit: contain; object-position: center; }
+
+/*
+ * The colour is set per hover by `client/exhibitions.ts`, which walks the palette
+ * sampled from the paintings so no two consecutive rows answer alike. Without
+ * scripting `--exh-hover` keeps its default and the row still responds.
+ */
+@media (hover: hover) {
+  .exh:hover { color: var(--exh-hover); }
+  .exh:hover .exh-plate { opacity: 1; }
+}
+.exh:focus-visible { color: var(--exh-hover); outline: none; }
+.exh:focus-visible .exh-plate { opacity: 1; }
+
+@media (max-width: 899px) {
+  .exh {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: 'name year' 'when year';
+    min-height: 0;
+    gap: 0.3rem 1rem;
+  }
+  .exh-name { grid-area: name; }
+  .exh-when { grid-area: when; }
+  .exh-year { grid-area: year; align-self: start; }
+  /* No pointer to hover with, and no room to spare. */
+  .exh-plate { display: none; }
+}

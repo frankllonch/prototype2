@@ -1,12 +1,18 @@
 /**
- * Collects the paintings still shown as photographs rather than as plates, so
- * they can be cropped by hand.
+ * Collects paintings for cropping by hand.
+ *
+ * By default only the ones still shown as photographs rather than as plates;
+ * with --all, every painting, for recropping the archive from scratch.
  *
  * Writes content/raw/uncropped/, one file per painting at full resolution, named
  * with its number, its title and its id. The id is what matters: keep it in the
  * filename and `apply-crops.ts --from-uncropped` can place the crop without
  * having to work out which painting it is. Rename them freely otherwise — if the
  * id is gone, `match-crops.ts` will find the painting by eye instead.
+ *
+ * Working here rather than in content/raw/media matters: that folder is the only
+ * copy of the originals, and both the renderer and the matcher read from it.
+ * Cropping over it would destroy what everything else falls back to.
  *
  * A contact sheet comes with them, for seeing the whole job at once.
  */
@@ -32,6 +38,7 @@ function slug(title: string): string {
 }
 
 async function main() {
+  const all = process.argv.includes('--all');
   const projects = JSON.parse(await readFile(path.join(ROOT, 'content', 'projects.json'), 'utf8'));
   const cropped = new Set<string>(JSON.parse(await readFile(path.join(ROOT, 'content', 'crops.final.json'), 'utf8')));
 
@@ -39,7 +46,9 @@ async function main() {
   const seen = new Set<string>();
   const todo = works.filter((p: any) => {
     const id = p.cover.id;
-    if (cropped.has(id) || seen.has(id)) return false;
+    // One file per painting, not per appearance: several works can share a cover.
+    if (seen.has(id)) return false;
+    if (!all && cropped.has(id)) return false;
     seen.add(id);
     return true;
   });
@@ -86,7 +95,7 @@ async function main() {
 
   await writeFile(path.join(OUT, '_list.json'), JSON.stringify(manifest, null, 2));
 
-  console.log(`${manifest.length} paintings still to crop → ${path.relative(ROOT, OUT)}`);
+  console.log(`${manifest.length} paintings ${all ? 'to recrop' : 'still to crop'} → ${path.relative(ROOT, OUT)}`);
   console.log('  _all.jpg is the contact sheet, _list.json the index');
   console.log('  keep the [id] in the filename and apply-crops can place them directly');
 }

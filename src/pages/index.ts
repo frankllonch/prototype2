@@ -3,6 +3,7 @@ import { layout } from '../components/layout.ts';
 import { grid, gridControls, type GridItem } from '../components/gallery.ts';
 import { responsiveImage } from '../components/image.ts';
 import { panels, type PanelItem } from '../components/panels.ts';
+import { exhibitionList } from '../components/exhibitions.ts';
 import { editorialBody } from '../components/editorial.ts';
 import { yearRail } from '../components/years.ts';
 import type { YearColour } from '../content/load.ts';
@@ -81,8 +82,44 @@ export function panelGridPage(opts: {
   });
 }
 
-export const exhibitionItem = (e: Exhibition): PanelItem =>
-  ({ slug: e.slug, title: e.title, year: e.year, images: e.images, rows: e.rows });
+export const exhibitionItem = (e: Exhibition): PanelItem => ({
+  slug: e.slug,
+  title: e.title,
+  images: e.images,
+  rows: e.rows,
+  ...(e.year !== undefined ? { year: e.year } : {}),
+  ...(e.venue !== undefined ? { venue: e.venue } : {}),
+  ...(e.from !== undefined ? { from: e.from } : {}),
+  ...(e.to !== undefined ? { to: e.to } : {}),
+});
+
+/**
+ * Exhibitions: a list rather than a gallery, after the designer's layout. The
+ * name and place at the left, the run of dates and the year at the right, a rule
+ * between each — and the photograph only when you reach for a row.
+ */
+export function exhibitionsPage(items: readonly Exhibition[], hues: readonly YearColour[]): Html {
+  return layout({
+    title: 'Exhibitions',
+    path: '/exhibitions/',
+    overlays: panels('exhibition', items.map(exhibitionItem)),
+    children: html`
+      <h1 class="sr-only">Exhibitions</h1>
+      ${exhibitionList(
+        items.map((e) => ({
+          slug: e.slug,
+          title: e.title,
+          ...(e.year !== undefined ? { year: e.year } : {}),
+          ...(e.venue !== undefined ? { venue: e.venue } : {}),
+          ...(e.from !== undefined ? { from: e.from } : {}),
+          ...(e.to !== undefined ? { to: e.to } : {}),
+          ...(e.cover !== undefined ? { cover: e.cover } : {}),
+        })),
+        hues,
+      )}
+    `,
+  });
+}
 
 export const collaborationItem = (p: Project): PanelItem => ({
   slug: p.slug,

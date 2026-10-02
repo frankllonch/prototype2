@@ -8,6 +8,10 @@ export interface PanelItem {
   readonly year?: number;
   readonly images: readonly ProjectImage[];
   readonly rows: readonly Row[];
+  /** Exhibitions carry where and when; collaborations do not. */
+  readonly venue?: string;
+  readonly from?: string;
+  readonly to?: string;
 }
 
 /**

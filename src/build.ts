@@ -12,7 +12,7 @@ import type { Html } from './components/html.ts';
 import { collaborations, colourChart, exhibitions, works, yearColours } from './content/load.ts';
 import { BASE } from './content/paths.ts';
 import {
-  artworkDetailPage, artworkPage, collaborationItem, colourChartPage, exhibitionItem, panelGridPage,
+  artworkDetailPage, artworkPage, collaborationItem, colourChartPage, exhibitionsPage, panelGridPage,
 } from './pages/index.ts';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -58,10 +58,7 @@ async function main() {
   await buildAssets();
 
   await writePage('', artworkPage(works, yearColours));
-  await writePage('exhibitions', panelGridPage({
-    title: 'Exhibitions', path: '/exhibitions/', kind: 'exhibition',
-    items: exhibitions.map(exhibitionItem), composition: 'feed',
-  }));
+  await writePage('exhibitions', exhibitionsPage(exhibitions, yearColours));
   await writePage('collaborations', panelGridPage({
     title: 'Collaborations', path: '/collaborations/', kind: 'collaboration',
     items: collaborations.map(collaborationItem), composition: 'justified',

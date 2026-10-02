@@ -7,6 +7,10 @@ export interface EditorialProps {
   readonly year?: number;
   readonly images: readonly ProjectImage[];
   readonly rows: readonly Row[];
+  /** An exhibition states where and when, in the same hand as the index. */
+  readonly venue?: string;
+  readonly from?: string;
+  readonly to?: string;
 }
 
 /**
@@ -27,14 +31,26 @@ export interface EditorialProps {
  * Shared by the exhibition and collaboration panels and by the Colour Chart, so
  * everything that is read rather than browsed is read the same way.
  */
-export function editorialBody({ title, year, images, rows }: EditorialProps): Html {
+export function editorialBody({ title, year, images, rows, venue, from, to }: EditorialProps): Html {
   const text = rows.flatMap((row) => row.columns).filter((column) => column.kind === 'text');
+  // An exhibition opens on its own facts, set as the index sets them, so the row
+  // you clicked and the page it opens read as the same object.
+  const stated = Boolean(venue || from);
 
-  return html`<div class="reader">
+  return html`<div class="reader${stated ? ' reader-stated' : ''}">
     <div class="reader-text">
       <header class="reader-head">
         <h2 class="reader-title">${title}</h2>
-        ${year ? html`<span class="reader-year">${year}</span>` : ''}
+        ${venue ? html`<p class="reader-venue">${venue}</p>` : ''}
+        ${stated
+          ? html`<p class="reader-when">
+              ${from && to
+                ? html`<span class="exh-span"><span class="exh-lead">From</span> <em>${from}</em></span>
+                  <span class="exh-span"><span class="exh-lead">To</span> <em>${to}</em></span>`
+                : from ? html`<em>${from}</em>` : ''}
+              ${year ? html`<span class="reader-when-year">${year}</span>` : ''}
+            </p>`
+          : year ? html`<span class="reader-year">${year}</span>` : ''}
       </header>
       ${join(text.map((c) => html`<div class="prose">${raw(c.kind === 'text' ? c.html : '')}</div>`))}
     </div>

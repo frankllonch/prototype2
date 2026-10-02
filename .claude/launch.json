@@ -1,6 +1,12 @@
 {
   "version": "0.0.1",
   "configurations": [
-    { "name": "cv2", "runtimeExecutable": "npm", "runtimeArgs": ["run", "serve"], "port": 4321 }
+    {
+      "name": "cv2",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "serve"],
+      "port": 4174,
+      "env": { "PORT": "4174" }
+    }
   ]
 }
