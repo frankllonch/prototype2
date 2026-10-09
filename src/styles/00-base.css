@@ -4,11 +4,27 @@
  * Three colours from the designer's mockups, one typeface. The work carries all
  * the colour; the interface is blue type on near-white, and peach for About.
  */
+/*
+ * Switzer, from Fontshare, self-hosted. Its licence permits commercial use and
+ * self-hosting outright, and travels with it in src/assets/fonts.
+ *
+ * Both files are the variable cut, so one request covers every weight the site
+ * asks for — the 400 of the prose and the 500 of everything uppercase — and the
+ * italic is a drawn italic rather than a slanted roman, which is what the index
+ * years need.
+ */
 @font-face {
-  font-family: 'Inter';
-  src: url('/fonts/inter-normal.woff2') format('woff2-variations');
+  font-family: 'Switzer';
+  src: url('/fonts/Switzer-Variable.woff2') format('woff2-variations');
   font-weight: 100 900;
   font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Switzer';
+  src: url('/fonts/Switzer-VariableItalic.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: italic;
   font-display: swap;
 }
 
@@ -22,7 +38,7 @@
   --ink-soft: color-mix(in srgb, var(--ink) 48%, var(--paper));
   --peach: #fcd090;
 
-  --sans: 'Inter', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  --sans: 'Switzer', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
   /* Measured off the mockups, which agree on a fixed margin rather than a
      proportional one: the left inset is 40px at 1866 wide, 43px at 1368 and
      47px at 1588 — near-constant while the frames differ by 500px. 2.5rem is

@@ -169,7 +169,7 @@ export function layout({ title, description, path, rail, controls, overlays, chi
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>${fullTitle}</title>
 ${description ? `<meta name="description" content="${description.replace(/"/g, '&quot;').slice(0, 300)}" />` : ''}
-<link rel="preload" href="${withBase('/fonts/inter-normal.woff2')}" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="${withBase('/fonts/Switzer-Variable.woff2')}" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="${withBase('/site.css')}" />
 ${modules.map((m) => `<link rel="modulepreload" href="${m}" />`).join('\n')}
 <script>document.documentElement.classList.add('js');
