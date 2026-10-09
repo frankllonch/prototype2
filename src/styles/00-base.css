@@ -23,7 +23,11 @@
   --peach: #fcd090;
 
   --sans: 'Inter', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
-  --pad: clamp(1.25rem, 4vw, 4rem);
+  /* Measured off the mockups, which agree on a fixed margin rather than a
+     proportional one: the left inset is 40px at 1866 wide, 43px at 1368 and
+     47px at 1588 — near-constant while the frames differ by 500px. 2.5rem is
+     40px; the clamp only takes over on screens narrower than the designs. */
+  --pad: clamp(1.25rem, 3.5vw, 2.5rem);
   --gap: clamp(1.5rem, 4.5vw, 5rem);
   --bar: 5.5rem;
   --rail: clamp(9rem, 14vw, 17rem);   /* width kept clear for the year rail */

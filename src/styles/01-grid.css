@@ -203,7 +203,11 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
  */
 .exh-list {
   --exh-hover: var(--ink);
-  max-width: 100rem;
+  /* No cap: the margin governs, as it does in the design. A capped box plus the
+     padding inside it put the rules 77px from the edge at the width the mockup
+     was drawn at, not the 30 it specifies — the cap was centring the box and the
+     padding was then measured from the box, not from the screen. These are short
+     rows, so there is no measure to protect. */
   margin: 0 auto;
   padding: calc(var(--bar) + var(--gap)) var(--pad) 18vh;
 }
@@ -316,15 +320,18 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
  */
 .xlist {
   --exh-hover: var(--ink);
-  max-width: 100rem;
   margin: 0 auto;
   padding: calc(var(--bar) + 8vh) var(--pad) 18vh;
 }
 
 .xgroup {
   display: grid;
-  grid-template-columns: minmax(0, 20%) minmax(0, 1fr);
-  gap: 0 clamp(1.5rem, 5vw, 5rem);
+  /* The rows begin at 496px of 1866 in the mockup, measured off the rules
+     themselves rather than off the type. Inside the 40px margins that is
+     456 of 1786, so 25.53%. The gap is nil because that figure already is the
+     gap: it is where the rules start, not where the label ends. */
+  grid-template-columns: 25.53% minmax(0, 1fr);
+  gap: 0;
   margin-bottom: clamp(4rem, 9vw, 9rem);
 }
 .xgroup:last-child { margin-bottom: 0; }

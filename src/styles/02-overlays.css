@@ -64,7 +64,7 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   gap: clamp(2rem, 5vw, 5rem);
   align-items: start;
   /* Wider than a page of prose: this is the whole screen's work. */
-  max-width: 108rem;
+  max-width: 112rem;
   margin: 0 auto;
   padding: calc(var(--bar) + var(--gap)) var(--pad) 0;
 }
@@ -274,7 +274,7 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   grid-template-columns: minmax(0, 1fr) minmax(0, 0.82fr);
   gap: clamp(2rem, 5vw, 5rem);
   align-items: start;
-  max-width: 86rem;
+  max-width: 112rem;
   margin: 0 auto;
   padding: 0 var(--pad);
 }
