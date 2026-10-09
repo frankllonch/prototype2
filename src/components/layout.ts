@@ -120,10 +120,12 @@ function aboutOverlay(): Html {
 
     ${parts
       ? html`<div class="about-body">
+          <div class="about-head">
+            ${parts.heading ? html`<div class="about-heading">${raw(parts.heading)}</div>` : ''}
+            ${parts.lead ? html`<div class="about-lead">${raw(parts.lead)}</div>` : ''}
+          </div>
           <div class="about-inner">
             <div class="about-text">
-              ${parts.heading ? html`<div class="about-heading">${raw(parts.heading)}</div>` : ''}
-              ${parts.lead ? html`<div class="about-lead">${raw(parts.lead)}</div>` : ''}
               <div class="about-prose">${raw(markAccents(parts.body))}</div>
             </div>
             <div class="about-figures" data-about-figures>

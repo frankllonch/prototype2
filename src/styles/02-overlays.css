@@ -264,29 +264,48 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   padding: 14vh 0 calc(var(--gap) * 2);
 }
 /*
- * Biography and photographs side by side — beside, never over. The designer's
- * sheet laps the picture across the text, which reads well as a still image and
- * badly as a page: a line of prose running under a photograph is a line nobody
- * can finish.
+ * The opening runs the full width, as the sheet has it, and the columns begin
+ * underneath it.
+ *
+ * Everything on this page is set from one measurement. The sheet's body is
+ * 37.4px at the 1588 its export was made at, which is 2.355vw — and 2.355vw is
+ * 45px at 1920, exactly the size the type sheet names. The export is therefore
+ * at 0.827 of full size and the frame is 1920, which is how the rest of these
+ * figures were converted.
  */
-.about-inner {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 0.82fr);
-  gap: clamp(2rem, 5vw, 5rem);
-  align-items: start;
+.about-head {
   max-width: 112rem;
   margin: 0 auto;
   padding: 0 var(--pad);
 }
+
+/*
+ * Biography and photographs side by side — beside, never over. The sheet laps
+ * the picture across the text, which reads well as a still image and badly as a
+ * page: a line of prose running under a photograph is a line nobody can finish.
+ * The photograph keeps its edge from the sheet, at 60.6% of the width inside
+ * the margins; the gutter is taken out of the text column so that edge does not
+ * move.
+ */
+.about-inner {
+  display: grid;
+  grid-template-columns: 60.6% minmax(0, 1fr);
+  gap: 0;
+  align-items: start;
+  max-width: 112rem;
+  margin: clamp(2rem, 4vw, 4rem) auto 0;
+  padding: 0 var(--pad);
+}
+.about-text { padding-right: clamp(1.5rem, 3vw, 3rem); }
 /* Nothing here is meant to be reachable sideways. */
 .about { overflow-x: hidden; }
 
 /* Her name, then the statement the page opens on, set large. */
-.about-heading > * { margin: 0; font-weight: 700; font-size: 15px; letter-spacing: 0.01em; }
-.about-lead { margin: 1.8rem 0 2.2rem; }
+.about-heading > * { margin: 0; font-weight: 500; font-size: clamp(0.8rem, 0.95vw, 1rem); letter-spacing: 0; }
+.about-lead { margin: 1.6rem 0 0; }
 .about-lead > * {
   margin: 0;
-  font-size: clamp(1.15rem, 1.85vw, 1.85rem);
+  font-size: clamp(1.25rem, 2.355vw, 2.85rem);
   /* Medium, 0% tracking, 50/45 leading — the sheet's uppercase style. */
   font-weight: 500;
   line-height: 1.111;
@@ -296,7 +315,7 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 /* Regular, 0% tracking, the same 50/45 leading. */
 .about-prose > * {
   margin: 0 0 1.1em;
-  font-size: clamp(0.95rem, 1.1vw, 1.1rem);
+  font-size: clamp(1.25rem, 2.355vw, 2.85rem);
   font-weight: 400;
   line-height: 1.111;
   letter-spacing: 0;
@@ -331,13 +350,13 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
  * the middle it reads as a record, which is what it is.
  */
 .about-tail {
-  max-width: 54rem;
+  max-width: 72rem;
   margin: clamp(4rem, 9vw, 9rem) auto 0;
   padding: 0 var(--pad);
   text-align: center;
 }
 .about-tail > * > * , .about-tail > * { margin: 0 0 0.55em; }
-.about-tail p { font-size: clamp(0.95rem, 1.1vw, 1.1rem); line-height: 1.111; letter-spacing: 0; }
+.about-tail p { font-size: clamp(1.1rem, 1.6vw, 1.9rem); line-height: 1.111; letter-spacing: 0; }
 .about-tail a { border-bottom: 1px solid currentColor; }
 /* The section labels the source sets in capitals get room above them. */
 .about-tail p:has(> strong), .about-tail strong { font-weight: 600; }
