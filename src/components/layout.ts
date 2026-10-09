@@ -3,6 +3,7 @@ import { responsiveImage } from './image.ts';
 import { withBase } from '../content/paths.ts';
 import { aboutPage } from '../content/load.ts';
 import { splitAbout } from '../content/about.ts';
+import { markAccents } from '../content/accents.ts';
 
 interface LayoutProps {
   readonly title: string;
@@ -123,7 +124,7 @@ function aboutOverlay(): Html {
             <div class="about-text">
               ${parts.heading ? html`<div class="about-heading">${raw(parts.heading)}</div>` : ''}
               ${parts.lead ? html`<div class="about-lead">${raw(parts.lead)}</div>` : ''}
-              <div class="about-prose">${raw(parts.body)}</div>
+              <div class="about-prose">${raw(markAccents(parts.body))}</div>
             </div>
             <div class="about-figures" data-about-figures>
               <div class="about-sticky">

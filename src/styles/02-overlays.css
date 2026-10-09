@@ -571,3 +571,23 @@ html:not(.js) .about:target { display: block; position: static; opacity: 1; visi
 .reader-page .reader-nav,
 .reader-page .reader-expand { display: none; }
 .reader-page .reader-text { padding-right: 0; }
+
+/*
+ * The phrases the designer sets in an italic serif — the studio, the chart, the
+ * enquiry, the project, the practice. Against the sans they read as the subject
+ * of their paragraph lifted out of it.
+ *
+ * A system serif, because the site ships one typeface and this is the only
+ * place a second is wanted; naming a stack costs nothing to download and gives
+ * the contrast the sheet is after. It will not be the designer's face, and
+ * swapping it is one line plus a woff2 once she says which.
+ *
+ * Sized up a little: at the same point size a serif sits visually smaller than
+ * Inter beside it, and the phrase should read as emphasis rather than as a drop.
+ */
+.ink-accent {
+  font-family: Georgia, 'Times New Roman', 'Iowan Old Style', serif;
+  font-style: italic;
+  font-size: 1.06em;
+  letter-spacing: 0;
+}
