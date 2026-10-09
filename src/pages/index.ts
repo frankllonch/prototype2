@@ -36,11 +36,17 @@ export function artworkPage(works: readonly Project[], years: readonly YearColou
     description: TAGLINE,
     path: '/',
     rail: yearRail(years),
-    controls: gridControls(),
+    controls: gridControls([], true),
     children: html`
       <h1 class="sr-only">Claudia Valsells — Artwork</h1>
       <div class="hero" data-hero aria-hidden="true"></div>
-      ${grid({ items: works.filter((w) => w.cover).map(workItem), basePath: '/artwork', lightbox: true, stack: true })}
+      ${grid({
+        items: works.filter((w) => w.cover).map(workItem),
+        basePath: '/artwork',
+        lightbox: true,
+        stack: true,
+        toScale: true,
+      })}
     `,
   });
 }

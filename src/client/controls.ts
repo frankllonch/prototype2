@@ -1,7 +1,11 @@
 /**
- * The density control: three grid sizes. It sets one custom property, and fires
- * `gridchange` so the opening pile re-measures against the new layout rather
- * than against stale targets.
+ * The controls above the grid: three densities, and a switch between equal
+ * heights and relative sizes.
+ *
+ * Both only change how the grid is drawn — a custom property and a class — and
+ * both fire `gridchange`, so the opening pile re-measures against the new layout
+ * rather than against stale targets, and the year rail waits for the size
+ * transition before deciding where to scroll.
  */
 export function initControls(): void {
   const grid = document.querySelector<HTMLElement>('[data-grid]');
@@ -26,4 +30,21 @@ export function initControls(): void {
     });
   }
 
+  /*
+   * The sizing switch is only offered where the tiles were given their real
+   * sizes to draw at; without them every work would claim the same scale, which
+   * would be a worse lie than showing them all the same on purpose.
+   */
+  const scales = root.querySelectorAll<HTMLButtonElement>('[data-scale]');
+  if (grid.hasAttribute('data-scalable')) {
+    for (const button of scales) {
+      button.addEventListener('click', () => {
+        grid.classList.toggle('grid-scaled', button.dataset.scale === 'real');
+        press(scales, button);
+        changed();
+      });
+    }
+  } else {
+    for (const button of scales) button.closest('.control-group')?.remove();
+  }
 }

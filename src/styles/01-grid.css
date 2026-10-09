@@ -281,3 +281,29 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
   /* No pointer to hover with, and no room to spare. */
   .exh-plate { display: none; }
 }
+
+/* ---------------------------------------------------------- to-scale grid */
+
+/*
+ * The same works at their relative sizes rather than at one height — the grid
+ * read as a wall instead of as a contact sheet.
+ *
+ * Each tile carries `--sh`, its height as a multiple of the unit, worked out
+ * from the catalogued measurements in `content/size.ts`. The width still follows
+ * the photograph's shape, so the area is what carries the size and nothing is
+ * letterboxed. A work whose dimensions could not be read keeps `--sh: 1` and
+ * stays at the unit height, which is the honest answer to not knowing.
+ *
+ * The rows centre on a line. That is the whole reason this reads as a hang and
+ * not as a jumble: `align-items` works per flex line, so each row of tiles
+ * settles on its own horizontal centre, which is how work is actually hung.
+ */
+.tile { --sh: 1; }
+
+.grid-scaled { align-items: center; }
+.grid-scaled .tile {
+  height: calc(var(--unit) * var(--sh));
+  width: calc(var(--unit) * var(--sh) * var(--a));
+}
+
+/* Switching modes animates, on the size transition the tiles already carry. */

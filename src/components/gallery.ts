@@ -1,6 +1,7 @@
 import { html, join, type Html } from './html.ts';
 import { aspectOf, responsiveImage } from './image.ts';
 import { displayTitle } from '../content/title.ts';
+import { realSize, scaleAgainst, type Scaled } from '../content/size.ts';
 import { withBase } from '../content/paths.ts';
 import type { ProjectImage } from '../content/types.ts';
 
@@ -43,6 +44,11 @@ interface GridProps {
    * row height, which is the whole point of the composition.
    */
   readonly feed?: boolean;
+  /**
+   * Carry each work's real size, so the reader can switch the grid from one
+   * height to relative scale. Only where the items have catalogued dimensions.
+   */
+  readonly toScale?: boolean;
   /** Leading tiles to load eagerly — the ones visible in the stack. */
   readonly eagerCount?: number;
 }
@@ -60,7 +66,8 @@ export const DENSITIES = [
 export const DEFAULT_DENSITY = 2;
 
 function tile(
-  item: GridItem, basePath: string, index: number, priority: boolean, panels?: string, anchor?: number,
+  item: GridItem, basePath: string, index: number, priority: boolean,
+  panels?: string, anchor?: number, scaled?: Scaled,
 ): Html {
   const name = displayTitle(item.title, 'work');
   // A tile that raises a panel points at the panel's own anchor — there is no
@@ -70,7 +77,7 @@ function tile(
     class="tile"
     href="${href}"
     ${anchor ? html`id="year-${anchor}"` : ''}
-    style="--a:${aspectOf(item.image).toFixed(4)}"
+    style="--a:${aspectOf(item.image).toFixed(4)}${scaled ? `;--sh:${scaled.height.toFixed(4)}` : ''}"
     ${panels ? html`data-panel-open="${panels}-${item.slug}"` : ''}
     data-title="${name}"
     data-year="${item.year ?? ''}"
@@ -94,11 +101,22 @@ function tile(
  * only thing the density control changes; every tile's width is `--unit × --a`.
  */
 export function grid({
-  items, basePath, lightbox = false, panels, stack = false, justified = false, feed = false, eagerCount = 14,
+  items, basePath, lightbox = false, panels, stack = false, justified = false, feed = false,
+  toScale = false, eagerCount = 14,
 }: GridProps): Html {
   // The first tile of each year carries that year's anchor, so the rail can be
   // plain links and still work with scripting off.
   const seen = new Set<number>();
+
+  /*
+   * Every tile carries the size it would be drawn at on a wall, whether or not
+   * the reader ever asks for it: the switch is then a class on the grid rather
+   * than a re-render, and works without anything being recomputed.
+   */
+  const sizes = items.map((item) => realSize(item.dimensions));
+  const scale = scaleAgainst(sizes);
+  const scaleOf = (item: GridItem, i: number) =>
+    (toScale ? scale(sizes[i], aspectOf(item.image)) : undefined);
 
   /*
    * The feed is two columns of whole items rather than one wrapping run, so the
@@ -119,18 +137,28 @@ export function grid({
     data-grid
     ${lightbox ? html`data-lightbox-source` : ''}
     ${stack ? html`data-stack` : ''}
+    ${toScale ? html`data-scalable` : ''}
     style="--unit:${DENSITIES[DEFAULT_DENSITY]!.unit}px"
   >${join(
     items.map((item, i) => {
       const first = item.year !== undefined && !seen.has(item.year);
       if (first) seen.add(item.year!);
-      return tile(item, basePath, i, i < eagerCount, panels, first ? item.year : undefined);
+      return tile(item, basePath, i, i < eagerCount, panels, first ? item.year : undefined, scaleOf(item, i));
     }),
   )}</div>`;
 }
 
-/** Density steps and, optionally, a year filter — set in small caps above the grid. */
-export function gridControls(years: readonly number[] = []): Html {
+/**
+ * Density steps and, where the works are catalogued with their measurements, a
+ * switch between showing them all at one height and showing them at their
+ * relative sizes.
+ *
+ * Two readings of the same archive rather than one replacing the other: equal
+ * heights are a contact sheet, which is what you want to compare colour across
+ * 154 works, and relative sizes are a wall, which is what tells you a painting
+ * is three metres across. Neither is the truer view, so the reader chooses.
+ */
+export function gridControls(years: readonly number[] = [], scalable = false): Html {
   return html`<div class="controls" data-controls>
     <div class="control-group" role="group" aria-label="Grid size">
       ${join(
@@ -140,6 +168,12 @@ export function gridControls(years: readonly number[] = []): Html {
         ),
       )}
     </div>
+    ${scalable
+      ? html`<div class="control-group" role="group" aria-label="Sizing">
+          <button type="button" class="control is-active" data-scale="equal" aria-pressed="true">Equal</button>
+          <button type="button" class="control" data-scale="real" aria-pressed="false">To scale</button>
+        </div>`
+      : ''}
     ${years.length
       ? html`<div class="control-group" role="group" aria-label="Year">
           <button type="button" class="control is-active" data-year-filter="all" aria-pressed="true">All</button>
