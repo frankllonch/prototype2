@@ -263,27 +263,81 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   margin-top: 22vh;
   padding: 14vh 0 calc(var(--gap) * 2);
 }
+/*
+ * Biography and photographs side by side — beside, never over. The designer's
+ * sheet laps the picture across the text, which reads well as a still image and
+ * badly as a page: a line of prose running under a photograph is a line nobody
+ * can finish.
+ */
 .about-inner {
   display: grid;
-  grid-template-columns: minmax(0, 34rem) minmax(0, 0.7fr);
-  gap: var(--gap);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.82fr);
+  gap: clamp(2rem, 5vw, 5rem);
   align-items: start;
-  max-width: 78rem;
+  max-width: 86rem;
   margin: 0 auto;
   padding: 0 var(--pad);
 }
 /* Nothing here is meant to be reachable sideways. */
 .about { overflow-x: hidden; }
-.about-text > * { margin: 0 0 0.9em; font-size: 14px; line-height: 1.68; }
+
+/* Her name, then the statement the page opens on, set large. */
+.about-heading > * { margin: 0; font-weight: 700; font-size: 15px; letter-spacing: 0.01em; }
+.about-lead { margin: 1.8rem 0 2.2rem; }
+.about-lead > * {
+  margin: 0;
+  font-size: clamp(1.15rem, 1.85vw, 1.85rem);
+  font-weight: 600;
+  line-height: 1.22;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+.about-prose > * { margin: 0 0 1.1em; font-size: clamp(0.95rem, 1.1vw, 1.1rem); line-height: 1.55; }
 .about-text strong { font-weight: 600; }
 .about-text a { border-bottom: 1px solid currentColor; }
-.about-figures { display: flex; flex-direction: column; gap: var(--gap); position: sticky; top: var(--bar); }
-.about-figure { margin: 0; }
-.about-figure img { width: 100%; height: auto; }
+
+/*
+ * One photograph at a time, holding its place while the words go by and
+ * changing as they do — the same idea as a detail panel, driven from the About
+ * panel's own scroll (`client/figures.ts`).
+ *
+ * The stage is given a height so the pictures can be stacked in it; without
+ * one, absolutely positioned figures would collapse it to nothing.
+ */
+.about-figures { position: sticky; top: calc(var(--bar) + 2vh); }
+.about-sticky { position: relative; height: min(68vh, 34rem); }
+.about-figure {
+  position: absolute; inset: 0;
+  margin: 0;
+  display: grid; align-content: start; justify-items: center;
+  opacity: 0;
+  transition: opacity 0.8s var(--ease);
+}
+.about-figure.is-current { opacity: 1; }
+.about-figure picture, .about-figure img { width: 100%; height: 100%; }
+.about-figure img { object-fit: contain; object-position: top center; }
+
+/*
+ * From the private collections to the end: no columns, centred. A list of
+ * names, places and dates is not an argument and does not need a measure — down
+ * the middle it reads as a record, which is what it is.
+ */
+.about-tail {
+  max-width: 54rem;
+  margin: clamp(4rem, 9vw, 9rem) auto 0;
+  padding: 0 var(--pad);
+  text-align: center;
+}
+.about-tail > * > * , .about-tail > * { margin: 0 0 0.55em; }
+.about-tail p { font-size: clamp(0.95rem, 1.1vw, 1.1rem); line-height: 1.55; }
+.about-tail a { border-bottom: 1px solid currentColor; }
+/* The section labels the source sets in capitals get room above them. */
+.about-tail p:has(> strong), .about-tail strong { font-weight: 600; }
 
 @media (max-width: 899px) {
   .about-inner { grid-template-columns: 1fr; }
   .about-figures { position: static; }
+  .about-sticky { height: 52vh; }
 }
 
 /* Sticky covering is motion; without it the two simply sit one after the other. */

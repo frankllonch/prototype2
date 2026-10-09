@@ -17,6 +17,8 @@
  * here hides anything that cannot be got at without it.
  */
 export function initFigures(): void {
+  aboutFigures();
+
   for (const reader of document.querySelectorAll<HTMLElement>('[data-reader]')) {
     // Panels only. The Colour Chart scrolls the page and keeps its own mechanism.
     const panel = reader.closest<HTMLElement>('[data-panel]');
@@ -71,4 +73,52 @@ export function initFigures(): void {
     panel.addEventListener('panelopen', () => { widen(null); show(0); });
     show(0);
   }
+}
+
+/**
+ * The studio photograph on About changes as the biography goes by.
+ *
+ * Driven by scroll rather than by arrows, unlike a detail panel: there is no
+ * sequence to work through here, only two pictures of the same room, and a
+ * control for them would be a control for nothing. It reads as the view
+ * shifting while you read.
+ *
+ * Measured against the biography's own column rather than the whole panel, so
+ * the change happens while there is still text beside it, not after the reader
+ * has gone past into the collections.
+ */
+function aboutFigures(): void {
+  const stage = document.querySelector<HTMLElement>('[data-about-figures]');
+  const panel = stage?.closest<HTMLElement>('[data-panel]');
+  const column = stage?.closest('.about-inner')?.querySelector<HTMLElement>('.about-text');
+  if (!stage || !panel || !column) return;
+
+  const figures = [...stage.querySelectorAll<HTMLElement>('.about-figure')];
+  if (figures.length < 2) return;
+
+  let shown = 0;
+  const update = () => {
+    const box = column.getBoundingClientRect();
+    // How far the column has travelled past the middle of the screen, 0 to 1.
+    const travelled = (window.innerHeight * 0.5 - box.top) / Math.max(1, box.height);
+    const index = Math.min(figures.length - 1, Math.max(0, Math.floor(travelled * figures.length)));
+    if (index === shown) return;
+    shown = index;
+    figures.forEach((figure, i) => figure.classList.toggle('is-current', i === shown));
+  };
+
+  // On the clock rather than a frame callback: this only swaps a class, and a
+  // frame a background tab withholds would leave the wrong photograph showing.
+  let last = 0;
+  panel.addEventListener('scroll', () => {
+    const now = performance.now();
+    if (now - last < 60) return;
+    last = now;
+    update();
+  }, { passive: true });
+  panel.addEventListener('scrollend', update);
+  panel.addEventListener('panelopen', () => {
+    shown = 0;
+    figures.forEach((figure, i) => figure.classList.toggle('is-current', i === 0));
+  });
 }

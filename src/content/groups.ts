@@ -41,20 +41,50 @@ const GROUPS: ReadonlyArray<{ name: string; slugs: readonly string[] }> = [
 ];
 
 /**
- * Projects belonging to the What's Color? series, which is to become a section
- * of its own. Until it does they stay in the list, because a project that is
- * on the site today should not vanish while the page that will hold it is still
- * being drawn.
+ * Projects belonging to the What's Color? series, which has a section of its own
+ * coming. They are held out of this index rather than filed under a heading they
+ * do not belong to; the section being built is where they will be shown.
+ *
+ * Named here rather than deleted anywhere, so when that page lands it has the
+ * list already and nothing has to be remembered.
  */
-const WHATS_COLOR = new Set(['whats-color-3rd-edition-llibreria-terranova-abril-2024']);
+export const WHATS_COLOR = new Set(['whats-color-3rd-edition-llibreria-terranova-abril-2024']);
+
+/**
+ * Titles as the designer set them for the index.
+ *
+ * The derived titles are accurate but inherit the catalogue's unevenness — a
+ * client's name missing from one, a bracketed abbreviation left in another. An
+ * index is read down a column at a glance, so the wording is worth settling.
+ * Two of the designer's have been corrected where they are plainly slips:
+ * "Trainnings" for Trainings, and Uterqüe keeps its diaeresis, which is how the
+ * brand writes itself.
+ *
+ * Nothing else is overridden. Anything absent falls back to the derived title,
+ * so a project added later is named from the source rather than going untitled.
+ */
+const NAMES: Readonly<Record<string, string>> = {
+  'terra-rossa-milan-design-week-2024': 'Terra Rossa',
+  'color-chart-el-taller-de-arquitectura-rbta': 'Color Chart Taller d’Arquitectura',
+  'santa-cole-color-palette-2023': 'Color Palette Santa & Cole',
+  'artist-residence-2022': 'Artists Residence',
+  'tones-collection-2022': 'Tones Collection of Nani Marquina',
+  'dada-workshops-2017-2': 'Color Atlas for La Muralla Roja',
+  'silla-8-aoo-2019-2020': 'Silla 8 AOO',
+  'edges-collection-for-within-reach': 'Edges Collection',
+  'uterque-art-essays': 'Uterqüe Arts Essays',
+  'trainings_silences': 'Trainings Silencis',
+  'dada-workshops-2018': 'Dada Barcelona',
+  'dada-workshops-2017': 'Dada Barcelona',
+  'kamanar-10-chairs-10-artists-2022': 'Kamanar',
+  'solidary-fulard': 'Solidary Fulard Design',
+};
 
 export interface GroupedProject {
   readonly slug: string;
   readonly title: string;
   readonly when: string;
   readonly project: Project;
-  /** Belongs to a section not yet built; shown here meanwhile. */
-  readonly pending: boolean;
 }
 
 export interface ProjectGroup {
@@ -83,8 +113,10 @@ function whenOf(project: Project): string {
   return year ? String(year) : '';
 }
 
-/** The title with its dates and stray punctuation taken off, since the date is set beside it. */
+/** The designer's wording where there is one, else the title with its dates taken off. */
 function nameOf(project: Project): string {
+  const given = NAMES[project.slug];
+  if (given) return given;
   return displayTitle(project.title, 'project')
     .replace(/\b(?:19|20)\d{2}\s*[-–—]\s*(?:(?:19|20)\d{2}|on\s*going|ongoing|current(?:ly)?)\b/gi, '')
     .replace(/[_]+/g, ' ')
@@ -101,13 +133,13 @@ export function groupCommissioned(projects: readonly Project[]): readonly Projec
   const buckets = new Map<string, GroupedProject[]>(GROUPS.map((g) => [g.name, []]));
 
   for (const project of projects) {
+    if (WHATS_COLOR.has(project.slug)) continue;
     const name = placed.get(project.slug) ?? fallback;
     buckets.get(name)!.push({
       slug: project.slug,
       title: nameOf(project),
       when: whenOf(project),
       project,
-      pending: WHATS_COLOR.has(project.slug),
     });
   }
 

@@ -22,14 +22,14 @@ export interface EditorialProps {
  * to change as you scrolled, which read well while the text was the thing you
  * were following, but it means the reader cannot go back and cannot stay — and
  * looking at the photographs is half of why anyone opens an exhibition. The
- * Colour Chart keeps the scrolling version, because it is a page you read
+ * Color Chart keeps the scrolling version, because it is a page you read
  * through rather than a thing you look at.
  *
  * Either column can take the whole width: the text alone, for reading, or the
  * pictures alone, centred, for looking. One at a time, and never both, so there
  * is always something to come back to.
  *
- * Shared by the exhibition and commissioned panels and by the Colour Chart, so
+ * Shared by the exhibition and commissioned panels and by the Color Chart, so
  * everything that is read rather than browsed is read the same way.
  */
 export function editorialBody({ title, year, images, rows, venue, from, to, kind }: EditorialProps): Html {

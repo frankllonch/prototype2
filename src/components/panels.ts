@@ -18,7 +18,7 @@ export interface PanelItem {
 /**
  * Detail bodies for exhibitions and commissioned work, rendered once into the page
  * and raised over it on demand. The composition inside is the shared reader
- * (`editorial.ts`), the same one the Colour Chart uses.
+ * (`editorial.ts`), the same one the Color Chart uses.
  *
  * In the markup rather than fetched, so opening one is instant and the text is
  * there for search engines and for readers without scripting, who reach it by

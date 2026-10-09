@@ -198,7 +198,7 @@ function venueOf(body: string, title: string): string | undefined {
  * and leaves unbalanced markup that swallows the next sibling whole. That is
  * exactly how the About page lost its photographs once already.
  */
-function firstBlock(html: string): { block: string; rest: string } | null {
+export function firstBlock(html: string): { block: string; rest: string } | null {
   const open = /^\s*<([a-z][\w-]*)\b[^>]*>/i.exec(html);
   if (!open) return null;
   const name = open[1]!.toLowerCase();

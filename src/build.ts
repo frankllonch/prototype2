@@ -71,7 +71,7 @@ async function main() {
   await writePage('', artworkPage(works, yearColours));
   await writePage('exhibitions', exhibitionsPage(exhibitions, yearColours));
   await writePage('commissioned', commissionedPage(commissioned, yearColours));
-  if (colourChart) await writePage('colour-chart', colourChartPage(colourChart));
+  if (colourChart) await writePage('color-chart', colourChartPage(colourChart));
 
   for (const [i, work] of works.entries()) {
     await writePage(`artwork/${work.slug}`, artworkDetailPage(work, works[i - 1], works[i + 1]));
@@ -79,7 +79,7 @@ async function main() {
 
   console.log(
     `Built ${pagesWritten} pages: artwork (${works.length} works, ${yearColours.length} years), ` +
-    `exhibitions (${exhibitions.length}), commissioned (${commissioned.length}), colour chart.` +
+    `exhibitions (${exhibitions.length}), commissioned (${commissioned.length}), color chart.` +
     (BASE ? `\nBase path: ${BASE}` : ''),
   );
 }

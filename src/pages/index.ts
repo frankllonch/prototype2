@@ -139,15 +139,15 @@ export const commissionedItem = (p: Project): PanelItem => ({
   rows: p.rows,
 });
 
-/** The Colour Chart, read the same way as an exhibition. */
+/** The Color Chart, read the same way as an exhibition. */
 export function colourChartPage(page: Project): Html {
   return layout({
-    title: 'Colour Chart',
-    path: '/colour-chart/',
+    title: 'Color Chart',
+    path: '/color-chart/',
     children: html`
-      <h1 class="sr-only">Colour Chart</h1>
+      <h1 class="sr-only">Color Chart</h1>
       <div class="reader-page">
-        ${editorialBody({ title: 'Colour Chart', images: page.images, rows: page.rows })}
+        ${editorialBody({ title: 'Color Chart', images: page.images, rows: page.rows })}
       </div>
     `,
   });

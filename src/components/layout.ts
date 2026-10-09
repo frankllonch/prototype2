@@ -2,6 +2,7 @@ import { html, join, raw, type Html } from './html.ts';
 import { responsiveImage } from './image.ts';
 import { withBase } from '../content/paths.ts';
 import { aboutPage } from '../content/load.ts';
+import { splitAbout } from '../content/about.ts';
 
 interface LayoutProps {
   readonly title: string;
@@ -28,7 +29,7 @@ const MENU = [
   { label: 'Artwork', href: '/' },
   { label: 'Commissioned', href: '/commissioned/' },
   { label: 'Exhibitions', href: '/exhibitions/' },
-  { label: 'Colour Chart', href: '/colour-chart/' },
+  { label: 'Color Chart', href: '/color-chart/' },
 ] as const;
 
 /** Client modules, in boot order. Preloaded so the first interaction is instant. */
@@ -92,13 +93,19 @@ function aboutText(): string {
 
 /**
  * About opens over whatever page you are on. The first screen is the designer's
- * five lines, blinking through the palette; scrolling draws the biography up over
- * it — text in one column, the studio photographs down the other. The same
- * two-column idea as a detail panel, but the pictures move with the words here
- * instead of holding still.
+ * five lines, blinking through the palette; scrolling draws the biography up
+ * over it.
+ *
+ * Then the designer's layout: her name, an opening statement set large, the
+ * biography in a column with the studio photographs beside it — beside, not
+ * under, so nothing is read through a picture — and the photograph changing as
+ * you go. From the private collections to the end the page gives up its columns
+ * and centres, because a list of names and dates has no argument to make and
+ * reads better down the middle than ranged against a margin.
  */
 function aboutOverlay(): Html {
   const bio = aboutText();
+  const parts = bio ? splitAbout(bio) : null;
   const images = aboutPage?.images ?? [];
 
   return html`<section class="about" id="about" data-panel aria-label="About">
@@ -110,20 +117,27 @@ function aboutOverlay(): Html {
       ${bio ? html`<span class="about-more" aria-hidden="true">Scroll</span>` : ''}
     </div>
 
-    ${bio
+    ${parts
       ? html`<div class="about-body">
           <div class="about-inner">
-            <div class="about-text">${raw(bio)}</div>
-            <div class="about-figures">
-              ${join(
-                images.slice(0, 2).map(
-                  (image) => html`<figure class="about-figure">
-                    ${responsiveImage({ image, sizes: '(max-width: 899px) 88vw, 30vw' })}
-                  </figure>`,
-                ),
-              )}
+            <div class="about-text">
+              ${parts.heading ? html`<div class="about-heading">${raw(parts.heading)}</div>` : ''}
+              ${parts.lead ? html`<div class="about-lead">${raw(parts.lead)}</div>` : ''}
+              <div class="about-prose">${raw(parts.body)}</div>
+            </div>
+            <div class="about-figures" data-about-figures>
+              <div class="about-sticky">
+                ${join(
+                  images.slice(0, 2).map(
+                    (image, i) => html`<figure class="about-figure${i === 0 ? ' is-current' : ''}">
+                      ${responsiveImage({ image, sizes: '(max-width: 899px) 88vw, 38vw', priority: i === 0 })}
+                    </figure>`,
+                  ),
+                )}
+              </div>
             </div>
           </div>
+          ${parts.tail ? html`<div class="about-tail">${raw(parts.tail)}</div>` : ''}
         </div>`
       : ''}
   </section>`;
