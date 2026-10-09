@@ -56,6 +56,22 @@ const manifest = readJson<Record<string, ManifestEntry>>('content/images.json');
 /** One colour per year, sampled from that year's paintings by scripts/palette.ts. */
 export const yearColours: readonly YearColour[] = readJson<YearColour[]>('content/years.json');
 
+/**
+ * Covers that are a crop of the painting rather than a photograph of a room it
+ * is hanging in.
+ *
+ * It matters wherever the tile is taken to stand for the work itself. Drawing
+ * the grid to scale is the clear case: the tile's area is set from the
+ * catalogue, but if the picture inside it is a gallery wall then the painting
+ * occupies some unknown fraction of that area, and a 2-metre canvas can end up
+ * reading smaller than a sheet of paper beside it.
+ */
+const plates = new Set<string>(readJson<string[]>('content/crops.final.json'));
+
+/** Whether this image shows the work alone. */
+export const isPlate = (image: ProjectImage | undefined): boolean =>
+  Boolean(image && plates.has(image.id));
+
 const projects: readonly Project[] = dataset.projects.map((p) => hydrate(p, manifest));
 const by = (kind: Project['kind']) => projects.filter((p) => p.kind === kind);
 

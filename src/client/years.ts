@@ -139,6 +139,14 @@ export function initYears(): void {
       update();
     }, { passive: true });
     window.addEventListener('scrollend', update);
+    /*
+     * The grid can change shape under a reader who is sitting still — a density
+     * step, or the sizing switch, which moves the rows by a third of a page. No
+     * scroll follows, so nothing above would re-mark the rail, and it would go
+     * on naming a year that is no longer anywhere near the middle of the screen
+     * until the reader happened to move. Re-read once the sizes have settled.
+     */
+    grid?.addEventListener('gridchange', () => afterRelayout(update));
     update();
   };
 

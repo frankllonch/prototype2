@@ -19,6 +19,11 @@ export interface GridItem {
   readonly materials?: string;
   readonly reference?: string;
   readonly available?: boolean;
+  /**
+   * The image shows the work alone, rather than hanging in a room. Only then is
+   * the tile a fair stand-in for the painting's size.
+   */
+  readonly plate?: boolean;
 }
 
 interface GridProps {
@@ -115,8 +120,15 @@ export function grid({
    */
   const sizes = items.map((item) => realSize(item.dimensions));
   const scale = scaleAgainst(sizes);
+  /*
+   * A size is claimed only for works photographed alone. Where the cover is an
+   * installation shot the picture is mostly room, so an area set from the
+   * catalogue says nothing true about how big the painting looks — those keep
+   * the unit height, which is what the module already does for a work whose
+   * measurements could not be read, and the honest answer to the same question.
+   */
   const scaleOf = (item: GridItem, i: number) =>
-    (toScale ? scale(sizes[i], aspectOf(item.image)) : undefined);
+    (toScale && item.plate ? scale(sizes[i], aspectOf(item.image)) : undefined);
 
   /*
    * The feed is two columns of whole items rather than one wrapping run, so the

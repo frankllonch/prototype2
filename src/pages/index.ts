@@ -6,7 +6,7 @@ import { panels, type PanelItem } from '../components/panels.ts';
 import { exhibitionList } from '../components/exhibitions.ts';
 import { editorialBody } from '../components/editorial.ts';
 import { yearRail } from '../components/years.ts';
-import type { YearColour } from '../content/load.ts';
+import { isPlate, type YearColour } from '../content/load.ts';
 import { describeImage } from '../content/describe.ts';
 import { displayTitle } from '../content/title.ts';
 import { withBase } from '../content/paths.ts';
@@ -24,6 +24,7 @@ const workItem = (p: Project): GridItem => ({
   materials: p.metadata.materials,
   reference: p.metadata.reference,
   available: p.metadata.available,
+  plate: isPlate(p.cover),
 });
 
 /**
