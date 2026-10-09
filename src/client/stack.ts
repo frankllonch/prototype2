@@ -46,7 +46,7 @@ export function initStack(): void {
   const hero = document.querySelector<HTMLElement>('[data-hero]');
   const root = document.documentElement;
 
-  // Pages without a pile (exhibitions, collaborations) must not wait for one.
+  // Pages without a pile (exhibitions, commissioned) must not wait for one.
   if (!grid || !hero) { reveal(); return; }
 
   const tiles = [...grid.querySelectorAll<HTMLElement>('.tile')];

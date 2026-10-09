@@ -32,7 +32,7 @@ interface GridProps {
   readonly basePath: string;
   /** Tiles open in the lightbox (single works) … */
   readonly lightbox?: boolean;
-  /** … or as a panel `#<kind>-<slug>` over the page (exhibitions, collaborations). */
+  /** … or as a panel `#<kind>-<slug>` over the page (exhibitions, commissioned). */
   readonly panels?: string;
   /** Animate the grid out of a stack on the first scroll. */
   readonly stack?: boolean;

@@ -10,6 +10,7 @@ import { initYears } from './years.ts';
 import { initExhibitions } from './exhibitions.ts';
 import { initPanels } from './panels.ts';
 import { initPanelScroll } from './panel-scroll.ts';
+import { initFigures } from './figures.ts';
 import { initLightbox } from './lightbox.ts';
 import { initCursor } from './cursor.ts';
 
@@ -21,5 +22,6 @@ initYears();
 initExhibitions();
 initPanels();
 initPanelScroll();
+initFigures();
 initLightbox();
 initCursor();

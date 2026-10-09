@@ -1,5 +1,5 @@
 /**
- * Detail panels, after bofill.com: the text scrolls, the photograph stays.
+ * The Colour Chart, after bofill.com: the text scrolls, the photograph stays.
  *
  * The images are stacked in one sticky column and only one is shown at a time.
  * Which one follows the reader's progress — progress 0 to 1 maps across the
@@ -10,11 +10,15 @@
  * text: nothing is hidden behind this file.
  */
 export function initPanelScroll(): void {
-  // A panel scrolls inside itself; the Colour Chart scrolls the page.
-  const readers: Array<{ scroller: HTMLElement | Document; root: HTMLElement }> = [
-    ...[...document.querySelectorAll<HTMLElement>('[data-panel]')].map((p) => ({ scroller: p, root: p })),
-    ...[...document.querySelectorAll<HTMLElement>('.reader-page')].map((p) => ({ scroller: document, root: p })),
-  ];
+  /*
+   * The Colour Chart only. The detail panels used to be driven from here too,
+   * but their pictures are turned by hand now (`figures.ts`) — you cannot go
+   * back through a sequence that is tied to the scrollbar, and on an exhibition
+   * the photographs are half the point. A page you read straight through is the
+   * case the scrolled version is still right for.
+   */
+  const readers: Array<{ scroller: HTMLElement | Document; root: HTMLElement }> =
+    [...document.querySelectorAll<HTMLElement>('.reader-page')].map((p) => ({ scroller: document, root: p }));
 
   for (const { scroller, root: panel } of readers) {
     const stage = panel.querySelector<HTMLElement>('[data-figures]');

@@ -81,8 +81,8 @@ export const works: readonly Project[] = [...by('work')].sort((a, b) => {
   return year !== 0 ? year : (b.metadata.date ?? '').localeCompare(a.metadata.date ?? '');
 });
 
-/** Collaborations and commissions, newest first. */
-export const collaborations: readonly Project[] = [...by('project')].sort(
+/** Commissioned work and collaborations, newest first. */
+export const commissioned: readonly Project[] = [...by('project')].sort(
   (a, b) => (b.metadata.year ?? 0) - (a.metadata.year ?? 0),
 );
 

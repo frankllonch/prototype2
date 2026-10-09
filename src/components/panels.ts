@@ -16,7 +16,7 @@ export interface PanelItem {
 }
 
 /**
- * Detail bodies for exhibitions and collaborations, rendered once into the page
+ * Detail bodies for exhibitions and commissioned work, rendered once into the page
  * and raised over it on demand. The composition inside is the shared reader
  * (`editorial.ts`), the same one the Colour Chart uses.
  *

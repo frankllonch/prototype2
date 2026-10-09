@@ -107,7 +107,7 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .reader-figure figcaption { color: var(--ink-soft); margin-top: 0.4rem; font-size: 11px; }
 .reader-figure img { width: 100%; height: auto; }
 
-.reader-figures.is-live[data-multi] {
+.reader-page .reader-figures.is-live[data-multi] {
   min-height: clamp(170vh, calc(var(--n) * var(--slot)), 260vh);
 }
 /*
@@ -415,3 +415,122 @@ html:not(.js) .about:target { display: block; position: static; opacity: 1; visi
   text-transform: uppercase;
   color: var(--ink-soft);
 }
+
+/* ------------------------------------------------- detail panels, redesign */
+
+/*
+ * The panels are set in dark grey rather than the site's indigo, after the
+ * designer's layout.
+ *
+ * Both have to be restated. `--ink-soft` is written on `:root` as a mix of
+ * `--ink` with the paper, and it is tempting to think redefining `--ink` here
+ * would carry the quieter tone with it — it does not. A custom property has its
+ * own `var()` references substituted at the element that declares it, so
+ * `--ink-soft` resolved against the indigo at the root and inherited down
+ * already blue, which is exactly what it did until this line was added.
+ */
+.panel {
+  --ink: #242528;
+  --ink-soft: color-mix(in srgb, var(--ink) 52%, var(--paper));
+  color: var(--ink);
+}
+
+/* The two marks at the head of the sheet, from the layout. */
+.reader { position: relative; }
+.reader-mark {
+  position: absolute;
+  top: var(--bar);
+  width: 1.3rem;
+  height: 1.3rem;
+  background: var(--ink);
+}
+.reader-mark-start { left: 0; }
+.reader-mark-end { right: 0; }
+
+/*
+ * Turning the pictures. Under them, quiet, in the colour of the text — the
+ * arrows are for when you want them, not a thing the page is about.
+ */
+.reader-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.4rem;
+  margin-top: 1rem;
+}
+.reader-step {
+  color: inherit;
+  font-size: 15px;
+  line-height: 1;
+  padding: 0.35rem 0.5rem;
+  opacity: 0.55;
+  transition: opacity var(--hover) var(--ease);
+}
+.reader-step:hover, .reader-step:focus-visible { opacity: 1; }
+.reader-nav .reader-counter { margin: 0; min-width: 4.5rem; text-align: center; }
+
+/*
+ * Giving a column the whole sheet.
+ *
+ * Two brackets facing apart, which close toward each other once the column has
+ * the screen — the mark says what the next press will do, rather than what the
+ * state currently is.
+ */
+.reader-expand {
+  position: absolute;
+  top: calc(var(--bar) + 2.4rem);
+  right: 0;
+  z-index: 2;
+  color: inherit;
+  padding: 0.4rem;
+  opacity: 0.45;
+  transition: opacity var(--hover) var(--ease);
+}
+.reader-expand:hover, .reader-expand:focus-visible { opacity: 1; }
+.reader-expand > span { position: relative; display: block; width: 14px; height: 14px; }
+.reader-expand > span::before, .reader-expand > span::after {
+  content: '';
+  position: absolute;
+  width: 6px; height: 6px;
+  border: 1px solid currentColor;
+  transition: transform 0.3s var(--ease);
+}
+.reader-expand > span::before { top: 0; left: 0; border-right: 0; border-bottom: 0; }
+.reader-expand > span::after { right: 0; bottom: 0; border-left: 0; border-top: 0; }
+.reader-expand[aria-pressed='true'] > span::before { transform: translate(3px, 3px); }
+.reader-expand[aria-pressed='true'] > span::after { transform: translate(-3px, -3px); }
+
+/* The columns need somewhere to hang the button from. */
+.reader-text, .reader-figures { position: relative; }
+.reader-text { padding-right: 2.5rem; }
+
+/* Text alone: one column, and the measure opens out to the full sheet. */
+.reader.is-wide-text { grid-template-columns: minmax(0, 1fr); }
+.reader.is-wide-text .reader-figures { display: none; }
+.reader.is-wide-text .reader-text .prose { max-width: none; }
+/* With the width to do it, the run of dates spreads across the head. */
+.reader.is-wide-text .reader-when { justify-content: space-between; }
+
+/* Pictures alone: one column, centred, as much height as the screen allows. */
+.reader.is-wide-figures { grid-template-columns: minmax(0, 1fr); }
+.reader.is-wide-figures .reader-text { display: none; }
+.reader.is-wide-figures .reader-figures { justify-self: center; width: min(100%, 76rem); }
+.reader.is-wide-figures .reader-stage { height: calc(100vh - var(--bar) - 7rem); }
+.reader.is-wide-figures .reader-figure picture,
+.reader.is-wide-figures .reader-figure img { max-height: calc(100vh - var(--bar) - 9rem); }
+
+@media (max-width: 899px) {
+  .reader-mark { width: 0.9rem; height: 0.9rem; }
+  .reader-text { padding-right: 2rem; }
+}
+
+/*
+ * The Colour Chart shares this composition but not its controls: it is a page
+ * you read straight through, and its pictures follow the scroll. Rendering the
+ * arrows and the expand marks there would put two controls on the page that do
+ * nothing — `figures.ts` wires only what sits inside a panel. `display: none`
+ * rather than hiding them, so they leave the tab order with the layout.
+ */
+.reader-page .reader-nav,
+.reader-page .reader-expand { display: none; }
+.reader-page .reader-text { padding-right: 0; }

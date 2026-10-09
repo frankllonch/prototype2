@@ -9,10 +9,10 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import ts from 'typescript';
 import type { Html } from './components/html.ts';
-import { collaborations, colourChart, exhibitions, works, yearColours } from './content/load.ts';
+import { commissioned, colourChart, exhibitions, works, yearColours } from './content/load.ts';
 import { BASE } from './content/paths.ts';
 import {
-  artworkDetailPage, artworkPage, collaborationItem, colourChartPage, exhibitionsPage, panelGridPage,
+  artworkDetailPage, artworkPage, commissionedItem, colourChartPage, exhibitionsPage, panelGridPage,
 } from './pages/index.ts';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -50,18 +50,29 @@ async function buildAssets() {
 }
 
 async function main() {
-  // dist/media (the rendered images) is kept; everything else is regenerated.
-  for (const entry of ['site.css', 'js', 'fonts', 'index.html', 'artwork', 'exhibitions', 'collaborations', 'colour-chart']) {
-    const target = path.join(DIST, entry);
-    if (existsSync(target)) await rm(target, { recursive: true, force: true });
+  /*
+   * Everything is regenerated except the rendered images, which cost minutes to
+   * make and never change unless `npm run images` is run.
+   *
+   * Swept rather than named one by one. A list of routes to delete looks tidier
+   * and is quietly wrong the first time a route is renamed: the old directory is
+   * not on the list, so nothing removes it, and it sits in dist being deployed
+   * long after the page that made it is gone. Renaming Collaborations to
+   * Commissioned left exactly that behind.
+   */
+  if (existsSync(DIST)) {
+    for (const entry of await readdir(DIST)) {
+      if (entry === 'media' || entry === '.git') continue;
+      await rm(path.join(DIST, entry), { recursive: true, force: true });
+    }
   }
   await buildAssets();
 
   await writePage('', artworkPage(works, yearColours));
   await writePage('exhibitions', exhibitionsPage(exhibitions, yearColours));
-  await writePage('collaborations', panelGridPage({
-    title: 'Collaborations', path: '/collaborations/', kind: 'collaboration',
-    items: collaborations.map(collaborationItem), composition: 'justified',
+  await writePage('commissioned', panelGridPage({
+    title: 'Commissioned', path: '/commissioned/', kind: 'commissioned',
+    items: commissioned.map(commissionedItem), composition: 'justified',
   }));
   if (colourChart) await writePage('colour-chart', colourChartPage(colourChart));
 
@@ -71,7 +82,7 @@ async function main() {
 
   console.log(
     `Built ${pagesWritten} pages: artwork (${works.length} works, ${yearColours.length} years), ` +
-    `exhibitions (${exhibitions.length}), collaborations (${collaborations.length}), colour chart.` +
+    `exhibitions (${exhibitions.length}), commissioned (${commissioned.length}), colour chart.` +
     (BASE ? `\nBase path: ${BASE}` : ''),
   );
 }

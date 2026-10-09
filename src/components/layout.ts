@@ -26,7 +26,7 @@ interface LayoutProps {
 const MENU = [
   { label: 'About', href: '/#about', panel: 'about' },
   { label: 'Artwork', href: '/' },
-  { label: 'Collaborations', href: '/collaborations/' },
+  { label: 'Commissioned', href: '/commissioned/' },
   { label: 'Exhibitions', href: '/exhibitions/' },
   { label: 'Colour Chart', href: '/colour-chart/' },
 ] as const;
@@ -34,7 +34,7 @@ const MENU = [
 /** Client modules, in boot order. Preloaded so the first interaction is instant. */
 const CLIENT_MODULES = [
   'env', 'text-roll', 'transitions', 'controls', 'stack', 'years', 'exhibitions', 'panels',
-  'panel-scroll', 'lightbox', 'cursor', 'index',
+  'panel-scroll', 'figures', 'lightbox', 'cursor', 'index',
 ] as const;
 
 /** The designer's About: five lines, set in blue on peach. */

@@ -57,7 +57,7 @@ export function artworkPage(works: readonly Project[], years: readonly YearColou
  *
  * The two differ in composition. Exhibitions are installation views — rooms,
  * mostly, of varying shape — and read better in the two staggered columns after
- * nachoalegre.com. Collaborations are a set of objects, and read better justified
+ * nachoalegre.com. Commissioned work is a set of objects, and reads better justified
  * into rows, where they line up and can be compared.
  */
 export function panelGridPage(opts: {
@@ -129,7 +129,7 @@ export function exhibitionsPage(items: readonly Exhibition[], hues: readonly Yea
   });
 }
 
-export const collaborationItem = (p: Project): PanelItem => ({
+export const commissionedItem = (p: Project): PanelItem => ({
   slug: p.slug,
   title: displayTitle(p.title, 'project'),
   year: p.metadata.year,

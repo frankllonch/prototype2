@@ -15,21 +15,21 @@ export interface EditorialProps {
 }
 
 /**
- * The reading composition, after bofill.com: the text runs down one column and
- * the photograph holds the other.
+ * The reading composition: the text runs down one column and the photograph
+ * holds the other.
  *
- * Only one figure shows at a time and which one follows the reader's progress
- * (`client/panel-scroll.ts`), so the picture holds its place on the screen while
- * the words travel past it. `data-multi` marks the case where that is worth
- * arranging: with two or more photographs the figure column claims enough scroll
- * of its own to pin itself (see `.reader-figures` in the stylesheet), and with
- * one there is nothing to move through, so the text governs.
+ * In a panel the pictures are turned by hand, with arrows under them. They used
+ * to change as you scrolled, which read well while the text was the thing you
+ * were following, but it means the reader cannot go back and cannot stay — and
+ * looking at the photographs is half of why anyone opens an exhibition. The
+ * Colour Chart keeps the scrolling version, because it is a page you read
+ * through rather than a thing you look at.
  *
- * The count of photographs sits in the figure column rather than under the
- * title: it belongs to the pictures, and that column is the one that holds still,
- * so it stays in view for as long as it is telling you something.
+ * Either column can take the whole width: the text alone, for reading, or the
+ * pictures alone, centred, for looking. One at a time, and never both, so there
+ * is always something to come back to.
  *
- * Shared by the exhibition and collaboration panels and by the Colour Chart, so
+ * Shared by the exhibition and commissioned panels and by the Colour Chart, so
  * everything that is read rather than browsed is read the same way.
  */
 export function editorialBody({ title, year, images, rows, venue, from, to, kind }: EditorialProps): Html {
@@ -38,8 +38,15 @@ export function editorialBody({ title, year, images, rows, venue, from, to, kind
   // you clicked and the page it opens read as the same object.
   const stated = Boolean(venue || from || kind);
 
-  return html`<div class="reader${stated ? ' reader-stated' : ''}">
+  return html`<div class="reader${stated ? ' reader-stated' : ''}" data-reader>
+    <span class="reader-mark reader-mark-start" aria-hidden="true"></span>
+    <span class="reader-mark reader-mark-end" aria-hidden="true"></span>
+
     <div class="reader-text">
+      <button
+        type="button" class="reader-expand" data-expand="text"
+        aria-pressed="false" aria-label="Show the text on its own"
+      ><span aria-hidden="true"></span></button>
       <header class="reader-head">
         <h2 class="reader-title">${title}</h2>
         ${venue ? html`<p class="reader-venue">${venue}</p>` : ''}
@@ -58,6 +65,12 @@ export function editorialBody({ title, year, images, rows, venue, from, to, kind
     </div>
 
     <div class="reader-figures" data-figures ${images.length > 1 ? 'data-multi' : ''} style="--n:${images.length}">
+      ${images.length
+        ? html`<button
+            type="button" class="reader-expand" data-expand="figures"
+            aria-pressed="false" aria-label="Show the images on their own"
+          ><span aria-hidden="true"></span></button>`
+        : ''}
       <div class="reader-sticky">
         <div class="reader-stage">
           ${join(
@@ -70,7 +83,15 @@ export function editorialBody({ title, year, images, rows, venue, from, to, kind
           )}
         </div>
         ${images.length > 1
-          ? html`<p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>`
+          ? html`<nav class="reader-nav" aria-label="Images">
+              <button type="button" class="reader-step" data-figure-step="-1" aria-label="Previous image">
+                <span aria-hidden="true">&#8592;</span>
+              </button>
+              <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
+              <button type="button" class="reader-step" data-figure-step="1" aria-label="Next image">
+                <span aria-hidden="true">&#8594;</span>
+              </button>
+            </nav>`
           : ''}
       </div>
     </div>
