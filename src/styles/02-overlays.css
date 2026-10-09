@@ -154,8 +154,8 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 /*
  * About is a takeover, not a veil.
  *
- * The title screen cycles through the palette the paintings gave us — the same
- * colours as the year rail, ground and type changing together.
+ * The title screen cycles through the five pairs the designer set, ground and
+ * type changing together.
  *
  * Each colour *holds* and then blends quickly into the next, rather than cutting
  * or sweeping: a cut was harsh and a constant sweep never let a colour be itself.
@@ -163,17 +163,27 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
  * properties so the keyframes interpolate them properly instead of falling back
  * to the discrete behaviour unregistered properties get.
  */
-@property --blink-bg { syntax: '<color>'; inherits: true; initial-value: #fcd090; }
-@property --blink-fg { syntax: '<color>'; inherits: true; initial-value: #003880; }
+@property --blink-bg { syntax: '<color>'; inherits: true; initial-value: #ed373f; }
+@property --blink-fg { syntax: '<color>'; inherits: true; initial-value: #013787; }
 
+/*
+ * The five pairs, as given, in the order given. Ground and type always move
+ * together — each is a pairing someone chose, not a background and a foreground
+ * picked independently, so no frame ever shows one half of one pair against the
+ * other half of another.
+ *
+ * Five slots of a fifth each: the colour holds for 17 and turns over 3, which is
+ * what makes it read as a blink. At nine seconds on About that is a second and a
+ * half of stillness and a quarter-second turn; on the loading screen, at 1.8s,
+ * the same shape strobes.
+ */
 @keyframes about-blink {
-  0%,   14%  { --blink-bg: #fcd090; --blink-fg: #003880; }
-  16.6%, 31% { --blink-bg: #003880; --blink-fg: #fcd090; }
-  33.3%, 47% { --blink-bg: #0b6140; --blink-fg: #dac192; }
-  50%,   64% { --blink-bg: #bc703f; --blink-fg: #ffffff; }
-  66.6%, 81% { --blink-bg: #0a5769; --blink-fg: #fcd090; }
-  83.3%, 97% { --blink-bg: #843b32; --blink-fg: #dac192; }
-  100%       { --blink-bg: #fcd090; --blink-fg: #003880; }
+  0%,   17% { --blink-bg: #ed373f; --blink-fg: #013787; }
+  20%,  37% { --blink-bg: #ffd090; --blink-fg: #013787; }
+  40%,  57% { --blink-bg: #392524; --blink-fg: #e8bc00; }
+  60%,  77% { --blink-bg: #054d9f; --blink-fg: #e6a085; }
+  80%,  97% { --blink-bg: #2c402f; --blink-fg: #f5c041; }
+  100%      { --blink-bg: #ed373f; --blink-fg: #013787; }
 }
 
 .about {

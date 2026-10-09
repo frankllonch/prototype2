@@ -152,11 +152,12 @@ html.is-revealed .detail { animation-name: none; }
   background: var(--blink-bg);
   color: var(--blink-fg);
   /*
-   * A strobe: six colours in under two seconds, so it flashes rather than turns.
+   * A strobe: the five pairs in under two seconds, so it flashes rather than
+   * turns.
    * The opposite of About, which holds each colour for a second and a half.
    *
    * Not faster than this on purpose. The keyframes hold and then cut, so the
-   * rate you see is one change per 0.3s — about three a second, which is where
+   * rate you see is one change per 0.36s — under three a second, which is where
    * the guidance on flashing stops. Anyone who has asked for less movement gets
    * no loading screen at all rather than a slower one.
    */
