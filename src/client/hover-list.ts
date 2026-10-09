@@ -1,5 +1,6 @@
 /**
- * The exhibitions index answers in a different colour each time.
+ * The index lists — exhibitions, and commissioned work — answer in a different
+ * colour each time.
  *
  * The palette is the one sampled from the paintings for the year rail, handed
  * over as custom properties on the list itself, so the colours stay in the
@@ -13,14 +14,15 @@
  * Decoration only. Without this the row keeps the default `--exh-hover` from the
  * stylesheet and still answers to the pointer; it simply answers in one colour.
  */
-export function initExhibitions(): void {
-  const list = document.querySelector<HTMLElement>('[data-exhibitions]');
-  if (!list) return;
+export function initHoverList(): void {
+  for (const list of document.querySelectorAll<HTMLElement>('[data-hues]')) wire(list);
+}
 
+function wire(list: HTMLElement): void {
   const count = Number(list.dataset.hues ?? 0);
   if (!Number.isFinite(count) || count < 2) return;
 
-  const rows = [...list.querySelectorAll<HTMLElement>('.exh')];
+  const rows = [...list.querySelectorAll<HTMLElement>('.hrow')];
   let next = rows.length % count;
 
   const colour = (row: HTMLElement) => {

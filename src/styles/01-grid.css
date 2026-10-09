@@ -262,11 +262,11 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
  * scripting `--exh-hover` keeps its default and the row still responds.
  */
 @media (hover: hover) {
-  .exh:hover { color: var(--exh-hover); }
-  .exh:hover .exh-plate { opacity: 1; }
+  .hrow:hover { color: var(--exh-hover); }
+  .hrow:hover .exh-plate { opacity: 1; }
 }
-.exh:focus-visible { color: var(--exh-hover); outline: none; }
-.exh:focus-visible .exh-plate { opacity: 1; }
+.hrow:focus-visible { color: var(--exh-hover); outline: none; }
+.hrow:focus-visible .exh-plate { opacity: 1; }
 
 @media (max-width: 899px) {
   .exh {
@@ -307,3 +307,81 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
 }
 
 /* Switching modes animates, on the size transition the tiles already carry. */
+
+/* ------------------------------------------------- commissioned, by group */
+
+/*
+ * The kind of work named once at the left, its projects beside it: a rule under
+ * each and the year at the right margin.
+ */
+.xlist {
+  --exh-hover: var(--ink);
+  max-width: 100rem;
+  margin: 0 auto;
+  padding: calc(var(--bar) + 8vh) var(--pad) 18vh;
+}
+
+.xgroup {
+  display: grid;
+  grid-template-columns: minmax(0, 20%) minmax(0, 1fr);
+  gap: 0 clamp(1.5rem, 5vw, 5rem);
+  margin-bottom: clamp(4rem, 9vw, 9rem);
+}
+.xgroup:last-child { margin-bottom: 0; }
+.xgroup-name {
+  margin: 0;
+  font-size: clamp(1rem, 1.35vw, 1.35rem);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.xrow {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 1.5rem;
+  padding: 0.55rem 0 0.5rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 30%, transparent);
+  color: var(--ink);
+  transition: color 0.45s var(--ease);
+}
+.xrow-title, .xrow-when {
+  font-size: clamp(1rem, 1.35vw, 1.35rem);
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  line-height: 1.25;
+}
+.xrow-title { font-weight: 500; }
+.xrow-when { font-style: italic; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/*
+ * The photograph floats rather than sitting in the row.
+ *
+ * Each row here is a single line, and a picture inside one would set its height
+ * — so the list would lurch every time the pointer crossed it, which is the
+ * fault the exhibitions index avoids by being tall enough to hold its plate.
+ * These rows cannot be that tall without losing the layout, so the picture is
+ * taken out of flow entirely. Only one row is ever hovered, so there is nothing
+ * for it to collide with.
+ */
+.xrow .exh-plate {
+  position: absolute;
+  left: 52%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 13vw;
+  max-width: 11rem;
+  height: 7.5rem;
+  z-index: 2;
+  pointer-events: none;
+}
+
+@media (max-width: 899px) {
+  .xgroup { grid-template-columns: 1fr; gap: 0.75rem; }
+  .xgroup-name { margin-bottom: 0.25rem; }
+  /* No pointer to hover with, and no room beside the row for a picture. */
+  .xrow .exh-plate { display: none; }
+}

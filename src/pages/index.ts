@@ -4,6 +4,8 @@ import { grid, gridControls, type GridItem } from '../components/gallery.ts';
 import { responsiveImage } from '../components/image.ts';
 import { panels, type PanelItem } from '../components/panels.ts';
 import { exhibitionList } from '../components/exhibitions.ts';
+import { commissionedList } from '../components/commissioned.ts';
+import { groupCommissioned } from '../content/groups.ts';
 import { editorialBody } from '../components/editorial.ts';
 import { yearRail } from '../components/years.ts';
 import { isPlate, type YearColour } from '../content/load.ts';
@@ -183,5 +185,23 @@ export function artworkDetailPage(work: Project, previous?: Project, next?: Proj
         ${link(next, 'Next →', 'next')}
       </nav>
     </article>`,
+  });
+}
+
+
+/**
+ * Commissioned work: grouped by the kind of job rather than shown as a grid,
+ * after the designer's layout. Same index behaviour as the exhibitions page —
+ * the row answers in a colour and brings up its photograph.
+ */
+export function commissionedPage(items: readonly Project[], hues: readonly YearColour[]): Html {
+  return layout({
+    title: 'Commissioned',
+    path: '/commissioned/',
+    overlays: panels('commissioned', items.map(commissionedItem)),
+    children: html`
+      <h1 class="sr-only">Commissioned</h1>
+      ${commissionedList(groupCommissioned(items), hues)}
+    `,
   });
 }

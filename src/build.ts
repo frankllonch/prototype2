@@ -12,7 +12,7 @@ import type { Html } from './components/html.ts';
 import { commissioned, colourChart, exhibitions, works, yearColours } from './content/load.ts';
 import { BASE } from './content/paths.ts';
 import {
-  artworkDetailPage, artworkPage, commissionedItem, colourChartPage, exhibitionsPage, panelGridPage,
+  artworkDetailPage, artworkPage, commissionedPage, colourChartPage, exhibitionsPage,
 } from './pages/index.ts';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -70,10 +70,7 @@ async function main() {
 
   await writePage('', artworkPage(works, yearColours));
   await writePage('exhibitions', exhibitionsPage(exhibitions, yearColours));
-  await writePage('commissioned', panelGridPage({
-    title: 'Commissioned', path: '/commissioned/', kind: 'commissioned',
-    items: commissioned.map(commissionedItem), composition: 'justified',
-  }));
+  await writePage('commissioned', commissionedPage(commissioned, yearColours));
   if (colourChart) await writePage('colour-chart', colourChartPage(colourChart));
 
   for (const [i, work] of works.entries()) {

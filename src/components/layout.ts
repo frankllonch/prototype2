@@ -33,7 +33,7 @@ const MENU = [
 
 /** Client modules, in boot order. Preloaded so the first interaction is instant. */
 const CLIENT_MODULES = [
-  'env', 'text-roll', 'transitions', 'controls', 'stack', 'years', 'exhibitions', 'panels',
+  'env', 'text-roll', 'transitions', 'controls', 'stack', 'years', 'hover-list', 'panels',
   'panel-scroll', 'figures', 'lightbox', 'cursor', 'index',
 ] as const;
 
@@ -57,6 +57,7 @@ function loadingScreen(): Html {
 function topBar(path: string): Html {
   return html`<header class="top">
     <a class="wordmark" href="${withBase('/')}" data-roll>CLAUDIA VALSELLS</a>
+    <button type="button" class="top-soon" aria-disabled="true">What&rsquo;s Color?</button>
     <nav class="menu" aria-label="Primary">
       ${join(
         MENU.map(

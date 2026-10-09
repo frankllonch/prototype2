@@ -26,13 +26,16 @@ export interface ExhibitionRow {
  * through. A show whose dates could not be read simply shows none; a wrong date
  * on a gallery's page is worse than an absent one.
  */
-export function exhibitionList(items: readonly ExhibitionRow[], hues: readonly YearColour[]): Html {
-  // The hover colours are the ones sampled from the paintings for the year rail,
-  // handed to the client as custom properties so the palette stays in the
-  // stylesheet's world and only the choosing is scripted.
-  const palette = hues.map((h, i) => `--hue-${i}:${vivid(h.colour)}`).join(';');
+/**
+ * The hover colours, handed to the client as custom properties so the palette
+ * stays in the stylesheet's world and only the choosing is scripted. Shared with
+ * the commissioned index, which answers the same way.
+ */
+export const huePalette = (hues: readonly YearColour[]): string =>
+  hues.map((h, i) => `--hue-${i}:${vivid(h.colour)}`).join(';');
 
-  return html`<div class="exh-list" data-exhibitions data-hues="${hues.length}" style="${palette}">
+export function exhibitionList(items: readonly ExhibitionRow[], hues: readonly YearColour[]): Html {
+  return html`<div class="exh-list" data-hues="${hues.length}" style="${huePalette(hues)}">
     ${join(items.map(row))}
   </div>`;
 }
@@ -101,7 +104,7 @@ function row(item: ExhibitionRow): Html {
    * photograph is `aria-hidden`, so it adds nothing to that name.
    */
   return html`<a
-    class="exh"
+    class="exh hrow"
     href="#exhibition-${item.slug}"
     data-panel-open="exhibition-${item.slug}"
   >

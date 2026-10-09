@@ -418,23 +418,6 @@ html:not(.js) .about:target { display: block; position: static; opacity: 1; visi
 
 /* ------------------------------------------------- detail panels, redesign */
 
-/*
- * The panels are set in dark grey rather than the site's indigo, after the
- * designer's layout.
- *
- * Both have to be restated. `--ink-soft` is written on `:root` as a mix of
- * `--ink` with the paper, and it is tempting to think redefining `--ink` here
- * would carry the quieter tone with it — it does not. A custom property has its
- * own `var()` references substituted at the element that declares it, so
- * `--ink-soft` resolved against the indigo at the root and inherited down
- * already blue, which is exactly what it did until this line was added.
- */
-.panel {
-  --ink: #242528;
-  --ink-soft: color-mix(in srgb, var(--ink) 52%, var(--paper));
-  color: var(--ink);
-}
-
 /* The two marks at the head of the sheet, from the layout. */
 .reader { position: relative; }
 .reader-mark {
