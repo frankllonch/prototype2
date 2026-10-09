@@ -4,6 +4,7 @@ import { grid, gridControls, type GridItem } from '../components/gallery.ts';
 import { responsiveImage } from '../components/image.ts';
 import { panels, type PanelItem } from '../components/panels.ts';
 import { exhibitionList } from '../components/exhibitions.ts';
+import { WHATS_COLOR_SHOWS, venueFor } from '../content/shows.ts';
 import { commissionedList } from '../components/commissioned.ts';
 import { groupCommissioned } from '../content/groups.ts';
 import { editorialBody } from '../components/editorial.ts';
@@ -109,18 +110,22 @@ export const exhibitionItem = (e: Exhibition): PanelItem => ({
  * between each — and the photograph only when you reach for a row.
  */
 export function exhibitionsPage(items: readonly Exhibition[], hues: readonly YearColour[]): Html {
+  // The What’s Color? shows are held for their own section, panels and all: a
+  // row taken off the index whose panel still answered would be a page nothing
+  // links to.
+  const shown = items.filter((e) => !WHATS_COLOR_SHOWS.has(e.slug));
   return layout({
     title: 'Exhibitions',
     path: '/exhibitions/',
-    overlays: panels('exhibition', items.map(exhibitionItem)),
+    overlays: panels('exhibition', shown.map(exhibitionItem)),
     children: html`
       <h1 class="sr-only">Exhibitions</h1>
       ${exhibitionList(
-        items.map((e) => ({
+        shown.map((e) => ({
           slug: e.slug,
           title: e.title,
           ...(e.year !== undefined ? { year: e.year } : {}),
-          ...(e.venue !== undefined ? { venue: e.venue } : {}),
+          ...(venueFor(e.slug, e.venue) !== undefined ? { venue: venueFor(e.slug, e.venue)! } : {}),
           ...(e.from !== undefined ? { from: e.from } : {}),
           ...(e.to !== undefined ? { to: e.to } : {}),
           ...(e.cover !== undefined ? { cover: e.cover } : {}),

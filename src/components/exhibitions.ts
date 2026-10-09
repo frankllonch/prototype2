@@ -104,7 +104,7 @@ function row(item: ExhibitionRow): Html {
    * photograph is `aria-hidden`, so it adds nothing to that name.
    */
   return html`<a
-    class="exh hrow"
+    class="exh xrow hrow"
     href="#exhibition-${item.slug}"
     data-panel-open="exhibition-${item.slug}"
   >

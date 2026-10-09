@@ -190,79 +190,96 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
   .feed-column + .feed-column { margin-top: clamp(4rem, 10vw, 10rem); }
 }
 
-/* ------------------------------------------------------- exhibitions list */
+/* ------------------------------------------------------------ index rows */
 
 /*
- * The exhibitions index, after the designer's layout: a line per show rather
- * than a gallery of them. Name and place at the left, the run of dates and the
- * year at the right, a rule between each, and a great deal of air.
+ * One row system, used by both indexes.
  *
- * The photograph sits in the gap between the name and the dates and is only
- * brought up on hover, so the page reads as a table — which is what a list of
- * exhibitions is — until you reach for a row.
+ * Exhibitions and Commissioned are the same object — a name, a date, a rule
+ * under it — and the designer drew them that way. They had drifted apart in the
+ * build: the exhibitions row was a hairline under 1.15vw type with 8.5rem of
+ * air around it, which is nothing the sheet asks for. Everything that is not
+ * the column layout lives here now, and each list brings only its columns.
+ *
+ * Measured off the references at the 1866 they were exported at: the rule is
+ * 3px, one single-line row sits 60px from the next, and the type sits 7px clear
+ * of the line beneath it.
  */
-.exh-list {
-  --exh-hover: var(--ink);
-  /* No cap: the margin governs, as it does in the design. A capped box plus the
-     padding inside it put the rules 77px from the edge at the width the mockup
-     was drawn at, not the 30 it specifies — the cap was centring the box and the
-     padding was then measured from the box, not from the screen. These are short
-     rows, so there is no measure to protect. */
-  margin: 0 auto;
-  padding: calc(var(--bar) + var(--gap)) var(--pad) 18vh;
-}
-
-.exh {
+.xrow {
+  position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 10rem minmax(0, 15rem) 4.5rem;
-  align-items: center;
-  gap: clamp(1rem, 3vw, 3rem);
-  /* Tall enough to hold the photograph without the row changing height when it
-     appears — a list that jumps as the pointer crosses it is unusable. */
-  min-height: 8.5rem;
-  padding: 1.6rem 0;
-  border-bottom: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
+  align-items: baseline;
+  gap: 1.5rem;
+  /*
+   * Four knobs, so the two lists can share everything else: the type scale, the
+   * leading, and the space above and below. Commissioned keeps the defaults,
+   * which are the figures solved off its reference; exhibitions turns each one
+   * down or up because its rows carry two lines and a date range rather than a
+   * name.
+   */
+  padding: var(--row-top, 1.017vw) 0 var(--row-bottom, 0px);
+  border-bottom: 3px solid var(--ink);
   color: var(--ink);
   transition: color 0.45s var(--ease);
 }
-.exh:first-child { border-top: 1px solid color-mix(in srgb, var(--ink) 18%, transparent); }
 
-.exh-name { display: grid; gap: 0.1rem; min-width: 0; }
-.exh-title, .exh-venue {
-  font-size: clamp(0.95rem, 1.15vw, 1.15rem);
-  letter-spacing: 0;
-  text-transform: uppercase;
-  line-height: 1.111;
-}
-.exh-title { font-weight: 500; }
-.exh-venue { font-weight: 500; }
-
-.exh-when, .exh-year {
-  font-size: clamp(0.95rem, 1.15vw, 1.15rem);
-  text-transform: uppercase;
+/*
+ * Solved against the reference rather than guessed: 2.286vw puts the cap height
+ * at its 29px, and 0.8915 puts the baseline 7px clear of the rule.
+ *
+ * The line box is under 1 because the slack a normal one carries beneath the
+ * baseline is what was holding the type off the line. On the exhibitions rows,
+ * which run to two lines, that same figure becomes the leading — these are caps
+ * with no descenders, so the lines stack close without colliding. The
+ * half-leading under the last baseline does not depend on how many lines sit
+ * above it, so the 7px comes out the same on a two-line row as on a one-line
+ * row, and the two lists share a rule position without being told to.
+ */
+.xrow-title, .xrow-when, .exh-title, .exh-venue, .exh-when, .exh-year, .xgroup-name {
+  font-size: calc(clamp(1.05rem, 2.286vw, 2.75rem) * var(--row-k, 1));
   font-weight: 500;
   letter-spacing: 0;
+  text-transform: uppercase;
+  line-height: var(--row-leading, 0.8915);
   font-variant-numeric: tabular-nums;
 }
-.exh-when { display: flex; gap: clamp(0.5rem, 1.6vw, 1.6rem); }
-.exh-span { white-space: nowrap; }
+.xrow-when { font-style: italic; white-space: nowrap; }
 /* The months lean, the words that introduce them stay upright. */
 .exh-when em, .reader-when em { font-style: italic; }
 .exh-lead { font-style: normal; }
-.exh-year { text-align: right; }
+.exh-span { white-space: nowrap; }
 
-/* Shown on hover, never moving anything: the cell is always this size. */
+/*
+ * The photograph floats rather than sitting in the row.
+ *
+ * A picture inside a row sets that row's height, so the list lurches every time
+ * the pointer crosses it. The exhibitions index used to buy its way out of that
+ * by being tall enough to hold the plate whether or not one was showing, which
+ * is where its air came from. At the measured rhythm there is no room for that,
+ * so the picture is taken out of flow on both lists. Only one row is ever
+ * hovered, so there is nothing for it to collide with.
+ */
 .exh-plate {
   display: block;
-  height: 5.2rem;
   opacity: 0;
   transition: opacity 0.45s var(--ease);
 }
 .exh-plate picture, .exh-plate img { width: 100%; height: 100%; }
 .exh-plate img { object-fit: contain; object-position: center; }
+.xrow .exh-plate {
+  position: absolute;
+  left: 52%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 13vw;
+  max-width: 11rem;
+  height: 7.5rem;
+  z-index: 2;
+  pointer-events: none;
+}
 
 /*
- * The colour is set per hover by `client/exhibitions.ts`, which walks the palette
+ * The colour is set per hover by `client/hover-list.ts`, which walks the palette
  * sampled from the paintings so no two consecutive rows answer alike. Without
  * scripting `--exh-hover` keeps its default and the row still responds.
  */
@@ -273,11 +290,67 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
 .hrow:focus-visible { color: var(--exh-hover); outline: none; }
 .hrow:focus-visible .exh-plate { opacity: 1; }
 
+/* ------------------------------------------------------- exhibitions list */
+
+/*
+ * A line per show rather than a gallery of them: name and place at the left,
+ * the run of dates and the year at the right, a rule between each.
+ */
+.exh-list {
+  --exh-hover: var(--ink);
+  /*
+   * Set off the designer's exhibitions sheet, whose first row is this page's
+   * first row — the same show, the same address — so the type could be scaled
+   * from it directly: the title and the venue each come out at 0.91 of the
+   * commissioned size, agreeing to within a percent.
+   *
+   * The leading and the air are the real difference between the two lists.
+   * Commissioned is one line sitting tight on its rule, which is what the
+   * sub-1 line box is for. These rows are two lines with a gap under them, so
+   * the leading goes back above 1 and the row is given room above and below.
+   * Forcing the commissioned rhythm onto them put four lines in a 98px row.
+   */
+  --row-k: 0.91;
+  --row-leading: 1.05;
+  --row-top: 4.49vw;
+  --row-bottom: 2.76vw;
+  /* Wide enough for the longest run the dates can make — 'From December To
+     January 2022', the one show that crosses a year — with the year clear of
+     it. Too narrow and the two run together, which is what they were doing. */
+  --when-col: 37vw;
+  --year-col: 5.8vw;
+  /* No cap: the margin governs, as it does in the design. A capped box plus the
+     padding inside it put the rules 77px from the edge at the width the mockup
+     was drawn at, not the 30 it specifies — the cap was centring the box and the
+     padding was then measured from the box, not from the screen. These are short
+     rows, so there is no measure to protect. */
+  margin: 0 auto;
+  padding: calc(var(--bar) + 8vh) var(--pad) 18vh;
+}
+
+/*
+ * The date and year columns are fixed rather than `auto` because each row is
+ * its own grid: `auto` would size every row to its own contents and the dates
+ * would stagger down the page instead of standing in a column.
+ */
+.exh-list .exh {
+  grid-template-columns: minmax(0, 1fr) var(--when-col) var(--year-col);
+}
+.exh-name { display: grid; min-width: 0; }
+.exh-when { display: flex; gap: clamp(0.5rem, 1.6vw, 1.6rem); }
+.exh-year { text-align: right; }
+
+/* Held just clear of the dates rather than over them: at 52% the plate landed
+   on top of the date column, which on this list starts further left. */
+.exh-list .xrow .exh-plate {
+  left: auto;
+  right: calc(var(--when-col) + var(--year-col) + 3rem);
+}
+
 @media (max-width: 899px) {
-  .exh {
+  .exh-list .exh {
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas: 'name year' 'when year';
-    min-height: 0;
     gap: 0.3rem 1rem;
   }
   .exh-name { grid-area: name; }
@@ -317,7 +390,8 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
 
 /*
  * The kind of work named once at the left, its projects beside it: a rule under
- * each and the year at the right margin.
+ * each and the year at the right margin. The rows themselves are the shared
+ * ones above; only the columns and the spacing between groups are here.
  */
 .xlist {
   --exh-hover: var(--ink);
@@ -333,59 +407,28 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
      gap: it is where the rules start, not where the label ends. */
   grid-template-columns: 25.53% minmax(0, 1fr);
   gap: 0;
-  margin-bottom: clamp(4rem, 9vw, 9rem);
+  /*
+   * 139px from the last rule of one group to the first rule of the next, which
+   * is 79px of margin once the 60px row is taken off — 4.234vw at the 1866 the
+   * reference was exported at.
+   *
+   * The reference is not consistent about this: the same figure across the
+   * second boundary is 168px, and both exports of the file agree on both
+   * numbers, so it is the file rather than the measurement. Two different gaps
+   * in one list reads as hand-placed blocks rather than as intent, so the
+   * tighter one is used throughout — the note that came with the reference was
+   * that the spacing is tighter than we had it.
+   */
+  margin-bottom: clamp(2.5rem, 4.234vw, 6rem);
 }
 .xgroup:last-child { margin-bottom: 0; }
-.xgroup-name {
-  margin: 0;
-  font-size: clamp(1rem, 1.35vw, 1.35rem);
-  font-weight: 500;
-  letter-spacing: 0;
-  text-transform: uppercase;
-  line-height: 1.111;
-}
+.xgroup-name { margin: 0; }
 
-.xrow {
-  position: relative;
-  display: grid;
+/* Scoped to the list: the two indexes share every rule above but the columns,
+   and an unscoped `.xrow` here would win over the exhibitions template on
+   source order alone — same specificity, further down the sheet. */
+.xlist .xrow {
   grid-template-columns: minmax(0, 1fr) auto;
-  align-items: baseline;
-  gap: 1.5rem;
-  padding: 0.55rem 0 0.5rem;
-  border-bottom: 1px solid color-mix(in srgb, var(--ink) 30%, transparent);
-  color: var(--ink);
-  transition: color 0.45s var(--ease);
-}
-/* The sheet: 0% tracking, 50/45 leading. */
-.xrow-title, .xrow-when {
-  font-size: clamp(1rem, 1.35vw, 1.35rem);
-  letter-spacing: 0;
-  text-transform: uppercase;
-  line-height: 1.111;
-}
-.xrow-title { font-weight: 500; }
-.xrow-when { font-style: italic; font-variant-numeric: tabular-nums; white-space: nowrap; }
-
-/*
- * The photograph floats rather than sitting in the row.
- *
- * Each row here is a single line, and a picture inside one would set its height
- * — so the list would lurch every time the pointer crossed it, which is the
- * fault the exhibitions index avoids by being tall enough to hold its plate.
- * These rows cannot be that tall without losing the layout, so the picture is
- * taken out of flow entirely. Only one row is ever hovered, so there is nothing
- * for it to collide with.
- */
-.xrow .exh-plate {
-  position: absolute;
-  left: 52%;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 13vw;
-  max-width: 11rem;
-  height: 7.5rem;
-  z-index: 2;
-  pointer-events: none;
 }
 
 @media (max-width: 899px) {
