@@ -282,15 +282,35 @@ body.is-locked { overflow: hidden; }
 .top {
   position: fixed; inset: 0 0 auto 0; z-index: 40;
   display: grid;
-  /* Wordmark, the section still to come, then the pages pushed to the right. */
-  grid-template-columns: auto auto minmax(0, 1fr);
+  /*
+   * Wordmark, the section still to come, then the pages pushed to the right.
+   *
+   * The first column is the same 25.53% the commissioned groups use, because
+   * in the sheet the section heading starts at x498 and the list's rules start
+   * at x497 — it is one alignment, not two that happen to be close. The rule
+   * that used to place it keyed off a `.top-feature` class that is not in the
+   * markup, so it had never done anything and the heading sat against the
+   * wordmark.
+   */
+  grid-template-columns: 25.53% auto minmax(0, 1fr);
   align-items: baseline;
-  gap: var(--pad);
+  gap: 0;
   padding: 1.6rem var(--pad) 1rem;
   pointer-events: none;
   mix-blend-mode: difference;
 }
-.top-feature { margin-left: clamp(1rem, 9vw, 11rem); }
+/*
+ * The bar, measured off the designer's sheet at the 1866 it was exported at.
+ *
+ * Every item in it — wordmark, the section heading, the pages — sits on one
+ * baseline at one size there; the build had the wordmark at 13px and the rest
+ * at 11, which is why the whole bar read small and bunched. Four of the menu
+ * items give the size independently, from their rendered widths rather than
+ * from a cap height an antialiased edge can shift by a pixel: 18.24, 18.14,
+ * 18.29, 18.33. The wordmark is tracked looser than the pages in our build and
+ * tighter in the sheet, so its own tracking comes down to suit.
+ */
+.wordmark, .top-soon, .menu { font-size: 18.2px; }
 /*
  * A heading for a section that does not exist yet. It is a button and not a
  * link because there is nowhere to go: a link to nothing is a broken link, and
@@ -304,10 +324,10 @@ body.is-locked { overflow: hidden; }
   cursor: default;
 }
 .top > * { pointer-events: auto; }
-.wordmark { font-size: 13px; letter-spacing: 0.08em; white-space: nowrap; }
-/* Spread rather than bunched: the mockup sets the five items evenly across the
-   width to the right of the wordmark. */
-.menu { display: flex; justify-content: flex-end; gap: clamp(1rem, 3.4vw, 3.4rem); }
+.wordmark { letter-spacing: 0.033em; white-space: nowrap; }
+/* Evenly spaced, and the sheet says how far apart: 75px of 1866, four times
+   over, to within a pixel each time. */
+.menu { display: flex; justify-content: flex-end; gap: clamp(1rem, 4.019vw, 4.7rem); }
 /* Source colours chosen so that, over white, they resolve to the indigo and to
    a softer tint of it. */
 /*
