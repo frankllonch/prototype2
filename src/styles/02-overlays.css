@@ -76,15 +76,15 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
  * The picture is the thing that holds still here; the words all move together.
  */
 .reader-head { margin-bottom: clamp(1.5rem, 3vw, 2.5rem); }
-.reader-title { font-size: clamp(1.4rem, 3vw, 2.4rem); letter-spacing: -0.02em; line-height: 1.1; }
+.reader-title { font-size: var(--type); letter-spacing: -0.02em; line-height: var(--lead); }
 .reader-year, .reader-counter {
   display: block; margin: 0.35rem 0 0; color: var(--ink-soft);
-  font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; font-variant-numeric: tabular-nums;
+  font-size: var(--type); letter-spacing: 0.06em; text-transform: uppercase; font-variant-numeric: tabular-nums;
 }
 
 .reader-text { padding-bottom: 12vh; }
 /* Larger than the rest of the site: this is the one place on it made for reading. */
-.reader-text .prose { max-width: 36rem; font-size: 16px; line-height: 1.62; }
+.reader-text .prose { max-width: 36rem; font-size: var(--type); line-height: var(--lead); }
 .reader-text .prose p { margin: 0 0 1.1em; }
 
 /*
@@ -104,7 +104,7 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
  */
 .reader-figures { --slot: 30vh; }
 .reader-figure { margin: 0; }
-.reader-figure figcaption { color: var(--ink-soft); margin-top: 0.4rem; font-size: 11px; }
+.reader-figure figcaption { color: var(--ink-soft); margin-top: 0.4rem; font-size: var(--type); }
 .reader-figure img { width: 100%; height: auto; }
 
 .reader-page .reader-figures.is-live[data-multi] {
@@ -237,10 +237,10 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 }
 .about-lines p {
   margin: 0;
-  font-size: clamp(1.5rem, 3.4vw, 2.75rem);
+  font-size: var(--type);
   font-weight: 500;
   letter-spacing: -0.02em;
-  line-height: 1.32;
+  line-height: var(--lead);
 }
 .about-more { position: absolute; bottom: 2rem; left: 0; right: 0; opacity: 0.6; }
 
@@ -301,23 +301,23 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .about { overflow-x: hidden; }
 
 /* Her name, then the statement the page opens on, set large. */
-.about-heading > * { margin: 0; font-weight: 500; font-size: clamp(0.8rem, 0.95vw, 1rem); letter-spacing: 0; }
+.about-heading > * { margin: 0; font-weight: 500; font-size: var(--type); letter-spacing: 0; }
 .about-lead { margin: 1.6rem 0 0; }
 .about-lead > * {
   margin: 0;
-  font-size: clamp(1.25rem, 2.355vw, 2.85rem);
+  font-size: var(--type);
   /* Medium, 0% tracking, 50/45 leading — the sheet's uppercase style. */
   font-weight: 500;
-  line-height: 1.111;
+  line-height: var(--lead);
   letter-spacing: 0;
   text-transform: uppercase;
 }
 /* Regular, 0% tracking, the same 50/45 leading. */
 .about-prose > * {
   margin: 0 0 1.1em;
-  font-size: clamp(1.25rem, 2.355vw, 2.85rem);
+  font-size: var(--type);
   font-weight: 400;
-  line-height: 1.111;
+  line-height: var(--lead);
   letter-spacing: 0;
 }
 .about-text strong { font-weight: 600; }
@@ -356,7 +356,7 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   text-align: center;
 }
 .about-tail > * > * , .about-tail > * { margin: 0 0 0.55em; }
-.about-tail p { font-size: clamp(1.1rem, 1.6vw, 1.9rem); line-height: 1.111; letter-spacing: 0; }
+.about-tail p { font-size: var(--type); line-height: var(--lead); letter-spacing: 0; }
 .about-tail a { border-bottom: 1px solid currentColor; }
 /* The section labels the source sets in capitals get room above them. */
 .about-tail p:has(> strong), .about-tail strong { font-weight: 600; }
@@ -415,11 +415,11 @@ html:not(.js) .about:target { display: block; position: static; opacity: 1; visi
 .lightbox-plate { grid-column: 3; display: grid; place-items: center; min-width: 0; min-height: 0; transition: opacity 0.42s var(--ease); }
 .lightbox.is-changing .lightbox-plate, .lightbox.is-changing .lightbox-caption { opacity: 0; }
 .lightbox-plate img { max-height: 74vh; max-width: 100%; width: auto; height: auto; }
-.lightbox-caption { grid-column: 4; transition: opacity 0.42s var(--ease); font-size: 14px; }
-.lightbox-title { font-size: 20px; letter-spacing: -0.01em; margin: 0 0 0.4rem; }
+.lightbox-caption { grid-column: 4; transition: opacity 0.42s var(--ease); font-size: var(--type); }
+.lightbox-title { font-size: var(--type); letter-spacing: -0.01em; margin: 0 0 0.4rem; }
 .lightbox-meta { display: flex; flex-direction: column; gap: 0.15rem; margin: 0 0 0.9rem; }
 .lightbox-count { margin: 0; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
-.lightbox-nav { align-self: center; width: clamp(2rem, 4vw, 3.5rem); height: 40vh; color: var(--ink-soft); font-size: 15px; transition: color 0.2s var(--ease); }
+.lightbox-nav { align-self: center; width: clamp(2rem, 4vw, 3.5rem); height: 40vh; color: var(--ink-soft); font-size: var(--type); transition: color 0.2s var(--ease); }
 .lightbox-nav:hover { color: var(--ink); }
 .lightbox-prev { grid-column: 1; }
 .lightbox-next { grid-column: 5; }
@@ -443,17 +443,17 @@ html:not(.js) .about:target { display: block; position: static; opacity: 1; visi
  */
 .reader-venue {
   margin: 0.15rem 0 0;
-  font-size: clamp(0.95rem, 1.15vw, 1.15rem);
+  font-size: var(--type);
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.01em;
-  line-height: 1.25;
+  line-height: var(--lead);
 }
 .reader-when {
   display: flex;
   gap: clamp(0.6rem, 1.8vw, 1.8rem);
   margin: 1.6rem 0 0;
-  font-size: clamp(0.95rem, 1.15vw, 1.15rem);
+  font-size: var(--type);
   font-weight: 500;
   text-transform: uppercase;
   font-variant-numeric: tabular-nums;
@@ -463,17 +463,17 @@ html:not(.js) .about:target { display: block; position: static; opacity: 1; visi
 /* A press release opens on a statement and then settles into prose; the source
    sets it as one paragraph, so the distinction is drawn here. */
 .reader-stated .reader-title {
-  font-size: clamp(1.1rem, 1.4vw, 1.35rem);
+  font-size: var(--type);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.01em;
-  line-height: 1.25;
+  line-height: var(--lead);
 }
 .reader-stated .prose:first-of-type > p:first-child {
-  font-size: clamp(1.15rem, 1.9vw, 1.9rem);
+  font-size: var(--type);
   font-weight: 600;
   text-transform: uppercase;
-  line-height: 1.22;
+  line-height: var(--lead);
   letter-spacing: -0.01em;
   margin-bottom: 1.2em;
 }
@@ -491,7 +491,7 @@ html:not(.js) .about:target { display: block; position: static; opacity: 1; visi
 }
 .reader-kind {
   margin: 0.55rem 0 0;
-  font-size: 11px;
+  font-size: var(--type);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ink-soft);
@@ -524,8 +524,8 @@ html:not(.js) .about:target { display: block; position: static; opacity: 1; visi
 }
 .reader-step {
   color: inherit;
-  font-size: 15px;
-  line-height: 1;
+  font-size: var(--type);
+  line-height: var(--lead);
   padding: 0.35rem 0.5rem;
   opacity: 0.55;
   transition: opacity var(--hover) var(--ease);
@@ -615,6 +615,9 @@ html:not(.js) .about:target { display: block; position: static; opacity: 1; visi
 .ink-accent {
   font-family: 'Times New Roman', Times, 'Liberation Serif', Tinos, serif;
   font-style: italic;
-  font-size: 1.06em;
+  /* The same size as everything else. Times sets a little smaller than Switzer
+     at a given size, so this used to carry a 1.06 optical correction; the size
+     is now uniform by instruction and the face alone does the distinguishing. */
+  font-size: 1em;
   letter-spacing: 0;
 }

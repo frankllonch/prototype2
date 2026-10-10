@@ -180,8 +180,8 @@ html.js .hero[data-hero]+.grid[data-stack] {
 /* --------------------------------------------------------- colour chart */
 
 .prose {
-  font-size: 13px;
-  line-height: 1.6;
+  font-size: var(--type);
+  line-height: var(--lead);
 }
 
 .prose p {
@@ -233,11 +233,11 @@ html.js .hero[data-hero]+.grid[data-stack] {
 
 .detail-caption {
   grid-column: 3;
-  font-size: 14px;
+  font-size: var(--type);
 }
 
 .detail-title {
-  font-size: 20px;
+  font-size: var(--type);
   letter-spacing: -0.01em;
   margin-bottom: 0.4rem;
 }
@@ -399,18 +399,17 @@ html.js .hero[data-hero]+.grid[data-stack] {
    * export instead made the type 3.9% too large, and because the rhythm was
    * being held to its measured figures, the padding absorbed the difference
    * and the list read tight.
+   *
+   * The per-list size knob is gone: there is one size for the whole site now,
+   * `--type` in 00-base.css, and these rows take it like everything else.
+   * `--row-leading` is kept because a row can still want a different line
+   * from the site's, but it falls through to `--lead`.
    */
-  /*
-   * --row-size is that size in the designer's own units: pixels at a 1920
-   * frame, so it is the number her file shows and nothing is converted by
-   * hand. 40 is what the sheet specifies. Each list sets its own, below;
-   * that is the one place to change it. Nothing here is worth editing.
-   */
-  font-size: clamp(1.05rem, calc(var(--row-size, 40) / 19.2 * 1vw), 3.4rem);
+  font-size: var(--type);
   font-weight: 500;
   letter-spacing: 0;
   text-transform: uppercase;
-  line-height: var(--row-leading, 1);
+  line-height: var(--row-leading, var(--lead));
   font-variant-numeric: tabular-nums;
 }
 
@@ -532,11 +531,6 @@ html.js .hero[data-hero]+.grid[data-stack] {
    * 226.6px from rule to rule, 40.4 between the baselines, 61.9 from the last
    * baseline down to the line.
    */
-  /* Type size, in the designer's 1920-frame pixels: 40 is what her sheet
-     specifies. Lower it to make this list alone smaller — 36, 32, 28. The air
-     around the rows does not move with it, so a smaller number here gives a
-     smaller face in the same rhythm. */
-  --row-size: 40;
   --row-top: 4.747vw;
   --row-bottom: 2.956vw;
   /* Wide enough for the longest run the dates can make — 'From December To
@@ -544,8 +538,8 @@ html.js .hero[data-hero]+.grid[data-stack] {
      it. Too narrow and the two ran together. The sheet's own columns are
      narrower, but its rows are a placeholder show repeated, whose dates are
      shorter than anything real on this list. */
-  --when-col: 30vw;
-  --year-col: 3vw;
+  --when-col: 40vw;
+  --year-col: 6vw;
   /* No cap: the margin governs, as it does in the design. A capped box plus the
      padding inside it put the rules 77px from the edge at the width the mockup
      was drawn at, not the 30 it specifies — the cap was centring the box and the
@@ -558,7 +552,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
    * scale: it was right at 1866 and 13px long at 1598. The bar is a floor
    * instead, so a narrow window still cannot slide the list under the menu.
    */
-  padding: max(calc(var(--bar) + 2rem), var(--list-top, 16.050vw)) var(--pad) 18vh;
+  padding: max(calc(var(--bar) + 1rem), var(--list-top, 16.050vw)) var(--pad) 18vh;
 }
 
 /*
@@ -657,8 +651,6 @@ html.js .hero[data-hero]+.grid[data-stack] {
  */
 .xlist {
   --exh-hover: var(--ink);
-  /* As the exhibitions list: the sheet’s size in 1920-frame pixels. */
-  --row-size: 40;
   margin: 0 auto;
   /* First rule 438px down the 1866 sheet; we had it at 228. Same reasoning as
      the exhibitions offset: proportional, with the bar as a floor. */

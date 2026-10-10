@@ -39,6 +39,20 @@
   --peach: #fcd090;
 
   --sans: 'Switzer', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+
+  /*
+   * One size for the whole site, in the designer's 1920-frame pixels: 40 on a
+   * 50 line. Weight, case, slope and the serif face are what tell one kind of
+   * text from another — not size. Two things are deliberately outside it: the
+   * bar, at 20, and the cursor label, which keeps the size it had.
+   *
+   * The clamp guards only the extremes. 2.0833vw is the 40, and it holds from
+   * about 768px up to 2600px; below that a floor keeps the type readable on a
+   * phone, above it a ceiling stops it running away on a very wide screen.
+   */
+  --type: clamp(1rem, 2.0833vw, 3.4rem);
+  --lead: 1.25;                        /* 50 over 40 */
+  --type-menu: clamp(0.75rem, 1.0417vw, 1.7rem);
   /* Measured off the mockups, which agree on a fixed margin rather than a
      proportional one: the left inset is 40px at 1866 wide, 43px at 1368 and
      47px at 1588 — near-constant while the frames differ by 500px. 2.5rem is
@@ -187,10 +201,10 @@ html.is-revealed .detail { animation-name: none; }
 }
 .loader p {
   margin: 0;
-  font-size: clamp(1.5rem, 3.4vw, 2.75rem);
+  font-size: var(--type);
   font-weight: 500;
   letter-spacing: -0.02em;
-  line-height: 1.32;
+  line-height: var(--lead);
 }
 /*
  * Once the load is done the script brings that exit forward by naming a
@@ -231,8 +245,8 @@ body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--sans);
-  font-size: 12px;
-  line-height: 1.5;
+  font-size: var(--type);
+  line-height: var(--lead);
   letter-spacing: 0.01em;
   -webkit-font-smoothing: antialiased;
 }
@@ -260,7 +274,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .menu, .controls, .wordmark, .top-soon, .about-close, .panel-close,
 .lightbox-close, .lightbox-count, .year-label,
 .detail-back, .detail-pager, .about-more {
-  font-size: 11px;
+  font-size: var(--type);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   font-weight: 500;
@@ -310,7 +324,9 @@ body.is-locked { overflow: hidden; }
  * 18.29, 18.33. The wordmark is tracked looser than the pages in our build and
  * tighter in the sheet, so its own tracking comes down to suit.
  */
-.wordmark, .top-soon, .menu { font-size: 18.2px; }
+/* The bar is the one part of the site set smaller: 20 of the designer’s
+   1920-frame pixels, against 40 everywhere else. */
+.wordmark, .top-soon, .menu { font-size: var(--type-menu); }
 /*
  * A heading for a section that does not exist yet. It is a button and not a
  * link because there is nowhere to go: a link to nothing is a broken link, and

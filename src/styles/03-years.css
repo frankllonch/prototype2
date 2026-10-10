@@ -82,7 +82,7 @@
   .year-swatch { width: 13px; height: 22px; transition: height 0.4s var(--ease); }
   .year.is-current .year-swatch, .year:hover .year-swatch { width: 13px; height: 34px; }
   .year-label { display: none; }
-  .year.is-current .year-label { display: block; opacity: 1; transform: none; font-size: 9px; }
+  .year.is-current .year-label { display: block; opacity: 1; transform: none; font-size: var(--type); }
   /* Clear of the rail along the foot, and centred rather than tucked in a corner. */
   .controls { bottom: 5.4rem; right: auto; left: 0; justify-content: center; width: 100%; }
 }
