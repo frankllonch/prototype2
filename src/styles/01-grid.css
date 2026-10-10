@@ -217,8 +217,16 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
    * down or up because its rows carry two lines and a date range rather than a
    * name.
    */
-  padding: var(--row-top, 0.911vw) 0 var(--row-bottom, 0px);
-  border-bottom: 3px solid var(--ink);
+  padding: var(--row-top, 1.018vw) 0 var(--row-bottom, 0px);
+  /*
+   * A hairline at full ink. Measured as coverage rather than by a threshold,
+   * both sheets draw about one pixel of ink: 1.0-1.26 on the commissioned one
+   * at 1866, 0.75-0.87 on the exhibitions one at 1598. The 3px here was my
+   * misreading of an antialiased edge as thickness. What was actually wrong
+   * before all this was the ink, not the width — a 1px line at 18% of the ink
+   * colour, which is a sixth of a pixel of actual mark, and read as nothing.
+   */
+  border-bottom: 1px solid var(--ink);
   color: var(--ink);
   transition: color 0.45s var(--ease);
 }
@@ -325,8 +333,8 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
    * 226.6px from rule to rule, 40.4 between the baselines, 61.9 from the last
    * baseline down to the line.
    */
-  --row-top: 4.834vw;
-  --row-bottom: 2.862vw;
+  --row-top: 4.615vw;
+  --row-bottom: 2.969vw;
   /* Wide enough for the longest run the dates can make — 'From December To
      January 2022', the one show that crosses a year — with the year clear of
      it. Too narrow and the two ran together. The sheet's own columns are
@@ -340,7 +348,10 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
      padding was then measured from the box, not from the screen. These are short
      rows, so there is no measure to protect. */
   margin: 0 auto;
-  padding: calc(var(--bar) + 8vh) var(--pad) 18vh;
+  /* The sheet puts the first rule 447px down a 1598 frame, which is 522 at
+     1866; we had it at 395. Held in vw so it keeps its proportion, with the
+     bar's own height added so the list can never ride up under it. */
+  padding: calc(var(--bar) + var(--list-top, 11.358vw)) var(--pad) 18vh;
 }
 
 /*
@@ -411,7 +422,8 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
 .xlist {
   --exh-hover: var(--ink);
   margin: 0 auto;
-  padding: calc(var(--bar) + 8vh) var(--pad) 18vh;
+  /* First rule 438px down the 1866 sheet; we had it at 228. */
+  padding: calc(var(--bar) + 15.54vw) var(--pad) 18vh;
 }
 
 .xgroup {
@@ -441,7 +453,7 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
    band there. The label is in its own grid column, so without this it starts
    at the top of the cell and the row's own padding drops the row 17px below
    it. Same property, so the two cannot drift apart. */
-.xgroup-name { margin: 0; padding-top: var(--row-top, 0.911vw); }
+.xgroup-name { margin: 0; padding-top: var(--row-top, 1.018vw); }
 
 /* Scoped to the list: the two indexes share every rule above but the columns,
    and an unscoped `.xrow` here would win over the exhibitions template on
