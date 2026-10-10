@@ -217,7 +217,7 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
    * down or up because its rows carry two lines and a date range rather than a
    * name.
    */
-  padding: var(--row-top, 1.017vw) 0 var(--row-bottom, 0px);
+  padding: var(--row-top, 0.911vw) 0 var(--row-bottom, 0px);
   border-bottom: 3px solid var(--ink);
   color: var(--ink);
   transition: color 0.45s var(--ease);
@@ -236,13 +236,24 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
  * row, and the two lists share a rule position without being told to.
  */
 .xrow-title, .xrow-when, .exh-title, .exh-venue, .exh-when, .exh-year, .xgroup-name {
-  font-size: calc(clamp(1.05rem, 2.286vw, 2.75rem) * var(--row-k, 1));
+  /* The designer's values, not inferred ones: Switzer Variable at 40px on a
+     40px line with no tracking. 2.1436vw is that 40px at the 1866 the sheets
+     were exported at, kept in vw so it holds its proportion at other widths. */
+  font-size: calc(clamp(1.05rem, 2.1436vw, 2.75rem) * var(--row-k, 1));
   font-weight: 500;
   letter-spacing: 0;
   text-transform: uppercase;
-  line-height: var(--row-leading, 0.8915);
+  line-height: var(--row-leading, 1);
   font-variant-numeric: tabular-nums;
 }
+/*
+ * Semibold for the name of the thing, medium for what qualifies it: the show's
+ * title against its address, the kind of work against the projects in it. Both
+ * sheets draw it that way — measured, the heavier stems run about 1.13 times
+ * the lighter ones, and 600 is the step that gives that; 700 would be 1.34.
+ * The designer's sheet says 600 in as many words.
+ */
+.exh-title, .xgroup-name { font-weight: 600; }
 .xrow-when { font-style: italic; white-space: nowrap; }
 /* The months lean, the words that introduce them stay upright. */
 .exh-when em, .reader-when em { font-style: italic; }
@@ -314,9 +325,8 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
    * 226.6px from rule to rule, 40.4 between the baselines, 61.9 from the last
    * baseline down to the line.
    */
-  --row-leading: 0.948;
-  --row-top: 4.747vw;
-  --row-bottom: 2.902vw;
+  --row-top: 4.834vw;
+  --row-bottom: 2.862vw;
   /* Wide enough for the longest run the dates can make — 'From December To
      January 2022', the one show that crosses a year — with the year clear of
      it. Too narrow and the two ran together. The sheet's own columns are
@@ -427,7 +437,11 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
   margin-bottom: clamp(2.5rem, 4.234vw, 6rem);
 }
 .xgroup:last-child { margin-bottom: 0; }
-.xgroup-name { margin: 0; }
+/* On the first row's baseline, as the sheet has it — both sit in the same
+   band there. The label is in its own grid column, so without this it starts
+   at the top of the cell and the row's own padding drops the row 17px below
+   it. Same property, so the two cannot drift apart. */
+.xgroup-name { margin: 0; padding-top: var(--row-top, 0.911vw); }
 
 /* Scoped to the list: the two indexes share every rule above but the columns,
    and an unscoped `.xrow` here would win over the exhibitions template on
