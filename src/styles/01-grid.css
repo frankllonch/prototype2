@@ -217,7 +217,7 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
    * down or up because its rows carry two lines and a date range rather than a
    * name.
    */
-  padding: var(--row-top, 1.018vw) 0 var(--row-bottom, 0px);
+  padding: var(--row-top, 1.0785vw) 0 var(--row-bottom, 0px);
   /*
    * A hairline at full ink. Measured as coverage rather than by a threshold,
    * both sheets draw about one pixel of ink: 1.0-1.26 on the commissioned one
@@ -244,10 +244,20 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
  * row, and the two lists share a rule position without being told to.
  */
 .xrow-title, .xrow-when, .exh-title, .exh-venue, .exh-when, .exh-year, .xgroup-name {
-  /* The designer's values, not inferred ones: Switzer Variable at 40px on a
-     40px line with no tracking. 2.1436vw is that 40px at the 1866 the sheets
-     were exported at, kept in vw so it holds its proportion at other widths. */
-  font-size: calc(clamp(1.05rem, 2.1436vw, 2.75rem) * var(--row-k, 1));
+  /*
+   * The designer's values: Switzer Variable at 40px on a 40px line, no
+   * tracking. 2.0833vw is that 40px at a 1920 frame.
+   *
+   * The frame is 1920 and not the width the sheets were exported at, which is
+   * what I had. The sheet's own line-height settles it: the designer sets the
+   * line equal to the size, and the exhibitions export has 33px between the
+   * two baselines of a row at 1598 wide, so its frame is 40 x 1598/33 = 1937
+   * — 1920 within the pixel of error a 33px read carries. Sizing against the
+   * export instead made the type 3.9% too large, and because the rhythm was
+   * being held to its measured figures, the padding absorbed the difference
+   * and the list read tight.
+   */
+  font-size: calc(clamp(1.05rem, 2.0833vw, 2.75rem) * var(--row-k, 1));
   font-weight: 500;
   letter-spacing: 0;
   text-transform: uppercase;
@@ -333,8 +343,11 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
    * 226.6px from rule to rule, 40.4 between the baselines, 61.9 from the last
    * baseline down to the line.
    */
-  --row-top: 4.615vw;
-  --row-bottom: 2.969vw;
+  /* Type size for this list alone, as a multiple of the shared one: 1 is the
+     40px the sheet specifies, 0.9 would be 36px. Commissioned is unaffected. */
+  --row-k: 1;
+  --row-top: 4.747vw;
+  --row-bottom: 2.956vw;
   /* Wide enough for the longest run the dates can make — 'From December To
      January 2022', the one show that crosses a year — with the year clear of
      it. Too narrow and the two ran together. The sheet's own columns are
@@ -348,10 +361,13 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
      padding was then measured from the box, not from the screen. These are short
      rows, so there is no measure to protect. */
   margin: 0 auto;
-  /* The sheet puts the first rule 447px down a 1598 frame, which is 522 at
-     1866; we had it at 395. Held in vw so it keeps its proportion, with the
-     bar's own height added so the list can never ride up under it. */
-  padding: calc(var(--bar) + var(--list-top, 11.358vw)) var(--pad) 18vh;
+  /*
+   * The sheet puts the first rule 447px down its 1598 export, 522 at 1866.
+   * Pure vw, because adding a fixed bar height to it meant the offset did not
+   * scale: it was right at 1866 and 13px long at 1598. The bar is a floor
+   * instead, so a narrow window still cannot slide the list under the menu.
+   */
+  padding: max(calc(var(--bar) + 2rem), var(--list-top, 16.050vw)) var(--pad) 18vh;
 }
 
 /*
@@ -422,8 +438,9 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
 .xlist {
   --exh-hover: var(--ink);
   margin: 0 auto;
-  /* First rule 438px down the 1866 sheet; we had it at 228. */
-  padding: calc(var(--bar) + 15.54vw) var(--pad) 18vh;
+  /* First rule 438px down the 1866 sheet; we had it at 228. Same reasoning as
+     the exhibitions offset: proportional, with the bar as a floor. */
+  padding: max(calc(var(--bar) + 2rem), var(--list-top, 20.257vw)) var(--pad) 18vh;
 }
 
 .xgroup {
@@ -453,7 +470,7 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
    band there. The label is in its own grid column, so without this it starts
    at the top of the cell and the row's own padding drops the row 17px below
    it. Same property, so the two cannot drift apart. */
-.xgroup-name { margin: 0; padding-top: var(--row-top, 1.018vw); }
+.xgroup-name { margin: 0; padding-top: var(--row-top, 1.0785vw); }
 
 /* Scoped to the list: the two indexes share every rule above but the columns,
    and an unscoped `.xrow` here would win over the exhibitions template on
