@@ -271,14 +271,23 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 
 /* Small caps for every label on the site. */
-.menu, .controls, .wordmark, .top-soon, .about-close, .panel-close,
-.lightbox-close, .lightbox-count, .year-label,
+.menu, .wordmark, .top-soon, .about-close, .panel-close,
+.lightbox-close, .lightbox-count,
 .detail-back, .detail-pager, .about-more {
   font-size: var(--type);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   font-weight: 500;
 }
+
+/*
+ * The gallery's own controls keep the size they had before the site went to
+ * one type size. They are not text on the page: the year rail stands in the
+ * margin beside the paintings and the density switch sits under them, and at
+ * 40 the rail grew to 156px wide and each year to a 49px line box, which made
+ * a column of eleven years taller than the window.
+ */
+.controls, .years, .year-label { font-size: 11px; line-height: 1.5; }
 
 body.is-locked { overflow: hidden; }
 
