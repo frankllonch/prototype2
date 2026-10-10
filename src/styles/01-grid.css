@@ -2,8 +2,14 @@
 
 /* A screen of empty ground under the wordmark. The stack is drawn over it by
    transforming the grid's own tiles, so nothing here is laid out twice. */
-.hero { height: 100vh; }
-html:not(.js) .hero, .hero:empty:not([data-hero]) { height: 0; }
+.hero {
+  height: 100vh;
+}
+
+html:not(.js) .hero,
+.hero:empty:not([data-hero]) {
+  height: 0;
+}
 
 /* ------------------------------------------------------------------ grid */
 
@@ -23,10 +29,19 @@ html:not(.js) .hero, .hero:empty:not([data-hero]) { height: 0; }
      nothing. */
   padding: 0 var(--pad) 62vh var(--rail);
 }
-@media (max-width: 899px) { .grid { padding-left: var(--pad); padding-bottom: 58vh; } }
+
+@media (max-width: 899px) {
+  .grid {
+    padding-left: var(--pad);
+    padding-bottom: 58vh;
+  }
+}
+
 /* The justified grid sets its own padding; excluded here so this more
    specific selector does not quietly win over it. */
-.grid:not([data-stack]):not(.grid-justified) { padding-top: var(--gap); }
+.grid:not([data-stack]):not(.grid-justified) {
+  padding-top: var(--gap);
+}
 
 /*
  * Half a screen of paper between the pile settling and the first painting.
@@ -53,7 +68,9 @@ html:not(.js) .hero, .hero:empty:not([data-hero]) { height: 0; }
  * `html.js` covers the remaining case: with no scripting the hero is collapsed
  * rather than removed, and there is no opening to make room for either.
  */
-html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
+html.js .hero[data-hero]+.grid[data-stack] {
+  padding-top: 22vh;
+}
 
 .tile {
   flex: 0 0 auto;
@@ -61,7 +78,10 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
   width: calc(var(--unit) * var(--a));
   transform-origin: center center;
 }
-.tile[hidden] { display: none; }
+
+.tile[hidden] {
+  display: none;
+}
 
 /*
  * Choosing a year pushes every other one back rather than hiding it: the sheet
@@ -74,6 +94,7 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
   opacity: 0.38;
   pointer-events: none;
 }
+
 .tile {
   transition:
     height 0.5s var(--ease), width 0.5s var(--ease),
@@ -85,19 +106,48 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
  * enough to read as attention rather than as a effect, and slow enough that
  * crossing the sheet quickly does not strobe.
  */
-.tile picture, .tile img { transition: filter 0.7s var(--ease), opacity 0.7s var(--ease); }
-.tile:hover img { filter: blur(1.6px); opacity: 0.82; }
+.tile picture,
+.tile img {
+  transition: filter 0.7s var(--ease), opacity 0.7s var(--ease);
+}
+
+.tile:hover img {
+  filter: blur(1.6px);
+  opacity: 0.82;
+}
+
 /* A dimmed tile is already pushed back; hovering must not fight that. */
-.tile.is-dimmed:hover img { filter: none; opacity: 1; }
-.tile picture, .tile img { width: 100%; height: 100%; }
-.tile img { object-fit: contain; }
+.tile.is-dimmed:hover img {
+  filter: none;
+  opacity: 1;
+}
+
+.tile picture,
+.tile img {
+  width: 100%;
+  height: 100%;
+}
+
+.tile img {
+  object-fit: contain;
+}
 
 /* While the stack is dispersing, tiles move every frame: no size transitions,
    and a compositing hint. Cleared once they settle. */
-.grid.is-stacked .tile { transition: none; will-change: transform; }
-.grid.is-stacked { pointer-events: none; }
+.grid.is-stacked .tile {
+  transition: none;
+  will-change: transform;
+}
 
-@media (max-width: 599px) { .grid:not(.grid-justified) { --unit: 120px !important; } }
+.grid.is-stacked {
+  pointer-events: none;
+}
+
+@media (max-width: 599px) {
+  .grid:not(.grid-justified) {
+    --unit: 120px !important;
+  }
+}
 
 /*
  * A handful of items rather than 154, and no size for the reader to choose:
@@ -110,6 +160,7 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
 .grid-justified {
   padding: calc(var(--bar) + var(--gap)) var(--pad) var(--gap);
 }
+
 .grid-justified .tile {
   height: auto;
   width: auto;
@@ -119,14 +170,31 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
   /* Room under each row for the name to appear on hover. */
   margin-bottom: 1.5rem;
 }
-.grid-justified .tile picture, .grid-justified .tile img { width: 100%; height: auto; }
+
+.grid-justified .tile picture,
+.grid-justified .tile img {
+  width: 100%;
+  height: auto;
+}
 
 /* --------------------------------------------------------- colour chart */
 
-.prose { font-size: 13px; line-height: 1.6; }
-.prose p { margin: 0 0 0.9em; }
-.prose a { border-bottom: 1px solid currentColor; }
-.prose strong { font-weight: 600; }
+.prose {
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.prose p {
+  margin: 0 0 0.9em;
+}
+
+.prose a {
+  border-bottom: 1px solid currentColor;
+}
+
+.prose strong {
+  font-weight: 600;
+}
 
 /* ---------------------------------------------------------------- detail */
 
@@ -138,18 +206,67 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
   gap: var(--pad);
   padding: var(--bar) var(--pad) var(--pad);
 }
-.detail-back { grid-column: 1; align-self: start; color: var(--ink-soft); }
-.detail-back:hover { color: var(--ink); }
-.detail-plate { grid-column: 2; margin: 0; display: grid; place-items: center; }
-.detail-plate img { max-height: 74vh; width: auto; height: auto; max-width: 100%; }
-.detail-caption { grid-column: 3; font-size: 14px; }
-.detail-title { font-size: 20px; letter-spacing: -0.01em; margin-bottom: 0.4rem; }
-.detail-caption p { margin: 0 0 0.15rem; }
-.detail-pager { grid-column: 1 / -1; display: flex; justify-content: space-between; color: var(--ink-soft); }
-.detail-pager a:hover { color: var(--ink); }
+
+.detail-back {
+  grid-column: 1;
+  align-self: start;
+  color: var(--ink-soft);
+}
+
+.detail-back:hover {
+  color: var(--ink);
+}
+
+.detail-plate {
+  grid-column: 2;
+  margin: 0;
+  display: grid;
+  place-items: center;
+}
+
+.detail-plate img {
+  max-height: 74vh;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+}
+
+.detail-caption {
+  grid-column: 3;
+  font-size: 14px;
+}
+
+.detail-title {
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.4rem;
+}
+
+.detail-caption p {
+  margin: 0 0 0.15rem;
+}
+
+.detail-pager {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  color: var(--ink-soft);
+}
+
+.detail-pager a:hover {
+  color: var(--ink);
+}
+
 @media (max-width: 899px) {
-  .detail { grid-template-columns: 1fr; }
-  .detail-back, .detail-plate, .detail-caption { grid-column: 1; }
+  .detail {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-back,
+  .detail-plate,
+  .detail-caption {
+    grid-column: 1;
+  }
 }
 
 /* ------------------------------------------------------------------- feed */
@@ -169,6 +286,7 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
   align-items: start;
   padding: calc(var(--bar) + var(--gap)) var(--pad) 20vh;
 }
+
 .feed-column {
   display: flex;
   flex-direction: column;
@@ -176,18 +294,37 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
      name has room to appear under it on hover. */
   gap: clamp(4rem, 10vw, 10rem);
 }
-.feed-column + .feed-column { margin-top: clamp(7rem, 18vw, 18rem); }
+
+.feed-column+.feed-column {
+  margin-top: clamp(7rem, 18vw, 18rem);
+}
 
 /* Undo the contact sheet's fixed row height: here the picture sets its own. */
-.grid-feed .tile { height: auto; width: 100%; }
-.grid-feed .tile picture, .grid-feed .tile img { width: 100%; height: auto; }
-.grid-feed .tile img { object-fit: contain; }
+.grid-feed .tile {
+  height: auto;
+  width: 100%;
+}
+
+.grid-feed .tile picture,
+.grid-feed .tile img {
+  width: 100%;
+  height: auto;
+}
+
+.grid-feed .tile img {
+  object-fit: contain;
+}
 
 /* Stacked, the stagger would only push the second half of the works down the
    page for no reason. */
 @media (max-width: 699px) {
-  .grid-feed { grid-template-columns: 1fr; }
-  .feed-column + .feed-column { margin-top: clamp(4rem, 10vw, 10rem); }
+  .grid-feed {
+    grid-template-columns: 1fr;
+  }
+
+  .feed-column+.feed-column {
+    margin-top: clamp(4rem, 10vw, 10rem);
+  }
 }
 
 /* ------------------------------------------------------------ index rows */
@@ -243,7 +380,13 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
  * above it, so the 7px comes out the same on a two-line row as on a one-line
  * row, and the two lists share a rule position without being told to.
  */
-.xrow-title, .xrow-when, .exh-title, .exh-venue, .exh-when, .exh-year, .xgroup-name {
+.xrow-title,
+.xrow-when,
+.exh-title,
+.exh-venue,
+.exh-when,
+.exh-year,
+.xgroup-name {
   /*
    * The designer's values: Switzer Variable at 40px on a 40px line, no
    * tracking. 2.0833vw is that 40px at a 1920 frame.
@@ -257,13 +400,20 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
    * being held to its measured figures, the padding absorbed the difference
    * and the list read tight.
    */
-  font-size: calc(clamp(1.05rem, 2.0833vw, rem) * var(--row-k, 0.5));
+  /*
+   * --row-size is that size in the designer's own units: pixels at a 1920
+   * frame, so it is the number her file shows and nothing is converted by
+   * hand. 40 is what the sheet specifies. Each list sets its own, below;
+   * that is the one place to change it. Nothing here is worth editing.
+   */
+  font-size: clamp(1.05rem, calc(var(--row-size, 40) / 19.2 * 1vw), 3.4rem);
   font-weight: 500;
   letter-spacing: 0;
   text-transform: uppercase;
   line-height: var(--row-leading, 1);
   font-variant-numeric: tabular-nums;
 }
+
 /*
  * Semibold for the name of the thing, medium for what qualifies it: the show's
  * title against its address, the kind of work against the projects in it. Both
@@ -271,12 +421,29 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
  * the lighter ones, and 600 is the step that gives that; 700 would be 1.34.
  * The designer's sheet says 600 in as many words.
  */
-.exh-title, .xgroup-name { font-weight: 600; }
-.xrow-when { font-style: italic; white-space: nowrap; }
+.exh-title,
+.xgroup-name {
+  font-weight: 600;
+}
+
+.xrow-when {
+  font-style: italic;
+  white-space: nowrap;
+}
+
 /* The months lean, the words that introduce them stay upright. */
-.exh-when em, .reader-when em { font-style: italic; }
-.exh-lead { font-style: normal; }
-.exh-span { white-space: nowrap; }
+.exh-when em,
+.reader-when em {
+  font-style: italic;
+}
+
+.exh-lead {
+  font-style: normal;
+}
+
+.exh-span {
+  white-space: nowrap;
+}
 
 /*
  * The photograph floats rather than sitting in the row.
@@ -293,8 +460,18 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
   opacity: 0;
   transition: opacity 0.45s var(--ease);
 }
-.exh-plate picture, .exh-plate img { width: 100%; height: 100%; }
-.exh-plate img { object-fit: contain; object-position: center; }
+
+.exh-plate picture,
+.exh-plate img {
+  width: 100%;
+  height: 100%;
+}
+
+.exh-plate img {
+  object-fit: contain;
+  object-position: center;
+}
+
 .xrow .exh-plate {
   position: absolute;
   left: 52%;
@@ -313,11 +490,23 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
  * scripting `--exh-hover` keeps its default and the row still responds.
  */
 @media (hover: hover) {
-  .hrow:hover { color: var(--exh-hover); }
-  .hrow:hover .exh-plate { opacity: 1; }
+  .hrow:hover {
+    color: var(--exh-hover);
+  }
+
+  .hrow:hover .exh-plate {
+    opacity: 1;
+  }
 }
-.hrow:focus-visible { color: var(--exh-hover); outline: none; }
-.hrow:focus-visible .exh-plate { opacity: 1; }
+
+.hrow:focus-visible {
+  color: var(--exh-hover);
+  outline: none;
+}
+
+.hrow:focus-visible .exh-plate {
+  opacity: 1;
+}
 
 /* ------------------------------------------------------- exhibitions list */
 
@@ -343,9 +532,11 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
    * 226.6px from rule to rule, 40.4 between the baselines, 61.9 from the last
    * baseline down to the line.
    */
-  /* Type size for this list alone, as a multiple of the shared one: 1 is the
-     40px the sheet specifies, 0.9 would be 36px. Commissioned is unaffected. */
-  --row-k: 1;
+  /* Type size, in the designer's 1920-frame pixels: 40 is what her sheet
+     specifies. Lower it to make this list alone smaller — 36, 32, 28. The air
+     around the rows does not move with it, so a smaller number here gives a
+     smaller face in the same rhythm. */
+  --row-size: 40;
   --row-top: 4.747vw;
   --row-bottom: 2.956vw;
   /* Wide enough for the longest run the dates can make — 'From December To
@@ -353,8 +544,8 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
      it. Too narrow and the two ran together. The sheet's own columns are
      narrower, but its rows are a placeholder show repeated, whose dates are
      shorter than anything real on this list. */
-  --when-col: 40vw;
-  --year-col: 6vw;
+  --when-col: 30vw;
+  --year-col: 3vw;
   /* No cap: the margin governs, as it does in the design. A capped box plus the
      padding inside it put the rules 77px from the edge at the width the mockup
      was drawn at, not the 30 it specifies — the cap was centring the box and the
@@ -378,9 +569,20 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
 .exh-list .exh {
   grid-template-columns: minmax(0, 1fr) var(--when-col) var(--year-col);
 }
-.exh-name { display: grid; min-width: 0; }
-.exh-when { display: flex; gap: clamp(0.5rem, 1.6vw, 1.6rem); }
-.exh-year { text-align: right; }
+
+.exh-name {
+  display: grid;
+  min-width: 0;
+}
+
+.exh-when {
+  display: flex;
+  gap: clamp(0.5rem, 1.6vw, 1.6rem);
+}
+
+.exh-year {
+  text-align: right;
+}
 
 /* Held just clear of the dates rather than over them: at 52% the plate landed
    on top of the date column, which on this list starts further left. */
@@ -395,11 +597,24 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
     grid-template-areas: 'name year' 'when year';
     gap: 0.3rem 1rem;
   }
-  .exh-name { grid-area: name; }
-  .exh-when { grid-area: when; }
-  .exh-year { grid-area: year; align-self: start; }
+
+  .exh-name {
+    grid-area: name;
+  }
+
+  .exh-when {
+    grid-area: when;
+  }
+
+  .exh-year {
+    grid-area: year;
+    align-self: start;
+  }
+
   /* No pointer to hover with, and no room to spare. */
-  .exh-plate { display: none; }
+  .exh-plate {
+    display: none;
+  }
 }
 
 /* ---------------------------------------------------------- to-scale grid */
@@ -418,9 +633,14 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
  * not as a jumble: `align-items` works per flex line, so each row of tiles
  * settles on its own horizontal centre, which is how work is actually hung.
  */
-.tile { --sh: 1; }
+.tile {
+  --sh: 1;
+}
 
-.grid-scaled { align-items: center; }
+.grid-scaled {
+  align-items: center;
+}
+
 .grid-scaled .tile {
   height: calc(var(--unit) * var(--sh));
   width: calc(var(--unit) * var(--sh) * var(--a));
@@ -437,6 +657,8 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
  */
 .xlist {
   --exh-hover: var(--ink);
+  /* As the exhibitions list: the sheet’s size in 1920-frame pixels. */
+  --row-size: 40;
   margin: 0 auto;
   /* First rule 438px down the 1866 sheet; we had it at 228. Same reasoning as
      the exhibitions offset: proportional, with the bar as a floor. */
@@ -465,12 +687,19 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
    */
   margin-bottom: clamp(2.5rem, 4.234vw, 6rem);
 }
-.xgroup:last-child { margin-bottom: 0; }
+
+.xgroup:last-child {
+  margin-bottom: 0;
+}
+
 /* On the first row's baseline, as the sheet has it — both sit in the same
    band there. The label is in its own grid column, so without this it starts
    at the top of the cell and the row's own padding drops the row 17px below
    it. Same property, so the two cannot drift apart. */
-.xgroup-name { margin: 0; padding-top: var(--row-top, 1.0785vw); }
+.xgroup-name {
+  margin: 0;
+  padding-top: var(--row-top, 1.0785vw);
+}
 
 /* Scoped to the list: the two indexes share every rule above but the columns,
    and an unscoped `.xrow` here would win over the exhibitions template on
@@ -480,8 +709,17 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
 }
 
 @media (max-width: 899px) {
-  .xgroup { grid-template-columns: 1fr; gap: 0.75rem; }
-  .xgroup-name { margin-bottom: 0.25rem; }
+  .xgroup {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .xgroup-name {
+    margin-bottom: 0.25rem;
+  }
+
   /* No pointer to hover with, and no room beside the row for a picture. */
-  .xrow .exh-plate { display: none; }
+  .xrow .exh-plate {
+    display: none;
+  }
 }
