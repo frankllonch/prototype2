@@ -604,20 +604,21 @@ html:not(.js) .about:target { display: block; position: static; opacity: 1; visi
  * enquiry, the project, the practice. Against the sans they read as the subject
  * of their paragraph lifted out of it.
  *
- * Times New Roman italic, which the type sheet names. Nothing to download: it
- * ships with every desktop operating system, and the stack names the metric
- * equivalents for the ones it does not — Liberation Serif on Linux, Tinos
- * where that is what is installed.
+ * Times New Roman italic, which the type sheet names, and which ships with
+ * macOS and Windows — so on most machines the literal face renders. It cannot
+ * be served from the site, though: Monotype licenses it with the operating
+ * system, not for the web. Tinos behind it is Steve Matteson's metric
+ * compatible cut under the SIL Open Font License, self-hosted, so a visitor
+ * without Times New Roman gets the same widths rather than whatever their
+ * browser calls a serif.
  *
  * Sized up a little: at the same point size Times sits visually smaller than
  * Switzer beside it, and the phrase should read as emphasis rather than a drop.
+ * This is an adjustment, not the sheet, which gives both at 45px.
  */
 .ink-accent {
-  font-family: 'Times New Roman', Times, 'Liberation Serif', Tinos, serif;
+  font-family: 'Times New Roman', Times, 'Tinos', 'Liberation Serif', serif;
   font-style: italic;
-  /* The same size as everything else. Times sets a little smaller than Switzer
-     at a given size, so this used to carry a 1.06 optical correction; the size
-     is now uniform by instruction and the face alone does the distinguishing. */
-  font-size: 1em;
+  font-size: 1.06em;
   letter-spacing: 0;
 }
