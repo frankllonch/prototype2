@@ -167,8 +167,14 @@ export function whatsColorPage(): Html {
 export function whatsColorEditionPage(edition: Edition): Html {
   return layout({
     title: `What’s Color? (${edition.numeral})`,
-    path: '/',
-    description: `What’s Color? edition ${edition.numeral} — ${edition.participants.length} answers to the question of what colour is.`,
+    path: `/whats-color/${edition.numeral.toLowerCase()}/`,
+    description: (() => {
+      const answered = edition.participants.filter((p) => p.answer).length;
+      const n = edition.participants.length;
+      return answered
+        ? `What’s Color? edition ${edition.numeral} — ${n} people, ${answered} of them on what color is.`
+        : `What’s Color? edition ${edition.numeral} — the ${n} studios and people who took part.`;
+    })(),
     children: whatsColorEdition(edition),
   });
 }

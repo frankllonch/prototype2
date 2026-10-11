@@ -32,8 +32,12 @@ export interface Participant {
   readonly code?: string;
   /** The colour's name as the source writes it: POWDER RED, AZUL PISCINA. */
   readonly colourName?: string;
-  /** Their answer to the question, as HTML. Absent for those who did not give one. */
+  /** Their answer to the question. Absent for those who did not give one. */
   readonly answer?: string;
+  /** Which edition this record came from: 'I', 'II' or 'III'. */
+  readonly edition?: string;
+  /** A stable id for linking to this person's entry on an edition page. */
+  readonly id?: string;
 }
 
 export interface Edition {
@@ -41,8 +45,17 @@ export interface Edition {
   readonly slug: string;
   /** The title as the source writes it. */
   readonly sourceTitle: string;
-  /** The introduction, as HTML. */
+  /** The introduction the opening view shows in that edition's column. */
   readonly intro: string;
+  /**
+   * The artist's own statement about this edition, for its own page.
+   *
+   * The same text as `intro` for I and III, where there is only one. Edition
+   * II has two — a curators' essay and a note from Claudia — and the sheet
+   * puts the essay in the opening column, so the note would otherwise appear
+   * nowhere on the site despite being the only thing she wrote about it.
+   */
+  readonly statement: string;
   readonly participants: readonly Participant[];
   /** False for edition II, whose source lists names and nothing else. */
   readonly hasAnswers: boolean;
@@ -95,13 +108,29 @@ const AC = /\bAC\s*0*(\d{1,3})\b/i;
  * it is the colour's name — except for the two entries that put the code after
  * the colour instead, which is why both sides are tried.
  */
+function looksLikeHeader(block: string): boolean {
+  const text = plain(block);
+  if (!text) return false;
+  if (AC.test(text)) return true;
+  // A header with a colour reference this regex cannot read would otherwise
+  // vanish and be swallowed as the previous person's answer — silently, and
+  // one person short. So shape is the fallback test: a bold run at the front,
+  // short, and shouted, which no answer in either source is.
+  const lead = leadingStrong(block);
+  if (!lead || text.length > 180) return false;
+  const letters = text.replace(/[^\p{L}]/gu, '');
+  if (letters.length < 3) return false;
+  const upper = letters.replace(/\p{Ll}/gu, '').length / letters.length;
+  return upper > 0.6;
+}
+
 function readHeader(block: string): Participant | null {
   const text = plain(block);
+  if (!looksLikeHeader(block)) return null;
   const code = AC.exec(text);
-  if (!code) return null;
 
-  let before = text.slice(0, code.index);
-  let after = text.slice(code.index + code[0].length);
+  let before = code ? text.slice(0, code.index) : text;
+  let after = code ? text.slice(code.index + code[0].length) : '';
 
   // JULIA RUIZ CABELLO and CRISTINA STOLHE are written `… OCRE ROJIZO AC075`,
   // with the colour before the code. Nothing follows the code there, so when
@@ -150,7 +179,7 @@ function readHeader(block: string): Participant | null {
     name: titleCase(name),
     ...(roleOut ? { role: sentenceCase(roleOut) } : {}),
     ...(alias ? { alias } : {}),
-    code: `AC${code[1]!.padStart(3, '0')}`,
+    ...(code ? { code: `AC${code[1]!.padStart(3, '0')}` } : {}),
     ...(colourName ? { colourName: sentenceCase(colourName) } : {}),
   };
 }
@@ -158,10 +187,11 @@ function readHeader(block: string): Participant | null {
 /**
  * Names the source runs into the next word for want of a comma.
  *
- * Two of them, both in edition III, and both only resolvable by knowing that
- * the trailing words are a job: LUCIA BONED's `LIBRERA` sits in the role
- * column of the designer's own sheet, and MARC GÓMEZ del MORAL is a name in
- * full. Written down because they are readings of the source, not the source.
+ * Two of them, one in each roster, and both only resolvable by knowing that
+ * the trailing words are a job: LUCIA BONED's `LIBRERA` (edition III) sits in
+ * the role column of the designer's own sheet, and HENRY GIROUX's bold run
+ * (edition I) swallows his title. Written down because they are readings of
+ * the source, not the source.
  */
 const NAME_FIX: Readonly<Record<string, { name: string; rest: string[] }>> = {
   'LUCIA BONED LIBRERA': { name: 'LUCIA BONED', rest: ['LIBRERA'] },
@@ -204,15 +234,20 @@ function sentenceCase(s: string): string {
  */
 function readRoster(html: string): Participant[] {
   const out: Participant[] = [];
+  const answers: string[][] = [];
   for (const block of paragraphs(html)) {
-    const header = readHeader(block);
-    if (header) { out.push(header); continue; }
-    const last = out[out.length - 1];
+    if (readHeader(block)) { out.push(readHeader(block)!); answers.push([]); continue; }
     const body = plain(block);
-    if (!last || last.answer || !body) continue;
-    out[out.length - 1] = { ...last, answer: body };
+    // Luís Cerveró answers in two paragraphs; taking only the first dropped
+    // seven hundred characters of him without saying so. Everything between
+    // one header and the next belongs to the person named in it.
+    if (!out.length || !body) continue;
+    answers[answers.length - 1]!.push(body);
   }
-  return out;
+  return out.map((p, i) => {
+    const parts = answers[i] ?? [];
+    return parts.length ? { ...p, answer: parts.join('\n\n') } : p;
+  });
 }
 
 /**
@@ -231,7 +266,7 @@ function readThanks(html: string): Participant[] {
     .split(/\s*,\s*/)
     .map((s) => s.replace(/[.\s]+$/, '').trim())
     .filter((s) => s.length > 1)
-    .map((name) => ({ name: titleCase(name) }));
+    .map((name) => ({ name }));
 }
 
 interface RowLike { readonly columns: readonly { readonly kind: string; readonly html?: string }[] }
@@ -295,6 +330,7 @@ function build(): readonly Edition[] {
       // Block 0 is the masthead — title, bookshop, dates — which the page sets
       // elsewhere; block 1 is the writing.
       intro: intro(column, 1, 1),
+      statement: intro(column, 1, 1),
       participants: readRoster(column),
       hasAnswers: true,
     });
@@ -303,9 +339,14 @@ function build(): readonly Edition[] {
   if (two) {
     const columns = textColumns(two.rows);
     const essay = columns[0] ?? '';
+    const note = columns[1] ?? '';
     out.push({
       numeral: 'II', slug: two.slug, sourceTitle: two.title,
+      // The sheet opens this column with the curators' essay, so that is what
+      // the opening view shows; Claudia's own note is kept for the edition's
+      // own page rather than left unused.
       intro: intro(essay, 1),
+      statement: intro(note, 1),
       participants: readThanks(columns.join('\n')),
       hasAnswers: false,
     });
@@ -314,7 +355,11 @@ function build(): readonly Edition[] {
   if (one) {
     out.push({
       numeral: 'I', slug: one.slug, sourceTitle: one.title,
-      intro: intro(textColumns(one.rows)[0] ?? '', 1),
+      // Three paragraphs, not one: the opening sentence alone reads as a
+      // statement that was cut off, and the paragraph that actually says what
+      // the project is comes third.
+      intro: intro(textColumns(one.rows)[0] ?? '', 3),
+      statement: intro(textColumns(one.rows)[0] ?? '', 3),
       // The glossary column, which opens with Claudia's own note before the
       // first name; `readRoster` ignores anything before a header anyway.
       participants: readRoster(rosterColumn(one.rows)),
@@ -343,10 +388,12 @@ function build(): readonly Edition[] {
 const WORDS: ReadonlyArray<readonly [RegExp, string]> = [
   [/off\s*white|blanco|white|crudo/i, '#efebe3'],
   [/powder\s*red|rosa|pink/i, '#d98f93'],
-  [/pompeian|rojizo|rouge|rojo|\bred\b/i, '#b23a2e'],
+  [/pompeian|rouge|rojo|\bred\b/i, '#b23a2e'],
   [/burdeos|granate|wine/i, '#7d2a35'],
   [/naranja|orange|teja/i, '#d2762f'],
+  [/ocre\s*rojizo/i, '#c07a3e'],
   [/ocre|ocher|ochre|mostaza|amarillo|yellow/i, '#e3b23c'],
+  [/rojizo/i, '#b23a2e'],
   [/arena|sand|beige|nude|crema/i, '#dcc9a8'],
   [/marr[oó]n|brown|tierra/i, '#8a5a3b'],
   [/verde\s*oscuro|dark\s*green/i, '#2f4b35'],
@@ -359,10 +406,65 @@ const WORDS: ReadonlyArray<readonly [RegExp, string]> = [
   [/gris|grey|gray/i, '#8d8d87'],
   [/negro|black/i, '#2b2b2b'],
   [/fresa|strawberry/i, '#c4455c'],
+  [/mandarina|tangerine/i, '#e08a3c'],
+  [/blau\s*verd|verd\s*blau|teal/i, '#2f7a74'],
+  [/blau/i, '#4a6b96'],
+  [/verd\b/i, '#5f7f4f'],
+  [/vermell|carmes[ií]/i, '#b23a2e'],
+  [/groc/i, '#e3b23c'],
+  [/plom|lead/i, '#6e7681'],
 ];
 
 /** When the source names no colour, a steady sweep so neighbours differ. */
 const SWEEP = ['#c96a3f', '#4a6b96', '#5f7f4f', '#b23a2e', '#8d8d87', '#e3b23c', '#6b4a78', '#3f9aa6'];
+
+/* ---------------------------------------------------- making a colour legible */
+
+const channel = (v: number) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+const toRgb = (hex: string) => {
+  const n = Number.parseInt(hex.replace('#', ''), 16);
+  return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255] as const;
+};
+const luminance = (rgb: readonly number[]) =>
+  0.2126 * channel(rgb[0]!) + 0.7152 * channel(rgb[1]!) + 0.0722 * channel(rgb[2]!);
+const hex2 = (v: number) => Math.round(Math.min(1, Math.max(0, v)) * 255).toString(16).padStart(2, '0');
+
+/**
+ * Which of ink or paper to set on top of a swatch.
+ *
+ * The hovered name is knocked out of its colour, and the palette runs from a
+ * near-white off-white to a near-black green. White on the off-white is not
+ * faint, it is absent, so the knockout follows the swatch rather than always
+ * being paper.
+ */
+export function inkOn(hex: string): 'paper' | 'ink' {
+  return luminance(toRgb(hex)) > 0.42 ? 'ink' : 'paper';
+}
+
+/**
+ * The same colour, dark enough to read as type on white.
+ *
+ * The colour reference is the one place the colour IS the type, which is how
+ * the sheet draws it — but the sheet only ever draws the red brown. Set
+ * literally, a third of the palette falls under 3:1 against the paper and
+ * NATURAL OFF WHITE disappears entirely. So the hue is kept and only the
+ * lightness comes down, and only as far as it has to; a colour already legible
+ * is not touched. The same approach, and the same reasoning, as `vivid()` in
+ * `components/exhibitions.ts`.
+ */
+export function readable(hex: string, ratio = 4.5): string {
+  const rgb = toRgb(hex);
+  const max = Math.max(...rgb), min = Math.min(...rgb);
+  if (1.05 / (luminance(rgb) + 0.05) >= ratio) return hex;
+  for (let k = 0.95; k > 0; k -= 0.02) {
+    const scaled = rgb.map((v) => v * k);
+    if (1.05 / (luminance(scaled) + 0.05) >= ratio) {
+      return `#${scaled.map(hex2).join('')}`;
+    }
+  }
+  void max; void min;
+  return '#242528';
+}
 
 export function swatchFor(p: Participant, index: number): string {
   if (p.colourName) {
@@ -371,7 +473,20 @@ export function swatchFor(p: Participant, index: number): string {
   return SWEEP[index % SWEEP.length]!;
 }
 
-export const EDITIONS: readonly Edition[] = build();
+/** A name reduced to something that can live in a URL fragment. */
+export const idFor = (name: string) =>
+  `wc-${name.toLocaleLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`;
+
+const built = build();
+
+/** Each participant stamped with the edition they came from, for linking. */
+export const EDITIONS: readonly Edition[] = built.map((edition) => ({
+  ...edition,
+  participants: edition.participants.map((p) => ({
+    ...p, edition: edition.numeral, id: idFor(p.name),
+  })),
+}));
 
 /**
  * Everyone, once, in the order the editions run.
@@ -382,15 +497,19 @@ export const EDITIONS: readonly Edition[] = build();
  * per-edition views still show them under each.
  */
 export function allParticipants(): readonly Participant[] {
-  const seen = new Set<string>();
-  const out: Participant[] = [];
+  // Keep the fuller record where somebody answered twice: Oscar Tusquets is a
+  // bare name in edition II and a colour and an answer in edition I, and it
+  // was the bare one that survived, so he hovered a colour that is not his.
+  const rank = (p: Participant) => (p.answer ? 2 : 0) + (p.code ? 1 : 0);
+  const best = new Map<string, Participant>();
+  const order: string[] = [];
   for (const edition of EDITIONS) {
     for (const p of edition.participants) {
       const key = p.name.toLocaleLowerCase();
-      if (seen.has(key)) continue;
-      seen.add(key);
-      out.push(p);
+      const held = best.get(key);
+      if (!held) { order.push(key); best.set(key, p); continue; }
+      if (rank(p) > rank(held)) best.set(key, p);
     }
   }
-  return out;
+  return order.map((k) => best.get(k)!);
 }

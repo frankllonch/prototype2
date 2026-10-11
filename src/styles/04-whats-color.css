@@ -9,6 +9,10 @@
  * else above the fold, which is the point — the project is the people in it.
  */
 .wc {
+  /* Past this the type hits its clamp ceiling while a percentage measure keeps
+     widening, which would run the justified columns out to a hundred
+     characters. Freezing the container keeps every proportion on this page. */
+  max-width: 2160px;
   margin: 0 auto;
   padding: calc(var(--bar) + var(--wc-top, 15.92vw)) var(--pad) 14vh;
 }
@@ -72,12 +76,15 @@
 @media (hover: hover) {
   .wc-name:hover {
     background-color: var(--swatch, var(--ink));
-    color: var(--paper);
+    /* Knocked out in whichever of paper or ink the swatch can carry. The
+       palette runs to a near-white off-white, and white on that is not faint,
+       it is absent. */
+    color: var(--swatch-ink, var(--paper));
   }
 }
 .wc-name:focus-visible {
   background-color: var(--swatch, var(--ink));
-  color: var(--paper);
+  color: var(--swatch-ink, var(--paper));
   outline: none;
 }
 
@@ -155,14 +162,17 @@
  * An edition's own page: its numeral, its names narrowed to the people who
  * answered that time, and their answers below.
  *
- * The names reuse `.wc-names` untouched, so moving from the opening view to an
- * edition reads as the same run of type closing in rather than as a different
- * page arriving.
+ * Measured off the designer's sheet, which is a 1576px render of a 1467px
+ * content column, so every figure here is that measurement restated against
+ * ours: three columns at 32.79% with a 0.82% gutter, the name at 1.50% cap
+ * (which is the same 40px the rest of the site runs at), the role, the colour
+ * reference and the answer all at 0.78% cap, which is a shade over half the
+ * name.
  */
 .wc-numeral {
   margin: 0 0 var(--wc-numeral-gap, 2.4vw);
   text-align: center;
-  font-size: clamp(0.9rem, 1.5184vw, 1.9rem);
+  font-size: clamp(0.9rem, 1.5184vw, 2.05rem);
   font-weight: 500;
   letter-spacing: 0;
 }
@@ -171,7 +181,7 @@
   max-width: var(--wc-measure, 84%);
   margin: var(--wc-intro-gap, 8.464vw) auto 0;
   text-align: center;
-  font-size: clamp(0.9rem, 1.5184vw, 1.9rem);
+  font-size: clamp(0.9rem, 1.5184vw, 2.05rem);
   line-height: 1.048;
   letter-spacing: 0;
 }
@@ -181,15 +191,17 @@
 /*
  * The answers, flowing down three columns.
  *
- * CSS columns rather than a grid, because the sheet fills each column in turn:
- * entries in adjacent columns there begin at heights that have nothing to do
- * with each other, which a row-aligned grid cannot produce. The cost is that
- * reading order runs down and then across, which is also how it is drawn.
+ * CSS columns rather than a grid, because the sheet fills each column in turn.
+ * Its three columns hold four, four and five entries over the same vertical
+ * extent, which no row-aligned grid can do, and every entry's position is
+ * predicted by the length of the answer above it rather than by any shared
+ * row. The gutter is 0.82% of the content column — 12px of 1467 — which is
+ * far tighter than the 4vw first guessed at.
  */
 .wc-answers {
   margin-top: var(--wc-answers-gap, 7vw);
   columns: 3;
-  column-gap: var(--wc-gutter, 1.468vw);
+  column-gap: var(--wc-gutter-tight, 0.782vw);
 }
 
 .wc-answer {
@@ -197,83 +209,120 @@
      one column and its answer at the head of the next. */
   break-inside: avoid;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: baseline;
-  column-gap: 1rem;
-  margin: 0 0 var(--wc-answer-gap, 4.4vw);
+  /*
+   * The role track is capped rather than left to size itself.
+   *
+   * At `auto` it took its max-content width, and edition I's roles are
+   * bilingual — "Biòleg especialitzat en neurociència aplicada a l'educació /
+   * biologist, education and neuroscience" — so the name track was squeezed to
+   * nothing and five names printed on top of their own roles at 1866, eleven
+   * at 1100. The name now holds at least 60% of the column and a long role
+   * wraps instead.
+   */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 36%);
+  align-items: start;
+  column-gap: 0.8rem;
+  margin: 0 0 var(--wc-answer-gap, 9.78%);
 }
 
 .wc-answer-name {
   grid-column: 1;
   margin: 0;
-  font-size: clamp(1rem, 1.82vw, 2.4rem);
+  font-size: clamp(1.05rem, 2.1436vw, 2.9rem);
   font-weight: 500;
-  line-height: 1.04;
+  /* 32px of leading on a 22px cap in the sheet, for the names that wrap. */
+  line-height: 0.974;
   letter-spacing: 0;
   text-transform: uppercase;
+  overflow-wrap: anywhere;
 }
-.wc-answer-alias::before { content: ', '; }
 .wc-answer-alias { font-weight: 400; text-transform: none; }
+.wc-answer-alias::before { content: ', '; }
 
+/*
+ * The role and the colour reference, ranged right against the column edge.
+ *
+ * Cap-top aligned with the name's cap top rather than sitting on its baseline,
+ * which is how the sheet places it: the role's caps are half the height of the
+ * name's, so a shared baseline would drop it ten pixels. The padding is what
+ * carries that alignment, since the two have different line boxes.
+ */
 .wc-answer-meta {
   grid-column: 2;
   margin: 0;
+  padding-top: var(--wc-meta-shift, 0.46em);
   display: grid;
   justify-items: end;
-  gap: 0.5em;
+  gap: var(--wc-meta-gap, 1.1em);
   text-align: right;
 }
-.wc-answer-role {
-  font-size: clamp(0.62rem, 0.75vw, 0.95rem);
+.wc-answer-role,
+.wc-answer-code {
+  font-size: clamp(0.66rem, 1.104vw, 1.5rem);
   font-weight: 500;
-  letter-spacing: 0.02em;
+  line-height: 1.1;
+  letter-spacing: 0;
   text-transform: uppercase;
 }
 /*
  * The one place on the site where the colour is the type rather than behind
- * it, as the sheet has it: AC 002 RED BROWN set in a red brown.
+ * it, as the sheet has it: it sets AC 002 RED BROWN in a red brown, sampled
+ * at #8c4b3a. Darkened first where it has to be — a third of this palette
+ * falls under 3:1 against white set literally, and NATURAL OFF WHITE vanishes
+ * — with the hue kept and only the lightness moved.
  */
-.wc-answer-code {
-  font-size: clamp(0.62rem, 0.75vw, 0.95rem);
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  color: var(--swatch, var(--ink));
-}
+.wc-answer-code { color: var(--swatch, var(--ink)); }
 
 .wc-answer-text {
   grid-column: 1 / -1;
-  margin-top: var(--wc-answer-text-gap, 1.9vw);
-  font-size: clamp(0.78rem, 0.95vw, 1.15rem);
-  line-height: 1.22;
+  margin-top: var(--wc-answer-text-gap, 1.6vw);
+  font-size: clamp(0.66rem, 1.104vw, 1.5rem);
+  /* 16.4px of leading on an 11.5px cap: these are set almost solid. */
+  line-height: 0.97;
   letter-spacing: 0;
-  /* Justified, as the sheet sets these: the right edges of its multi-line
-     answers align. Hyphenation so justification does not open rivers in a
-     column this narrow. */
+  /* Justified, as the sheet sets them — its right edges hold to within two
+     pixels over ten separate blocks while the word spacing visibly varies.
+     Hyphenated, or a column this narrow opens rivers; the prefix is for Safari
+     before 17, which otherwise drops hyphenation and gets the rivers. */
   text-align: justify;
+  -webkit-hyphens: auto;
   hyphens: auto;
 }
 .wc-answer-text > * { margin: 0; }
+/* A second paragraph is indented rather than spaced, as the sheet indents it. */
+.wc-answer-text > * + * { text-indent: var(--wc-indent, 1.98%); }
 
 .wc-back {
   margin: var(--wc-answers-gap, 7vw) 0 0;
   text-align: center;
-  font-size: clamp(0.62rem, 0.75vw, 0.95rem);
+  font-size: clamp(0.66rem, 1.104vw, 1.5rem);
   font-weight: 500;
-  letter-spacing: 0.02em;
+  letter-spacing: 0;
   text-transform: uppercase;
 }
-.wc-back a { color: var(--ink); text-decoration: none; }
-.wc-back a:hover { background: var(--ink); color: var(--paper); }
+.wc-back a { color: var(--ink); text-decoration: none; padding: 0 0.2em; }
+.wc-back a:hover, .wc-back a:focus-visible { background: var(--ink); color: var(--paper); outline: none; }
 
 .wc-answers-none {
   margin: var(--wc-answers-gap, 7vw) auto 0;
   max-width: 44ch;
   text-align: center;
-  font-size: clamp(0.78rem, 0.95vw, 1.15rem);
+  font-size: clamp(0.78rem, 1.104vw, 1.5rem);
   line-height: 1.22;
   color: var(--ink-soft);
 }
 
-@media (max-width: 1099px) { .wc-answers { columns: 2; } }
-@media (max-width: 719px) { .wc-answers { columns: 1; } }
+@media (max-width: 1099px) {
+  .wc-answers { columns: 2; }
+  .wc-answer { grid-template-columns: minmax(0, 1fr) minmax(0, 42%); }
+}
+@media (max-width: 899px) {
+  /* The intro follows the names to full width; it was keeping an 84% measure
+     inside an already-inset column, so the two sat on different margins. */
+  .wc-edition-intro { max-width: none; }
+}
+@media (max-width: 719px) {
+  .wc-answers { columns: 1; }
+  /* One column is wide enough to put the role back beside the name. */
+  .wc-answer { grid-template-columns: minmax(0, 1fr) minmax(0, 36%); }
+}

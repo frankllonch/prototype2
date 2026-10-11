@@ -29,12 +29,14 @@ The dataset (`content/projects.json`), the crop decisions (`content/crops.json`,
 
 | Route | What it is |
 |---|---|
-| `/` | The wordmark, every painting gathered into one stack, dispersing into the grid as you scroll |
+| `/` | What's Color? — everyone who has answered, in one run of names, with the three editions introduced beneath |
+| `/whats-color/<numeral>/` | One edition: its own names, then each person's answer in three columns |
+| `/artwork/` | Every painting gathered into one stack, dispersing into the grid as you scroll |
 | `/artwork/<slug>/` | One painting — what a shared link opens; from the grid the same work opens in the lightbox |
-| `/exhibitions/` | The six exhibitions as a grid; each opens as a panel over the page |
-| `/collaborations/` | The fifteen collaborations, likewise |
-| `/colour-chart/` | The colour chart on its own page |
-| About | An overlay on any page — five lines of blue on peach, the work faint behind |
+| `/exhibitions/` | The exhibitions as an index; each opens as a panel over the page |
+| `/commissioned/` | The commissioned work, grouped, likewise |
+| `/color-chart/` | The color chart on its own page |
+| About | An overlay on any page — five lines of colour, the work faint behind |
 
 ### The stack
 
@@ -106,7 +108,7 @@ scripts/
 src/
   content/        types, load (the only disk reader), title, describe, sections
   components/     html (the 40-line template tag), image, gallery, panels, slider, layout
-  pages/index.ts  The four pages and the artwork detail
+  pages/index.ts  The pages and the artwork detail
   client/         stack, controls, slider, panels, lightbox, text-roll — no framework
   styles/         base + top bar, grid + detail, overlays
   build.ts        Renders every route

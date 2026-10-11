@@ -1,5 +1,6 @@
 import { html, join, raw, type Html } from './html.ts';
-import { swatchFor, type Edition, type Participant } from '../content/whats-color.ts';
+import { swatchFor, readable, inkOn, type Edition, type Participant } from '../content/whats-color.ts';
+import { withBase } from '../content/paths.ts';
 
 /**
  * The opening view of What's Color?: everyone who has answered, in one run,
@@ -17,14 +18,24 @@ import { swatchFor, type Edition, type Participant } from '../content/whats-colo
  * mechanism the two indexes share, which assigns a rotating colour on
  * pointerenter and would overwrite a fixed one.
  */
-export function whatsColorNames(participants: readonly Participant[]): Html {
+export function whatsColorNames(
+  participants: readonly Participant[],
+  within?: string,
+): Html {
+  // On an edition's own page a name goes to that person's answer further down
+  // it; on the opening view it goes to the edition they answered in. Every one
+  // of them used to point at `#whats-color`, an id nothing on the site has.
+  const target = (p: Participant) =>
+    within && p.id
+      ? `#${p.id}`
+      : withBase(`/whats-color/${(p.edition ?? 'i').toLowerCase()}/`);
   return html`<p class="wc-names">
     ${join(
       participants.map(
         (p, i) => html`${i > 0 ? raw('<span class="wc-sep">, </span>') : ''}<a
           class="wc-name"
-          href="#whats-color"
-          style="--swatch: ${swatchFor(p, i)}"
+          href="${target(p)}"
+          style="--swatch: ${swatchFor(p, i)}; --swatch-ink: var(--${inkOn(swatchFor(p, i))})"
         >${p.name}</a>`,
       ),
     )}
@@ -50,7 +61,7 @@ export function whatsColorIntros(editions: readonly Edition[]): Html {
       forwards.map(
         (edition) => html`<a
           class="wc-intro"
-          href="/whats-color/${edition.numeral.toLowerCase()}/"
+          href="${withBase(`/whats-color/${edition.numeral.toLowerCase()}/`)}"
           data-edition="${edition.numeral}"
         >
           <h2 class="wc-intro-title">What&rsquo;s Color? <sup>(${edition.numeral})</sup></h2>
@@ -85,12 +96,12 @@ export function whatsColorOpening(
  */
 function answer(p: Participant, index: number): Html {
   const swatch = swatchFor(p, index);
-  return html`<article class="wc-answer">
+  return html`<article class="wc-answer" id="${p.id ?? ''}">
     <h2 class="wc-answer-name">${p.name}${p.alias ? html`<span class="wc-answer-alias">${p.alias}</span>` : ''}</h2>
     <p class="wc-answer-meta">
       ${p.role ? html`<span class="wc-answer-role">${p.role}</span>` : ''}
       ${p.code
-        ? html`<span class="wc-answer-code" style="--swatch: ${swatch}">
+        ? html`<span class="wc-answer-code" style="--swatch: ${readable(swatch)}">
             ${p.code}${p.colourName ? ` ${p.colourName}` : ''}
           </span>`
         : ''}
@@ -115,9 +126,9 @@ export function whatsColorEdition(edition: Edition): Html {
   return html`<div class="wc wc-edition">
     <p class="wc-numeral" aria-hidden="true">(${edition.numeral})</p>
     <h1 class="sr-only">What&rsquo;s Color? (${edition.numeral})</h1>
-    ${whatsColorNames(edition.participants)}
+    ${whatsColorNames(edition.participants, edition.numeral)}
 
-    <div class="wc-edition-intro">${raw(edition.intro)}</div>
+    <div class="wc-edition-intro">${raw(edition.statement)}</div>
 
     ${edition.participants.some((p) => p.answer)
       ? html`<div class="wc-answers">${join(edition.participants.map(answer))}</div>`
@@ -126,6 +137,6 @@ export function whatsColorEdition(edition: Edition): Html {
           record of what they answered.
         </p>`}
 
-    <p class="wc-back"><a href="/">All of What&rsquo;s Color?</a></p>
+    <p class="wc-back"><a href="${withBase('/')}">All of What&rsquo;s Color?</a></p>
   </div>`;
 }

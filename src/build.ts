@@ -1,7 +1,7 @@
 /**
  * Renders the site to dist/ as static HTML.
  *
- * Four pages and the artwork details. Every route is a pure function of the
+ * Seven pages and the artwork details. Every route is a pure function of the
  * dataset, so the build is deterministic: same content in, same pages out.
  */
 import { cp, mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
@@ -85,8 +85,10 @@ async function main() {
     await writePage(`artwork/${work.slug}`, artworkDetailPage(work, works[i - 1], works[i + 1]));
   }
 
+  const wc = EDITIONS.map((e) => `${e.numeral}:${e.participants.length}`).join(' ');
   console.log(
-    `Built ${pagesWritten} pages: artwork (${works.length} works, ${yearColours.length} years), ` +
+    `Built ${pagesWritten} pages: what's color (${EDITIONS.length} editions, ${wc}), ` +
+    `artwork (${works.length} works, ${yearColours.length} years), ` +
     `exhibitions (${exhibitions.length}), commissioned (${commissioned.length}), color chart.` +
     (BASE ? `\nBase path: ${BASE}` : ''),
   );
