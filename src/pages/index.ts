@@ -9,6 +9,8 @@ import { commissionedList } from '../components/commissioned.ts';
 import { groupCommissioned } from '../content/groups.ts';
 import { editorialBody } from '../components/editorial.ts';
 import { yearRail } from '../components/years.ts';
+import { whatsColorOpening } from '../components/whats-color.ts';
+import { EDITIONS, allParticipants } from '../content/whats-color.ts';
 import { isPlate, type YearColour } from '../content/load.ts';
 import { describeImage } from '../content/describe.ts';
 import { displayTitle } from '../content/title.ts';
@@ -36,9 +38,9 @@ const workItem = (p: Project): GridItem => ({
  */
 export function artworkPage(works: readonly Project[], years: readonly YearColour[]): Html {
   return layout({
-    title: 'Claudia Valsells',
+    title: 'Artwork',
     description: TAGLINE,
-    path: '/',
+    path: '/artwork/',
     rail: yearRail(years),
     controls: gridControls([], true),
     children: html`
@@ -136,6 +138,31 @@ export function exhibitionsPage(items: readonly Exhibition[], hues: readonly Yea
   });
 }
 
+/**
+ * What's Color?, and the first thing the site shows.
+ *
+ * It takes the place the gallery used to hold. The project is the one piece of
+ * Claudia's work that is about other people — she gives each of them a colour
+ * and asks them what colour is — so the page opens on the names and nothing
+ * else, and the three editions introduce themselves underneath.
+ *
+ * Everything here is read out of the source: the rosters, the roles, the
+ * colour references and the introductions all come off the pages the site
+ * already has for the two exhibitions and the Terranova project.
+ */
+export function whatsColorPage(): Html {
+  return layout({
+    title: 'Claudia Valsells',
+    description:
+      'What’s Color? — Claudia Valsells assigns a colour to people she admires and asks them what colour means to them.',
+    path: '/',
+    children: html`
+      <h1 class="sr-only">What’s Color?</h1>
+      ${whatsColorOpening(allParticipants(), EDITIONS)}
+    `,
+  });
+}
+
 export const commissionedItem = (p: Project): PanelItem => ({
   slug: p.slug,
   title: displayTitle(p.title, 'project'),
@@ -172,10 +199,10 @@ export function artworkDetailPage(work: Project, previous?: Project, next?: Proj
 
   return layout({
     title: name,
-    path: '/',
+    path: '/artwork/',
     description: work.description ?? '',
     children: html`<article class="detail">
-      <a class="detail-back" href="${withBase('/')}">← Artwork</a>
+      <a class="detail-back" href="${withBase('/artwork/')}">← Artwork</a>
       ${work.cover
         ? html`<figure class="detail-plate">
             ${responsiveImage({ image: work.cover, sizes: '(max-width: 900px) 92vw, 46vw', priority: true, alt: describeImage(work, work.cover.alt) })}

@@ -13,6 +13,7 @@ import { commissioned, colourChart, exhibitions, works, yearColours } from './co
 import { BASE } from './content/paths.ts';
 import {
   artworkDetailPage, artworkPage, commissionedPage, colourChartPage, exhibitionsPage,
+  whatsColorPage,
 } from './pages/index.ts';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -68,7 +69,10 @@ async function main() {
   }
   await buildAssets();
 
-  await writePage('', artworkPage(works, yearColours));
+  // What's Color? is the start page; the gallery has a route of its own, which
+  // coexists with the 154 artwork/<slug> routes because writePage mkdirs deep.
+  await writePage('', whatsColorPage());
+  await writePage('artwork', artworkPage(works, yearColours));
   await writePage('exhibitions', exhibitionsPage(exhibitions, yearColours));
   await writePage('commissioned', commissionedPage(commissioned, yearColours));
   if (colourChart) await writePage('color-chart', colourChartPage(colourChart));

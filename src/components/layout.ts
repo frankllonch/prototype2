@@ -27,7 +27,7 @@ interface LayoutProps {
 /** Order and wording of the menu, after the designer's mockup. */
 const MENU = [
   { label: 'About', href: '/#about', panel: 'about' },
-  { label: 'Artwork', href: '/' },
+  { label: 'Artwork', href: '/artwork/' },
   { label: 'Commissioned', href: '/commissioned/' },
   { label: 'Exhibitions', href: '/exhibitions/' },
   { label: 'Color Chart', href: '/color-chart/' },
@@ -59,7 +59,7 @@ function loadingScreen(): Html {
 function topBar(path: string): Html {
   return html`<header class="top">
     <a class="wordmark" href="${withBase('/')}" data-roll>CLAUDIA VALSELLS</a>
-    <button type="button" class="top-soon" aria-disabled="true">What&rsquo;s Color?</button>
+    <a class="top-soon" href="${withBase('/')}" ${path === '/' ? raw('aria-current="page"') : ''} data-roll>What&rsquo;s Color?</a>
     <nav class="menu" aria-label="Primary">
       ${join(
         MENU.map(
