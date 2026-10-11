@@ -71,3 +71,61 @@ export function whatsColorOpening(
     ${whatsColorIntros(editions)}
   </div>`;
 }
+
+/**
+ * One participant's answer, as the sheet sets it: the name large, what they do
+ * ranged right beside it, the colour their answer was given underneath that,
+ * and the answer itself below.
+ *
+ * The colour reference is set in the colour it names — "AC 002 RED BROWN" in a
+ * red brown — which is the one place on the site where the swatch is the type
+ * rather than behind it. Where the source gives no answer, and for fourteen of
+ * edition I's twenty-eight it gives none, the entry is the name and the colour
+ * and nothing else. That is what the page has to say.
+ */
+function answer(p: Participant, index: number): Html {
+  const swatch = swatchFor(p, index);
+  return html`<article class="wc-answer">
+    <h2 class="wc-answer-name">${p.name}${p.alias ? html`<span class="wc-answer-alias">${p.alias}</span>` : ''}</h2>
+    <p class="wc-answer-meta">
+      ${p.role ? html`<span class="wc-answer-role">${p.role}</span>` : ''}
+      ${p.code
+        ? html`<span class="wc-answer-code" style="--swatch: ${swatch}">
+            ${p.code}${p.colourName ? ` ${p.colourName}` : ''}
+          </span>`
+        : ''}
+    </p>
+    ${p.answer ? html`<div class="wc-answer-text"><p>${p.answer}</p></div>` : ''}
+  </article>`;
+}
+
+/**
+ * One edition: its numeral, its own names, and its answers.
+ *
+ * The names run across the top exactly as they do on the opening view, only
+ * narrowed to this edition — the same object, filtered, so moving between the
+ * two reads as the list closing in rather than as a different page.
+ *
+ * The answers flow down three columns independently rather than sitting in a
+ * row-aligned grid, which is how the sheet lays them out: entries in adjacent
+ * columns begin at unrelated heights there, which only happens when each
+ * column is filled in turn.
+ */
+export function whatsColorEdition(edition: Edition): Html {
+  return html`<div class="wc wc-edition">
+    <p class="wc-numeral" aria-hidden="true">(${edition.numeral})</p>
+    <h1 class="sr-only">What&rsquo;s Color? (${edition.numeral})</h1>
+    ${whatsColorNames(edition.participants)}
+
+    <div class="wc-edition-intro">${raw(edition.intro)}</div>
+
+    ${edition.participants.some((p) => p.answer)
+      ? html`<div class="wc-answers">${join(edition.participants.map(answer))}</div>`
+      : html`<p class="wc-answers-none">
+          The source for this edition names everyone who took part but keeps no
+          record of what they answered.
+        </p>`}
+
+    <p class="wc-back"><a href="/">All of What&rsquo;s Color?</a></p>
+  </div>`;
+}

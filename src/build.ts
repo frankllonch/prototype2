@@ -10,10 +10,11 @@ import path from 'node:path';
 import ts from 'typescript';
 import type { Html } from './components/html.ts';
 import { commissioned, colourChart, exhibitions, works, yearColours } from './content/load.ts';
+import { EDITIONS } from './content/whats-color.ts';
 import { BASE } from './content/paths.ts';
 import {
   artworkDetailPage, artworkPage, commissionedPage, colourChartPage, exhibitionsPage,
-  whatsColorPage,
+  whatsColorPage, whatsColorEditionPage,
 } from './pages/index.ts';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -73,6 +74,9 @@ async function main() {
   // coexists with the 154 artwork/<slug> routes because writePage mkdirs deep.
   await writePage('', whatsColorPage());
   await writePage('artwork', artworkPage(works, yearColours));
+  for (const edition of EDITIONS) {
+    await writePage(`whats-color/${edition.numeral.toLowerCase()}`, whatsColorEditionPage(edition));
+  }
   await writePage('exhibitions', exhibitionsPage(exhibitions, yearColours));
   await writePage('commissioned', commissionedPage(commissioned, yearColours));
   if (colourChart) await writePage('color-chart', colourChartPage(colourChart));

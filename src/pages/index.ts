@@ -9,8 +9,8 @@ import { commissionedList } from '../components/commissioned.ts';
 import { groupCommissioned } from '../content/groups.ts';
 import { editorialBody } from '../components/editorial.ts';
 import { yearRail } from '../components/years.ts';
-import { whatsColorOpening } from '../components/whats-color.ts';
-import { EDITIONS, allParticipants } from '../content/whats-color.ts';
+import { whatsColorOpening, whatsColorEdition } from '../components/whats-color.ts';
+import { EDITIONS, allParticipants, type Edition } from '../content/whats-color.ts';
 import { isPlate, type YearColour } from '../content/load.ts';
 import { describeImage } from '../content/describe.ts';
 import { displayTitle } from '../content/title.ts';
@@ -160,6 +160,16 @@ export function whatsColorPage(): Html {
       <h1 class="sr-only">What’s Color?</h1>
       ${whatsColorOpening(allParticipants(), EDITIONS)}
     `,
+  });
+}
+
+/** One edition of What's Color?, with its own names and the answers beneath. */
+export function whatsColorEditionPage(edition: Edition): Html {
+  return layout({
+    title: `What’s Color? (${edition.numeral})`,
+    path: '/',
+    description: `What’s Color? edition ${edition.numeral} — ${edition.participants.length} answers to the question of what colour is.`,
+    children: whatsColorEdition(edition),
   });
 }
 

@@ -148,3 +148,132 @@
   /* No pointer, so nothing is ever dimmed and every column reads at full strength. */
   .wc-intros:hover .wc-intro { opacity: 1; }
 }
+
+/* ------------------------------------------------- what's color, one edition */
+
+/*
+ * An edition's own page: its numeral, its names narrowed to the people who
+ * answered that time, and their answers below.
+ *
+ * The names reuse `.wc-names` untouched, so moving from the opening view to an
+ * edition reads as the same run of type closing in rather than as a different
+ * page arriving.
+ */
+.wc-numeral {
+  margin: 0 0 var(--wc-numeral-gap, 2.4vw);
+  text-align: center;
+  font-size: clamp(0.9rem, 1.5184vw, 1.9rem);
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.wc-edition-intro {
+  max-width: var(--wc-measure, 84%);
+  margin: var(--wc-intro-gap, 8.464vw) auto 0;
+  text-align: center;
+  font-size: clamp(0.9rem, 1.5184vw, 1.9rem);
+  line-height: 1.048;
+  letter-spacing: 0;
+}
+.wc-edition-intro > * { margin: 0 0 0.9em; }
+.wc-edition-intro > :last-child { margin-bottom: 0; }
+
+/*
+ * The answers, flowing down three columns.
+ *
+ * CSS columns rather than a grid, because the sheet fills each column in turn:
+ * entries in adjacent columns there begin at heights that have nothing to do
+ * with each other, which a row-aligned grid cannot produce. The cost is that
+ * reading order runs down and then across, which is also how it is drawn.
+ */
+.wc-answers {
+  margin-top: var(--wc-answers-gap, 7vw);
+  columns: 3;
+  column-gap: var(--wc-gutter, 1.468vw);
+}
+
+.wc-answer {
+  /* An entry split across a column boundary would put a name at the foot of
+     one column and its answer at the head of the next. */
+  break-inside: avoid;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  column-gap: 1rem;
+  margin: 0 0 var(--wc-answer-gap, 4.4vw);
+}
+
+.wc-answer-name {
+  grid-column: 1;
+  margin: 0;
+  font-size: clamp(1rem, 1.82vw, 2.4rem);
+  font-weight: 500;
+  line-height: 1.04;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+.wc-answer-alias::before { content: ', '; }
+.wc-answer-alias { font-weight: 400; text-transform: none; }
+
+.wc-answer-meta {
+  grid-column: 2;
+  margin: 0;
+  display: grid;
+  justify-items: end;
+  gap: 0.5em;
+  text-align: right;
+}
+.wc-answer-role {
+  font-size: clamp(0.62rem, 0.75vw, 0.95rem);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+/*
+ * The one place on the site where the colour is the type rather than behind
+ * it, as the sheet has it: AC 002 RED BROWN set in a red brown.
+ */
+.wc-answer-code {
+  font-size: clamp(0.62rem, 0.75vw, 0.95rem);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--swatch, var(--ink));
+}
+
+.wc-answer-text {
+  grid-column: 1 / -1;
+  margin-top: var(--wc-answer-text-gap, 1.9vw);
+  font-size: clamp(0.78rem, 0.95vw, 1.15rem);
+  line-height: 1.22;
+  letter-spacing: 0;
+  /* Justified, as the sheet sets these: the right edges of its multi-line
+     answers align. Hyphenation so justification does not open rivers in a
+     column this narrow. */
+  text-align: justify;
+  hyphens: auto;
+}
+.wc-answer-text > * { margin: 0; }
+
+.wc-back {
+  margin: var(--wc-answers-gap, 7vw) 0 0;
+  text-align: center;
+  font-size: clamp(0.62rem, 0.75vw, 0.95rem);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.wc-back a { color: var(--ink); text-decoration: none; }
+.wc-back a:hover { background: var(--ink); color: var(--paper); }
+
+.wc-answers-none {
+  margin: var(--wc-answers-gap, 7vw) auto 0;
+  max-width: 44ch;
+  text-align: center;
+  font-size: clamp(0.78rem, 0.95vw, 1.15rem);
+  line-height: 1.22;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 1099px) { .wc-answers { columns: 2; } }
+@media (max-width: 719px) { .wc-answers { columns: 1; } }
