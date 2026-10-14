@@ -425,11 +425,21 @@ body.is-locked { overflow: hidden; }
  * a painting both become that painting's negative. Change `--ink` and these have
  * to be recomputed — they cannot be written as `var(--ink)`, because what is
  * wanted here is the colour that *produces* it.
+ *
+ * Both sit near white, so the bar is a true negative of whatever it crosses:
+ * close to black over paper, close to white over a dark frame. They used to be
+ * tuned so that over paper they landed exactly on the ink, which was right for
+ * a white page and left the menu a pale grey — 150 of 255 — on every page where
+ * nothing dark passed beneath it. That read as the blend not working at all.
+ *
+ * The cost is that the current page and a hover are now a smaller step from the
+ * rest: over paper, 3 against 27, where it used to be 36 against 150. The step
+ * is still there and it is the same one the opening film has always used.
  */
 .wordmark,
 .menu a:hover, .menu a:focus-visible, .menu a[aria-current='page'],
-.top-soon:hover, .top-soon:focus-visible, .top-soon[aria-current='page'] { color: rgb(219, 218, 215); }
-.menu a, .top-soon { color: rgb(105, 105, 103); transition: color var(--hover) var(--ease); }
+.top-soon:hover, .top-soon:focus-visible, .top-soon[aria-current='page'] { color: rgb(252, 252, 250); }
+.menu a, .top-soon { color: rgb(228, 228, 226); transition: color var(--hover) var(--ease); }
 
 /* Density sits with the year rail down the left edge, not off on its own. */
 .controls {
@@ -515,7 +525,7 @@ body.is-locked { overflow: hidden; }
 /* The roll draws its copies from a variable rather than from `currentColor`:
    the character span's own text is transparent — that is how the roll works —
    so `currentColor` inside it is transparent too, and the copies vanished. */
-.menu a, .top-soon { --roll-color: rgb(105, 105, 103); }
+.menu a, .top-soon { --roll-color: rgb(228, 228, 226); }
 .wordmark,
 .menu a:hover, .menu a:focus-visible, .menu a[aria-current='page'],
-.top-soon:hover, .top-soon:focus-visible, .top-soon[aria-current='page'] { --roll-color: rgb(219, 218, 215); }
+.top-soon:hover, .top-soon:focus-visible, .top-soon[aria-current='page'] { --roll-color: rgb(252, 252, 250); }

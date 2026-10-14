@@ -429,37 +429,6 @@
   pointer-events: none;
 }
 
-/*
- * A brighter negative, on this page only.
- *
- * The bar's colours are stored as the inverse of what they should resolve to,
- * because `difference` paints |backdrop - source|. The site-wide pair is tuned
- * so that over white paper they land exactly on the ink: 219 gives 36, which is
- * the ink's red channel. That is right on a white page and far too quiet over a
- * film, where the links at 105 came out a middling grey against the dark.
- *
- * These sit near white instead, so the bar reads as a true negative: close to
- * white over a dark frame, close to black over a pale one. The hover and the
- * current page keep a step above the rest, so the menu still answers.
- */
-.has-film .wordmark,
-.has-film .top-soon,
-.has-film .menu a:hover,
-.has-film .menu a[aria-current='page'] {
-  color: rgb(252, 252, 250);
-}
-.has-film .menu a {
-  color: rgb(228, 228, 226);
-}
-.has-film .wordmark,
-.has-film .menu a:hover,
-.has-film .menu a[aria-current='page'] {
-  --roll-color: rgb(252, 252, 250);
-}
-.has-film .menu a {
-  --roll-color: rgb(228, 228, 226);
-}
-
 .wc-film {
   position: relative;
   /* Behind the bar, which carries z-index 40 and blends against this. */
