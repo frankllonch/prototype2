@@ -761,9 +761,9 @@ html:has(body.has-film) {
    * this line is 7.24 times its own size wide, so dividing the available width
    * by 7.3 fills it to within a per cent at every width there is.
    */
-  font-size: calc((min(100vw, 2160px) - 2 * var(--pad)) / var(--wc-title-fit, 7.3));
+  font-size: var(--wc-title-size, calc((min(100vw, 2160px) - 2 * var(--pad)) / var(--wc-title-fit, 7.3)));
   font-weight: 700;
-  line-height: 0.9;
+  line-height: var(--wc-title-lead, 0.9);
   letter-spacing: -0.02em;
   text-transform: uppercase;
   text-align: center;
@@ -805,7 +805,16 @@ html:has(body.has-film) {
  * divided by, so the wipe and the film's departure are one movement.
  *
  * It starts a little past its own height because the line box is set under 1 —
- * at a flat 100% the feet of the letters would still show below the mask.
+ * at a flat 100% a sliver of the letters would still show past the mask.
+ *
+ * Three knobs, at the top of this rule and in the keyframes below it:
+ *   --wc-title-size   how big the words are. Unset, they are sized to fill the
+ *                     line exactly; give it a length to override that.
+ *   --wc-title-lead   the height of the band they sit in, as a multiple of the
+ *                     size. This is also the height of the mask, so it is what
+ *                     decides how far the words travel.
+ *   --wc-title-from   where they come from. 105% rises from below the line;
+ *                     -105% comes down from behind the film instead.
  */
 .wc-title-mask {
   overflow: hidden;
@@ -826,6 +835,6 @@ html:has(body.has-film) {
 }
 
 @keyframes wc-title-wipe {
-  from { transform: translateY(-105%); }
+  from { transform: translateY(var(--wc-title-from, 105%)); }
   to { transform: translateY(0); }
 }
