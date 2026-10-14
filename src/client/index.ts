@@ -14,6 +14,7 @@ import { initFigures } from './figures.ts';
 import { initLightbox } from './lightbox.ts';
 import { initCursor } from './cursor.ts';
 import { initFilm } from './film.ts';
+import { initTilt } from './tilt.ts';
 
 initTextRoll();
 initTransitions();
@@ -27,3 +28,4 @@ initFigures();
 initLightbox();
 initCursor();
 initFilm();
+initTilt();
