@@ -42,7 +42,7 @@ const MENU = [
 /** Client modules, in boot order. Preloaded so the first interaction is instant. */
 const CLIENT_MODULES = [
   'env', 'text-roll', 'transitions', 'controls', 'stack', 'years', 'hover-list', 'panels',
-  'panel-scroll', 'figures', 'lightbox', 'cursor', 'index',
+  'panel-scroll', 'figures', 'lightbox', 'cursor', 'film', 'index',
 ] as const;
 
 /** The designer's About: five lines, set in blue on peach. */

@@ -111,7 +111,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
   transition: filter 0.7s var(--ease), opacity 0.7s var(--ease);
 }
 
-.tile:hover img {
+.tile:hover img, .tile:focus-visible img {
   filter: blur(1.6px);
   opacity: 0.82;
 }
@@ -213,7 +213,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
   color: var(--ink-soft);
 }
 
-.detail-back:hover {
+.detail-back:hover, .detail-back:focus-visible {
   color: var(--ink);
 }
 
@@ -253,7 +253,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
   color: var(--ink-soft);
 }
 
-.detail-pager a:hover {
+.detail-pager a:hover, .detail-pager a:focus-visible {
   color: var(--ink);
 }
 

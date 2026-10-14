@@ -41,7 +41,7 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
  */
 .panel { background: color-mix(in srgb, var(--paper) 90%, transparent); padding: 0 0 var(--gap); }
 .panel-close { position: fixed; top: 1.6rem; right: var(--pad); z-index: 2; color: var(--ink-soft); }
-.panel-close:hover { color: var(--ink); }
+.panel-close:hover, .panel-close:focus-visible { color: var(--ink); }
 /*
  * The Colour Chart scrolls the page itself rather than sitting in a panel, so
  * its text passes under the menu — and the menu's difference blend over a line
@@ -196,13 +196,15 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   animation: about-blink 9s ease-in-out infinite;
 }
 
+/* Plain text on the colour: no plate behind it and no ring when focused — it
+   answers by coming up to full strength, as the other closes do. */
 .about-close {
   position: fixed; top: 1.6rem; right: var(--pad); z-index: 3;
   color: var(--ink);
-  /* Legible over the blink and over the white page below it alike. */
-  background: color-mix(in srgb, var(--paper) 78%, transparent);
-  padding: 0.3rem 0.5rem;
+  opacity: 0.62;
+  transition: opacity var(--hover) var(--ease);
 }
+.about-close:hover, .about-close:focus-visible { opacity: 1; }
 
 /*
  * Scrolling from the colour into the biography, in three layers.
@@ -411,7 +413,8 @@ html:not(.js) .about:target { display: block; position: static; opacity: 1; visi
 }
 /* The veil is positioned, so anything meant to sit in front must be positioned too. */
 .lightbox-plate, .lightbox-caption, .lightbox-nav { position: relative; z-index: 1; }
-.lightbox-close { position: fixed; top: 1.6rem; right: var(--pad); z-index: 1; }
+.lightbox-close { position: fixed; top: 1.6rem; right: var(--pad); z-index: 1; color: var(--ink-soft); }
+.lightbox-close:hover, .lightbox-close:focus-visible { color: var(--ink); }
 .lightbox-plate { grid-column: 3; display: grid; place-items: center; min-width: 0; min-height: 0; transition: opacity 0.42s var(--ease); }
 .lightbox.is-changing .lightbox-plate, .lightbox.is-changing .lightbox-caption { opacity: 0; }
 .lightbox-plate img { max-height: 74vh; max-width: 100%; width: auto; height: auto; }
@@ -420,7 +423,7 @@ html:not(.js) .about:target { display: block; position: static; opacity: 1; visi
 .lightbox-meta { display: flex; flex-direction: column; gap: 0.15rem; margin: 0 0 0.9rem; }
 .lightbox-count { margin: 0; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
 .lightbox-nav { align-self: center; width: clamp(2rem, 4vw, 3.5rem); height: 40vh; color: var(--ink-soft); font-size: var(--type); transition: color 0.2s var(--ease); }
-.lightbox-nav:hover { color: var(--ink); }
+.lightbox-nav:hover, .lightbox-nav:focus-visible { color: var(--ink); }
 .lightbox-prev { grid-column: 1; }
 .lightbox-next { grid-column: 5; }
 @media (max-width: 899px) {

@@ -310,7 +310,15 @@ h1, h2, h3 { font-weight: 500; margin: 0; }
 p { margin: 0 0 1em; }
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
 ::selection { background: var(--ink); color: var(--paper); }
-:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+/*
+ * No ring. Keyboard focus is shown the way hover is — the thing you are on
+ * changes colour — because a 2px box drawn round an arrow or a close button is
+ * a shape the design does not otherwise contain, and it was landing on every
+ * arrow of every detail panel. Each focusable thing pairs `:focus-visible`
+ * with its own `:hover` rule, so moving by key shows what moving by pointer
+ * shows, and nothing is left without an indicator.
+ */
+:focus-visible { outline: none; }
 .skip-link { position: absolute; left: -999px; top: 0; z-index: 100; background: var(--ink); color: var(--paper); padding: 0.6rem 1rem; }
 .skip-link:focus { left: 0; }
 /* Present for screen readers and search engines, absent on screen. */
@@ -419,8 +427,8 @@ body.is-locked { overflow: hidden; }
  * wanted here is the colour that *produces* it.
  */
 .wordmark,
-.menu a:hover, .menu a[aria-current='page'],
-.top-soon:hover, .top-soon[aria-current='page'] { color: rgb(219, 218, 215); }
+.menu a:hover, .menu a:focus-visible, .menu a[aria-current='page'],
+.top-soon:hover, .top-soon:focus-visible, .top-soon[aria-current='page'] { color: rgb(219, 218, 215); }
 .menu a, .top-soon { color: rgb(105, 105, 103); transition: color var(--hover) var(--ease); }
 
 /* Density sits with the year rail down the left edge, not off on its own. */
@@ -430,7 +438,7 @@ body.is-locked { overflow: hidden; }
   transition: opacity 0.8s var(--ease);
 }
 .control { transition: color var(--hover) var(--ease); font-variant-numeric: tabular-nums; }
-.control:hover, .control.is-active { color: var(--ink); }
+.control:hover, .control:focus-visible, .control.is-active { color: var(--ink); }
 
 @media (max-width: 899px) {
   .top { grid-template-columns: 1fr; justify-items: center; gap: 0.7rem; padding: 1.2rem var(--pad) 0.9rem; }
@@ -509,5 +517,5 @@ body.is-locked { overflow: hidden; }
    so `currentColor` inside it is transparent too, and the copies vanished. */
 .menu a, .top-soon { --roll-color: rgb(105, 105, 103); }
 .wordmark,
-.menu a:hover, .menu a[aria-current='page'],
-.top-soon:hover, .top-soon[aria-current='page'] { --roll-color: rgb(219, 218, 215); }
+.menu a:hover, .menu a:focus-visible, .menu a[aria-current='page'],
+.top-soon:hover, .top-soon:focus-visible, .top-soon[aria-current='page'] { --roll-color: rgb(219, 218, 215); }

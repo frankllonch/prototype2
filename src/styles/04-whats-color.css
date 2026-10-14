@@ -121,7 +121,9 @@
   .wc-intros:hover .wc-intro { opacity: 0.45; }
   .wc-intros:hover .wc-intro:hover { opacity: 1; }
 }
-.wc-intro:focus-visible { outline: 2px solid var(--ink); outline-offset: 0.6rem; }
+/* The answer hovering gives, rather than a ring around it. */
+.wc-intro:focus-visible { opacity: 1; }
+.wc-intros:focus-within .wc-intro:not(:focus-visible) { opacity: 0.45; }
 
 .wc-intro-title {
   margin: 0 0 var(--wc-title-gap, 0.87em);
@@ -330,22 +332,30 @@
 /* ------------------------------------------------------- the opening film */
 
 /*
- * The film fills the first screen and the bar sits across the middle of it,
- * reading as the negative of whatever is passing underneath. Scrolling carries
- * the bar up until it reaches the top, where it stays for the rest of the page.
+ * The bar does three things in turn, and the whole of it is one `position:
+ * sticky` with both offsets set.
  *
- * It is `sticky` rather than `fixed`, and it is the one page where that is so.
- * Sticky needs the element in flow, and it stays stuck only while its
- * containing block is on screen — so the bar has to be a child of <body> and
- * not of the film, or it would leave with the film the way the reference does.
- * Ours stays.
+ *   1. It holds on the middle line of the screen while the film runs behind it.
+ *   2. The film's bottom edge rises to meet it, and from there the bar travels
+ *      on that edge — sitting under the film, never over it.
+ *   3. It reaches the top and stays there for the rest of the page.
  *
- * The arithmetic is the whole trick. The bar is given a known height and a top
- * margin of half a screen less half of itself, which centres it on the first
- * view; `main` is then pulled up by exactly the space the bar took, so the film
- * still begins at the top of the page and runs behind it. Scrolling half a
- * screen is what it takes for the bar to reach the top, which is the moment the
- * film has gone and the names below begin.
+ * Sticky clamps a box between two limits rather than pinning it to one. Give it
+ * `top: 0` and `bottom: (100vh - bar) / 2` and its screen position becomes
+ * clamp(0, natural, middle): too low and the bottom offset lifts it to the
+ * middle, too high and the top offset holds it at zero, and in between it
+ * simply travels with the page. Those three clauses are the three phases, and
+ * no script is involved.
+ *
+ * For phase two to land on the film's edge, the bar's position in normal flow
+ * has to be that edge: hence the 100vh top margin, which puts it exactly at the
+ * film's bottom. `main` is then pulled up by that margin plus the bar's own
+ * height, so the film still starts at the top of the page and runs behind it.
+ *
+ * The bar is a child of <body> and not of the film on purpose. Sticky holds
+ * only while its containing block is in view, so inside the film it would come
+ * unstuck and leave with it — which is what the reference does and the opposite
+ * of what is wanted here.
  */
 .has-film {
   --film-bar: 4.2rem;
@@ -354,16 +364,49 @@
 .has-film .top {
   position: sticky;
   top: 0;
+  bottom: calc((100vh - var(--film-bar)) / 2);
   height: var(--film-bar);
   padding-top: 0;
   padding-bottom: 0;
   /* One row in a taller box: centre it rather than leaving it on the baseline. */
   align-content: center;
-  margin-top: calc(50vh - var(--film-bar) / 2);
+  /* Its resting place in flow is the film's bottom edge. */
+  margin-top: 100vh;
 }
 
 .has-film main {
-  margin-top: calc(-50vh - var(--film-bar) / 2);
+  margin-top: calc(-100vh - var(--film-bar));
+}
+
+/*
+ * A brighter negative, on this page only.
+ *
+ * The bar's colours are stored as the inverse of what they should resolve to,
+ * because `difference` paints |backdrop - source|. The site-wide pair is tuned
+ * so that over white paper they land exactly on the ink: 219 gives 36, which is
+ * the ink's red channel. That is right on a white page and far too quiet over a
+ * film, where the links at 105 came out a middling grey against the dark.
+ *
+ * These sit near white instead, so the bar reads as a true negative: close to
+ * white over a dark frame, close to black over a pale one. The hover and the
+ * current page keep a step above the rest, so the menu still answers.
+ */
+.has-film .wordmark,
+.has-film .top-soon,
+.has-film .menu a:hover,
+.has-film .menu a[aria-current='page'] {
+  color: rgb(252, 252, 250);
+}
+.has-film .menu a {
+  color: rgb(228, 228, 226);
+}
+.has-film .wordmark,
+.has-film .menu a:hover,
+.has-film .menu a[aria-current='page'] {
+  --roll-color: rgb(252, 252, 250);
+}
+.has-film .menu a {
+  --roll-color: rgb(228, 228, 226);
 }
 
 .wc-film {
@@ -403,3 +446,19 @@
   /* A half-screen of film is enough on a phone; a full one is a wall. */
   .wc-film { height: 70vh; }
 }
+
+/*
+ * With scripting off the bar is simply the bar: fixed at the top, as on every
+ * other page. The three-phase motion is an enhancement and is written as one —
+ * the film still plays and the page still reads, it just opens with the bar
+ * where a visitor already expects it rather than across the middle.
+ */
+html:not(.js) .has-film .top {
+  position: fixed;
+  top: 0;
+  margin-top: 0;
+  height: auto;
+  padding-top: 1.6rem;
+  padding-bottom: 1rem;
+}
+html:not(.js) .has-film main { margin-top: 0; }
