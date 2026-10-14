@@ -549,3 +549,22 @@ html:not(.js) .has-film .top {
   padding-bottom: 1rem;
 }
 html:not(.js) .has-film main { margin-top: 0; }
+
+/*
+ * No give at the top of the film.
+ *
+ * Scrolling up from the top of a page normally rubber-bands, and what shows in
+ * the gap is the document's own ground — white — so the film appeared to peel
+ * away from a blank sheet. The page is asked not to overscroll instead, which
+ * is the only way to refuse it: the gap is drawn by the compositor, outside
+ * anything a stylesheet can paint, so there is nothing to colour in.
+ *
+ * Set through `:has` because it has to land on the scrolling element itself,
+ * and what identifies this page is a class on the body. Scoped to this page on
+ * purpose — elsewhere the bounce is the platform's own behaviour and there is
+ * nothing behind the page to catch anyone out. The one cost is pull-to-refresh
+ * on Android, which goes with it.
+ */
+html:has(body.has-film) {
+  overscroll-behavior-y: none;
+}

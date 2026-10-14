@@ -1,3 +1,5 @@
+import { isPlainClick, reduceMotion } from './env.ts';
+
 /**
  * Switches the bar between its two resting states over the opening film.
  *
@@ -52,4 +54,47 @@ export function initFilm(): void {
     { threshold: 0 },
   );
   watch.observe(mark);
+  samePageLinks();
+}
+
+/**
+ * The two links in the bar that point at this page, when you are already on it.
+ *
+ * The film and the names live on one page, so from anywhere else the bar's two
+ * halves are ordinary links to two places in it: the wordmark to the top, where
+ * the film is, and the section's own name to the names below. From another page
+ * the browser does the work and lands where the link says.
+ *
+ * From this page it would do nothing at all — the wordmark's href is the page
+ * you are reading — so the view is moved by hand instead, and smoothly, since
+ * the whole point is to show that the names are further down the same page
+ * rather than somewhere else.
+ *
+ * The address is corrected to match, so that reloading, or coming back, returns
+ * to the part you were actually looking at. Replaced rather than pushed: moving
+ * within a page is not a step to be undone with the back button.
+ */
+function samePageLinks(): void {
+  const names = document.getElementById('whats-color');
+
+  const go = (link: HTMLAnchorElement | null, to: () => number, href: string) => {
+    if (!link) return;
+    link.addEventListener('click', (event) => {
+      // A modified click means "open this elsewhere", and a link to another page
+      // is left to be a link.
+      if (!isPlainClick(event) || link.pathname !== window.location.pathname) return;
+      event.preventDefault();
+      window.history.replaceState(null, '', href);
+      window.scrollTo({ top: to(), behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+    });
+  };
+
+  go(document.querySelector<HTMLAnchorElement>('.wordmark'), () => 0, window.location.pathname);
+  if (names) {
+    go(
+      document.querySelector<HTMLAnchorElement>('.top-soon'),
+      () => names.getBoundingClientRect().top + window.scrollY,
+      '#whats-color',
+    );
+  }
 }

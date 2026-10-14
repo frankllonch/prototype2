@@ -77,7 +77,7 @@ export function whatsColorOpening(
   participants: readonly Participant[],
   editions: readonly Edition[],
 ): Html {
-  return html`<div class="wc">
+  return html`<div class="wc" id="whats-color">
     ${whatsColorNames(participants)}
     ${whatsColorIntros(editions)}
   </div>`;
