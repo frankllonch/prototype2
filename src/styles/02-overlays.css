@@ -499,17 +499,8 @@ html:not(.js) .about:target { display: block; position: static; opacity: 1; visi
 
 /* ------------------------------------------------- detail panels, redesign */
 
-/* The two marks at the head of the sheet, from the layout. */
+/* Kept as the positioning context for the arrows and the expand controls. */
 .reader { position: relative; }
-.reader-mark {
-  position: absolute;
-  top: var(--bar);
-  width: 1.3rem;
-  height: 1.3rem;
-  background: var(--ink);
-}
-.reader-mark-start { left: 0; }
-.reader-mark-end { right: 0; }
 
 /*
  * Turning the pictures. Under them, quiet, in the colour of the text — the
@@ -584,7 +575,6 @@ html:not(.js) .about:target { display: block; position: static; opacity: 1; visi
 .reader.is-wide-figures .reader-figure img { max-height: calc(100vh - var(--bar) - 9rem); }
 
 @media (max-width: 899px) {
-  .reader-mark { width: 0.9rem; height: 0.9rem; }
   .reader-text { padding-right: 2rem; }
 }
 

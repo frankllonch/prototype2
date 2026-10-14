@@ -392,11 +392,16 @@ body.is-locked { overflow: hidden; }
  * `aria-disabled` says plainly that it is here but not ready, which is the
  * truth. It keeps its place in the tab order so it is not a surprise when it
  * starts working.
+ *
+ * It takes the menu’s colours all the same — quiet by default, bright on hover
+ * and when it is the current page. It used to sit in the always-bright group,
+ * so it read as permanently selected while no page it names existed, and the
+ * one page you were actually on looked no different from it.
  */
 .top-soon {
   font-family: inherit;
   white-space: nowrap;
-  cursor: default;
+  cursor: pointer;
 }
 .top > * { pointer-events: auto; }
 .wordmark { letter-spacing: 0.033em; white-space: nowrap; }
@@ -413,8 +418,10 @@ body.is-locked { overflow: hidden; }
  * to be recomputed — they cannot be written as `var(--ink)`, because what is
  * wanted here is the colour that *produces* it.
  */
-.wordmark, .menu a:hover, .menu a[aria-current='page'], .top-soon { color: rgb(219, 218, 215); }
-.menu a { color: rgb(105, 105, 103); transition: color var(--hover) var(--ease); }
+.wordmark,
+.menu a:hover, .menu a[aria-current='page'],
+.top-soon:hover, .top-soon[aria-current='page'] { color: rgb(219, 218, 215); }
+.menu a, .top-soon { color: rgb(105, 105, 103); transition: color var(--hover) var(--ease); }
 
 /* Density sits with the year rail down the left edge, not off on its own. */
 .controls {
@@ -500,5 +507,7 @@ body.is-locked { overflow: hidden; }
 /* The roll draws its copies from a variable rather than from `currentColor`:
    the character span's own text is transparent — that is how the roll works —
    so `currentColor` inside it is transparent too, and the copies vanished. */
-.menu a { --roll-color: rgb(105, 105, 103); }
-.wordmark, .menu a:hover, .menu a[aria-current='page'] { --roll-color: rgb(219, 218, 215); }
+.menu a, .top-soon { --roll-color: rgb(105, 105, 103); }
+.wordmark,
+.menu a:hover, .menu a[aria-current='page'],
+.top-soon:hover, .top-soon[aria-current='page'] { --roll-color: rgb(219, 218, 215); }

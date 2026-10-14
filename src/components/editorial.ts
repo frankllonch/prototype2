@@ -39,8 +39,6 @@ export function editorialBody({ title, year, images, rows, venue, from, to, kind
   const stated = Boolean(venue || from || kind);
 
   return html`<div class="reader${stated ? ' reader-stated' : ''}" data-reader>
-    <span class="reader-mark reader-mark-start" aria-hidden="true"></span>
-    <span class="reader-mark reader-mark-end" aria-hidden="true"></span>
 
     <div class="reader-text">
       <button
