@@ -86,6 +86,8 @@ async function render(image: ProjectImage, file: string, key: string): Promise<I
   if (!existsSync(jpgPath)) {
     await sharp(file, { failOn: 'none' }).rotate()
       .resize({ width: widest, withoutEnlargement: true })
+      // JPEG has no alpha. Without a ground a cut-out composites onto black.
+      .flatten({ background: '#ffffff' })
       .jpeg({ quality: 80, progressive: true, mozjpeg: true })
       .toFile(jpgPath);
   }
@@ -119,7 +121,15 @@ async function main() {
         // A crop that passed review replaces the photograph everywhere the image
         // is shown. Its variants get their own key, so nothing rendered from the
         // uncropped file is ever reused by mistake.
-        const crop = path.join(CROPS, `${image.id}.jpg`);
+        /*
+         * A cut-out has no background and must keep it that way, so it is held
+         * as PNG; AVIF and WebP carry the transparency through and only the
+         * JPEG fallback has to be given a ground. The crops from the earlier
+         * pass are flat JPEGs and still work, so both are looked for.
+         */
+        const cutout = path.join(CROPS, `${image.id}.png`);
+        const flat = path.join(CROPS, `${image.id}.jpg`);
+        const crop = existsSync(cutout) ? cutout : flat;
         const useCrop = cropped.has(image.id) && existsSync(crop);
         const file = useCrop ? crop : original;
         /*

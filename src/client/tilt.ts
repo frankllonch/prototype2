@@ -24,7 +24,7 @@ export function initTilt(): void {
   if (!finePointer.matches) return;
 
   for (const art of document.querySelectorAll<HTMLElement>('[data-tilt]')) {
-    const inner = art.querySelector<HTMLElement>('.plate-art-inner');
+    const inner = art.querySelector<HTMLElement>('.detail-plate-inner');
     if (!inner) continue;
 
     const knob = (name: string, fallback: number) => {

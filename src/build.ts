@@ -85,7 +85,7 @@ async function main() {
   if (colourChart) await writePage('color-chart', colourChartPage(colourChart));
 
   for (const [i, work] of works.entries()) {
-    await writePage(`artwork/${work.slug}`, artworkDetailPage(work, works[i - 1], works[i + 1], i, works));
+    await writePage(`artwork/${work.slug}`, artworkDetailPage(work, works[i - 1], works[i + 1]));
   }
 
   const wc = EDITIONS.map((e) => `${e.numeral}:${e.participants.length}`).join(' ');

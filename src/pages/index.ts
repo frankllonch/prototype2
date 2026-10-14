@@ -212,37 +212,11 @@ export function colourChartPage(page: Project): Html {
  * A painting on its own page — what a shared link opens. From the grid, the
  * same work opens in the lightbox instead; this is the same composition.
  */
-/**
- * The wall the painting hangs on: the rest of the collection, faint.
- *
- * Spread across the whole set rather than taken from the front, so the wall
- * reads as the body of work and not as whichever paintings happen to sort
- * first. The current one is left out — it is the thing on the wall.
- *
- * These are the same files the gallery serves at the same size, so arriving
- * here from the grid costs nothing: the browser already holds them. They are
- * lazy and `aria-hidden`, being a texture rather than a picture of anything.
- */
-function plateWall(all: readonly Project[], current: string): Html {
-  const others = all.filter((w) => w.slug !== current && w.cover);
-  const step = Math.max(1, Math.floor(others.length / 30));
-  const chosen = others.filter((_, i) => i % step === 0).slice(0, 30);
-  return html`<div class="plate-wall" aria-hidden="true">
-    ${join(chosen.map((w) => html`<span class="plate-wall-tile">
-      ${responsiveImage({ image: w.cover!, sizes: '140px', alt: '' })}
-    </span>`))}
-  </div>`;
-}
-
-export function artworkDetailPage(
-  work: Project,
-  previous?: Project,
-  next?: Project,
-  index = 0,
-  all: readonly Project[] = [],
-): Html {
+export function artworkDetailPage(work: Project, previous?: Project, next?: Project): Html {
   const name = displayTitle(work.title, 'work');
-  const { year, dimensions, materials, available } = work.metadata;
+  const { year, dimensions, materials, reference, available } = work.metadata;
+  const facts = [dimensions, materials, year ? String(year) : undefined, reference, available ? 'Available' : undefined]
+    .filter((f): f is string => Boolean(f));
   const link = (p: Project | undefined, label: string, rel: string) =>
     p ? html`<a href="${withBase(`/artwork/${p.slug}/`)}" rel="${rel}">${label}</a>` : html`<span></span>`;
 
@@ -250,34 +224,19 @@ export function artworkDetailPage(
     title: name,
     path: '/artwork/',
     description: work.description ?? '',
-    children: html`<article class="plate">
-      ${all.length ? plateWall(all, work.slug) : ''}
+    children: html`<article class="detail">
       <a class="detail-back" href="${withBase('/artwork/')}">← Artwork</a>
-
       ${work.cover
-        ? html`<figure class="plate-art" data-tilt>
-            <span class="plate-art-inner">
-              ${responsiveImage({ image: work.cover, sizes: '(max-width: 900px) 86vw, 44vw', priority: true, alt: describeImage(work, work.cover.alt) })}
+        ? html`<figure class="detail-plate" data-tilt>
+            <span class="detail-plate-inner">
+              ${responsiveImage({ image: work.cover, sizes: '(max-width: 900px) 92vw, 46vw', priority: true, alt: describeImage(work, work.cover.alt) })}
             </span>
           </figure>`
         : ''}
-
-      <div class="plate-facts">
-        <h1 class="plate-name">${name}</h1>
-        ${materials ? html`<p class="plate-medium">${materials}</p>` : ''}
-        ${year || dimensions
-          ? html`<p class="plate-spec">
-              ${year ? html`<span class="plate-strong">${String(year)}</span>` : ''}
-              ${year && dimensions ? raw('<br />') : ''}
-              ${dimensions ?? ''}
-            </p>`
-          : ''}
-        ${all.length
-          ? html`<p class="plate-count"><span class="plate-strong">${String(index + 1)}</span> of ${String(all.length)}</p>`
-          : ''}
-        ${available ? html`<p class="plate-available">Available</p>` : ''}
+      <div class="detail-caption">
+        <h1 class="detail-title">${name}</h1>
+        ${join(facts.map((f) => html`<p>${f}</p>`))}
       </div>
-
       <nav class="detail-pager" aria-label="Between works">
         ${link(previous, '← Previous', 'prev')}
         ${link(next, 'Next →', 'next')}
@@ -285,7 +244,6 @@ export function artworkDetailPage(
     </article>`,
   });
 }
-
 
 /**
  * Commissioned work: grouped by the kind of job rather than shown as a grid,

@@ -1,12 +1,12 @@
-/* ------------------------------------------------------- a single painting */
+/* --------------------------------------------- the lean on a single work */
 
 /*
  * THE HOVER — the numbers to change are all here.
  *
  * The painting leans towards the pointer as it crosses it. Every figure the
- * effect uses is a custom property on `.plate-art`, read by the script rather
- * than written into it, so this block is the whole of the tuning and nothing
- * has to be touched in JavaScript.
+ * effect uses is a custom property on `.detail-plate`, read by the script
+ * rather than written into it, so this block is the whole of the tuning and
+ * nothing has to be touched in JavaScript.
  *
  *   --tilt-max      how far it leans at the very edge. 0deg turns the lean off
  *                   and leaves the lift and the shadow.
@@ -18,145 +18,50 @@
  *                   because the painting has to track the hand without lag.
  *   --tilt-shadow   the shadow while it is held, and at rest.
  *
- * Set --tilt-max and --tilt-lift to 0 and 1 to switch the whole thing off.
+ * Set --tilt-max to 0deg and --tilt-lift to 1 to switch the whole thing off.
+ *
+ * The shadows are deliberately faint. These are cut-outs with no background of
+ * their own, sitting on the paper, so a heavy shadow reads as a box around the
+ * painting rather than as the painting standing off the page.
  */
-.plate-art {
+.detail-plate {
   --tilt-max: 6deg;
   --tilt-depth: 1100px;
   --tilt-lift: 1.015;
   --tilt-settle: 620ms;
-  --tilt-shadow: 0 2.2rem 4rem rgb(0 0 0 / 0.2);
-  --tilt-shadow-rest: 0 0.9rem 2rem rgb(0 0 0 / 0.1);
+  --tilt-shadow: 0 1.6rem 3rem rgb(0 0 0 / 0.14);
+  --tilt-shadow-rest: 0 0 0 rgb(0 0 0 / 0);
 
-  grid-area: art;
-  margin: 0;
-  justify-self: center;
   perspective: var(--tilt-depth);
 }
 
 /*
- * The transform goes on an inner element, not on the figure itself: the figure
- * holds the perspective, and an element cannot be both the perspective and the
- * thing seen through it.
+ * The transform goes on an inner element, not on the figure: the figure holds
+ * the perspective, and an element cannot be both the perspective and the thing
+ * seen through it.
  */
-.plate-art-inner {
+.detail-plate-inner {
   display: block;
   transform-style: preserve-3d;
   will-change: transform;
-  box-shadow: var(--tilt-shadow-rest);
-  transition: transform var(--tilt-settle) var(--ease), box-shadow var(--tilt-settle) var(--ease);
+  filter: drop-shadow(var(--tilt-shadow-rest));
+  transition: transform var(--tilt-settle) var(--ease), filter var(--tilt-settle) var(--ease);
 }
 
 /*
- * While the pointer is on it there is no transition, so the lean is exactly
- * where the hand is rather than easing towards it a frame behind. The easing
- * is for the way back.
+ * `drop-shadow` and not `box-shadow`, because these have no background: a box
+ * shadow would draw a rectangle behind a painting that is not rectangular, and
+ * the shadow would show in the transparent corners.
  */
-.plate-art.is-tilting .plate-art-inner {
+.detail-plate.is-tilting .detail-plate-inner {
   transition: none;
-  box-shadow: var(--tilt-shadow);
-}
-
-.plate-art img {
-  display: block;
-  width: 100%;
-  height: auto;
-  max-height: 74vh;
-  width: auto;
-  max-width: 100%;
-}
-
-/* ------------------------------------------------------------- the layout */
-
-/*
- * The painting at the left and what it is at the right, both on the middle
- * line of the screen, after the designer's sheet.
- */
-.plate {
-  position: relative;
-  min-height: 100vh;
-  display: grid;
-  grid-template-columns: minmax(0, 50%) minmax(0, 1fr);
-  grid-template-areas: 'art facts';
-  align-items: center;
-  gap: clamp(2rem, 5vw, 6rem);
-  padding: calc(var(--bar) + 4vh) var(--pad) 8vh;
-}
-
-.plate-facts {
-  grid-area: facts;
-  align-self: center;
-  position: relative;
-  z-index: 1;
+  filter: drop-shadow(var(--tilt-shadow));
 }
 
 /*
- * One size for all of it, as everywhere else on the site; the weight is what
- * separates the name of the thing from what qualifies it.
- */
-.plate-name,
-.plate-medium,
-.plate-spec,
-.plate-count,
-.plate-available {
-  margin: 0;
-  font-size: var(--type);
-  line-height: var(--lead);
-  letter-spacing: 0;
-  text-transform: uppercase;
-  font-weight: 500;
-}
-.plate-name,
-.plate-strong {
-  font-weight: 600;
-}
-
-/* The sheet sets the three facts apart from each other, not from their own lines. */
-.plate-spec { margin-top: 1.6em; }
-.plate-count { margin-top: 1.6em; }
-.plate-available { margin-top: 1.6em; font-style: italic; }
-
-/* ------------------------------------------------------------- the wall */
-
-/*
- * The rest of the collection behind, barely there.
- *
- * Behind everything and out of the way of the pointer: it is a texture, not a
- * set of links, and it is `aria-hidden` in the markup for the same reason.
- */
-.plate-wall {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
-  align-content: space-between;
-  gap: clamp(2rem, 5vw, 5rem);
-  padding: 6vh var(--pad);
-  opacity: 0.1;
-  pointer-events: none;
-}
-.plate-wall-tile { display: block; }
-.plate-wall img { width: 100%; height: auto; }
-
-.plate > :not(.plate-wall) { position: relative; z-index: 1; }
-
-@media (max-width: 899px) {
-  .plate {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: 'art' 'facts';
-    gap: clamp(1.5rem, 6vw, 3rem);
-  }
-  .plate-art img { max-height: 56vh; }
-  /* A wall behind a single column is noise, and it is the heaviest thing here. */
-  .plate-wall { display: none; }
-}
-
-/*
- * No lean for anyone who has asked for less motion. The shadow stays, since it
- * is not motion — it is what tells you the painting is a thing on a wall.
+ * No lean for anyone who has asked for less motion. Done here rather than in
+ * the script, so the one place these are decided stays the one place.
  */
 @media (prefers-reduced-motion: reduce) {
-  .plate-art { --tilt-max: 0deg; --tilt-lift: 1; }
+  .detail-plate { --tilt-max: 0deg; --tilt-lift: 1; }
 }
