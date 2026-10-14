@@ -40,6 +40,8 @@ export function initYears(): void {
    * does Escape.
    */
   let focused = '';
+  /** True while a chosen year is being travelled to, pile and all. */
+  let jumping = false;
   const focus = (year: string) => {
     focused = year;
     for (const tile of tiles) tile.classList.toggle('is-dimmed', Boolean(year) && tile.dataset.year !== year);
@@ -83,6 +85,14 @@ export function initYears(): void {
 
       if (focused === year) { focus(''); return; }
       focus(year);
+      /*
+       * A jump that starts from the folded pile scrolls down through it, and
+       * the pile is still `running` for the whole of that journey — which the
+       * guard below reads as the reader going back up to the heap, and it threw
+       * away the very year just asked for. That is why the dimming came and
+       * went and a second click was needed. Held until the tiles settle.
+       */
+      jumping = true;
 
       const go = () => afterRelayout(() => {
         window.scrollTo({ top: centreOn(target), behavior: reduceMotion.matches ? 'auto' : 'smooth' });
@@ -100,7 +110,9 @@ export function initYears(): void {
        * needed to arrive, which read as the rail ignoring the first one.
        */
       if (document.documentElement.classList.contains('stack-running')) {
-        document.addEventListener('stackdone', go, { once: true });
+        document.addEventListener('stackdone', () => { go(); jumping = false; }, { once: true });
+      } else {
+        jumping = false;
       }
       history.replaceState(null, '', `#year-${year}`);
     });
@@ -136,6 +148,21 @@ export function initYears(): void {
     if (!anchors.length) return;
 
     const update = () => {
+      /*
+       * Nothing is in the middle of a heap.
+       *
+       * While the pile is folded every row is transformed to the same place,
+       * and `getBoundingClientRect` reports where a thing is drawn, not where
+       * it is laid out — so every year read as being above the middle and the
+       * loop below settled on whichever came last. That is the stray colour
+       * that appeared on the oldest year whenever the paintings gathered back
+       * up. There is no current year until they have come to rest.
+       */
+      if (document.documentElement.classList.contains('stack-running')) {
+        for (const { link } of anchors) link.classList.remove('is-current');
+        return;
+      }
+
       // Measured at the middle of the screen, which is where choosing a year now
       // puts it — probing near the top would mark a different year than the one
       // the click just centred.
@@ -163,6 +190,7 @@ export function initYears(): void {
      * other route.
      */
     window.addEventListener('scroll', () => {
+      if (jumping) return;
       if (focused && document.documentElement.classList.contains('stack-running')) focus('');
     }, { passive: true });
     /*

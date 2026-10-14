@@ -41,7 +41,7 @@ import { EDITION_II } from './whats-color-edition-ii.ts';
  * means. The editions say the rest in her own voice, at length.
  */
 export const LEAD =
-  'What\u2019s Color? is a personal project I began in 2020. I assign a color to ' +
+  'I assign a color to ' +
   'people who inspire me \u2014 philosophers, historians, thinkers, writers, ' +
   'architects and artists \u2014 and ask each of them about their personal ' +
   'relationship with color. It has run three times: Barcelona in 2020, Madrid ' +

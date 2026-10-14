@@ -1,4 +1,5 @@
 import { isPlainClick, reduceMotion } from './env.ts';
+import { OUT_MS } from './transitions.ts';
 
 /**
  * Leaving a painting the way you came: a step back, not a fresh gallery.
@@ -23,7 +24,16 @@ function backStepsBack(): void {
   back.addEventListener('click', (event) => {
     if (!isPlainClick(event)) return;
     event.preventDefault();
-    window.history.back();
+    /*
+     * Faded on the way out, the same as any other departure. Stepping back is
+     * instant — that is the point of it — and arriving instantly is what made
+     * it feel abrupt beside the fade going in. The veil covers the change and
+     * `pageshow` clears it at the other end, which fires whether the gallery
+     * is rebuilt or resumed from the back/forward cache.
+     */
+    if (reduceMotion.matches) { window.history.back(); return; }
+    document.documentElement.classList.add('is-leaving');
+    window.setTimeout(() => window.history.back(), OUT_MS);
   });
 }
 

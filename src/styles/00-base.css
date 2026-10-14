@@ -149,8 +149,14 @@
  * was on `body`. Falling back to the resting state is both safer and the state
  * we want anyway.
  */
+/*
+ * Under the bar, not over it. At 150 the veil covered the menu too, so the
+ * whole chrome went out with the page and came back with it — and the bar is
+ * the one thing that does not change between two paintings. Below 40 it fades
+ * the page and leaves the menu standing.
+ */
 .page-veil {
-  position: fixed; inset: 0; z-index: 150;
+  position: fixed; inset: 0; z-index: 39;
   background: var(--paper);
   pointer-events: none;
   opacity: 0;

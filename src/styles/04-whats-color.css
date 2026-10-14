@@ -761,9 +761,9 @@ html:has(body.has-film) {
    * this line is 7.24 times its own size wide, so dividing the available width
    * by 7.3 fills it to within a per cent at every width there is.
    */
-  font-size: var(--wc-title-size, calc((min(100vw, 2160px) - 2 * var(--pad)) / var(--wc-title-fit, 7.3)));
+  font-size: var(--wc-title-size, calc((min(100vw, 2160px) - 2 * var(--pad)) / var(--wc-title-fit, 10)));
   font-weight: 700;
-  line-height: var(--wc-title-lead, 0.9);
+  line-height: var(--wc-title-lead, 0.8);
   letter-spacing: -0.02em;
   text-transform: uppercase;
   text-align: center;
@@ -835,6 +835,6 @@ html:has(body.has-film) {
 }
 
 @keyframes wc-title-wipe {
-  from { transform: translateY(var(--wc-title-from, 105%)); }
+  from { transform: translateY(var(--wc-title-from, -105%)); }
   to { transform: translateY(0); }
 }
