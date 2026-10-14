@@ -1,5 +1,5 @@
 import { html, join, raw, type Html } from './html.ts';
-import { swatchFor, readable, inkOn, type Edition, type Participant } from '../content/whats-color.ts';
+import { LEAD, swatchFor, readable, inkOn, type Edition, type Participant } from '../content/whats-color.ts';
 import { withBase } from '../content/paths.ts';
 
 /**
@@ -78,6 +78,7 @@ export function whatsColorOpening(
   editions: readonly Edition[],
 ): Html {
   return html`<div class="wc" id="whats-color">
+    <p class="wc-lead">${LEAD}</p>
     ${whatsColorNames(participants)}
     ${whatsColorIntros(editions)}
   </div>`;

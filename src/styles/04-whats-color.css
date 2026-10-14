@@ -200,10 +200,18 @@
  * row. The gutter is 0.82% of the content column — 12px of 1467 — which is
  * far tighter than the 4vw first guessed at.
  */
+/*
+ * One column, not the sheet's three.
+ *
+ * The three columns were drawn around type at half this size. Set at the same
+ * size as everything else on the site — which is what was asked for, and what
+ * the names beside these answers were already at — a third of the width leaves
+ * about fifteen characters to a line, which justification turns into gaps and
+ * hyphenation turns into a ladder. So the column count follows the type.
+ */
 .wc-answers {
   margin-top: var(--wc-answers-gap, 7vw);
-  columns: 3;
-  column-gap: var(--wc-gutter-tight, 0.782vw);
+  columns: 1;
 }
 
 .wc-answer {
@@ -221,7 +229,7 @@
    * at 1100. The name now holds at least 60% of the column and a long role
    * wraps instead.
    */
-  grid-template-columns: minmax(0, 1fr) minmax(0, 36%);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 30%);
   align-items: start;
   column-gap: 0.8rem;
   margin: 0 0 var(--wc-answer-gap, 9.78%);
@@ -260,7 +268,7 @@
 }
 .wc-answer-role,
 .wc-answer-code {
-  font-size: clamp(0.66rem, 1.104vw, 1.5rem);
+  font-size: clamp(1.05rem, 2.1436vw, 2.75rem);
   font-weight: 500;
   line-height: 1.1;
   letter-spacing: 0;
@@ -278,9 +286,10 @@
 .wc-answer-text {
   grid-column: 1 / -1;
   margin-top: var(--wc-answer-text-gap, 1.6vw);
-  font-size: clamp(0.66rem, 1.104vw, 1.5rem);
-  /* 16.4px of leading on an 11.5px cap: these are set almost solid. */
-  line-height: 0.97;
+  font-size: clamp(1.05rem, 2.1436vw, 2.75rem);
+  /* The page's own leading now, not the near-solid setting the small type had:
+     at this size solid lines close up into a block. */
+  line-height: var(--wc-leading, 1.227);
   letter-spacing: 0;
   /* Justified, as the sheet sets them — its right edges hold to within two
      pixels over ten separate blocks while the word spacing visibly varies.
@@ -297,7 +306,7 @@
 .wc-back {
   margin: var(--wc-answers-gap, 7vw) 0 0;
   text-align: center;
-  font-size: clamp(0.66rem, 1.104vw, 1.5rem);
+  font-size: clamp(1.05rem, 2.1436vw, 2.75rem);
   font-weight: 500;
   letter-spacing: 0;
   text-transform: uppercase;
@@ -315,8 +324,7 @@
 }
 
 @media (max-width: 1099px) {
-  .wc-answers { columns: 2; }
-  .wc-answer { grid-template-columns: minmax(0, 1fr) minmax(0, 42%); }
+  .wc-answer { grid-template-columns: minmax(0, 1fr) minmax(0, 36%); }
 }
 @media (max-width: 899px) {
   /* The intro follows the names to full width; it was keeping an 84% measure
@@ -324,9 +332,9 @@
   .wc-edition-intro { max-width: none; }
 }
 @media (max-width: 719px) {
-  .wc-answers { columns: 1; }
-  /* One column is wide enough to put the role back beside the name. */
-  .wc-answer { grid-template-columns: minmax(0, 1fr) minmax(0, 36%); }
+  /* The role goes under the name rather than squeezing it. */
+  .wc-answer { grid-template-columns: minmax(0, 1fr); }
+  .wc-answer-meta { grid-column: 1; justify-items: start; text-align: left; padding-top: 0.3em; }
 }
 
 /* ------------------------------------------------------- the opening film */
@@ -551,4 +559,34 @@ html:has(body.has-film) {
 .has-film,
 .has-film main {
   overflow-anchor: none;
+}
+
+/*
+ * The standing note, above the names.
+ *
+ * Set to the page's own margins rather than the names' measure: the names are
+ * pulled in to break into short centred lines, which is right for a roll-call
+ * and wrong for a sentence. This runs the full width between the margins and
+ * is justified, so three or four lines sit as a block under the film and the
+ * names begin below it.
+ */
+.wc-lead {
+  margin: 0 0 var(--wc-lead-gap, 7vw);
+  font-size: clamp(1.05rem, 2.1436vw, 2.75rem);
+  line-height: var(--wc-leading, 1.227);
+  letter-spacing: 0;
+  text-align: justify;
+  /* A measure this wide opens rivers without it. */
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+/* The last line of a justified block is set flush left, so on its own it would
+   sit short against a full-width rule of text; centring the remainder is not
+   wanted here — the block reads as a paragraph, not as a plate. */
+.wc-lead:last-child { margin-bottom: 0; }
+
+@media (max-width: 899px) {
+  /* Justification needs words per line to spend; at a phone's measure it
+     spends them on gaps instead. */
+  .wc-lead { text-align: left; }
 }

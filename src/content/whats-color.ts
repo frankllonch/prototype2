@@ -22,6 +22,28 @@ import { exhibitions, commissioned } from './load.ts';
  * reports — see `hasAnswers`.
  */
 
+/**
+ * The standing note about the project, set above the names.
+ *
+ * The one paragraph on this page that is not someone's answer, and so the one
+ * that had to be written. Every phrase in it is the editions' own: the third
+ * calls this "a personal project I started in 2020" in which she assigns "a
+ * color to people who inspire and admire me" and asks about "their personal
+ * relationship with color"; the first names the kinds of people invited —
+ * philosophers, historians, thinkers, writers and other artists. Only the
+ * roll-call of the three editions is assembled here, and each of those facts
+ * is already stated further down the page.
+ *
+ * Kept to three or four lines on purpose: what the project is, not what it
+ * means. The editions say the rest in her own voice, at length.
+ */
+export const LEAD =
+  'What\u2019s Color? is a personal project I began in 2020. I assign a color to ' +
+  'people who inspire me \u2014 philosophers, historians, thinkers, writers, ' +
+  'architects and artists \u2014 and ask each of them about their personal ' +
+  'relationship with color. It has run three times: Barcelona in 2020, Madrid ' +
+  'in 2021, and Llibreria Terranova in Barcelona in 2024.';
+
 export interface Participant {
   readonly name: string;
   /** What they do, where the source says. */
