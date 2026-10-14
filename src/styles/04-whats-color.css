@@ -537,3 +537,18 @@ html:not(.js) .has-film main { margin-top: 0; }
 html:has(body.has-film) {
   overscroll-behavior-y: none;
 }
+
+/*
+ * No scroll anchoring across the hand-over.
+ *
+ * At the moment the bar trades `fixed` for `sticky` it enters the page's flow,
+ * and the browser may answer a layout change by shifting the scroll to keep
+ * what you were reading still. Here that would be shifting the very thing that
+ * caused it, and it is not needed: `main` gives back exactly what the bar's
+ * margin and height take, so nothing above or below actually moves. Turning
+ * anchoring off removes a correction that can only make things worse.
+ */
+.has-film,
+.has-film main {
+  overflow-anchor: none;
+}

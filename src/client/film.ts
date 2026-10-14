@@ -30,30 +30,59 @@ import { isPlainClick, reduceMotion } from './env.ts';
  */
 export function initFilm(): void {
   const film = document.querySelector<HTMLElement>('.wc-film');
-  if (!film || !('IntersectionObserver' in window)) return;
+  if (!film) return;
 
   /*
-   * The crossing point, as a mark in the page rather than a number to compare
-   * against: half a screen plus half the bar below the top, which is where the
-   * film's bottom edge meets the middle line. Its position is in the stylesheet
-   * with the rest of the arithmetic, so there is one place this is decided.
+   * The crossing point, as a mark in the page rather than a number worked out
+   * again here: half a screen plus half the bar below the top, less the lift,
+   * which is where the film's bottom edge meets the bar. It is placed by the
+   * stylesheet along with the rest of the arithmetic, so there is one place
+   * this is decided and the two states cannot come to disagree about it.
    */
   const mark = document.createElement('div');
   mark.className = 'wc-film-mark';
   mark.setAttribute('aria-hidden', 'true');
   film.append(mark);
 
-  const watch = new IntersectionObserver(
-    ([entry]) => {
-      if (!entry) return;
-      // Above the top of the screen, not merely out of sight: before the first
-      // scroll the mark is below the fold, which is also not intersecting.
-      const past = !entry.isIntersecting && entry.boundingClientRect.top < 0;
-      document.body.classList.toggle('is-film-past', past);
-    },
-    { threshold: 0 },
-  );
-  watch.observe(mark);
+  /*
+   * Measured once rather than watched.
+   *
+   * An observer used to report the crossing, and it arrived late: observers are
+   * delivered after layout, a frame or more behind the scroll that caused them,
+   * so the bar held at the middle a beat too long and then caught up in one
+   * step. At any speed above a crawl that step is visible, and it is the jolt
+   * at the hand-over.
+   *
+   * Comparing the scroll against a number costs nothing and happens in the same
+   * frame as the scroll itself. The number is safe to keep: the film occupies
+   * the same place in the page in both states — that is what `main` giving back
+   * the bar's margin is for — so the mark does not move when the class changes,
+   * and reading it cannot feed back into itself.
+   */
+  let crossing = 0;
+  let past: boolean | null = null;
+
+  const measure = () => { crossing = mark.getBoundingClientRect().top + window.scrollY; };
+
+  const update = () => {
+    const now = window.scrollY >= crossing;
+    // Only ever written when it changes, so a scroll costs one comparison.
+    if (now === past) return;
+    past = now;
+    document.body.classList.toggle('is-film-past', now);
+  };
+
+  measure();
+  update();
+
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', () => {
+    // The class decides nothing about where the mark sits, but it does decide
+    // where the bar sits, so settle the measurement before judging against it.
+    measure();
+    update();
+  });
+
   samePageLinks();
 }
 
