@@ -83,9 +83,25 @@ export function initYears(): void {
 
       if (focused === year) { focus(''); return; }
       focus(year);
-      afterRelayout(() => {
+
+      const go = () => afterRelayout(() => {
         window.scrollTo({ top: centreOn(target), behavior: reduceMotion.matches ? 'auto' : 'smooth' });
       });
+      go();
+
+      /*
+       * While the pile is still folded, the newest rows are behind it and
+       * `centreOn` holds the scroll at the floor rather than letting it land
+       * on a row that is not where it will end up. That first move is what
+       * unfolds the pile — it is a function of the scroll — so once the tiles
+       * have come to rest the journey is finished to the row's real position.
+       *
+       * Without this the first click only opened the pile and a second was
+       * needed to arrive, which read as the rail ignoring the first one.
+       */
+      if (document.documentElement.classList.contains('stack-running')) {
+        document.addEventListener('stackdone', go, { once: true });
+      }
       history.replaceState(null, '', `#year-${year}`);
     });
   }
@@ -139,6 +155,16 @@ export function initYears(): void {
       update();
     }, { passive: true });
     window.addEventListener('scrollend', update);
+    /*
+     * Scrolling back up gathers the paintings into the pile again, and a year
+     * still marked against a heap is marking nothing. `stackrestart` covers
+     * the moment they re-form, but only that moment; this covers being up
+     * there at all, which is what you see after coming back to the top by any
+     * other route.
+     */
+    window.addEventListener('scroll', () => {
+      if (focused && document.documentElement.classList.contains('stack-running')) focus('');
+    }, { passive: true });
     /*
      * The grid can change shape under a reader who is sitting still — a density
      * step, or the sizing switch, which moves the rows by a third of a page. No

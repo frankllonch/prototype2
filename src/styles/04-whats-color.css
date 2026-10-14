@@ -492,9 +492,17 @@
   to { transform: translateY(calc(0.15 * var(--film-h))); }
 }
 
-/* The film has already cleared the bar, so the names do not need to clear it. */
+/*
+ * No air above the title: its mask has to begin exactly where the film ends.
+ *
+ * That is what makes the reveal an overlay rather than an effect nearby — the
+ * mask's top edge and the film's bottom edge are the same line at every scroll
+ * position, because the film is a screen tall and this is the next thing in
+ * flow. The title slides down from behind that line, so it emerges from under
+ * the film. The air the page wants is below the title instead.
+ */
 .has-film .wc {
-  padding-top: var(--wc-top, 15.92vw);
+  padding-top: 0;
 }
 
 /*
@@ -785,8 +793,8 @@ html:has(body.has-film) {
 /*
  * The title is wiped up from under the film, not faded in.
  *
- * A mask the height of the line, and the line sitting just below it until the
- * scroll draws it up into view — so what you see is an edge travelling up the
+ * A mask the height of the line, and the line held above it until the scroll
+ * lets it down into view — so what you see is an edge travelling up the
  * letters, which is the film's own bottom edge leaving. It reads as the words
  * having been lying under the film all along rather than as something
  * appearing on top of the page.
@@ -797,7 +805,7 @@ html:has(body.has-film) {
  * divided by, so the wipe and the film's departure are one movement.
  *
  * It starts a little past its own height because the line box is set under 1 —
- * at a flat 100% the tops of the letters would still show above the mask.
+ * at a flat 100% the feet of the letters would still show below the mask.
  */
 .wc-title-mask {
   overflow: hidden;
@@ -818,6 +826,6 @@ html:has(body.has-film) {
 }
 
 @keyframes wc-title-wipe {
-  from { transform: translateY(105%); }
+  from { transform: translateY(-105%); }
   to { transform: translateY(0); }
 }
