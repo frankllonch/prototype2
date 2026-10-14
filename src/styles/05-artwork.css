@@ -16,7 +16,8 @@
  *   --tilt-settle   how long it takes to come back to rest once the pointer
  *                   leaves. It does not apply while the pointer is on it,
  *                   because the painting has to track the hand without lag.
- *   --tilt-shadow   the shadow while it is held, and at rest.
+ *   --tilt-shadow   the shadow under the painting. One value, not animated:
+ *                   see the note below.
  *
  * Set --tilt-max to 0deg and --tilt-lift to 1 to switch the whole thing off.
  *
@@ -30,7 +31,6 @@
   --tilt-lift: 1.015;
   --tilt-settle: 620ms;
   --tilt-shadow: 0 1.6rem 3rem rgb(0 0 0 / 0.14);
-  --tilt-shadow-rest: 0 0 0 rgb(0 0 0 / 0);
 
   perspective: var(--tilt-depth);
 }
@@ -40,12 +40,18 @@
  * the perspective, and an element cannot be both the perspective and the thing
  * seen through it.
  */
+/*
+ * Sized to the painting, not to the column: the figure is a grid cell as wide
+ * as its track, and the lean is bound to this, so the hover begins where the
+ * picture does rather than anywhere in the empty half of the page.
+ */
 .detail-plate-inner {
   display: block;
+  width: fit-content;
   transform-style: preserve-3d;
   will-change: transform;
-  filter: drop-shadow(var(--tilt-shadow-rest));
-  transition: transform var(--tilt-settle) var(--ease), filter var(--tilt-settle) var(--ease);
+  filter: drop-shadow(var(--tilt-shadow));
+  transition: transform var(--tilt-settle) var(--ease);
 }
 
 /*

@@ -52,9 +52,27 @@ export function initStack(): void {
   const tiles = [...grid.querySelectorAll<HTMLElement>('.tile')];
   if (!tiles.length || reduceMotion.matches) { hero.remove(); reveal(); return; }
 
+  /*
+   * Coming back from a painting is not arriving at the gallery.
+   *
+   * The pile is an opening, and an opening should happen once. On the way back
+   * it would throw the reader to the top of a page they were half way down and
+   * make them watch it again to get their place back, which is the opposite of
+   * what the back button is for. So on a back or forward step the grid is
+   * simply there, settled, and the browser puts the scroll where it was.
+   */
+  const entry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
+  if (entry?.type === 'back_forward') { hero.remove(); reveal(); return; }
+
   root.classList.add('stack-running');
 
-  // The pile only makes sense from the top of the page.
+  /*
+   * The pile only makes sense from the top of the page, so the browser is told
+   * not to restore a scroll on this arrival. It is handed back once the tiles
+   * have settled — `scrollRestoration` belongs to this history entry, and
+   * left on manual it would still be manual when the reader returns to it,
+   * which is exactly the position we want the browser to restore.
+   */
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   window.scrollTo(0, 0);
 
@@ -204,6 +222,9 @@ function reveal(): void {
   // class could never do that for the first paint, when no class is set yet.
   document.documentElement.classList.remove('stack-running');
   document.documentElement.classList.add('stack-settled');
+  // The opening is over, so the browser may have the scroll back: it is what
+  // returns the reader to their place when they come back from a painting.
+  if ('scrollRestoration' in history) history.scrollRestoration = 'auto';
   if (wired) return;
   wired = true;
   document.dispatchEvent(new CustomEvent('stackdone'));

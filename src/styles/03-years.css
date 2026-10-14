@@ -79,14 +79,12 @@
  * themselves after eight seconds — far longer than any pile — and the class,
  * when it comes, cancels it.
  */
-html.js .years,
 html.js .controls {
   opacity: 0;
   pointer-events: none;
   animation: control-failsafe 0.01s linear 8s forwards;
 }
 
-html.js.stack-settled .years,
 html.js.stack-settled .controls {
   opacity: 1;
   pointer-events: auto;

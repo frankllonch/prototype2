@@ -15,6 +15,7 @@ import { initLightbox } from './lightbox.ts';
 import { initCursor } from './cursor.ts';
 import { initFilm } from './film.ts';
 import { initTilt } from './tilt.ts';
+import { initPaging } from './paging.ts';
 
 initTextRoll();
 initTransitions();
@@ -29,3 +30,4 @@ initLightbox();
 initCursor();
 initFilm();
 initTilt();
+initPaging();

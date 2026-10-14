@@ -147,8 +147,22 @@ export function initYears(): void {
      * until the reader happened to move. Re-read once the sizes have settled.
      */
     grid?.addEventListener('gridchange', () => afterRelayout(update));
+    /*
+     * The pile moves the paintings without moving the layout under them, so
+     * the rail can be read and used while it runs. It only has to be told to
+     * look again once the tiles have come to rest, because what is in the
+     * middle of the screen by then is not what was there at the start.
+     */
+    document.addEventListener('stackdone', () => afterRelayout(update));
     update();
   };
 
-  document.addEventListener('stackdone', start, { once: true });
+  /*
+   * Started at once rather than on `stackdone`. The rail is visible from the
+   * first frame now, so it has to answer from the first frame too — and a year
+   * clicked while the paintings are still in a heap simply scrolls there,
+   * which is what unfolds them: the pile is a function of the scroll position,
+   * so travelling to the year plays the opening on the way.
+   */
+  start();
 }
