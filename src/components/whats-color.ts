@@ -107,7 +107,13 @@ function answer(p: Participant, index: number): Html {
           </span>`
         : ''}
     </p>
-    ${p.answer ? html`<div class="wc-answer-text"><p>${p.answer}</p></div>` : ''}
+    ${p.answer
+      ? html`<div class="wc-answer-text">
+          ${join(p.answer.split(/\n\s*\n/).map((para) => html`<p>${para}</p>`))}
+        </div>`
+      : p.inImages
+        ? html`<p class="wc-answer-images">Answered in images</p>`
+        : ''}
   </article>`;
 }
 

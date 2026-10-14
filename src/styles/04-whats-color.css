@@ -590,3 +590,16 @@ html:has(body.has-film) {
      spends them on gaps instead. */
   .wc-lead { text-align: left; }
 }
+
+/* Four of the second edition answered with pictures. Said plainly rather than
+   left as a name with nothing under it, which would read as a missing answer
+   rather than as the answer it was. */
+.wc-answer-images {
+  grid-column: 1 / -1;
+  margin-top: var(--wc-answer-text-gap, 1.6vw);
+  margin-bottom: 0;
+  font-size: clamp(1.05rem, 2.1436vw, 2.75rem);
+  line-height: var(--wc-leading, 1.227);
+  letter-spacing: 0;
+  color: var(--ink-soft);
+}

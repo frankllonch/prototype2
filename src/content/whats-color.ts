@@ -1,4 +1,6 @@
 import { exhibitions, commissioned } from './load.ts';
+import { EDITION_I, EDITION_III, type DocumentEntry } from './whats-color-document.ts';
+import { EDITION_II } from './whats-color-edition-ii.ts';
 
 /**
  * What's Color?, read out of the source rather than retyped.
@@ -16,10 +18,11 @@ import { exhibitions, commissioned } from './load.ts';
  * people ran into one. Deriving means a correction Claudia makes in WordPress
  * arrives here, and that this page cannot drift from the page it describes.
  *
- * Edition II is the exception and is honest about it: the source names
- * twenty-nine studios and people in a single thank-you sentence, with no
- * roles, no answers and no colours. That is all there is, so that is all this
- * reports — see `hasAnswers`.
+ * Edition II used to be the exception: the site's own page names its studios
+ * in a single thank-you sentence and prints no answers at all. Claudia's
+ * document of the three editions has them, so they are read from there — see
+ * `whats-color-edition-ii.ts` — and that document is also what decides who
+ * appears, on all three editions. Anyone it does not name is not on the page.
  */
 
 /**
@@ -60,6 +63,8 @@ export interface Participant {
   readonly edition?: string;
   /** A stable id for linking to this person's entry on an edition page. */
   readonly id?: string;
+  /** Answered with pictures rather than words, as four of edition II did. */
+  readonly inImages?: boolean;
 }
 
 export interface Edition {
@@ -336,6 +341,55 @@ function intro(html: string, take: number, skip = 0): string {
   return kept.join('\n');
 }
 
+/*
+ * Names compared without their accents, case or punctuation, because the two
+ * sources spell the same person three ways between them — Attenborugh for
+ * Attenborough, Plantea Estudi for Plantea Estudio, Conti.Cert for ContiCert.
+ */
+const nameKey = (name: string) =>
+  name.toLocaleLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '');
+
+/**
+ * The document decides who is on the page; the site supplies what it already
+ * knows about them.
+ *
+ * Walked in the document's order, so the roster is the document's roster: a
+ * name the document does not carry is simply never reached, which is how the
+ * people who had drifted in — Oscar Tusquets filed under edition II, where he
+ * was not a guest — come off. Where the document and the site describe the
+ * same person, the document wins on spelling, role and colour, because it is
+ * Claudia's own record and the site's text is a transcription of it.
+ *
+ * The answer is the exception: for editions I and III it comes from the site,
+ * which already holds every one of them and agrees with the document. Only
+ * edition II's answers are carried here, because they are nowhere else.
+ */
+function fromDocument(doc: readonly DocumentEntry[], derived: readonly Participant[]): Participant[] {
+  const known = new Map<string, Participant>();
+  for (const person of derived) known.set(nameKey(person.name), person);
+
+  return doc.map((entry) => {
+    const site =
+      known.get(nameKey(entry.name)) ??
+      entry.aka?.map((spelling) => known.get(nameKey(spelling))).find(Boolean);
+
+    const code = entry.code ? AC.exec(entry.code) : null;
+    const answer = entry.answer ?? site?.answer;
+    const role = entry.role ?? site?.role;
+    const colourName = entry.colourName ?? site?.colourName;
+
+    return {
+      name: entry.name,
+      ...(role ? { role } : {}),
+      ...(entry.alias ? { alias: entry.alias } : site?.alias ? { alias: site.alias } : {}),
+      ...(code ? { code: `AC${code[1]!.padStart(3, '0')}` } : site?.code ? { code: site.code } : {}),
+      ...(colourName ? { colourName } : {}),
+      ...(answer ? { answer } : {}),
+      ...(entry.inImages ? { inImages: true } : {}),
+    };
+  });
+}
+
 function build(): readonly Edition[] {
   const one = exhibitions.find((e) => e.slug === 'what-s-color-i');
   const two = exhibitions.find((e) => e.slug === 'what-s-color-ii-for-architects-and-designers');
@@ -353,7 +407,7 @@ function build(): readonly Edition[] {
       // elsewhere; block 1 is the writing.
       intro: intro(column, 1, 1),
       statement: intro(column, 1, 1),
-      participants: readRoster(column),
+      participants: fromDocument(EDITION_III, readRoster(column)),
       hasAnswers: true,
     });
   }
@@ -369,8 +423,8 @@ function build(): readonly Edition[] {
       // own page rather than left unused.
       intro: intro(essay, 1),
       statement: intro(note, 1),
-      participants: readThanks(columns.join('\n')),
-      hasAnswers: false,
+      participants: fromDocument(EDITION_II, readThanks(columns.join('\n'))),
+      hasAnswers: true,
     });
   }
 
@@ -384,7 +438,7 @@ function build(): readonly Edition[] {
       statement: intro(textColumns(one.rows)[0] ?? '', 3),
       // The glossary column, which opens with Claudia's own note before the
       // first name; `readRoster` ignores anything before a header anyway.
-      participants: readRoster(rosterColumn(one.rows)),
+      participants: fromDocument(EDITION_I, readRoster(rosterColumn(one.rows))),
       hasAnswers: true,
     });
   }
