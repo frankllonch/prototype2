@@ -374,7 +374,7 @@
    * further; 21px would put the type's own top on the film's edge, and more
    * than that would run the words into the picture.
    */
-  --film-lift: 4.2px;
+  --film-lift: 50px;
 }
 
 /*
