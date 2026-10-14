@@ -33,9 +33,27 @@ http.createServer(async (req, res) => {
     res.end('Not found');
     return;
   }
+  /*
+   * Markup, styles and scripts are never stored; everything else may be, but
+   * must be checked.
+   *
+   * `no-cache` was not enough. It permits the browser to keep the response and
+   * only asks it to revalidate first — and nothing here sends an ETag or a
+   * Last-Modified for it to revalidate against, so what happens next is up to
+   * the browser. In practice a rebuild would show on a hard reload and not on
+   * an ordinary click, which looks exactly like the build having failed.
+   * `no-store` forbids keeping it at all, so a click always fetches what is on
+   * disk now.
+   *
+   * Only the small text files: the rendered images are hundreds of megabytes
+   * and almost never change, and re-fetching them on every page would make the
+   * preview useless.
+   */
+  const ext = path.extname(file);
+  const volatile = ext === '.html' || ext === '.css' || ext === '.js' || ext === '';
   res.writeHead(200, {
-    'content-type': TYPES[path.extname(file)] ?? 'application/octet-stream',
-    'cache-control': 'no-cache',
+    'content-type': TYPES[ext] ?? 'application/octet-stream',
+    'cache-control': volatile ? 'no-store, must-revalidate' : 'no-cache',
   });
   createReadStream(file).pipe(res);
 }).listen(PORT, () => console.log(`http://localhost:${PORT}`));

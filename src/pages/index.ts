@@ -49,7 +49,15 @@ export function artworkPage(works: readonly Project[], years: readonly YearColou
       ${grid({
         items: works.filter((w) => w.cover).map(workItem),
         basePath: '/artwork',
-        lightbox: true,
+        /*
+         * Tiles go to the painting's own page rather than opening over the
+         * gallery. The lightbox intercepted the click and pushed the work's
+         * address into the bar without ever loading it, so the gallery led to
+         * one thing and that same address, opened or reloaded, led to another.
+         * The page is the better of the two and the one that carries the
+         * caption, the lean and the way through the collection, so it is what
+         * a click gets.
+         */
         stack: true,
         toScale: true,
       })}
