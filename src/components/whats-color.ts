@@ -75,6 +75,12 @@ export function whatsColorIntros(editions: readonly Edition[]): Html {
 /** The opening view entire. */
 export function whatsColorOpening(editions: readonly Edition[]): Html {
   return html`<div class="wc" id="whats-color">
+    <!--
+      The title the film gives way to. Decorative and hidden from the reading
+      order: the page already has its heading, and announcing the same words
+      twice would only make a screen reader say them twice.
+    -->
+    <p class="wc-title" aria-hidden="true">What&rsquo;s Color</p>
     <p class="wc-lead">${LEAD}</p>
     ${join(editions.map(namesOfEdition))}
     ${whatsColorIntros(editions)}

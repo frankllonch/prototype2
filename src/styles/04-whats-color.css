@@ -733,3 +733,78 @@ html:has(body.has-film) {
   text-indent: 0;
   margin-top: var(--wc-leading, 1.227em);
 }
+
+/* ------------------------------------------------------------ the title */
+
+/*
+ * The words the film gives way to, set as large as the screen will hold them.
+ *
+ * One line, never wrapped, so the size is the only thing deciding whether it
+ * fits: the measure is the page between its margins and the type is sized to
+ * fill it. `white-space: nowrap` is what makes that a fact rather than a hope —
+ * without it the line would break and the size would stop meaning anything.
+ */
+.wc-title {
+  margin: 0 0 var(--wc-title-gap, 7vw);
+  /*
+   * Sized off the room it has rather than off the window, because the margin
+   * is a clamp and the page is capped at 2160: at 13vw it filled the line at
+   * 1600 and overran it at 1200, where the margin stops shrinking. Measured,
+   * this line is 7.24 times its own size wide, so dividing the available width
+   * by 7.3 fills it to within a per cent at every width there is.
+   */
+  font-size: calc((min(100vw, 2160px) - 2 * var(--pad)) / var(--wc-title-fit, 7.3));
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/*
+ * It arrives as the film goes.
+ *
+ * The range begins where the bar locks onto the film's bottom edge and ends
+ * where that edge reaches the top — the same two figures the bar's own two
+ * states are divided by, so the title comes up through exactly the stretch of
+ * scroll in which the film is leaving. It rises a little as it comes, which is
+ * what makes it read as arriving rather than as switching on.
+ *
+ * Scroll-driven, so it is computed where the scrolling is computed and cannot
+ * lag. Without scroll timelines it is simply there, at rest, which is why the
+ * resting state is the finished one and the animation only takes it away.
+ */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .has-film .wc-title {
+      animation: wc-title-arrive linear both;
+      animation-timeline: scroll(root block);
+      animation-range: calc((var(--film-h) + var(--film-bar)) / 2) var(--film-h);
+    }
+  }
+}
+
+@keyframes wc-title-arrive {
+  from { opacity: 0; transform: translateY(0.18em); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* The standing note is set bold, with the title above it. */
+.wc-lead { font-weight: 700; }
+
+/*
+ * A name on an edition page points at that person's answer further down it, so
+ * it travels rather than jumps — the same as the heading in the bar, and for
+ * the same reason: it should be plain that the answer is on this page.
+ *
+ * On the scrolling element, which is why it is reached through `:has`. Only
+ * these pages: the gallery moves the page itself to settle its grid, and a
+ * smooth scroll there would animate something meant to be instant.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  html:has(.wc-edition) { scroll-behavior: smooth; }
+}
+
+/* Clear of the fixed bar when an answer is scrolled to. */
+.wc-answer { scroll-margin-top: var(--wc-answer-anchor, 7rem); }
