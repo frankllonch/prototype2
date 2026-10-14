@@ -137,7 +137,13 @@ export function whatsColorEdition(edition: Edition): Html {
           record of what they answered.
         </p>`}
 
-    <p class="wc-back"><a href="${withBase('/')}">All of What&rsquo;s Color?</a></p>
+    <!--
+      The names, not the film. The root of this page is the opening film, and
+      someone at the foot of an edition asking for all of What's Color? means
+      the roster, so this points past the film the way the bar's own heading
+      does.
+    -->
+    <p class="wc-back"><a href="${withBase('/#whats-color')}">All of What&rsquo;s Color?</a></p>
   </div>`;
 }
 
