@@ -370,15 +370,14 @@
  * earlier version compensated for the scroll with a transform and shook,
  * because a composited scroll outruns script and the bar arrived a frame behind.
  *
- * It rested on the middle line at first and now sits a fifth lower, which is a
- * fifth less distance to the film's bottom edge: that gap was 100vh minus half
- * the screen, and four fifths of it puts the bar at 0.6 of the screen less two
- * fifths of its own height. The mark below has to move with it or the two
- * states would disagree about where the bar is at the moment they swap.
+ * It rests on the middle line of the screen. The mark below marks the scroll at
+ * which the film's bottom edge arrives there, and the two have to be derived
+ * from the same figures or the states would disagree about where the bar is at
+ * the moment they swap.
  */
 .has-film .top {
   position: fixed;
-  top: calc(0.6 * var(--film-h) - 0.4 * var(--film-bar));
+  top: calc((var(--film-h) - var(--film-bar)) / 2);
   height: var(--film-bar);
   padding-top: 0;
   padding-bottom: 0;
@@ -411,7 +410,7 @@
 .wc-film-mark {
   position: absolute;
   left: 0;
-  top: calc(0.4 * (var(--film-h) + var(--film-bar)));
+  top: calc((var(--film-h) + var(--film-bar)) / 2);
   width: 1px;
   height: 1px;
   pointer-events: none;
@@ -501,6 +500,43 @@
 @keyframes film-sink {
   from { transform: translateY(0); }
   to { transform: translateY(calc(0.15 * var(--film-h))); }
+}
+
+/*
+ * Something for the negative to read against.
+ *
+ * A difference blend paints |backdrop - source|, which means that wherever the
+ * backdrop is half the source the text resolves to the backdrop's own value and
+ * disappears. With a near-white source that is mid-grey, and no choice of
+ * colour moves it — it only decides which tone vanishes. The film is full of
+ * mid-greys, which is why the bar read well over the dark passages and not over
+ * the halftones.
+ *
+ * So the backdrop is darkened before the blend reaches it. At 0.72 the whole
+ * film is pushed below the vanishing point and the worst case anywhere in it
+ * becomes about 110 of 255, against nothing at all before. It is feathered over
+ * a third of the screen and fixed to the viewport beneath the bar, so it reads
+ * as the film dimming where the type crosses it rather than as a panel behind
+ * the type — and it is only there while the bar is over the film. Once the bar
+ * is past, its backdrop is the white page, where the blend already resolves to
+ * near-black and needs no help.
+ */
+.has-film:not(.is-film-past) .wc-film::after {
+  content: '';
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: calc(50vh - 16vh);
+  height: 32vh;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgb(0 0 0 / 0) 0%,
+    rgb(0 0 0 / 0.72) 38%,
+    rgb(0 0 0 / 0.72) 62%,
+    rgb(0 0 0 / 0) 100%
+  );
 }
 
 /* The film has already cleared the bar, so the names do not need to clear it. */
