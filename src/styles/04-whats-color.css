@@ -745,7 +745,7 @@ html:has(body.has-film) {
  * without it the line would break and the size would stop meaning anything.
  */
 .wc-title {
-  margin: 0 0 var(--wc-title-gap, 7vw);
+  margin: 0;
   /*
    * Sized off the room it has rather than off the window, because the margin
    * is a clamp and the page is capped at 2160: at 13vw it filled the line at
@@ -762,33 +762,6 @@ html:has(body.has-film) {
   white-space: nowrap;
 }
 
-/*
- * It arrives as the film goes.
- *
- * The range begins where the bar locks onto the film's bottom edge and ends
- * where that edge reaches the top — the same two figures the bar's own two
- * states are divided by, so the title comes up through exactly the stretch of
- * scroll in which the film is leaving. It rises a little as it comes, which is
- * what makes it read as arriving rather than as switching on.
- *
- * Scroll-driven, so it is computed where the scrolling is computed and cannot
- * lag. Without scroll timelines it is simply there, at rest, which is why the
- * resting state is the finished one and the animation only takes it away.
- */
-@supports (animation-timeline: scroll()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .has-film .wc-title {
-      animation: wc-title-arrive linear both;
-      animation-timeline: scroll(root block);
-      animation-range: calc((var(--film-h) + var(--film-bar)) / 2) var(--film-h);
-    }
-  }
-}
-
-@keyframes wc-title-arrive {
-  from { opacity: 0; transform: translateY(0.18em); }
-  to { opacity: 1; transform: translateY(0); }
-}
 
 /* The standing note is set bold, with the title above it. */
 .wc-lead { font-weight: 700; }
@@ -808,3 +781,43 @@ html:has(body.has-film) {
 
 /* Clear of the fixed bar when an answer is scrolled to. */
 .wc-answer { scroll-margin-top: var(--wc-answer-anchor, 7rem); }
+
+/*
+ * The title is wiped up from under the film, not faded in.
+ *
+ * A mask the height of the line, and the line sitting just below it until the
+ * scroll draws it up into view — so what you see is an edge travelling up the
+ * letters, which is the film's own bottom edge leaving. It reads as the words
+ * having been lying under the film all along rather than as something
+ * appearing on top of the page.
+ *
+ * The travel runs over exactly the stretch in which the film leaves: it begins
+ * where the bar locks onto the film's bottom edge and ends where that edge
+ * reaches the top of the screen. The same two figures the bar's own states are
+ * divided by, so the wipe and the film's departure are one movement.
+ *
+ * It starts a little past its own height because the line box is set under 1 —
+ * at a flat 100% the tops of the letters would still show above the mask.
+ */
+.wc-title-mask {
+  overflow: hidden;
+  margin: 0 0 var(--wc-title-gap, 7vw);
+}
+.wc-title-mask .wc-title {
+  margin: 0;
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .has-film .wc-title {
+      animation: wc-title-wipe linear both;
+      animation-timeline: scroll(root block);
+      animation-range: calc((var(--film-h) + var(--film-bar)) / 2) var(--film-h);
+    }
+  }
+}
+
+@keyframes wc-title-wipe {
+  from { transform: translateY(105%); }
+  to { transform: translateY(0); }
+}
