@@ -361,21 +361,49 @@
   --film-bar: 4.2rem;
 }
 
+/*
+ * Phase one: fixed on the middle line. Genuinely fixed, so the browser holds it
+ * there without anything having to keep putting it back — the earlier version
+ * compensated for the scroll with a transform and shook, because a composited
+ * scroll outruns script and the bar arrived a frame behind.
+ */
 .has-film .top {
-  position: sticky;
-  top: 0;
-  bottom: calc((100vh - var(--film-bar)) / 2);
+  position: fixed;
+  top: calc((100vh - var(--film-bar)) / 2);
   height: var(--film-bar);
   padding-top: 0;
   padding-bottom: 0;
   /* One row in a taller box: centre it rather than leaving it on the baseline. */
   align-content: center;
-  /* Its resting place in flow is the film's bottom edge. */
+  margin-top: 0;
+}
+.has-film main { margin-top: 0; }
+
+/*
+ * Phases two and three, from the moment the film's bottom edge reaches the
+ * middle line. The bar's place in flow is that edge — hence the screen of top
+ * margin — so it travels on it and `top: 0` catches it at the top and keeps it.
+ *
+ * `main` gives back exactly what the bar's margin and height take, so the film
+ * occupies the same space in both states and the page is the same height in
+ * both. Nothing reflows when they swap and the scroll cannot jump.
+ */
+.has-film.is-film-past .top {
+  position: sticky;
+  top: 0;
   margin-top: 100vh;
 }
+.has-film.is-film-past main { margin-top: calc(-100vh - var(--film-bar)); }
 
-.has-film main {
-  margin-top: calc(-100vh - var(--film-bar));
+/* Where the two states agree, and so where the swap happens. Placed by the
+   stylesheet so the arithmetic lives in one file; the observer only watches. */
+.wc-film-mark {
+  position: absolute;
+  left: 0;
+  top: calc((100vh + var(--film-bar)) / 2);
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
 }
 
 /*

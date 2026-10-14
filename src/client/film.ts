@@ -1,45 +1,55 @@
 /**
- * Holds the bar on the middle line while the opening film runs behind it.
+ * Switches the bar between its two resting states over the opening film.
  *
- * The other two phases are the stylesheet's: the bar is sticky with its resting
- * place in flow at the film's bottom edge, so once that edge rises past it the
- * bar travels on it, and `top: 0` pins it when it reaches the top. What CSS
- * cannot do is the first phase — holding the bar *above* where it would
- * naturally sit, which is what `bottom` on a sticky box is for, except that a
- * box with both offsets set and room to fit takes the top one and ignores the
- * other. So that one clamp is applied here and nothing else is.
+ * The motion has three phases: held on the middle line while the film runs,
+ * then travelling on the film's bottom edge, then pinned at the top. The last
+ * two are one `position: sticky` — the bar's place in flow is the film's bottom
+ * edge, so it rides that edge and `top: 0` catches it. The first is
+ * `position: fixed`.
  *
- * The shift is `min(0, middle − natural)`: negative while the film's bottom is
- * below the middle line, which lifts the bar to it, and exactly zero from the
- * moment the two meet. There is no second mode and no threshold to cross — the
- * handover is the point where the expression reaches zero, so it cannot jump.
+ * Both are states the browser holds by itself, which is the whole point of
+ * doing it this way. An earlier version kept the bar on the middle line by
+ * rewriting its transform on every scroll event, and that visibly shook: the
+ * scroll is composited and the transform is not, so the bar arrived a frame
+ * late and appeared to resist the scroll. Nothing here runs per frame now. The
+ * only work is adding a class once, at the single point where the two states
+ * meet, and at that point they agree on where the bar is — the film's bottom
+ * edge has just reached the middle line — so the swap is invisible.
  *
- * Measured off the film rather than off the bar, because the bar's own box is
- * what this moves; reading it back would feed the result into its own input.
+ * Found with an observer rather than a scroll handler, so there is no listener
+ * on the scroll at all: a one-pixel mark is placed at the crossing point and
+ * the browser reports when it passes the top of the screen.
+ *
+ * The two states are laid out to occupy the same space, so nothing reflows when
+ * they swap: fixed, the bar is out of flow and `main` starts at the top; sticky,
+ * the bar takes a screen of top margin and `main` is pulled back by exactly
+ * that much again. The film sits in the same place either way and the page is
+ * the same height, so the scroll position cannot jump.
  */
 export function initFilm(): void {
-  const bar = document.querySelector<HTMLElement>('.top');
   const film = document.querySelector<HTMLElement>('.wc-film');
-  if (!bar || !film) return;
-
-  const place = () => {
-    // Where the bar would sit with no help: the film's bottom edge on screen.
-    const natural = film.getBoundingClientRect().bottom;
-    const middle = (window.innerHeight - bar.offsetHeight) / 2;
-    const shift = Math.min(0, middle - natural);
-    // Left off entirely once it is nil, so the bar carries no transform — and
-    // so no stacking context it did not already have — for most of the page.
-    bar.style.transform = shift < 0 ? `translateY(${shift.toFixed(1)}px)` : '';
-  };
+  if (!film || !('IntersectionObserver' in window)) return;
 
   /*
-   * Run straight off the scroll event rather than waiting on a frame callback.
-   * The work is one measurement and one transform, which is what a compositor
-   * handles without a repaint; deferring it to `requestAnimationFrame` would
-   * buy nothing and would leave the bar wherever it was on any page that never
-   * gets a frame — a background tab, or a browser that has stopped animating.
+   * The crossing point, as a mark in the page rather than a number to compare
+   * against: half a screen plus half the bar below the top, which is where the
+   * film's bottom edge meets the middle line. Its position is in the stylesheet
+   * with the rest of the arithmetic, so there is one place this is decided.
    */
-  window.addEventListener('scroll', place, { passive: true });
-  window.addEventListener('resize', place);
-  place();
+  const mark = document.createElement('div');
+  mark.className = 'wc-film-mark';
+  mark.setAttribute('aria-hidden', 'true');
+  film.append(mark);
+
+  const watch = new IntersectionObserver(
+    ([entry]) => {
+      if (!entry) return;
+      // Above the top of the screen, not merely out of sight: before the first
+      // scroll the mark is below the fold, which is also not intersecting.
+      const past = !entry.isIntersecting && entry.boundingClientRect.top < 0;
+      document.body.classList.toggle('is-film-past', past);
+    },
+    { threshold: 0 },
+  );
+  watch.observe(mark);
 }
