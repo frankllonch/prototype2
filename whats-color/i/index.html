@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>What’s Color? (I) — Claudia Valsells</title>
+<meta name="description" content="What’s Color? edition I — 14 people, 14 of them on what color is." />
+<link rel="preload" href="/prototype2/fonts/Switzer-Variable.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="/prototype2/site.css" />
+<link rel="modulepreload" href="/prototype2/js/env.js" />
+<link rel="modulepreload" href="/prototype2/js/text-roll.js" />
+<link rel="modulepreload" href="/prototype2/js/transitions.js" />
+<link rel="modulepreload" href="/prototype2/js/controls.js" />
+<link rel="modulepreload" href="/prototype2/js/stack.js" />
+<link rel="modulepreload" href="/prototype2/js/years.js" />
+<link rel="modulepreload" href="/prototype2/js/hover-list.js" />
+<link rel="modulepreload" href="/prototype2/js/panels.js" />
+<link rel="modulepreload" href="/prototype2/js/panel-scroll.js" />
+<link rel="modulepreload" href="/prototype2/js/figures.js" />
+<link rel="modulepreload" href="/prototype2/js/lightbox.js" />
+<link rel="modulepreload" href="/prototype2/js/cursor.js" />
+<link rel="modulepreload" href="/prototype2/js/film.js" />
+<link rel="modulepreload" href="/prototype2/js/tilt.js" />
+<link rel="modulepreload" href="/prototype2/js/paging.js" />
+<link rel="modulepreload" href="/prototype2/js/index.js" />
+<script>document.documentElement.classList.add('js');
+// The loading screen belongs to arriving at the site, not to each page of it.
+// Decided here, before the first paint, so pages after the first never show it
+// even for a frame.
+try { if (sessionStorage.getItem('cv-seen')) document.documentElement.classList.add('loaded') } catch (e) {}</script>
+</head>
+<body>
+<div class="loader" data-loader aria-hidden="true">
+    <p>CLAUDIA VALSELLS</p><p>1969</p><p>Alzueta Gallery</p><p>Barcelona, Spain</p><p>© All Rights Reserved</p>
+  </div>
+<div class="page-veil" aria-hidden="true"></div>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="top">
+    <a class="wordmark" href="/prototype2/" data-roll>CLAUDIA VALSELLS</a>
+    <a class="top-soon" href="/prototype2/#whats-color"  data-roll>What&rsquo;s Color?</a>
+    <nav class="menu" aria-label="Primary">
+      <a
+            href="/prototype2/#about"
+            data-panel-open="about"
+            
+            data-roll
+          >About</a><a
+            href="/prototype2/artwork/"
+            
+            
+            data-roll
+          >Artwork</a><a
+            href="/prototype2/commissioned/"
+            
+            
+            data-roll
+          >Commissioned</a><a
+            href="/prototype2/exhibitions/"
+            
+            
+            data-roll
+          >Exhibitions</a><a
+            href="/prototype2/color-chart/"
+            
+            
+            data-roll
+          >Color Chart</a>
+    </nav>
+  </header>
+
+<main id="main"><div class="wc wc-edition wc-edition-i">
+    <p class="wc-numeral" aria-hidden="true">(I)</p>
+    <h1 class="sr-only">What&rsquo;s Color? (I)</h1>
+    <p class="wc-names">
+    <a
+          class="wc-name"
+          href="#wc-marina-garces"
+          style="--swatch: #d98f93; --swatch-ink: var(--paper)"
+        >Marina Garcés</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-olafur-eliasson"
+          style="--swatch: #e3b23c; --swatch-ink: var(--ink)"
+        >Olafur Eliasson</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-li-edelkoort"
+          style="--swatch: #efebe3; --swatch-ink: var(--ink)"
+        >Li Edelkoort</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-rupi-kaur"
+          style="--swatch: #dcc9a8; --swatch-ink: var(--ink)"
+        >Rupi Kaur</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-ramon-andres"
+          style="--swatch: #2f4b35; --swatch-ink: var(--paper)"
+        >Ramón Andrés</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-victoria-cirlot"
+          style="--swatch: #b23a2e; --swatch-ink: var(--paper)"
+        >Victoria Cirlot</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-tortell-poltrona"
+          style="--swatch: #b23a2e; --swatch-ink: var(--paper)"
+        >Tortell Poltrona</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-angelica-dass"
+          style="--swatch: #dcc9a8; --swatch-ink: var(--ink)"
+        >Angelica Dass</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-jaume-funes"
+          style="--swatch: #5f7f4f; --swatch-ink: var(--paper)"
+        >Jaume Funes</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-oscar-tusquets"
+          style="--swatch: #b23a2e; --swatch-ink: var(--paper)"
+        >Oscar Tusquets</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-david-bueno-i-torrens"
+          style="--swatch: #5f7f4f; --swatch-ink: var(--paper)"
+        >David Bueno i Torrens</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-flavia-company"
+          style="--swatch: #e3b23c; --swatch-ink: var(--ink)"
+        >Flavia Company</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-siri-hustvedt"
+          style="--swatch: #d2762f; --swatch-ink: var(--paper)"
+        >Siri Hustvedt</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-henry-giroux"
+          style="--swatch: #b23a2e; --swatch-ink: var(--paper)"
+        >Henry Giroux</a>
+  </p>
+
+    <div class="wc-edition-intro"><p><span>Throughout the lockdown I was away from my studio and my art form – painting.</span></p>
+<p><span>I found great comfort reading pieces by philosophers, historians, thinkers, writers, and other artists. They helped me better understand humanity and its role in this globalized world.</span></p>
+<p><span>During the past months I have invited them to consider and answer the question:</span><span> ‘What does color mean to you?’</span></p></div>
+
+    <div class="wc-answers"><article class="wc-answer" id="wc-marina-garces">
+    <h2 class="wc-answer-name">Marina Garcés</h2>
+    <p class="wc-answer-meta">
+      <span class="wc-answer-role">Filòsofa / Philosopher</span>
+      <span class="wc-answer-code" style="--swatch: #9a6668">
+            AC011 Vermell pols / Powder red
+          </span>
+    </p>
+    <div class="wc-answer-text">
+          <p>‘Diria que el color, per a mi, és el gust del tacte’</p>
+        </div>
+  </article><article class="wc-answer" id="wc-olafur-eliasson">
+    <h2 class="wc-answer-name">Olafur Eliasson</h2>
+    <p class="wc-answer-meta">
+      <span class="wc-answer-role">Artist</span>
+      <span class="wc-answer-code" style="--swatch: #8f7026">
+            AC002 Yellow
+          </span>
+    </p>
+    <div class="wc-answer-text">
+          <p>‘Colour has an enormous psychological and associative potential: even though it has been cultivated to the extreme, the amount of individuality in experiencing colours is equally extreme. Colour does not exist in itself but only when looked at. The unique fact that colour only materialises when light bounces off a surface onto our retinas shows us that the analysis of colours is, in fact, about the ability to analyse ourselves.’</p>
+        </div>
+  </article><article class="wc-answer" id="wc-li-edelkoort">
+    <h2 class="wc-answer-name">Li Edelkoort</h2>
+    <p class="wc-answer-meta">
+      <span class="wc-answer-role">Trend forecaster</span>
+      <span class="wc-answer-code" style="--swatch: #75736f">
+            AC119 Natural off white
+          </span>
+    </p>
+    <div class="wc-answer-text">
+          <p>‘Color approach to body and soul.The mystical aspect in colour; colour as an expression of a higher goal; colour as a form of profound concentration; colour as a new level of awareness.’</p>
+        </div>
+  </article><article class="wc-answer" id="wc-rupi-kaur">
+    <h2 class="wc-answer-name">Rupi Kaur</h2>
+    <p class="wc-answer-meta">
+      <span class="wc-answer-role">Poet</span>
+      <span class="wc-answer-code" style="--swatch: #7d7360">
+            AC206 Soft nude
+          </span>
+    </p>
+    <div class="wc-answer-text">
+          <p>‘ Colour is laughter, and joy, and air. Colour is one of the most beautiful details of life.’</p>
+        </div>
+  </article><article class="wc-answer" id="wc-ramon-andres">
+    <h2 class="wc-answer-name">Ramón Andrés</h2>
+    <p class="wc-answer-meta">
+      <span class="wc-answer-role">Ensayista, pensador / Essayist and thinker</span>
+      <span class="wc-answer-code" style="--swatch: #2f4b35">
+            AC052 Verde oscuro / Dark green
+          </span>
+    </p>
+    <div class="wc-answer-text">
+          <p>«El color es una forma de nostalgia, un modo de entender la noche, de desnudar su sombra para que las cosas sean cuando ella duerme. El color es una lluvia, un vaso, el alba, la hoja vuelta de un álamo, la rodera de un carro de heno, que amarillea. Es el relieve del mundo para que nosotros, a ciegas, tocándolo, descubramos desde nuestra oscuridad su rostro y nos reconozcamos en él».</p>
+        </div>
+  </article><article class="wc-answer" id="wc-victoria-cirlot">
+    <h2 class="wc-answer-name">Victoria Cirlot</h2>
+    <p class="wc-answer-meta">
+      <span class="wc-answer-role">Catedrática de Filología Románica / Professor of Romanic Philology</span>
+      <span class="wc-answer-code" style="--swatch: #b23a2e">
+            AC019 Rouge
+          </span>
+    </p>
+    <div class="wc-answer-text">
+          <p>‘Entiendo el color como el aspecto espiritual de una representación. El color es un estado de ánimo, una emoción. El rojo burdeos expresa una pasión hecha de dolor y gozo. ‘</p>
+        </div>
+  </article><article class="wc-answer" id="wc-tortell-poltrona">
+    <h2 class="wc-answer-name">Tortell Poltrona</h2>
+    <p class="wc-answer-meta">
+      <span class="wc-answer-role">Pallasso / Clown</span>
+      <span class="wc-answer-code" style="--swatch: #b23a2e">
+            AC009 Vermell / Rouge
+          </span>
+    </p>
+    <div class="wc-answer-text">
+          <p>‘Els meus colors de maquillatge son el Blanc, el negre i el vermell, que es el que més m’agrada’</p>
+        </div>
+  </article><article class="wc-answer" id="wc-angelica-dass">
+    <h2 class="wc-answer-name">Angelica Dass</h2>
+    <p class="wc-answer-meta">
+      <span class="wc-answer-role">Fotògrafa / Photographer — Humanae project</span>
+      <span class="wc-answer-code" style="--swatch: #7d7360">
+            AC073 Beautiful sand
+          </span>
+    </p>
+    <div class="wc-answer-text">
+          <p>‘Nací en una familia llena de color ‘</p>
+        </div>
+  </article><article class="wc-answer" id="wc-jaume-funes">
+    <h2 class="wc-answer-name">Jaume Funes</h2>
+    <p class="wc-answer-meta">
+      <span class="wc-answer-role">Psicòleg, educador i periodista / Psychologist, educator and journalist</span>
+      <span class="wc-answer-code" style="--swatch: #5f7f4f">
+            AC048 Green blue
+          </span>
+    </p>
+    <div class="wc-answer-text">
+          <p>‘Per a mi el color es una manera de mirar i d’interpretar la realitat que m’envolta. Miro amb filtres de llums i colors. La llum i el color són maneres d’entendre i explicar el món.’</p>
+        </div>
+  </article><article class="wc-answer" id="wc-oscar-tusquets">
+    <h2 class="wc-answer-name">Oscar Tusquets</h2>
+    <p class="wc-answer-meta">
+      <span class="wc-answer-role">Arquitecto, pintor y escritor / Architect, painter and writer</span>
+      <span class="wc-answer-code" style="--swatch: #b23a2e">
+            AC071 Pompeian red
+          </span>
+    </p>
+    <div class="wc-answer-text">
+          <p>“En Arquitectura, la posibilidad de huir osadamente de la dictadura contemporánea del blanco ¡Viva Barragán!”.</p>
+        </div>
+  </article><article class="wc-answer" id="wc-david-bueno-i-torrens">
+    <h2 class="wc-answer-name">David Bueno i Torrens</h2>
+    <p class="wc-answer-meta">
+      <span class="wc-answer-role">Biòleg especialitzat en neurociència aplicada a l’educació / Biologist, education and neuroscience</span>
+      <span class="wc-answer-code" style="--swatch: #5f7f4f">
+            AC098 Grey green
+          </span>
+    </p>
+    <div class="wc-answer-text">
+          <p>‘ Com a científic haig de dir que el color és una ona electromagnètica de natura corpuscular que vibra en una determinada longitud d’ona. Ara bé, això és només una descripció que únicament grata la superfície. Per a mí el color és l’expressió vital de la natura, el reflex d’allò que ha estat i l’ombra del que vindrà.’</p>
+        </div>
+  </article><article class="wc-answer" id="wc-flavia-company">
+    <h2 class="wc-answer-name">Flavia Company</h2>
+    <p class="wc-answer-meta">
+      <span class="wc-answer-role">Escriptora i periodista / Writer and journalist</span>
+      <span class="wc-answer-code" style="--swatch: #8f7026">
+            AC062 Ocher green
+          </span>
+    </p>
+    <div class="wc-answer-text">
+          <p>‘ El color és el filtre amb què mirem la vida.’</p><p>Flavia Company m’escriu aquestes increíbles ratlles en referència a les meves obres:</p><p>‘La verticalitat del que comença i no acaba. Ens representa. Ens convoca. Ens pregunta -què podries construir amb mi?- però també ens contesta -tu ets dels colors del que construeixes-. La relació entre l’horitzontalitat dels diferents colors -diferents conceptes, individualitats, temps, espais, idees, illes, cases, mons, sentiments, tot i tant-, colors interromputs -la vida- en les seves formes trencades, recolzades sobre el blanc, que és tots els colors, que és cap ni un. Contrast i significació. Context.’</p><p>Flavia Company writes me these beautiful words in reference to my artworks :</p><p>‘The verticality of what begins and doesn’t end. It represents us. It convenes us. It asks us -what could construct with me?- but also it answers us -you are the colors that you build. The relation among the horizontality of the diferent colors-distinct concepts, individualities, time, rooms, ideas, islands, homes, worlds, feelings, everything and so much-, colors interrupted -the life- at its broken forms, placed on the white, that is all the colours, which is none and no one . Contrast and significance. Context.’</p><p>Thank you Flavia!</p>
+        </div>
+  </article><article class="wc-answer" id="wc-siri-hustvedt">
+    <h2 class="wc-answer-name">Siri Hustvedt</h2>
+    <p class="wc-answer-meta">
+      <span class="wc-answer-role">Essayist, novelist and poet</span>
+      <span class="wc-answer-code" style="--swatch: #ae6227">
+            AC074 Dark orange
+          </span>
+    </p>
+    <div class="wc-answer-text">
+          <p>My neurological sensitivities have determined my life, I suffer from synaesthesia. I also have strong physical responses to colors—once while looking at a shade of turquoise in Iceland I had a revolting crawling sensation all over my body. Everyone responds to color, but my mirror-touch sensations probably exaggerate the response. It’s possible that this sensitivity increased my interest in looking at paintings. My earliest exposure to a painter was to Munch. The colors are subjective. Everyone has her or his own.</p>
+        </div>
+  </article><article class="wc-answer" id="wc-henry-giroux">
+    <h2 class="wc-answer-name">Henry Giroux</h2>
+    <p class="wc-answer-meta">
+      <span class="wc-answer-role">Writer and cultural critic, founder of critical pedagogy / Escriptor i crític cultural</span>
+      <span class="wc-answer-code" style="--swatch: #b23a2e">
+            AC008 Warm red
+          </span>
+    </p>
+    <div class="wc-answer-text">
+          <p>«Color for me opens a world that allows hope to present itself as a landscape of passion, possibility, and joy. Color pushes against the darkness, literal and symbolic, and creates a world in which words appear limited. Color elevates and merges with a visual world in which love and hope merge. Red is my color, it connects the blood in my veins and heart to the passion of resistance and the narratives of courage that give the present a future. «</p>
+        </div>
+  </article></div>
+
+    <!--
+      The names, not the film. The root of this page is the opening film, and
+      someone at the foot of an edition asking for all of What's Color? means
+      the roster, so this points past the film the way the bar's own heading
+      does.
+    -->
+    <p class="wc-back"><a href="/prototype2/#whats-color">All of What&rsquo;s Color?</a></p>
+  </div></main>
+
+
+<div class="cursor" data-cursor aria-hidden="true"><span class="cursor-label"></span></div>
+<div class="panel-veil" data-panel-veil></div>
+<section class="about" id="about" data-panel aria-label="About">
+    <a class="about-close" href="#" data-panel-close>Close</a>
+
+    <div class="about-colour" aria-hidden="true"></div>
+    <div class="about-lines">
+      <p>CLAUDIA VALSELLS</p><p>1969</p><p>Alzueta Gallery</p><p>Barcelona, Spain</p><p>© All Rights Reserved</p>
+      <span class="about-more" aria-hidden="true">Scroll</span>
+    </div>
+
+    <div class="about-body">
+          <div class="about-head">
+            <div class="about-heading"><p><span><b>Claudia Valsells (1969) Barcelona, Spain<span> </span></b></span></p></div>
+            <div class="about-lead"> <p><span>Claudia is an artist specialized in color. A multidisciplinary creator, she discovered painting through her own instinct for color. Her formation as a mural painter gave her a professional opportunity, and her passion in color her own artistic language.<span> </span></span></p></div>
+          </div>
+          <div class="about-inner">
+            <div class="about-text">
+              <div class="about-prose"> <p><span>Based on her reflections as an artist, her experience in color prediction and mural painting, brings to all her work, with color as a primary tool, <em class="ink-accent">an identifiable language</em>.</span></p>
+ <p><span>She began her artistic career painting and soon realized that she had <em class="ink-accent">a natural ability with color</em>. In her own words, ‘All I have done throughout my career has been to cultivate this natural gift.<span> </span>First as a mural painter, then designing color charts and prescribing color and finally as an artist’.</span></p>
+ <p><span>The tireless search for <em class="ink-accent">the reason of color and its form</em> has obsessed artists throughout history, from the very creation of pictorial expression. Claudia Valsells knows about this and she aims to portray this into her artwork.</span></p>
+ <p><span>In her beginnings as a colorist she worked on commissions, for architects, and on projects of different scales advising and prescribing color. Soon she founded her own Studio, under the name of ‘<em class="ink-accent">Arts&Claus</em>’, in allegory to the ‘Arts&Craft’ movement where she always found a lot of inspiration. She specialized in mural painting, color applied to architecture, and interior design for 20 years on projects in Spain and abroad. Her role was to convey the value of color and its texture in the decoration of interior spaces working closely with professionals in the fields of art, design, and architecture. It was in this context, working close with architects and designers,<span> </span>that she found out the communication between professionals was based by the painting companies, relegated the work of the colorist to the background due to ignorance or fear clients to make a mistake or be branded as eccentric. It was then when Claudia Valsells created a specific chromatic selection, <em class="ink-accent">a COLOUR CHART, with more than 200 references</em>, which have been used as color comunication tools by Spain’s best architects.</span></p>
+ <p><span>Her work has two very defined characteristics: on the one hand her chromatic instinct, a gift of colors and on the other her ability to select, group and interact colors creating <em class="ink-accent">a chromatic language of her own</em>.</span></p>
+ <p><span>The common denominator of all her work is color, and her obsession with <em class="ink-accent">the way colors interact with each other</em>. The interaction of color occurs when two or more colors are combined in a composition. The combination of colors varies its own appearance and it is in these moments when Claudia decides to put one color next to another in order to influence its perception and achieve the desired visual experience. For Claudia the interaction of color is a key concept in her work as an artist and as a colorist and allows her to experiment and explore an ever new visual and emotional perception of colors in each work and commission.</span></p>
+ <p><span>Her most personal and ongoing project emerged from the pandemic in 2020 where she launched a <em class="ink-accent">‘Color glossary’</em> through the question ‘What’s color?’ to people of thought, philosophers, historians, thinkers, writers, and other artists, in order to think of color in a broader context. She wanted to discover the notion of color as it is thought of by others. She opened a dialogue to grasp new ways of seeing colors, other perspectives, but mostly to better understand the reason of color and its form, and this way to understand better human being.</span></p>
+ <p><span>This project has been represented in three solo shows, one in Barcelona ( 2020) and the other two in Madrid ( 2021, 2022) since then<span> </span></span></p>
+ <p><span>Currently she combines her activity as an artist with <em class="ink-accent">colour prescription in the areas of design and architecture</em>.<span> </span></span></p>
+ <p><span>Her work is represented, in Spain and abroad, by the Barcelona gallery owner <em class="ink-accent">Miquel Alzueta</em>. <a href="http://alzuetagallery.com">ALZUETA GALLERY </a></span></p></div>
+            </div>
+            <div class="about-figures" data-about-figures>
+              <div class="about-sticky">
+                <figure class="about-figure is-current">
+                      <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/0d2c1af6977621e4-400.avif 400w, /prototype2/media/0d2c1af6977621e4-800.avif 800w" sizes="(max-width: 899px) 88vw, 38vw" />
+      <source type="image/webp" srcset="/prototype2/media/0d2c1af6977621e4-400.webp 400w, /prototype2/media/0d2c1af6977621e4-800.webp 800w" sizes="(max-width: 899px) 88vw, 38vw" />
+      <img
+        src="/prototype2/media/0d2c1af6977621e4-800.jpg"
+        alt=""
+        width="1140"
+        height="1710"
+        style="aspect-ratio:1140 / 1710"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </picture>
+                    </figure><figure class="about-figure">
+                      <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/790d2d2760032466-400.avif 400w, /prototype2/media/790d2d2760032466-800.avif 800w, /prototype2/media/790d2d2760032466-1600.avif 1600w" sizes="(max-width: 899px) 88vw, 38vw" />
+      <source type="image/webp" srcset="/prototype2/media/790d2d2760032466-400.webp 400w, /prototype2/media/790d2d2760032466-800.webp 800w, /prototype2/media/790d2d2760032466-1600.webp 1600w" sizes="(max-width: 899px) 88vw, 38vw" />
+      <img
+        src="/prototype2/media/790d2d2760032466-1600.jpg"
+        alt=""
+        width="2560"
+        height="1740"
+        style="aspect-ratio:2560 / 1740"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+                    </figure>
+              </div>
+            </div>
+          </div>
+          <div class="about-tail"> <p>PRIVATE COLLECTIONS</p>
+ <div> <div> <div> <div> <p>Fundació Vilacases (Barcelona)</p> <p>Fundació Banc Sabadell (Barcelona)</p> <p>Collection Hayot (France)</p> <p>Martinez Collection (Mexico-US)</p> <p>Niederberghaus Collection (Germany)</p> <p>Collection Richard (France)</p> <p>Smith Collection (Wyoming, US)</p> <p>EXHIBITIONS & ART FAIRS</p> <p>_2026 June_July, Palau de Casavells, ‘<i>Shift Towards Coincidnce’, </i>Group exhibition</p> <p>_2026 June_July, New York, <em>‘Abstract paintings’</em>, Scroll Ny , Group exhibition</p> <p>_2026 May _ June, Paris, ‘<em>Moll de l’os’ peintures 2026</em>, Alzueta Gallery Paris</p> <p>_2026 February, Zona Maco CDMX Mexico with Alzueta Gallery</p> <p>_2025 October, Estampa contemporary art fair, Madrid with Alzueta Gallery</p> <p>-2025 April, <em>‘Míra’m no deixis de mirar-me’</em> Solo show at Palau de Casavells with Alzueta Gallery</p> <p>-2025 March, ‘Marco, límite y lugar’, Madrid with Alzueta Gallery, Group Exhibition</p> <p>-2024 November, Luxemburg art week with Alzueta Gallery</p> </div> <p>-2024 July, Gallery_br, Tetbury, UK, ‘Painting as a gift from color’, solo show</p> <div> <p>-2024 February, ZONA MACO with Alzueta Gallery</p> <p>-2024 January, Alzueta Gallery Séneca, ‘ What abstract art means to me? ‘ Group exhibition</p> <p>-2023 November, Alzueta Gallery Madrid, «La terre est bleue comme une orange», Group exhibition</p> <p>-2023 September, Alzueta Gallery Turó, <em>‘Transitions’ </em>solo show</p> </div> <p>-2023 February, Art Rotterdam, Contemporary Art Fair</p> <div> <p>-2021 December, Alzueta Gallery Madrid, ‘Color Dialogues’ Solo Exhibition</p> <p>-2021 December, Espacio Pavillion, Madrid, 2nd Edition ‘What’s color?’</p> <p>-2021 October, Alzueta Gallery, Madrid, Estampa Contemporary Art Fair</p> <p>-2021 September, Alzueta Gallery, Paris, Art Paris Fair</p> </div> </div> </div> </div>
+ <p>-2021 June, Alzueta Gallery, Madrid, Art Madrid Feria</p>
+ <p>-2020 December, Alzueta Gallery, Barcelona, Solo Exhibition, ‘What’s color?’</p>
+ <p><span>-2020 February, Alzueta Gallery, Barcelona, Aoo&Claudia Valsells ‘Silla8’ show</span></p>
+ <p><span>-2019 November, Solo Exhibition, Almost Perfect, Tokyo, Japan</span></p>
+ <p><span>-2019 October, Art Élysées-Art & Design, París.</span></p>
+ <p><span>-2019 April, Art Paris Grand Palais, París.</span></p>
+ <p><span>-2019 April, Almoneda, Ifema feria de Madrid, Palau de Casavells, Madrid.</span></p>
+ <p><span>-2019 March, AFF Art Fair Brussels</span></p>
+ <p><span>-2019 March, Art Madrid, Madrid</span></p>
+ <p><span>-2018 November, T10 at Alzueta Gallery, Barcelona</span></p>
+ <p><span>-2018 November, Palau de Casavells, solo exhibition, Girona, Spain</span></p>
+ <p><span>-2018 Art fair Hamburg</span></p>
+ <p><span>-2018 Art Elysees París</span></p>
+ <p><span>-2018 Art fair Stockholm</span></p>
+ <p><span>-2018 Contemporary Art Fair Just LX, Portugal</span></p>
+ <p><span>-2018 Almoneda Antik Passion, Madrid</span></p>
+ <p><span>-2018 Art Fair Grand Palais, París</span></p>
+ <p><span>-2018 Eurantica art fair, Brussels</span></p>
+ <p><span>-2018 Art Madrid, Madrid</span></p>
+ <p><span>-2017/07 Uterqüe Art Essays AW2017</span></p>
+ <p><span>-2017/03 Art París, International Art Fair, París</span></p>
+ <p><span>-2017/02 Alzueta Gallery «Color y forma» solo exhibition, Barcelona</span></p>
+ <p><span>-2017/02 Art Madrid, Madrid</span></p>
+ <p><span>-2016/12 <a href="http://www.axelpairon-gallery.com">Galeria Axel Pairon</a> exposición colectiva.</span></p>
+ <p><span>-2016/11 Antica Namur, Belgium</span></p>
+ <p><span>-2016/10 Art Élysées, International Art Fair, París</span></p>
+ <p><span>-2016/06 Scope Basel, Basel art fair</span></p>
+ <p><span>-2007 <a href="http://www.palaudecasavells.com/" target="_blank" rel="noopener noreferrer">Palau de Casavells</a>, Baix Empordà, Solo exhibition , May 2007</span></p>
+ <p><span>-2005 <a href="http://galeriamiquelalzueta.es/home/" target="_blank" rel="noopener noreferrer">Galeria Miquel Alzueta</a>, Barcelona, Solo exhibition, March 2005 – «Expresions de Mur». Abstract Informalism paintings.</span></p>
+ <p><span>-2000/04 <a href="http://www.vincon.com/es/" target="_blank" rel="noopener noreferrer">Sala Vinçon</a>, Barcelona, Solo exhibition, Abril 2000 «El color no existe, existe la luz»/ «The color doesn’t exist, just the light». Individual exhibition where the interaction of the public with the installation was essential. I tried to demonstrate through personal experimentation that color only exists if there is light.<br> </span></p>
+ <p>INQUIRES PLEASE CONTACT TO: editorial@alzuetagallery.com</p>
+ <p><span>images:</span></p>
+ <p><span>© yosigo_yosigo</span></p>
+ <p><span>© Martina Domenech ( below)</span></p></div>
+        </div>
+  </section>
+<div class="lightbox" data-lightbox data-available-label="Available" hidden>
+    <div class="lightbox-veil" data-lightbox-veil></div>
+    <button type="button" class="lightbox-close" data-lightbox-close>Close</button>
+    <button type="button" class="lightbox-nav lightbox-prev" data-lightbox-prev aria-label="Previous">←</button>
+    <div class="lightbox-plate" data-lightbox-plate></div>
+    <div class="lightbox-caption">
+      <h2 class="lightbox-title" data-lightbox-title></h2>
+      <p class="lightbox-meta" data-lightbox-meta></p>
+      <p class="lightbox-count" data-lightbox-count data-template="{n} of {total}"></p>
+    </div>
+    <button type="button" class="lightbox-nav lightbox-next" data-lightbox-next aria-label="Next">→</button>
+  </div>
+<script type="module" src="/prototype2/js/index.js"></script>
+</body>
+</html>

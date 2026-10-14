@@ -4,26 +4,110 @@
  * Three colours from the designer's mockups, one typeface. The work carries all
  * the colour; the interface is blue type on near-white, and peach for About.
  */
+/*
+ * Switzer, from Fontshare, self-hosted. Its licence permits commercial use and
+ * self-hosting outright, and travels with it in src/assets/fonts.
+ *
+ * Both files are the variable cut, so one request covers every weight the site
+ * asks for — the 400 of the prose and the 500 of everything uppercase — and the
+ * italic is a drawn italic rather than a slanted roman, which is what the index
+ * years need.
+ */
 @font-face {
-  font-family: 'Inter';
-  src: url('/prototype2/fonts/inter-normal.woff2') format('woff2-variations');
+  font-family: 'Switzer';
+  src: url('/prototype2/fonts/Switzer-Variable.woff2') format('woff2-variations');
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
+@font-face {
+  font-family: 'Switzer';
+  src: url('/prototype2/fonts/Switzer-VariableItalic.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/*
+ * Tinos, for the italic serif phrases on About.
+ *
+ * The sheet names Times New Roman, which is Monotype's and ships with macOS
+ * and Windows under terms that do not cover serving it from a website. Tinos
+ * is Steve Matteson's metric-compatible cut of it under the SIL Open Font
+ * License: the same widths, so a line breaks in the same place and the phrase
+ * occupies the same space. Times New Roman still comes first in the stack, so
+ * on a Mac or a PC the literal face the designer specified is what renders,
+ * and this is what everyone else gets instead of a generic serif that is a
+ * different width.
+ *
+ * Latin and Latin Extended only, split as Google splits them. The Greek,
+ * Cyrillic, Hebrew and Vietnamese cuts are four fifths of the family's weight
+ * and nothing on this site, in any of its languages, reaches for them.
+ */
+@font-face {
+  font-family: 'Tinos';
+  src: url('/prototype2/fonts/Tinos-Regular-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Tinos';
+  src: url('/prototype2/fonts/Tinos-Regular-latin-ext.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Tinos';
+  src: url('/prototype2/fonts/Tinos-Italic-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Tinos';
+  src: url('/prototype2/fonts/Tinos-Italic-latin-ext.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
 
 :root {
   color-scheme: light;
   /* From the designer's mockups. The ground is white so the paintings carry
-     every colour on the page; the type is the indigo of the wordmark, with a
-     tint of the same hue for anything inactive — never a different colour. */
+     every colour on the page; the type is a near-black grey, with a tint of the
+     same value for anything inactive — never a different colour. */
   --paper: #ffffff;
-  --ink: #003880;
+  --ink: #242528;
   --ink-soft: color-mix(in srgb, var(--ink) 48%, var(--paper));
   --peach: #fcd090;
 
-  --sans: 'Inter', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
-  --pad: clamp(1.25rem, 4vw, 4rem);
+  --sans: 'Switzer', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+
+  /*
+   * One size for the whole site, in the designer's 1920-frame pixels: 40 on a
+   * 50 line. Weight, case, slope and the serif face are what tell one kind of
+   * text from another — not size. Two things are deliberately outside it: the
+   * bar, at 20, and the cursor label, which keeps the size it had.
+   *
+   * The clamp guards only the extremes. 2.0833vw is the 40, and it holds from
+   * about 768px up to 2600px; below that a floor keeps the type readable on a
+   * phone, above it a ceiling stops it running away on a very wide screen.
+   */
+  --type: clamp(1rem, 2.0833vw, 3.4rem);
+  --lead: 1.25;                        /* 50 over 40 */
+  --type-menu: clamp(0.75rem, 1.0417vw, 1.7rem);
+  /* Measured off the mockups, which agree on a fixed margin rather than a
+     proportional one: the left inset is 40px at 1866 wide, 43px at 1368 and
+     47px at 1588 — near-constant while the frames differ by 500px. 2.5rem is
+     40px; the clamp only takes over on screens narrower than the designs. */
+  --pad: clamp(1.25rem, 3.5vw, 2.5rem);
   --gap: clamp(1.5rem, 4.5vw, 5rem);
   --bar: 5.5rem;
   --rail: clamp(9rem, 14vw, 17rem);   /* width kept clear for the year rail */
@@ -65,8 +149,14 @@
  * was on `body`. Falling back to the resting state is both safer and the state
  * we want anyway.
  */
+/*
+ * Under the bar, not over it. At 150 the veil covered the menu too, so the
+ * whole chrome went out with the page and came back with it — and the bar is
+ * the one thing that does not change between two paintings. Below 40 it fades
+ * the page and leaves the menu standing.
+ */
 .page-veil {
-  position: fixed; inset: 0; z-index: 150;
+  position: fixed; inset: 0; z-index: 39;
   background: var(--paper);
   pointer-events: none;
   opacity: 0;
@@ -152,11 +242,12 @@ html.is-revealed .detail { animation-name: none; }
   background: var(--blink-bg);
   color: var(--blink-fg);
   /*
-   * A strobe: six colours in under two seconds, so it flashes rather than turns.
+   * A strobe: the five pairs in under two seconds, so it flashes rather than
+   * turns.
    * The opposite of About, which holds each colour for a second and a half.
    *
    * Not faster than this on purpose. The keyframes hold and then cut, so the
-   * rate you see is one change per 0.3s — about three a second, which is where
+   * rate you see is one change per 0.36s — under three a second, which is where
    * the guidance on flashing stops. Anyone who has asked for less movement gets
    * no loading screen at all rather than a slower one.
    */
@@ -166,10 +257,10 @@ html.is-revealed .detail { animation-name: none; }
 }
 .loader p {
   margin: 0;
-  font-size: clamp(1.5rem, 3.4vw, 2.75rem);
+  font-size: var(--type);
   font-weight: 500;
   letter-spacing: -0.02em;
-  line-height: 1.32;
+  line-height: var(--lead);
 }
 /*
  * Once the load is done the script brings that exit forward by naming a
@@ -210,8 +301,8 @@ body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--sans);
-  font-size: 12px;
-  line-height: 1.5;
+  font-size: var(--type);
+  line-height: var(--lead);
   letter-spacing: 0.01em;
   -webkit-font-smoothing: antialiased;
 }
@@ -225,7 +316,15 @@ h1, h2, h3 { font-weight: 500; margin: 0; }
 p { margin: 0 0 1em; }
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
 ::selection { background: var(--ink); color: var(--paper); }
-:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+/*
+ * No ring. Keyboard focus is shown the way hover is — the thing you are on
+ * changes colour — because a 2px box drawn round an arrow or a close button is
+ * a shape the design does not otherwise contain, and it was landing on every
+ * arrow of every detail panel. Each focusable thing pairs `:focus-visible`
+ * with its own `:hover` rule, so moving by key shows what moving by pointer
+ * shows, and nothing is left without an indicator.
+ */
+:focus-visible { outline: none; }
 .skip-link { position: absolute; left: -999px; top: 0; z-index: 100; background: var(--ink); color: var(--paper); padding: 0.6rem 1rem; }
 .skip-link:focus { left: 0; }
 /* Present for screen readers and search engines, absent on screen. */
@@ -236,14 +335,23 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 
 /* Small caps for every label on the site. */
-.menu, .controls, .wordmark, .about-close, .panel-close,
-.lightbox-close, .lightbox-count, .year-label,
+.menu, .wordmark, .top-soon, .about-close, .panel-close,
+.lightbox-close, .lightbox-count,
 .detail-back, .detail-pager, .about-more {
-  font-size: 11px;
+  font-size: var(--type);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   font-weight: 500;
 }
+
+/*
+ * The gallery's own controls keep the size they had before the site went to
+ * one type size. They are not text on the page: the year rail stands in the
+ * margin beside the paintings and the density switch sits under them, and at
+ * 40 the rail grew to 156px wide and each year to a 49px line box, which made
+ * a column of eleven years taller than the window.
+ */
+.controls, .years, .year-label { font-size: 11px; line-height: 1.5; }
 
 body.is-locked { overflow: hidden; }
 
@@ -261,22 +369,83 @@ body.is-locked { overflow: hidden; }
 .top {
   position: fixed; inset: 0 0 auto 0; z-index: 40;
   display: grid;
-  grid-template-columns: auto 1fr;
+  /*
+   * Wordmark, the section still to come, then the pages pushed to the right.
+   *
+   * The first column is the same 25.53% the commissioned groups use, because
+   * in the sheet the section heading starts at x498 and the list's rules start
+   * at x497 — it is one alignment, not two that happen to be close. The rule
+   * that used to place it keyed off a `.top-feature` class that is not in the
+   * markup, so it had never done anything and the heading sat against the
+   * wordmark.
+   */
+  grid-template-columns: 25.53% auto minmax(0, 1fr);
   align-items: baseline;
-  gap: var(--pad);
+  gap: 0;
   padding: 1.6rem var(--pad) 1rem;
   pointer-events: none;
   mix-blend-mode: difference;
 }
+/*
+ * The bar, measured off the designer's sheet at the 1866 it was exported at.
+ *
+ * Every item in it — wordmark, the section heading, the pages — sits on one
+ * baseline at one size there; the build had the wordmark at 13px and the rest
+ * at 11, which is why the whole bar read small and bunched. Four of the menu
+ * items give the size independently, from their rendered widths rather than
+ * from a cap height an antialiased edge can shift by a pixel: 18.24, 18.14,
+ * 18.29, 18.33. The wordmark is tracked looser than the pages in our build and
+ * tighter in the sheet, so its own tracking comes down to suit.
+ */
+/* The bar is the one part of the site set smaller: 20 of the designer’s
+   1920-frame pixels, against 40 everywhere else. */
+.wordmark, .top-soon, .menu { font-size: var(--type-menu); }
+/*
+ * A heading for a section that does not exist yet. It is a button and not a
+ * link because there is nowhere to go: a link to nothing is a broken link, and
+ * `aria-disabled` says plainly that it is here but not ready, which is the
+ * truth. It keeps its place in the tab order so it is not a surprise when it
+ * starts working.
+ *
+ * It takes the menu’s colours all the same — quiet by default, bright on hover
+ * and when it is the current page. It used to sit in the always-bright group,
+ * so it read as permanently selected while no page it names existed, and the
+ * one page you were actually on looked no different from it.
+ */
+.top-soon {
+  font-family: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+}
 .top > * { pointer-events: auto; }
-.wordmark { font-size: 13px; letter-spacing: 0.08em; white-space: nowrap; }
-/* Spread rather than bunched: the mockup sets the five items evenly across the
-   width to the right of the wordmark. */
-.menu { display: flex; justify-content: space-around; gap: 1rem; }
+.wordmark { letter-spacing: 0.033em; white-space: nowrap; }
+/* Evenly spaced, and the sheet says how far apart: 75px of 1866, four times
+   over, to within a pixel each time. */
+.menu { display: flex; justify-content: flex-end; gap: clamp(1rem, 4.019vw, 4.7rem); }
 /* Source colours chosen so that, over white, they resolve to the indigo and to
    a softer tint of it. */
-.wordmark, .menu a:hover, .menu a[aria-current='page'] { color: rgb(255, 199, 127); }
-.menu a { color: rgb(127, 95, 60); transition: color var(--hover) var(--ease); }
+/*
+ * These are the inverses, not the colours. The bar blends with `difference`, so
+ * over the white page each resolves to |255 − source|: rgb(219,218,215) comes
+ * out as the ink's #242528 and rgb(105,105,103) as its quieter tint, while over
+ * a painting both become that painting's negative. Change `--ink` and these have
+ * to be recomputed — they cannot be written as `var(--ink)`, because what is
+ * wanted here is the colour that *produces* it.
+ *
+ * Both sit near white, so the bar is a true negative of whatever it crosses:
+ * close to black over paper, close to white over a dark frame. They used to be
+ * tuned so that over paper they landed exactly on the ink, which was right for
+ * a white page and left the menu a pale grey — 150 of 255 — on every page where
+ * nothing dark passed beneath it. That read as the blend not working at all.
+ *
+ * The cost is that the current page and a hover are now a smaller step from the
+ * rest: over paper, 3 against 27, where it used to be 36 against 150. The step
+ * is still there and it is the same one the opening film has always used.
+ */
+.wordmark,
+.menu a:hover, .menu a:focus-visible, .menu a[aria-current='page'],
+.top-soon:hover, .top-soon:focus-visible, .top-soon[aria-current='page'] { color: rgb(252, 252, 250); }
+.menu a, .top-soon { color: rgb(228, 228, 226); transition: color var(--hover) var(--ease); }
 
 /* Density sits with the year rail down the left edge, not off on its own. */
 .controls {
@@ -285,7 +454,7 @@ body.is-locked { overflow: hidden; }
   transition: opacity 0.8s var(--ease);
 }
 .control { transition: color var(--hover) var(--ease); font-variant-numeric: tabular-nums; }
-.control:hover, .control.is-active { color: var(--ink); }
+.control:hover, .control:focus-visible, .control.is-active { color: var(--ink); }
 
 @media (max-width: 899px) {
   .top { grid-template-columns: 1fr; justify-items: center; gap: 0.7rem; padding: 1.2rem var(--pad) 0.9rem; }
@@ -362,15 +531,23 @@ body.is-locked { overflow: hidden; }
 /* The roll draws its copies from a variable rather than from `currentColor`:
    the character span's own text is transparent — that is how the roll works —
    so `currentColor` inside it is transparent too, and the copies vanished. */
-.menu a { --roll-color: rgb(127, 95, 60); }
-.wordmark, .menu a:hover, .menu a[aria-current='page'] { --roll-color: rgb(255, 199, 127); }
+.menu a, .top-soon { --roll-color: rgb(228, 228, 226); }
+.wordmark,
+.menu a:hover, .menu a:focus-visible, .menu a[aria-current='page'],
+.top-soon:hover, .top-soon:focus-visible, .top-soon[aria-current='page'] { --roll-color: rgb(252, 252, 250); }
 
 /* ------------------------------------------------------------------ hero */
 
 /* A screen of empty ground under the wordmark. The stack is drawn over it by
    transforming the grid's own tiles, so nothing here is laid out twice. */
-.hero { height: 100vh; }
-html:not(.js) .hero, .hero:empty:not([data-hero]) { height: 0; }
+.hero {
+  height: 100vh;
+}
+
+html:not(.js) .hero,
+.hero:empty:not([data-hero]) {
+  height: 0;
+}
 
 /* ------------------------------------------------------------------ grid */
 
@@ -390,10 +567,19 @@ html:not(.js) .hero, .hero:empty:not([data-hero]) { height: 0; }
      nothing. */
   padding: 0 var(--pad) 62vh var(--rail);
 }
-@media (max-width: 899px) { .grid { padding-left: var(--pad); padding-bottom: 58vh; } }
+
+@media (max-width: 899px) {
+  .grid {
+    padding-left: var(--pad);
+    padding-bottom: 58vh;
+  }
+}
+
 /* The justified grid sets its own padding; excluded here so this more
    specific selector does not quietly win over it. */
-.grid:not([data-stack]):not(.grid-justified) { padding-top: var(--gap); }
+.grid:not([data-stack]):not(.grid-justified) {
+  padding-top: var(--gap);
+}
 
 /*
  * Half a screen of paper between the pile settling and the first painting.
@@ -420,7 +606,9 @@ html:not(.js) .hero, .hero:empty:not([data-hero]) { height: 0; }
  * `html.js` covers the remaining case: with no scripting the hero is collapsed
  * rather than removed, and there is no opening to make room for either.
  */
-html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
+html.js .hero[data-hero]+.grid[data-stack] {
+  padding-top: 22vh;
+}
 
 .tile {
   flex: 0 0 auto;
@@ -428,7 +616,10 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
   width: calc(var(--unit) * var(--a));
   transform-origin: center center;
 }
-.tile[hidden] { display: none; }
+
+.tile[hidden] {
+  display: none;
+}
 
 /*
  * Choosing a year pushes every other one back rather than hiding it: the sheet
@@ -441,6 +632,7 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
   opacity: 0.38;
   pointer-events: none;
 }
+
 .tile {
   transition:
     height 0.5s var(--ease), width 0.5s var(--ease),
@@ -452,19 +644,48 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
  * enough to read as attention rather than as a effect, and slow enough that
  * crossing the sheet quickly does not strobe.
  */
-.tile picture, .tile img { transition: filter 0.7s var(--ease), opacity 0.7s var(--ease); }
-.tile:hover img { filter: blur(1.6px); opacity: 0.82; }
+.tile picture,
+.tile img {
+  transition: filter 0.7s var(--ease), opacity 0.7s var(--ease);
+}
+
+.tile:hover img, .tile:focus-visible img {
+  filter: blur(1.6px);
+  opacity: 0.82;
+}
+
 /* A dimmed tile is already pushed back; hovering must not fight that. */
-.tile.is-dimmed:hover img { filter: none; opacity: 1; }
-.tile picture, .tile img { width: 100%; height: 100%; }
-.tile img { object-fit: contain; }
+.tile.is-dimmed:hover img {
+  filter: none;
+  opacity: 1;
+}
+
+.tile picture,
+.tile img {
+  width: 100%;
+  height: 100%;
+}
+
+.tile img {
+  object-fit: contain;
+}
 
 /* While the stack is dispersing, tiles move every frame: no size transitions,
    and a compositing hint. Cleared once they settle. */
-.grid.is-stacked .tile { transition: none; will-change: transform; }
-.grid.is-stacked { pointer-events: none; }
+.grid.is-stacked .tile {
+  transition: none;
+  will-change: transform;
+}
 
-@media (max-width: 599px) { .grid:not(.grid-justified) { --unit: 120px !important; } }
+.grid.is-stacked {
+  pointer-events: none;
+}
+
+@media (max-width: 599px) {
+  .grid:not(.grid-justified) {
+    --unit: 120px !important;
+  }
+}
 
 /*
  * A handful of items rather than 154, and no size for the reader to choose:
@@ -477,6 +698,7 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
 .grid-justified {
   padding: calc(var(--bar) + var(--gap)) var(--pad) var(--gap);
 }
+
 .grid-justified .tile {
   height: auto;
   width: auto;
@@ -486,14 +708,31 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
   /* Room under each row for the name to appear on hover. */
   margin-bottom: 1.5rem;
 }
-.grid-justified .tile picture, .grid-justified .tile img { width: 100%; height: auto; }
+
+.grid-justified .tile picture,
+.grid-justified .tile img {
+  width: 100%;
+  height: auto;
+}
 
 /* --------------------------------------------------------- colour chart */
 
-.prose { font-size: 13px; line-height: 1.6; }
-.prose p { margin: 0 0 0.9em; }
-.prose a { border-bottom: 1px solid currentColor; }
-.prose strong { font-weight: 600; }
+.prose {
+  font-size: var(--type);
+  line-height: var(--lead);
+}
+
+.prose p {
+  margin: 0 0 0.9em;
+}
+
+.prose a {
+  border-bottom: 1px solid currentColor;
+}
+
+.prose strong {
+  font-weight: 600;
+}
 
 /* ---------------------------------------------------------------- detail */
 
@@ -505,18 +744,67 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
   gap: var(--pad);
   padding: var(--bar) var(--pad) var(--pad);
 }
-.detail-back { grid-column: 1; align-self: start; color: var(--ink-soft); }
-.detail-back:hover { color: var(--ink); }
-.detail-plate { grid-column: 2; margin: 0; display: grid; place-items: center; }
-.detail-plate img { max-height: 74vh; width: auto; height: auto; max-width: 100%; }
-.detail-caption { grid-column: 3; font-size: 14px; }
-.detail-title { font-size: 20px; letter-spacing: -0.01em; margin-bottom: 0.4rem; }
-.detail-caption p { margin: 0 0 0.15rem; }
-.detail-pager { grid-column: 1 / -1; display: flex; justify-content: space-between; color: var(--ink-soft); }
-.detail-pager a:hover { color: var(--ink); }
+
+.detail-back {
+  grid-column: 1;
+  align-self: start;
+  color: var(--ink-soft);
+}
+
+.detail-back:hover, .detail-back:focus-visible {
+  color: var(--ink);
+}
+
+.detail-plate {
+  grid-column: 2;
+  margin: 0;
+  display: grid;
+  place-items: center;
+}
+
+.detail-plate img {
+  max-height: 74vh;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+}
+
+.detail-caption {
+  grid-column: 3;
+  font-size: var(--type);
+}
+
+.detail-title {
+  font-size: var(--type);
+  letter-spacing: -0.01em;
+  margin-bottom: 0.4rem;
+}
+
+.detail-caption p {
+  margin: 0 0 0.15rem;
+}
+
+.detail-pager {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  color: var(--ink-soft);
+}
+
+.detail-pager a:hover, .detail-pager a:focus-visible {
+  color: var(--ink);
+}
+
 @media (max-width: 899px) {
-  .detail { grid-template-columns: 1fr; }
-  .detail-back, .detail-plate, .detail-caption { grid-column: 1; }
+  .detail {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-back,
+  .detail-plate,
+  .detail-caption {
+    grid-column: 1;
+  }
 }
 
 /* ------------------------------------------------------------------- feed */
@@ -536,6 +824,7 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
   align-items: start;
   padding: calc(var(--bar) + var(--gap)) var(--pad) 20vh;
 }
+
 .feed-column {
   display: flex;
   flex-direction: column;
@@ -543,20 +832,427 @@ html.js .hero[data-hero] + .grid[data-stack] { padding-top: 22vh; }
      name has room to appear under it on hover. */
   gap: clamp(4rem, 10vw, 10rem);
 }
-.feed-column + .feed-column { margin-top: clamp(7rem, 18vw, 18rem); }
+
+.feed-column+.feed-column {
+  margin-top: clamp(7rem, 18vw, 18rem);
+}
 
 /* Undo the contact sheet's fixed row height: here the picture sets its own. */
-.grid-feed .tile { height: auto; width: 100%; }
-.grid-feed .tile picture, .grid-feed .tile img { width: 100%; height: auto; }
-.grid-feed .tile img { object-fit: contain; }
+.grid-feed .tile {
+  height: auto;
+  width: 100%;
+}
+
+.grid-feed .tile picture,
+.grid-feed .tile img {
+  width: 100%;
+  height: auto;
+}
+
+.grid-feed .tile img {
+  object-fit: contain;
+}
 
 /* Stacked, the stagger would only push the second half of the works down the
    page for no reason. */
 @media (max-width: 699px) {
-  .grid-feed { grid-template-columns: 1fr; }
-  .feed-column + .feed-column { margin-top: clamp(4rem, 10vw, 10rem); }
+  .grid-feed {
+    grid-template-columns: 1fr;
+  }
+
+  .feed-column+.feed-column {
+    margin-top: clamp(4rem, 10vw, 10rem);
+  }
 }
 
+/* ------------------------------------------------------------ index rows */
+
+/*
+ * One row system, used by both indexes.
+ *
+ * Exhibitions and Commissioned are the same object — a name, a date, a rule
+ * under it — and the designer drew them that way. They had drifted apart in the
+ * build: the exhibitions row was a hairline under 1.15vw type with 8.5rem of
+ * air around it, which is nothing the sheet asks for. Everything that is not
+ * the column layout lives here now, and each list brings only its columns.
+ *
+ * Measured off the references at the 1866 they were exported at: the rule is
+ * 3px, one single-line row sits 60px from the next, and the type sits 7px clear
+ * of the line beneath it.
+ */
+.xrow {
+  position: relative;
+  display: grid;
+  align-items: baseline;
+  gap: 1.5rem;
+  /*
+   * Four knobs, so the two lists can share everything else: the type scale, the
+   * leading, and the space above and below. Commissioned keeps the defaults,
+   * which are the figures solved off its reference; exhibitions turns each one
+   * down or up because its rows carry two lines and a date range rather than a
+   * name.
+   */
+  padding: var(--row-top, 1.0785vw) 0 var(--row-bottom, 0px);
+  /*
+   * A hairline at full ink. Measured as coverage rather than by a threshold,
+   * both sheets draw about one pixel of ink: 1.0-1.26 on the commissioned one
+   * at 1866, 0.75-0.87 on the exhibitions one at 1598. The 3px here was my
+   * misreading of an antialiased edge as thickness. What was actually wrong
+   * before all this was the ink, not the width — a 1px line at 18% of the ink
+   * colour, which is a sixth of a pixel of actual mark, and read as nothing.
+   */
+  border-bottom: 1px solid var(--ink);
+  color: var(--ink);
+  transition: color 0.45s var(--ease);
+}
+
+/*
+ * Solved against the reference rather than guessed: 2.286vw puts the cap height
+ * at its 29px, and 0.8915 puts the baseline 7px clear of the rule.
+ *
+ * The line box is under 1 because the slack a normal one carries beneath the
+ * baseline is what was holding the type off the line. On the exhibitions rows,
+ * which run to two lines, that same figure becomes the leading — these are caps
+ * with no descenders, so the lines stack close without colliding. The
+ * half-leading under the last baseline does not depend on how many lines sit
+ * above it, so the 7px comes out the same on a two-line row as on a one-line
+ * row, and the two lists share a rule position without being told to.
+ */
+.xrow-title,
+.xrow-when,
+.exh-title,
+.exh-venue,
+.exh-when,
+.exh-year,
+.xgroup-name {
+  /*
+   * The designer's values: Switzer Variable at 40px on a 40px line, no
+   * tracking. 2.0833vw is that 40px at a 1920 frame.
+   *
+   * The frame is 1920 and not the width the sheets were exported at, which is
+   * what I had. The sheet's own line-height settles it: the designer sets the
+   * line equal to the size, and the exhibitions export has 33px between the
+   * two baselines of a row at 1598 wide, so its frame is 40 x 1598/33 = 1937
+   * — 1920 within the pixel of error a 33px read carries. Sizing against the
+   * export instead made the type 3.9% too large, and because the rhythm was
+   * being held to its measured figures, the padding absorbed the difference
+   * and the list read tight.
+   *
+   * The per-list size knob is gone: there is one size for the whole site now,
+   * `--type` in 00-base.css, and these rows take it like everything else.
+   * `--row-leading` is kept because a row can still want a different line
+   * from the site's, but it falls through to `--lead`.
+   */
+  font-size: var(--type);
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  line-height: var(--row-leading, var(--lead));
+  font-variant-numeric: tabular-nums;
+}
+
+/*
+ * Semibold for the name of the thing, medium for what qualifies it: the show's
+ * title against its address, the kind of work against the projects in it. Both
+ * sheets draw it that way — measured, the heavier stems run about 1.13 times
+ * the lighter ones, and 600 is the step that gives that; 700 would be 1.34.
+ * The designer's sheet says 600 in as many words.
+ */
+.exh-title,
+.xgroup-name {
+  font-weight: 600;
+}
+
+.xrow-when {
+  font-style: italic;
+  white-space: nowrap;
+}
+
+/* The months lean, the words that introduce them stay upright. */
+.exh-when em,
+.reader-when em {
+  font-style: italic;
+}
+
+.exh-lead {
+  font-style: normal;
+}
+
+.exh-span {
+  white-space: nowrap;
+}
+
+/*
+ * The photograph floats rather than sitting in the row.
+ *
+ * A picture inside a row sets that row's height, so the list lurches every time
+ * the pointer crosses it. The exhibitions index used to buy its way out of that
+ * by being tall enough to hold the plate whether or not one was showing, which
+ * is where its air came from. At the measured rhythm there is no room for that,
+ * so the picture is taken out of flow on both lists. Only one row is ever
+ * hovered, so there is nothing for it to collide with.
+ */
+.exh-plate {
+  display: block;
+  opacity: 0;
+  transition: opacity 0.45s var(--ease);
+}
+
+.exh-plate picture,
+.exh-plate img {
+  width: 100%;
+  height: 100%;
+}
+
+.exh-plate img {
+  object-fit: contain;
+  object-position: center;
+}
+
+.xrow .exh-plate {
+  position: absolute;
+  left: 52%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 13vw;
+  max-width: 11rem;
+  height: 7.5rem;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/*
+ * The colour is set per hover by `client/hover-list.ts`, which walks the palette
+ * sampled from the paintings so no two consecutive rows answer alike. Without
+ * scripting `--exh-hover` keeps its default and the row still responds.
+ */
+@media (hover: hover) {
+  .hrow:hover {
+    color: var(--exh-hover);
+  }
+
+  .hrow:hover .exh-plate {
+    opacity: 1;
+  }
+}
+
+.hrow:focus-visible {
+  color: var(--exh-hover);
+  outline: none;
+}
+
+.hrow:focus-visible .exh-plate {
+  opacity: 1;
+}
+
+/* ------------------------------------------------------- exhibitions list */
+
+/*
+ * A line per show rather than a gallery of them: name and place at the left,
+ * the run of dates and the year at the right, a rule between each.
+ */
+.exh-list {
+  --exh-hover: var(--ink);
+  /*
+   * Set off the designer's exhibitions sheet, measured rather than estimated.
+   *
+   * The sheet is a 1598px render of a 1508px-wide frame, so nothing in it can
+   * be read against the commissioned sheet until both are put on one scale.
+   * The menu gives that scale — its ink spans 1794 there and 1508 here, so
+   * 1.1897 — and the wordmark's cap height confirms it independently (12 x
+   * 1.1897 = 14.3, against 14). Scaled up, this list's title cap is 28.6 where
+   * commissioned's is 28: the same size. An earlier pass had this at 0.91,
+   * which came of measuring against the image's width instead of the frame's.
+   *
+   * What does differ is the rhythm, and by a lot. Commissioned is one line
+   * sitting tight on its rule. These are two lines with real air under them:
+   * 226.6px from rule to rule, 40.4 between the baselines, 61.9 from the last
+   * baseline down to the line.
+   */
+  --row-top: 4.747vw;
+  --row-bottom: 2.956vw;
+  /* Wide enough for the longest run the dates can make — 'From December To
+     January 2022', the one show that crosses a year — with the year clear of
+     it. Too narrow and the two ran together. The sheet's own columns are
+     narrower, but its rows are a placeholder show repeated, whose dates are
+     shorter than anything real on this list. */
+  --when-col: 40vw;
+  --year-col: 6vw;
+  /* No cap: the margin governs, as it does in the design. A capped box plus the
+     padding inside it put the rules 77px from the edge at the width the mockup
+     was drawn at, not the 30 it specifies — the cap was centring the box and the
+     padding was then measured from the box, not from the screen. These are short
+     rows, so there is no measure to protect. */
+  margin: 0 auto;
+  /*
+   * The sheet puts the first rule 447px down its 1598 export, 522 at 1866.
+   * Pure vw, because adding a fixed bar height to it meant the offset did not
+   * scale: it was right at 1866 and 13px long at 1598. The bar is a floor
+   * instead, so a narrow window still cannot slide the list under the menu.
+   */
+  padding: max(calc(var(--bar) + 1rem), var(--list-top, 16.050vw)) var(--pad) 18vh;
+}
+
+/*
+ * The date and year columns are fixed rather than `auto` because each row is
+ * its own grid: `auto` would size every row to its own contents and the dates
+ * would stagger down the page instead of standing in a column.
+ */
+.exh-list .exh {
+  grid-template-columns: minmax(0, 1fr) var(--when-col) var(--year-col);
+}
+
+.exh-name {
+  display: grid;
+  min-width: 0;
+}
+
+.exh-when {
+  display: flex;
+  gap: clamp(0.5rem, 1.6vw, 1.6rem);
+}
+
+.exh-year {
+  text-align: right;
+}
+
+/* Held just clear of the dates rather than over them: at 52% the plate landed
+   on top of the date column, which on this list starts further left. */
+.exh-list .xrow .exh-plate {
+  left: auto;
+  right: calc(var(--when-col) + var(--year-col) + 3rem);
+}
+
+@media (max-width: 899px) {
+  .exh-list .exh {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: 'name year' 'when year';
+    gap: 0.3rem 1rem;
+  }
+
+  .exh-name {
+    grid-area: name;
+  }
+
+  .exh-when {
+    grid-area: when;
+  }
+
+  .exh-year {
+    grid-area: year;
+    align-self: start;
+  }
+
+  /* No pointer to hover with, and no room to spare. */
+  .exh-plate {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------- to-scale grid */
+
+/*
+ * The same works at their relative sizes rather than at one height — the grid
+ * read as a wall instead of as a contact sheet.
+ *
+ * Each tile carries `--sh`, its height as a multiple of the unit, worked out
+ * from the catalogued measurements in `content/size.ts`. The width still follows
+ * the photograph's shape, so the area is what carries the size and nothing is
+ * letterboxed. A work whose dimensions could not be read keeps `--sh: 1` and
+ * stays at the unit height, which is the honest answer to not knowing.
+ *
+ * The rows centre on a line. That is the whole reason this reads as a hang and
+ * not as a jumble: `align-items` works per flex line, so each row of tiles
+ * settles on its own horizontal centre, which is how work is actually hung.
+ */
+.tile {
+  --sh: 1;
+}
+
+.grid-scaled {
+  align-items: center;
+}
+
+.grid-scaled .tile {
+  height: calc(var(--unit) * var(--sh));
+  width: calc(var(--unit) * var(--sh) * var(--a));
+}
+
+/* Switching modes animates, on the size transition the tiles already carry. */
+
+/* ------------------------------------------------- commissioned, by group */
+
+/*
+ * The kind of work named once at the left, its projects beside it: a rule under
+ * each and the year at the right margin. The rows themselves are the shared
+ * ones above; only the columns and the spacing between groups are here.
+ */
+.xlist {
+  --exh-hover: var(--ink);
+  margin: 0 auto;
+  /* First rule 438px down the 1866 sheet; we had it at 228. Same reasoning as
+     the exhibitions offset: proportional, with the bar as a floor. */
+  padding: max(calc(var(--bar) + 2rem), var(--list-top, 20.257vw)) var(--pad) 18vh;
+}
+
+.xgroup {
+  display: grid;
+  /* The rows begin at 496px of 1866 in the mockup, measured off the rules
+     themselves rather than off the type. Inside the 40px margins that is
+     456 of 1786, so 25.53%. The gap is nil because that figure already is the
+     gap: it is where the rules start, not where the label ends. */
+  grid-template-columns: 25.53% minmax(0, 1fr);
+  gap: 0;
+  /*
+   * 139px from the last rule of one group to the first rule of the next, which
+   * is 79px of margin once the 60px row is taken off — 4.234vw at the 1866 the
+   * reference was exported at.
+   *
+   * The reference is not consistent about this: the same figure across the
+   * second boundary is 168px, and both exports of the file agree on both
+   * numbers, so it is the file rather than the measurement. Two different gaps
+   * in one list reads as hand-placed blocks rather than as intent, so the
+   * tighter one is used throughout — the note that came with the reference was
+   * that the spacing is tighter than we had it.
+   */
+  margin-bottom: clamp(2.5rem, 4.234vw, 6rem);
+}
+
+.xgroup:last-child {
+  margin-bottom: 0;
+}
+
+/* On the first row's baseline, as the sheet has it — both sit in the same
+   band there. The label is in its own grid column, so without this it starts
+   at the top of the cell and the row's own padding drops the row 17px below
+   it. Same property, so the two cannot drift apart. */
+.xgroup-name {
+  margin: 0;
+  padding-top: var(--row-top, 1.0785vw);
+}
+
+/* Scoped to the list: the two indexes share every rule above but the columns,
+   and an unscoped `.xrow` here would win over the exhibitions template on
+   source order alone — same specificity, further down the sheet. */
+.xlist .xrow {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+@media (max-width: 899px) {
+  .xgroup {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .xgroup-name {
+    margin-bottom: 0.25rem;
+  }
+
+  /* No pointer to hover with, and no room beside the row for a picture. */
+  .xrow .exh-plate {
+    display: none;
+  }
+}
 /*
  * Overlays. One veil, shared by About and the detail panels, blurring the page
  * behind them lightly enough that the work stays visible.
@@ -600,7 +1296,7 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
  */
 .panel { background: color-mix(in srgb, var(--paper) 90%, transparent); padding: 0 0 var(--gap); }
 .panel-close { position: fixed; top: 1.6rem; right: var(--pad); z-index: 2; color: var(--ink-soft); }
-.panel-close:hover { color: var(--ink); }
+.panel-close:hover, .panel-close:focus-visible { color: var(--ink); }
 /*
  * The Colour Chart scrolls the page itself rather than sitting in a panel, so
  * its text passes under the menu — and the menu's difference blend over a line
@@ -623,7 +1319,7 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   gap: clamp(2rem, 5vw, 5rem);
   align-items: start;
   /* Wider than a page of prose: this is the whole screen's work. */
-  max-width: 108rem;
+  max-width: 112rem;
   margin: 0 auto;
   padding: calc(var(--bar) + var(--gap)) var(--pad) 0;
 }
@@ -635,15 +1331,15 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
  * The picture is the thing that holds still here; the words all move together.
  */
 .reader-head { margin-bottom: clamp(1.5rem, 3vw, 2.5rem); }
-.reader-title { font-size: clamp(1.4rem, 3vw, 2.4rem); letter-spacing: -0.02em; line-height: 1.1; }
+.reader-title { font-size: var(--type); letter-spacing: -0.02em; line-height: var(--lead); }
 .reader-year, .reader-counter {
   display: block; margin: 0.35rem 0 0; color: var(--ink-soft);
-  font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; font-variant-numeric: tabular-nums;
+  font-size: var(--type); letter-spacing: 0.06em; text-transform: uppercase; font-variant-numeric: tabular-nums;
 }
 
 .reader-text { padding-bottom: 12vh; }
 /* Larger than the rest of the site: this is the one place on it made for reading. */
-.reader-text .prose { max-width: 36rem; font-size: 16px; line-height: 1.62; }
+.reader-text .prose { max-width: 36rem; font-size: var(--type); line-height: var(--lead); }
 .reader-text .prose p { margin: 0 0 1.1em; }
 
 /*
@@ -663,10 +1359,10 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
  */
 .reader-figures { --slot: 30vh; }
 .reader-figure { margin: 0; }
-.reader-figure figcaption { color: var(--ink-soft); margin-top: 0.4rem; font-size: 11px; }
+.reader-figure figcaption { color: var(--ink-soft); margin-top: 0.4rem; font-size: var(--type); }
 .reader-figure img { width: 100%; height: auto; }
 
-.reader-figures.is-live[data-multi] {
+.reader-page .reader-figures.is-live[data-multi] {
   min-height: clamp(170vh, calc(var(--n) * var(--slot)), 260vh);
 }
 /*
@@ -713,8 +1409,8 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 /*
  * About is a takeover, not a veil.
  *
- * The title screen cycles through the palette the paintings gave us — the same
- * colours as the year rail, ground and type changing together.
+ * The title screen cycles through the five pairs the designer set, ground and
+ * type changing together.
  *
  * Each colour *holds* and then blends quickly into the next, rather than cutting
  * or sweeping: a cut was harsh and a constant sweep never let a colour be itself.
@@ -722,17 +1418,27 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
  * properties so the keyframes interpolate them properly instead of falling back
  * to the discrete behaviour unregistered properties get.
  */
-@property --blink-bg { syntax: '<color>'; inherits: true; initial-value: #fcd090; }
-@property --blink-fg { syntax: '<color>'; inherits: true; initial-value: #003880; }
+@property --blink-bg { syntax: '<color>'; inherits: true; initial-value: #ed373f; }
+@property --blink-fg { syntax: '<color>'; inherits: true; initial-value: #013787; }
 
+/*
+ * The five pairs, as given, in the order given. Ground and type always move
+ * together — each is a pairing someone chose, not a background and a foreground
+ * picked independently, so no frame ever shows one half of one pair against the
+ * other half of another.
+ *
+ * Five slots of a fifth each: the colour holds for 17 and turns over 3, which is
+ * what makes it read as a blink. At nine seconds on About that is a second and a
+ * half of stillness and a quarter-second turn; on the loading screen, at 1.8s,
+ * the same shape strobes.
+ */
 @keyframes about-blink {
-  0%,   14%  { --blink-bg: #fcd090; --blink-fg: #003880; }
-  16.6%, 31% { --blink-bg: #003880; --blink-fg: #fcd090; }
-  33.3%, 47% { --blink-bg: #0b6140; --blink-fg: #dac192; }
-  50%,   64% { --blink-bg: #bc703f; --blink-fg: #ffffff; }
-  66.6%, 81% { --blink-bg: #0a5769; --blink-fg: #fcd090; }
-  83.3%, 97% { --blink-bg: #843b32; --blink-fg: #dac192; }
-  100%       { --blink-bg: #fcd090; --blink-fg: #003880; }
+  0%,   17% { --blink-bg: #ed373f; --blink-fg: #013787; }
+  20%,  37% { --blink-bg: #ffd090; --blink-fg: #013787; }
+  40%,  57% { --blink-bg: #392524; --blink-fg: #e8bc00; }
+  60%,  77% { --blink-bg: #054d9f; --blink-fg: #e6a085; }
+  80%,  97% { --blink-bg: #2c402f; --blink-fg: #f5c041; }
+  100%      { --blink-bg: #ed373f; --blink-fg: #013787; }
 }
 
 .about {
@@ -745,13 +1451,21 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   animation: about-blink 9s ease-in-out infinite;
 }
 
+/*
+ * Plain text on the colour, in the colour the five lines are written in: it is
+ * a child of `.about`, which is where the blink keyframes set `--blink-fg`,
+ * so it inherits the property and turns with them rather than being animated
+ * on its own clock — there is no way for the two to drift apart.
+ *
+ * No plate behind it and no ring when focused; it answers by going quiet
+ * instead, which it can afford to do because it sits on its own in the corner.
+ */
 .about-close {
   position: fixed; top: 1.6rem; right: var(--pad); z-index: 3;
-  color: var(--ink);
-  /* Legible over the blink and over the white page below it alike. */
-  background: color-mix(in srgb, var(--paper) 78%, transparent);
-  padding: 0.3rem 0.5rem;
+  color: var(--blink-fg, var(--ink));
+  transition: opacity var(--hover) var(--ease);
 }
+.about-close:hover, .about-close:focus-visible { opacity: 0.62; }
 
 /*
  * Scrolling from the colour into the biography, in three layers.
@@ -786,10 +1500,10 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 }
 .about-lines p {
   margin: 0;
-  font-size: clamp(1.5rem, 3.4vw, 2.75rem);
+  font-size: var(--type);
   font-weight: 500;
   letter-spacing: -0.02em;
-  line-height: 1.32;
+  line-height: var(--lead);
 }
 .about-more { position: absolute; bottom: 2rem; left: 0; right: 0; opacity: 0.6; }
 
@@ -812,27 +1526,108 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   margin-top: 22vh;
   padding: 14vh 0 calc(var(--gap) * 2);
 }
-.about-inner {
-  display: grid;
-  grid-template-columns: minmax(0, 34rem) minmax(0, 0.7fr);
-  gap: var(--gap);
-  align-items: start;
-  max-width: 78rem;
+/*
+ * The opening runs the full width, as the sheet has it, and the columns begin
+ * underneath it.
+ *
+ * Everything on this page is set from one measurement. The sheet's body is
+ * 37.4px at the 1588 its export was made at, which is 2.355vw — and 2.355vw is
+ * 45px at 1920, exactly the size the type sheet names. The export is therefore
+ * at 0.827 of full size and the frame is 1920, which is how the rest of these
+ * figures were converted.
+ */
+.about-head {
+  max-width: 112rem;
   margin: 0 auto;
   padding: 0 var(--pad);
 }
+
+/*
+ * Biography and photographs side by side — beside, never over. The sheet laps
+ * the picture across the text, which reads well as a still image and badly as a
+ * page: a line of prose running under a photograph is a line nobody can finish.
+ * The photograph keeps its edge from the sheet, at 60.6% of the width inside
+ * the margins; the gutter is taken out of the text column so that edge does not
+ * move.
+ */
+.about-inner {
+  display: grid;
+  grid-template-columns: 60.6% minmax(0, 1fr);
+  gap: 0;
+  align-items: start;
+  max-width: 112rem;
+  margin: clamp(2rem, 4vw, 4rem) auto 0;
+  padding: 0 var(--pad);
+}
+.about-text { padding-right: clamp(1.5rem, 3vw, 3rem); }
 /* Nothing here is meant to be reachable sideways. */
 .about { overflow-x: hidden; }
-.about-text > * { margin: 0 0 0.9em; font-size: 14px; line-height: 1.68; }
+
+/* Her name, then the statement the page opens on, set large. */
+.about-heading > * { margin: 0; font-weight: 500; font-size: var(--type); letter-spacing: 0; }
+.about-lead { margin: 1.6rem 0 0; }
+.about-lead > * {
+  margin: 0;
+  font-size: var(--type);
+  /* Medium, 0% tracking, 50/45 leading — the sheet's uppercase style. */
+  font-weight: 500;
+  line-height: var(--lead);
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+/* Regular, 0% tracking, the same 50/45 leading. */
+.about-prose > * {
+  margin: 0 0 1.1em;
+  font-size: var(--type);
+  font-weight: 400;
+  line-height: var(--lead);
+  letter-spacing: 0;
+}
 .about-text strong { font-weight: 600; }
 .about-text a { border-bottom: 1px solid currentColor; }
-.about-figures { display: flex; flex-direction: column; gap: var(--gap); position: sticky; top: var(--bar); }
-.about-figure { margin: 0; }
-.about-figure img { width: 100%; height: auto; }
+
+/*
+ * One photograph at a time, holding its place while the words go by and
+ * changing as they do — the same idea as a detail panel, driven from the About
+ * panel's own scroll (`client/figures.ts`).
+ *
+ * The stage is given a height so the pictures can be stacked in it; without
+ * one, absolutely positioned figures would collapse it to nothing.
+ */
+.about-figures { position: sticky; top: calc(var(--bar) + 2vh); }
+.about-sticky { position: relative; height: min(68vh, 34rem); }
+.about-figure {
+  position: absolute; inset: 0;
+  margin: 0;
+  display: grid; align-content: start; justify-items: center;
+  opacity: 0;
+  transition: opacity 0.8s var(--ease);
+}
+.about-figure.is-current { opacity: 1; }
+.about-figure picture, .about-figure img { width: 100%; height: 100%; }
+.about-figure img { object-fit: contain; object-position: top center; }
+
+/*
+ * From the private collections to the end: no columns, centred. A list of
+ * names, places and dates is not an argument and does not need a measure — down
+ * the middle it reads as a record, which is what it is.
+ */
+.about-tail {
+  max-width: 72rem;
+  margin: clamp(4rem, 9vw, 9rem) auto 0;
+  padding: 0 var(--pad);
+  text-align: center;
+}
+.about-tail > * > * , .about-tail > * { margin: 0 0 0.55em; }
+.about-tail p { font-size: var(--type); line-height: var(--lead); letter-spacing: 0; }
+.about-tail a { border-bottom: 1px solid currentColor; }
+/* The section labels the source sets in capitals get room above them. */
+.about-tail p:has(> strong), .about-tail strong { font-weight: 600; }
 
 @media (max-width: 899px) {
   .about-inner { grid-template-columns: 1fr; }
   .about-figures { position: static; }
+  .about-sticky { height: 52vh; }
 }
 
 /* Sticky covering is motion; without it the two simply sit one after the other. */
@@ -879,16 +1674,17 @@ html:not(.js) .about:target { display: block; position: static; opacity: 1; visi
 }
 /* The veil is positioned, so anything meant to sit in front must be positioned too. */
 .lightbox-plate, .lightbox-caption, .lightbox-nav { position: relative; z-index: 1; }
-.lightbox-close { position: fixed; top: 1.6rem; right: var(--pad); z-index: 1; }
+.lightbox-close { position: fixed; top: 1.6rem; right: var(--pad); z-index: 1; color: var(--ink-soft); }
+.lightbox-close:hover, .lightbox-close:focus-visible { color: var(--ink); }
 .lightbox-plate { grid-column: 3; display: grid; place-items: center; min-width: 0; min-height: 0; transition: opacity 0.42s var(--ease); }
 .lightbox.is-changing .lightbox-plate, .lightbox.is-changing .lightbox-caption { opacity: 0; }
 .lightbox-plate img { max-height: 74vh; max-width: 100%; width: auto; height: auto; }
-.lightbox-caption { grid-column: 4; transition: opacity 0.42s var(--ease); font-size: 14px; }
-.lightbox-title { font-size: 20px; letter-spacing: -0.01em; margin: 0 0 0.4rem; }
+.lightbox-caption { grid-column: 4; transition: opacity 0.42s var(--ease); font-size: var(--type); }
+.lightbox-title { font-size: var(--type); letter-spacing: -0.01em; margin: 0 0 0.4rem; }
 .lightbox-meta { display: flex; flex-direction: column; gap: 0.15rem; margin: 0 0 0.9rem; }
 .lightbox-count { margin: 0; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
-.lightbox-nav { align-self: center; width: clamp(2rem, 4vw, 3.5rem); height: 40vh; color: var(--ink-soft); font-size: 15px; transition: color 0.2s var(--ease); }
-.lightbox-nav:hover { color: var(--ink); }
+.lightbox-nav { align-self: center; width: clamp(2rem, 4vw, 3.5rem); height: 40vh; color: var(--ink-soft); font-size: var(--type); transition: color 0.2s var(--ease); }
+.lightbox-nav:hover, .lightbox-nav:focus-visible { color: var(--ink); }
 .lightbox-prev { grid-column: 1; }
 .lightbox-next { grid-column: 5; }
 @media (max-width: 899px) {
@@ -903,6 +1699,184 @@ html:not(.js) .about:target { display: block; position: static; opacity: 1; visi
   *, *::before, *::after { transition-duration: 0.001ms !important; animation-duration: 0.001ms !important; }
 }
 
+/* ------------------------------------------------- exhibition detail panel */
+
+/*
+ * An exhibition opens on its own facts, set as the index sets them, so the row
+ * you clicked and the page it opens read as the same object.
+ */
+.reader-venue {
+  margin: 0.15rem 0 0;
+  font-size: var(--type);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: var(--lead);
+}
+.reader-when {
+  display: flex;
+  gap: clamp(0.6rem, 1.8vw, 1.8rem);
+  margin: 1.6rem 0 0;
+  font-size: var(--type);
+  font-weight: 500;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+.reader-when-year { margin-left: auto; }
+
+/* A press release opens on a statement and then settles into prose; the source
+   sets it as one paragraph, so the distinction is drawn here. */
+.reader-stated .reader-title {
+  font-size: var(--type);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: var(--lead);
+}
+.reader-stated .prose:first-of-type > p:first-child {
+  font-size: var(--type);
+  font-weight: 600;
+  text-transform: uppercase;
+  line-height: var(--lead);
+  letter-spacing: -0.01em;
+  margin-bottom: 1.2em;
+}
+.reader-stated .reader-text { padding-top: 2.5rem; }
+
+/*
+ * More of the page shows through than for a painting. The exhibition you opened
+ * came from a list, and keeping that list legible underneath — blurred, but
+ * plainly still there — is what makes the panel read as something raised over it
+ * rather than as a different page you have been taken to.
+ */
+.panel:has(.reader-stated) { background: color-mix(in srgb, var(--paper) 78%, transparent); }
+@supports not selector(:has(*)) {
+  .panel { background: color-mix(in srgb, var(--paper) 86%, transparent); }
+}
+.reader-kind {
+  margin: 0.55rem 0 0;
+  font-size: var(--type);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* ------------------------------------------------- detail panels, redesign */
+
+/* Kept as the positioning context for the arrows and the expand controls. */
+.reader { position: relative; }
+
+/*
+ * Turning the pictures. Under them, quiet, in the colour of the text — the
+ * arrows are for when you want them, not a thing the page is about.
+ */
+.reader-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.4rem;
+  margin-top: 1rem;
+}
+.reader-step {
+  color: inherit;
+  font-size: var(--type);
+  line-height: var(--lead);
+  padding: 0.35rem 0.5rem;
+  opacity: 0.55;
+  transition: opacity var(--hover) var(--ease);
+}
+.reader-step:hover, .reader-step:focus-visible { opacity: 1; }
+.reader-nav .reader-counter { margin: 0; min-width: 4.5rem; text-align: center; }
+
+/*
+ * Giving a column the whole sheet.
+ *
+ * Two brackets facing apart, which close toward each other once the column has
+ * the screen — the mark says what the next press will do, rather than what the
+ * state currently is.
+ */
+.reader-expand {
+  position: absolute;
+  top: calc(var(--bar) + 2.4rem);
+  right: 0;
+  z-index: 2;
+  color: inherit;
+  padding: 0.4rem;
+  opacity: 0.45;
+  transition: opacity var(--hover) var(--ease);
+}
+.reader-expand:hover, .reader-expand:focus-visible { opacity: 1; }
+.reader-expand > span { position: relative; display: block; width: 14px; height: 14px; }
+.reader-expand > span::before, .reader-expand > span::after {
+  content: '';
+  position: absolute;
+  width: 6px; height: 6px;
+  border: 1px solid currentColor;
+  transition: transform 0.3s var(--ease);
+}
+.reader-expand > span::before { top: 0; left: 0; border-right: 0; border-bottom: 0; }
+.reader-expand > span::after { right: 0; bottom: 0; border-left: 0; border-top: 0; }
+.reader-expand[aria-pressed='true'] > span::before { transform: translate(3px, 3px); }
+.reader-expand[aria-pressed='true'] > span::after { transform: translate(-3px, -3px); }
+
+/* The columns need somewhere to hang the button from. */
+.reader-text, .reader-figures { position: relative; }
+.reader-text { padding-right: 2.5rem; }
+
+/* Text alone: one column, and the measure opens out to the full sheet. */
+.reader.is-wide-text { grid-template-columns: minmax(0, 1fr); }
+.reader.is-wide-text .reader-figures { display: none; }
+.reader.is-wide-text .reader-text .prose { max-width: none; }
+/* With the width to do it, the run of dates spreads across the head. */
+.reader.is-wide-text .reader-when { justify-content: space-between; }
+
+/* Pictures alone: one column, centred, as much height as the screen allows. */
+.reader.is-wide-figures { grid-template-columns: minmax(0, 1fr); }
+.reader.is-wide-figures .reader-text { display: none; }
+.reader.is-wide-figures .reader-figures { justify-self: center; width: min(100%, 76rem); }
+.reader.is-wide-figures .reader-stage { height: calc(100vh - var(--bar) - 7rem); }
+.reader.is-wide-figures .reader-figure picture,
+.reader.is-wide-figures .reader-figure img { max-height: calc(100vh - var(--bar) - 9rem); }
+
+@media (max-width: 899px) {
+  .reader-text { padding-right: 2rem; }
+}
+
+/*
+ * The Colour Chart shares this composition but not its controls: it is a page
+ * you read straight through, and its pictures follow the scroll. Rendering the
+ * arrows and the expand marks there would put two controls on the page that do
+ * nothing — `figures.ts` wires only what sits inside a panel. `display: none`
+ * rather than hiding them, so they leave the tab order with the layout.
+ */
+.reader-page .reader-nav,
+.reader-page .reader-expand { display: none; }
+.reader-page .reader-text { padding-right: 0; }
+
+/*
+ * The phrases the designer sets in an italic serif — the studio, the chart, the
+ * enquiry, the project, the practice. Against the sans they read as the subject
+ * of their paragraph lifted out of it.
+ *
+ * Times New Roman italic, which the type sheet names, and which ships with
+ * macOS and Windows — so on most machines the literal face renders. It cannot
+ * be served from the site, though: Monotype licenses it with the operating
+ * system, not for the web. Tinos behind it is Steve Matteson's metric
+ * compatible cut under the SIL Open Font License, self-hosted, so a visitor
+ * without Times New Roman gets the same widths rather than whatever their
+ * browser calls a serif.
+ *
+ * Sized up a little: at the same point size Times sits visually smaller than
+ * Switzer beside it, and the phrase should read as emphasis rather than a drop.
+ * This is an adjustment, not the sheet, which gives both at 45px.
+ */
+.ink-accent {
+  font-family: 'Times New Roman', Times, 'Tinos', 'Liberation Serif', serif;
+  font-style: italic;
+  font-size: 1.06em;
+  letter-spacing: 0;
+}
+
 /*
  * The year rail: a column of colour swatches down the left edge, one per year,
  * each in a colour sampled from that year's own paintings (scripts/palette.ts).
@@ -911,8 +1885,8 @@ html:not(.js) .about:target { display: block; position: static; opacity: 1; visi
  * longer and names itself; hovering any of them draws it longer still. Clicking
  * jumps to that year in the grid.
  *
- * It is hidden while the opening pile is still moving — `stack-running` is set
- * by the script and removed when the grid has settled — so the rail cannot be
+ * It is hidden while the opening pile is still moving — it is drawn hidden and
+ * `stack-settled` is set once the grid has come to rest — so the rail cannot be
  * touched, or re-measured against, mid-animation.
  */
 .years {
@@ -966,9 +1940,39 @@ html:not(.js) .about:target { display: block; position: static; opacity: 1; visi
 .years.is-focused .year[aria-pressed='true'] .year-swatch { width: 110px; }
 .years.is-focused .year[aria-pressed='true'] .year-label { opacity: 1; transform: none; }
 
-/* Nothing that waits on the opening animation may be reachable before it ends. */
-.stack-running .years,
-.stack-running .controls { opacity: 0; pointer-events: none; }
+/*
+ * Nothing that waits on the opening animation may be reachable, or visible,
+ * before it ends.
+ *
+ * Stated the hidden way round on purpose. These used to be hidden by a class
+ * the script adds, which cannot be in place for the first paint — the markup
+ * has already been drawn by the time a module runs — so the rail appeared at
+ * full strength and was taken away again a moment later. Hiding is the initial
+ * state now, written against the `js` class the document carries before
+ * anything is painted, and the script's job is to reveal rather than to
+ * conceal. With scripting off neither class is ever set and the rail is simply
+ * there, which is right: no animation runs to wait for.
+ *
+ * The failsafe matters more than it looks. Anything hidden until a script says
+ * otherwise is lost for good if that script never arrives, so these reveal
+ * themselves after eight seconds — far longer than any pile — and the class,
+ * when it comes, cancels it.
+ */
+html.js .controls {
+  opacity: 0;
+  pointer-events: none;
+  animation: control-failsafe 0.01s linear 8s forwards;
+}
+
+html.js.stack-settled .controls {
+  opacity: 1;
+  pointer-events: auto;
+  animation: none;
+}
+
+@keyframes control-failsafe {
+  to { opacity: 1; pointer-events: auto; }
+}
 
 @media (max-width: 899px) {
   /* No room for a rail beside the grid on a phone: it lies along the foot. */
@@ -990,5 +1994,920 @@ html:not(.js) .about:target { display: block; position: static; opacity: 1; visi
   .year.is-current .year-label { display: block; opacity: 1; transform: none; font-size: 9px; }
   /* Clear of the rail along the foot, and centred rather than tucked in a corner. */
   .controls { bottom: 5.4rem; right: auto; left: 0; justify-content: center; width: 100%; }
+}
+
+/* ------------------------------------------------------------ what's color */
+
+/*
+ * The opening view: everyone who has answered the question, set as one run of
+ * names, with the three editions introduced underneath.
+ *
+ * This is the first thing the site shows now, in place of the gallery, so it
+ * carries the weight the gallery used to. It is a page of names and nothing
+ * else above the fold, which is the point — the project is the people in it.
+ */
+.wc {
+  /* Past this the type hits its clamp ceiling while a percentage measure keeps
+     widening, which would run the justified columns out to a hundred
+     characters. Freezing the container keeps every proportion on this page. */
+  max-width: 2160px;
+  margin: 0 auto;
+  padding: calc(var(--bar) + var(--wc-top, 15.92vw)) var(--pad) 14vh;
+}
+
+/*
+ * The names, as a paragraph rather than a list.
+ *
+ * Centred as a block of text — each line centred within the measure, which is
+ * how the sheet sets it: the lines are ragged on both sides and balanced about
+ * the middle, not justified. The measure is narrower than the page so the run
+ * breaks into the same kind of short lines the sheet has; at full width it
+ * would be four very long ones and would read as a credit roll.
+ */
+.wc-names {
+  /*
+   * Measured off the sheet, which is a 1652px render of a 1565px content
+   * column, so everything transfers as a fraction of that: the widest line
+   * runs 82.4% of it, which puts the measure a shade above that and no more —
+   * wider and the wrap goes slack, narrower and it breaks early.
+   *
+   * The type is the same 40px the rest of the site runs at (cap 24 of 1565
+   * scales to 27.4 of our 1786, and 40px gives 27.2), on 49px of leading:
+   * 43/1565 restated, which is 1.227 against the font.
+   */
+  max-width: var(--wc-measure, 84%);
+  margin: 0 auto;
+  text-align: center;
+  text-wrap: balance;
+  font-size: clamp(1.05rem, 2.1436vw, 2.75rem);
+  font-weight: 500;
+  line-height: var(--wc-leading, 1.227);
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+/*
+ * A name, and the colour its answer was given.
+ *
+ * The swatch sits behind the name with the name knocked out of it, which is
+ * how the sheet draws it — rgb(245, 192, 65) behind white there. Measured off
+ * that mockup the block runs about 9px to the left of the first glyph and 7 to
+ * the right of the last at a 28px cap, so the padding is a fifth of an em
+ * either side; the height comes from the line box rather than from padding, or
+ * a hovered name would push its own line taller and move the whole paragraph.
+ *
+ * `box-decoration-break` matters: a name that falls across a line break would
+ * otherwise get the swatch's left edge on one line and nothing on the other.
+ */
+.wc-name {
+  color: inherit;
+  text-decoration: none;
+  padding: 0 0.2em;
+  margin: 0 -0.2em;
+  border-radius: 0;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  background-color: transparent;
+  transition: background-color var(--hover) var(--ease), color var(--hover) var(--ease);
+}
+@media (hover: hover) {
+  .wc-name:hover {
+    background-color: var(--swatch, var(--ink));
+    /* Knocked out in whichever of paper or ink the swatch can carry. The
+       palette runs to a near-white off-white, and white on that is not faint,
+       it is absent. */
+    color: var(--swatch-ink, var(--paper));
+  }
+}
+.wc-name:focus-visible {
+  background-color: var(--swatch, var(--ink));
+  color: var(--swatch-ink, var(--paper));
+  outline: none;
+}
+
+/* The comma between two names belongs to neither, so it stays out of both
+   swatches and keeps the ink colour however its neighbours answer. */
+.wc-sep { color: var(--ink); }
+
+/*
+ * The three introductions, across the foot of the view.
+ *
+ * Ordered I, II, III left to right — the opposite of the newest-first the rest
+ * of the site keeps, because these are chapters of one project rather than a
+ * list of work, and the sheet sets them in that order.
+ *
+ * Each column is the control for its edition, so the whole thing is a link:
+ * what you are pointing at when you decide to read one is the text itself.
+ */
+.wc-intros {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* Three equal columns, 24px apart of 1565 — 1.468vw once scaled. */
+  gap: var(--wc-gutter, 1.468vw);
+  align-items: start;
+  margin-top: var(--wc-intro-gap, 8.464vw);
+}
+
+.wc-intro {
+  display: block;
+  color: var(--ink);
+  text-decoration: none;
+  transition: opacity var(--hover) var(--ease);
+}
+@media (hover: hover) {
+  .wc-intros:hover .wc-intro { opacity: 0.45; }
+  .wc-intros:hover .wc-intro:hover { opacity: 1; }
+}
+/* The answer hovering gives, rather than a ring around it. */
+.wc-intro:focus-visible { opacity: 1; }
+.wc-intros:focus-within .wc-intro:not(:focus-visible) { opacity: 0.45; }
+
+.wc-intro-title {
+  margin: 0 0 var(--wc-title-gap, 0.87em);
+  /* Heading and body are one size on the sheet: cap 17 against the names' 24,
+     so 40 x 17/24 = 28.3px, which is 1.5184vw at the width they were drawn. */
+  font-size: clamp(0.9rem, 1.5184vw, 1.9rem);
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+/* The numeral rides high after the title, as the sheet sets it. */
+.wc-intro-title sup {
+  font-size: 0.62em;
+  vertical-align: super;
+  line-height: 0;
+}
+
+.wc-intro-text {
+  font-size: clamp(0.9rem, 1.5184vw, 1.9rem);
+  /* 26px of leading on a 17px cap — tighter than the names, as the sheet has it. */
+  line-height: 1.048;
+  letter-spacing: 0;
+}
+.wc-intro-text > * { margin: 0 0 0.9em; }
+.wc-intro-text > :last-child { margin-bottom: 0; }
+
+@media (max-width: 899px) {
+  .wc { padding-top: calc(var(--bar) + 6vh); }
+  .wc-names { max-width: none; line-height: 1.18; }
+  .wc-intros { grid-template-columns: 1fr; gap: 2.5rem; margin-top: 3rem; }
+  /* No pointer, so nothing is ever dimmed and every column reads at full strength. */
+  .wc-intros:hover .wc-intro { opacity: 1; }
+}
+
+/* ------------------------------------------------- what's color, one edition */
+
+/*
+ * An edition's own page: its numeral, its names narrowed to the people who
+ * answered that time, and their answers below.
+ *
+ * Measured off the designer's sheet, which is a 1576px render of a 1467px
+ * content column, so every figure here is that measurement restated against
+ * ours: three columns at 32.79% with a 0.82% gutter, the name at 1.50% cap
+ * (which is the same 40px the rest of the site runs at), the role, the colour
+ * reference and the answer all at 0.78% cap, which is a shade over half the
+ * name.
+ */
+.wc-numeral {
+  margin: 0 0 var(--wc-numeral-gap, 2.4vw);
+  text-align: center;
+  font-size: clamp(0.9rem, 1.5184vw, 2.05rem);
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.wc-edition-intro {
+  max-width: var(--wc-measure, 84%);
+  margin: var(--wc-intro-gap, 8.464vw) auto 0;
+  text-align: center;
+  font-size: clamp(0.9rem, 1.5184vw, 2.05rem);
+  line-height: 1.048;
+  letter-spacing: 0;
+}
+.wc-edition-intro > * { margin: 0 0 0.9em; }
+.wc-edition-intro > :last-child { margin-bottom: 0; }
+
+/*
+ * The answers, flowing down three columns.
+ *
+ * CSS columns rather than a grid, because the sheet fills each column in turn.
+ * Its three columns hold four, four and five entries over the same vertical
+ * extent, which no row-aligned grid can do, and every entry's position is
+ * predicted by the length of the answer above it rather than by any shared
+ * row. The gutter is 0.82% of the content column — 12px of 1467 — which is
+ * far tighter than the 4vw first guessed at.
+ */
+/*
+ * One column, not the sheet's three.
+ *
+ * The three columns were drawn around type at half this size. Set at the same
+ * size as everything else on the site — which is what was asked for, and what
+ * the names beside these answers were already at — a third of the width leaves
+ * about fifteen characters to a line, which justification turns into gaps and
+ * hyphenation turns into a ladder. So the column count follows the type.
+ */
+.wc-answers {
+  margin-top: var(--wc-answers-gap, 7vw);
+  columns: 1;
+}
+
+.wc-answer {
+  /* An entry split across a column boundary would put a name at the foot of
+     one column and its answer at the head of the next. */
+  break-inside: avoid;
+  display: grid;
+  /*
+   * The role track is capped rather than left to size itself.
+   *
+   * At `auto` it took its max-content width, and edition I's roles are
+   * bilingual — "Biòleg especialitzat en neurociència aplicada a l'educació /
+   * biologist, education and neuroscience" — so the name track was squeezed to
+   * nothing and five names printed on top of their own roles at 1866, eleven
+   * at 1100. The name now holds at least 60% of the column and a long role
+   * wraps instead.
+   */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 30%);
+  align-items: start;
+  column-gap: 0.8rem;
+  margin: 0 0 var(--wc-answer-gap, 9.78%);
+}
+
+.wc-answer-name {
+  grid-column: 1;
+  margin: 0;
+  font-size: clamp(1.05rem, 2.1436vw, 2.9rem);
+  font-weight: 500;
+  /* 32px of leading on a 22px cap in the sheet, for the names that wrap. */
+  line-height: 0.974;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+.wc-answer-alias { font-weight: 400; text-transform: none; }
+.wc-answer-alias::before { content: ', '; }
+
+/*
+ * The role and the colour reference, ranged right against the column edge.
+ *
+ * Cap-top aligned with the name's cap top rather than sitting on its baseline,
+ * which is how the sheet places it: the role's caps are half the height of the
+ * name's, so a shared baseline would drop it ten pixels. The padding is what
+ * carries that alignment, since the two have different line boxes.
+ */
+.wc-answer-meta {
+  grid-column: 2;
+  margin: 0;
+  padding-top: var(--wc-meta-shift, 0.46em);
+  display: grid;
+  justify-items: end;
+  gap: var(--wc-meta-gap, 1.1em);
+  text-align: right;
+}
+.wc-answer-role,
+.wc-answer-code {
+  font-size: clamp(1.05rem, 2.1436vw, 2.75rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+/*
+ * The one place on the site where the colour is the type rather than behind
+ * it, as the sheet has it: it sets AC 002 RED BROWN in a red brown, sampled
+ * at #8c4b3a. Darkened first where it has to be — a third of this palette
+ * falls under 3:1 against white set literally, and NATURAL OFF WHITE vanishes
+ * — with the hue kept and only the lightness moved.
+ */
+.wc-answer-code { color: var(--swatch, var(--ink)); }
+
+.wc-answer-text {
+  grid-column: 1 / -1;
+  margin-top: var(--wc-answer-text-gap, 1.6vw);
+  font-size: clamp(1.05rem, 2.1436vw, 2.75rem);
+  /* The page's own leading now, not the near-solid setting the small type had:
+     at this size solid lines close up into a block. */
+  line-height: var(--wc-leading, 1.227);
+  letter-spacing: 0;
+  /* Justified, as the sheet sets them — its right edges hold to within two
+     pixels over ten separate blocks while the word spacing visibly varies.
+     Hyphenated, or a column this narrow opens rivers; the prefix is for Safari
+     before 17, which otherwise drops hyphenation and gets the rivers. */
+  text-align: justify;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+.wc-answer-text > * { margin: 0; }
+/* A second paragraph is indented rather than spaced, as the sheet indents it. */
+.wc-answer-text > * + * { text-indent: var(--wc-indent, 1.98%); }
+
+.wc-back {
+  margin: var(--wc-answers-gap, 7vw) 0 0;
+  text-align: center;
+  font-size: clamp(1.05rem, 2.1436vw, 2.75rem);
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+.wc-back a { color: var(--ink); text-decoration: none; padding: 0 0.2em; }
+.wc-back a:hover, .wc-back a:focus-visible { background: var(--ink); color: var(--paper); outline: none; }
+
+.wc-answers-none {
+  margin: var(--wc-answers-gap, 7vw) auto 0;
+  max-width: 44ch;
+  text-align: center;
+  font-size: clamp(0.78rem, 1.104vw, 1.5rem);
+  line-height: 1.22;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 1099px) {
+  .wc-answer { grid-template-columns: minmax(0, 1fr) minmax(0, 36%); }
+}
+@media (max-width: 899px) {
+  /* The intro follows the names to full width; it was keeping an 84% measure
+     inside an already-inset column, so the two sat on different margins. */
+  .wc-edition-intro { max-width: none; }
+}
+@media (max-width: 719px) {
+  /* The role goes under the name rather than squeezing it. */
+  .wc-answer { grid-template-columns: minmax(0, 1fr); }
+  .wc-answer-meta { grid-column: 1; justify-items: start; text-align: left; padding-top: 0.3em; }
+}
+
+/* ------------------------------------------------------- the opening film */
+
+/*
+ * The bar does three things in turn, and the whole of it is one `position:
+ * sticky` with both offsets set.
+ *
+ *   1. It holds on the middle line of the screen while the film runs behind it.
+ *   2. The film's bottom edge rises to meet it, and from there the bar travels
+ *      on that edge — sitting under the film, never over it.
+ *   3. It reaches the top and stays there for the rest of the page.
+ *
+ * Sticky clamps a box between two limits rather than pinning it to one. Give it
+ * `top: 0` and `bottom: (100vh - bar) / 2` and its screen position becomes
+ * clamp(0, natural, middle): too low and the bottom offset lifts it to the
+ * middle, too high and the top offset holds it at zero, and in between it
+ * simply travels with the page. Those three clauses are the three phases, and
+ * no script is involved.
+ *
+ * For phase two to land on the film's edge, the bar's position in normal flow
+ * has to be that edge: hence the 100vh top margin, which puts it exactly at the
+ * film's bottom. `main` is then pulled up by that margin plus the bar's own
+ * height, so the film still starts at the top of the page and runs behind it.
+ *
+ * The bar is a child of <body> and not of the film on purpose. Sticky holds
+ * only while its containing block is in view, so inside the film it would come
+ * unstuck and leave with it — which is what the reference does and the opposite
+ * of what is wanted here.
+ */
+.has-film {
+  --film-bar: 4.2rem;
+  /* The film's height, and with it every figure below: where the bar rests,
+     where the two states swap, how far the film drifts. One number to change. */
+  --film-h: 100vh;
+
+  /*
+   * How far above the film's bottom edge the bar settles, once it has stopped
+   * travelling with it.
+   *
+   * With this at nil the bar's top sits exactly on that edge, and the type sits
+   * 21px lower still — the room a 67px bar leaves above a 21px line when the
+   * line is centred in it. That 21px is the gap you see between the film and
+   * the words. This lifts the bar by a fifth of it. Raise it to close the gap
+   * further; 21px would put the type's own top on the film's edge, and more
+   * than that would run the words into the picture.
+   */
+  --film-lift: 50px;
+}
+
+/*
+ * Phase one: fixed where it rests over the film. Genuinely fixed, so the
+ * browser holds it there without anything having to keep putting it back — the
+ * earlier version compensated for the scroll with a transform and shook,
+ * because a composited scroll outruns script and the bar arrived a frame behind.
+ *
+ * It rests on the middle line of the screen. The mark below marks the scroll at
+ * which the film's bottom edge arrives there, and the two have to be derived
+ * from the same figures or the states would disagree about where the bar is at
+ * the moment they swap.
+ */
+.has-film .top {
+  position: fixed;
+  top: calc((var(--film-h) - var(--film-bar)) / 2);
+  height: var(--film-bar);
+  padding-top: 0;
+  padding-bottom: 0;
+  /* One row in a taller box: centre it rather than leaving it on the baseline. */
+  align-content: center;
+  margin-top: 0;
+}
+.has-film main { margin-top: 0; }
+
+/*
+ * Phases two and three, from the moment the film's bottom edge reaches the
+ * middle line. The bar's place in flow is that edge — hence the screen of top
+ * margin — so it travels on it and `top: 0` catches it at the top and keeps it.
+ *
+ * `main` gives back exactly what the bar's margin and height take, so the film
+ * occupies the same space in both states and the page is the same height in
+ * both. Nothing reflows when they swap and the scroll cannot jump.
+ */
+.has-film.is-film-past .top {
+  position: sticky;
+  top: 0;
+  margin-top: calc(var(--film-h) - var(--film-lift));
+}
+.has-film.is-film-past main { margin-top: calc(-1 * var(--film-h) + var(--film-lift) - var(--film-bar)); }
+
+/* Where the two states agree, and so where the swap happens: the scroll at
+   which the film's bottom edge reaches the bar's resting place, which is the
+   screen height less that resting place. Placed by the stylesheet so the
+   arithmetic lives in one file; the observer only watches. */
+.wc-film-mark {
+  position: absolute;
+  left: 0;
+  top: calc((var(--film-h) + var(--film-bar)) / 2 - var(--film-lift));
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+.wc-film {
+  position: relative;
+  /* Behind the bar, which carries z-index 40 and blends against this. */
+  z-index: 0;
+  height: var(--film-h);
+  overflow: hidden;
+  /* The poster shows through until the first frame paints, and is what remains
+     when the film is withheld for reduced motion. */
+  background: var(--ink) var(--film-poster, none) center / cover no-repeat;
+}
+
+/*
+ * Taller than the frame it shows through, and hung above it, so there is film
+ * to spare when the parallax below slides it down.
+ */
+.wc-film-video {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: calc(-0.15 * var(--film-h));
+  width: 100%;
+  height: calc(1.15 * var(--film-h));
+  object-fit: cover;
+}
+
+/*
+ * The film lags the page, so it reads as sinking beneath it.
+ *
+ * Over the screen it takes to scroll past, the film is slid down 15vh while the
+ * page carries it up 100vh: it travels at 0.85 of the scroll, and the white
+ * below appears to draw over it rather than merely follow it. That is the whole
+ * effect, and it wants to stay small — at much more than this it stops reading
+ * as depth and starts reading as the film being dragged.
+ *
+ * Driven by the scroll itself rather than by script. A scroll-driven animation
+ * is handled where the scrolling is handled, so it cannot fall a frame behind
+ * the way the bar did when script was moving it. Browsers without it simply
+ * play the film without the drift, which is why the whole thing sits behind a
+ * support query and nothing else depends on it.
+ */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .wc-film-video {
+      animation: film-sink linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 var(--film-h);
+    }
+  }
+}
+
+@keyframes film-sink {
+  from { transform: translateY(0); }
+  to { transform: translateY(calc(0.15 * var(--film-h))); }
+}
+
+/*
+ * No air above the title: its mask has to begin exactly where the film ends.
+ *
+ * That is what makes the reveal an overlay rather than an effect nearby — the
+ * mask's top edge and the film's bottom edge are the same line at every scroll
+ * position, because the film is a screen tall and this is the next thing in
+ * flow. The title slides down from behind that line, so it emerges from under
+ * the film. The air the page wants is below the title instead.
+ */
+.has-film .wc {
+  padding-top: 0;
+}
+
+/*
+ * Someone who has asked for less motion gets the opening frame as a still. The
+ * film is hidden rather than removed so the poster behind it stands in place.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .wc-film-video { display: none; }
+}
+
+@media (max-width: 899px) {
+  /* A half-screen of film is enough on a phone; a full one is a wall. Set on
+     the one variable, so the bar and the swap follow it. */
+  .has-film { --film-h: 70vh; }
+}
+
+/*
+ * With scripting off the bar is simply the bar: fixed at the top, as on every
+ * other page. The three-phase motion is an enhancement and is written as one —
+ * the film still plays and the page still reads, it just opens with the bar
+ * where a visitor already expects it rather than across the middle.
+ */
+html:not(.js) .has-film .top {
+  position: fixed;
+  top: 0;
+  margin-top: 0;
+  height: auto;
+  padding-top: 1.6rem;
+  padding-bottom: 1rem;
+}
+html:not(.js) .has-film main { margin-top: 0; }
+
+/*
+ * No give at the top of the film.
+ *
+ * Scrolling up from the top of a page normally rubber-bands, and what shows in
+ * the gap is the document's own ground — white — so the film appeared to peel
+ * away from a blank sheet. The page is asked not to overscroll instead, which
+ * is the only way to refuse it: the gap is drawn by the compositor, outside
+ * anything a stylesheet can paint, so there is nothing to colour in.
+ *
+ * Set through `:has` because it has to land on the scrolling element itself,
+ * and what identifies this page is a class on the body. Scoped to this page on
+ * purpose — elsewhere the bounce is the platform's own behaviour and there is
+ * nothing behind the page to catch anyone out. The one cost is pull-to-refresh
+ * on Android, which goes with it.
+ */
+html:has(body.has-film) {
+  overscroll-behavior-y: none;
+}
+
+/*
+ * No scroll anchoring across the hand-over.
+ *
+ * At the moment the bar trades `fixed` for `sticky` it enters the page's flow,
+ * and the browser may answer a layout change by shifting the scroll to keep
+ * what you were reading still. Here that would be shifting the very thing that
+ * caused it, and it is not needed: `main` gives back exactly what the bar's
+ * margin and height take, so nothing above or below actually moves. Turning
+ * anchoring off removes a correction that can only make things worse.
+ */
+.has-film,
+.has-film main {
+  overflow-anchor: none;
+}
+
+/*
+ * The standing note, above the names.
+ *
+ * Set to the page's own margins rather than the names' measure: the names are
+ * pulled in to break into short centred lines, which is right for a roll-call
+ * and wrong for a sentence. This runs the full width between the margins and
+ * is justified, so three or four lines sit as a block under the film and the
+ * names begin below it.
+ */
+.wc-lead {
+  margin: 0 0 var(--wc-lead-gap, 7vw);
+  font-size: clamp(1.05rem, 2.1436vw, 2.75rem);
+  line-height: var(--wc-leading, 1.227);
+  letter-spacing: 0;
+  text-align: justify;
+  /* A measure this wide opens rivers without it. */
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+/* The last line of a justified block is set flush left, so on its own it would
+   sit short against a full-width rule of text; centring the remainder is not
+   wanted here — the block reads as a paragraph, not as a plate. */
+.wc-lead:last-child { margin-bottom: 0; }
+
+@media (max-width: 899px) {
+  /* Justification needs words per line to spend; at a phone's measure it
+     spends them on gaps instead. */
+  .wc-lead { text-align: left; }
+}
+
+/* Four of the second edition answered with pictures. Said plainly rather than
+   left as a name with nothing under it, which would read as a missing answer
+   rather than as the answer it was. */
+.wc-answer-images {
+  grid-column: 1 / -1;
+  margin-top: var(--wc-answer-text-gap, 1.6vw);
+  margin-bottom: 0;
+  font-size: clamp(1.05rem, 2.1436vw, 2.75rem);
+  line-height: var(--wc-leading, 1.227);
+  letter-spacing: 0;
+  color: var(--ink-soft);
+}
+
+/* ------------------------------------------------- the first edition's sheet */
+
+/*
+ * The first edition keeps the setting it was drawn with: three columns of small
+ * type under full-size names.
+ *
+ * That layout is the designer's, measured off her sheet — the gutter is 12px of
+ * 1467, the answers are set almost solid at 16.4px of leading on an 11.5px cap,
+ * and the three columns hold four, four and five entries over one vertical
+ * extent because each is filled in turn. It only works at that size, which is
+ * why the other two editions, now set at the page's size, had to give up the
+ * columns. This edition was asked to keep it, so everything the larger type
+ * changed is put back here and nowhere else.
+ */
+.wc-edition-i .wc-answers {
+  columns: 3;
+  column-gap: var(--wc-gutter-tight, 0.782vw);
+}
+
+.wc-edition-i .wc-answer {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 36%);
+}
+
+.wc-edition-i .wc-answer-role,
+.wc-edition-i .wc-answer-code,
+.wc-edition-i .wc-back {
+  font-size: clamp(0.66rem, 1.104vw, 1.5rem);
+}
+
+.wc-edition-i .wc-answer-text {
+  font-size: clamp(0.66rem, 1.104vw, 1.5rem);
+  /* 16.4px of leading on an 11.5px cap: these are set almost solid. */
+  line-height: 0.97;
+}
+
+@media (max-width: 1099px) {
+  .wc-edition-i .wc-answers { columns: 2; }
+  .wc-edition-i .wc-answer { grid-template-columns: minmax(0, 1fr) minmax(0, 42%); }
+}
+
+@media (max-width: 719px) {
+  .wc-edition-i .wc-answers { columns: 1; }
+  /* One column is wide enough to put the role back beside the name. */
+  .wc-edition-i .wc-answer { grid-template-columns: minmax(0, 1fr) minmax(0, 36%); }
+  .wc-edition-i .wc-answer-meta { justify-items: end; text-align: right; padding-top: var(--wc-meta-shift, 0.46em); }
+}
+
+/* ------------------------------------------- the opening view, by edition */
+
+/*
+ * The names are set in three blocks, one per edition, each under its numeral.
+ * The gap between them is the only new figure: 33 of 761 in the reference.
+ */
+.wc-group + .wc-group {
+  margin-top: var(--wc-group-gap, 4.34vw);
+}
+
+/* ------------------------------------------- the third edition's own style */
+
+/*
+ * The third edition is set centred on one axis: the name, then the role, then
+ * the colour, then the answer beneath them, each centred under the last.
+ *
+ * Measured off the reference, where everything shares a centre line. The role
+ * is four fifths of the name's size and the colour reference half of it; the
+ * answer keeps the page's size and the roster's measure — 66.3% of the frame,
+ * against the 66.0% the names above it hold, which is the same column. The
+ * answer sits 1.69 line pitches under the colour and 3.83 below the last line
+ * before the next name.
+ *
+ * Ragged rather than justified, and unhyphenated: centred text has no edge to
+ * hold, so justification has nothing to do and hyphens would only break words
+ * for no gain.
+ */
+.wc-edition-iii .wc-answer {
+  display: block;
+  text-align: center;
+  font-size: clamp(1.05rem, 2.1436vw, 2.75rem);
+  margin: 0 auto 4.69em;
+}
+
+.wc-edition-iii .wc-answer-name {
+  font-size: 1em;
+  line-height: var(--wc-leading, 1.227);
+  margin: 0;
+}
+
+.wc-edition-iii .wc-answer-meta {
+  display: block;
+  /*
+   * Reset, not left to the block display to make irrelevant. The rule this
+   * overrides sets `justify-items: end` for its grid, and a block container
+   * honours that too in current Chromium — the role and the colour kept being
+   * shrink-wrapped and pushed to the right edge while everything around them
+   * was centred, with nothing in the cascade that looked like it was doing it.
+   */
+  justify-items: center;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
+
+.wc-edition-iii .wc-answer-role {
+  display: block;
+  font-size: 0.8em;
+  line-height: var(--wc-leading, 1.227);
+}
+
+.wc-edition-iii .wc-answer-code {
+  display: block;
+  font-size: 0.5em;
+  line-height: var(--wc-leading, 1.227);
+}
+
+.wc-edition-iii .wc-answer-text {
+  max-width: 66.3%;
+  margin: 2.08em auto 0;
+  font-size: 1em;
+  line-height: var(--wc-leading, 1.227);
+  text-align: center;
+  -webkit-hyphens: none;
+  hyphens: none;
+}
+/* Centred paragraphs are separated by a line rather than indented — an indent
+   needs a left edge to measure from. */
+.wc-edition-iii .wc-answer-text > * + * {
+  text-indent: 0;
+  margin-top: var(--wc-leading, 1.227em);
+}
+
+/* ------------------------------------------------------------ the title */
+
+/*
+ * The words the film gives way to, set as large as the screen will hold them.
+ *
+ * One line, never wrapped, so the size is the only thing deciding whether it
+ * fits: the measure is the page between its margins and the type is sized to
+ * fill it. `white-space: nowrap` is what makes that a fact rather than a hope —
+ * without it the line would break and the size would stop meaning anything.
+ */
+.wc-title {
+  margin: 0;
+  /*
+   * Sized off the room it has rather than off the window, because the margin
+   * is a clamp and the page is capped at 2160: at 13vw it filled the line at
+   * 1600 and overran it at 1200, where the margin stops shrinking. Measured,
+   * this line is 7.24 times its own size wide, so dividing the available width
+   * by 7.3 fills it to within a per cent at every width there is.
+   */
+  font-size: var(--wc-title-size, calc((min(100vw, 2160px) - 2 * var(--pad)) / var(--wc-title-fit, 10)));
+  font-weight: 700;
+  line-height: var(--wc-title-lead, 0.8);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  text-align: center;
+  white-space: nowrap;
+}
+
+
+/* The standing note is set bold, with the title above it. */
+.wc-lead { font-weight: 700; }
+
+/*
+ * A name on an edition page points at that person's answer further down it, so
+ * it travels rather than jumps — the same as the heading in the bar, and for
+ * the same reason: it should be plain that the answer is on this page.
+ *
+ * On the scrolling element, which is why it is reached through `:has`. Only
+ * these pages: the gallery moves the page itself to settle its grid, and a
+ * smooth scroll there would animate something meant to be instant.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  html:has(.wc-edition) { scroll-behavior: smooth; }
+}
+
+/* Clear of the fixed bar when an answer is scrolled to. */
+.wc-answer { scroll-margin-top: var(--wc-answer-anchor, 7rem); }
+
+/*
+ * The title is wiped up from under the film, not faded in.
+ *
+ * A mask the height of the line, and the line held above it until the scroll
+ * lets it down into view — so what you see is an edge travelling up the
+ * letters, which is the film's own bottom edge leaving. It reads as the words
+ * having been lying under the film all along rather than as something
+ * appearing on top of the page.
+ *
+ * The travel runs over exactly the stretch in which the film leaves: it begins
+ * where the bar locks onto the film's bottom edge and ends where that edge
+ * reaches the top of the screen. The same two figures the bar's own states are
+ * divided by, so the wipe and the film's departure are one movement.
+ *
+ * It starts a little past its own height because the line box is set under 1 —
+ * at a flat 100% a sliver of the letters would still show past the mask.
+ *
+ * Three knobs, at the top of this rule and in the keyframes below it:
+ *   --wc-title-size   how big the words are. Unset, they are sized to fill the
+ *                     line exactly; give it a length to override that.
+ *   --wc-title-lead   the height of the band they sit in, as a multiple of the
+ *                     size. This is also the height of the mask, so it is what
+ *                     decides how far the words travel.
+ *   --wc-title-from   where they come from. 105% rises from below the line;
+ *                     -105% comes down from behind the film instead.
+ */
+.wc-title-mask {
+  overflow: hidden;
+  margin: 0 0 var(--wc-title-gap, 7vw);
+}
+.wc-title-mask .wc-title {
+  margin: 0;
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .has-film .wc-title {
+      animation: wc-title-wipe linear both;
+      animation-timeline: scroll(root block);
+      animation-range: calc((var(--film-h) + var(--film-bar)) / 2) var(--film-h);
+    }
+  }
+}
+
+@keyframes wc-title-wipe {
+  from { transform: translateY(var(--wc-title-from, -105%)); }
+  to { transform: translateY(0); }
+}
+
+/* --------------------------------------------- the lean on a single work */
+
+/*
+ * THE HOVER — the numbers to change are all here.
+ *
+ * The painting leans towards the pointer as it crosses it. Every figure the
+ * effect uses is a custom property on `.detail-plate`, read by the script
+ * rather than written into it, so this block is the whole of the tuning and
+ * nothing has to be touched in JavaScript.
+ *
+ *   --tilt-max      how far it leans at the very edge. 0deg turns the lean off
+ *                   and leaves the lift and the shadow.
+ *   --tilt-depth    the perspective. Smaller is a stronger, more wide-angle
+ *                   lean for the same number of degrees; larger is flatter.
+ *   --tilt-lift     how much it grows while the pointer is on it. 1 is none.
+ *   --tilt-settle   how long it takes to come back to rest once the pointer
+ *                   leaves. It does not apply while the pointer is on it,
+ *                   because the painting has to track the hand without lag.
+ *   --tilt-shadow   the shadow under the painting. One value, not animated:
+ *                   see the note below.
+ *
+ * Set --tilt-max to 0deg and --tilt-lift to 1 to switch the whole thing off.
+ *
+ * The shadows are deliberately faint. These are cut-outs with no background of
+ * their own, sitting on the paper, so a heavy shadow reads as a box around the
+ * painting rather than as the painting standing off the page.
+ */
+.detail-plate {
+  --tilt-max: 6deg;
+  --tilt-depth: 1100px;
+  --tilt-lift: 1.015;
+  --tilt-settle: 620ms;
+  --tilt-shadow: 0 1.6rem 3rem rgb(0 0 0 / 0.14);
+
+  perspective: var(--tilt-depth);
+}
+
+/*
+ * The transform goes on an inner element, not on the figure: the figure holds
+ * the perspective, and an element cannot be both the perspective and the thing
+ * seen through it.
+ */
+/*
+ * Sized to the painting, not to the column: the figure is a grid cell as wide
+ * as its track, and the lean is bound to this, so the hover begins where the
+ * picture does rather than anywhere in the empty half of the page.
+ */
+.detail-plate-inner {
+  display: block;
+  width: fit-content;
+  transform-style: preserve-3d;
+  will-change: transform;
+  filter: drop-shadow(var(--tilt-shadow));
+  transition: transform var(--tilt-settle) var(--ease);
+}
+
+/*
+ * `drop-shadow` and not `box-shadow`, because these have no background: a box
+ * shadow would draw a rectangle behind a painting that is not rectangular, and
+ * the shadow would show in the transparent corners.
+ */
+.detail-plate.is-tilting .detail-plate-inner {
+  transition: none;
+  filter: drop-shadow(var(--tilt-shadow));
+}
+
+/*
+ * No lean for anyone who has asked for less motion. Done here rather than in
+ * the script, so the one place these are decided stays the one place.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .detail-plate { --tilt-max: 0deg; --tilt-lift: 1; }
 }
 

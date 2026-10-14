@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>What’s Color? (II) — Claudia Valsells</title>
+<meta name="description" content="What’s Color? edition II — 23 people, 23 of them on what color is." />
+<link rel="preload" href="/prototype2/fonts/Switzer-Variable.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="/prototype2/site.css" />
+<link rel="modulepreload" href="/prototype2/js/env.js" />
+<link rel="modulepreload" href="/prototype2/js/text-roll.js" />
+<link rel="modulepreload" href="/prototype2/js/transitions.js" />
+<link rel="modulepreload" href="/prototype2/js/controls.js" />
+<link rel="modulepreload" href="/prototype2/js/stack.js" />
+<link rel="modulepreload" href="/prototype2/js/years.js" />
+<link rel="modulepreload" href="/prototype2/js/hover-list.js" />
+<link rel="modulepreload" href="/prototype2/js/panels.js" />
+<link rel="modulepreload" href="/prototype2/js/panel-scroll.js" />
+<link rel="modulepreload" href="/prototype2/js/figures.js" />
+<link rel="modulepreload" href="/prototype2/js/lightbox.js" />
+<link rel="modulepreload" href="/prototype2/js/cursor.js" />
+<link rel="modulepreload" href="/prototype2/js/film.js" />
+<link rel="modulepreload" href="/prototype2/js/tilt.js" />
+<link rel="modulepreload" href="/prototype2/js/paging.js" />
+<link rel="modulepreload" href="/prototype2/js/index.js" />
+<script>document.documentElement.classList.add('js');
+// The loading screen belongs to arriving at the site, not to each page of it.
+// Decided here, before the first paint, so pages after the first never show it
+// even for a frame.
+try { if (sessionStorage.getItem('cv-seen')) document.documentElement.classList.add('loaded') } catch (e) {}</script>
+</head>
+<body>
+<div class="loader" data-loader aria-hidden="true">
+    <p>CLAUDIA VALSELLS</p><p>1969</p><p>Alzueta Gallery</p><p>Barcelona, Spain</p><p>© All Rights Reserved</p>
+  </div>
+<div class="page-veil" aria-hidden="true"></div>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="top">
+    <a class="wordmark" href="/prototype2/" data-roll>CLAUDIA VALSELLS</a>
+    <a class="top-soon" href="/prototype2/#whats-color"  data-roll>What&rsquo;s Color?</a>
+    <nav class="menu" aria-label="Primary">
+      <a
+            href="/prototype2/#about"
+            data-panel-open="about"
+            
+            data-roll
+          >About</a><a
+            href="/prototype2/artwork/"
+            
+            
+            data-roll
+          >Artwork</a><a
+            href="/prototype2/commissioned/"
+            
+            
+            data-roll
+          >Commissioned</a><a
+            href="/prototype2/exhibitions/"
+            
+            
+            data-roll
+          >Exhibitions</a><a
+            href="/prototype2/color-chart/"
+            
+            
+            data-roll
+          >Color Chart</a>
+    </nav>
+  </header>
+
+<main id="main"><div class="wc wc-edition wc-edition-ii">
+    <p class="wc-numeral" aria-hidden="true">(II)</p>
+    <h1 class="sr-only">What&rsquo;s Color? (II)</h1>
+    <p class="wc-names">
+    <a
+          class="wc-name"
+          href="#wc-plantea-estudio"
+          style="--swatch: #c96a3f; --swatch-ink: var(--paper)"
+        >Plantea Estudio</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-kal-a"
+          style="--swatch: #4a6b96; --swatch-ink: var(--paper)"
+        >Kal-a</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-elii"
+          style="--swatch: #5f7f4f; --swatch-ink: var(--paper)"
+        >Elii</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-hanghar"
+          style="--swatch: #b23a2e; --swatch-ink: var(--paper)"
+        >HANGHAR</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-montse-vicens"
+          style="--swatch: #8d8d87; --swatch-ink: var(--paper)"
+        >Montse Vicens</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-isabel-francoy"
+          style="--swatch: #e3b23c; --swatch-ink: var(--ink)"
+        >Isabel Francoy</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-tomas-lopez-amat"
+          style="--swatch: #6b4a78; --swatch-ink: var(--paper)"
+        >Tomás López Amat</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-stefano-colli"
+          style="--swatch: #3f9aa6; --swatch-ink: var(--paper)"
+        >Stefano Colli</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-conticert"
+          style="--swatch: #c96a3f; --swatch-ink: var(--paper)"
+        >ContiCert</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-un-parell-d-arquitectes"
+          style="--swatch: #4a6b96; --swatch-ink: var(--paper)"
+        >Un parell d’arquitectes</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-isla-arquitectos"
+          style="--swatch: #5f7f4f; --swatch-ink: var(--paper)"
+        >Isla arquitectos</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-auxi-galvez"
+          style="--swatch: #b23a2e; --swatch-ink: var(--paper)"
+        >Auxi Gálvez</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-escobedo-soliz"
+          style="--swatch: #8d8d87; --swatch-ink: var(--paper)"
+        >Escobedo Soliz</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-antoni-arola"
+          style="--swatch: #e3b23c; --swatch-ink: var(--ink)"
+        >Antoni Arola</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-barbara-aurell"
+          style="--swatch: #6b4a78; --swatch-ink: var(--paper)"
+        >Barbara Aurell</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-laura-castanya"
+          style="--swatch: #3f9aa6; --swatch-ink: var(--paper)"
+        >Laura Castanya</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-marc-morro"
+          style="--swatch: #c96a3f; --swatch-ink: var(--paper)"
+        >Marc Morro</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-anna-vidal"
+          style="--swatch: #4a6b96; --swatch-ink: var(--paper)"
+        >Anna Vidal</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-gema-sach"
+          style="--swatch: #5f7f4f; --swatch-ink: var(--paper)"
+        >Gema Sach</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-mariona-espinet"
+          style="--swatch: #b23a2e; --swatch-ink: var(--paper)"
+        >Mariona Espinet</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-isabel-sendra"
+          style="--swatch: #8d8d87; --swatch-ink: var(--paper)"
+        >Isabel Sendra</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-amoo"
+          style="--swatch: #e3b23c; --swatch-ink: var(--ink)"
+        >AMOO</a><span class="wc-sep">, </span><a
+          class="wc-name"
+          href="#wc-loca-studio"
+          style="--swatch: #6b4a78; --swatch-ink: var(--paper)"
+        >Loca Studio</a>
+  </p>
+
+    <div class="wc-edition-intro"><p><span>In this second edition of <em>‘What’s color?’</em> exhibition, I asked to anyone </span><span>connected to architecture or design <em>‘‘What’s color?’’. </em></span></p></div>
+
+    <div class="wc-answers"><article class="wc-answer" id="wc-plantea-estudio">
+    <h2 class="wc-answer-name">Plantea Estudio</h2>
+    <p class="wc-answer-meta">
+      
+      
+    </p>
+    <div class="wc-answer-text">
+          <p>“…opté por un amarillo dorado y un rojo vivo oscuro, y como tercer color un pardo. Se tejió la alfombra, pero con gran sorpresa mía, la fuerte y cálida vecindad del amarillo y el rojo transformó por completo el color pardo en un azul” Carl Petersen, “Colores”, 1923.</p><p>Para nosotros, como para Petersen, el color es sorprendente, innombrable, efímero, inaprensible… es el puente que se tiende entre el mundo real y nuestra imaginación. También perseguimos colores a los que no llegamos y encontramos otros que no habíamos imaginado.</p>
+        </div>
+  </article><article class="wc-answer" id="wc-kal-a">
+    <h2 class="wc-answer-name">Kal-a</h2>
+    <p class="wc-answer-meta">
+      
+      
+    </p>
+    <div class="wc-answer-text">
+          <p>Generalmente el color se educa y se concibe como un matiz plano sin profundidad pero a veces los materiales definen su procedencia en función de su tonalidad. Los diferentes aceros reflejan con diversas tonalidades, así como la madera define su procedencia y la capacidad de identificarla por un matiz específico. Una de las cuestiones que más nos preocupa es la autenticidad, que sin duda tiene una vinculación indisociable con el color.</p><p>En otro orden de cosas, el color surge a veces en lo espontáneo y mutable como es el simple estado espumoso del té verde tras su preparación. Los esmaltes en la cerámica mutan de tonalidad tras la cocción y los esmaltes atenúan el contenido. El color es una percepción en tránsito, quizá definido por el instante que cada uno elegimos.</p>
+        </div>
+  </article><article class="wc-answer" id="wc-elii">
+    <h2 class="wc-answer-name">Elii</h2>
+    <p class="wc-answer-meta">
+      
+      
+    </p>
+    <div class="wc-answer-text">
+          <p>A menudo nos preguntan por qué empleamos color en nuestros proyectos. Es una pregunta que no comprendemos. La arquitectura siempre tiene color. Es curioso comprobar cómo algunos asocian el color blanco a la ausencia de color o a la neutralidad. El famoso “cubo blanco” moderno es todo menos “neutro”. Y la idea de que la arquitectura puede ser neutral es una ficción. La arquitectura nunca es “neutral” porque nuestros cuerpos siempre están interactuando con el espacio.</p><p>Preferimos pensar cada proyecto de manera específica, tanto en su dimensión espacial, material y, también, cromática. Es decir, pensar los espacios como ambientes, desde el deseo. El objetivo no es hacerlos “neutrales” (cosa imposible) sino deseables para sus habitantes. El color es un recurso más para definir estas atmósferas.</p>
+        </div>
+  </article><article class="wc-answer" id="wc-hanghar">
+    <h2 class="wc-answer-name">HANGHAR</h2>
+    <p class="wc-answer-meta">
+      
+      
+    </p>
+    <div class="wc-answer-text">
+          <p>El color es materia. El color es yeso y agua. El color es barro cocido. El color es aceite y serrín. El color es metal extruido. El color es reflejos en un espejo. El color es luz en nuestros ojos.</p>
+        </div>
+  </article><article class="wc-answer" id="wc-montse-vicens">
+    <h2 class="wc-answer-name">Montse Vicens<span class="wc-answer-alias">Int_sight</span></h2>
+    <p class="wc-answer-meta">
+      
+      
+    </p>
+    <div class="wc-answer-text">
+          <p>Para emociones, los colores.</p>
+        </div>
+  </article><article class="wc-answer" id="wc-isabel-francoy">
+    <h2 class="wc-answer-name">Isabel Francoy</h2>
+    <p class="wc-answer-meta">
+      
+      
+    </p>
+    <div class="wc-answer-text">
+          <p>Mi vida en sí es toda una experiencia “prosaica” en torno al color. En todos los sentidos y en todos los campos. En tercero de arquitectura no encontraba mi creatividad; me sentía muy perdida así que empecé paralelamente a estudiar Arte y Diseño. Fue mi renacimiento. No era todo tan cuadriculado; había más allá de la estructura, la distribución y la orientación… había color. Justo en este momento de introspección conmigo misma, me enseñaron el color, su construcción y deconstrucción. Un lenguaje que entendía y me hacía sentir cómoda, y que era aplicable literalmente a todo.</p><p>Aquí mi vida empezó a ser una carta de colores. Con el tiempo, el color se ha convertido en mi séptimo sentido, con una paleta de colores generada de manera natural tras años de observación y obsesión por el color. Al contrario que a la mayoría, para mí el negro no representa ni tristeza ni muerte, sin embargo, y espacialmente hablando, la falta de luz, la oscuridad. Por eso, cuando tengo que pensar en el color desde el punto de vista arquitectónico, es todo un reto ya que el color ejerce un papel importante en el estado anímico de las personas que lo habitan siendo cada persona única (sin generalizar). La arquitectura despierta estados de ánimo en las personas, por lo que es tarea del arquitecto dar a esos estados de ánimo una expresión concreta. Una habitación debe parecer agradable, confortable para vivir. Un vicio secreto debe parecer un gesto de amenaza para los tribunales de justicia… Un banco está obligado a decir: “aquí su dinero está seguro, en manos de gente honesta”. Un arquitecto sólo puede conseguirlo volviendo una vez más a esos edificios del pasado que despertaron estados de ánimo en la gente. Para los chinos, el blanco es el color del luto, para nosotros, el negro. Por tanto, a nuestros arquitectos les resultaría imposible crear esos alegres estados de ánimo con pintura negra.</p>
+        </div>
+  </article><article class="wc-answer" id="wc-tomas-lopez-amat">
+    <h2 class="wc-answer-name">Tomás López Amat</h2>
+    <p class="wc-answer-meta">
+      
+      
+    </p>
+    <div class="wc-answer-text">
+          <p>“Siento el color como un vehículo de transmisión vibracional, una herramienta perceptiva de gran poder y potencia transformadora, en cualquier espacio o persona. El color es indisociable del fenómeno físico de la luz. La luz y el color son las materias de mayor carga poética y reveladora de un lugar o de un objeto, que existen en el diseño y la arquitectura, así como en la naturaleza. El color y la luz son siempre, siempre, parte del proyecto. Sin luz no hay color, o sí… el color negro: la oscuridad.</p><p>Todos tenemos un color asociado a nuestra persona, a nuestro cuerpo, a nuestra vibración. El color es energía, es la expresión perceptiva de la energía de la luz. La energía ni se crea ni se destruye, se transforma. Está en nuestras manos, en nuestros dedos, hacer el mejor uso posible de su poder de transformación en los espacios y objetos que creamos y proyectamos, mediante las prácticas artísticas y del diseño.”</p>
+        </div>
+  </article><article class="wc-answer" id="wc-stefano-colli">
+    <h2 class="wc-answer-name">Stefano Colli</h2>
+    <p class="wc-answer-meta">
+      
+      
+    </p>
+    <div class="wc-answer-text">
+          <p>En mi formación en Milán como arquitecto y diseñador a final de los 80, principios de los 90 el uso del color no estaba bien visto. Se utilizaba habitualmente el blanco u otros tonos claros y muy neutros como manifiesto de modernidad. Se iba acercando al minimalismo justo después del postmodernismo. La ausencia de colores en los espacios era un recurso común y fácil, sin compromisos diría. Asimismo durante años los arquitectos más modernos y elegantes no vestían nunca con colores: solo con negro y gris. Otra vez la negación del color, qué fácil. Nadie se atrevía a buscar la elegancia y la belleza en el color.</p><p>Solo recientemente he descubierto el color y su gran eficacia como herramienta y recurso para diseñar interiores. Gracias al encargo de un proyecto de pintura y revestimientos para los colegios públicos de Barcelona, he descubierto definitivamente lo potente que puede llegar a ser el uso del color para redefinir un espacio. En este proyecto solo podíamos pintar y puntualmente cambiar algún revestimiento. Aprovechando una acción de mantenimiento ordinario teníamos el compromiso y la oportunidad enorme de re-calificar estos lugares, de caracterizarlos. Mejorar la percepción arquitectónica de sus usuarios ha sido mi principal objetivo. Con solo pintar se puede hacer arquitectura, se puede construir. He descubierto que con la luz (existente) y el color se pueden construir muchas emociones; se puede llegar a lo más importante de las personas, las emociones.</p>
+        </div>
+  </article><article class="wc-answer" id="wc-conticert">
+    <h2 class="wc-answer-name">ContiCert</h2>
+    <p class="wc-answer-meta">
+      
+      
+    </p>
+    <div class="wc-answer-text">
+          <p>Envueltas en una neutralidad casi característica en nosotras, solemos darle un punto de fuerza al proyecto asociándolo a un solo color. En un solo espacio. Y ese es nuestro hilo conductor para guiarnos en el resto del proyecto. A esa mezcla de colores le ponemos el nombre del proyecto. Color “Elisa”, color “Narcís Oller”…</p>
+        </div>
+  </article><article class="wc-answer" id="wc-un-parell-d-arquitectes">
+    <h2 class="wc-answer-name">Un parell d’arquitectes</h2>
+    <p class="wc-answer-meta">
+      
+      
+    </p>
+    <div class="wc-answer-text">
+          <p>Hace unos años, a raíz de la rehabilitación integral, urbanización y fachadas, de una plaza del núcleo histórico de Olot, propusimos al estudio Gabinete del Color el encargo del plan del color para el casco antiguo de la ciudad. La propuesta cromática resultante se basaba en el estudio y análisis de los revestimientos antiguos de distintas casas del barrio. Nuestra imaginación nos traicionó al llevarnos a pensar, equivocadamente, que la propuesta cromática estaría inspirada en el paisaje natural volcánico de la zona. Cuando conocimos la carta, la sorpresa fue descubrir la gran variedad y vivacidad de los colores antiguos que predominaban en el paisaje urbano olotense. Contrastaban perfectamente con la gama de grises, azules y rojizos, la mayoría de tonos oscuros, procedentes de los áridos y las piedras volcánicas que constituyen la base de esas construcciones. ¡Ay, a veces, qué ilusos llegamos a ser!</p>
+        </div>
+  </article><article class="wc-answer" id="wc-isla-arquitectos">
+    <h2 class="wc-answer-name">Isla arquitectos</h2>
+    <p class="wc-answer-meta">
+      
+      
+    </p>
+    <div class="wc-answer-text">
+          <p>La Lover’s House es una vivienda en Santa María, de un llamativo color que flota entre el rojo, el rosa y el naranja, según le de la luz, que hace que la casa se funda con el terreno, una tierra fértil de viñedos en el Plà de Mallorca. La fachada rugosa de mortero pigmentado, los suelos, exteriores e interiores, y el resto de piezas de hormigón coloreado en el mismo tono, y los propios muros que encapsulan los patios semi abiertos, hacen que la luz que entra en la casa tenga esa misma calidez y adquiera cuerpo y densidad.</p><p>En la búsqueda del color probamos con diferentes tonos —terrosos, ocres, sienas…— y diferentes rugosidades, hasta que un día el promotor propuso si probábamos algo más rojizo. La muestra convenció a todos. De ahí se sacó el tono de las piezas de hormigón y los suelos, fabricados localmente en Mallorca. Con todas esas piezas ya encargadas o en fabricación, justo antes de que el albañil comenzase a atarracar la primera fachada, al promotor le dio un breve arrebato de inseguridad y susurró: “¿De verdad vamos a hacerlo todo rojo?”.</p><p>El resultado convenció a todos. Las fotos que hizo Luis no necesitaron retoque porque todas tenían esa luz espesa que lo bañaba todo, enfatizada por una ligerísima neblina que suavizaba el sol aquel día de julio. En febrero, un lector de un popular blog dejaba un comentario en el que se preguntaba cómo alguien querría vivir en una casa monocroma. En octubre, una familia sueca decidía comprar la casa y venirse a vivir todo el año a ella, aunque eso no estaba en ninguno de sus planes. Por Zoom, en la reunión que tuvimos para conocernos, nos exclamó: “Who the f*** wouldn’t want to live in this monochromatic interior!!!!”</p>
+        </div>
+  </article><article class="wc-answer" id="wc-auxi-galvez">
+    <h2 class="wc-answer-name">Auxi Gálvez</h2>
+    <p class="wc-answer-meta">
+      
+      
+    </p>
+    <div class="wc-answer-text">
+          <p>Para mí el color de un proyecto es el de los múltiples cuerpos que aloja.</p>
+        </div>
+  </article><article class="wc-answer" id="wc-escobedo-soliz">
+    <h2 class="wc-answer-name">Escobedo Soliz</h2>
+    <p class="wc-answer-meta">
+      
+      
+    </p>
+    <div class="wc-answer-text">
+          <p>“El color es materia.”</p>
+        </div>
+  </article><article class="wc-answer" id="wc-antoni-arola">
+    <h2 class="wc-answer-name">Antoni Arola</h2>
+    <p class="wc-answer-meta">
+      
+      
+    </p>
+    <div class="wc-answer-text">
+          <p>Parets Mèxic. Recopilació fotogràfica, 2009 – actualitat. El més interessant d’aquest treball: veure-hi reflectida la idiosincràsia de cada poble en els colors pintats en les façanes.</p>
+        </div>
+  </article><article class="wc-answer" id="wc-barbara-aurell">
+    <h2 class="wc-answer-name">Barbara Aurell</h2>
+    <p class="wc-answer-meta">
+      
+      
+    </p>
+    <div class="wc-answer-text">
+          <p>Como interiorista uso el color en mi vida. Mi cabeza es un color constante que cambia según el sentimiento que me transmite cada uno de mis proyectos. Con el color hago de un espacio algo especial que despierte una sensación para todo aquel que viva en él. El color es vida. Creo que los espacios transmiten el alma de las personas. Nosotros en el estudio siempre trabajamos desde el “tú cómo quieres vivir”, y este “cómo quieres vivir” no es técnicamente un espacio, es un sueño, es un feeling, son unas ganas de cómo quieres vivir las cosas. Entonces, el color ayuda a traducir esos sentimientos en el concepto de hogar que te imaginas, dotando de alma esos espacios. Me apasiona el mundo del arte y podría decir que es de donde obtengo más información a nivel de color.</p>
+        </div>
+  </article><article class="wc-answer" id="wc-laura-castanya">
+    <h2 class="wc-answer-name">Laura Castanya</h2>
+    <p class="wc-answer-meta">
+      
+      
+    </p>
+    <div class="wc-answer-text">
+          <p>“El blanc per ampliar espais, els verds per recordar la natura, el blau per fer desaparèixer amb el cel, els vermells han de ser continguts de dia o descarats de nit junt amb els daurats. El meu preferit, el color torrat de la fusta quan li dona el sol.”</p>
+        </div>
+  </article><article class="wc-answer" id="wc-marc-morro">
+    <h2 class="wc-answer-name">Marc Morro</h2>
+    <p class="wc-answer-meta">
+      
+      
+    </p>
+    <div class="wc-answer-text">
+          <p>“Rojo imprimación.”</p>
+        </div>
+  </article><article class="wc-answer" id="wc-anna-vidal">
+    <h2 class="wc-answer-name">Anna Vidal</h2>
+    <p class="wc-answer-meta">
+      
+      
+    </p>
+    <div class="wc-answer-text">
+          <p>Quan un color em crida l’atenció, penso en la llum que en aquell instant hi ha a l’escena. M’agrada veure i pensar les dues coses alhora.</p><p>El color que més utilitzo a la meva paleta es el blau ultramar.</p>
+        </div>
+  </article><article class="wc-answer" id="wc-gema-sach">
+    <h2 class="wc-answer-name">Gema Sach</h2>
+    <p class="wc-answer-meta">
+      
+      
+    </p>
+    <div class="wc-answer-text">
+          <p>La gama cromática que le des a un proyecto es la parte más emocional. Un mismo proyecto te provocará muy distintas sensaciones según la opción que eliges, es ahí donde se refleja la personalidad de quien vive. El color es el traje a medida de la personalidad de quién te encarga un proyecto sea del tipo que sea… por eso respeto muchísimo las preferencias de los clientes porque cada uno sabe en dónde se siente mejor. Soy partidaria del color que cuesta definir, que no es plano, que tiene valores y no suele surgir a la primera, por eso nunca puedo compartir un color cuando me lo preguntan… porque no es ninguno concreto, es la mezcla de varios la que suele convencerme. Ni tan siquiera el negro o el blanco los hago tal cual, como dicen los de mi equipo: “Tú cocinas con los colores”.</p>
+        </div>
+  </article><article class="wc-answer" id="wc-mariona-espinet">
+    <h2 class="wc-answer-name">Mariona Espinet</h2>
+    <p class="wc-answer-meta">
+      
+      
+    </p>
+    <div class="wc-answer-text">
+          <p>El color es información. Lo usamos para describir nuestras sensaciones, nuestras emociones y las situaciones. Para mí es vida. Es luz. Es hogar.</p>
+        </div>
+  </article><article class="wc-answer" id="wc-isabel-sendra">
+    <h2 class="wc-answer-name">Isabel Sendra</h2>
+    <p class="wc-answer-meta">
+      
+      
+    </p>
+    <div class="wc-answer-text">
+          <p>“Para mí, que recibí una formación arquitectónica donde el color estaba casi proscrito, ha resultado difícil amarlo y reconozco que todavía no me siento cómoda al utilizarlo. Lo que más me atrae del color son las emociones que evoca, cómo hace vibrar las superficies y cómo, junto a la luz, las proporciones, las texturas, los sonidos… conforma la manera de sentir el espacio.”</p>
+        </div>
+  </article><article class="wc-answer" id="wc-amoo">
+    <h2 class="wc-answer-name">AMOO</h2>
+    <p class="wc-answer-meta">
+      
+      
+    </p>
+    <div class="wc-answer-text">
+          <p>Quatre divagacions sobre el color: Mai no hem entès els arquitectes que no utilitzen més que el blanc, el gris i/o el negre. Si tenim tots els colors possibles a la nostra disposició, per què no fer-los servir? Serà la por d’equivocar-se? A fer un pas en fals?</p><p>Efectivament, hi ha projectes que requereixen una absència total de color, però no tenir-los mai en compte seria equivalent a no utilitzar materials com la pedra, la fusta o la ceràmica, a favor d’altres materials. Ells s’ho perden. El color és un conglomerat de llengües minoritàries que, quan es regiren contra el seu Goliath, i vencen, poden donar lloc a espais inesperats.</p><p>Què és el color sinó un altre material de construcció més?</p>
+        </div>
+  </article><article class="wc-answer" id="wc-loca-studio">
+    <h2 class="wc-answer-name">Loca Studio</h2>
+    <p class="wc-answer-meta">
+      
+      
+    </p>
+    <div class="wc-answer-text">
+          <p>¿Qué es el color? El color es luz. Muy evidente e inmediato, pero tan cierto y científico como poético y romántico. Una vida en blanco y negro, más allá de algo del pasado, se asocia a lo lúgubre, lo triste, lo apagado; sin embargo, la vida en color es alegría, despertar, es vida en sí misma.</p><p>Así que como arquitectos decimos sí, totalmente sí al color, a espacios llenos de vida. El color es complejo y difícil de aprender, de controlar, de trabajar, pero una vez te liberas y experimentas es un aliado maravilloso para crear. ¡Viva el color!</p>
+        </div>
+  </article></div>
+
+    <!--
+      The names, not the film. The root of this page is the opening film, and
+      someone at the foot of an edition asking for all of What's Color? means
+      the roster, so this points past the film the way the bar's own heading
+      does.
+    -->
+    <p class="wc-back"><a href="/prototype2/#whats-color">All of What&rsquo;s Color?</a></p>
+  </div></main>
+
+
+<div class="cursor" data-cursor aria-hidden="true"><span class="cursor-label"></span></div>
+<div class="panel-veil" data-panel-veil></div>
+<section class="about" id="about" data-panel aria-label="About">
+    <a class="about-close" href="#" data-panel-close>Close</a>
+
+    <div class="about-colour" aria-hidden="true"></div>
+    <div class="about-lines">
+      <p>CLAUDIA VALSELLS</p><p>1969</p><p>Alzueta Gallery</p><p>Barcelona, Spain</p><p>© All Rights Reserved</p>
+      <span class="about-more" aria-hidden="true">Scroll</span>
+    </div>
+
+    <div class="about-body">
+          <div class="about-head">
+            <div class="about-heading"><p><span><b>Claudia Valsells (1969) Barcelona, Spain<span> </span></b></span></p></div>
+            <div class="about-lead"> <p><span>Claudia is an artist specialized in color. A multidisciplinary creator, she discovered painting through her own instinct for color. Her formation as a mural painter gave her a professional opportunity, and her passion in color her own artistic language.<span> </span></span></p></div>
+          </div>
+          <div class="about-inner">
+            <div class="about-text">
+              <div class="about-prose"> <p><span>Based on her reflections as an artist, her experience in color prediction and mural painting, brings to all her work, with color as a primary tool, <em class="ink-accent">an identifiable language</em>.</span></p>
+ <p><span>She began her artistic career painting and soon realized that she had <em class="ink-accent">a natural ability with color</em>. In her own words, ‘All I have done throughout my career has been to cultivate this natural gift.<span> </span>First as a mural painter, then designing color charts and prescribing color and finally as an artist’.</span></p>
+ <p><span>The tireless search for <em class="ink-accent">the reason of color and its form</em> has obsessed artists throughout history, from the very creation of pictorial expression. Claudia Valsells knows about this and she aims to portray this into her artwork.</span></p>
+ <p><span>In her beginnings as a colorist she worked on commissions, for architects, and on projects of different scales advising and prescribing color. Soon she founded her own Studio, under the name of ‘<em class="ink-accent">Arts&Claus</em>’, in allegory to the ‘Arts&Craft’ movement where she always found a lot of inspiration. She specialized in mural painting, color applied to architecture, and interior design for 20 years on projects in Spain and abroad. Her role was to convey the value of color and its texture in the decoration of interior spaces working closely with professionals in the fields of art, design, and architecture. It was in this context, working close with architects and designers,<span> </span>that she found out the communication between professionals was based by the painting companies, relegated the work of the colorist to the background due to ignorance or fear clients to make a mistake or be branded as eccentric. It was then when Claudia Valsells created a specific chromatic selection, <em class="ink-accent">a COLOUR CHART, with more than 200 references</em>, which have been used as color comunication tools by Spain’s best architects.</span></p>
+ <p><span>Her work has two very defined characteristics: on the one hand her chromatic instinct, a gift of colors and on the other her ability to select, group and interact colors creating <em class="ink-accent">a chromatic language of her own</em>.</span></p>
+ <p><span>The common denominator of all her work is color, and her obsession with <em class="ink-accent">the way colors interact with each other</em>. The interaction of color occurs when two or more colors are combined in a composition. The combination of colors varies its own appearance and it is in these moments when Claudia decides to put one color next to another in order to influence its perception and achieve the desired visual experience. For Claudia the interaction of color is a key concept in her work as an artist and as a colorist and allows her to experiment and explore an ever new visual and emotional perception of colors in each work and commission.</span></p>
+ <p><span>Her most personal and ongoing project emerged from the pandemic in 2020 where she launched a <em class="ink-accent">‘Color glossary’</em> through the question ‘What’s color?’ to people of thought, philosophers, historians, thinkers, writers, and other artists, in order to think of color in a broader context. She wanted to discover the notion of color as it is thought of by others. She opened a dialogue to grasp new ways of seeing colors, other perspectives, but mostly to better understand the reason of color and its form, and this way to understand better human being.</span></p>
+ <p><span>This project has been represented in three solo shows, one in Barcelona ( 2020) and the other two in Madrid ( 2021, 2022) since then<span> </span></span></p>
+ <p><span>Currently she combines her activity as an artist with <em class="ink-accent">colour prescription in the areas of design and architecture</em>.<span> </span></span></p>
+ <p><span>Her work is represented, in Spain and abroad, by the Barcelona gallery owner <em class="ink-accent">Miquel Alzueta</em>. <a href="http://alzuetagallery.com">ALZUETA GALLERY </a></span></p></div>
+            </div>
+            <div class="about-figures" data-about-figures>
+              <div class="about-sticky">
+                <figure class="about-figure is-current">
+                      <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/0d2c1af6977621e4-400.avif 400w, /prototype2/media/0d2c1af6977621e4-800.avif 800w" sizes="(max-width: 899px) 88vw, 38vw" />
+      <source type="image/webp" srcset="/prototype2/media/0d2c1af6977621e4-400.webp 400w, /prototype2/media/0d2c1af6977621e4-800.webp 800w" sizes="(max-width: 899px) 88vw, 38vw" />
+      <img
+        src="/prototype2/media/0d2c1af6977621e4-800.jpg"
+        alt=""
+        width="1140"
+        height="1710"
+        style="aspect-ratio:1140 / 1710"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </picture>
+                    </figure><figure class="about-figure">
+                      <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/790d2d2760032466-400.avif 400w, /prototype2/media/790d2d2760032466-800.avif 800w, /prototype2/media/790d2d2760032466-1600.avif 1600w" sizes="(max-width: 899px) 88vw, 38vw" />
+      <source type="image/webp" srcset="/prototype2/media/790d2d2760032466-400.webp 400w, /prototype2/media/790d2d2760032466-800.webp 800w, /prototype2/media/790d2d2760032466-1600.webp 1600w" sizes="(max-width: 899px) 88vw, 38vw" />
+      <img
+        src="/prototype2/media/790d2d2760032466-1600.jpg"
+        alt=""
+        width="2560"
+        height="1740"
+        style="aspect-ratio:2560 / 1740"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+                    </figure>
+              </div>
+            </div>
+          </div>
+          <div class="about-tail"> <p>PRIVATE COLLECTIONS</p>
+ <div> <div> <div> <div> <p>Fundació Vilacases (Barcelona)</p> <p>Fundació Banc Sabadell (Barcelona)</p> <p>Collection Hayot (France)</p> <p>Martinez Collection (Mexico-US)</p> <p>Niederberghaus Collection (Germany)</p> <p>Collection Richard (France)</p> <p>Smith Collection (Wyoming, US)</p> <p>EXHIBITIONS & ART FAIRS</p> <p>_2026 June_July, Palau de Casavells, ‘<i>Shift Towards Coincidnce’, </i>Group exhibition</p> <p>_2026 June_July, New York, <em>‘Abstract paintings’</em>, Scroll Ny , Group exhibition</p> <p>_2026 May _ June, Paris, ‘<em>Moll de l’os’ peintures 2026</em>, Alzueta Gallery Paris</p> <p>_2026 February, Zona Maco CDMX Mexico with Alzueta Gallery</p> <p>_2025 October, Estampa contemporary art fair, Madrid with Alzueta Gallery</p> <p>-2025 April, <em>‘Míra’m no deixis de mirar-me’</em> Solo show at Palau de Casavells with Alzueta Gallery</p> <p>-2025 March, ‘Marco, límite y lugar’, Madrid with Alzueta Gallery, Group Exhibition</p> <p>-2024 November, Luxemburg art week with Alzueta Gallery</p> </div> <p>-2024 July, Gallery_br, Tetbury, UK, ‘Painting as a gift from color’, solo show</p> <div> <p>-2024 February, ZONA MACO with Alzueta Gallery</p> <p>-2024 January, Alzueta Gallery Séneca, ‘ What abstract art means to me? ‘ Group exhibition</p> <p>-2023 November, Alzueta Gallery Madrid, «La terre est bleue comme une orange», Group exhibition</p> <p>-2023 September, Alzueta Gallery Turó, <em>‘Transitions’ </em>solo show</p> </div> <p>-2023 February, Art Rotterdam, Contemporary Art Fair</p> <div> <p>-2021 December, Alzueta Gallery Madrid, ‘Color Dialogues’ Solo Exhibition</p> <p>-2021 December, Espacio Pavillion, Madrid, 2nd Edition ‘What’s color?’</p> <p>-2021 October, Alzueta Gallery, Madrid, Estampa Contemporary Art Fair</p> <p>-2021 September, Alzueta Gallery, Paris, Art Paris Fair</p> </div> </div> </div> </div>
+ <p>-2021 June, Alzueta Gallery, Madrid, Art Madrid Feria</p>
+ <p>-2020 December, Alzueta Gallery, Barcelona, Solo Exhibition, ‘What’s color?’</p>
+ <p><span>-2020 February, Alzueta Gallery, Barcelona, Aoo&Claudia Valsells ‘Silla8’ show</span></p>
+ <p><span>-2019 November, Solo Exhibition, Almost Perfect, Tokyo, Japan</span></p>
+ <p><span>-2019 October, Art Élysées-Art & Design, París.</span></p>
+ <p><span>-2019 April, Art Paris Grand Palais, París.</span></p>
+ <p><span>-2019 April, Almoneda, Ifema feria de Madrid, Palau de Casavells, Madrid.</span></p>
+ <p><span>-2019 March, AFF Art Fair Brussels</span></p>
+ <p><span>-2019 March, Art Madrid, Madrid</span></p>
+ <p><span>-2018 November, T10 at Alzueta Gallery, Barcelona</span></p>
+ <p><span>-2018 November, Palau de Casavells, solo exhibition, Girona, Spain</span></p>
+ <p><span>-2018 Art fair Hamburg</span></p>
+ <p><span>-2018 Art Elysees París</span></p>
+ <p><span>-2018 Art fair Stockholm</span></p>
+ <p><span>-2018 Contemporary Art Fair Just LX, Portugal</span></p>
+ <p><span>-2018 Almoneda Antik Passion, Madrid</span></p>
+ <p><span>-2018 Art Fair Grand Palais, París</span></p>
+ <p><span>-2018 Eurantica art fair, Brussels</span></p>
+ <p><span>-2018 Art Madrid, Madrid</span></p>
+ <p><span>-2017/07 Uterqüe Art Essays AW2017</span></p>
+ <p><span>-2017/03 Art París, International Art Fair, París</span></p>
+ <p><span>-2017/02 Alzueta Gallery «Color y forma» solo exhibition, Barcelona</span></p>
+ <p><span>-2017/02 Art Madrid, Madrid</span></p>
+ <p><span>-2016/12 <a href="http://www.axelpairon-gallery.com">Galeria Axel Pairon</a> exposición colectiva.</span></p>
+ <p><span>-2016/11 Antica Namur, Belgium</span></p>
+ <p><span>-2016/10 Art Élysées, International Art Fair, París</span></p>
+ <p><span>-2016/06 Scope Basel, Basel art fair</span></p>
+ <p><span>-2007 <a href="http://www.palaudecasavells.com/" target="_blank" rel="noopener noreferrer">Palau de Casavells</a>, Baix Empordà, Solo exhibition , May 2007</span></p>
+ <p><span>-2005 <a href="http://galeriamiquelalzueta.es/home/" target="_blank" rel="noopener noreferrer">Galeria Miquel Alzueta</a>, Barcelona, Solo exhibition, March 2005 – «Expresions de Mur». Abstract Informalism paintings.</span></p>
+ <p><span>-2000/04 <a href="http://www.vincon.com/es/" target="_blank" rel="noopener noreferrer">Sala Vinçon</a>, Barcelona, Solo exhibition, Abril 2000 «El color no existe, existe la luz»/ «The color doesn’t exist, just the light». Individual exhibition where the interaction of the public with the installation was essential. I tried to demonstrate through personal experimentation that color only exists if there is light.<br> </span></p>
+ <p>INQUIRES PLEASE CONTACT TO: editorial@alzuetagallery.com</p>
+ <p><span>images:</span></p>
+ <p><span>© yosigo_yosigo</span></p>
+ <p><span>© Martina Domenech ( below)</span></p></div>
+        </div>
+  </section>
+<div class="lightbox" data-lightbox data-available-label="Available" hidden>
+    <div class="lightbox-veil" data-lightbox-veil></div>
+    <button type="button" class="lightbox-close" data-lightbox-close>Close</button>
+    <button type="button" class="lightbox-nav lightbox-prev" data-lightbox-prev aria-label="Previous">←</button>
+    <div class="lightbox-plate" data-lightbox-plate></div>
+    <div class="lightbox-caption">
+      <h2 class="lightbox-title" data-lightbox-title></h2>
+      <p class="lightbox-meta" data-lightbox-meta></p>
+      <p class="lightbox-count" data-lightbox-count data-template="{n} of {total}"></p>
+    </div>
+    <button type="button" class="lightbox-nav lightbox-next" data-lightbox-next aria-label="Next">→</button>
+  </div>
+<script type="module" src="/prototype2/js/index.js"></script>
+</body>
+</html>

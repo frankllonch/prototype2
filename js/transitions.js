@@ -13,7 +13,7 @@ import { isPlainClick, reduceMotion } from './env.js';
  * feature-detected, so there was no way to tell the difference between a browser
  * that did not support them and a site that had them wrong.
  */
-const OUT_MS = 420;
+export const OUT_MS = 420;
 /** Never hold a navigation longer than this, whatever the timer does. */
 const LEAVE_GUARD = 700;
 /** If the navigation has not happened by now, assume it never will. */

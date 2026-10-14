@@ -40,7 +40,7 @@ export function initStack() {
     const grid = document.querySelector('[data-stack]');
     const hero = document.querySelector('[data-hero]');
     const root = document.documentElement;
-    // Pages without a pile (exhibitions, collaborations) must not wait for one.
+    // Pages without a pile (exhibitions, commissioned) must not wait for one.
     if (!grid || !hero) {
         reveal();
         return;
@@ -51,8 +51,29 @@ export function initStack() {
         reveal();
         return;
     }
+    /*
+     * Coming back from a painting is not arriving at the gallery.
+     *
+     * The pile is an opening, and an opening should happen once. On the way back
+     * it would throw the reader to the top of a page they were half way down and
+     * make them watch it again to get their place back, which is the opposite of
+     * what the back button is for. So on a back or forward step the grid is
+     * simply there, settled, and the browser puts the scroll where it was.
+     */
+    const entry = performance.getEntriesByType('navigation')[0];
+    if (entry?.type === 'back_forward') {
+        hero.remove();
+        reveal();
+        return;
+    }
     root.classList.add('stack-running');
-    // The pile only makes sense from the top of the page.
+    /*
+     * The pile only makes sense from the top of the page, so the browser is told
+     * not to restore a scroll on this arrival. It is handed back once the tiles
+     * have settled — `scrollRestoration` belongs to this history entry, and
+     * left on manual it would still be manual when the reader returns to it,
+     * which is exactly the position we want the browser to restore.
+     */
     if ('scrollRestoration' in history)
         history.scrollRestoration = 'manual';
     window.scrollTo(0, 0);
@@ -189,7 +210,15 @@ export function initStack() {
  */
 let wired = false;
 function reveal() {
+    // Two classes, and the positive one is what the stylesheet reads. The rail is
+    // drawn hidden, so it needs something to say the wait is over; removing a
+    // class could never do that for the first paint, when no class is set yet.
     document.documentElement.classList.remove('stack-running');
+    document.documentElement.classList.add('stack-settled');
+    // The opening is over, so the browser may have the scroll back: it is what
+    // returns the reader to their place when they come back from a painting.
+    if ('scrollRestoration' in history)
+        history.scrollRestoration = 'auto';
     if (wired)
         return;
     wired = true;
@@ -201,5 +230,6 @@ function reveal() {
  */
 function hide() {
     document.documentElement.classList.add('stack-running');
+    document.documentElement.classList.remove('stack-settled');
     document.dispatchEvent(new CustomEvent('stackrestart'));
 }

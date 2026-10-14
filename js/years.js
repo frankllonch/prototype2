@@ -40,6 +40,8 @@ export function initYears() {
      * does Escape.
      */
     let focused = '';
+    /** True while a chosen year is being travelled to, pile and all. */
+    let jumping = false;
     const focus = (year) => {
         focused = year;
         for (const tile of tiles)
@@ -87,9 +89,34 @@ export function initYears() {
                 return;
             }
             focus(year);
-            afterRelayout(() => {
+            /*
+             * A jump that starts from the folded pile scrolls down through it, and
+             * the pile is still `running` for the whole of that journey — which the
+             * guard below reads as the reader going back up to the heap, and it threw
+             * away the very year just asked for. That is why the dimming came and
+             * went and a second click was needed. Held until the tiles settle.
+             */
+            jumping = true;
+            const go = () => afterRelayout(() => {
                 window.scrollTo({ top: centreOn(target), behavior: reduceMotion.matches ? 'auto' : 'smooth' });
             });
+            go();
+            /*
+             * While the pile is still folded, the newest rows are behind it and
+             * `centreOn` holds the scroll at the floor rather than letting it land
+             * on a row that is not where it will end up. That first move is what
+             * unfolds the pile — it is a function of the scroll — so once the tiles
+             * have come to rest the journey is finished to the row's real position.
+             *
+             * Without this the first click only opened the pile and a second was
+             * needed to arrive, which read as the rail ignoring the first one.
+             */
+            if (document.documentElement.classList.contains('stack-running')) {
+                document.addEventListener('stackdone', () => { go(); jumping = false; }, { once: true });
+            }
+            else {
+                jumping = false;
+            }
             history.replaceState(null, '', `#year-${year}`);
         });
     }
@@ -124,6 +151,21 @@ export function initYears() {
         if (!anchors.length)
             return;
         const update = () => {
+            /*
+             * Nothing is in the middle of a heap.
+             *
+             * While the pile is folded every row is transformed to the same place,
+             * and `getBoundingClientRect` reports where a thing is drawn, not where
+             * it is laid out — so every year read as being above the middle and the
+             * loop below settled on whichever came last. That is the stray colour
+             * that appeared on the oldest year whenever the paintings gathered back
+             * up. There is no current year until they have come to rest.
+             */
+            if (document.documentElement.classList.contains('stack-running')) {
+                for (const { link } of anchors)
+                    link.classList.remove('is-current');
+                return;
+            }
             // Measured at the middle of the screen, which is where choosing a year now
             // puts it — probing near the top would mark a different year than the one
             // the click just centred.
@@ -145,7 +187,42 @@ export function initYears() {
             update();
         }, { passive: true });
         window.addEventListener('scrollend', update);
+        /*
+         * Scrolling back up gathers the paintings into the pile again, and a year
+         * still marked against a heap is marking nothing. `stackrestart` covers
+         * the moment they re-form, but only that moment; this covers being up
+         * there at all, which is what you see after coming back to the top by any
+         * other route.
+         */
+        window.addEventListener('scroll', () => {
+            if (jumping)
+                return;
+            if (focused && document.documentElement.classList.contains('stack-running'))
+                focus('');
+        }, { passive: true });
+        /*
+         * The grid can change shape under a reader who is sitting still — a density
+         * step, or the sizing switch, which moves the rows by a third of a page. No
+         * scroll follows, so nothing above would re-mark the rail, and it would go
+         * on naming a year that is no longer anywhere near the middle of the screen
+         * until the reader happened to move. Re-read once the sizes have settled.
+         */
+        grid?.addEventListener('gridchange', () => afterRelayout(update));
+        /*
+         * The pile moves the paintings without moving the layout under them, so
+         * the rail can be read and used while it runs. It only has to be told to
+         * look again once the tiles have come to rest, because what is in the
+         * middle of the screen by then is not what was there at the start.
+         */
+        document.addEventListener('stackdone', () => afterRelayout(update));
         update();
     };
-    document.addEventListener('stackdone', start, { once: true });
+    /*
+     * Started at once rather than on `stackdone`. The rail is visible from the
+     * first frame now, so it has to answer from the first frame too — and a year
+     * clicked while the paintings are still in a heap simply scrolls there,
+     * which is what unfolds them: the pile is a function of the scroll position,
+     * so travelling to the year plays the opening on the way.
+     */
+    start();
 }
