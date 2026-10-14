@@ -362,6 +362,19 @@
   /* The film's height, and with it every figure below: where the bar rests,
      where the two states swap, how far the film drifts. One number to change. */
   --film-h: 100vh;
+
+  /*
+   * How far above the film's bottom edge the bar settles, once it has stopped
+   * travelling with it.
+   *
+   * With this at nil the bar's top sits exactly on that edge, and the type sits
+   * 21px lower still — the room a 67px bar leaves above a 21px line when the
+   * line is centred in it. That 21px is the gap you see between the film and
+   * the words. This lifts the bar by a fifth of it. Raise it to close the gap
+   * further; 21px would put the type's own top on the film's edge, and more
+   * than that would run the words into the picture.
+   */
+  --film-lift: 4.2px;
 }
 
 /*
@@ -399,9 +412,9 @@
 .has-film.is-film-past .top {
   position: sticky;
   top: 0;
-  margin-top: var(--film-h);
+  margin-top: calc(var(--film-h) - var(--film-lift));
 }
-.has-film.is-film-past main { margin-top: calc(-1 * var(--film-h) - var(--film-bar)); }
+.has-film.is-film-past main { margin-top: calc(-1 * var(--film-h) + var(--film-lift) - var(--film-bar)); }
 
 /* Where the two states agree, and so where the swap happens: the scroll at
    which the film's bottom edge reaches the bar's resting place, which is the
@@ -410,7 +423,7 @@
 .wc-film-mark {
   position: absolute;
   left: 0;
-  top: calc((var(--film-h) + var(--film-bar)) / 2);
+  top: calc((var(--film-h) + var(--film-bar)) / 2 - var(--film-lift));
   width: 1px;
   height: 1px;
   pointer-events: none;
@@ -500,43 +513,6 @@
 @keyframes film-sink {
   from { transform: translateY(0); }
   to { transform: translateY(calc(0.15 * var(--film-h))); }
-}
-
-/*
- * Something for the negative to read against.
- *
- * A difference blend paints |backdrop - source|, which means that wherever the
- * backdrop is half the source the text resolves to the backdrop's own value and
- * disappears. With a near-white source that is mid-grey, and no choice of
- * colour moves it — it only decides which tone vanishes. The film is full of
- * mid-greys, which is why the bar read well over the dark passages and not over
- * the halftones.
- *
- * So the backdrop is darkened before the blend reaches it. At 0.72 the whole
- * film is pushed below the vanishing point and the worst case anywhere in it
- * becomes about 110 of 255, against nothing at all before. It is feathered over
- * a third of the screen and fixed to the viewport beneath the bar, so it reads
- * as the film dimming where the type crosses it rather than as a panel behind
- * the type — and it is only there while the bar is over the film. Once the bar
- * is past, its backdrop is the white page, where the blend already resolves to
- * near-black and needs no help.
- */
-.has-film:not(.is-film-past) .wc-film::after {
-  content: '';
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: calc(50vh - 16vh);
-  height: 32vh;
-  z-index: 1;
-  pointer-events: none;
-  background: linear-gradient(
-    to bottom,
-    rgb(0 0 0 / 0) 0%,
-    rgb(0 0 0 / 0.72) 38%,
-    rgb(0 0 0 / 0.72) 62%,
-    rgb(0 0 0 / 0) 100%
-  );
 }
 
 /* The film has already cleared the bar, so the names do not need to clear it. */
