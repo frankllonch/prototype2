@@ -34,26 +34,19 @@ http.createServer(async (req, res) => {
     return;
   }
   /*
-   * Markup, styles and scripts are never stored; everything else may be, but
-   * must be checked.
+   * `no-cache`, deliberately, and not `no-store`.
    *
-   * `no-cache` was not enough. It permits the browser to keep the response and
-   * only asks it to revalidate first — and nothing here sends an ETag or a
-   * Last-Modified for it to revalidate against, so what happens next is up to
-   * the browser. In practice a rebuild would show on a hard reload and not on
-   * an ordinary click, which looks exactly like the build having failed.
-   * `no-store` forbids keeping it at all, so a click always fetches what is on
-   * disk now.
-   *
-   * Only the small text files: the rendered images are hundreds of megabytes
-   * and almost never change, and re-fetching them on every page would make the
-   * preview useless.
+   * They read as near-synonyms and are not: `no-store` forbids keeping the
+   * response at all, and a page that may not be kept cannot go in the
+   * back/forward cache either. That is the thing that makes stepping back
+   * instant — the page is resumed rather than rebuilt, with its scroll and its
+   * state intact — so forbidding it to fix a staleness problem that turned out
+   * to be something else entirely was a poor trade. `no-cache` still has the
+   * browser check with the server before reusing anything.
    */
-  const ext = path.extname(file);
-  const volatile = ext === '.html' || ext === '.css' || ext === '.js' || ext === '';
   res.writeHead(200, {
-    'content-type': TYPES[ext] ?? 'application/octet-stream',
-    'cache-control': volatile ? 'no-store, must-revalidate' : 'no-cache',
+    'content-type': TYPES[path.extname(file)] ?? 'application/octet-stream',
+    'cache-control': 'no-cache',
   });
   createReadStream(file).pipe(res);
 }).listen(PORT, () => console.log(`http://localhost:${PORT}`));

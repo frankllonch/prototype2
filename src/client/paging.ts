@@ -1,4 +1,31 @@
-import { reduceMotion } from './env.ts';
+import { isPlainClick, reduceMotion } from './env.ts';
+
+/**
+ * Leaving a painting the way you came: a step back, not a fresh gallery.
+ *
+ * Following the link builds the gallery again from the top and replays the
+ * opening, which loses the place the reader had. Stepping back resumes the
+ * page they left — their scroll, their chosen year, and no pile — and the
+ * browser does all of it.
+ *
+ * Only when the gallery really is the previous page. Arriving at a painting
+ * from somewhere else, or straight from its address, leaves the link as a
+ * link, because there would be nothing behind to step back to.
+ */
+function backStepsBack(): void {
+  const back = document.querySelector<HTMLAnchorElement>('.detail-back');
+  if (!back || !document.referrer || window.history.length <= 1) return;
+
+  const cameFrom = new URL(document.referrer, window.location.href);
+  if (cameFrom.origin !== window.location.origin) return;
+  if (cameFrom.pathname !== new URL(back.href).pathname) return;
+
+  back.addEventListener('click', (event) => {
+    if (!isPlainClick(event)) return;
+    event.preventDefault();
+    window.history.back();
+  });
+}
 
 /**
  * The left and right keys walk through the paintings.
@@ -12,6 +39,8 @@ import { reduceMotion } from './env.ts';
  * painting's own.
  */
 export function initPaging(): void {
+  backStepsBack();
+
   const prev = document.querySelector<HTMLAnchorElement>('a[rel="prev"]');
   const next = document.querySelector<HTMLAnchorElement>('a[rel="next"]');
   if (!prev && !next) return;
