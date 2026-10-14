@@ -6,8 +6,8 @@
  * longer and names itself; hovering any of them draws it longer still. Clicking
  * jumps to that year in the grid.
  *
- * It is hidden while the opening pile is still moving — `stack-running` is set
- * by the script and removed when the grid has settled — so the rail cannot be
+ * It is hidden while the opening pile is still moving — it is drawn hidden and
+ * `stack-settled` is set once the grid has come to rest — so the rail cannot be
  * touched, or re-measured against, mid-animation.
  */
 .years {
@@ -61,9 +61,41 @@
 .years.is-focused .year[aria-pressed='true'] .year-swatch { width: 110px; }
 .years.is-focused .year[aria-pressed='true'] .year-label { opacity: 1; transform: none; }
 
-/* Nothing that waits on the opening animation may be reachable before it ends. */
-.stack-running .years,
-.stack-running .controls { opacity: 0; pointer-events: none; }
+/*
+ * Nothing that waits on the opening animation may be reachable, or visible,
+ * before it ends.
+ *
+ * Stated the hidden way round on purpose. These used to be hidden by a class
+ * the script adds, which cannot be in place for the first paint — the markup
+ * has already been drawn by the time a module runs — so the rail appeared at
+ * full strength and was taken away again a moment later. Hiding is the initial
+ * state now, written against the `js` class the document carries before
+ * anything is painted, and the script's job is to reveal rather than to
+ * conceal. With scripting off neither class is ever set and the rail is simply
+ * there, which is right: no animation runs to wait for.
+ *
+ * The failsafe matters more than it looks. Anything hidden until a script says
+ * otherwise is lost for good if that script never arrives, so these reveal
+ * themselves after eight seconds — far longer than any pile — and the class,
+ * when it comes, cancels it.
+ */
+html.js .years,
+html.js .controls {
+  opacity: 0;
+  pointer-events: none;
+  animation: control-failsafe 0.01s linear 8s forwards;
+}
+
+html.js.stack-settled .years,
+html.js.stack-settled .controls {
+  opacity: 1;
+  pointer-events: auto;
+  animation: none;
+}
+
+@keyframes control-failsafe {
+  to { opacity: 1; pointer-events: auto; }
+}
 
 @media (max-width: 899px) {
   /* No room for a rail beside the grid on a phone: it lies along the foot. */

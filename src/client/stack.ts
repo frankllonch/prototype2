@@ -199,7 +199,11 @@ export function initStack(): void {
  */
 let wired = false;
 function reveal(): void {
+  // Two classes, and the positive one is what the stylesheet reads. The rail is
+  // drawn hidden, so it needs something to say the wait is over; removing a
+  // class could never do that for the first paint, when no class is set yet.
   document.documentElement.classList.remove('stack-running');
+  document.documentElement.classList.add('stack-settled');
   if (wired) return;
   wired = true;
   document.dispatchEvent(new CustomEvent('stackdone'));
@@ -211,5 +215,6 @@ function reveal(): void {
  */
 function hide(): void {
   document.documentElement.classList.add('stack-running');
+  document.documentElement.classList.remove('stack-settled');
   document.dispatchEvent(new CustomEvent('stackrestart'));
 }
