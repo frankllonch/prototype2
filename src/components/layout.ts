@@ -20,6 +20,12 @@ interface LayoutProps {
    * otherwise compete with the overlays — so anything meant to rise above the
    * veil has to live outside it.
    */
+  /**
+   * A class on <body>, for a page that needs the chrome to behave differently.
+   * The opening film is the only user: it makes the bar sticky rather than
+   * fixed so it can begin in the middle of the film and rise to the top.
+   */
+  readonly bodyClass?: string;
   readonly overlays?: Html;
   readonly children: Html;
 }
@@ -161,7 +167,7 @@ function lightbox(): Html {
   </div>`;
 }
 
-export function layout({ title, description, path, rail, controls, overlays, children }: LayoutProps): Html {
+export function layout({ title, description, path, rail, controls, overlays, bodyClass, children }: LayoutProps): Html {
   const fullTitle = title === 'Claudia Valsells' ? title : `${title} — Claudia Valsells`;
   const modules = CLIENT_MODULES.map((m) => withBase(`/js/${m}.js`));
   return raw(`<!doctype html>
@@ -180,7 +186,7 @@ ${modules.map((m) => `<link rel="modulepreload" href="${m}" />`).join('\n')}
 // even for a frame.
 try { if (sessionStorage.getItem('cv-seen')) document.documentElement.classList.add('loaded') } catch (e) {}</script>
 </head>
-<body>
+<body${bodyClass ? ' class="' + bodyClass + '"' : ''}>
 ${loadingScreen().__html}
 <div class="page-veil" aria-hidden="true"></div>
 <a class="skip-link" href="#main">Skip to content</a>

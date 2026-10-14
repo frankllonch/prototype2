@@ -9,7 +9,7 @@ import { commissionedList } from '../components/commissioned.ts';
 import { groupCommissioned } from '../content/groups.ts';
 import { editorialBody } from '../components/editorial.ts';
 import { yearRail } from '../components/years.ts';
-import { whatsColorOpening, whatsColorEdition } from '../components/whats-color.ts';
+import { whatsColorOpening, whatsColorEdition, whatsColorFilm } from '../components/whats-color.ts';
 import { EDITIONS, allParticipants, type Edition } from '../content/whats-color.ts';
 import { isPlate, type YearColour } from '../content/load.ts';
 import { describeImage } from '../content/describe.ts';
@@ -156,8 +156,15 @@ export function whatsColorPage(): Html {
     description:
       'What’s Color? — Claudia Valsells assigns a colour to people she admires and asks them what colour means to them.',
     path: '/',
+    /*
+     * The film changes how the chrome behaves: the bar begins across the middle
+     * of it and rises to the top as you scroll, rather than being fixed there
+     * from the start. That is a page-level decision, so it travels on the body.
+     */
+    bodyClass: 'has-film',
     children: html`
       <h1 class="sr-only">What’s Color?</h1>
+      ${whatsColorFilm()}
       ${whatsColorOpening(allParticipants(), EDITIONS)}
     `,
   });

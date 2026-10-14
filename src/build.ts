@@ -40,6 +40,9 @@ async function buildAssets() {
   for (const part of parts) css += `${await readFile(path.join(styles, part), 'utf8')}\n`;
   await writeFile(path.join(DIST, 'site.css'), BASE ? css.replaceAll("url('/fonts/", `url('${BASE}/fonts/`) : css);
   await cp(path.join(ROOT, 'src', 'assets', 'fonts'), path.join(DIST, 'fonts'), { recursive: true });
+  // The opening film, re-encoded for the web from the 168MB original on the
+  // live site. Copied rather than processed: it is already at its serving size.
+  await cp(path.join(ROOT, 'src', 'assets', 'video'), path.join(DIST, 'video'), { recursive: true });
 
   for (const file of (await readdir(CLIENT)).filter((f) => f.endsWith('.ts'))) {
     const source = await readFile(path.join(CLIENT, file), 'utf8');

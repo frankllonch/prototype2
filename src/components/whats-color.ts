@@ -140,3 +140,38 @@ export function whatsColorEdition(edition: Edition): Html {
     <p class="wc-back"><a href="${withBase('/')}">All of What&rsquo;s Color?</a></p>
   </div>`;
 }
+
+/**
+ * The opening film: the documentation of edition I, full screen, with the bar
+ * sitting across the middle of it.
+ *
+ * Muted, looping and `playsinline`, which is what every browser requires before
+ * it will start a video by itself. The poster is the film's own first frame, so
+ * the still that shows while it loads is the one the film opens on and there is
+ * no jump when it starts.
+ *
+ * `preload="metadata"` rather than `auto`: the file streams as it plays, so the
+ * page does not wait on three minutes of video to become usable. With scripting
+ * or autoplay refused, the poster stands in its place and the page below is
+ * unaffected — nothing here is load-bearing.
+ */
+export function whatsColorFilm(): Html {
+  const poster = withBase('/video/whats-color-poster.jpg');
+  return html`<section
+    class="wc-film"
+    style="--film-poster: url('${poster}')"
+    aria-label="What’s Color? (I), Alzueta Gallery, December 2020"
+  >
+    <video
+      class="wc-film-video"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+      poster="${poster}"
+    >
+      <source src="${withBase('/video/whats-color.mp4')}" type="video/mp4" />
+    </video>
+  </section>`;
+}
