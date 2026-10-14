@@ -11,6 +11,7 @@
  */
 import { mkdir, readFile, writeFile, stat } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 import sharp from 'sharp';
 import type { Dataset, ProjectImage } from '../src/content/types.ts';
@@ -121,9 +122,21 @@ async function main() {
         const crop = path.join(CROPS, `${image.id}.jpg`);
         const useCrop = cropped.has(image.id) && existsSync(crop);
         const file = useCrop ? crop : original;
+        /*
+         * A crop's variants are named after what is in it, not just which image
+         * it belongs to. They used to be keyed `<id>c`, which never changed, so
+         * recropping a painting rewrote the file behind a URL that every browser
+         * and every cache already held — the site served the old picture and
+         * looked as though nothing had been done. Eight characters of the crop's
+         * own hash means a new crop is a new address and a stale one cannot be
+         * served.
+         */
+        const key = useCrop
+          ? `${image.id}c${createHash('sha1').update(await readFile(crop)).digest('hex').slice(0, 8)}`
+          : image.id;
         if (file) {
           try {
-            const entry = await render(image, file, useCrop ? `${image.id}c` : image.id);
+            const entry = await render(image, file, key);
             if (entry) manifest[image.id] = entry;
             else failed++;
           } catch (err) {
