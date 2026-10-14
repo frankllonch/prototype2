@@ -73,15 +73,33 @@ export function whatsColorIntros(editions: readonly Edition[]): Html {
 }
 
 /** The opening view entire. */
-export function whatsColorOpening(
-  participants: readonly Participant[],
-  editions: readonly Edition[],
-): Html {
+export function whatsColorOpening(editions: readonly Edition[]): Html {
   return html`<div class="wc" id="whats-color">
     <p class="wc-lead">${LEAD}</p>
-    ${whatsColorNames(participants)}
+    ${join(editions.map(namesOfEdition))}
     ${whatsColorIntros(editions)}
   </div>`;
+}
+
+/**
+ * One edition's people, under its numeral.
+ *
+ * The opening view used to be a single run of everyone, deduplicated, which
+ * read as one long credit roll and said nothing about which edition anyone
+ * answered in. Three blocks say it without a word. Newest first, which is the
+ * order the editions are built in and the order the reference sets them in —
+ * and the opposite of the introductions at the foot, which run forwards
+ * because they are chapters rather than a list.
+ *
+ * No name is in two blocks: nobody has answered in more than one edition.
+ * Should that change, they would appear under each, which is the truth.
+ */
+function namesOfEdition(edition: Edition): Html {
+  return html`<section class="wc-group">
+    <p class="wc-numeral" aria-hidden="true">(${edition.numeral})</p>
+    <h2 class="sr-only">What&rsquo;s Color? (${edition.numeral})</h2>
+    ${whatsColorNames(edition.participants)}
+  </section>`;
 }
 
 /**

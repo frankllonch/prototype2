@@ -165,7 +165,7 @@ export function whatsColorPage(): Html {
     children: html`
       <h1 class="sr-only">What’s Color?</h1>
       ${whatsColorFilm()}
-      ${whatsColorOpening(allParticipants(), EDITIONS)}
+      ${whatsColorOpening(EDITIONS)}
     `,
   });
 }

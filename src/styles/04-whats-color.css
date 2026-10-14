@@ -650,3 +650,86 @@ html:has(body.has-film) {
   .wc-edition-i .wc-answer { grid-template-columns: minmax(0, 1fr) minmax(0, 36%); }
   .wc-edition-i .wc-answer-meta { justify-items: end; text-align: right; padding-top: var(--wc-meta-shift, 0.46em); }
 }
+
+/* ------------------------------------------- the opening view, by edition */
+
+/*
+ * The names are set in three blocks, one per edition, each under its numeral.
+ * The gap between them is the only new figure: 33 of 761 in the reference.
+ */
+.wc-group + .wc-group {
+  margin-top: var(--wc-group-gap, 4.34vw);
+}
+
+/* ------------------------------------------- the third edition's own style */
+
+/*
+ * The third edition is set centred on one axis: the name, then the role, then
+ * the colour, then the answer beneath them, each centred under the last.
+ *
+ * Measured off the reference, where everything shares a centre line. The role
+ * is four fifths of the name's size and the colour reference half of it; the
+ * answer keeps the page's size and the roster's measure — 66.3% of the frame,
+ * against the 66.0% the names above it hold, which is the same column. The
+ * answer sits 1.69 line pitches under the colour and 3.83 below the last line
+ * before the next name.
+ *
+ * Ragged rather than justified, and unhyphenated: centred text has no edge to
+ * hold, so justification has nothing to do and hyphens would only break words
+ * for no gain.
+ */
+.wc-edition-iii .wc-answer {
+  display: block;
+  text-align: center;
+  font-size: clamp(1.05rem, 2.1436vw, 2.75rem);
+  margin: 0 auto 4.69em;
+}
+
+.wc-edition-iii .wc-answer-name {
+  font-size: 1em;
+  line-height: var(--wc-leading, 1.227);
+  margin: 0;
+}
+
+.wc-edition-iii .wc-answer-meta {
+  display: block;
+  /*
+   * Reset, not left to the block display to make irrelevant. The rule this
+   * overrides sets `justify-items: end` for its grid, and a block container
+   * honours that too in current Chromium — the role and the colour kept being
+   * shrink-wrapped and pushed to the right edge while everything around them
+   * was centred, with nothing in the cascade that looked like it was doing it.
+   */
+  justify-items: center;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
+
+.wc-edition-iii .wc-answer-role {
+  display: block;
+  font-size: 0.8em;
+  line-height: var(--wc-leading, 1.227);
+}
+
+.wc-edition-iii .wc-answer-code {
+  display: block;
+  font-size: 0.5em;
+  line-height: var(--wc-leading, 1.227);
+}
+
+.wc-edition-iii .wc-answer-text {
+  max-width: 66.3%;
+  margin: 2.08em auto 0;
+  font-size: 1em;
+  line-height: var(--wc-leading, 1.227);
+  text-align: center;
+  -webkit-hyphens: none;
+  hyphens: none;
+}
+/* Centred paragraphs are separated by a line rather than indented — an indent
+   needs a left edge to measure from. */
+.wc-edition-iii .wc-answer-text > * + * {
+  text-indent: 0;
+  margin-top: var(--wc-leading, 1.227em);
+}
