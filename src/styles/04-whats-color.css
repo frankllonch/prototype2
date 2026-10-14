@@ -603,3 +603,50 @@ html:has(body.has-film) {
   letter-spacing: 0;
   color: var(--ink-soft);
 }
+
+/* ------------------------------------------------- the first edition's sheet */
+
+/*
+ * The first edition keeps the setting it was drawn with: three columns of small
+ * type under full-size names.
+ *
+ * That layout is the designer's, measured off her sheet — the gutter is 12px of
+ * 1467, the answers are set almost solid at 16.4px of leading on an 11.5px cap,
+ * and the three columns hold four, four and five entries over one vertical
+ * extent because each is filled in turn. It only works at that size, which is
+ * why the other two editions, now set at the page's size, had to give up the
+ * columns. This edition was asked to keep it, so everything the larger type
+ * changed is put back here and nowhere else.
+ */
+.wc-edition-i .wc-answers {
+  columns: 3;
+  column-gap: var(--wc-gutter-tight, 0.782vw);
+}
+
+.wc-edition-i .wc-answer {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 36%);
+}
+
+.wc-edition-i .wc-answer-role,
+.wc-edition-i .wc-answer-code,
+.wc-edition-i .wc-back {
+  font-size: clamp(0.66rem, 1.104vw, 1.5rem);
+}
+
+.wc-edition-i .wc-answer-text {
+  font-size: clamp(0.66rem, 1.104vw, 1.5rem);
+  /* 16.4px of leading on an 11.5px cap: these are set almost solid. */
+  line-height: 0.97;
+}
+
+@media (max-width: 1099px) {
+  .wc-edition-i .wc-answers { columns: 2; }
+  .wc-edition-i .wc-answer { grid-template-columns: minmax(0, 1fr) minmax(0, 42%); }
+}
+
+@media (max-width: 719px) {
+  .wc-edition-i .wc-answers { columns: 1; }
+  /* One column is wide enough to put the role back beside the name. */
+  .wc-edition-i .wc-answer { grid-template-columns: minmax(0, 1fr) minmax(0, 36%); }
+  .wc-edition-i .wc-answer-meta { justify-items: end; text-align: right; padding-top: var(--wc-meta-shift, 0.46em); }
+}

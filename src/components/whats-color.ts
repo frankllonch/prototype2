@@ -130,7 +130,7 @@ function answer(p: Participant, index: number): Html {
  * column is filled in turn.
  */
 export function whatsColorEdition(edition: Edition): Html {
-  return html`<div class="wc wc-edition">
+  return html`<div class="wc wc-edition wc-edition-${edition.numeral.toLowerCase()}">
     <p class="wc-numeral" aria-hidden="true">(${edition.numeral})</p>
     <h1 class="sr-only">What&rsquo;s Color? (${edition.numeral})</h1>
     ${whatsColorNames(edition.participants, edition.numeral)}

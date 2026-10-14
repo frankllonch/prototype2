@@ -556,12 +556,25 @@ export const idFor = (name: string) =>
 
 const built = build();
 
-/** Each participant stamped with the edition they came from, for linking. */
+/**
+ * Each participant stamped with the edition they came from, for linking — and
+ * only those with something to read.
+ *
+ * The document names everyone who was asked, which is why it is still the
+ * roster: the record of who took part belongs with the work. But a name on the
+ * page with nothing under it reads as an answer gone missing rather than as
+ * someone who did not give one, and that is as true of the four who answered in
+ * pictures as of the guests who never replied. So the pages show the people who
+ * answered in words, and the document keeps the rest.
+ *
+ * Filtered here rather than per page, so the opening run of names and each
+ * edition's own run cannot disagree about who is in it.
+ */
 export const EDITIONS: readonly Edition[] = built.map((edition) => ({
   ...edition,
-  participants: edition.participants.map((p) => ({
-    ...p, edition: edition.numeral, id: idFor(p.name),
-  })),
+  participants: edition.participants
+    .filter((p) => p.answer)
+    .map((p) => ({ ...p, edition: edition.numeral, id: idFor(p.name) })),
 }));
 
 /**
