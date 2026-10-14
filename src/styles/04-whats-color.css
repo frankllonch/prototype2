@@ -359,17 +359,26 @@
  */
 .has-film {
   --film-bar: 4.2rem;
+  /* The film's height, and with it every figure below: where the bar rests,
+     where the two states swap, how far the film drifts. One number to change. */
+  --film-h: 100vh;
 }
 
 /*
- * Phase one: fixed on the middle line. Genuinely fixed, so the browser holds it
- * there without anything having to keep putting it back — the earlier version
- * compensated for the scroll with a transform and shook, because a composited
- * scroll outruns script and the bar arrived a frame behind.
+ * Phase one: fixed where it rests over the film. Genuinely fixed, so the
+ * browser holds it there without anything having to keep putting it back — the
+ * earlier version compensated for the scroll with a transform and shook,
+ * because a composited scroll outruns script and the bar arrived a frame behind.
+ *
+ * It rested on the middle line at first and now sits a fifth lower, which is a
+ * fifth less distance to the film's bottom edge: that gap was 100vh minus half
+ * the screen, and four fifths of it puts the bar at 0.6 of the screen less two
+ * fifths of its own height. The mark below has to move with it or the two
+ * states would disagree about where the bar is at the moment they swap.
  */
 .has-film .top {
   position: fixed;
-  top: calc((100vh - var(--film-bar)) / 2);
+  top: calc(0.6 * var(--film-h) - 0.4 * var(--film-bar));
   height: var(--film-bar);
   padding-top: 0;
   padding-bottom: 0;
@@ -391,16 +400,18 @@
 .has-film.is-film-past .top {
   position: sticky;
   top: 0;
-  margin-top: 100vh;
+  margin-top: var(--film-h);
 }
-.has-film.is-film-past main { margin-top: calc(-100vh - var(--film-bar)); }
+.has-film.is-film-past main { margin-top: calc(-1 * var(--film-h) - var(--film-bar)); }
 
-/* Where the two states agree, and so where the swap happens. Placed by the
-   stylesheet so the arithmetic lives in one file; the observer only watches. */
+/* Where the two states agree, and so where the swap happens: the scroll at
+   which the film's bottom edge reaches the bar's resting place, which is the
+   screen height less that resting place. Placed by the stylesheet so the
+   arithmetic lives in one file; the observer only watches. */
 .wc-film-mark {
   position: absolute;
   left: 0;
-  top: calc((100vh + var(--film-bar)) / 2);
+  top: calc(0.4 * (var(--film-h) + var(--film-bar)));
   width: 1px;
   height: 1px;
   pointer-events: none;
@@ -441,20 +452,55 @@
   position: relative;
   /* Behind the bar, which carries z-index 40 and blends against this. */
   z-index: 0;
-  height: 100vh;
+  height: var(--film-h);
   overflow: hidden;
   /* The poster shows through until the first frame paints, and is what remains
      when the film is withheld for reduced motion. */
   background: var(--ink) var(--film-poster, none) center / cover no-repeat;
 }
 
+/*
+ * Taller than the frame it shows through, and hung above it, so there is film
+ * to spare when the parallax below slides it down.
+ */
 .wc-film-video {
   display: block;
   position: absolute;
-  inset: 0;
+  left: 0;
+  top: calc(-0.15 * var(--film-h));
   width: 100%;
-  height: 100%;
+  height: calc(1.15 * var(--film-h));
   object-fit: cover;
+}
+
+/*
+ * The film lags the page, so it reads as sinking beneath it.
+ *
+ * Over the screen it takes to scroll past, the film is slid down 15vh while the
+ * page carries it up 100vh: it travels at 0.85 of the scroll, and the white
+ * below appears to draw over it rather than merely follow it. That is the whole
+ * effect, and it wants to stay small — at much more than this it stops reading
+ * as depth and starts reading as the film being dragged.
+ *
+ * Driven by the scroll itself rather than by script. A scroll-driven animation
+ * is handled where the scrolling is handled, so it cannot fall a frame behind
+ * the way the bar did when script was moving it. Browsers without it simply
+ * play the film without the drift, which is why the whole thing sits behind a
+ * support query and nothing else depends on it.
+ */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .wc-film-video {
+      animation: film-sink linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 var(--film-h);
+    }
+  }
+}
+
+@keyframes film-sink {
+  from { transform: translateY(0); }
+  to { transform: translateY(calc(0.15 * var(--film-h))); }
 }
 
 /* The film has already cleared the bar, so the names do not need to clear it. */
@@ -471,8 +517,9 @@
 }
 
 @media (max-width: 899px) {
-  /* A half-screen of film is enough on a phone; a full one is a wall. */
-  .wc-film { height: 70vh; }
+  /* A half-screen of film is enough on a phone; a full one is a wall. Set on
+     the one variable, so the bar and the swap follow it. */
+  .has-film { --film-h: 70vh; }
 }
 
 /*

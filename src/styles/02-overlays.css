@@ -196,15 +196,21 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   animation: about-blink 9s ease-in-out infinite;
 }
 
-/* Plain text on the colour: no plate behind it and no ring when focused — it
-   answers by coming up to full strength, as the other closes do. */
+/*
+ * Plain text on the colour, in the colour the five lines are written in: it is
+ * a child of `.about`, which is where the blink keyframes set `--blink-fg`,
+ * so it inherits the property and turns with them rather than being animated
+ * on its own clock — there is no way for the two to drift apart.
+ *
+ * No plate behind it and no ring when focused; it answers by going quiet
+ * instead, which it can afford to do because it sits on its own in the corner.
+ */
 .about-close {
   position: fixed; top: 1.6rem; right: var(--pad); z-index: 3;
-  color: var(--ink);
-  opacity: 0.62;
+  color: var(--blink-fg, var(--ink));
   transition: opacity var(--hover) var(--ease);
 }
-.about-close:hover, .about-close:focus-visible { opacity: 1; }
+.about-close:hover, .about-close:focus-visible { opacity: 0.62; }
 
 /*
  * Scrolling from the colour into the biography, in three layers.
