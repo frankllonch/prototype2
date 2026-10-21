@@ -16,6 +16,7 @@ interface ManifestEntry {
   fallback: string;
   width: number;
   height: number;
+  original?: ManifestEntry;
 }
 
 const readJson = <T,>(file: string): T => JSON.parse(readFileSync(path.join(ROOT, file), 'utf8')) as T;
@@ -25,11 +26,15 @@ function withVariants(image: ProjectImage, manifest: Record<string, ManifestEntr
   if (!entry) return image;
   // The pipeline's measured size wins: it is the size of what is actually served,
   // which for a cropped painting is the canvas, not the photograph.
+  const o = entry.original;
   return {
     ...image,
     width: entry.width,
     height: entry.height,
     variants: { avif: entry.avif, webp: entry.webp, fallback: entry.fallback },
+    // The photograph behind a cut-out, carried as its own sized set so a page
+    // can show the record of the work beside the work.
+    ...(o ? { original: { width: o.width, height: o.height, variants: { avif: o.avif, webp: o.webp, fallback: o.fallback } } } : {}),
   };
 }
 

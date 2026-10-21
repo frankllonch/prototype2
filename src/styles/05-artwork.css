@@ -71,3 +71,57 @@
 @media (prefers-reduced-motion: reduce) {
   .detail-plate { --tilt-max: 0deg; --tilt-lift: 1; }
 }
+
+/* ------------------------------------------------- the other pictures */
+
+/*
+ * The plate and the row of small pictures under it share one cell of the
+ * detail grid, so adding the row moves nothing else — the caption stays on
+ * the middle line and the pager stays at the foot. The plate used to claim
+ * the grid's second column itself; inside this cell that would open a second
+ * column, so the claim is withdrawn here.
+ */
+.detail-stage {
+  grid-column: 2;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 1.1rem;
+}
+.detail-stage .detail-plate { grid-column: auto; }
+
+/* Only one picture is ever on the plate. The rest are kept out of layout, not
+   merely hidden, so a lazy one does not load until it is asked for and the
+   plate's box — which the lean measures — is the box of what is shown. */
+.detail-view { display: none; }
+.detail-view.is-shown { display: block; }
+
+.detail-thumbs {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+/* Small, quiet, and not a plate: no shadow and no lean, so there is no doubt
+   which picture is the work and which are the ways of looking at it. */
+.detail-thumb {
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: 0;
+  width: 4.5rem;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity var(--hover) var(--ease);
+}
+.detail-thumb img { display: block; width: 100%; height: auto; }
+.detail-thumb.is-shown,
+.detail-thumb:hover,
+.detail-thumb:focus-visible { opacity: 1; }
+.detail-thumb:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+
+@media (max-width: 899px) {
+  .detail-stage { grid-column: 1; }
+  .detail-thumb { width: 3.6rem; }
+}

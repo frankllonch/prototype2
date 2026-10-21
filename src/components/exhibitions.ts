@@ -35,8 +35,13 @@ export const huePalette = (hues: readonly YearColour[]): string =>
   hues.map((h, i) => `--hue-${i}:${vivid(h.colour)}`).join(';');
 
 export function exhibitionList(items: readonly ExhibitionRow[], hues: readonly YearColour[]): Html {
-  return html`<div class="exh-list" data-hues="${hues.length}" style="${huePalette(hues)}">
-    ${join(items.map(row))}
+  return html`<div class="xlist" data-hues="${hues.length}" style="${huePalette(hues)}">
+    <section class="xgroup">
+      <h2 class="xgroup-name">Exhibitions</h2>
+      <div class="xrows">
+        ${join(items.map(row))}
+      </div>
+    </section>
   </div>`;
 }
 
@@ -95,46 +100,24 @@ function vivid(hex: string): string {
 }
 
 function row(item: ExhibitionRow): Html {
-  const when = dates(item);
   /*
    * No `aria-label`. One was here and it quietly dropped the dates: a label
-   * replaces the whole subtree, so the months a sighted reader sees in their own
-   * column were never announced. Letting the name compute from the visible text
-   * says everything the row says, and cannot drift away from it later. The
+   * replaces the whole subtree, so what a sighted reader sees in its own column
+   * was never announced. Letting the name compute from the visible text says
+   * everything the row says, and cannot drift away from it later. The
    * photograph is `aria-hidden`, so it adds nothing to that name.
    */
   return html`<a
-    class="exh xrow hrow"
+    class="xrow hrow"
     href="#exhibition-${item.slug}"
     data-panel-open="exhibition-${item.slug}"
   >
-    <span class="exh-name">
-      <span class="exh-title">${item.title}</span>
-      ${item.venue ? html`<span class="exh-venue">${item.venue}</span>` : ''}
-    </span>
-
+    <span class="xrow-title">${item.title}</span>
     <span class="exh-plate" aria-hidden="true">
       ${item.cover
-        ? responsiveImage({ image: item.cover, sizes: '(max-width: 899px) 30vw, 14vw', alt: '' })
+        ? responsiveImage({ image: item.cover, sizes: '(max-width: 899px) 30vw, 13vw', alt: '' })
         : ''}
     </span>
-
-    <span class="exh-when">${when}</span>
-    <span class="exh-year">${item.year ?? ''}</span>
+    <span class="xrow-when">${item.year ?? ''}</span>
   </a>`;
-}
-
-/**
- * "From May to June" where both are known, a single month where only one is, and
- * nothing at all where neither could be read. `From` and `To` stay upright while
- * the months lean, as in the designer's layout.
- */
-function dates(item: ExhibitionRow): Html {
-  if (!item.from) return html``;
-  // The year already stands at the right margin, so the opening month does not
-  // repeat it — only the end does, and only when the run crosses into a new one.
-  const from = item.year ? item.from.replace(new RegExp(`\\s*${item.year}$`), '') : item.from;
-  if (!item.to) return html`<em>${from}</em>`;
-  return html`<span class="exh-span"><span class="exh-lead">From</span> <em>${from}</em></span>
-    <span class="exh-span"><span class="exh-lead">To</span> <em>${item.to}</em></span>`;
 }

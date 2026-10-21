@@ -16,6 +16,7 @@ import { initCursor } from './cursor.ts';
 import { initFilm } from './film.ts';
 import { initTilt } from './tilt.ts';
 import { initPaging } from './paging.ts';
+import { initViews } from './views.ts';
 
 initTextRoll();
 initTransitions();
@@ -31,3 +32,4 @@ initCursor();
 initFilm();
 initTilt();
 initPaging();
+initViews();

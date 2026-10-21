@@ -34,6 +34,8 @@ interface ImageManifestEntry {
   fallback: string;
   width: number;
   height: number;
+  /** For a cropped painting: the photograph it was cut from, rendered as well. */
+  original?: ImageManifestEntry;
 }
 
 async function download(image: ProjectImage): Promise<string | null> {
@@ -147,8 +149,20 @@ async function main() {
         if (file) {
           try {
             const entry = await render(image, file, key);
-            if (entry) manifest[image.id] = entry;
-            else failed++;
+            if (entry) {
+              /*
+               * A cropped painting keeps its photograph too, rendered under the
+               * plain id exactly as it was before the crop existed — so for most
+               * this costs nothing, the files being already on disk. The
+               * cut-out is the work; the photograph is the record of it, and the
+               * only place the frame, the wall and the light survive.
+               */
+              if (useCrop && original) {
+                const photo = await render(image, original, image.id);
+                if (photo) entry.original = photo;
+              }
+              manifest[image.id] = entry;
+            } else failed++;
           } catch (err) {
             failed++;
             console.warn(`  ! render ${image.id}: ${String(err)}`);

@@ -70,15 +70,35 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 }
 
 /*
- * The title travels with the text rather than pinning above it. Pinned, and with
- * no ground of its own to hide what passed beneath — a ground was the visible box
- * — the prose scrolled straight through it and the two were legible at once.
- * The picture is the thing that holds still here; the words all move together.
+ * The head pins to the top and the words run underneath it.
+ *
+ * This was tried once before and taken out: pinned, with no ground of its own
+ * to hide what passed beneath, the prose scrolled straight through the title
+ * and the two were legible at once. The blend is what makes it work. With
+ * `difference`, whatever passes under the head is inverted rather than
+ * crowded, so the two are never competing to be read — the head is always the
+ * negative of the page behind it. It is the trick the menu bar plays over the
+ * paintings, turned on the one place that most needed it.
+ *
+ * The colour is the inverse, not the colour: over the near-white panel
+ * rgb(219,218,215) resolves to the ink and rgb(105,105,103) to its quieter
+ * tint. Change `--ink` and both have to be recomputed, as in the bar.
  */
-.reader-head { margin-bottom: clamp(1.5rem, 3vw, 2.5rem); }
+.reader-head {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  padding: 1.6rem 0 0.9rem;
+  mix-blend-mode: difference;
+  color: rgb(219, 218, 215);
+}
+.reader-title, .reader-venue, .reader-kind, .reader-when { color: inherit; }
 .reader-title { font-size: var(--type); letter-spacing: -0.02em; line-height: var(--lead); }
+.reader-year { font-style: italic; }
+.reader-year, .reader-when-year { color: rgb(105, 105, 103); }
 .reader-year, .reader-counter {
-  display: block; margin: 0.35rem 0 0; color: var(--ink-soft);
+  display: block; margin: 0.35rem 0 0;
   font-size: var(--type); letter-spacing: 0.06em; text-transform: uppercase; font-variant-numeric: tabular-nums;
 }
 
@@ -471,14 +491,16 @@ html:not(.js) .about:target { display: block; position: static; opacity: 1; visi
 
 /* A press release opens on a statement and then settles into prose; the source
    sets it as one paragraph, so the distinction is drawn here. */
-.reader-stated .reader-title {
+.reader-stated .reader-title,
+[data-panel] .reader-title {
   font-size: var(--type);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.01em;
   line-height: var(--lead);
 }
-.reader-stated .prose:first-of-type > p:first-child {
+.reader-stated .prose:first-of-type > p:first-child,
+[data-panel] .prose:first-of-type > p:first-child {
   font-size: var(--type);
   font-weight: 600;
   text-transform: uppercase;
@@ -486,7 +508,7 @@ html:not(.js) .about:target { display: block; position: static; opacity: 1; visi
   letter-spacing: -0.01em;
   margin-bottom: 1.2em;
 }
-.reader-stated .reader-text { padding-top: 2.5rem; }
+.reader-stated .reader-text, [data-panel] .reader-text { padding-top: 0; }
 
 /*
  * More of the page shows through than for a painting. The exhibition you opened
@@ -495,6 +517,13 @@ html:not(.js) .about:target { display: block; position: static; opacity: 1; visi
  * rather than as a different page you have been taken to.
  */
 .panel:has(.reader-stated) { background: color-mix(in srgb, var(--paper) 78%, transparent); }
+/*
+ * While a detail panel is open its own head is the bar, so the site's stands
+ * down rather than sitting behind it. Two bars at the top, both blending, were
+ * reading as one crowded line. The About panel keeps the menu: it is a
+ * different element (`.about`), so it is not matched here.
+ */
+body:has(.panel.is-open) .top { opacity: 0; pointer-events: none; }
 @supports not selector(:has(*)) {
   .panel { background: color-mix(in srgb, var(--paper) 86%, transparent); }
 }

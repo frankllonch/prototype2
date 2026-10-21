@@ -45,7 +45,9 @@ export function initTilt(): void {
     };
 
     const lean = (event: PointerEvent) => {
-      if (!box || reduceMotion.matches) return;
+      // A box with no size is a picture that has not arrived; a lean worked out
+      // against it divides by zero and writes nothing but noise.
+      if (!box || !box.width || !box.height || reduceMotion.matches) return;
       // −1 to 1 from the middle, on each axis.
       const x = (event.clientX - box.left) / box.width * 2 - 1;
       const y = (event.clientY - box.top) / box.height * 2 - 1;

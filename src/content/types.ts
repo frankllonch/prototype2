@@ -37,6 +37,17 @@ export interface ProjectImage {
     /** Largest JPEG, used as the <img src> fallback. */
     readonly fallback: string;
   };
+  /**
+   * For a cropped painting, the photograph it was cut from. The cut-out is the
+   * work and is what `variants` holds; this is the record of it — the frame,
+   * the wall, the light — and the only place they survive. Absent when nothing
+   * was cropped, in which case `variants` already is the photograph.
+   */
+  readonly original?: {
+    readonly width: number;
+    readonly height: number;
+    readonly variants: NonNullable<ProjectImage['variants']>;
+  };
 }
 
 /** A column within a row: either rich text or a run of images, never both. */

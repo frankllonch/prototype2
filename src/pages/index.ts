@@ -16,7 +16,7 @@ import { describeImage } from '../content/describe.ts';
 import { displayTitle } from '../content/title.ts';
 import { withBase } from '../content/paths.ts';
 import type { Exhibition } from '../content/sections.ts';
-import type { Project } from '../content/types.ts';
+import type { Project, ProjectImage } from '../content/types.ts';
 
 const TAGLINE = 'Claudia Valsells — an artist working with colour as material, language and subject.';
 
@@ -220,6 +220,55 @@ export function colourChartPage(page: Project): Html {
  * A painting on its own page — what a shared link opens. From the grid, the
  * same work opens in the lightbox instead; this is the same composition.
  */
+/**
+ * Every picture there is of a work, the cut-out first.
+ *
+ * The cut-out is the work and takes the plate. Behind it, when the painting was
+ * cropped, is the photograph it was cut from — the frame, the wall, the light —
+ * and after that any further views the source carries. Each gets a small
+ * picture under the plate; choosing one puts it on the plate, lean and all,
+ * since there is only ever one plate.
+ *
+ * Nothing is listed twice: the cover is the first image, so the rest begin
+ * after it. A work with one picture gets no row of small ones at all.
+ */
+function plateStage(work: Project, name: string): Html {
+  const cover = work.cover;
+  if (!cover) return html``;
+
+  const views: { image: ProjectImage; alt: string }[] = [{ image: cover, alt: describeImage(work, cover.alt) }];
+  if (cover.original) {
+    views.push({
+      image: { ...cover, width: cover.original.width, height: cover.original.height, variants: cover.original.variants },
+      alt: `Photograph of ${name}, uncropped`,
+    });
+  }
+  for (const image of work.images.filter((i) => i.id !== cover.id)) {
+    views.push({ image, alt: image.alt || `${name}, another view` });
+  }
+
+  return html`<div class="detail-stage">
+    <figure class="detail-plate" data-tilt>
+      <span class="detail-plate-inner">
+        ${join(views.map((v, i) => html`<span class="detail-view${i === 0 ? ' is-shown' : ''}" data-view="${String(i)}">
+          ${responsiveImage({ image: v.image, sizes: '(max-width: 900px) 92vw, 46vw', priority: i === 0, alt: v.alt })}
+        </span>`))}
+      </span>
+    </figure>
+    ${views.length > 1
+      ? html`<div class="detail-thumbs" role="group" aria-label="Pictures of this work">
+          ${join(views.map((v, i) => html`<button
+            type="button"
+            class="detail-thumb${i === 0 ? ' is-shown' : ''}"
+            data-show="${String(i)}"
+            aria-pressed="${i === 0 ? 'true' : 'false'}"
+            aria-label="${v.alt}"
+          >${responsiveImage({ image: v.image, sizes: '72px', priority: true, alt: '' })}</button>`))}
+        </div>`
+      : ''}
+  </div>`;
+}
+
 export function artworkDetailPage(work: Project, previous?: Project, next?: Project): Html {
   const name = displayTitle(work.title, 'work');
   const { year, dimensions, materials, reference, available } = work.metadata;
@@ -234,13 +283,7 @@ export function artworkDetailPage(work: Project, previous?: Project, next?: Proj
     description: work.description ?? '',
     children: html`<article class="detail">
       <a class="detail-back" href="${withBase('/artwork/')}">← Artwork</a>
-      ${work.cover
-        ? html`<figure class="detail-plate" data-tilt>
-            <span class="detail-plate-inner">
-              ${responsiveImage({ image: work.cover, sizes: '(max-width: 900px) 92vw, 46vw', priority: true, alt: describeImage(work, work.cover.alt) })}
-            </span>
-          </figure>`
-        : ''}
+      ${plateStage(work, name)}
       <div class="detail-caption">
         <h1 class="detail-title">${name}</h1>
         ${join(facts.map((f) => html`<p>${f}</p>`))}
