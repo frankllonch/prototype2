@@ -22,6 +22,7 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
 import type { Dataset } from '../src/content/types.ts';
+import { localFile, sourceExt } from './sources.ts';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const MEDIA = path.join(ROOT, 'content', 'raw', 'media');
@@ -77,8 +78,7 @@ async function main() {
     const crop = path.join(CROPS, `${cover.id}.jpg`);
     let file = cropped.has(cover.id) && existsSync(crop) ? crop : '';
     if (!file) {
-      const ext = path.extname(new URL(cover.source).pathname) || '.jpg';
-      const original = path.join(MEDIA, `${cover.id}${ext}`);
+      const original = localFile(cover.source) ?? path.join(MEDIA, `${cover.id}${sourceExt(cover.source)}`);
       if (existsSync(original)) file = original;
     }
     if (!file) continue;

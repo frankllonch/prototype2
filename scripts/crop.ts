@@ -24,6 +24,7 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
 import type { Dataset, Project } from '../src/content/types.ts';
+import { localFile, sourceExt } from './sources.ts';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const CACHE = path.join(ROOT, 'content', 'raw', 'media');
@@ -403,8 +404,7 @@ async function main() {
 
   for (const work of works) {
     const cover = work.cover!;
-    const ext = path.extname(new URL(cover.source).pathname) || '.jpg';
-    const file = path.join(CACHE, `${cover.id}${ext}`);
+    const file = localFile(cover.source) ?? path.join(CACHE, `${cover.id}${sourceExt(cover.source)}`);
     const record = existsSync(file) ? await analyse(file, work) : { status: 'no-image' as const };
     report[cover.id] = record;
     tally[record.status] = (tally[record.status] ?? 0) + 1;

@@ -10,6 +10,7 @@
   "scripts": {
     "extract": "node --experimental-strip-types scripts/extract.ts",
     "images": "node --experimental-strip-types scripts/images.ts",
+    "add-works": "node --experimental-strip-types scripts/add-works.ts",
     "crop": "node --experimental-strip-types scripts/crop.ts",
     "match-crops": "node --experimental-strip-types scripts/match-crops.ts",
     "match-review": "node --experimental-strip-types scripts/match-review.ts",

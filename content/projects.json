@@ -5463,7 +5463,7 @@
     {
       "slug": "untitled-2020-110x153cm",
       "kind": "work",
-      "title": "Untitled 2020, 110x153cm",
+      "title": "Untitled 2021, 110x153cm",
       "sourceUrl": "https://www.claudiavalsells.com/portfolio/untitled-2020-110x153cm/",
       "description": "Untitled 2020, 110 x 153 cm, 43,30 x 60,23 inches, gouache on paper.",
       "rows": [
@@ -5512,7 +5512,7 @@
       ],
       "metadata": {
         "date": "2021-03-04T15:37:14+00:00",
-        "year": 2020,
+        "year": 2021,
         "categories": [
           "pinturas-paintings"
         ],
@@ -5951,7 +5951,7 @@
     {
       "slug": "untitled-2020-200x200cm-2",
       "kind": "work",
-      "title": "Untitled 2020, 200x200cm",
+      "title": "Untitled 2021, 200x200cm",
       "sourceUrl": "https://www.claudiavalsells.com/portfolio/untitled-2020-200x200cm-2/",
       "description": "Untitled 2020, 200x200cm, 78,74 x 78,74 inches. Mixed technique on canvas.",
       "rows": [
@@ -6000,7 +6000,7 @@
       ],
       "metadata": {
         "date": "2021-03-04T15:52:21+00:00",
-        "year": 2020,
+        "year": 2021,
         "categories": [
           "pinturas-paintings"
         ],
@@ -6331,6 +6331,23 @@
               ]
             }
           ]
+        },
+        {
+          "columns": [
+            {
+              "kind": "images",
+              "span": 12,
+              "images": [
+                {
+                  "id": "871045d49bda12e2",
+                  "source": "local/photos/gouache 72x62 Claudia Valsells.jpg",
+                  "alt": "",
+                  "width": 2000,
+                  "height": 2400
+                }
+              ]
+            }
+          ]
         }
       ],
       "cover": {
@@ -6347,11 +6364,18 @@
           "alt": "",
           "width": 2000,
           "height": 2400
+        },
+        {
+          "id": "871045d49bda12e2",
+          "source": "local/photos/gouache 72x62 Claudia Valsells.jpg",
+          "alt": "",
+          "width": 2000,
+          "height": 2400
         }
       ],
       "metadata": {
         "date": "2020-05-30T18:25:03+00:00",
-        "year": 2020,
+        "year": 2019,
         "categories": [
           "pinturas-paintings"
         ],
@@ -10392,6 +10416,1365 @@
         "reference": "M612",
         "dimensions": "81 × 100 cm",
         "materials": "Acrylic on linen"
+      }
+    },
+    {
+      "slug": "untitled-2016-130x100cm",
+      "kind": "work",
+      "title": "Untitled 2016, 130x100 cm",
+      "sourceUrl": "",
+      "rows": [
+        {
+          "columns": [
+            {
+              "kind": "images",
+              "span": 12,
+              "images": [
+                {
+                  "id": "ca7f1afdaf3b040d",
+                  "source": "local/2016/130x100 acrylic paint by Claudia Valsells.jpg",
+                  "alt": "",
+                  "width": 828,
+                  "height": 1000
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cover": {
+        "id": "ca7f1afdaf3b040d",
+        "source": "local/2016/130x100 acrylic paint by Claudia Valsells.jpg",
+        "alt": "",
+        "width": 828,
+        "height": 1000
+      },
+      "images": [
+        {
+          "id": "ca7f1afdaf3b040d",
+          "source": "local/2016/130x100 acrylic paint by Claudia Valsells.jpg",
+          "alt": "",
+          "width": 828,
+          "height": 1000
+        }
+      ],
+      "metadata": {
+        "date": "2016-01-01T00:00:59+00:00",
+        "year": 2016,
+        "categories": [
+          "pinturas-paintings"
+        ],
+        "available": false,
+        "dimensions": "130 × 100 cm",
+        "materials": "Acrylic paint"
+      }
+    },
+    {
+      "slug": "untitled-2016-130x100cm-2",
+      "kind": "work",
+      "title": "Untitled 2016, 130x100 cm",
+      "sourceUrl": "",
+      "rows": [
+        {
+          "columns": [
+            {
+              "kind": "images",
+              "span": 12,
+              "images": [
+                {
+                  "id": "926abc4fc6f82c36",
+                  "source": "local/2016/130x100 acrylic paint claudia valsells.jpg",
+                  "alt": "",
+                  "width": 843,
+                  "height": 1000
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cover": {
+        "id": "926abc4fc6f82c36",
+        "source": "local/2016/130x100 acrylic paint claudia valsells.jpg",
+        "alt": "",
+        "width": 843,
+        "height": 1000
+      },
+      "images": [
+        {
+          "id": "926abc4fc6f82c36",
+          "source": "local/2016/130x100 acrylic paint claudia valsells.jpg",
+          "alt": "",
+          "width": 843,
+          "height": 1000
+        }
+      ],
+      "metadata": {
+        "date": "2016-01-01T00:00:58+00:00",
+        "year": 2016,
+        "categories": [
+          "pinturas-paintings"
+        ],
+        "available": false,
+        "dimensions": "130 × 100 cm",
+        "materials": "Acrylic paint"
+      }
+    },
+    {
+      "slug": "untitled-2016-130x100cm-3",
+      "kind": "work",
+      "title": "Untitled 2016, 130x100 cm",
+      "sourceUrl": "",
+      "rows": [
+        {
+          "columns": [
+            {
+              "kind": "images",
+              "span": 12,
+              "images": [
+                {
+                  "id": "8744e56729d6eab3",
+                  "source": "local/2016/130x100 de Claudia Valsells.jpg",
+                  "alt": "",
+                  "width": 857,
+                  "height": 1000
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cover": {
+        "id": "8744e56729d6eab3",
+        "source": "local/2016/130x100 de Claudia Valsells.jpg",
+        "alt": "",
+        "width": 857,
+        "height": 1000
+      },
+      "images": [
+        {
+          "id": "8744e56729d6eab3",
+          "source": "local/2016/130x100 de Claudia Valsells.jpg",
+          "alt": "",
+          "width": 857,
+          "height": 1000
+        }
+      ],
+      "metadata": {
+        "date": "2016-01-01T00:00:57+00:00",
+        "year": 2016,
+        "categories": [
+          "pinturas-paintings"
+        ],
+        "available": false,
+        "dimensions": "130 × 100 cm"
+      }
+    },
+    {
+      "slug": "untitled-2016-150x110cm",
+      "kind": "work",
+      "title": "Untitled 2016, 150x110 cm",
+      "sourceUrl": "",
+      "rows": [
+        {
+          "columns": [
+            {
+              "kind": "images",
+              "span": 12,
+              "images": [
+                {
+                  "id": "4d8de0c530904422",
+                  "source": "local/2016/150x110 acrylic paint claudia valsells.jpg",
+                  "alt": "",
+                  "width": 843,
+                  "height": 1000
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cover": {
+        "id": "4d8de0c530904422",
+        "source": "local/2016/150x110 acrylic paint claudia valsells.jpg",
+        "alt": "",
+        "width": 843,
+        "height": 1000
+      },
+      "images": [
+        {
+          "id": "4d8de0c530904422",
+          "source": "local/2016/150x110 acrylic paint claudia valsells.jpg",
+          "alt": "",
+          "width": 843,
+          "height": 1000
+        }
+      ],
+      "metadata": {
+        "date": "2016-01-01T00:00:56+00:00",
+        "year": 2016,
+        "categories": [
+          "pinturas-paintings"
+        ],
+        "available": false,
+        "dimensions": "150 × 110 cm",
+        "materials": "Acrylic paint"
+      }
+    },
+    {
+      "slug": "untitled-2016-160x130cm",
+      "kind": "work",
+      "title": "Untitled 2016, 160x130 cm",
+      "sourceUrl": "",
+      "rows": [
+        {
+          "columns": [
+            {
+              "kind": "images",
+              "span": 12,
+              "images": [
+                {
+                  "id": "024e39a198b18367",
+                  "source": "local/2016/160x130 acrylic paint claudia valsells.jpg",
+                  "alt": "",
+                  "width": 843,
+                  "height": 1000
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cover": {
+        "id": "024e39a198b18367",
+        "source": "local/2016/160x130 acrylic paint claudia valsells.jpg",
+        "alt": "",
+        "width": 843,
+        "height": 1000
+      },
+      "images": [
+        {
+          "id": "024e39a198b18367",
+          "source": "local/2016/160x130 acrylic paint claudia valsells.jpg",
+          "alt": "",
+          "width": 843,
+          "height": 1000
+        }
+      ],
+      "metadata": {
+        "date": "2016-01-01T00:00:55+00:00",
+        "year": 2016,
+        "categories": [
+          "pinturas-paintings"
+        ],
+        "available": false,
+        "dimensions": "160 × 130 cm",
+        "materials": "Acrylic paint"
+      }
+    },
+    {
+      "slug": "untitled-2016-90x100cm",
+      "kind": "work",
+      "title": "Untitled 2016, 90x100 cm",
+      "sourceUrl": "",
+      "rows": [
+        {
+          "columns": [
+            {
+              "kind": "images",
+              "span": 12,
+              "images": [
+                {
+                  "id": "e64e3cadc07834c3",
+                  "source": "local/2016/gouache 90x100.jpg",
+                  "alt": "",
+                  "width": 803,
+                  "height": 1024
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cover": {
+        "id": "e64e3cadc07834c3",
+        "source": "local/2016/gouache 90x100.jpg",
+        "alt": "",
+        "width": 803,
+        "height": 1024
+      },
+      "images": [
+        {
+          "id": "e64e3cadc07834c3",
+          "source": "local/2016/gouache 90x100.jpg",
+          "alt": "",
+          "width": 803,
+          "height": 1024
+        }
+      ],
+      "metadata": {
+        "date": "2016-01-01T00:00:54+00:00",
+        "year": 2016,
+        "categories": [
+          "pinturas-paintings"
+        ],
+        "available": false,
+        "dimensions": "90 × 100 cm",
+        "materials": "Gouache on paper"
+      }
+    },
+    {
+      "slug": "untitled-2016-95x105cm",
+      "kind": "work",
+      "title": "Untitled 2016, 95x105 cm",
+      "sourceUrl": "",
+      "rows": [
+        {
+          "columns": [
+            {
+              "kind": "images",
+              "span": 12,
+              "images": [
+                {
+                  "id": "7649e98a37f76c69",
+                  "source": "local/2016/gouache on paper claudia valsells 95X105 1.jpg",
+                  "alt": "",
+                  "width": 1166,
+                  "height": 1500
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cover": {
+        "id": "7649e98a37f76c69",
+        "source": "local/2016/gouache on paper claudia valsells 95X105 1.jpg",
+        "alt": "",
+        "width": 1166,
+        "height": 1500
+      },
+      "images": [
+        {
+          "id": "7649e98a37f76c69",
+          "source": "local/2016/gouache on paper claudia valsells 95X105 1.jpg",
+          "alt": "",
+          "width": 1166,
+          "height": 1500
+        }
+      ],
+      "metadata": {
+        "date": "2016-01-01T00:00:53+00:00",
+        "year": 2016,
+        "categories": [
+          "pinturas-paintings"
+        ],
+        "available": false,
+        "dimensions": "95 × 105 cm",
+        "materials": "Gouache on paper"
+      }
+    },
+    {
+      "slug": "untitled-2016-95x105cm-2",
+      "kind": "work",
+      "title": "Untitled 2016, 95x105 cm",
+      "sourceUrl": "",
+      "rows": [
+        {
+          "columns": [
+            {
+              "kind": "images",
+              "span": 12,
+              "images": [
+                {
+                  "id": "0741d035d2c1092e",
+                  "source": "local/2016/gouache on paper claudia valsells 95X105 2.jpg",
+                  "alt": "",
+                  "width": 1154,
+                  "height": 1500
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cover": {
+        "id": "0741d035d2c1092e",
+        "source": "local/2016/gouache on paper claudia valsells 95X105 2.jpg",
+        "alt": "",
+        "width": 1154,
+        "height": 1500
+      },
+      "images": [
+        {
+          "id": "0741d035d2c1092e",
+          "source": "local/2016/gouache on paper claudia valsells 95X105 2.jpg",
+          "alt": "",
+          "width": 1154,
+          "height": 1500
+        }
+      ],
+      "metadata": {
+        "date": "2016-01-01T00:00:52+00:00",
+        "year": 2016,
+        "categories": [
+          "pinturas-paintings"
+        ],
+        "available": false,
+        "dimensions": "95 × 105 cm",
+        "materials": "Gouache on paper"
+      }
+    },
+    {
+      "slug": "untitled-2017-56x70cm",
+      "kind": "work",
+      "title": "Untitled 2017, 56x70 cm",
+      "sourceUrl": "",
+      "rows": [
+        {
+          "columns": [
+            {
+              "kind": "images",
+              "span": 12,
+              "images": [
+                {
+                  "id": "cb5fd1996fc23dc6",
+                  "source": "local/2017/56X70.JPG",
+                  "alt": "",
+                  "width": 989,
+                  "height": 1200
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cover": {
+        "id": "cb5fd1996fc23dc6",
+        "source": "local/2017/56X70.JPG",
+        "alt": "",
+        "width": 989,
+        "height": 1200
+      },
+      "images": [
+        {
+          "id": "cb5fd1996fc23dc6",
+          "source": "local/2017/56X70.JPG",
+          "alt": "",
+          "width": 989,
+          "height": 1200
+        }
+      ],
+      "metadata": {
+        "date": "2017-01-01T00:00:59+00:00",
+        "year": 2017,
+        "categories": [
+          "pinturas-paintings"
+        ],
+        "available": false,
+        "dimensions": "56 × 70 cm"
+      }
+    },
+    {
+      "slug": "untitled-2017-80x150cm",
+      "kind": "work",
+      "title": "Untitled 2017, 80x150 cm",
+      "sourceUrl": "",
+      "rows": [
+        {
+          "columns": [
+            {
+              "kind": "images",
+              "span": 12,
+              "images": [
+                {
+                  "id": "bb25802406944821",
+                  "source": "local/2017/80x150 cartell expo claudia valsells.jpg",
+                  "alt": "",
+                  "width": 864,
+                  "height": 1000
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cover": {
+        "id": "bb25802406944821",
+        "source": "local/2017/80x150 cartell expo claudia valsells.jpg",
+        "alt": "",
+        "width": 864,
+        "height": 1000
+      },
+      "images": [
+        {
+          "id": "bb25802406944821",
+          "source": "local/2017/80x150 cartell expo claudia valsells.jpg",
+          "alt": "",
+          "width": 864,
+          "height": 1000
+        }
+      ],
+      "metadata": {
+        "date": "2017-01-01T00:00:58+00:00",
+        "year": 2017,
+        "categories": [
+          "pinturas-paintings"
+        ],
+        "available": false,
+        "dimensions": "80 × 150 cm"
+      }
+    },
+    {
+      "slug": "untitled-2017-90x90cm",
+      "kind": "work",
+      "title": "Untitled 2017, 90x90 cm",
+      "sourceUrl": "",
+      "rows": [
+        {
+          "columns": [
+            {
+              "kind": "images",
+              "span": 12,
+              "images": [
+                {
+                  "id": "1be72d8b32c05a1a",
+                  "source": "local/2017/90X90 gouache claudia valsells.JPG",
+                  "alt": "",
+                  "width": 1083,
+                  "height": 1200
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cover": {
+        "id": "1be72d8b32c05a1a",
+        "source": "local/2017/90X90 gouache claudia valsells.JPG",
+        "alt": "",
+        "width": 1083,
+        "height": 1200
+      },
+      "images": [
+        {
+          "id": "1be72d8b32c05a1a",
+          "source": "local/2017/90X90 gouache claudia valsells.JPG",
+          "alt": "",
+          "width": 1083,
+          "height": 1200
+        }
+      ],
+      "metadata": {
+        "date": "2017-01-01T00:00:57+00:00",
+        "year": 2017,
+        "categories": [
+          "pinturas-paintings"
+        ],
+        "available": false,
+        "dimensions": "90 × 90 cm",
+        "materials": "Gouache on paper"
+      }
+    },
+    {
+      "slug": "untitled-2017-100x100cm",
+      "kind": "work",
+      "title": "Untitled 2017, 100x100 cm",
+      "sourceUrl": "",
+      "rows": [
+        {
+          "columns": [
+            {
+              "kind": "images",
+              "span": 12,
+              "images": [
+                {
+                  "id": "256b4477d1cef930",
+                  "source": "local/2017/100x100 gouache on paper 2.JPG",
+                  "alt": "",
+                  "width": 933,
+                  "height": 1000
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cover": {
+        "id": "256b4477d1cef930",
+        "source": "local/2017/100x100 gouache on paper 2.JPG",
+        "alt": "",
+        "width": 933,
+        "height": 1000
+      },
+      "images": [
+        {
+          "id": "256b4477d1cef930",
+          "source": "local/2017/100x100 gouache on paper 2.JPG",
+          "alt": "",
+          "width": 933,
+          "height": 1000
+        }
+      ],
+      "metadata": {
+        "date": "2017-01-01T00:00:56+00:00",
+        "year": 2017,
+        "categories": [
+          "pinturas-paintings"
+        ],
+        "available": false,
+        "dimensions": "100 × 100 cm",
+        "materials": "Gouache on paper"
+      }
+    },
+    {
+      "slug": "untitled-2017-100x100cm-2",
+      "kind": "work",
+      "title": "Untitled 2017, 100x100 cm",
+      "sourceUrl": "",
+      "rows": [
+        {
+          "columns": [
+            {
+              "kind": "images",
+              "span": 12,
+              "images": [
+                {
+                  "id": "63de73eae7e1d72a",
+                  "source": "local/2017/100X100 gouache on paper.JPG",
+                  "alt": "",
+                  "width": 1200,
+                  "height": 1150
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cover": {
+        "id": "63de73eae7e1d72a",
+        "source": "local/2017/100X100 gouache on paper.JPG",
+        "alt": "",
+        "width": 1200,
+        "height": 1150
+      },
+      "images": [
+        {
+          "id": "63de73eae7e1d72a",
+          "source": "local/2017/100X100 gouache on paper.JPG",
+          "alt": "",
+          "width": 1200,
+          "height": 1150
+        }
+      ],
+      "metadata": {
+        "date": "2017-01-01T00:00:55+00:00",
+        "year": 2017,
+        "categories": [
+          "pinturas-paintings"
+        ],
+        "available": false,
+        "dimensions": "100 × 100 cm",
+        "materials": "Gouache on paper"
+      }
+    },
+    {
+      "slug": "untitled-2017-110x130cm",
+      "kind": "work",
+      "title": "Untitled 2017, 110x130 cm",
+      "sourceUrl": "",
+      "rows": [
+        {
+          "columns": [
+            {
+              "kind": "images",
+              "span": 12,
+              "images": [
+                {
+                  "id": "d95f3643d09b19f3",
+                  "source": "local/2017/110x130 claudia valsells acrylic on canvas.jpg",
+                  "alt": "",
+                  "width": 3040,
+                  "height": 3662
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cover": {
+        "id": "d95f3643d09b19f3",
+        "source": "local/2017/110x130 claudia valsells acrylic on canvas.jpg",
+        "alt": "",
+        "width": 3040,
+        "height": 3662
+      },
+      "images": [
+        {
+          "id": "d95f3643d09b19f3",
+          "source": "local/2017/110x130 claudia valsells acrylic on canvas.jpg",
+          "alt": "",
+          "width": 3040,
+          "height": 3662
+        }
+      ],
+      "metadata": {
+        "date": "2017-01-01T00:00:54+00:00",
+        "year": 2017,
+        "categories": [
+          "pinturas-paintings"
+        ],
+        "available": false,
+        "dimensions": "110 × 130 cm",
+        "materials": "Acrylic on canvas"
+      }
+    },
+    {
+      "slug": "untitled-2018",
+      "kind": "work",
+      "title": "Untitled 2018",
+      "sourceUrl": "",
+      "rows": [
+        {
+          "columns": [
+            {
+              "kind": "images",
+              "span": 12,
+              "images": [
+                {
+                  "id": "d8f04d85fcf77bd0",
+                  "source": "local/2018/_DSC9206 copia.jpg",
+                  "alt": "",
+                  "width": 2000,
+                  "height": 2400
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cover": {
+        "id": "d8f04d85fcf77bd0",
+        "source": "local/2018/_DSC9206 copia.jpg",
+        "alt": "",
+        "width": 2000,
+        "height": 2400
+      },
+      "images": [
+        {
+          "id": "d8f04d85fcf77bd0",
+          "source": "local/2018/_DSC9206 copia.jpg",
+          "alt": "",
+          "width": 2000,
+          "height": 2400
+        }
+      ],
+      "metadata": {
+        "date": "2018-01-01T00:00:59+00:00",
+        "year": 2018,
+        "categories": [
+          "pinturas-paintings"
+        ],
+        "available": false
+      }
+    },
+    {
+      "slug": "untitled-2018-2",
+      "kind": "work",
+      "title": "Untitled 2018",
+      "sourceUrl": "",
+      "rows": [
+        {
+          "columns": [
+            {
+              "kind": "images",
+              "span": 12,
+              "images": [
+                {
+                  "id": "7d437acc68c6f22e",
+                  "source": "local/2018/arte contemporaneo claudia valsells.JPG",
+                  "alt": "",
+                  "width": 1269,
+                  "height": 1500
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cover": {
+        "id": "7d437acc68c6f22e",
+        "source": "local/2018/arte contemporaneo claudia valsells.JPG",
+        "alt": "",
+        "width": 1269,
+        "height": 1500
+      },
+      "images": [
+        {
+          "id": "7d437acc68c6f22e",
+          "source": "local/2018/arte contemporaneo claudia valsells.JPG",
+          "alt": "",
+          "width": 1269,
+          "height": 1500
+        }
+      ],
+      "metadata": {
+        "date": "2018-01-01T00:00:58+00:00",
+        "year": 2018,
+        "categories": [
+          "pinturas-paintings"
+        ],
+        "available": false
+      }
+    },
+    {
+      "slug": "untitled-2018-3",
+      "kind": "work",
+      "title": "Untitled 2018",
+      "sourceUrl": "",
+      "rows": [
+        {
+          "columns": [
+            {
+              "kind": "images",
+              "span": 12,
+              "images": [
+                {
+                  "id": "32cdf07c53f6aca5",
+                  "source": "local/2018/gouache on paper claudia valsells 5.jpg",
+                  "alt": "",
+                  "width": 1200,
+                  "height": 1138
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cover": {
+        "id": "32cdf07c53f6aca5",
+        "source": "local/2018/gouache on paper claudia valsells 5.jpg",
+        "alt": "",
+        "width": 1200,
+        "height": 1138
+      },
+      "images": [
+        {
+          "id": "32cdf07c53f6aca5",
+          "source": "local/2018/gouache on paper claudia valsells 5.jpg",
+          "alt": "",
+          "width": 1200,
+          "height": 1138
+        }
+      ],
+      "metadata": {
+        "date": "2018-01-01T00:00:57+00:00",
+        "year": 2018,
+        "categories": [
+          "pinturas-paintings"
+        ],
+        "available": false,
+        "materials": "Gouache on paper"
+      }
+    },
+    {
+      "slug": "untitled-2018-4",
+      "kind": "work",
+      "title": "Untitled 2018",
+      "sourceUrl": "",
+      "rows": [
+        {
+          "columns": [
+            {
+              "kind": "images",
+              "span": 12,
+              "images": [
+                {
+                  "id": "32b991c832913253",
+                  "source": "local/2018/gouache on paper claudia valsells.jpg",
+                  "alt": "",
+                  "width": 1200,
+                  "height": 1138
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cover": {
+        "id": "32b991c832913253",
+        "source": "local/2018/gouache on paper claudia valsells.jpg",
+        "alt": "",
+        "width": 1200,
+        "height": 1138
+      },
+      "images": [
+        {
+          "id": "32b991c832913253",
+          "source": "local/2018/gouache on paper claudia valsells.jpg",
+          "alt": "",
+          "width": 1200,
+          "height": 1138
+        }
+      ],
+      "metadata": {
+        "date": "2018-01-01T00:00:56+00:00",
+        "year": 2018,
+        "categories": [
+          "pinturas-paintings"
+        ],
+        "available": false,
+        "materials": "Gouache on paper"
+      }
+    },
+    {
+      "slug": "untitled-2018-5",
+      "kind": "work",
+      "title": "Untitled 2018",
+      "sourceUrl": "",
+      "rows": [
+        {
+          "columns": [
+            {
+              "kind": "images",
+              "span": 12,
+              "images": [
+                {
+                  "id": "2cd86570b677e5df",
+                  "source": "local/2018/paper claudia valsells.jpg",
+                  "alt": "",
+                  "width": 1385,
+                  "height": 1500
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cover": {
+        "id": "2cd86570b677e5df",
+        "source": "local/2018/paper claudia valsells.jpg",
+        "alt": "",
+        "width": 1385,
+        "height": 1500
+      },
+      "images": [
+        {
+          "id": "2cd86570b677e5df",
+          "source": "local/2018/paper claudia valsells.jpg",
+          "alt": "",
+          "width": 1385,
+          "height": 1500
+        }
+      ],
+      "metadata": {
+        "date": "2018-01-01T00:00:55+00:00",
+        "year": 2018,
+        "categories": [
+          "pinturas-paintings"
+        ],
+        "available": false
+      }
+    },
+    {
+      "slug": "untitled-2018-80x70cm",
+      "kind": "work",
+      "title": "Untitled 2018, 80x70 cm",
+      "sourceUrl": "",
+      "rows": [
+        {
+          "columns": [
+            {
+              "kind": "images",
+              "span": 12,
+              "images": [
+                {
+                  "id": "26f66515f50e938d",
+                  "source": "local/2018/PARIS 80X70 2.jpg",
+                  "alt": "",
+                  "width": 1500,
+                  "height": 1398
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cover": {
+        "id": "26f66515f50e938d",
+        "source": "local/2018/PARIS 80X70 2.jpg",
+        "alt": "",
+        "width": 1500,
+        "height": 1398
+      },
+      "images": [
+        {
+          "id": "26f66515f50e938d",
+          "source": "local/2018/PARIS 80X70 2.jpg",
+          "alt": "",
+          "width": 1500,
+          "height": 1398
+        }
+      ],
+      "metadata": {
+        "date": "2018-01-01T00:00:54+00:00",
+        "year": 2018,
+        "categories": [
+          "pinturas-paintings"
+        ],
+        "available": false,
+        "dimensions": "80 × 70 cm"
+      }
+    },
+    {
+      "slug": "untitled-2019",
+      "kind": "work",
+      "title": "Untitled 2019",
+      "sourceUrl": "",
+      "rows": [
+        {
+          "columns": [
+            {
+              "kind": "images",
+              "span": 12,
+              "images": [
+                {
+                  "id": "ba959adcb8de1f09",
+                  "source": "local/2019/3.jpg",
+                  "alt": "",
+                  "width": 1200,
+                  "height": 1138
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cover": {
+        "id": "ba959adcb8de1f09",
+        "source": "local/2019/3.jpg",
+        "alt": "",
+        "width": 1200,
+        "height": 1138
+      },
+      "images": [
+        {
+          "id": "ba959adcb8de1f09",
+          "source": "local/2019/3.jpg",
+          "alt": "",
+          "width": 1200,
+          "height": 1138
+        }
+      ],
+      "metadata": {
+        "date": "2019-01-01T00:00:59+00:00",
+        "year": 2019,
+        "categories": [
+          "pinturas-paintings"
+        ],
+        "available": false
+      }
+    },
+    {
+      "slug": "untitled-2019-2",
+      "kind": "work",
+      "title": "Untitled 2019",
+      "sourceUrl": "",
+      "rows": [
+        {
+          "columns": [
+            {
+              "kind": "images",
+              "span": 12,
+              "images": [
+                {
+                  "id": "5d555e25302d7b31",
+                  "source": "local/2019/6.jpg",
+                  "alt": "",
+                  "width": 1200,
+                  "height": 1138
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cover": {
+        "id": "5d555e25302d7b31",
+        "source": "local/2019/6.jpg",
+        "alt": "",
+        "width": 1200,
+        "height": 1138
+      },
+      "images": [
+        {
+          "id": "5d555e25302d7b31",
+          "source": "local/2019/6.jpg",
+          "alt": "",
+          "width": 1200,
+          "height": 1138
+        }
+      ],
+      "metadata": {
+        "date": "2019-01-01T00:00:58+00:00",
+        "year": 2019,
+        "categories": [
+          "pinturas-paintings"
+        ],
+        "available": false
+      }
+    },
+    {
+      "slug": "untitled-2019-3",
+      "kind": "work",
+      "title": "Untitled 2019",
+      "sourceUrl": "",
+      "rows": [
+        {
+          "columns": [
+            {
+              "kind": "images",
+              "span": 12,
+              "images": [
+                {
+                  "id": "38c8b2b7e3012e19",
+                  "source": "local/2019/7.jpg",
+                  "alt": "",
+                  "width": 1200,
+                  "height": 1138
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cover": {
+        "id": "38c8b2b7e3012e19",
+        "source": "local/2019/7.jpg",
+        "alt": "",
+        "width": 1200,
+        "height": 1138
+      },
+      "images": [
+        {
+          "id": "38c8b2b7e3012e19",
+          "source": "local/2019/7.jpg",
+          "alt": "",
+          "width": 1200,
+          "height": 1138
+        }
+      ],
+      "metadata": {
+        "date": "2019-01-01T00:00:57+00:00",
+        "year": 2019,
+        "categories": [
+          "pinturas-paintings"
+        ],
+        "available": false
+      }
+    },
+    {
+      "slug": "untitled-2019-160x130cm",
+      "kind": "work",
+      "title": "Untitled 2019, 160x130 cm",
+      "sourceUrl": "",
+      "rows": [
+        {
+          "columns": [
+            {
+              "kind": "images",
+              "span": 12,
+              "images": [
+                {
+                  "id": "e3644687f887bdbd",
+                  "source": "local/2019/160x130 collage &gouache.jpg",
+                  "alt": "",
+                  "width": 4016,
+                  "height": 6016
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cover": {
+        "id": "e3644687f887bdbd",
+        "source": "local/2019/160x130 collage &gouache.jpg",
+        "alt": "",
+        "width": 4016,
+        "height": 6016
+      },
+      "images": [
+        {
+          "id": "e3644687f887bdbd",
+          "source": "local/2019/160x130 collage &gouache.jpg",
+          "alt": "",
+          "width": 4016,
+          "height": 6016
+        }
+      ],
+      "metadata": {
+        "date": "2019-01-01T00:00:56+00:00",
+        "year": 2019,
+        "categories": [
+          "pinturas-paintings"
+        ],
+        "available": false,
+        "dimensions": "160 × 130 cm",
+        "materials": "Gouache and collage on paper"
+      }
+    },
+    {
+      "slug": "untitled-2019-160x140cm",
+      "kind": "work",
+      "title": "Untitled 2019, 160x140 cm",
+      "sourceUrl": "",
+      "rows": [
+        {
+          "columns": [
+            {
+              "kind": "images",
+              "span": 12,
+              "images": [
+                {
+                  "id": "c462852980c8bc0c",
+                  "source": "local/2019/160X140 Claudia Valsells gouache i collage sobre paper.jpg",
+                  "alt": "",
+                  "width": 4016,
+                  "height": 6016
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cover": {
+        "id": "c462852980c8bc0c",
+        "source": "local/2019/160X140 Claudia Valsells gouache i collage sobre paper.jpg",
+        "alt": "",
+        "width": 4016,
+        "height": 6016
+      },
+      "images": [
+        {
+          "id": "c462852980c8bc0c",
+          "source": "local/2019/160X140 Claudia Valsells gouache i collage sobre paper.jpg",
+          "alt": "",
+          "width": 4016,
+          "height": 6016
+        }
+      ],
+      "metadata": {
+        "date": "2019-01-01T00:00:55+00:00",
+        "year": 2019,
+        "categories": [
+          "pinturas-paintings"
+        ],
+        "available": false,
+        "dimensions": "160 × 140 cm",
+        "materials": "Gouache and collage on paper"
+      }
+    },
+    {
+      "slug": "untitled-2019-72x62cm",
+      "kind": "work",
+      "title": "Untitled 2019, 72x62 cm",
+      "sourceUrl": "",
+      "rows": [
+        {
+          "columns": [
+            {
+              "kind": "images",
+              "span": 12,
+              "images": [
+                {
+                  "id": "b5e85dc92163ba94",
+                  "source": "local/2019/gouache 72x62 C Valsells.jpg",
+                  "alt": "",
+                  "width": 2000,
+                  "height": 2400
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cover": {
+        "id": "b5e85dc92163ba94",
+        "source": "local/2019/gouache 72x62 C Valsells.jpg",
+        "alt": "",
+        "width": 2000,
+        "height": 2400
+      },
+      "images": [
+        {
+          "id": "b5e85dc92163ba94",
+          "source": "local/2019/gouache 72x62 C Valsells.jpg",
+          "alt": "",
+          "width": 2000,
+          "height": 2400
+        }
+      ],
+      "metadata": {
+        "date": "2019-01-01T00:00:54+00:00",
+        "year": 2019,
+        "categories": [
+          "pinturas-paintings"
+        ],
+        "available": false,
+        "dimensions": "72 × 62 cm",
+        "materials": "Gouache on paper"
+      }
+    },
+    {
+      "slug": "untitled-2019-120x110cm",
+      "kind": "work",
+      "title": "Untitled 2019, 120x110 cm",
+      "sourceUrl": "",
+      "rows": [
+        {
+          "columns": [
+            {
+              "kind": "images",
+              "span": 12,
+              "images": [
+                {
+                  "id": "e2751a738fafbc4e",
+                  "source": "local/2019/gouache_on_paper_120x110_-OwMylsfs.jpg",
+                  "alt": "",
+                  "width": 4016,
+                  "height": 4819
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "cover": {
+        "id": "e2751a738fafbc4e",
+        "source": "local/2019/gouache_on_paper_120x110_-OwMylsfs.jpg",
+        "alt": "",
+        "width": 4016,
+        "height": 4819
+      },
+      "images": [
+        {
+          "id": "e2751a738fafbc4e",
+          "source": "local/2019/gouache_on_paper_120x110_-OwMylsfs.jpg",
+          "alt": "",
+          "width": 4016,
+          "height": 4819
+        }
+      ],
+      "metadata": {
+        "date": "2019-01-01T00:00:53+00:00",
+        "year": 2019,
+        "categories": [
+          "pinturas-paintings"
+        ],
+        "available": false,
+        "dimensions": "120 × 110 cm",
+        "materials": "Gouache on paper"
       }
     },
     {

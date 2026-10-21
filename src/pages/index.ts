@@ -42,7 +42,7 @@ export function artworkPage(works: readonly Project[], years: readonly YearColou
     description: TAGLINE,
     path: '/artwork/',
     rail: yearRail(years),
-    controls: gridControls([], true),
+    controls: gridControls([], true, works.length),
     children: html`
       <h1 class="sr-only">Claudia Valsells — Artwork</h1>
       <div class="hero" data-hero aria-hidden="true"></div>

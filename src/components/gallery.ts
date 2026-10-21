@@ -170,13 +170,16 @@ export function grid({
  * 154 works, and relative sizes are a wall, which is what tells you a painting
  * is three metres across. Neither is the truer view, so the reader chooses.
  */
-export function gridControls(years: readonly number[] = [], scalable = false): Html {
+export function gridControls(years: readonly number[] = [], scalable = false, total?: number): Html {
+  // The densest step is labelled with the whole archive, however many works
+  // that is by now.
+  const label = (i: number) => (i === DENSITIES.length - 1 && total ? total : DENSITIES[i]!.label);
   return html`<div class="controls" data-controls>
     <div class="control-group" role="group" aria-label="Grid size">
       ${join(
         DENSITIES.map(
           (d, i) => html`<button type="button" class="control${i === DEFAULT_DENSITY ? ' is-active' : ''}"
-            data-density="${d.unit}" aria-pressed="${i === DEFAULT_DENSITY ? 'true' : 'false'}">${d.label}</button>`,
+            data-density="${d.unit}" aria-pressed="${i === DEFAULT_DENSITY ? 'true' : 'false'}">${label(i)}</button>`,
         ),
       )}
     </div>

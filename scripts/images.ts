@@ -15,6 +15,7 @@ import { createHash } from 'node:crypto';
 import path from 'node:path';
 import sharp from 'sharp';
 import type { Dataset, ProjectImage } from '../src/content/types.ts';
+import { localFile, sourceExt } from './sources.ts';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const CACHE = path.join(ROOT, 'content', 'raw', 'media');
@@ -39,8 +40,15 @@ interface ImageManifestEntry {
 }
 
 async function download(image: ProjectImage): Promise<string | null> {
-  const ext = path.extname(new URL(image.source).pathname) || '.jpg';
-  const file = path.join(CACHE, `${image.id}${ext}`);
+  // A painting that was never on the site has nothing to download: its file is
+  // the source.
+  const local = localFile(image.source);
+  if (local) {
+    if (existsSync(local)) return local;
+    console.warn(`  ! missing ${image.source}`);
+    return null;
+  }
+  const file = path.join(CACHE, `${image.id}${sourceExt(image.source)}`);
   if (existsSync(file) && (await stat(file)).size > 0) return file;
 
   try {
