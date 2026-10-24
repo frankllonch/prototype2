@@ -718,7 +718,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
 }
 
 .grid-scaled .tile {
-  --k: var(--sh);
+  --k: calc(var(--sh) * var(--wall-scale, 1));
   height: calc(var(--unit) * var(--sh));
   width: calc(var(--unit) * var(--sh) * var(--a));
 }

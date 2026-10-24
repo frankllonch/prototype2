@@ -119,6 +119,15 @@
   --grid-gap-x: clamp(1rem, 2.6vw, 3.2rem);
   --grid-gap-y: clamp(0.6rem, 1.45vw, 1.8rem);
   /*
+   * THE WALL'S SIZE — how big the paintings are drawn when the grid is to
+   * scale, against their size at equal heights. 1 draws the typical work at
+   * the row height; the wall came out larger than the contact sheet because
+   * its rows are fewer per line and grow further to meet the edge, so it is
+   * taken down to 0.85. The spread between small and large works is a
+   * separate matter: content/size.ts, GAMMA.
+   */
+  --wall-scale: 0.85;
+  /*
    * WHERE THE OPENING ENDS — how far down the window the grid's first row sits
    * the moment the pile has unfolded. The pile lets go after SCROLL_SPAN
    * screens of scrolling (stack.ts, 1.3), and the first row lands at
