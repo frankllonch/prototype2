@@ -4,7 +4,7 @@ import { grid, gridControls, type GridItem } from '../components/gallery.ts';
 import { responsiveImage } from '../components/image.ts';
 import { panels, type PanelItem } from '../components/panels.ts';
 import { exhibitionList } from '../components/exhibitions.ts';
-import { WHATS_COLOR_SHOWS, venueFor } from '../content/shows.ts';
+import { SHOWS } from '../content/exhibitions-list.ts';
 import { commissionedList } from '../components/commissioned.ts';
 import { groupCommissioned } from '../content/groups.ts';
 import { editorialBody } from '../components/editorial.ts';
@@ -125,24 +125,17 @@ export function exhibitionsPage(items: readonly Exhibition[]): Html {
   // The What’s Color? shows are held for their own section, panels and all: a
   // row taken off the index whose panel still answered would be a page nothing
   // links to.
-  const shown = items.filter((e) => !WHATS_COLOR_SHOWS.has(e.slug));
+  // Every show Claudia listed is on the page; the few that came from the source
+  // page keep their photograph and their panel, matched by slug.
+  const covers = new Map(items.flatMap((e) => (e.cover ? [[e.slug, e.cover] as const] : [])));
+  const shown = items;
   return layout({
     title: 'Exhibitions',
     path: '/exhibitions/',
     overlays: panels('exhibition', shown.map(exhibitionItem)),
     children: html`
       <h1 class="sr-only">Exhibitions</h1>
-      ${exhibitionList(
-        shown.map((e) => ({
-          slug: e.slug,
-          title: e.title,
-          ...(e.year !== undefined ? { year: e.year } : {}),
-          ...(venueFor(e.slug, e.venue) !== undefined ? { venue: venueFor(e.slug, e.venue)! } : {}),
-          ...(e.from !== undefined ? { from: e.from } : {}),
-          ...(e.to !== undefined ? { to: e.to } : {}),
-          ...(e.cover !== undefined ? { cover: e.cover } : {}),
-        })),
-      )}
+      ${exhibitionList(SHOWS, covers)}
     `,
   });
 }
