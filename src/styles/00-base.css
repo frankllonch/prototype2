@@ -456,6 +456,72 @@ body.is-locked { overflow: hidden; }
 .control { transition: color var(--hover) var(--ease); font-variant-numeric: tabular-nums; }
 .control:hover, .control:focus-visible, .control.is-active { color: var(--ink); }
 
+/* ---------------------------------------------------------- scroll cue */
+
+/*
+ * The hint that there is more below, on the two pages that open on a full
+ * screen of something — the film and the pile. Neither looks like the top of a
+ * document, so without this nothing on the first view says what happens next.
+ *
+ * Fixed at the foot of the screen rather than placed in the page, because the
+ * gallery's runway is removed outright for reduced motion and on a back
+ * navigation (`client/stack.ts`), and a cue living inside it would go with it.
+ * Pointer events off: it says where to go, it does not go there, so the film
+ * and the tiles under it stay clickable.
+ */
+.scroll-cue {
+  position: fixed;
+  left: 50%;
+  bottom: 1.9rem;
+  /* Under the bar, over the page. */
+  z-index: 35;
+  width: 1.6rem;
+  margin-left: -0.8rem;
+  pointer-events: none;
+  transition: opacity 0.7s var(--ease);
+}
+.scroll-cue svg { display: block; width: 100%; height: auto; }
+
+/* Taken, and so no longer a cue. `client/scroll-cue.ts` sets this once, on the
+   first movement worth the name, and never takes it off. */
+html.is-scrolled .scroll-cue { opacity: 0; }
+
+/* The gallery's: paper behind it and nothing else, so it is simply the ink. */
+.scroll-cue-ink { color: var(--ink); }
+
+/*
+ * The start page's, crossing the film: drawn as the inverse of whatever frame
+ * is behind it, exactly as the bar's type is.
+ *
+ * The same near-white source the wordmark uses, and for the same reason — this
+ * is the colour that *produces* the ink over paper, not the ink itself, and
+ * over a dark frame it comes out near white. The blend sits on this element
+ * rather than on the svg inside it: a fixed, z-indexed box is its own stacking
+ * context, so a blend set on a child would mix with the empty space inside the
+ * box instead of with the film.
+ */
+.scroll-cue-negative {
+  color: rgb(252, 252, 250);
+  mix-blend-mode: difference;
+}
+
+/*
+ * A slow fall, repeated — the movement is the instruction. Small enough that it
+ * reads as a nudge rather than as something demanding to be clicked.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .scroll-cue svg { animation: scroll-cue-fall 2.4s var(--ease) infinite; }
+}
+@keyframes scroll-cue-fall {
+  0%, 100% { transform: translateY(-0.18rem); }
+  50% { transform: translateY(0.18rem); }
+}
+
+/* No room to spare, and a phone's own scrollbar already says the page is long. */
+@media (max-width: 899px) {
+  .scroll-cue { bottom: 1.1rem; width: 1.3rem; margin-left: -0.65rem; }
+}
+
 @media (max-width: 899px) {
   .top { grid-template-columns: 1fr; justify-items: center; gap: 0.7rem; padding: 1.2rem var(--pad) 0.9rem; }
   .menu { flex-wrap: wrap; justify-content: center; gap: 0.35rem 1.1rem; }

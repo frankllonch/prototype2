@@ -1,4 +1,5 @@
 import { html, join, raw, type Html } from './html.ts';
+import { scrollCue } from './scroll-cue.ts';
 import { responsiveImage } from './image.ts';
 import { withBase } from '../content/paths.ts';
 import { aboutPage } from '../content/load.ts';
@@ -27,6 +28,14 @@ interface LayoutProps {
    */
   readonly bodyClass?: string;
   readonly overlays?: Html;
+  /**
+   * The hint that there is more below, on the pages that open on a full screen
+   * of something. `negative` draws it as the inverse of the film behind it,
+   * `ink` in the ink. It belongs at body level for the same reason the bar
+   * does: a blend reaches the film only from outside `main`, which the pile
+   * gives a stacking context of its own.
+   */
+  readonly cue?: 'ink' | 'negative';
   readonly children: Html;
 }
 
@@ -42,7 +51,8 @@ const MENU = [
 /** Client modules, in boot order. Preloaded so the first interaction is instant. */
 const CLIENT_MODULES = [
   'env', 'text-roll', 'transitions', 'controls', 'stack', 'years', 'hover-list', 'panels',
-  'panel-scroll', 'figures', 'lightbox', 'cursor', 'film', 'tilt', 'paging', 'views', 'index',
+  'panel-scroll', 'figures', 'lightbox', 'cursor', 'film', 'tilt', 'paging', 'views',
+  'scroll-cue', 'index',
 ] as const;
 
 /** The designer's About: five lines, set in blue on peach. */
@@ -167,7 +177,7 @@ function lightbox(): Html {
   </div>`;
 }
 
-export function layout({ title, description, path, rail, controls, overlays, bodyClass, children }: LayoutProps): Html {
+export function layout({ title, description, path, rail, controls, overlays, cue, bodyClass, children }: LayoutProps): Html {
   const fullTitle = title === 'Claudia Valsells' ? title : `${title} — Claudia Valsells`;
   const modules = CLIENT_MODULES.map((m) => withBase(`/js/${m}.js`));
   return raw(`<!doctype html>
@@ -195,6 +205,7 @@ ${rail ? rail.__html : ''}
 <main id="main">${children.__html}</main>
 ${overlays ? overlays.__html : ''}
 ${controls ? controls.__html : ''}
+${cue ? scrollCue(cue).__html : ''}
 <div class="cursor" data-cursor aria-hidden="true"><span class="cursor-label"></span></div>
 <div class="panel-veil" data-panel-veil></div>
 ${aboutOverlay().__html}

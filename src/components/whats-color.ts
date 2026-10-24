@@ -80,8 +80,18 @@ export function whatsColorOpening(editions: readonly Edition[]): Html {
       order: the page already has its heading, and announcing the same words
       twice would only make a screen reader say them twice.
     -->
-    <div class="wc-title-mask" aria-hidden="true"><p class="wc-title">What&rsquo;s Color?</p></div>
-    <p class="wc-lead">${LEAD}</p>
+    <!--
+      The whole opening — the name of the project and the note under it —
+      rides up from behind the film as one. Only the title is kept out of the
+      reading order: the page already carries its heading, and the note is
+      real text that has to be read.
+    -->
+    <div class="wc-intro-mask">
+      <div class="wc-intro-slide">
+        <p class="wc-title" aria-hidden="true">What&rsquo;s Color?</p>
+        <p class="wc-lead">${LEAD}</p>
+      </div>
+    </div>
     ${join(editions.map(namesOfEdition))}
     ${whatsColorIntros(editions)}
   </div>`;

@@ -42,6 +42,8 @@ export function artworkPage(works: readonly Project[], years: readonly YearColou
     description: TAGLINE,
     path: '/artwork/',
     rail: yearRail(years),
+    // The pile fills the screen and does not read as the top of a document.
+    cue: 'ink',
     controls: gridControls([], true, works.length),
     children: html`
       <h1 class="sr-only">Claudia Valsells — Artwork</h1>
@@ -170,6 +172,8 @@ export function whatsColorPage(): Html {
      * from the start. That is a page-level decision, so it travels on the body.
      */
     bodyClass: 'has-film',
+    // Drawn as the inverse of the film it crosses, as the bar's type is.
+    cue: 'negative',
     children: html`
       <h1 class="sr-only">What’s Color?</h1>
       ${whatsColorFilm()}

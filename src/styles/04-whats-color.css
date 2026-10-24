@@ -437,6 +437,21 @@
   pointer-events: none;
 }
 
+/*
+ * The scroll cue belongs to the film, not to the screen.
+ *
+ * It is fixed at the foot of the viewport by default, which is the film's own
+ * foot while the film is a full screen tall. On a phone it is 70vh, and a cue
+ * pinned to the bottom of the window then sat below the picture on white — a
+ * negative drawn against nothing, pointing down from the wrong edge. Measured
+ * off the film's height instead, it stays on the film's bottom edge at every
+ * size; where the film is the whole screen the two are the same number.
+ */
+.has-film .scroll-cue { bottom: calc(100vh - var(--film-h) + 1.9rem); }
+@media (max-width: 899px) {
+  .has-film .scroll-cue { bottom: calc(100vh - var(--film-h) + 1.1rem); }
+}
+
 .wc-film {
   position: relative;
   /* Behind the bar, which carries z-index 40 and blends against this. */
@@ -745,29 +760,21 @@ html:has(body.has-film) {
 /* ------------------------------------------------------------ the title */
 
 /*
- * The words the film gives way to, set as large as the screen will hold them.
+ * The name of the project, above the note.
  *
- * One line, never wrapped, so the size is the only thing deciding whether it
- * fits: the measure is the page between its margins and the type is sized to
- * fill it. `white-space: nowrap` is what makes that a fact rather than a hope —
- * without it the line would break and the size would stop meaning anything.
+ * It was set as large as the line would hold and is ordinary text now: the
+ * page's own size, the same as the names and the note under it, centred over
+ * them. Nothing here fits itself to the width any more, so it may wrap, which
+ * at this size is what it should do.
  */
 .wc-title {
-  margin: 0;
-  /*
-   * Sized off the room it has rather than off the window, because the margin
-   * is a clamp and the page is capped at 2160: at 13vw it filled the line at
-   * 1600 and overran it at 1200, where the margin stops shrinking. Measured,
-   * this line is 7.24 times its own size wide, so dividing the available width
-   * by 7.3 fills it to within a per cent at every width there is.
-   */
-  font-size: var(--wc-title-size, calc((min(100vw, 2160px) - 2 * var(--pad)) / var(--wc-title-fit, 10)));
+  margin: 0 0 var(--wc-title-gap, 1.227em);
+  font-size: clamp(1.05rem, 2.1436vw, 2.75rem);
   font-weight: 700;
-  line-height: var(--wc-title-lead, 0.8);
-  letter-spacing: -0.02em;
+  line-height: var(--wc-leading, 1.227);
+  letter-spacing: 0;
   text-transform: uppercase;
   text-align: center;
-  white-space: nowrap;
 }
 
 
@@ -791,42 +798,36 @@ html:has(body.has-film) {
 .wc-answer { scroll-margin-top: var(--wc-answer-anchor, 7rem); }
 
 /*
- * The title is wiped up from under the film, not faded in.
+ * The opening rides up from under the film.
  *
- * A mask the height of the line, and the line held above it until the scroll
- * lets it down into view — so what you see is an edge travelling up the
- * letters, which is the film's own bottom edge leaving. It reads as the words
- * having been lying under the film all along rather than as something
- * appearing on top of the page.
+ * The mask begins exactly where the film ends — a screen of film, then this,
+ * with nothing between — so its top edge and the film's bottom edge are the
+ * same line at every scroll position. The block inside is held clear of that
+ * line until the scroll draws it into place, so the words come out from under
+ * the film rather than appearing near it.
  *
- * The travel runs over exactly the stretch in which the film leaves: it begins
- * where the bar locks onto the film's bottom edge and ends where that edge
- * reaches the top of the screen. The same two figures the bar's own states are
- * divided by, so the wipe and the film's departure are one movement.
+ * It is the whole opening that moves now, the project's name and the note
+ * together, rather than a display line on its own. They read as one thing, so
+ * they arrive as one.
  *
- * It starts a little past its own height because the line box is set under 1 —
- * at a flat 100% a sliver of the letters would still show past the mask.
+ * The travel runs over exactly the stretch in which the film leaves: from
+ * where the bar locks onto the film's bottom edge to where that edge reaches
+ * the top of the screen — the same two figures the bar's own two states are
+ * divided by, so the two are one movement.
  *
- * Three knobs, at the top of this rule and in the keyframes below it:
- *   --wc-title-size   how big the words are. Unset, they are sized to fill the
- *                     line exactly; give it a length to override that.
- *   --wc-title-lead   the height of the band they sit in, as a multiple of the
- *                     size. This is also the height of the mask, so it is what
- *                     decides how far the words travel.
- *   --wc-title-from   where they come from. 105% rises from below the line;
- *                     -105% comes down from behind the film instead.
+ * Two knobs:
+ *   --wc-title-from   where the block comes from. 105% rises from below the
+ *                     line; -105% comes down from behind the film instead.
+ *   --wc-title-gap    the air between the project's name and the note.
  */
-.wc-title-mask {
+.wc-intro-mask {
   overflow: hidden;
-  margin: 0 0 var(--wc-title-gap, 7vw);
-}
-.wc-title-mask .wc-title {
-  margin: 0;
+  margin: 0 0 var(--wc-intro-gap-below, 7vw);
 }
 
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) {
-    .has-film .wc-title {
+    .has-film .wc-intro-slide {
       animation: wc-title-wipe linear both;
       animation-timeline: scroll(root block);
       animation-range: calc((var(--film-h) + var(--film-bar)) / 2) var(--film-h);
@@ -835,6 +836,6 @@ html:has(body.has-film) {
 }
 
 @keyframes wc-title-wipe {
-  from { transform: translateY(var(--wc-title-from, -105%)); }
+  from { transform: translateY(var(--wc-title-from, 105%)); }
   to { transform: translateY(0); }
 }

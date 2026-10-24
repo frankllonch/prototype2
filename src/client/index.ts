@@ -17,6 +17,7 @@ import { initFilm } from './film.ts';
 import { initTilt } from './tilt.ts';
 import { initPaging } from './paging.ts';
 import { initViews } from './views.ts';
+import { initScrollCue } from './scroll-cue.ts';
 
 initTextRoll();
 initTransitions();
@@ -33,3 +34,4 @@ initFilm();
 initTilt();
 initPaging();
 initViews();
+initScrollCue();
