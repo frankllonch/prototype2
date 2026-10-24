@@ -126,7 +126,7 @@
    * from the top of the window: 52vh puts it 22vh down, under the controls.
    * Raise it to end lower, lower it to end higher.
    */
-  --grid-start: 52vh;
+  --grid-start: 70vh;
   --blue: var(--ink);                 /* alias kept for the About panel */
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -468,7 +468,8 @@ body.is-locked { overflow: hidden; }
  * the top right under the bar, at the page's one type size, and are drawn the
  * way the bar is: as the negative of whatever scrolls under them, so they
  * stay legible when the grid flows beneath. Same colours as the menu — the
- * chosen one bright, the rest a step back.
+ * chosen one bright, the rest a step back — until the script names the chosen
+ * one in a colour from the site's list (client/controls.ts).
  */
 .controls {
   position: fixed; right: var(--pad); top: var(--bar); z-index: 30;

@@ -53,7 +53,7 @@ const MENU = [
 const CLIENT_MODULES = [
   'env', 'text-roll', 'transitions', 'controls', 'stack', 'years', 'hover-list', 'panels',
   'panel-scroll', 'figures', 'lightbox', 'cursor', 'film', 'tilt', 'paging', 'views',
-  'scroll-cue', 'hues', 'menu-hue', 'index',
+  'scroll-cue', 'hues', 'index',
 ] as const;
 
 /** The designer's About: five lines, set in blue on peach. */

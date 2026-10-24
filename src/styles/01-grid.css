@@ -91,6 +91,10 @@ html.js .hero[data-hero]+.grid[data-stack] {
   width: auto;
   flex: calc(var(--a) * var(--k) * 10) 1 calc(var(--unit) * var(--k) * var(--a));
   aspect-ratio: var(--a);
+  /* A change of size is carried by client/controls.ts, which moves each
+     painting from where it was to where it is; the layout itself must snap,
+     or the paintings would be chasing a target still on its way. */
+  transition: opacity 0.45s var(--ease), filter 0.45s var(--ease);
 }
 .grid[data-stack]::after {
   content: '';
@@ -116,7 +120,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
 
 .tile {
   transition:
-    height 0.5s var(--ease), width 0.5s var(--ease), flex-basis 0.5s var(--ease),
+    height 0.5s var(--ease), width 0.5s var(--ease),
     opacity 0.45s var(--ease), filter 0.45s var(--ease);
 }
 
@@ -572,15 +576,24 @@ html.js .hero[data-hero]+.grid[data-stack] {
    * 226.6px from rule to rule, 40.4 between the baselines, 61.9 from the last
    * baseline down to the line.
    */
-  --row-top: 4.747vw;
-  --row-bottom: 2.956vw;
-  /* Wide enough for the longest run the dates can make — 'From December To
-     January 2022', the one show that crosses a year — with the year clear of
-     it. Too narrow and the two ran together. The sheet's own columns are
-     narrower, but its rows are a placeholder show repeated, whose dates are
-     shorter than anything real on this list. */
-  --when-col: 40vw;
-  --year-col: 6vw;
+  /*
+   * Measured off the sheet, which is 1232px wide with its content running
+   * 34..1225 — so 1191 of content, and everything below is that read against
+   * the 1920 frame the rest of the site is set in.
+   *
+   * 83px from rule to rule becomes 129. The two lines sit 25 apart, which is
+   * 39 at the frame and a 0.95 line on 41px type — tighter than the site's
+   * 1.25, because a name and its address are one thing said twice, not two
+   * paragraphs. That leaves 51 for the air, 25 above and 25 below the pair.
+   */
+  --row-top: 1.302vw;
+  --row-bottom: 1.302vw;
+  /*
+   * The sheet right-aligns the months at 81.5% of the content and the year at
+   * the margin, so the year column is what holds the 18.5% between them.
+   */
+  --when-col: 16%;
+  --year-col: 18.5%;
   /* No cap: the margin governs, as it does in the design. A capped box plus the
      padding inside it put the rules 77px from the edge at the width the mockup
      was drawn at, not the 30 it specifies — the cap was centring the box and the
@@ -601,33 +614,61 @@ html.js .hero[data-hero]+.grid[data-stack] {
  * its own grid: `auto` would size every row to its own contents and the dates
  * would stagger down the page instead of standing in a column.
  */
-.exh-list .exh {
+/*
+ * `.xlist.exh-list`, not `.exh-list`: the commissioned `.xlist .xrow` rule
+ * sits further down this file at the same specificity, so the plainer selector
+ * loses on source order alone and the row stacks instead of laying out.
+ */
+.xlist.exh-list .xrow {
   grid-template-columns: minmax(0, 1fr) var(--when-col) var(--year-col);
+  align-items: start;
+  gap: 0;
 }
 
 .exh-name {
   display: grid;
   min-width: 0;
 }
+/* On the lines, not on the block: the shared type rule sets `--lead` on these
+   two directly, and a line-height on their parent never reaches them. */
+.exh-list .exh-title,
+.exh-list .exh-venue { line-height: 0.95; }
+/* The name is said twice: what it was called, then where it was. */
+.exh-venue { font-style: italic; }
 
+/*
+ * The months are the one thing on the row set small — half the size, near the
+ * bar's — and they stack rather than running along, because 'From December'
+ * and 'To January' side by side is what ran into the year on the sheet.
+ */
 .exh-when {
-  display: flex;
-  gap: clamp(0.5rem, 1.6vw, 1.6rem);
+  display: grid;
+  justify-items: end;
+  text-align: right;
+  font-size: var(--type-menu);
+  line-height: 1.25;
+  white-space: nowrap;
 }
 
+/* The year leans, and a run that crosses one states both, stacked. */
 .exh-year {
+  display: grid;
+  justify-items: end;
   text-align: right;
+  font-style: italic;
+  line-height: 0.95;
+  font-variant-numeric: tabular-nums;
 }
 
 /* Held just clear of the dates rather than over them: at 52% the plate landed
    on top of the date column, which on this list starts further left. */
-.exh-list .xrow .exh-plate {
+.xlist.exh-list .xrow .exh-plate {
   left: auto;
-  right: calc(var(--when-col) + var(--year-col) + 3rem);
+  right: calc(var(--when-col) + var(--year-col) + 2rem);
 }
 
 @media (max-width: 899px) {
-  .exh-list .exh {
+  .xlist.exh-list .xrow {
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas: 'name year' 'when year';
     gap: 0.3rem 1rem;
