@@ -150,7 +150,7 @@ export function grid({
   }
 
   return html`<div
-    class="grid${justified ? ' grid-justified' : ''}"
+    class="grid${justified ? ' grid-justified' : ''}${toScale ? ' grid-scaled' : ''}"
     data-grid
     ${lightbox ? html`data-lightbox-source` : ''}
     ${stack ? html`data-stack` : ''}
@@ -173,7 +173,8 @@ export function grid({
  * Two readings of the same archive rather than one replacing the other: equal
  * heights are a contact sheet, which is what you want to compare colour across
  * 154 works, and relative sizes are a wall, which is what tells you a painting
- * is three metres across. Neither is the truer view, so the reader chooses.
+ * is three metres across. Neither is the truer view, so the reader chooses;
+ * the wall is where they start.
  */
 export function gridControls(years: readonly number[] = [], scalable = false, total?: number): Html {
   // The densest step is labelled with the whole archive, however many works
@@ -190,8 +191,8 @@ export function gridControls(years: readonly number[] = [], scalable = false, to
     </div>
     ${scalable
       ? html`<div class="control-group" role="group" aria-label="Sizing">
-          <button type="button" class="control is-active" data-scale="equal" aria-pressed="true">Equal</button>
-          <button type="button" class="control" data-scale="real" aria-pressed="false">To scale</button>
+          <button type="button" class="control" data-scale="equal" aria-pressed="false">Equal</button>
+          <button type="button" class="control is-active" data-scale="real" aria-pressed="true">To scale</button>
         </div>`
       : ''}
     ${years.length

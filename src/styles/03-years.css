@@ -121,5 +121,5 @@ html.js.stack-settled .years {
   .year-label { display: none; }
   .year.is-current .year-label { display: block; opacity: 1; transform: none; font-size: 9px; }
   /* Clear of the rail along the foot, and centred rather than tucked in a corner. */
-  .controls { bottom: 5.4rem; right: auto; left: 0; justify-content: center; width: 100%; }
+  .controls { top: auto; bottom: 5.4rem; right: auto; left: 0; align-items: center; width: 100%; }
 }

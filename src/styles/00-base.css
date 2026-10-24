@@ -358,7 +358,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
  * 40 the rail grew to 156px wide and each year to a 49px line box, which made
  * a column of eleven years taller than the window.
  */
-.controls, .years, .year-label { font-size: 11px; line-height: 1.5; }
+.years, .year-label { font-size: 11px; line-height: 1.5; }
 
 body.is-locked { overflow: hidden; }
 
@@ -454,14 +454,27 @@ body.is-locked { overflow: hidden; }
 .top-soon:hover, .top-soon:focus-visible, .top-soon[aria-current='page'] { color: rgb(252, 252, 250); }
 .menu a, .top-soon { color: rgb(228, 228, 226); transition: color var(--hover) var(--ease); }
 
-/* Density sits with the year rail down the left edge, not off on its own. */
+/*
+ * The grid's controls — the three sizes, and equal against to scale — stand at
+ * the top right under the bar, at the page's one type size, and are drawn the
+ * way the bar is: as the negative of whatever scrolls under them, so they
+ * stay legible when the grid flows beneath. Same colours as the menu — the
+ * chosen one bright, the rest a step back.
+ */
 .controls {
-  position: fixed; left: var(--pad); bottom: 1.6rem; z-index: 30;
-  display: flex; gap: 1.3rem; color: var(--ink-soft);
+  position: fixed; right: var(--pad); top: var(--bar); z-index: 30;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 0;
+  font-size: var(--type); line-height: var(--lead);
+  mix-blend-mode: difference;
   transition: opacity 0.8s var(--ease);
 }
-.control { transition: color var(--hover) var(--ease); font-variant-numeric: tabular-nums; }
-.control:hover, .control:focus-visible, .control.is-active { color: var(--ink); }
+.control-group { display: flex; gap: 1em; }
+.control {
+  color: rgb(228, 228, 226);
+  transition: color var(--hover) var(--ease);
+  font-variant-numeric: tabular-nums;
+}
+.control:hover, .control:focus-visible, .control.is-active { color: rgb(252, 252, 250); }
 
 /* ---------------------------------------------------------- scroll cue */
 
