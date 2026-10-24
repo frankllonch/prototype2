@@ -16,21 +16,17 @@
  *   --tilt-settle   how long it takes to come back to rest once the pointer
  *                   leaves. It does not apply while the pointer is on it,
  *                   because the painting has to track the hand without lag.
- *   --tilt-shadow   the shadow under the painting. One value, not animated:
- *                   see the note below.
  *
  * Set --tilt-max to 0deg and --tilt-lift to 1 to switch the whole thing off.
  *
- * The shadows are deliberately faint. These are cut-outs with no background of
- * their own, sitting on the paper, so a heavy shadow reads as a box around the
- * painting rather than as the painting standing off the page.
+ * No shadow. The paintings sit on the paper as they are; a shadow under a
+ * cut-out read as a box around it, and under a photograph as a card.
  */
 .detail-plate {
   --tilt-max: 6deg;
   --tilt-depth: 1100px;
   --tilt-lift: 1.015;
   --tilt-settle: 620ms;
-  --tilt-shadow: 0 1.6rem 3rem rgb(0 0 0 / 0.14);
 
   perspective: var(--tilt-depth);
 }
@@ -50,18 +46,11 @@
   width: fit-content;
   transform-style: preserve-3d;
   will-change: transform;
-  filter: drop-shadow(var(--tilt-shadow));
   transition: transform var(--tilt-settle) var(--ease);
 }
 
-/*
- * `drop-shadow` and not `box-shadow`, because these have no background: a box
- * shadow would draw a rectangle behind a painting that is not rectangular, and
- * the shadow would show in the transparent corners.
- */
 .detail-plate.is-tilting .detail-plate-inner {
   transition: none;
-  filter: drop-shadow(var(--tilt-shadow));
 }
 
 /*
