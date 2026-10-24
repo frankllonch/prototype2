@@ -1,8 +1,6 @@
 import { html, join, type Html } from './html.ts';
 import { responsiveImage } from './image.ts';
-import { huePalette } from './exhibitions.ts';
 import type { ProjectGroup } from '../content/groups.ts';
-import type { YearColour } from '../content/load.ts';
 
 /**
  * The commissioned index, after the designer's layout: the kind of work named
@@ -15,8 +13,8 @@ import type { YearColour } from '../content/load.ts';
  * taken out of flow entirely, which costs the layout nothing and reads as the
  * picture being held up beside the name rather than filed under it.
  */
-export function commissionedList(groups: readonly ProjectGroup[], hues: readonly YearColour[]): Html {
-  return html`<div class="xlist" data-hues="${hues.length}" style="${huePalette(hues)}">
+export function commissionedList(groups: readonly ProjectGroup[]): Html {
+  return html`<div class="xlist">
     ${join(groups.map(group))}
   </div>`;
 }

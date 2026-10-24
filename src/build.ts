@@ -80,8 +80,8 @@ async function main() {
   for (const edition of EDITIONS) {
     await writePage(`whats-color/${edition.numeral.toLowerCase()}`, whatsColorEditionPage(edition));
   }
-  await writePage('exhibitions', exhibitionsPage(exhibitions, yearColours));
-  await writePage('commissioned', commissionedPage(commissioned, yearColours));
+  await writePage('exhibitions', exhibitionsPage(exhibitions));
+  await writePage('commissioned', commissionedPage(commissioned));
   if (colourChart) await writePage('color-chart', colourChartPage(colourChart));
 
   for (const [i, work] of works.entries()) {

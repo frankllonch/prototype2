@@ -68,10 +68,34 @@ html.js .hero[data-hero]+.grid[data-stack] {
 }
 
 .tile {
+  --k: 1;   /* drawing scale: 1, or the work's relative size on the wall */
   flex: 0 0 auto;
   height: var(--unit);
   width: calc(var(--unit) * var(--a));
   transform-origin: center center;
+}
+
+/*
+ * The archive's rows fill the width. Each tile starts at its unit size and
+ * then grows in proportion to its width, so every tile in a row grows by the
+ * same factor, the shapes hold, and the row meets the right edge instead of
+ * stopping wherever the last tile happened to end — which at the two looser
+ * sizes left most of a tile's width empty at the right. `--k` is 1, or the
+ * work's relative size when the grid is drawn to scale.
+ *
+ * The last row is the exception: a pseudo-element with a vast grow factor
+ * takes its slack, so the last few works stay at their size, at the left.
+ */
+.grid[data-stack] .tile {
+  height: auto;
+  width: auto;
+  flex: calc(var(--a) * var(--k) * 10) 1 calc(var(--unit) * var(--k) * var(--a));
+  aspect-ratio: var(--a);
+}
+.grid[data-stack]::after {
+  content: '';
+  flex: 1000000 1 0;
+  height: 0;
 }
 
 .tile[hidden] {
@@ -92,7 +116,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
 
 .tile {
   transition:
-    height 0.5s var(--ease), width 0.5s var(--ease),
+    height 0.5s var(--ease), width 0.5s var(--ease), flex-basis 0.5s var(--ease),
     opacity 0.45s var(--ease), filter 0.45s var(--ease);
 }
 
@@ -653,6 +677,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
 }
 
 .grid-scaled .tile {
+  --k: var(--sh);
   height: calc(var(--unit) * var(--sh));
   width: calc(var(--unit) * var(--sh) * var(--a));
 }

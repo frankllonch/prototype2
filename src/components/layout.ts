@@ -5,6 +5,7 @@ import { withBase } from '../content/paths.ts';
 import { aboutPage } from '../content/load.ts';
 import { splitAbout } from '../content/about.ts';
 import { markAccents } from '../content/accents.ts';
+import { hueVars } from '../content/palette.ts';
 
 interface LayoutProps {
   readonly title: string;
@@ -52,7 +53,7 @@ const MENU = [
 const CLIENT_MODULES = [
   'env', 'text-roll', 'transitions', 'controls', 'stack', 'years', 'hover-list', 'panels',
   'panel-scroll', 'figures', 'lightbox', 'cursor', 'film', 'tilt', 'paging', 'views',
-  'scroll-cue', 'index',
+  'scroll-cue', 'hues', 'menu-hue', 'index',
 ] as const;
 
 /** The designer's About: five lines, set in blue on peach. */
@@ -181,7 +182,7 @@ export function layout({ title, description, path, rail, controls, overlays, cue
   const fullTitle = title === 'Claudia Valsells' ? title : `${title} — Claudia Valsells`;
   const modules = CLIENT_MODULES.map((m) => withBase(`/js/${m}.js`));
   return raw(`<!doctype html>
-<html lang="en">
+<html lang="en" style="${hueVars()}">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />

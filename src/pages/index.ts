@@ -121,7 +121,7 @@ export const exhibitionItem = (e: Exhibition): PanelItem => ({
  * name and place at the left, the run of dates and the year at the right, a rule
  * between each — and the photograph only when you reach for a row.
  */
-export function exhibitionsPage(items: readonly Exhibition[], hues: readonly YearColour[]): Html {
+export function exhibitionsPage(items: readonly Exhibition[]): Html {
   // The What’s Color? shows are held for their own section, panels and all: a
   // row taken off the index whose panel still answered would be a page nothing
   // links to.
@@ -142,7 +142,6 @@ export function exhibitionsPage(items: readonly Exhibition[], hues: readonly Yea
           ...(e.to !== undefined ? { to: e.to } : {}),
           ...(e.cover !== undefined ? { cover: e.cover } : {}),
         })),
-        hues,
       )}
     `,
   });
@@ -243,21 +242,23 @@ function plateStage(work: Project, name: string): Html {
   const cover = work.cover;
   if (!cover) return html``;
 
-  const views: { image: ProjectImage; alt: string }[] = [{ image: cover, alt: describeImage(work, cover.alt) }];
-  if (cover.original) {
-    views.push({
-      image: { ...cover, width: cover.original.width, height: cover.original.height, variants: cover.original.variants },
-      alt: `Photograph of ${name}, uncropped`,
-    });
-  }
+  // Only a cut-out leans — a photograph is a flat record of a room, and a room
+  // tipping towards the pointer reads as a card, not a painting — and only
+  // from TILT_FROM on. Before that the cut-out is for the gallery alone: the
+  // page shows the photograph it was taken from, and lies flat.
+  const plate = isPlate(cover) && (work.metadata.year ?? 0) >= TILT_FROM;
+  const photo = cover.original
+    ? { image: { ...cover, width: cover.original.width, height: cover.original.height, variants: cover.original.variants },
+        alt: `Photograph of ${name}, uncropped` }
+    : null;
+
+  const views: { image: ProjectImage; alt: string }[] = [];
+  if (plate) views.push({ image: cover, alt: describeImage(work, cover.alt) });
+  if (photo) views.push(photo);
+  else if (!plate) views.push({ image: cover, alt: describeImage(work, cover.alt) });
   for (const image of work.images.filter((i) => i.id !== cover.id)) {
     views.push({ image, alt: image.alt || `${name}, another view` });
   }
-
-  // Only a cut-out leans — a photograph is a flat record of a room, and a room
-  // tipping towards the pointer reads as a card, not a painting — and only
-  // from TILT_FROM on; the earlier years keep the cut-out and lie flat.
-  const plate = isPlate(cover) && (work.metadata.year ?? 0) >= TILT_FROM;
   return html`<div class="detail-stage">
     <figure class="detail-plate" data-tilt>
       <span class="detail-plate-inner${plate ? '' : ' is-photo'}">
@@ -312,14 +313,14 @@ export function artworkDetailPage(work: Project, previous?: Project, next?: Proj
  * after the designer's layout. Same index behaviour as the exhibitions page —
  * the row answers in a colour and brings up its photograph.
  */
-export function commissionedPage(items: readonly Project[], hues: readonly YearColour[]): Html {
+export function commissionedPage(items: readonly Project[]): Html {
   return layout({
     title: 'Commissioned',
     path: '/commissioned/',
     overlays: panels('commissioned', items.map(commissionedItem)),
     children: html`
       <h1 class="sr-only">Commissioned</h1>
-      ${commissionedList(groupCommissioned(items), hues)}
+      ${commissionedList(groupCommissioned(items))}
     `,
   });
 }
