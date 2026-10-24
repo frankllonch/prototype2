@@ -193,10 +193,20 @@ html.js .hero[data-hero]+.grid[data-stack] {
 
 /* ---------------------------------------------------------------- detail */
 
+/*
+ * One screen, never more. The page is the height of the window and nothing in
+ * it scrolls: the back link on the first row, the painting and its caption on
+ * the second, which takes whatever height is left, and the pager on the last.
+ * The painting is then sized to its cell (see .detail-plate), so a tall work
+ * shrinks rather than pushing the pager below the fold.
+ */
 .detail {
-  min-height: 100vh;
+  height: 100dvh;
+  box-sizing: border-box;
+  overflow: hidden;
   display: grid;
   grid-template-columns: minmax(12rem, 17rem) 1fr minmax(12rem, 17rem);
+  grid-template-rows: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: var(--pad);
   padding: var(--bar) var(--pad) var(--pad);
@@ -204,6 +214,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
 
 .detail-back {
   grid-column: 1;
+  grid-row: 1;
   align-self: start;
   color: var(--ink-soft);
 }
@@ -219,15 +230,22 @@ html.js .hero[data-hero]+.grid[data-stack] {
   place-items: center;
 }
 
+/*
+ * The picture is bounded by the plate's own box, in container units, because
+ * nothing between the plate and the image has a height of its own to measure
+ * a percentage against: the inner span hugs the picture so the lean begins at
+ * its edge. The plate takes its size from the grid cell it sits in.
+ */
 .detail-plate img {
-  max-height: 74vh;
+  max-height: 100cqh;
+  max-width: 100cqw;
   width: auto;
   height: auto;
-  max-width: 100%;
 }
 
 .detail-caption {
   grid-column: 3;
+  grid-row: 2;
   font-size: var(--type);
 }
 
@@ -243,6 +261,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
 
 .detail-pager {
   grid-column: 1 / -1;
+  grid-row: 3;
   display: flex;
   justify-content: space-between;
   color: var(--ink-soft);
@@ -255,6 +274,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
 @media (max-width: 899px) {
   .detail {
     grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr) auto auto;
   }
 
   .detail-back,
@@ -262,6 +282,8 @@ html.js .hero[data-hero]+.grid[data-stack] {
   .detail-caption {
     grid-column: 1;
   }
+  .detail-caption { grid-row: 3; }
+  .detail-pager { grid-row: 4; }
 }
 
 /* ------------------------------------------------------------------- feed */

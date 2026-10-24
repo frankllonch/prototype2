@@ -72,12 +72,23 @@
  */
 .detail-stage {
   grid-column: 2;
+  grid-row: 2;
+  /* Fills its cell top to bottom, so the plate has a height to be sized by;
+     the row of small pictures takes its own height under it. */
+  align-self: stretch;
+  min-height: 0;
   display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
   justify-items: center;
-  align-content: center;
   gap: 1.1rem;
 }
-.detail-stage .detail-plate { grid-column: auto; }
+.detail-stage .detail-plate {
+  grid-column: auto;
+  justify-self: stretch;
+  min-height: 0;
+  /* Its size comes from the cell, not from the picture, which is sized to it. */
+  container-type: size;
+}
 
 /* Only one picture is ever on the plate. The rest are kept out of layout, not
    merely hidden, so a lazy one does not load until it is asked for and the

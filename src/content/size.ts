@@ -34,10 +34,13 @@ export function realSize(dimensions: string | undefined): number | undefined {
  * Compression. The archive runs from 28 cm to 244 cm, which is 8.7 to one, and
  * at true scale the smallest works are thumbnails beside the largest. Raising
  * the ratio to a power short of 1 keeps the order and most of the feeling while
- * pulling the ends in: at 0.75 the span becomes about five to one, so a 260 cm
- * canvas still reads as five times the little oil panel rather than nine.
+ * pulling the ends in: at 0.6 the span becomes under four to one, so a 260 cm
+ * canvas still reads as the biggest thing on the wall without the rows around
+ * it opening up — a row is as tall as its tallest work, and the gaps between
+ * rows grow with the spread. It was 0.75; raise it for more difference between
+ * the works, lower it for a tighter grid.
  */
-const GAMMA = 0.75;
+const GAMMA = 0.6;
 
 /**
  * The floor and the ceiling.
@@ -52,8 +55,8 @@ const GAMMA = 0.75;
  * costs the small works a fraction of their true difference and buys them back
  * enough tile to be a picture.
  */
-const MIN = 0.45;
-const MAX = 2.2;
+const MIN = 0.55;
+const MAX = 1.7;
 
 export interface Scaled {
   /** Tile height as a multiple of the grid unit. Width follows from the aspect. */
