@@ -73,6 +73,13 @@ export function initCursor(): void {
   window.addEventListener('scroll', relook, { passive: true });
   document.addEventListener('stackrestart', relook);
 
+  // Coming back to the gallery restores it from the cache exactly as it was
+  // left — with the name of the painting just clicked still on the pointer,
+  // which then blinked off on the first movement. Arrive with it off.
+  const clear = () => { active = false; cursor.classList.remove('is-visible'); };
+  window.addEventListener('pageshow', clear);
+  window.addEventListener('pagehide', clear);
+
   document.addEventListener('pointerleave', () => {
     active = false;
     cursor.classList.remove('is-visible');
