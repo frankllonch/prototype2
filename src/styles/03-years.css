@@ -51,18 +51,19 @@
   white-space: nowrap;
 }
 
-/* The current year names itself; hovering any year reaches further out. */
+/* The current year names itself; hovering any year reaches out the same way —
+   one position out, never further. */
 .year.is-current .year-swatch { width: 9.7vw; }
 .year.is-current .year-label { opacity: 1; transform: none; }
 .years:hover .year.is-current:not(:hover) .year-swatch { width: 7.26vw; }
 .years:hover .year.is-current:not(:hover) .year-label { opacity: 0; transform: translateX(-4px); }
-.year:hover .year-swatch, .year:focus-visible .year-swatch { width: 12vw; }
+.year:hover .year-swatch, .year:focus-visible .year-swatch { width: 9.7vw; }
 .year:hover .year-label, .year:focus-visible .year-label { opacity: 1; transform: none; }
 
 /* While a year is in focus the rail says so: the chosen swatch stays out and
    named, and the rest step back. */
 .years.is-focused .year:not([aria-pressed='true']) .year-swatch { opacity: 0.4; }
-.years.is-focused .year[aria-pressed='true'] .year-swatch { width: 12vw; }
+.years.is-focused .year[aria-pressed='true'] .year-swatch { width: 9.7vw; }
 .years.is-focused .year[aria-pressed='true'] .year-label { opacity: 1; transform: none; }
 
 /*
@@ -121,5 +122,5 @@ html.js.stack-settled .years {
   .year-label { display: none; }
   .year.is-current .year-label { display: block; opacity: 1; transform: none; font-size: 9px; }
   /* Clear of the rail along the foot, and centred rather than tucked in a corner. */
-  .controls { top: auto; bottom: 5.4rem; right: auto; left: 0; align-items: center; width: 100%; }
+  .controls { top: auto; bottom: 5.4rem; right: auto; left: 0; justify-content: center; width: 100%; }
 }

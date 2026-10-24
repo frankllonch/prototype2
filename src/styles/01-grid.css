@@ -52,15 +52,10 @@ html:not(.js) .hero,
  * the pile's own stretch of scroll, so choosing it gathered the paintings back
  * up instead.
  *
- * The amount is a compromise, and it cannot be anything else. The pile lets go
- * at 0.85 of a viewport, so for the first year to centre, the grid has to start
- * below 1.35 — which would put its top row more than half a screen down at the
- * moment the pile resolves, and the paintings visibly sink as they spread. Those
- * two wants pull in opposite directions by exactly the half-viewport that
- * centring costs. This sits nearer the opening, which is seen on every visit:
- * the first row lands around a third of the way down, and every year from the
- * second onward still centres. The earliest comes to rest near the top instead,
- * which is as close to the middle as a year with only a screen above it can get.
+ * The amount is `--grid-start`, set with the other knobs in 00-base.css: the
+ * pile lets go after SCROLL_SPAN screens (stack.ts), so the first row lands at
+ * `--grid-start` minus the scroll past the first screen. It is set so the row
+ * comes to rest under the controls at the top right.
  *
  * Only where the pile actually runs. `stack.ts` deletes the hero on every path
  * where it does not — reduced motion, or no tiles to pile — and the sibling
@@ -69,7 +64,7 @@ html:not(.js) .hero,
  * rather than removed, and there is no opening to make room for either.
  */
 html.js .hero[data-hero]+.grid[data-stack] {
-  padding-top: 22vh;
+  padding-top: var(--grid-start);
 }
 
 .tile {

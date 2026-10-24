@@ -118,6 +118,15 @@
      the screen as they do there. */
   --grid-gap-x: clamp(1rem, 2.6vw, 3.2rem);
   --grid-gap-y: clamp(0.6rem, 1.45vw, 1.8rem);
+  /*
+   * WHERE THE OPENING ENDS — how far down the window the grid's first row sits
+   * the moment the pile has unfolded. The pile lets go after SCROLL_SPAN
+   * screens of scrolling (stack.ts, 1.3), and the first row lands at
+   *   (this − (SCROLL_SPAN − 1) × 100vh)
+   * from the top of the window: 52vh puts it 22vh down, under the controls.
+   * Raise it to end lower, lower it to end higher.
+   */
+  --grid-start: 52vh;
   --blue: var(--ink);                 /* alias kept for the About panel */
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -463,7 +472,7 @@ body.is-locked { overflow: hidden; }
  */
 .controls {
   position: fixed; right: var(--pad); top: var(--bar); z-index: 30;
-  display: flex; flex-direction: column; align-items: flex-end; gap: 0;
+  display: flex; align-items: baseline; gap: 2em;
   font-size: var(--type); line-height: var(--lead);
   mix-blend-mode: difference;
   transition: opacity 0.8s var(--ease);
