@@ -34,14 +34,9 @@ export function initCursor(): void {
       : 0;
   };
 
-  document.addEventListener('pointermove', (event) => {
-    if (event.pointerType !== 'mouse') return;
-    targetX = event.clientX;
-    targetY = event.clientY;
-    // Start where the pointer already is, or the label swoops in from 0,0.
-    if (!placed) { placed = true; x = targetX; y = targetY; }
-
-    const tile = (event.target as Element | null)?.closest<HTMLElement>('.tile');
+  /** Decide what the pointer is over, given the element under it. */
+  const refresh = (target: Element | null) => {
+    const tile = target?.closest<HTMLElement>('.tile');
     // A tile piled up in the opening animation, or dimmed by a year filter, is
     // not really under the pointer.
     const usable = tile && !tile.closest('.is-stacked') && !tile.classList.contains('is-dimmed')
@@ -60,7 +55,23 @@ export function initCursor(): void {
       cursor.classList.remove('is-visible');
     }
     if (!frame) frame = requestAnimationFrame(tick);
+  };
+
+  document.addEventListener('pointermove', (event) => {
+    if (event.pointerType !== 'mouse') return;
+    targetX = event.clientX;
+    targetY = event.clientY;
+    // Start where the pointer already is, or the label swoops in from 0,0.
+    if (!placed) { placed = true; x = targetX; y = targetY; }
+    refresh(event.target as Element | null);
   }, { passive: true });
+
+  // The page can move under a pointer that has not: a scroll carries a tile
+  // away, or gathers the grid back into the pile, and the label would stay on
+  // as the name of nothing. Look again at what is under the pointer now.
+  const relook = () => { if (placed) refresh(document.elementFromPoint(targetX, targetY)); };
+  window.addEventListener('scroll', relook, { passive: true });
+  document.addEventListener('stackrestart', relook);
 
   document.addEventListener('pointerleave', () => {
     active = false;

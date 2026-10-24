@@ -236,6 +236,9 @@ export function colourChartPage(page: Project): Html {
  * Nothing is listed twice: the cover is the first image, so the rest begin
  * after it. A work with one picture gets no row of small ones at all.
  */
+/** The first year whose cut-outs lean towards the pointer; earlier ones lie flat. */
+const TILT_FROM = 2021;
+
 function plateStage(work: Project, name: string): Html {
   const cover = work.cover;
   if (!cover) return html``;
@@ -251,9 +254,10 @@ function plateStage(work: Project, name: string): Html {
     views.push({ image, alt: image.alt || `${name}, another view` });
   }
 
-  // Only the cut-out leans: a photograph is a flat record of a room, and a
-  // room tipping towards the pointer reads as a card, not a painting.
-  const plate = isPlate(cover);
+  // Only a cut-out leans — a photograph is a flat record of a room, and a room
+  // tipping towards the pointer reads as a card, not a painting — and only
+  // from TILT_FROM on; the earlier years keep the cut-out and lie flat.
+  const plate = isPlate(cover) && (work.metadata.year ?? 0) >= TILT_FROM;
   return html`<div class="detail-stage">
     <figure class="detail-plate" data-tilt>
       <span class="detail-plate-inner${plate ? '' : ' is-photo'}">

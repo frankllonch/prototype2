@@ -98,6 +98,14 @@ html.js.stack-settled .years {
   animation: none;
 }
 
+/* While the pile is running the script is plainly alive, so the failsafe has
+   nothing to guard against — and left on, it fired eight seconds after a
+   scroll back into the pile and showed the controls over the heap. */
+html.js.stack-running .controls,
+html.js.stack-running .years {
+  animation: none;
+}
+
 @keyframes control-failsafe {
   to { opacity: 1; pointer-events: auto; }
 }
