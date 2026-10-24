@@ -12,14 +12,33 @@ import { OUT_MS } from './transitions.ts';
  * Only when the gallery really is the previous page. Arriving at a painting
  * from somewhere else, or straight from its address, leaves the link as a
  * link, because there would be nothing behind to step back to.
+ *
+ * Walking from painting to painting keeps that true: the arrows replace this
+ * page in the history instead of adding to it (`data-replace`), so the
+ * gallery stays one step back. The referrer then names the previous painting
+ * rather than the gallery, so the fact is remembered on arrival from the
+ * gallery — as the history's length at that moment, which a replacement does
+ * not change and a fresh arrival from anywhere else will not match.
  */
+const BEHIND = 'cv-gallery-behind';
+
+function galleryIsBehind(back: HTMLAnchorElement): boolean {
+  if (window.history.length <= 1) return false;
+  const depth = String(window.history.length);
+  if (document.referrer) {
+    const cameFrom = new URL(document.referrer, window.location.href);
+    if (cameFrom.origin === window.location.origin
+      && cameFrom.pathname === new URL(back.href).pathname) {
+      try { sessionStorage.setItem(BEHIND, depth); } catch { /* private mode: this visit only */ }
+      return true;
+    }
+  }
+  try { return sessionStorage.getItem(BEHIND) === depth; } catch { return false; }
+}
+
 function backStepsBack(): void {
   const back = document.querySelector<HTMLAnchorElement>('.detail-back');
-  if (!back || !document.referrer || window.history.length <= 1) return;
-
-  const cameFrom = new URL(document.referrer, window.location.href);
-  if (cameFrom.origin !== window.location.origin) return;
-  if (cameFrom.pathname !== new URL(back.href).pathname) return;
+  if (!back || !galleryIsBehind(back)) return;
 
   back.addEventListener('click', (event) => {
     if (!isPlainClick(event)) return;
@@ -80,7 +99,8 @@ export function initPaging(): void {
      * that holds the navigation — runs exactly as it does for the arrows on
      * the page. Going straight to the address would skip it.
      */
-    if (reduceMotion.matches) window.location.assign(link.href);
-    else link.click();
+    if (!reduceMotion.matches) link.click();
+    else if (link.hasAttribute('data-replace')) window.location.replace(link.href);
+    else window.location.assign(link.href);
   });
 }

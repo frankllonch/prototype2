@@ -47,7 +47,17 @@ export function initTransitions(): void {
    */
   let target = '';
   let gone = false;
-  const go = () => { if (!gone && target) { gone = true; location.href = target; } };
+  /*
+   * A link marked `data-replace` takes the place of this page in the history
+   * rather than adding to it — walking from one painting to the next leaves
+   * the gallery one step back, however far the walk went.
+   */
+  let replace = false;
+  const go = () => {
+    if (gone || !target) return;
+    gone = true;
+    if (replace) location.replace(target); else location.href = target;
+  };
 
   /**
    * Back-button navigations restore the page from the back/forward cache exactly
@@ -55,7 +65,7 @@ export function initTransitions(): void {
    * that faded it and the departure that was in flight. Without this, going back
    * lands under an opaque sheet with every link already spoken for.
    */
-  const arrive = () => { root.classList.remove('is-leaving'); target = ''; gone = false; };
+  const arrive = () => { root.classList.remove('is-leaving'); target = ''; gone = false; replace = false; };
   window.addEventListener('pageshow', arrive);
   window.addEventListener('popstate', arrive);
   arrive();
@@ -82,6 +92,7 @@ export function initTransitions(): void {
     event.preventDefault();
     const first = !target;
     target = url.href;
+    replace = link.hasAttribute('data-replace');
     root.classList.add('is-leaving');
     if (!first) return;   // already counting down; only the destination changed
 

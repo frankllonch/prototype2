@@ -286,7 +286,7 @@ export function artworkDetailPage(work: Project, previous?: Project, next?: Proj
   const facts = [dimensions, materials, year ? String(year) : undefined, reference, available ? 'Available' : undefined]
     .filter((f): f is string => Boolean(f));
   const link = (p: Project | undefined, label: string, rel: string) =>
-    p ? html`<a href="${withBase(`/artwork/${p.slug}/`)}" rel="${rel}">${label}</a>` : html`<span></span>`;
+    p ? html`<a href="${withBase(`/artwork/${p.slug}/`)}" rel="${rel}" data-replace>${label}</a>` : html`<span></span>`;
 
   return layout({
     title: name,
