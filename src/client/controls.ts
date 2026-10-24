@@ -24,7 +24,7 @@ export function initControls(): void {
   const densities = root.querySelectorAll<HTMLButtonElement>('[data-density]');
   for (const button of densities) {
     button.addEventListener('click', () => {
-      grid.style.setProperty('--unit', `${button.dataset.density}px`);
+      grid.style.setProperty('--unit', button.dataset.density ?? '');
       press(densities, button);
       changed();
     });

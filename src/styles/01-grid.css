@@ -22,7 +22,7 @@ html:not(.js) .hero,
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
-  gap: var(--gap);
+  gap: var(--grid-gap-y) var(--grid-gap-x);
   /* Left inset clears the year rail; the mockup starts the grid well in.
      The tail is deliberate: without it the last years sit too close to the
      bottom for the rail to bring them to the top, and clicking them did

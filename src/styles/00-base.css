@@ -110,7 +110,14 @@
   --pad: clamp(1.25rem, 3.5vw, 2.5rem);
   --gap: clamp(1.5rem, 4.5vw, 5rem);
   --bar: 5.5rem;
-  --rail: clamp(9rem, 14vw, 17rem);   /* width kept clear for the year rail */
+  /* Width kept clear for the year rail: the grid starts at 211 of the sheet's
+     1654, with the rail's bars 120 wide in it. */
+  --rail: clamp(9rem, 12.76vw, 17rem);
+  /* The gallery's gutters, off the same sheet: 43 between columns and about
+     23 between rows at 1654 — tighter than the page gap, so the paintings fill
+     the screen as they do there. */
+  --grid-gap-x: clamp(1rem, 2.6vw, 3.2rem);
+  --grid-gap-y: clamp(0.6rem, 1.45vw, 1.8rem);
   --blue: var(--ink);                 /* alias kept for the About panel */
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);

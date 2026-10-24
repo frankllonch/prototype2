@@ -60,13 +60,18 @@ interface GridProps {
 
 /**
  * Density levels, after tylermitchell.co's 50 / 200 / 500. `unit` is the row
- * height in px; the label is roughly how many of the 154 works fit on a screen
- * at that size, so the control reads as a count rather than a pixel value.
+ * height; the label is roughly how many works fit on a screen at that size, so
+ * the control reads as a count rather than a size.
+ *
+ * The heights are a share of the window's width, so the grid keeps the
+ * designer's proportions at any width: in the sheet, exported at 1654, the
+ * densest rows are 120 tall, and the two looser steps keep the ratios the old
+ * 240 / 150 / 96 pixel steps had.
  */
 export const DENSITIES = [
-  { unit: 240, label: 24 },
-  { unit: 150, label: 60 },
-  { unit: 96, label: 154 },
+  { unit: '14.51vw', label: 24 },
+  { unit: '9.07vw', label: 60 },
+  { unit: '7.26vw', label: 154 },
 ] as const;
 export const DEFAULT_DENSITY = 2;
 
@@ -150,7 +155,7 @@ export function grid({
     ${lightbox ? html`data-lightbox-source` : ''}
     ${stack ? html`data-stack` : ''}
     ${toScale ? html`data-scalable` : ''}
-    style="--unit:${DENSITIES[DEFAULT_DENSITY]!.unit}px"
+    style="--unit:${DENSITIES[DEFAULT_DENSITY]!.unit}"
   >${join(
     items.map((item, i) => {
       const first = item.year !== undefined && !seen.has(item.year);
