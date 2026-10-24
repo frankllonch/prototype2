@@ -251,10 +251,13 @@ function plateStage(work: Project, name: string): Html {
     views.push({ image, alt: image.alt || `${name}, another view` });
   }
 
+  // Only the cut-out leans: a photograph is a flat record of a room, and a
+  // room tipping towards the pointer reads as a card, not a painting.
+  const plate = isPlate(cover);
   return html`<div class="detail-stage">
     <figure class="detail-plate" data-tilt>
-      <span class="detail-plate-inner">
-        ${join(views.map((v, i) => html`<span class="detail-view${i === 0 ? ' is-shown' : ''}" data-view="${String(i)}">
+      <span class="detail-plate-inner${plate ? '' : ' is-photo'}">
+        ${join(views.map((v, i) => html`<span class="detail-view${i === 0 ? ' is-shown' : ''}" data-view="${String(i)}"${plate && i === 0 ? ' data-plate' : ''}>
           ${responsiveImage({ image: v.image, sizes: '(max-width: 900px) 92vw, 46vw', priority: i === 0, alt: v.alt })}
         </span>`))}
       </span>

@@ -29,8 +29,16 @@ export function initViews(): void {
     const thumbs = [...stage.querySelectorAll<HTMLButtonElement>('.detail-thumb')];
     if (views.length < 2 || thumbs.length !== views.length) continue;
 
+    const inner = stage.querySelector<HTMLElement>('.detail-plate-inner');
     const swap = (n: number) => {
       views.forEach((view, i) => view.classList.toggle('is-shown', i === n));
+      // Only the cut-out leans. Putting a photograph on the plate tells the
+      // tilt to stand down, and drops any lean the cut-out was holding.
+      if (inner) {
+        inner.classList.toggle('is-photo', !views[n]?.hasAttribute('data-plate'));
+        inner.classList.remove('is-tilting');
+        inner.style.transform = '';
+      }
       thumbs.forEach((thumb, i) => {
         thumb.classList.toggle('is-shown', i === n);
         thumb.setAttribute('aria-pressed', String(i === n));

@@ -48,6 +48,8 @@ export function initTilt(): void {
       // A box with no size is a picture that has not arrived; a lean worked out
       // against it divides by zero and writes nothing but noise.
       if (!box || !box.width || !box.height || reduceMotion.matches) return;
+      // A photograph on the plate (see views.ts) is a flat record, not the work.
+      if (inner.classList.contains('is-photo')) return;
       // −1 to 1 from the middle, on each axis.
       const x = (event.clientX - box.left) / box.width * 2 - 1;
       const y = (event.clientY - box.top) / box.height * 2 - 1;
@@ -65,7 +67,7 @@ export function initTilt(): void {
     };
 
     inner.addEventListener('pointerenter', (event) => {
-      if (reduceMotion.matches) return;
+      if (reduceMotion.matches || inner.classList.contains('is-photo')) return;
       read();
       inner.classList.add('is-tilting');
       lean(event);
