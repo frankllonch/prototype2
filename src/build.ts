@@ -82,10 +82,10 @@ async function main() {
   }
   await writePage('exhibitions', exhibitionsPage(exhibitions));
   await writePage('commissioned', commissionedPage(commissioned));
-  if (colourChart) await writePage('color-chart', colourChartPage(colourChart));
+  if (colourChart) await writePage('color-chart', colourChartPage());
 
   for (const [i, work] of works.entries()) {
-    await writePage(`artwork/${work.slug}`, artworkDetailPage(work, works[i - 1], works[i + 1]));
+    await writePage(`artwork/${work.slug}`, artworkDetailPage(work, works[i - 1], works[i + 1], { index: i + 1, total: works.length }));
   }
 
   const wc = EDITIONS.map((e) => `${e.numeral}:${e.participants.length}`).join(' ');

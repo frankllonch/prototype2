@@ -233,7 +233,10 @@ html.js .hero[data-hero]+.grid[data-stack] {
   box-sizing: border-box;
   overflow: hidden;
   display: grid;
-  grid-template-columns: minmax(12rem, 17rem) 1fr minmax(12rem, 17rem);
+  /* The sheet: the painting in the left two thirds, the text starting two
+     thirds across (618 of 927). The second column is sized so that, with
+     the page's own padding and the gap, it begins exactly there. */
+  grid-template-columns: 1fr calc(33.3% - 0.334 * var(--pad));
   grid-template-rows: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: var(--pad);
@@ -271,21 +274,60 @@ html.js .hero[data-hero]+.grid[data-stack] {
   height: auto;
 }
 
+/*
+ * The caption, measured off the designer's sheet (927 wide, painting 242
+ * tall, caps 13):
+ *
+ *   title and medium     cap top on the painting's top edge; the medium's
+ *                        baseline 31 below the title's, against 24 between
+ *                        year and size — so the title carries 7/13 of a cap,
+ *                        0.3 em, of extra room under it
+ *   year and size        the year's cap top 141 down, 0.583 of the height
+ *   87 of 154            baseline on the painting's bottom edge
+ *
+ * The column is given the painting's own box by client/views.ts — its top and
+ * its height, as `--plate-shift` and `--plate-height` — and the three groups
+ * are held to it from there. In Switzer at this leading the line box reaches
+ * 0.308 em above a cap and 0.262 em below a baseline (measured), which is
+ * what the small negative margins take off so the ink, not the box, sits on
+ * the edges. Without scripting the column takes the cell's height, which is
+ * near enough.
+ */
 .detail-caption {
-  grid-column: 3;
+  grid-column: 2;
   grid-row: 2;
+  align-self: start;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  height: var(--plate-height, 100%);
+  margin-top: var(--plate-shift, 0px);
   font-size: var(--type);
+  line-height: var(--lead);
 }
 
+.detail-caption p { margin: 0; }
+.detail-head { margin-top: -0.308em; }
 .detail-title {
   font-size: var(--type);
-  letter-spacing: -0.01em;
-  margin-bottom: 0.4rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: uppercase;
 }
-
-.detail-caption p {
-  margin: 0 0 0.15rem;
+.detail-caption .detail-medium {
+  text-transform: uppercase;
+  margin-top: 0.37em;
 }
+.detail-facts {
+  position: absolute;
+  left: 0;
+  top: calc(58.3% - 0.308em);
+}
+.detail-year { font-weight: 600; }
+.detail-caption .detail-index { margin-bottom: -0.262em; }
+.detail-index b { font-weight: 600; }
 
 .detail-pager {
   grid-column: 1 / -1;
@@ -310,7 +352,10 @@ html.js .hero[data-hero]+.grid[data-stack] {
   .detail-caption {
     grid-column: 1;
   }
-  .detail-caption { grid-row: 3; }
+  /* Under the painting there is no edge to follow: the groups stack. */
+  .detail-caption { grid-row: 3; height: auto; margin-top: 0; gap: 0.6em; }
+  .detail-facts { position: static; }
+  .detail-head, .detail-index { margin: 0; }
   .detail-pager { grid-row: 4; }
 }
 

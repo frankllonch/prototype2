@@ -71,7 +71,7 @@
  * column, so the claim is withdrawn here.
  */
 .detail-stage {
-  grid-column: 2;
+  grid-column: 1;
   grid-row: 2;
   /* Fills its cell top to bottom, so the plate has a height to be sized by;
      the row of small pictures takes its own height under it. */

@@ -27,11 +27,39 @@ export function initViews(): void {
   for (const stage of document.querySelectorAll<HTMLElement>('.detail-stage')) {
     const views = [...stage.querySelectorAll<HTMLElement>('.detail-view')];
     const thumbs = [...stage.querySelectorAll<HTMLButtonElement>('.detail-thumb')];
+    const caption = document.querySelector<HTMLElement>('.detail-caption');
+
+    /*
+     * The caption follows the painting's own edges, and only the browser knows
+     * where those came out: the picture is sized to its cell, so its box is
+     * whatever its shape and the window's left it. The column is handed the
+     * box — how far below its cell's top the painting begins, and how tall it
+     * is — and the stylesheet holds the text to it. Read with the shift at
+     * zero, so the cell's own top is what is measured against.
+     */
+    const follow = () => {
+      const img = stage.querySelector<HTMLImageElement>('.detail-view.is-shown img');
+      if (!img || !caption) return;
+      caption.style.setProperty('--plate-shift', '0px');
+      const cell = caption.getBoundingClientRect().top;
+      const box = img.getBoundingClientRect();
+      if (!box.height) return;
+      caption.style.setProperty('--plate-shift', `${box.top - cell}px`);
+      caption.style.setProperty('--plate-height', `${box.height}px`);
+    };
+    follow();
+    window.addEventListener('resize', follow);
+    // The box may change as the picture arrives (a lazily measured size, a
+    // font that settles the caption's own cell), so it is read again then.
+    window.addEventListener('load', follow);
+    void document.fonts.ready.then(follow);
+
     if (views.length < 2 || thumbs.length !== views.length) continue;
 
     const inner = stage.querySelector<HTMLElement>('.detail-plate-inner');
     const swap = (n: number) => {
       views.forEach((view, i) => view.classList.toggle('is-shown', i === n));
+      follow();
       // Only the cut-out leans. Putting a photograph on the plate tells the
       // tilt to stand down, and drops any lean the cut-out was holding.
       if (inner) {

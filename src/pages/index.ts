@@ -7,9 +7,9 @@ import { exhibitionList } from '../components/exhibitions.ts';
 import { SHOWS } from '../content/exhibitions-list.ts';
 import { commissionedList } from '../components/commissioned.ts';
 import { groupCommissioned } from '../content/groups.ts';
-import { editorialBody } from '../components/editorial.ts';
 import { yearRail } from '../components/years.ts';
 import { whatsColorOpening, whatsColorEdition, whatsColorFilm } from '../components/whats-color.ts';
+import { colourChart, inquiries } from '../components/colour-chart.ts';
 import { EDITIONS, allParticipants, type Edition } from '../content/whats-color.ts';
 import { isPlate, type YearColour } from '../content/load.ts';
 import { describeImage } from '../content/describe.ts';
@@ -198,17 +198,30 @@ export const commissionedItem = (p: Project): PanelItem => ({
   rows: p.rows,
 });
 
-/** The Color Chart, read the same way as an exhibition. */
-export function colourChartPage(page: Project): Html {
+/**
+ * The Color Chart, on the designer's own composition: the price and the way to
+ * order held still in the margin, the chart's colours beside them, and only the
+ * text moving.
+ *
+ * It is the one page of the site that is exactly a screen tall, so `bodyClass`
+ * takes the document's own scrollbar away: with the page fixed at the window's
+ * height there is nothing for it to scroll, and leaving it to appear and vanish
+ * as the browser chrome changes would shift the whole composition sideways by
+ * its width.
+ *
+ * The order form goes in `overlays` rather than in the page, for the reason that
+ * prop exists: `main` is its own stacking context, and anything that has to rise
+ * above the veil has to be outside it.
+ */
+export function colourChartPage(): Html {
   return layout({
     title: 'Color Chart',
     path: '/color-chart/',
-    children: html`
-      <h1 class="sr-only">Color Chart</h1>
-      <div class="reader-page">
-        ${editorialBody({ title: 'Color Chart', images: page.images, rows: page.rows })}
-      </div>
-    `,
+    description:
+      'Claudia Valsells\u2019 artist colour chart for architects and designers \u2014 a fan deck of 142 colours in real paint.',
+    bodyClass: 'chart-body',
+    children: colourChart(),
+    overlays: inquiries(),
   });
 }
 
@@ -274,11 +287,17 @@ function plateStage(work: Project, name: string): Html {
   </div>`;
 }
 
-export function artworkDetailPage(work: Project, previous?: Project, next?: Project): Html {
+/**
+ * The caption follows the designer's sheet: the title and the medium at the
+ * painting's top edge, the year and the size part way down, the work's place
+ * in the archive at its bottom edge — the three held to the picture's own box
+ * by client/views.ts, since only the browser knows how tall it came out.
+ */
+export function artworkDetailPage(
+  work: Project, previous?: Project, next?: Project, place?: { index: number; total: number },
+): Html {
   const name = displayTitle(work.title, 'work');
-  const { year, dimensions, materials, reference, available } = work.metadata;
-  const facts = [dimensions, materials, year ? String(year) : undefined, reference, available ? 'Available' : undefined]
-    .filter((f): f is string => Boolean(f));
+  const { year, dimensions, materials } = work.metadata;
   const link = (p: Project | undefined, label: string, rel: string) =>
     p ? html`<a href="${withBase(`/artwork/${p.slug}/`)}" rel="${rel}" data-replace>${label}</a>` : html`<span></span>`;
 
@@ -290,8 +309,15 @@ export function artworkDetailPage(work: Project, previous?: Project, next?: Proj
       <a class="detail-back" href="${withBase('/artwork/')}">← Artwork</a>
       ${plateStage(work, name)}
       <div class="detail-caption">
-        <h1 class="detail-title">${name}</h1>
-        ${join(facts.map((f) => html`<p>${f}</p>`))}
+        <div class="detail-head">
+          <h1 class="detail-title">${name}</h1>
+          ${materials ? html`<p class="detail-medium">${materials}</p>` : ''}
+        </div>
+        <div class="detail-facts">
+          ${year ? html`<p class="detail-year">${String(year)}</p>` : ''}
+          ${dimensions ? html`<p>${dimensions}</p>` : ''}
+        </div>
+        ${place ? html`<p class="detail-index"><b>${String(place.index)}</b> of ${String(place.total)}</p>` : ''}
       </div>
       <nav class="detail-pager" aria-label="Between works">
         ${link(previous, '← Previous', 'prev')}
