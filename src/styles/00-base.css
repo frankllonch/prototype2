@@ -370,6 +370,17 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 
 /*
+ * The two names in the bar are set heavier than the pages are.
+ *
+ * Measured off the sheet rather than guessed: at the bar's size the stems of
+ * the wordmark and of the section's name run 2.47 and 2.46 against 1.67 to
+ * 1.92 for the five page links — about 1.4 times, which is the step from this
+ * 500 to 700. They are what the site is called and what you are looking at;
+ * the pages are where you can go next, and they are not shouting.
+ */
+.wordmark, .top-soon { font-weight: 700; }
+
+/*
  * The gallery's own controls keep the size they had before the site went to
  * one type size. They are not text on the page: the year rail stands in the
  * margin beside the paintings and the density switch sits under them, and at

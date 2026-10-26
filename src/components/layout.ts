@@ -42,11 +42,11 @@ interface LayoutProps {
 
 /** Order and wording of the menu, after the designer's mockup. */
 const MENU = [
-  { label: 'About', href: '/#about', panel: 'about' },
-  { label: 'Artwork', href: '/artwork/' },
-  { label: 'Commissioned', href: '/commissioned/' },
-  { label: 'Exhibitions', href: '/exhibitions/' },
   { label: 'Color Chart', href: '/color-chart/' },
+  { label: 'Exhibitions', href: '/exhibitions/' },
+  { label: 'Commissioned', href: '/commissioned/' },
+  { label: 'Artwork', href: '/artwork/' },
+  { label: 'About', href: '/#about', panel: 'about' },
 ] as const;
 
 /** Client modules, in boot order. Preloaded so the first interaction is instant. */
