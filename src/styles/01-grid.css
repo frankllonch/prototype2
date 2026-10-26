@@ -298,6 +298,11 @@ html.js .hero[data-hero]+.grid[data-stack] {
   /* THE CAPTION'S LEADING — line height as a multiple of the type size. The
      rest of the page is 1.25 (50 over 40); the caption is set tighter. */
   --caption-lead: 1.1;
+  /* HOW FAR DOWN THE PAINTING THE CAPTION REACHES — the three groups are
+     spread over this share of the painting's height, from its top edge: 1 is
+     the sheet, with the numbering on the bottom edge; smaller gathers the
+     groups up towards the title. */
+  --caption-span: 0.6;
   grid-column: 2;
   grid-row: 2;
   align-self: start;
@@ -306,7 +311,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
   flex-direction: column;
   justify-content: space-between;
   box-sizing: border-box;
-  height: var(--plate-height, 100%);
+  height: calc(var(--plate-height, 100%) * var(--caption-span));
   margin-top: var(--plate-shift, 0px);
   font-size: var(--type);
   line-height: var(--caption-lead);
