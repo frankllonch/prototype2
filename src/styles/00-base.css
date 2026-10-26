@@ -218,7 +218,7 @@
  */
 html.is-revealed:not(.is-leaving) .page-veil,
 html.is-revealed .feed-column,
-html.is-revealed .reader-page .reader,
+html.is-revealed .chart,
 html.is-revealed .grid-justified,
 html.is-revealed .detail { animation-name: none; }
 
@@ -232,7 +232,7 @@ html.is-revealed .detail { animation-name: none; }
  */
 @keyframes settle-in { from { opacity: 0; transform: translateY(18px); } }
 @media (prefers-reduced-motion: no-preference) {
-  .feed-column, .reader-page .reader, .grid-justified, .detail {
+  .feed-column, .chart, .grid-justified, .detail {
     /* Backwards, so the page's resting state is visible and upright: nothing is
        left holding a transform, and nothing stays hidden if the animation does
        not run. See the reveal guarantee above. */

@@ -1,0 +1,33 @@
+#
+# The order desk, as Cloudflare runs it.
+#
+#   npx wrangler kv namespace create INQUIRIES_RATE   # once; put the id below
+#   npx wrangler secret put RESEND_API_KEY
+#   npx wrangler secret put TURNSTILE_SECRET          # only if you use it
+#   npx wrangler secret put IP_PEPPER                 # any long random string
+#   npx wrangler deploy
+#
+# The three secrets are never in this file and never in the repository. The
+# values below are not secrets: they are the addresses the handler sends to and
+# from, and the origins it will answer. Claudia's own address is set the same
+# way the secrets are, so it stays out of the repository too:
+#
+#   npx wrangler secret put INQUIRY_TO
+#
+name = "claudiavalsells-inquiries"
+main = "worker.ts"
+compatibility_date = "2025-09-01"
+
+[vars]
+# The site, exactly — scheme and host, no path, no trailing slash, no wildcard.
+# Add the GitHub Pages origin while the site is still served from there.
+ALLOWED_ORIGINS = "https://www.claudiavalsells.com,https://claudiavalsells.com"
+
+# A sender the mail provider has verified for this domain. Mail claiming to come
+# from an address the site does not control is mail that lands in a spam folder,
+# so this is never the address of the person writing — theirs is the Reply-To.
+INQUIRY_FROM = "Colour chart <orders@claudiavalsells.com>"
+
+[[kv_namespaces]]
+binding = "RATE"
+id = "replace-me-with-the-id-wrangler-prints"

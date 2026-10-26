@@ -12,6 +12,7 @@ import type { Html } from './components/html.ts';
 import { commissioned, colourChart, exhibitions, works, yearColours } from './content/load.ts';
 import { EDITIONS } from './content/whats-color.ts';
 import { BASE } from './content/paths.ts';
+import { ENDPOINT as INQUIRIES } from './content/inquiries.ts';
 import {
   artworkDetailPage, artworkPage, commissionedPage, colourChartPage, exhibitionsPage,
   whatsColorPage, whatsColorEditionPage,
@@ -95,6 +96,15 @@ async function main() {
     `exhibitions (${exhibitions.length}), commissioned (${commissioned.length}), color chart.` +
     (BASE ? `\nBase path: ${BASE}` : ''),
   );
+  /*
+   * Said out loud, because the one way to ship this broken is quietly. The
+   * Colour Chart's order form is the only part of the site that needs anything
+   * beyond these files, and a build that forgot to say where it sends produces
+   * a form that renders perfectly and cannot send a thing.
+   */
+  if (!INQUIRIES) {
+    console.warn('! INQUIRIES_ENDPOINT is not set — the colour chart order form will not send (server/inquiries/)');
+  }
 }
 
 await main();

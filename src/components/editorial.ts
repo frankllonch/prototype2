@@ -18,19 +18,19 @@ export interface EditorialProps {
  * The reading composition: the text runs down one column and the photograph
  * holds the other.
  *
- * In a panel the pictures are turned by hand, with arrows under them. They used
- * to change as you scrolled, which read well while the text was the thing you
- * were following, but it means the reader cannot go back and cannot stay — and
- * looking at the photographs is half of why anyone opens an exhibition. The
- * Color Chart keeps the scrolling version, because it is a page you read
- * through rather than a thing you look at.
+ * The pictures are turned by hand, with arrows under them. They used to change
+ * as you scrolled, which read well while the text was the thing you were
+ * following, but it means the reader cannot go back and cannot stay — and
+ * looking at the photographs is half of why anyone opens an exhibition.
  *
  * Either column can take the whole width: the text alone, for reading, or the
  * pictures alone, centred, for looking. One at a time, and never both, so there
  * is always something to come back to.
  *
- * Shared by the exhibition and commissioned panels and by the Color Chart, so
- * everything that is read rather than browsed is read the same way.
+ * Shared by the exhibition and commissioned panels, so everything that is read
+ * rather than browsed is read the same way. The Color Chart had this
+ * composition too until it was given the designer's own — a margin, the chart's
+ * colours, and a column of text (`components/colour-chart.ts`).
  */
 export function editorialBody({ title, year, images, rows, venue, from, to, kind }: EditorialProps): Html {
   const text = rows.flatMap((row) => row.columns).filter((column) => column.kind === 'text');
