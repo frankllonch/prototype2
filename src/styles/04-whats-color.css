@@ -126,7 +126,7 @@
 .wc-intros:focus-within .wc-intro:not(:focus-visible) { opacity: 0.45; }
 
 .wc-intro-title {
-  margin: 0 0 var(--wc-title-gap, 0.87em);
+  margin: 0 0 var(--wc-title-gap, 0.4em);
   /* Heading and body are one size on the sheet: cap 17 against the names' 24,
      so 40 x 17/24 = 28.3px, which is 1.5184vw at the width they were drawn. */
   font-size: clamp(0.9rem, 1.5184vw, 1.9rem);
@@ -836,6 +836,6 @@ html:has(body.has-film) {
 }
 
 @keyframes wc-title-wipe {
-  from { transform: translateY(var(--wc-title-from, 105%)); }
+  from { transform: translateY(var(--wc-title-from, -105%)); }
   to { transform: translateY(0); }
 }

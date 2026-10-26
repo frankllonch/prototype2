@@ -39,7 +39,7 @@
   width: 7.26vw;
   height: 1.57vw;
   background: var(--c);
-  transition: width 0.4s var(--ease);
+  transition: width 0.9s var(--ease);
 }
 
 .year-label {

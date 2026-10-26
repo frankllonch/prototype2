@@ -302,7 +302,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
      spread over this share of the painting's height, from its top edge: 1 is
      the sheet, with the numbering on the bottom edge; smaller gathers the
      groups up towards the title. */
-  --caption-span: 0.6;
+  --caption-span: 0.85;
   grid-column: 2;
   grid-row: 2;
   align-self: start;
