@@ -303,6 +303,10 @@ html.js .hero[data-hero]+.grid[data-stack] {
      the sheet, with the numbering on the bottom edge; smaller gathers the
      groups up towards the title. */
   --caption-span: 0.85;
+  /* HOW FAR DOWN IT STARTS — the title's cap top sits this share of the
+     painting's height below its top edge; with the span, 0.15 + 0.85 puts
+     the numbering on the bottom edge. 0 is the sheet. */
+  --caption-drop: 0.15;
   grid-column: 2;
   grid-row: 2;
   align-self: start;
@@ -312,7 +316,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
   justify-content: space-between;
   box-sizing: border-box;
   height: calc(var(--plate-height, 100%) * var(--caption-span));
-  margin-top: var(--plate-shift, 0px);
+  margin-top: calc(var(--plate-shift, 0px) + var(--plate-height, 0px) * var(--caption-drop));
   font-size: var(--type);
   line-height: var(--caption-lead);
 }
