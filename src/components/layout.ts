@@ -2,9 +2,7 @@ import { html, join, raw, type Html } from './html.ts';
 import { scrollCue } from './scroll-cue.ts';
 import { responsiveImage } from './image.ts';
 import { withBase } from '../content/paths.ts';
-import { aboutPage } from '../content/load.ts';
-import { splitAbout } from '../content/about.ts';
-import { markAccents } from '../content/accents.ts';
+import { ABOUT_BLOCKS, ABOUT_CARD, ABOUT_COLLECTIONS, ABOUT_COPYRIGHT, ABOUT_SHOWS, type AboutBlock } from '../content/about.ts';
 import { hueVars } from '../content/palette.ts';
 
 interface LayoutProps {
@@ -52,16 +50,16 @@ const MENU = [
 /** Client modules, in boot order. Preloaded so the first interaction is instant. */
 const CLIENT_MODULES = [
   'env', 'text-roll', 'transitions', 'controls', 'stack', 'years', 'hover-list', 'panels',
-  'panel-scroll', 'figures', 'lightbox', 'cursor', 'film', 'tilt', 'paging', 'views',
-  'scroll-cue', 'hues', 'index',
+  'figures', 'lightbox', 'cursor', 'film', 'tilt', 'paging', 'views',
+  'scroll-cue', 'inquiries', 'hues', 'index',
 ] as const;
 
-/** The designer's About: five lines, set in blue on peach. */
-const ABOUT_LINES = ['CLAUDIA VALSELLS', '1969', 'Alzueta Gallery', 'Barcelona, Spain', '© All Rights Reserved'];
+/** The loading screen's five lines, set in blue on peach. */
+const LOADER_LINES = ['CLAUDIA VALSELLS', '1969', 'Alzueta Gallery', 'Barcelona, Spain', '© All Rights Reserved'];
 
 /**
- * The opening screen, shown once a session while the site loads: the same five
- * lines as About, throbbing through the palette.
+ * The opening screen, shown once a session while the site loads: five lines,
+ * throbbing through the palette.
  *
  * Rendered on every page but hidden by the head script on all but the first, so
  * the decision is made before anything is painted rather than as a flash that is
@@ -69,7 +67,7 @@ const ABOUT_LINES = ['CLAUDIA VALSELLS', '1969', 'Alzueta Gallery', 'Barcelona, 
  */
 function loadingScreen(): Html {
   return html`<div class="loader" data-loader aria-hidden="true">
-    ${join(ABOUT_LINES.map((line) => html`<p>${line}</p>`))}
+    ${join(LOADER_LINES.map((line) => html`<p>${line}</p>`))}
   </div>`;
 }
 
@@ -93,74 +91,78 @@ function topBar(path: string): Html {
 }
 
 /**
- * The biography from the source About page, as one block of rich text.
- *
- * Taken whole rather than split into paragraphs: the source nests divs, and a
- * non-greedy block regex closes them at the wrong place, leaving unbalanced
- * markup that swallowed whatever followed it. The extractor has already
- * sanitised this HTML, so the browser can parse it as it stands.
- */
-function aboutText(): string {
-  if (!aboutPage) return '';
-  return aboutPage.rows
-    .flatMap((row) => row.columns)
-    .filter((column) => column.kind === 'text')
-    .map((column) => (column.kind === 'text' ? column.html : ''))
-    .join('');
-}
-
-/**
- * About opens over whatever page you are on. The first screen is the designer's
- * five lines, blinking through the palette; scrolling draws the biography up
- * over it.
- *
- * Then the designer's layout: her name, an opening statement set large, the
- * biography in a column with the studio photographs beside it — beside, not
- * under, so nothing is read through a picture — and the photograph changing as
- * you go. From the private collections to the end the page gives up its columns
- * and centres, because a list of names and dates has no argument to make and
- * reads better down the middle than ranged against a margin.
+ * About opens over whatever page you are on, which stays faintly visible and
+ * blurred behind it. The first screen is the designer's card: red, her name
+ * at the top, her city and year beneath it, how to reach her at the foot.
+ * Scrolling brings the biography up under the card in the card's own column,
+ * with the two studio photographs set into it, then the record of exhibitions
+ * in columns, the private collections, and the line of copyright.
  */
 function aboutOverlay(): Html {
-  const bio = aboutText();
-  const parts = bio ? splitAbout(bio) : null;
-  const images = aboutPage?.images ?? [];
-
   return html`<section class="about" id="about" data-panel aria-label="About">
     <a class="about-close" href="#" data-panel-close>Close</a>
-
-    <div class="about-colour" aria-hidden="true"></div>
-    <div class="about-lines">
-      ${join(ABOUT_LINES.map((line) => html`<p>${line}</p>`))}
-      ${bio ? html`<span class="about-more" aria-hidden="true">Scroll</span>` : ''}
-    </div>
-
-    ${parts
-      ? html`<div class="about-body">
-          <div class="about-head">
-            ${parts.heading ? html`<div class="about-heading">${raw(parts.heading)}</div>` : ''}
-            ${parts.lead ? html`<div class="about-lead">${raw(parts.lead)}</div>` : ''}
-          </div>
-          <div class="about-inner">
-            <div class="about-text">
-              <div class="about-prose">${raw(markAccents(parts.body))}</div>
-            </div>
-            <div class="about-figures" data-about-figures>
-              <div class="about-sticky">
+    <div class="about-sheet">
+      <div class="about-card-stage" data-tilt>
+      <div class="about-card" data-tilt-inner>
+        <p class="about-name">${ABOUT_CARD.name}</p>
+        <p class="about-born">${ABOUT_CARD.city}<br />${ABOUT_CARD.year}</p>
+        <address class="about-contact">
+          <a href="tel:${ABOUT_CARD.phone.replace(/\s+/g, '')}">${ABOUT_CARD.phone}</a>
+          ${join(ABOUT_CARD.emails.map((email) => html`<a href="mailto:${email}">${email}</a>`))}
+        </address>
+      </div>
+      </div>
+      <div class="about-text">
+        ${join(ABOUT_BLOCKS.map(aboutBlock))}
+      </div>
+      <div class="about-record">
+        ${join(
+          ABOUT_SHOWS.map(
+            (group) => html`<section class="about-shows${group.wide ? ' is-wide' : ''}">
+              <h3 class="about-label">${group.heading}</h3>
+              <ul class="about-show-list">
                 ${join(
-                  images.slice(0, 2).map(
-                    (image, i) => html`<figure class="about-figure${i === 0 ? ' is-current' : ''}">
-                      ${responsiveImage({ image, sizes: '(max-width: 899px) 88vw, 38vw', priority: i === 0 })}
-                    </figure>`,
+                  group.shows.map(
+                    (show) => html`<li class="about-show">
+                      <span class="about-show-when">${show.when}</span>
+                      <span class="about-show-title">${show.title}</span>
+                      ${join(show.lines.map((line) => html`<span class="about-show-line">${line}</span>`))}
+                    </li>`,
                   ),
                 )}
-              </div>
-            </div>
-          </div>
-          ${parts.tail ? html`<div class="about-tail">${raw(parts.tail)}</div>` : ''}
-        </div>`
-      : ''}
+              </ul>
+            </section>`,
+          ),
+        )}
+      </div>
+      <section class="about-collections">
+        <h3 class="about-label">Private collections</h3>
+        <ul class="about-collection-list">
+          ${join(
+            ABOUT_COLLECTIONS.map(
+              (c) => html`<li class="about-collection">
+                <span class="about-collection-name">${c.name}</span>
+                <span class="about-collection-place">${c.place}</span>
+              </li>`,
+            ),
+          )}
+        </ul>
+      </section>
+      <p class="about-foot"><b>${ABOUT_CARD.name}</b> ${ABOUT_COPYRIGHT}</p>
+    </div>
   </section>`;
+}
+
+/** The opening statement is set in capitals; the photographs take the column. */
+function aboutBlock(block: AboutBlock): Html {
+  switch (block.kind) {
+    case 'lead': return html`<p class="about-lead">${block.text}</p>`;
+    case 'text': return html`<p>${block.text}</p>`;
+    case 'figure':
+      return html`<figure class="about-figure">
+        ${responsiveImage({ image: block.image, sizes: '(max-width: 899px) 92vw, 79vw' })}
+      </figure>`;
+  }
 }
 
 function lightbox(): Html {

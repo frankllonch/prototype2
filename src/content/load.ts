@@ -95,5 +95,4 @@ const longform = (slug: string) => by('page').find((p) => p.slug === slug);
 
 export const exhibitions: readonly Exhibition[] = splitExhibitions(longform('whats-color-exhibitions'));
 export const colourChart: Project | undefined = longform('colour-chart');
-export const aboutPage: Project | undefined = longform('about');
 

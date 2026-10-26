@@ -10,6 +10,9 @@ import { finePointer, reduceMotion } from './env.ts';
  * Setting `--tilt-max` to 0 and `--tilt-lift` to 1 turns the lean off, which
  * is also how the reduced-motion case is handled — in CSS, not here.
  *
+ * Also leans the About card, which names its own inner element with
+ * `data-tilt-inner`; a painting is the plate's inner by default.
+ *
  * Bound to the painting and not to the figure. The figure is a grid cell as
  * wide as its column, so hovering anywhere in that column tipped a painting
  * the pointer was nowhere near; the inner element is sized to the picture, so
@@ -26,7 +29,7 @@ export function initTilt(): void {
   if (!finePointer.matches) return;
 
   for (const art of document.querySelectorAll<HTMLElement>('[data-tilt]')) {
-    const inner = art.querySelector<HTMLElement>('.detail-plate-inner');
+    const inner = art.querySelector<HTMLElement>('[data-tilt-inner], .detail-plate-inner');
     if (!inner) continue;
 
     let box: DOMRect | null = null;

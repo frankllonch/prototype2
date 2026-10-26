@@ -36,7 +36,7 @@ The dataset (`content/projects.json`), the crop decisions (`content/crops.json`,
 | `/exhibitions/` | The exhibitions as an index; each opens as a panel over the page |
 | `/commissioned/` | The commissioned work, grouped, likewise |
 | `/color-chart/` | The color chart on its own page |
-| About | An overlay on any page — five lines of colour, the work faint behind |
+| About | An overlay on any page — the red card, the biography with two studio photographs, the record of exhibitions and the collections, the work faint behind |
 
 ### The stack
 

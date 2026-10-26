@@ -44,6 +44,9 @@ async function buildAssets() {
   // The opening film, re-encoded for the web from the 168MB original on the
   // live site. Copied rather than processed: it is already at its serving size.
   await cp(path.join(ROOT, 'src', 'assets', 'video'), path.join(DIST, 'video'), { recursive: true });
+  // The two studio photographs on About, already rendered at their serving
+  // sizes from the originals in content/raw/about.
+  await cp(path.join(ROOT, 'src', 'assets', 'about'), path.join(DIST, 'about'), { recursive: true });
 
   for (const file of (await readdir(CLIENT)).filter((f) => f.endsWith('.ts'))) {
     const source = await readFile(path.join(CLIENT, file), 'utf8');

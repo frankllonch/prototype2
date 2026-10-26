@@ -34,7 +34,7 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 /* ----------------------------------------------------------------- reader */
 
 /*
- * The reading composition, shared by the detail panels and the Colour Chart.
+ * The reading composition, used by the detail panels.
  *
  * The panel carries no box of its own — an edge-to-edge sheet with a soft ground
  * and nothing that reads as a floating card over the blurred page behind it.
@@ -42,22 +42,6 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .panel { background: color-mix(in srgb, var(--paper) 90%, transparent); padding: 0 0 var(--gap); }
 .panel-close { position: fixed; top: 1.6rem; right: var(--pad); z-index: 2; color: var(--ink-soft); }
 .panel-close:hover, .panel-close:focus-visible { color: var(--ink); }
-/*
- * The Colour Chart scrolls the page itself rather than sitting in a panel, so
- * its text passes under the menu — and the menu's difference blend over a line
- * of type leaves both of them unreadable. A strip of paper, fixed under the bar,
- * keeps the crossing clean, and gives the menu the white ground it resolves to
- * the house indigo over. Behind the bar, so the blend is unaffected.
- */
-.reader-page { padding-bottom: var(--gap); }
-.reader-page::before {
-  content: '';
-  position: fixed; inset: 0 0 auto 0; height: var(--bar);
-  background: var(--paper);
-  z-index: 39;
-  pointer-events: none;
-}
-
 .reader {
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
@@ -127,15 +111,11 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .reader-figure figcaption { color: var(--ink-soft); margin-top: 0.4rem; font-size: var(--type); }
 .reader-figure img { width: 100%; height: auto; }
 
-.reader-page .reader-figures.is-live[data-multi] {
-  min-height: clamp(170vh, calc(var(--n) * var(--slot)), 260vh);
-}
 /*
- * …and it stretches to the height of the text beside it. Without this the
- * column ends where its own content does, the sticky releases, and the picture
- * scrolls away for the last part of the text — which is the one place you would
- * most notice it moving. `min-height` supplies the runway when the text is
- * short; this supplies it when the text is long.
+ * The figure column stretches to the height of the text beside it. Without
+ * this the column ends where its own content does, the sticky releases, and the
+ * picture scrolls away for the last part of the text — which is the one place
+ * you would most notice it moving.
  */
 .reader-figures.is-live { align-self: stretch; }
 .reader-figures.is-live .reader-sticky { position: sticky; top: var(--bar); }
@@ -165,38 +145,14 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 /* ------------------------------------------------------------------ about */
 
 /*
- * About opens over whatever page you are on. The first screen is the designer's
- * five lines on peach; scrolling on brings the biography the source site
- * carries. Same two-column idea as a detail panel — but here the photographs
- * travel with the text instead of holding still, so the two read as relatives
- * rather than repeats.
- */
-/*
- * About is a takeover, not a veil.
- *
- * The title screen cycles through the five pairs the designer set, ground and
- * type changing together.
- *
- * Each colour *holds* and then blends quickly into the next, rather than cutting
- * or sweeping: a cut was harsh and a constant sweep never let a colour be itself.
- * Holding and turning is what reads as a blink. The colours are registered custom
- * properties so the keyframes interpolate them properly instead of falling back
- * to the discrete behaviour unregistered properties get.
+ * The five colour pairs the designer set, held and turned, which the loading
+ * screen strobes through (`00-base.css`). About used to blink through them too;
+ * it is a red card now, and these stay here for the loader alone. The colours
+ * are registered custom properties so the keyframes interpolate them properly
+ * instead of falling back to the discrete behaviour unregistered properties get.
  */
 @property --blink-bg { syntax: '<color>'; inherits: true; initial-value: #ed373f; }
 @property --blink-fg { syntax: '<color>'; inherits: true; initial-value: #013787; }
-
-/*
- * The five pairs, as given, in the order given. Ground and type always move
- * together — each is a pairing someone chose, not a background and a foreground
- * picked independently, so no frame ever shows one half of one pair against the
- * other half of another.
- *
- * Five slots of a fifth each: the colour holds for 17 and turns over 3, which is
- * what makes it read as a blink. At nine seconds on About that is a second and a
- * half of stillness and a quarter-second turn; on the loading screen, at 1.8s,
- * the same shape strobes.
- */
 @keyframes about-blink {
   0%,   17% { --blink-bg: #ed373f; --blink-fg: #013787; }
   20%,  37% { --blink-bg: #ffd090; --blink-fg: #013787; }
@@ -206,199 +162,183 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   100%      { --blink-bg: #ed373f; --blink-fg: #013787; }
 }
 
+/*
+ * About opens over whatever page you are on: the page stays there behind it,
+ * blurred by the veil and faint through the panel's own ground — more of it
+ * showing than behind an exhibition, because here the first screen is one red
+ * card and the margins around it are where the page is seen.
+ *
+ * Everything is measured off the designer's sheet, which is 1061 wide with the
+ * card running 113..949 — a column of 78.8%, centred — and every figure below
+ * is a fraction of that column or of the card, so the composition holds at any
+ * width rather than only at hers.
+ */
 .about {
-  background: var(--paper);
+  background: color-mix(in srgb, var(--paper) 64%, transparent);
   color: var(--ink);
-  /* Each colour holds for about a second and a half and then turns. Quick enough
-     to be a blink rather than a slow wash, slow enough not to throb — the
-     loading screen is the one that throbs, on the same keyframes at a fifth of
-     the length. */
-  animation: about-blink 9s ease-in-out infinite;
+  /* Nothing here is meant to be reachable sideways. */
+  overflow-x: hidden;
 }
+.about-close { position: fixed; top: 1.6rem; right: var(--pad); z-index: 3; color: var(--ink-soft); }
+.about-close:hover, .about-close:focus-visible { color: var(--ink); }
 
-/*
- * Plain text on the colour, in the colour the five lines are written in: it is
- * a child of `.about`, which is where the blink keyframes set `--blink-fg`,
- * so it inherits the property and turns with them rather than being animated
- * on its own clock — there is no way for the two to drift apart.
- *
- * No plate behind it and no ring when focused; it answers by going quiet
- * instead, which it can afford to do because it sits on its own in the corner.
- */
-.about-close {
-  position: fixed; top: 1.6rem; right: var(--pad); z-index: 3;
-  color: var(--blink-fg, var(--ink));
-  transition: opacity var(--hover) var(--ease);
-}
-.about-close:hover, .about-close:focus-visible { opacity: 0.62; }
-
-/*
- * Scrolling from the colour into the biography, in three layers.
- *
- * The ground is sticky and holds the colour. The lines sit on top of it in normal
- * flow — pulled back over it by a negative margin — so they scroll up and away
- * while the colour stays. The biography follows, opaque, and draws itself up over
- * the ground.
- *
- * So the words leave before the page arrives, and the page meets a plain field of
- * colour rather than cutting through a line of type. Nothing lies between the two
- * grounds: no gradient band to look washed out, and no second element carrying the
- * same colour that could fall out of step with the blink and show its edges —
- * which is what was being seen as boxes appearing whenever the colour turned.
- */
-.about-colour {
-  position: sticky; top: 0;
-  height: 100vh;
-  background: var(--blink-bg);
-}
-.about-lines {
-  /* Back over the ground it is written on. */
-  margin-top: -100vh;
-  position: relative; z-index: 1;
-  min-height: 100vh;
-  display: grid;
-  align-content: center;
-  justify-items: center;
-  text-align: center;
-  padding: var(--bar) var(--pad);
-  color: var(--blink-fg);
-}
-.about-lines p {
-  margin: 0;
-  font-size: var(--type);
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: var(--lead);
-}
-.about-more { position: absolute; bottom: 2rem; left: 0; right: 0; opacity: 0.6; }
-
-/*
- * The covering has to reach both edges of the screen, so the white is on the
- * full-width block and the measure is set by the wrapper inside it.
- *
- * It used to be one element, centred and given a full-bleed `::before` at
- * `inset: 0 -50vw`. That did reach the edges, but half a viewport of it hung off
- * each side, and the panel scrolls — so it scrolled sideways. The rule below is
- * the same idea without anything sticking out of the box.
- */
-.about-body {
-  /* Above the sticky colour, and opaque, so it is the thing doing the covering. */
-  position: relative; z-index: 2;
-  background: var(--paper);
-  color: var(--ink);
-  /* A beat of plain colour after the lines have gone and before the page
-     arrives, so the two never share the screen. */
-  margin-top: 22vh;
-  padding: 14vh 0 calc(var(--gap) * 2);
-}
-/*
- * The opening runs the full width, as the sheet has it, and the columns begin
- * underneath it.
- *
- * Everything on this page is set from one measurement. The sheet's body is
- * 37.4px at the 1588 its export was made at, which is 2.355vw — and 2.355vw is
- * 45px at 1920, exactly the size the type sheet names. The export is therefore
- * at 0.827 of full size and the frame is 1920, which is how the rest of these
- * figures were converted.
- */
-.about-head {
-  max-width: 112rem;
+.about-sheet {
+  width: 78.8%;
   margin: 0 auto;
-  padding: 0 var(--pad);
+  /* The sheet puts the card 2.7% down; the bar is a floor, so it never slides
+     under the menu. */
+  padding: max(calc(var(--bar) + 0.5rem), 2.73vw) 0 var(--gap);
 }
 
+/* ------------------------------------------------------------- the card */
+
 /*
- * Biography and photographs side by side — beside, never over. The sheet laps
- * the picture across the text, which reads well as a still image and badly as a
- * page: a line of prose running under a photograph is a line nobody can finish.
- * The photograph keeps its edge from the sheet, at 60.6% of the width inside
- * the margins; the gutter is taken out of the text column so that edge does not
- * move.
+ * Red, her name at the top, her city and year beneath it, the contact at the
+ * foot ranged right. The card's proportions are the sheet's (836 by 434), and
+ * its insets are fractions of its width: 87 of 836 at the sides and top, 63
+ * at the foot. Its height is a preference, not a cap — on a narrow screen the
+ * lines need more than the proportion gives and the card grows to hold them.
  */
-.about-inner {
+/*
+ * The card leans a little towards the pointer, as a painting does on its own
+ * page (`client/tilt.ts`, with the figures on `.detail-plate` in
+ * `05-artwork.css`). The stage holds the perspective and the card turns in it;
+ * a shade more lean than a painting gets, since it is a card and not a work,
+ * and a shadow that deepens as it lifts, so it reads as a thing held up rather
+ * than a plane that happens to rotate. Settling back takes most of a second,
+ * so it comes to rest rather than snapping.
+ */
+.about-card-stage {
+  --tilt-max: 7deg;
+  --tilt-depth: 1400px;
+  --tilt-lift: 1.012;
+  --tilt-settle: 820ms;
+  perspective: var(--tilt-depth);
+}
+@media (prefers-reduced-motion: reduce) {
+  .about-card-stage { --tilt-max: 0deg; --tilt-lift: 1; }
+}
+.about-card {
+  --card-x: 10.4%;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform var(--tilt-settle) var(--ease), box-shadow var(--tilt-settle) var(--ease);
+  box-shadow: 0 0 0 rgba(36, 37, 40, 0);
   display: grid;
-  grid-template-columns: 60.6% minmax(0, 1fr);
-  gap: 0;
-  align-items: start;
-  max-width: 112rem;
-  margin: clamp(2rem, 4vw, 4rem) auto 0;
-  padding: 0 var(--pad);
-}
-.about-text { padding-right: clamp(1.5rem, 3vw, 3rem); }
-/* Nothing here is meant to be reachable sideways. */
-.about { overflow-x: hidden; }
-
-/* Her name, then the statement the page opens on, set large. */
-.about-heading > * { margin: 0; font-weight: 500; font-size: var(--type); letter-spacing: 0; }
-.about-lead { margin: 1.6rem 0 0; }
-.about-lead > * {
-  margin: 0;
+  grid-template-rows: auto auto minmax(2em, 1fr) auto;
+  aspect-ratio: 836 / 434;
+  box-sizing: border-box;
+  padding: 10.3% var(--card-x) 7.5%;
+  background: #ed373f;
+  color: #fff;
   font-size: var(--type);
-  /* Medium, 0% tracking, 50/45 leading — the sheet's uppercase style. */
+  line-height: var(--lead);
+}
+.about-card.is-tilting { transition: box-shadow var(--tilt-settle) var(--ease); box-shadow: 0 1.6vw 4vw rgba(36, 37, 40, 0.18); }
+.about-card p, .about-card address { margin: 0; font-style: normal; }
+.about-name, .about-born {
   font-weight: 500;
-  line-height: var(--lead);
-  letter-spacing: 0;
   text-transform: uppercase;
+  letter-spacing: -0.01em;
 }
-/* Regular, 0% tracking, the same 50/45 leading. */
-.about-prose > * {
-  margin: 0 0 1.1em;
-  font-size: var(--type);
+/* 73px from baseline to baseline on 20px type: a line and two more of air. */
+.about-card .about-born { margin-top: 1.95em; }
+.about-contact {
+  grid-row: 4;
+  display: grid;
+  justify-items: end;
+  text-align: right;
   font-weight: 400;
-  line-height: var(--lead);
-  letter-spacing: 0;
 }
-.about-text strong { font-weight: 600; }
-.about-text a { border-bottom: 1px solid currentColor; }
+.about-contact a { color: inherit; }
+.about-contact a:hover, .about-contact a:focus-visible { text-decoration: underline; text-underline-offset: 0.12em; }
+
+/* ------------------------------------------------------------- the text */
 
 /*
- * One photograph at a time, holding its place while the words go by and
- * changing as they do — the same idea as a detail panel, driven from the About
- * panel's own scroll (`client/figures.ts`).
- *
- * The stage is given a height so the pictures can be stacked in it; without
- * one, absolutely positioned figures would collapse it to nothing.
+ * The biography keeps the card's column. The opening statement is set in
+ * capitals at medium; the rest runs regular at the site's one size, with the
+ * two photographs taking the full width of the column, tight to the lines
+ * above and below them as the sheet has them.
  */
-.about-figures { position: sticky; top: calc(var(--bar) + 2vh); }
-.about-sticky { position: relative; height: min(68vh, 34rem); }
-.about-figure {
-  position: absolute; inset: 0;
-  margin: 0;
-  display: grid; align-content: start; justify-items: center;
-  opacity: 0;
-  transition: opacity 0.8s var(--ease);
-}
-.about-figure.is-current { opacity: 1; }
-.about-figure picture, .about-figure img { width: 100%; height: 100%; }
-.about-figure img { object-fit: contain; object-position: top center; }
+.about-text { margin-top: 10.4%; font-size: var(--type); line-height: var(--lead); }
+.about-text p { margin: 0 0 1.1em; font-weight: 400; letter-spacing: 0; }
+.about-text .about-lead { font-weight: 500; text-transform: uppercase; }
+.about-figure { margin: 0 0 1.1em; }
+.about-figure picture, .about-figure img { display: block; width: 100%; height: auto; }
+
+/* ----------------------------------------------------------- the record */
 
 /*
- * From the private collections to the end: no columns, centred. A list of
- * names, places and dates is not an argument and does not need a measure — down
- * the middle it reads as a record, which is what it is.
+ * Four columns at the bar's size, which is half the body's: solo, group, and
+ * the art fairs across the last two, since they run to twice the length of
+ * the others. Each entry is when, what, and where — the date leaning, the
+ * title heavier — and an entry is never split across columns.
  */
-.about-tail {
-  max-width: 72rem;
-  margin: clamp(4rem, 9vw, 9rem) auto 0;
-  padding: 0 var(--pad);
+.about-record {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: clamp(1rem, 2.4%, 2.5rem);
+  margin-top: 17%;
+  font-size: var(--type-menu);
+  line-height: 1.25;
+}
+.about-label {
+  margin: 0 0 3.6em;
+  font-size: var(--type-menu);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  line-height: 1.25;
+}
+.about-shows.is-wide { grid-column: span 2; }
+.about-shows.is-wide .about-show-list { columns: 2; column-gap: clamp(1rem, 2.4%, 2.5rem); }
+.about-show-list { list-style: none; margin: 0; padding: 0; }
+.about-show {
+  display: grid;
+  margin: 0 0 1.9em;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.about-show-when { font-style: italic; }
+.about-show-title { font-weight: 600; }
+
+/* ------------------------------------------------------ the collections */
+
+/*
+ * Who holds the work, set larger than the record and in one column: each
+ * name in capitals with its place beneath it, the two lines close, the pairs
+ * a little apart.
+ */
+.about-collections { margin-top: 15%; }
+.about-collection-list {
+  list-style: none;
+  margin: 0; padding: 0;
+  display: grid;
+  gap: 0.5em;
+  font-size: var(--type);
+  line-height: 1.1;
+}
+.about-collection { display: grid; }
+.about-collection-name { font-weight: 500; text-transform: uppercase; letter-spacing: -0.01em; }
+.about-collection-place { font-weight: 400; }
+
+.about-foot {
+  margin: 11% 0 0;
   text-align: center;
+  font-size: var(--type-menu);
+  line-height: 1.25;
 }
-.about-tail > * > * , .about-tail > * { margin: 0 0 0.55em; }
-.about-tail p { font-size: var(--type); line-height: var(--lead); letter-spacing: 0; }
-.about-tail a { border-bottom: 1px solid currentColor; }
-/* The section labels the source sets in capitals get room above them. */
-.about-tail p:has(> strong), .about-tail strong { font-weight: 600; }
+.about-foot b { font-weight: 600; }
 
 @media (max-width: 899px) {
-  .about-inner { grid-template-columns: 1fr; }
-  .about-figures { position: static; }
-  .about-sticky { height: 52vh; }
+  .about-sheet { width: calc(100% - 2 * var(--pad)); }
+  .about-record { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 2em; }
+  .about-shows.is-wide .about-show-list { columns: 1; }
 }
-
-/* Sticky covering is motion; without it the two simply sit one after the other. */
-@media (prefers-reduced-motion: reduce) {
-  .about { animation: none; }
-  .about-colour { position: static; }
+@media (max-width: 559px) {
+  .about-record { grid-template-columns: minmax(0, 1fr); }
+  .about-shows.is-wide { grid-column: auto; }
 }
 
 html:not(.js) .about { display: none; }
@@ -615,17 +555,6 @@ body:has(.panel.is-open) .top { opacity: 0; pointer-events: none; }
 @media (max-width: 899px) {
   .reader-text { padding-right: 2rem; }
 }
-
-/*
- * The Colour Chart shares this composition but not its controls: it is a page
- * you read straight through, and its pictures follow the scroll. Rendering the
- * arrows and the expand marks there would put two controls on the page that do
- * nothing — `figures.ts` wires only what sits inside a panel. `display: none`
- * rather than hiding them, so they leave the tab order with the layout.
- */
-.reader-page .reader-nav,
-.reader-page .reader-expand { display: none; }
-.reader-page .reader-text { padding-right: 0; }
 
 /*
  * The phrases the designer sets in an italic serif — the studio, the chart, the
