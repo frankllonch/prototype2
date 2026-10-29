@@ -839,3 +839,183 @@ html:has(body.has-film) {
   from { transform: translateY(var(--wc-title-from, -105%)); }
   to { transform: translateY(0); }
 }
+
+/* ------------------------------------------ the first edition's sheet */
+
+/*
+ * A composition, not a list.
+ *
+ * Measured off the designer's sheet at the 860px it was drawn at: a content
+ * width of 822 holding three columns of 265 with an 8px gutter, entries placed
+ * by hand in one column or another, Claudia's own paragraphs set across the
+ * full width between them, and a plate of the work partway down.
+ *
+ * Everything here is a share of that content width rather than a length, so
+ * the whole sheet keeps its proportions at any size: the gutter is 0.973% of
+ * it, the drop a block takes when it sits below its neighbour is 7.299%, the
+ * plate is 86.131% and centred. The type is the same — the name is 2.141% of
+ * the width and everything else is a multiple of the name, which is what makes
+ * one variable enough to scale the whole sheet.
+ */
+.wc-edition-i .wc-sheet {
+  /*
+   * The sheet's own width, as a length, because almost nothing here can use a
+   * percentage and mean this.
+   *
+   * A percentage gap on a grid resolves against the grid's height, and a
+   * percentage margin on a grid item resolves against its column — not against
+   * the sheet. Both were quietly wrong: the 7.3% drop came out at 36px instead
+   * of 111 because a third of the width is a third of the figure, and the row
+   * gap came out of the grid's own height, which is thousands of pixels. So
+   * every share of the width below is multiplied by this.
+   */
+  --sheet-w: calc(min(100vw, 2160px) - 2 * var(--pad));
+  --sheet: calc(var(--sheet-w) * var(--sheet-type, 0.02141));
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: var(--sheet-gutter, 0.973%);
+  row-gap: calc(var(--sheet-w) * var(--sheet-row, 0.05));
+  margin-top: var(--sheet-top, 22.749%);
+}
+
+/* The roster is set to the sheet's own measure, narrower than the other two. */
+.wc-edition-i .wc-names { max-width: var(--sheet-measure, 68.5%); }
+
+/* A slot is the column a block was put in, and how far it was dropped. */
+.wc-edition-i .wc-slot {
+  grid-column: var(--col, 1);
+  /* A drop is 7.299% of the sheet, which is why it is taken off its width. */
+  margin-top: calc(var(--drop, 0) * var(--sheet-w) * var(--sheet-drop, 0.07299));
+  /* With the row gap above, this makes 12.2% between one row and the next. */
+  margin-bottom: calc(var(--sheet-w) * var(--sheet-slot-gap, 0.072));
+}
+
+/*
+ * Her words stand further from the entries under them than from each other.
+ *
+ * Carried on the paragraph rather than on the entry below it, which is where
+ * it was first put and wrong: only the first entry of a row is the paragraph's
+ * next sibling, so the gap landed on that one block instead of the row, and it
+ * ate into the drop of the block beside it — Marina was pushed down 3.6% and
+ * arrived 3.7% above Olafur instead of 7.3%. On the paragraph it moves the
+ * whole row and leaves the drops to each other.
+ *
+ * Not between two paragraphs, where the gap is the row's own.
+ */
+.wc-edition-i .wc-say {
+  margin-bottom: calc(var(--sheet-w) * var(--sheet-say-gap, 0.036));
+}
+.wc-edition-i .wc-say:has(+ .wc-say) {
+  margin-bottom: 0;
+}
+
+/*
+ * Claudia's words, across the full width.
+ *
+ * Set a little larger than the names — 1.08 of them on the sheet — in caps and
+ * justified, which is how she sets them: the lines hold to both margins and
+ * the last one falls short.
+ */
+.wc-edition-i .wc-say {
+  grid-column: 1 / -1;
+  /* Top only. The bottom is set above and this rule comes after it, so zeroing
+     both here would quietly undo the gap below her words. */
+  margin-top: 0;
+  font-size: calc(var(--sheet) * 1.08);
+  font-weight: 500;
+  line-height: var(--sheet-say-lead, 0.95);
+  letter-spacing: 0;
+  text-transform: uppercase;
+  text-align: justify;
+}
+.wc-edition-i .wc-say > * { margin: 0; }
+
+/*
+ * An entry: the name down the left of its column, what they do ranged right
+ * against the column's other edge with the translation under it, the colour
+ * beneath that, and the answer across the whole column below.
+ */
+.wc-edition-i .wc-cell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 0.6em;
+  align-items: start;
+  font-size: var(--sheet);
+}
+
+.wc-edition-i .wc-cell-name {
+  grid-column: 1;
+  margin: 0;
+  font-size: 1em;
+  font-weight: 500;
+  line-height: var(--sheet-name-lead, 1.02);
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+.wc-edition-i .wc-cell-alias { font-weight: 400; text-transform: none; }
+.wc-edition-i .wc-cell-alias::before { content: ', '; }
+
+.wc-edition-i .wc-cell-meta {
+  grid-column: 2;
+  margin: 0;
+  display: grid;
+  justify-items: end;
+  text-align: right;
+}
+
+.wc-edition-i .wc-cell-role {
+  font-size: 0.67em;
+  font-weight: 500;
+  line-height: 0.85;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+/* The same words in the other language, set to be read second. */
+.wc-edition-i .wc-cell-also { font-style: italic; }
+
+.wc-edition-i .wc-cell-code {
+  margin-top: 0.9em;
+  font-size: 0.5em;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+/*
+ * The answer, across the column and justified, at a little under half the
+ * name's size — which is what makes the sheet read as a sheet rather than as a
+ * page of statements. Hyphenated, because a column this narrow opens rivers
+ * without it.
+ */
+.wc-edition-i .wc-cell-text {
+  grid-column: 1 / -1;
+  margin-top: var(--sheet-answer-gap, 1.4em);
+  font-size: 0.443em;
+  line-height: var(--sheet-answer-lead, 1.18);
+  letter-spacing: 0;
+  text-align: justify;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+.wc-edition-i .wc-cell-text > * { margin: 0; }
+.wc-edition-i .wc-cell-text > * + * { margin-top: 1em; }
+
+/* The work, inset from the sheet's own margins and centred. */
+.wc-edition-i .wc-plate {
+  grid-column: 1 / -1;
+  margin: calc(var(--sheet-w) * var(--sheet-plate-gap, 0.06)) auto;
+  width: var(--sheet-plate, 86.131%);
+}
+.wc-edition-i .wc-plate img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 899px) {
+  /* Three columns of this at a phone's width is a column of single words. */
+  .wc-edition-i .wc-sheet { grid-template-columns: minmax(0, 1fr); }
+  .wc-edition-i .wc-slot { grid-column: 1; margin-top: 0; }
+  .wc-edition-i .wc-plate { width: 100%; }
+}

@@ -86,6 +86,15 @@ export interface Edition {
   readonly participants: readonly Participant[];
   /** False for edition II, whose source lists names and nothing else. */
   readonly hasAnswers: boolean;
+  /**
+   * Claudia's own paragraphs, kept apart rather than joined.
+   *
+   * The first edition's sheet sets them across the full width between the
+   * entries, so the page needs them one at a time and in order. Read from the
+   * source like everything else; `statement` above is the same words run
+   * together for the editions that show them as one block.
+   */
+  readonly says?: readonly string[];
 }
 
 /* ------------------------------------------------------------------ parsing */
@@ -439,6 +448,10 @@ function build(): readonly Edition[] {
       // The glossary column, which opens with Claudia's own note before the
       // first name; `readRoster` ignores anything before a header anyway.
       participants: fromDocument(EDITION_I, readRoster(rosterColumn(one.rows))),
+      // The four her sheet sets between the entries, in source order.
+      says: paragraphs(textColumns(one.rows)[0] ?? '')
+        .slice(0, 4)
+        .map((p) => p.replace(/^<p\b[^>]*>/i, '').replace(/<\/p>$/i, '').trim()),
       hasAnswers: true,
     });
   }
@@ -555,6 +568,19 @@ export const idFor = (name: string) =>
     .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`;
 
 const built = build();
+
+/**
+ * The editions entire: everyone the document names, answer or no answer.
+ *
+ * The pages below show only the people who answered in words; this is for the
+ * one reader that wants the whole record — the WordPress import, which keeps
+ * the roster as entries so that nobody who took part is lost, and lets the
+ * site decide what to show of them.
+ */
+export const EDITIONS_ALL: readonly Edition[] = built.map((edition) => ({
+  ...edition,
+  participants: edition.participants.map((p) => ({ ...p, edition: edition.numeral, id: idFor(p.name) })),
+}));
 
 /**
  * Each participant stamped with the edition they came from, for linking — and

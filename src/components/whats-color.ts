@@ -1,6 +1,7 @@
 import { html, join, raw, type Html } from './html.ts';
 import { LEAD, swatchFor, readable, inkOn, type Edition, type Participant } from '../content/whats-color.ts';
 import { withBase } from '../content/paths.ts';
+import { SHEET_I } from '../content/whats-color-sheet.ts';
 
 /**
  * The opening view of What's Color?: everyone who has answered, in one run,
@@ -169,14 +170,7 @@ export function whatsColorEdition(edition: Edition): Html {
     <h1 class="sr-only">What&rsquo;s Color? (${edition.numeral})</h1>
     ${whatsColorNames(edition.participants, edition.numeral)}
 
-    <div class="wc-edition-intro">${raw(edition.statement)}</div>
-
-    ${edition.participants.some((p) => p.answer)
-      ? html`<div class="wc-answers">${join(edition.participants.map(answer))}</div>`
-      : html`<p class="wc-answers-none">
-          The source for this edition names everyone who took part but keeps no
-          record of what they answered.
-        </p>`}
+    ${edition.numeral === 'I' ? sheet(edition) : editionList(edition)}
 
     <!--
       The names, not the film. The root of this page is the opening film, and
@@ -221,4 +215,100 @@ export function whatsColorFilm(): Html {
       <source src="${withBase('/video/whats-color.mp4')}" type="video/mp4" />
     </video>
   </section>`;
+}
+
+/** Editions II and III: the statement as one block, then the answers under it. */
+function editionList(edition: Edition): Html {
+  return html`<div class="wc-edition-intro">${raw(edition.statement)}</div>
+
+    ${edition.participants.some((p) => p.answer)
+      ? html`<div class="wc-answers">${join(edition.participants.map(answer))}</div>`
+      : html`<p class="wc-answers-none">
+          The source for this edition names everyone who took part but keeps no
+          record of what they answered.
+        </p>`}`;
+}
+
+/**
+ * The first edition's sheet.
+ *
+ * A composition rather than a list: three columns, with each entry placed in
+ * one of them by the designer, Claudia's own paragraphs set across the full
+ * width between them, and a plate of the work partway down. The placement is
+ * in `whats-color-sheet.ts`, because none of it follows from the content.
+ *
+ * Entries are looked up by name. One that does not match simply does not
+ * appear, which is the failure that gets noticed — a page short of a person is
+ * visible in a way that a silently mis-placed one is not.
+ */
+function sheet(edition: Edition): Html {
+  const byName = new Map(edition.participants.map((p) => [p.name, p]));
+  return html`<div class="wc-sheet">
+    ${join(
+      SHEET_I.map((slot) => {
+        if (slot.say !== undefined) {
+          return html`<p class="wc-say">${raw(edition.says?.[slot.say] ?? '')}</p>`;
+        }
+        if (slot.plate) return plate();
+        const person = slot.who ? byName.get(slot.who) : undefined;
+        if (!person) return html``;
+        return html`<div
+          class="wc-slot"
+          style="--col: ${String(slot.col ?? 1)}; --drop: ${String(slot.drop ?? 0)}"
+        >${sheetEntry(person)}</div>`;
+      }),
+    )}
+  </div>`;
+}
+
+/** The work, full width across the sheet. */
+function plate(): Html {
+  return html`<figure class="wc-plate">
+    <picture>
+      <source srcset="${withBase('/img/whats-color-i.webp')}" type="image/webp" />
+      <img
+        src="${withBase('/img/whats-color-i.jpg')}"
+        alt=""
+        width="1000"
+        height="667"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+  </figure>`;
+}
+
+/**
+ * One entry on the sheet: the name, the role and its translation ranged right
+ * against the column, the colour under them, and the answer below.
+ */
+function sheetEntry(p: Participant): Html {
+  const [role, translated] = splitRole(p.role);
+  return html`<article class="wc-cell" id="${p.id ?? ''}">
+    <h2 class="wc-cell-name">${p.name}${p.alias ? html`<span class="wc-cell-alias">${p.alias}</span>` : ''}</h2>
+    <p class="wc-cell-meta">
+      ${role ? html`<span class="wc-cell-role">${role}</span>` : ''}
+      ${translated ? html`<span class="wc-cell-role wc-cell-also">${translated}</span>` : ''}
+      ${p.code
+        ? html`<span class="wc-cell-code">${p.code}${p.colourName ? ` ${p.colourName}` : ''}</span>`
+        : ''}
+    </p>
+    ${p.answer
+      ? html`<div class="wc-cell-text">
+          ${join(p.answer.split(/\n\s*\n/).map((para) => html`<p>${para}</p>`))}
+        </div>`
+      : ''}
+  </article>`;
+}
+
+/**
+ * The role as the sheet sets it: what they do, then the same in the other
+ * language beneath it. The roster keeps the pair in one string separated by a
+ * slash, which is how the source writes it; a role with no translation simply
+ * has no second line.
+ */
+function splitRole(role: string | undefined): [string, string] {
+  if (!role) return ['', ''];
+  const at = role.indexOf(' / ');
+  return at < 0 ? [role, ''] : [role.slice(0, at), role.slice(at + 3)];
 }
