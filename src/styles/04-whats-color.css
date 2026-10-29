@@ -857,7 +857,7 @@ html:has(body.has-film) {
  * the width and everything else is a multiple of the name, which is what makes
  * one variable enough to scale the whole sheet.
  */
-.wc-edition-i .wc-sheet {
+.wc-sheet-page .wc-sheet {
   /*
    * The sheet's own width, as a length, because almost nothing here can use a
    * percentage and mean this.
@@ -879,10 +879,10 @@ html:has(body.has-film) {
 }
 
 /* The roster is set to the sheet's own measure, narrower than the other two. */
-.wc-edition-i .wc-names { max-width: var(--sheet-measure, 68.5%); }
+.wc-sheet-page .wc-names { max-width: var(--sheet-measure, 68.5%); }
 
 /* A slot is the column a block was put in, and how far it was dropped. */
-.wc-edition-i .wc-slot {
+.wc-sheet-page .wc-slot {
   grid-column: var(--col, 1);
   /* A drop is 7.299% of the sheet, which is why it is taken off its width. */
   margin-top: calc(var(--drop, 0) * var(--sheet-w) * var(--sheet-drop, 0.07299));
@@ -902,10 +902,10 @@ html:has(body.has-film) {
  *
  * Not between two paragraphs, where the gap is the row's own.
  */
-.wc-edition-i .wc-say {
+.wc-sheet-page .wc-say {
   margin-bottom: calc(var(--sheet-w) * var(--sheet-say-gap, 0.036));
 }
-.wc-edition-i .wc-say:has(+ .wc-say) {
+.wc-sheet-page .wc-say:has(+ .wc-say) {
   margin-bottom: 0;
 }
 
@@ -916,7 +916,7 @@ html:has(body.has-film) {
  * justified, which is how she sets them: the lines hold to both margins and
  * the last one falls short.
  */
-.wc-edition-i .wc-say {
+.wc-sheet-page .wc-say {
   grid-column: 1 / -1;
   /* Top only. The bottom is set above and this rule comes after it, so zeroing
      both here would quietly undo the gap below her words. */
@@ -928,14 +928,14 @@ html:has(body.has-film) {
   text-transform: uppercase;
   text-align: justify;
 }
-.wc-edition-i .wc-say > * { margin: 0; }
+.wc-sheet-page .wc-say > * { margin: 0; }
 
 /*
  * An entry: the name down the left of its column, what they do ranged right
  * against the column's other edge with the translation under it, the colour
  * beneath that, and the answer across the whole column below.
  */
-.wc-edition-i .wc-cell {
+.wc-sheet-page .wc-cell {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   column-gap: 0.6em;
@@ -943,7 +943,7 @@ html:has(body.has-film) {
   font-size: var(--sheet);
 }
 
-.wc-edition-i .wc-cell-name {
+.wc-sheet-page .wc-cell-name {
   grid-column: 1;
   margin: 0;
   font-size: 1em;
@@ -952,10 +952,10 @@ html:has(body.has-film) {
   letter-spacing: 0;
   text-transform: uppercase;
 }
-.wc-edition-i .wc-cell-alias { font-weight: 400; text-transform: none; }
-.wc-edition-i .wc-cell-alias::before { content: ', '; }
+.wc-sheet-page .wc-cell-alias { font-weight: 400; text-transform: none; }
+.wc-sheet-page .wc-cell-alias::before { content: ', '; }
 
-.wc-edition-i .wc-cell-meta {
+.wc-sheet-page .wc-cell-meta {
   grid-column: 2;
   margin: 0;
   display: grid;
@@ -963,7 +963,7 @@ html:has(body.has-film) {
   text-align: right;
 }
 
-.wc-edition-i .wc-cell-role {
+.wc-sheet-page .wc-cell-role {
   font-size: 0.67em;
   font-weight: 500;
   line-height: 0.85;
@@ -971,9 +971,9 @@ html:has(body.has-film) {
   text-transform: uppercase;
 }
 /* The same words in the other language, set to be read second. */
-.wc-edition-i .wc-cell-also { font-style: italic; }
+.wc-sheet-page .wc-cell-also { font-style: italic; }
 
-.wc-edition-i .wc-cell-code {
+.wc-sheet-page .wc-cell-code {
   margin-top: 0.9em;
   font-size: 0.5em;
   font-weight: 500;
@@ -988,7 +988,7 @@ html:has(body.has-film) {
  * page of statements. Hyphenated, because a column this narrow opens rivers
  * without it.
  */
-.wc-edition-i .wc-cell-text {
+.wc-sheet-page .wc-cell-text {
   grid-column: 1 / -1;
   margin-top: var(--sheet-answer-gap, 1.4em);
   font-size: 0.443em;
@@ -998,16 +998,16 @@ html:has(body.has-film) {
   -webkit-hyphens: auto;
   hyphens: auto;
 }
-.wc-edition-i .wc-cell-text > * { margin: 0; }
-.wc-edition-i .wc-cell-text > * + * { margin-top: 1em; }
+.wc-sheet-page .wc-cell-text > * { margin: 0; }
+.wc-sheet-page .wc-cell-text > * + * { margin-top: 1em; }
 
 /* The work, inset from the sheet's own margins and centred. */
-.wc-edition-i .wc-plate {
+.wc-sheet-page .wc-plate {
   grid-column: 1 / -1;
   margin: calc(var(--sheet-w) * var(--sheet-plate-gap, 0.06)) auto;
   width: var(--sheet-plate, 86.131%);
 }
-.wc-edition-i .wc-plate img {
+.wc-sheet-page .wc-plate img {
   display: block;
   width: 100%;
   height: auto;
@@ -1015,7 +1015,67 @@ html:has(body.has-film) {
 
 @media (max-width: 899px) {
   /* Three columns of this at a phone's width is a column of single words. */
-  .wc-edition-i .wc-sheet { grid-template-columns: minmax(0, 1fr); }
-  .wc-edition-i .wc-slot { grid-column: 1; margin-top: 0; }
-  .wc-edition-i .wc-plate { width: 100%; }
+  .wc-sheet-page .wc-sheet { grid-template-columns: minmax(0, 1fr); }
+  .wc-sheet-page .wc-slot { grid-column: 1; margin-top: 0; }
+  .wc-sheet-page .wc-plate { width: 100%; }
+}
+
+/*
+ * The second edition's sheet opens with its own title — the project and the
+ * numeral bold, who it was for beside them — set at the weight of the writing
+ * rather than of a heading, because on her sheet it reads as the first line of
+ * the text and not as a masthead.
+ */
+/* Doubled up on purpose: the rule that closes the gap between two adjacent
+   statements is one class heavier than a bare `.wc-sheet-title`, and the
+   title is followed by a statement, so without this its gap never applies. */
+.wc-sheet-page .wc-say.wc-sheet-title {
+  font-weight: 400;
+  text-align: left;
+  margin-bottom: calc(var(--sheet-w) * var(--sheet-title-gap, 0.016));
+}
+.wc-sheet-page .wc-sheet-title strong {
+  font-weight: 700;
+}
+
+/*
+ * A plate set in one column rather than across all three, which is how the
+ * second edition sets its pair: two pictures side by side in the outer columns
+ * with the middle left empty. It takes a slot's spacing, not a plate's, so the
+ * pair sits in the rhythm of the entries around it.
+ */
+.wc-sheet-page .wc-plate-col {
+  grid-column: var(--col, 1);
+  width: 100%;
+  margin-top: calc(var(--drop, 0) * var(--sheet-w) * var(--sheet-drop, 0.07299));
+  margin-bottom: calc(var(--sheet-w) * var(--sheet-slot-gap, 0.072));
+}
+
+/*
+ * Where the design crops a photograph to a band, the shape rides on the figure
+ * and the file is covered into it. Left unset the ratio is `auto`, so a plate
+ * without one keeps the shape of its file — which is what the first edition's
+ * does, and why this can be added without touching it.
+ */
+.wc-sheet-page .wc-plate img {
+  aspect-ratio: var(--plate-aspect, auto);
+  object-fit: cover;
+}
+
+/* Her second sheet opens a little higher than her first. */
+.wc-edition-ii .wc-sheet {
+  /* Her second sheet keeps a tighter rhythm than her first: measured off it,
+     the writing sits closer to the entries and the entries closer to the
+     writing that follows them. */
+  --sheet-top: 17.5%;
+  --sheet-say-gap: 0.045;
+  --sheet-slot-gap: 0.053;
+  /* Her entries here carry no role under the name, only a colour ranged
+     against the far edge, so the space below the name is set rather than
+     left to a line that is not there. Stated against the sheet's width
+     because the default is in `em` of the answer, which is the smallest
+     type on the page. */
+  --sheet-answer-gap: calc(var(--sheet-w) * 0.0362);
+  /* Her full-width plates reach the margins; the first edition's stop short. */
+  --sheet-plate: 100%;
 }

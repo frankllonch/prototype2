@@ -1,7 +1,18 @@
 import { html, join, raw, type Html } from './html.ts';
 import { LEAD, swatchFor, readable, inkOn, type Edition, type Participant } from '../content/whats-color.ts';
 import { withBase } from '../content/paths.ts';
-import { SHEET_I } from '../content/whats-color-sheet.ts';
+import {
+  SHEET_I,
+  SHEET_II,
+  type Plate,
+  type SheetSlot,
+} from '../content/whats-color-sheet.ts';
+
+/** The editions the designer composed by hand, by numeral. */
+const SHEETS: Record<string, readonly SheetSlot[] | undefined> = {
+  I: SHEET_I,
+  II: SHEET_II,
+};
 
 /**
  * The opening view of What's Color?: everyone who has answered, in one run,
@@ -165,12 +176,13 @@ function answer(p: Participant, index: number): Html {
  * column is filled in turn.
  */
 export function whatsColorEdition(edition: Edition): Html {
-  return html`<div class="wc wc-edition wc-edition-${edition.numeral.toLowerCase()}">
+  const table = SHEETS[edition.numeral];
+  return html`<div class="wc wc-edition wc-edition-${edition.numeral.toLowerCase()}${table ? ' wc-sheet-page' : ''}">
     <p class="wc-numeral" aria-hidden="true">(${edition.numeral})</p>
     <h1 class="sr-only">What&rsquo;s Color? (${edition.numeral})</h1>
     ${whatsColorNames(edition.participants, edition.numeral)}
 
-    ${edition.numeral === 'I' ? sheet(edition) : editionList(edition)}
+    ${table ? sheet(edition, table) : editionList(edition)}
 
     <!--
       The names, not the film. The root of this page is the opening film, and
@@ -241,15 +253,16 @@ function editionList(edition: Edition): Html {
  * appear, which is the failure that gets noticed — a page short of a person is
  * visible in a way that a silently mis-placed one is not.
  */
-function sheet(edition: Edition): Html {
+function sheet(edition: Edition, table: readonly SheetSlot[]): Html {
   const byName = new Map(edition.participants.map((p) => [p.name, p]));
   return html`<div class="wc-sheet">
     ${join(
-      SHEET_I.map((slot) => {
+      table.map((slot) => {
+        if (slot.title) return sheetTitle(edition);
         if (slot.say !== undefined) {
           return html`<p class="wc-say">${raw(edition.says?.[slot.say] ?? '')}</p>`;
         }
-        if (slot.plate) return plate();
+        if (slot.plate) return plate(slot.plate, slot);
         const person = slot.who ? byName.get(slot.who) : undefined;
         if (!person) return html``;
         return html`<div
@@ -261,16 +274,50 @@ function sheet(edition: Edition): Html {
   </div>`;
 }
 
-/** The work, full width across the sheet. */
-function plate(): Html {
-  return html`<figure class="wc-plate">
+/**
+ * The edition's own title, where its sheet carries one: the project and the
+ * numeral set bold, and whatever the source title says after that beside it in
+ * the ordinary weight. Split rather than retyped, so the words stay the ones
+ * WordPress holds.
+ *
+ * Hidden from the reading order because the page already opens with the same
+ * heading; this is the designer's printed restatement of it.
+ */
+function sheetTitle(edition: Edition): Html {
+  const tail = edition.sourceTitle
+    .replace(/^\s*what.s\s+colou?r\s*\??\s*/i, '')
+    .replace(/^\(?\s*(i{1,3})\s*\)?\s*/i, '')
+    .trim();
+  return html`<p class="wc-say wc-sheet-title" aria-hidden="true">
+    <strong>What&rsquo;s Color? (${edition.numeral})</strong>${tail ? ` ${tail}` : ''}
+  </p>`;
+}
+
+/**
+ * A photograph on the sheet: across all three columns, or in one of them where
+ * the design sets a pair side by side.
+ *
+ * Where the design crops the picture to a band, the shape it crops to rides on
+ * the element and the file is covered into it. Without that the plate keeps the
+ * shape of the file, which is what the first edition's does.
+ */
+function plate(p: Plate, slot: SheetSlot): Html {
+  // Always stated, never left to `auto`: these load lazily, and an `auto`
+  // ratio gives a lazy image no height until it arrives, which collapses the
+  // row and shifts the page under the reader when it does.
+  const shape = `--plate-aspect: ${String(p.aspect ?? p.w / p.h)}`;
+  const column = slot.col ? `--col: ${String(slot.col)}; --drop: ${String(slot.drop ?? 0)}` : '';
+  return html`<figure
+    class="wc-plate${slot.col ? ' wc-plate-col' : ''}"
+    style="${[shape, column].filter(Boolean).join('; ')}"
+  >
     <picture>
-      <source srcset="${withBase('/img/whats-color-i.webp')}" type="image/webp" />
+      <source srcset="${withBase(`/img/${p.name}.webp`)}" type="image/webp" />
       <img
-        src="${withBase('/img/whats-color-i.jpg')}"
-        alt=""
-        width="1000"
-        height="667"
+        src="${withBase(`/img/${p.name}.jpg`)}"
+        alt="${p.alt}"
+        width="${String(p.w)}"
+        height="${String(p.h)}"
         loading="lazy"
         decoding="async"
       />

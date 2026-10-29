@@ -433,6 +433,15 @@ function build(): readonly Edition[] {
       intro: intro(essay, 1),
       statement: intro(note, 1),
       participants: fromDocument(EDITION_II, readThanks(columns.join('\n'))),
+      // The six her sheet sets between the entries. Not a run of them: the
+      // curators' credit opens the column, a note about who commissioned the
+      // first paragraph follows it, and the sheet sets neither.
+      says: [1, 3, 4, 5, 6, 7].map((i) =>
+        (paragraphs(essay)[i] ?? '')
+          .replace(/^<p\b[^>]*>/i, '')
+          .replace(/<\/p>$/i, '')
+          .trim(),
+      ),
       hasAnswers: true,
     });
   }
