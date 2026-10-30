@@ -4,6 +4,8 @@ import { withBase } from '../content/paths.ts';
 import {
   SHEET_I,
   SHEET_II,
+  SHEET_III,
+  BOOKS_III,
   type Plate,
   type SheetSlot,
 } from '../content/whats-color-sheet.ts';
@@ -12,6 +14,7 @@ import {
 const SHEETS: Record<string, readonly SheetSlot[] | undefined> = {
   I: SHEET_I,
   II: SHEET_II,
+  III: SHEET_III,
 };
 
 /**
@@ -259,6 +262,7 @@ function sheet(edition: Edition, table: readonly SheetSlot[]): Html {
     ${join(
       table.map((slot) => {
         if (slot.title) return sheetTitle(edition);
+        if (slot.strip) return strip();
         if (slot.say !== undefined) {
           return html`<p class="wc-say">${raw(edition.says?.[slot.say] ?? '')}</p>`;
         }
@@ -271,6 +275,47 @@ function sheet(edition: Edition, table: readonly SheetSlot[]): Html {
         >${sheetEntry(person)}</div>`;
       }),
     )}
+  </div>
+  ${table.some((slot) => slot.strip) ? bookView() : ''}`;
+}
+
+/**
+ * The row of photographs of the book, along the top of the third edition's
+ * sheet. Each one is a real link to the photograph, so without scripting a
+ * click still shows the picture; with it, the script opens the same picture
+ * over the page instead.
+ */
+function strip(): Html {
+  return html`<div class="wc-strip">
+    ${join(
+      BOOKS_III.map(
+        (book) => html`<a class="wc-book" href="${withBase(`/img/${book.name}.jpg`)}" data-book>
+          <picture>
+            <source srcset="${withBase(`/img/${book.name}.webp`)}" type="image/webp" />
+            <img
+              src="${withBase(`/img/${book.name}.jpg`)}"
+              alt="${book.alt}"
+              width="${String(book.w)}"
+              height="${String(book.h)}"
+              loading="lazy"
+              decoding="async"
+            />
+          </picture>
+        </a>`,
+      ),
+    )}
+  </div>`;
+}
+
+/**
+ * Where a clicked photograph opens: the picture large over the page, the page
+ * blurred behind it, closed by a click anywhere or Escape. Empty and hidden
+ * until the script fills it; without scripting it never shows and the links
+ * above stand on their own.
+ */
+function bookView(): Html {
+  return html`<div class="wc-book-view" data-book-view hidden>
+    <figure class="wc-book-plate" data-book-plate></figure>
   </div>`;
 }
 

@@ -40,10 +40,12 @@ export interface SheetSlot {
   readonly plate?: Plate;
   /** The edition's own title, across the full width. */
   readonly title?: boolean;
+  /** The row of photographs of the book, across the full width. */
+  readonly strip?: boolean;
   /** Which of the three columns, 1 to 3. Full width when left off. */
   readonly col?: 1 | 2 | 3;
   /** How many steps below the top of its row, each step 7.3% of the width. */
-  readonly drop?: 1 | 2;
+  readonly drop?: 1 | 2 | 3;
 }
 
 const PLATE_I: Plate = {
@@ -157,8 +159,8 @@ export const SHEET_II: readonly SheetSlot[] = [
   { say: 3 },
 
   { who: 'Antoni Arola', col: 1 },
-  { who: 'Isabel Sendra', col: 3, drop: 1 },
   { who: 'Laura Castanya', col: 2, drop: 2 },
+  { who: 'Isabel Sendra', col: 3, drop: 1 },
 
   { who: 'Kal-a', col: 1 },
   { who: 'AMOO', col: 3 },
@@ -182,12 +184,102 @@ export const SHEET_II: readonly SheetSlot[] = [
   { say: 5 },
 
   { who: 'Mariona Espinet', col: 1 },
-  { who: 'Auxi Gálvez', col: 3 },
   { who: 'Loca Studio', col: 2, drop: 1 },
+  { who: 'Auxi Gálvez', col: 3 },
 
   { who: 'HANGHAR', col: 1 },
   { who: 'Montse Vicens', col: 2 },
   { who: 'Escobedo Soliz', col: 3 },
 
   { who: 'Marc Morro', col: 1 },
+];
+
+/**
+ * The photographs of the book, in the order the third edition's sheet runs
+ * them along its top. Each one is a spread, photographed on the studio's pink
+ * ground, and the first doubles as the plate the sheet sets large further
+ * down. Matched to the sheet by colour rather than by eye: each thumbnail on
+ * it was compared against each photograph, and every match was unambiguous.
+ */
+export const BOOKS_III: readonly Plate[] = [
+  { name: 'whats-color-iii-1', w: 750, h: 1000, alt: 'The book open at Tomás López Amat’s and Rupi Kaur’s colours.' },
+  { name: 'whats-color-iii-2', w: 750, h: 1000, alt: 'The book open at Sofia Romero y Miguel Sotos’ and Luis Cerveró’s colours.' },
+  { name: 'whats-color-iii-3', w: 750, h: 1000, alt: 'The book open at Carlota Guerrero’s and Escobedo Soliz’s colours.' },
+  { name: 'whats-color-iii-4', w: 750, h: 1000, alt: 'The book open at Ana Vidal’s and Tortell Poltrona’s colours.' },
+  { name: 'whats-color-iii-5', w: 750, h: 1000, alt: 'The book open at Plantea Estudio’s and Hanghar’s colours.' },
+  { name: 'whats-color-iii-6', w: 747, h: 995, alt: 'The book open at Carlota Casanova’s and Albert Riera Galcerán’s colours.' },
+  { name: 'whats-color-iii-7', w: 768, h: 1024, alt: 'The book open at its index: every name with its colour reference.' },
+  { name: 'whats-color-iii-8', w: 768, h: 1024, alt: 'The book’s cover sheet, printed with rows of painted frames.' },
+];
+
+/**
+ * Four of the third edition's five statements exist in no extracted source:
+ * the WordPress page carries only the first, and the others appear on the
+ * designer's sheet alone, so they are transcribed from it here the way the
+ * second edition's answers were transcribed from Claudia's document — written
+ * down once, with their provenance stated, rather than invented. The fifth
+ * statement of the page is the first, and it is read from the source.
+ */
+export const SAYS_III_SHEET: readonly string[] = [
+  'During the past months I have invited them to consider and answer the question: ‘What does color mean to you?’',
+  'First of all, to open up a dialogue, to grasp new ways of seeing colors, other perspectives, but also to better understand the world. I wanted to think of color in a broader context, outside of the artistic view, and to discover the notion of color as it is thought of by others.',
+  'Now, this whole journey has become a process of identifying and synthesizing knowledge, when possible, into color, with the wish to create and share a ‘color glossary’ where color meets perception. For what purpose?',
+  'Because to me, color is a universal visual emotion, capable of reaching and inspiring every human being.',
+];
+
+/**
+ * The third edition's sheet. The same system as the first two and the loosest
+ * rhythm of the three: single entries drop as far as three steps, and the row
+ * of book photographs stands where the other editions open with words.
+ *
+ * Two colour references on her sheet are typos — Marta D. Riezu and Juan
+ * Diego Valera both carry a neighbour's colour there — and the entries here
+ * follow Claudia's document instead, which the book's own printed index
+ * agrees with.
+ */
+export const SHEET_III: readonly SheetSlot[] = [
+  { strip: true },
+  { say: 0 },
+
+  { who: 'Marc Gómez del Moral', col: 1 },
+  { who: 'Jose Javier Serrano', col: 2 },
+  { who: 'Lucia Boned', col: 3, drop: 2 },
+
+  { say: 1 },
+
+  { who: 'Albert Riera Galcerán', col: 2 },
+  { who: 'María Medem', col: 3 },
+
+  { who: 'Isabel Martinez', col: 1, drop: 1 },
+  { who: 'Ana Cuba', col: 2 },
+
+  {
+    plate: {
+      name: 'whats-color-iii-1',
+      w: 750,
+      h: 1000,
+      alt: 'The book open at Tomás López Amat’s and Rupi Kaur’s colours, set large across the sheet.',
+      aspect: 1.13,
+    },
+  },
+
+  { say: 2 },
+
+  { who: 'Julia Ruiz Cabello', col: 1 },
+  { who: 'Raquel Quevedo', col: 2, drop: 2 },
+  { who: 'José Quintanar', col: 3, drop: 3 },
+
+  { say: 3 },
+
+  { who: 'Luís Cerveró', col: 1 },
+  { who: 'Marta D. Riezu', col: 2, drop: 1 },
+
+  { who: 'Belén Gayán', col: 2 },
+  { who: 'Cristina Stolhe', col: 3, drop: 1 },
+
+  { say: 4 },
+
+  { who: 'Juan Diego Valera', col: 1 },
+  { who: 'Álvaro Galmés', col: 2, drop: 3 },
+  { who: 'Arnau Blanch', col: 3, drop: 1 },
 ];

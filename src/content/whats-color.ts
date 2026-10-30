@@ -1,6 +1,7 @@
 import { exhibitions, commissioned } from './load.ts';
 import { EDITION_I, EDITION_III, type DocumentEntry } from './whats-color-document.ts';
 import { EDITION_II } from './whats-color-edition-ii.ts';
+import { SAYS_III_SHEET } from './whats-color-sheet.ts';
 
 /**
  * What's Color?, read out of the source rather than retyped.
@@ -417,6 +418,15 @@ function build(): readonly Edition[] {
       intro: intro(column, 1, 1),
       statement: intro(column, 1, 1),
       participants: fromDocument(EDITION_III, readRoster(column)),
+      // The first of the five is the artist's own paragraph, read from the
+      // source; the sheet's other four exist nowhere else and come transcribed
+      // with their provenance stated beside them.
+      says: [
+        ...paragraphs(column)
+          .slice(1, 2)
+          .map((p) => p.replace(/^<p\b[^>]*>/i, '').replace(/<\/p>$/i, '').trim()),
+        ...SAYS_III_SHEET,
+      ],
       hasAnswers: true,
     });
   }

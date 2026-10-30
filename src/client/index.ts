@@ -18,6 +18,8 @@ import { initPaging } from './paging.ts';
 import { initViews } from './views.ts';
 import { initScrollCue } from './scroll-cue.ts';
 import { initInquiries } from './inquiries.ts';
+import { initBook } from './book.ts';
+import { initWcFocus } from './focus.ts';
 
 initTextRoll();
 initTransitions();
@@ -35,3 +37,5 @@ initPaging();
 initViews();
 initScrollCue();
 initInquiries();
+initBook();
+initWcFocus();
