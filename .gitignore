@@ -2,3 +2,7 @@ node_modules/
 dist/
 content/raw/
 .DS_Store
+
+# WordPress local environment
+wordpress/import/
+wordpress/themes/claudiavalsells/assets/

@@ -1,0 +1,55 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "settings": {
+    "appearanceTools": false,
+    "color": {
+      "custom": false,
+      "customDuotone": false,
+      "customGradient": false,
+      "defaultDuotone": false,
+      "defaultGradients": false,
+      "defaultPalette": false,
+      "background": false,
+      "text": false,
+      "link": false,
+      "palette": [
+        { "slug": "ink", "color": "#242528", "name": "Ink" },
+        { "slug": "paper", "color": "#ffffff", "name": "Paper" },
+        { "slug": "peach", "color": "#fcd090", "name": "Peach" }
+      ]
+    },
+    "typography": {
+      "customFontSize": false,
+      "defaultFontSizes": false,
+      "fontSizes": [],
+      "dropCap": false,
+      "fontStyle": false,
+      "fontWeight": false,
+      "letterSpacing": false,
+      "lineHeight": false,
+      "textAlign": false,
+      "textColumns": false,
+      "textDecoration": false,
+      "textTransform": false,
+      "writingMode": false
+    },
+    "spacing": {
+      "margin": false,
+      "padding": false,
+      "blockGap": null,
+      "units": []
+    },
+    "border": {
+      "color": false,
+      "radius": false,
+      "style": false,
+      "width": false
+    },
+    "shadow": { "defaultPresets": false },
+    "layout": {
+      "contentSize": "36rem",
+      "wideSize": "36rem"
+    }
+  }
+}

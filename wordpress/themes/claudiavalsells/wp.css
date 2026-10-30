@@ -1,0 +1,39 @@
+/*
+ * Beside site.css: only what the WordPress reading of the site needs and the
+ * static site does not. site.css is built from src/styles and is not edited
+ * here.
+ */
+
+/* Signed in, the admin bar takes the top of the window; the chrome moves down under it. */
+.admin-bar .top,
+.admin-bar .about,
+.admin-bar .panel,
+.admin-bar .lightbox,
+.admin-bar .inq,
+.admin-bar .panel-veil {
+  top: var(--wp-admin--admin-bar--height, 32px);
+}
+
+/* A plain page — the privacy notice, a not-found — reads as a column of text. */
+.page-plain {
+  max-width: 44rem;
+  padding: calc(var(--bar) + var(--gap)) var(--pad) var(--gap);
+  font-size: var(--type);
+  line-height: var(--lead);
+}
+.page-plain h1 {
+  margin: 0 0 1.5em;
+  font-size: inherit;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+.page-plain .prose p { margin: 0 0 1.1em; }
+.page-figure { margin: 0 0 1.1em; }
+.page-figure figcaption { color: var(--ink-soft); margin-top: 0.4rem; }
+
+/* The editor's own figure markup, should any reach the page. */
+.prose .wp-block-image,
+.about-text .wp-block-image { margin: 0 0 1.1em; }
+.prose .wp-block-image img,
+.about-text .wp-block-image img { width: 100%; height: auto; }
+.prose figcaption { color: var(--ink-soft); }
