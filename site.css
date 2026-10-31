@@ -484,77 +484,6 @@ body.is-locked { overflow: hidden; }
 .top { --bar-ink: rgb(252, 252, 250); }
 .top-soon:hover, .top-soon:focus-visible, .top-soon[aria-current='page'] { color: var(--bar-ink); }
 
-/*
- * The page you are on, as a block of colour hanging from the top of the screen.
- *
- * The same mark the question wears in the opening text — a solid field of one
- * of the palette's colours with the words knocked out of it — except that this
- * one reaches the top edge, so it reads as a chip of paint laid on the screen
- * rather than as a highlighter run across a line.
- *
- * It sits below the bar's colours and not above them, and it names an element
- * in its selector, because the rule that tints the current page is
- * `.menu a[aria-current]` — a class, an attribute and an element. Written any
- * lighter, or any earlier, the ink stayed where it was and the name came out
- * dark on its own colour.
- *
- * Three things make it behave.
- *
- * The colour arrives as a negative, because the bar blends with `difference`:
- * what it paints is the distance between the backdrop and the colour it is
- * given, so over the page's white a negative comes back as the hue itself.
- * `client/current.ts` draws it from the site's list, afresh on every load.
- *
- * The ink is black for the same reason and not by accident — black against
- * white is the whole distance, which is paper. So the name is knocked out in
- * white without naming a second colour to keep in step.
- *
- * And it climbs without moving anything: the padding that carries it to the top
- * edge is taken straight back as margin, on every side, so the item occupies
- * exactly the space it did unpainted and the spacing measured off the
- * designer's sheet is untouched.
- *
- * The three knobs:
- *
- *   --bar-rise   how far the block climbs towards the top edge. Measured by
- *                the script off a neighbour, since the opening page gives its
- *                bar a different height; set it here to override that.
- *   --bar-drop   how far it hangs below the line of type.
- *   --bar-side   how far it stands out either side of the name.
- */
-.top {
-  --bar-rise: var(--bar-rise-measured, 1.6rem);
-  --bar-drop: 0.5em;
-  --bar-side: 0.18em;
-}
-
-.top [aria-current='page']:is(a, button) {
-  background: var(--bar-swatch, var(--neg-0));
-  color: #000;
-  --roll-color: #000;
-  padding: var(--bar-rise) var(--bar-side) var(--bar-drop);
-  margin: calc(-1 * var(--bar-rise)) calc(-1 * var(--bar-side)) calc(-1 * var(--bar-drop));
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
-}
-
-/*
- * On the opening page the block waits until the film is off the screen
- * altogether — not merely until the bar has stopped travelling with it. While
- * any of the film is still showing, the bar is its negative and a second colour
- * laid over that reads as part of the picture. The block belongs to the page
- * underneath, so it arrives when the page does.
- */
-.has-film:not(.is-film-gone) .top [aria-current='page']:is(a, button) {
-  background: none;
-  color: var(--bar-ink);
-  --roll-color: var(--bar-ink);
-  padding-top: 0;
-  padding-bottom: 0;
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
 .menu a, .top-soon { color: rgb(228, 228, 226); transition: color var(--hover) var(--ease); }
 
 /*
@@ -725,6 +654,154 @@ html.is-scrolled .scroll-cue { opacity: 0; }
 .wordmark,
 .menu a:hover, .menu a:focus-visible, .menu a[aria-current='page'],
 .top-soon:hover, .top-soon:focus-visible, .top-soon[aria-current='page'] { --roll-color: rgb(252, 252, 250); }
+
+/*
+ * The page you are on, as a block of colour hanging from the top of the screen.
+ *
+ * The same mark the question wears in the opening text — a solid field of one
+ * of the palette's colours with the words knocked out of it — except that this
+ * one reaches the top edge, so it reads as a chip of paint laid on the screen
+ * rather than as a highlighter run across a line.
+ *
+ * It sits below everything else that colours the bar, and it names an element
+ * in its selector. Both are needed. The rules it has to beat —
+ * `.menu a[aria-current]` for the ink, and the same selector again for
+ * `--roll-color` — carry a class, an attribute and an element each, so a
+ * lighter selector loses outright and an equal one loses on order. Written
+ * above them the name came out dark on its own colour; and because the roll
+ * draws the glyphs you actually see from `--roll-color`, while the element's
+ * own text is only what shows before the script runs, getting one and not the
+ * other bought a flash of white and nothing more.
+ *
+ * Three things make it behave.
+ *
+ * The colour arrives as a negative, because the bar blends with `difference`:
+ * what it paints is the distance between the backdrop and the colour it is
+ * given, so over the page's white a negative comes back as the hue itself.
+ * `client/current.ts` draws it from the site's list, afresh on every load.
+ *
+ * The ink is black for the same reason and not by accident — black against
+ * white is the whole distance, which is paper. So the name is knocked out in
+ * white without naming a second colour to keep in step.
+ *
+ * And it climbs without moving anything: the padding that carries it to the top
+ * edge is taken straight back as margin, on every side, so the item occupies
+ * exactly the space it did unpainted and the spacing measured off the
+ * designer's sheet is untouched.
+ *
+ * The three knobs:
+ *
+ *   --bar-rise   how far the block climbs towards the top edge. Measured by
+ *                the script off a neighbour, since the opening page gives its
+ *                bar a different height; set it here to override that.
+ *   --bar-drop   how far it hangs below the line of type.
+ *   --bar-side   how far it stands out either side of the name.
+ */
+.top {
+  --bar-rise: var(--bar-rise-measured, 1.6rem);
+  --bar-drop: 0.5em;
+  --bar-side: 0.18em;
+}
+
+.top [aria-current='page']:is(a, button) {
+  position: relative;
+  color: #000;
+  --roll-color: #000;
+  padding: var(--bar-rise) var(--bar-side) var(--bar-drop);
+  margin: calc(-1 * var(--bar-rise)) calc(-1 * var(--bar-side)) calc(-1 * var(--bar-drop));
+}
+
+/*
+ * The colour is a layer of its own behind the name, and not the name's own
+ * background, so that it can move while the name stays where it is. Arriving,
+ * it drops into place from above the top edge; leaving, it withdraws the same
+ * way. The name is only ever still, and only changes colour.
+ */
+.top [aria-current='page']:is(a, button)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--bar-swatch, var(--neg-0));
+  animation: swatch-drop 0.46s var(--ease) both;
+}
+
+/*
+ * Going somewhere else. `is-leaving` is already on the document while the veil
+ * draws over the page, so the block has that long to withdraw and the name to
+ * go back to the ink it wears everywhere else — which over paper is black. The
+ * bar itself does not move through any of this: it sits a layer above the veil,
+ * so it is the one thing on the screen that does not fade, and the only change
+ * between one page and the next is this block leaving one name and dropping
+ * onto another.
+ */
+html.is-leaving .top [aria-current='page']:is(a, button) {
+  color: var(--bar-ink);
+  --roll-color: var(--bar-ink);
+}
+html.is-leaving .top [aria-current='page']:is(a, button)::before {
+  animation: swatch-lift 0.34s var(--ease) both;
+}
+
+@keyframes swatch-drop {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+@keyframes swatch-lift {
+  from { transform: translateY(0); }
+  to { transform: translateY(-100%); }
+}
+
+/*
+ * On the opening page the block comes out from under the film rather than
+ * appearing once it has gone.
+ *
+ * Nothing shows while the bar is still held on the middle line: there the bar
+ * is the film's negative, and a second colour laid over that reads as part of
+ * the picture.
+ *
+ * From the moment the bar settles on the film's bottom edge the block is there
+ * but cut off at that edge, so only what has cleared the film is seen. The cut
+ * is a constant and not something to recompute as the page moves: the bar rides
+ * that edge for the whole of the film's last stretch, so the film's bottom
+ * always sits exactly `--film-lift` below the top of the block.
+ *
+ * What is left is the final stretch — the bar has reached the top and the
+ * film's last `--film-lift` of picture is still sliding past it — and that one
+ * opens the cut, on the scroll itself, so the block looks drawn out from
+ * beneath the film. Where scroll timelines are not understood the cut is simply
+ * dropped once the film has gone, which is the behaviour this replaces.
+ */
+.has-film:not(.is-film-past) .top [aria-current='page']:is(a, button)::before { display: none; }
+.has-film:not(.is-film-past) .top [aria-current='page']:is(a, button) {
+  color: var(--bar-ink);
+  --roll-color: var(--bar-ink);
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.has-film.is-film-past .top [aria-current='page']:is(a, button) {
+  clip-path: inset(var(--film-lift) 0 0 0);
+}
+.has-film.is-film-gone .top [aria-current='page']:is(a, button) {
+  clip-path: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  .has-film.is-film-past .top [aria-current='page']:is(a, button) {
+    animation: swatch-slide linear both;
+    animation-timeline: scroll(root block);
+    animation-range: calc(var(--film-h) - var(--film-lift)) var(--film-h);
+  }
+}
+
+@keyframes swatch-slide {
+  from { clip-path: inset(var(--film-lift) 0 0 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+
 
 /* ------------------------------------------------------------------ hero */
 
