@@ -96,6 +96,12 @@ export interface Edition {
    * together for the editions that show them as one block.
    */
   readonly says?: readonly string[];
+  /**
+   * Everyone the source names for this edition, answered or not — the list
+   * the designer sets across the top of its page. `participants` below keeps
+   * only those with an answer, which is what the entries are built from.
+   */
+  readonly roster?: readonly Participant[];
 }
 
 /* ------------------------------------------------------------------ parsing */
@@ -617,6 +623,13 @@ export const EDITIONS_ALL: readonly Edition[] = built.map((edition) => ({
  */
 export const EDITIONS: readonly Edition[] = built.map((edition) => ({
   ...edition,
+  // The roster is everyone; only the answered get an id, because only they
+  // have an entry on the page for a name to point at.
+  roster: edition.participants.map((p) =>
+    p.answer
+      ? { ...p, edition: edition.numeral, id: idFor(p.name) }
+      : { ...p, edition: edition.numeral },
+  ),
   participants: edition.participants
     .filter((p) => p.answer)
     .map((p) => ({ ...p, edition: edition.numeral, id: idFor(p.name) })),

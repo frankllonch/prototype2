@@ -846,12 +846,21 @@ html:has(body.has-film) {
    * every share of the width below is multiplied by this.
    */
   --sheet-w: calc(min(100vw, 2160px) - 2 * var(--pad));
-  --sheet: calc(var(--sheet-w) * var(--sheet-type, 0.02141) * var(--wc-zoom, 1));
+  /* 40px of the 1824 the sheets are drawn at: the site's own size, not a
+     bespoke one — her sheets set everything at 40 or at half of it. */
+  --sheet: calc(var(--sheet-w) * var(--sheet-type, 0.021930) * var(--wc-zoom, 1));
+  /* The vertical unit. The client has the whole project a quarter smaller
+     than the sheets are drawn, so the air between bands scales with the type
+     it surrounds — otherwise small text would float in full-size gaps and
+     nothing would sit the way the sheets have it. Horizontal measures — the
+     columns, the gutter, the strip — stay true to the width. */
+  --sheet-v: calc(var(--sheet-w) * var(--wc-zoom, 1));
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  column-gap: var(--sheet-gutter, 0.973%);
-  row-gap: calc(var(--sheet-w) * var(--sheet-row, 0.05));
-  margin-top: var(--sheet-top, 22.749%);
+  column-gap: var(--sheet-gutter, 0.877%);
+  /* No gap of its own: every band carries its measured air as a lead. */
+  row-gap: 0;
+  margin-top: calc(var(--sheet-v) * var(--sheet-top, 0.2275));
 }
 
 /* The roster is set to the sheet's own measure, narrower than the other two. */
@@ -860,10 +869,29 @@ html:has(body.has-film) {
 /* A slot is the column a block was put in, and how far it was dropped. */
 .wc-sheet-page .wc-slot {
   grid-column: var(--col, 1);
-  /* A drop is 7.299% of the sheet, which is why it is taken off its width. */
-  margin-top: calc(var(--drop, 0) * var(--sheet-w) * var(--sheet-drop, 0.07299));
-  /* With the row gap above, this makes 12.2% between one row and the next. */
-  margin-bottom: calc(var(--sheet-w) * var(--sheet-slot-gap, 0.072));
+  /* The band's measured air, plus this slot's own drop below the band's top.
+     A step is 134 of the sheet's 1824. Both are taken off the width. */
+  margin-top: calc(
+    var(--sheet-v) * (var(--lead, 0.09) + var(--drop, 0) * var(--sheet-drop, 0.0732))
+  );
+  margin-bottom: 0;
+}
+
+/*
+ * The one hairline on her second sheet: up the right edge of Elii's column,
+ * the height of the entry, a gutter's width out.
+ */
+.wc-sheet-page .wc-slot-rule {
+  position: relative;
+}
+.wc-sheet-page .wc-slot-rule::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: calc(var(--sheet-w) * -0.0088);
+  width: 1px;
+  background: var(--ink);
 }
 
 /*
@@ -878,12 +906,7 @@ html:has(body.has-film) {
  *
  * Not between two paragraphs, where the gap is the row's own.
  */
-.wc-sheet-page .wc-say {
-  margin-bottom: calc(var(--sheet-w) * var(--sheet-say-gap, 0.036));
-}
-.wc-sheet-page .wc-say:has(+ .wc-say) {
-  margin-bottom: 0;
-}
+
 
 /*
  * Claudia's words, across the full width.
@@ -894,15 +917,19 @@ html:has(body.has-film) {
  */
 .wc-sheet-page .wc-say {
   grid-column: 1 / -1;
-  /* Top only. The bottom is set above and this rule comes after it, so zeroing
-     both here would quietly undo the gap below her words. */
-  margin-top: 0;
-  font-size: calc(var(--sheet) * 1.08);
+  margin-top: calc(var(--sheet-v) * var(--lead, 0.08));
+  margin-bottom: 0;
+  /* Her words are the page's own size, not a step up from it. */
+  font-size: var(--sheet);
   font-weight: 500;
-  line-height: var(--sheet-say-lead, 0.95);
+  line-height: var(--sheet-say-lead, 1);
   letter-spacing: 0;
   text-transform: uppercase;
   text-align: justify;
+}
+/* The third sheet sets its words ragged; the other two hold both margins. */
+.wc-edition-iii .wc-say {
+  text-align: left;
 }
 .wc-sheet-page .wc-say > * { margin: 0; }
 
@@ -928,7 +955,7 @@ html:has(body.has-film) {
   margin: 0;
   font-size: 1em;
   font-weight: 500;
-  line-height: var(--sheet-name-lead, 1.02);
+  line-height: var(--sheet-name-lead, 1);
   letter-spacing: 0;
   text-transform: uppercase;
 }
@@ -944,9 +971,9 @@ html:has(body.has-film) {
 }
 
 .wc-sheet-page .wc-cell-role {
-  font-size: 0.67em;
+  font-size: 0.5em;
   font-weight: 500;
-  line-height: 0.85;
+  line-height: 1;
   letter-spacing: 0;
   text-transform: uppercase;
 }
@@ -970,22 +997,28 @@ html:has(body.has-film) {
  */
 .wc-sheet-page .wc-cell-text {
   grid-column: 1 / -1;
-  margin-top: var(--sheet-answer-gap, 1.4em);
-  font-size: 0.443em;
-  line-height: var(--sheet-answer-lead, 1.18);
+  margin-top: var(--sheet-answer-gap, calc(var(--sheet-v) * 0.0355));
+  font-size: 0.5em;
+  line-height: var(--sheet-answer-lead, 1);
   letter-spacing: 0;
   text-align: justify;
   -webkit-hyphens: auto;
   hyphens: auto;
 }
 .wc-sheet-page .wc-cell-text > * { margin: 0; }
-.wc-sheet-page .wc-cell-text > * + * { margin-top: 1em; }
+/* Paragraphs run on, marked by an indent rather than by air — which is how
+   the sheets set them, and why a blank line here would read as a gap in the
+   voice rather than as a new thought. */
+.wc-sheet-page .wc-cell-text > * + * {
+  margin-top: 0;
+  text-indent: 2.5em;
+}
 
 /* The work, inset from the sheet's own margins and centred. */
 .wc-sheet-page .wc-plate {
   grid-column: 1 / -1;
-  margin: calc(var(--sheet-w) * var(--sheet-plate-gap, 0.06)) auto;
-  width: var(--sheet-plate, 86.131%);
+  margin: calc(var(--sheet-v) * var(--lead, 0.06)) auto 0;
+  width: var(--sheet-plate, 100%);
 }
 .wc-sheet-page .wc-plate img {
   display: block;
@@ -999,8 +1032,18 @@ html:has(body.has-film) {
      desktop page and all but vanishes at a phone's — the proper phone
      setting of these sheets is still its own piece of work. */
   .wc-sheet-page .wc-sheet { grid-template-columns: minmax(0, 1fr); --sheet: 1.1rem; }
-  .wc-sheet-page .wc-slot { grid-column: 1; margin-top: 0; }
+  .wc-sheet-page .wc-slot,
+  .wc-sheet-page .wc-plate-col {
+    grid-column: 1;
+    margin-top: 1.6rem;
+  }
+  .wc-sheet-page .wc-say,
+  .wc-sheet-page .wc-plate,
+  .wc-sheet-page .wc-strip {
+    margin-top: 1.6rem;
+  }
   .wc-sheet-page .wc-plate { width: 100%; }
+  .wc-sheet-page .wc-slot-rule::after { content: none; }
 }
 
 /*
@@ -1015,7 +1058,6 @@ html:has(body.has-film) {
 .wc-sheet-page .wc-say.wc-sheet-title {
   font-weight: 400;
   text-align: left;
-  margin-bottom: calc(var(--sheet-w) * var(--sheet-title-gap, 0.016));
 }
 .wc-sheet-page .wc-sheet-title strong {
   font-weight: 700;
@@ -1030,8 +1072,10 @@ html:has(body.has-film) {
 .wc-sheet-page .wc-plate-col {
   grid-column: var(--col, 1);
   width: 100%;
-  margin-top: calc(var(--drop, 0) * var(--sheet-w) * var(--sheet-drop, 0.07299));
-  margin-bottom: calc(var(--sheet-w) * var(--sheet-slot-gap, 0.072));
+  margin-top: calc(
+    var(--sheet-v) * (var(--lead, 0.05) + var(--drop, 0) * var(--sheet-drop, 0.0732))
+  );
+  margin-bottom: 0;
 }
 
 /*
@@ -1047,20 +1091,7 @@ html:has(body.has-film) {
 
 /* Her second sheet opens a little higher than her first. */
 .wc-edition-ii .wc-sheet {
-  /* Her second sheet keeps a tighter rhythm than her first: measured off it,
-     the writing sits closer to the entries and the entries closer to the
-     writing that follows them. */
-  --sheet-top: 17.5%;
-  --sheet-say-gap: 0.045;
-  --sheet-slot-gap: 0.053;
-  /* Her entries here carry no role under the name, only a colour ranged
-     against the far edge, so the space below the name is set rather than
-     left to a line that is not there. Stated against the sheet's width
-     because the default is in `em` of the answer, which is the smallest
-     type on the page. */
-  --sheet-answer-gap: calc(var(--sheet-w) * 0.0362);
-  /* Her full-width plates reach the margins; the first edition's stop short. */
-  --sheet-plate: 100%;
+  --sheet-top: 0.177;
 }
 
 /*
@@ -1069,15 +1100,7 @@ html:has(body.has-film) {
  * its plate reaches the margins the way the second edition's do.
  */
 .wc-edition-iii .wc-sheet {
-  --sheet-top: 5.7%;
-  --sheet-plate: 100%;
-  /* The loosest sheet of the three in its drops and much the tightest in its
-     row rhythm: her words sit almost on the grid's own gap, and the entries
-     keep barely more than it. Measured off her sheet, like the others. */
-  --sheet-plate-gap: 0.05;
-  --sheet-say-gap: 0.001;
-  --sheet-slot-gap: 0.009;
-  --sheet-answer-gap: calc(var(--sheet-w) * 0.039);
+  --sheet-top: 0.0595;
 }
 
 /*
@@ -1088,12 +1111,11 @@ html:has(body.has-film) {
  */
 .wc-sheet-page .wc-strip {
   grid-column: 1 / -1;
-  width: var(--sheet-strip, 66.9%);
-  margin: 0 auto;
-  margin-bottom: calc(var(--sheet-w) * var(--sheet-strip-gap, 0.072));
+  width: var(--sheet-strip, 66.34%);
+  margin: calc(var(--sheet-v) * var(--lead, 0)) auto 0;
   display: grid;
   grid-template-columns: repeat(8, minmax(0, 1fr));
-  column-gap: var(--sheet-strip-gutter, 1.27%);
+  column-gap: var(--sheet-strip-gutter, 1.324%);
 }
 
 /*

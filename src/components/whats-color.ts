@@ -49,13 +49,16 @@ export function whatsColorNames(
       : withBase(`/whats-color/${(p.edition ?? 'i').toLowerCase()}/`) + (p.id ? `#${p.id}` : '');
   return html`<p class="wc-names">
     ${join(
-      participants.map(
-        (p, i) => html`${i > 0 ? raw('<span class="wc-sep">, </span>') : ''}<a
-          class="wc-name"
-          href="${target(p)}"
-          style="--swatch: ${swatchFor(p, i)}; --swatch-ink: var(--${inkOn(swatchFor(p, i))})"
-        >${p.name}</a>`,
-      ),
+      participants.map((p, i) => {
+        const sep = i > 0 ? raw('<span class="wc-sep">, </span>') : '';
+        const paint = `--swatch: ${swatchFor(p, i)}; --swatch-ink: var(--${inkOn(swatchFor(p, i))})`;
+        // On an edition's own page a name with no answer has no entry to point
+        // at, so it stands in the sentence as a name rather than as a link.
+        if (within && !p.id) {
+          return html`${sep}<span class="wc-name" style="${paint}">${p.name}</span>`;
+        }
+        return html`${sep}<a class="wc-name" href="${target(p)}" style="${paint}">${p.name}</a>`;
+      }),
     )}
   </p>`;
 }
@@ -163,7 +166,7 @@ function writeOn(text: string): Html {
    * lower is sooner (more film still showing), higher is later, 1 is the
    * moment the pin engages.
    */
-  const START = 0.7;
+  const START = 0.8;
   /** And ends at 85% of the pinned stretch; the last 15% is the held beat. */
   const END = 1 + 0.85 * (SCREENS - 1);
   const marked = (w: string) => w.length > 1 && /[A-Z]/.test(w) && w === w.toUpperCase();
@@ -254,7 +257,7 @@ export function whatsColorEdition(edition: Edition): Html {
   return html`<div class="wc wc-edition wc-edition-${edition.numeral.toLowerCase()}${table ? ' wc-sheet-page' : ''}">
     <p class="wc-numeral" aria-hidden="true">(${edition.numeral})</p>
     <h1 class="sr-only">What&rsquo;s Color? (${edition.numeral})</h1>
-    ${whatsColorNames(edition.participants, edition.numeral)}
+    ${whatsColorNames(edition.roster ?? edition.participants, edition.numeral)}
 
     ${table ? sheet(edition, table) : editionList(edition)}
 
@@ -329,20 +332,46 @@ function editionList(edition: Edition): Html {
  */
 function sheet(edition: Edition, table: readonly SheetSlot[]): Html {
   const byName = new Map(edition.participants.map((p) => [p.name, p]));
+  /*
+   * A band's lead is written once, on its first slot, and carried to the rest
+   * of its row here: grid items sit at the top of their row, so a band only
+   * moves as one if every slot in it wears the same margin. Anything spanning
+   * the full width ends the band.
+   */
+  let band: number | undefined;
+  const air = (lead: number | undefined) =>
+    lead === undefined ? '' : `--lead: ${String(lead)}`;
   return html`<div class="wc-sheet">
     ${join(
       table.map((slot) => {
-        if (slot.title) return sheetTitle(edition);
-        if (slot.strip) return strip();
-        if (slot.say !== undefined) {
-          return html`<p class="wc-say">${raw(edition.says?.[slot.say] ?? '')}</p>`;
+        if (slot.title) {
+          band = undefined;
+          return sheetTitle(edition, slot.lead);
         }
-        if (slot.plate) return plate(slot.plate, slot);
+        if (slot.strip) {
+          band = undefined;
+          return strip(slot.lead);
+        }
+        if (slot.say !== undefined) {
+          band = undefined;
+          return html`<p class="wc-say" style="${air(slot.lead)}">${raw(
+            edition.says?.[slot.say] ?? '',
+          )}</p>`;
+        }
+        if (slot.plate) {
+          if (slot.col) {
+            if (slot.lead !== undefined) band = slot.lead;
+            return plate(slot.plate, slot, band);
+          }
+          band = undefined;
+          return plate(slot.plate, slot, slot.lead);
+        }
         const person = slot.who ? byName.get(slot.who) : undefined;
+        if (slot.lead !== undefined) band = slot.lead;
         if (!person) return html``;
         return html`<div
-          class="wc-slot"
-          style="--col: ${String(slot.col ?? 1)}; --drop: ${String(slot.drop ?? 0)}"
+          class="wc-slot${slot.rule ? ' wc-slot-rule' : ''}"
+          style="--col: ${String(slot.col ?? 1)}; --drop: ${String(slot.drop ?? 0)}; ${air(band)}"
         >${sheetEntry(person)}</div>`;
       }),
     )}
@@ -356,8 +385,8 @@ function sheet(edition: Edition, table: readonly SheetSlot[]): Html {
  * click still shows the picture; with it, the script opens the same picture
  * over the page instead.
  */
-function strip(): Html {
-  return html`<div class="wc-strip">
+function strip(lead?: number): Html {
+  return html`<div class="wc-strip" style="${lead === undefined ? '' : `--lead: ${String(lead)}`}">
     ${join(
       BOOKS_III.map(
         (book) => html`<a class="wc-book" href="${withBase(`/img/${book.name}.jpg`)}" data-book>
@@ -399,12 +428,16 @@ function bookView(): Html {
  * Hidden from the reading order because the page already opens with the same
  * heading; this is the designer's printed restatement of it.
  */
-function sheetTitle(edition: Edition): Html {
+function sheetTitle(edition: Edition, lead?: number): Html {
   const tail = edition.sourceTitle
     .replace(/^\s*what.s\s+colou?r\s*\??\s*/i, '')
     .replace(/^\(?\s*(i{1,3})\s*\)?\s*/i, '')
     .trim();
-  return html`<p class="wc-say wc-sheet-title" aria-hidden="true">
+  return html`<p
+    class="wc-say wc-sheet-title"
+    aria-hidden="true"
+    style="${lead === undefined ? '' : `--lead: ${String(lead)}`}"
+  >
     <strong>What&rsquo;s Color? (${edition.numeral})</strong>${tail ? ` ${tail}` : ''}
   </p>`;
 }
@@ -417,15 +450,16 @@ function sheetTitle(edition: Edition): Html {
  * the element and the file is covered into it. Without that the plate keeps the
  * shape of the file, which is what the first edition's does.
  */
-function plate(p: Plate, slot: SheetSlot): Html {
+function plate(p: Plate, slot: SheetSlot, lead?: number): Html {
   // Always stated, never left to `auto`: these load lazily, and an `auto`
   // ratio gives a lazy image no height until it arrives, which collapses the
   // row and shifts the page under the reader when it does.
   const shape = `--plate-aspect: ${String(p.aspect ?? p.w / p.h)}`;
   const column = slot.col ? `--col: ${String(slot.col)}; --drop: ${String(slot.drop ?? 0)}` : '';
+  const air = lead === undefined ? '' : `--lead: ${String(lead)}`;
   return html`<figure
     class="wc-plate${slot.col ? ' wc-plate-col' : ''}"
-    style="${[shape, column].filter(Boolean).join('; ')}"
+    style="${[shape, column, air].filter(Boolean).join('; ')}"
   >
     <picture>
       <source srcset="${withBase(`/img/${p.name}.webp`)}" type="image/webp" />

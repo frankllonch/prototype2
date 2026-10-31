@@ -1,15 +1,19 @@
 /**
  * Where everything sits on the sheets.
  *
- * Editions I and II are compositions rather than lists. The designer placed
+ * All three editions are compositions rather than lists. The designer placed
  * every entry herself — which of the three columns it sits in, how far it is
- * dropped below the one beside it — and set Claudia's own words across the full
- * width between them, with plates of the work partway down. None of that can be
- * worked out from the content, so it is written here.
+ * dropped below the one beside it, and how much air each band gets before it —
+ * and set Claudia's own words across the full width between them, with plates
+ * of the work partway down. None of that can be worked out from the content,
+ * so it is written here.
  *
- * Measured off her sheets at the 860px they were drawn at: three columns of 265
- * with an 8px gutter inside a content width of 822, and entries at x 24, 297
- * and 571. The drops are 60px, which is 7.3% of that width.
+ * Read off the Figma file itself (the three DISSENY frames, drawn at 1920 with
+ * a content width of 1824), not off exported pictures of it: every `lead` and
+ * `drop` below is a Figma distance divided by 1824. A drop step is 134px of
+ * that frame — 7.32% — and a lead is the air between a band and whatever stood
+ * above it, which is the one quantity that survives the move from Figma to a
+ * browser, where the same text never breaks at quite the same heights.
  *
  * `say` indexes Claudia's paragraphs, which are read from the source in order
  * and never retyped. Everything else is a participant, named as the roster
@@ -44,8 +48,18 @@ export interface SheetSlot {
   readonly strip?: boolean;
   /** Which of the three columns, 1 to 3. Full width when left off. */
   readonly col?: 1 | 2 | 3;
-  /** How many steps below the top of its row, each step 7.3% of the width. */
+  /** How many steps below the top of its row, each step 7.32% of the width. */
   readonly drop?: 1 | 2 | 3;
+  /**
+   * The air above this element, as a share of the sheet's width — the Figma
+   * gap between it and the band before it. On a participant it starts a band,
+   * and the slots that follow without one sit in the same band. Negative pulls
+   * an element up beside the band above, which the second edition does once.
+   * Left off everywhere only on rows the designer never drew.
+   */
+  readonly lead?: number;
+  /** A hairline up the right edge of this slot's column, drawn once on her second sheet. */
+  readonly rule?: boolean;
 }
 
 const PLATE_I: Plate = {
@@ -56,35 +70,37 @@ const PLATE_I: Plate = {
 };
 
 export const SHEET_I: readonly SheetSlot[] = [
-  { say: 0 },
-  { say: 1 },
+  // One block on the sheet, two paragraphs in the source: the second runs
+  // straight on from the first, so it gets no air of its own.
+  { say: 0, lead: 0 },
+  { say: 1, lead: 0 },
 
-  { who: 'Marina Garcés', col: 1 },
+  { who: 'Marina Garc\u00e9s', col: 1, lead: 0.0877 },
   { who: 'Olafur Eliasson', col: 2, drop: 1 },
-  { who: 'Li Edelkoort', col: 3, drop: 2 },
+  { who: 'Li Edelkoort', col: 3, drop: 3 },
 
-  { say: 2 },
+  { say: 2, lead: 0.0373 },
 
-  { who: 'Rupi Kaur', col: 1 },
-  { who: 'Ramón Andrés', col: 3 },
+  { who: 'Rupi Kaur', col: 1, lead: 0.0762 },
+  { who: 'Ram\u00f3n Andr\u00e9s', col: 3 },
 
-  { who: 'Victoria Cirlot', col: 2 },
+  { who: 'Victoria Cirlot', col: 2, lead: 0.1447 },
   { who: 'Tortell Poltrona', col: 3 },
 
-  { who: 'Angelica Dass', col: 1 },
+  { who: 'Angelica Dass', col: 1, lead: 0.0713 },
   { who: 'Jaume Funes', col: 2 },
 
-  { say: 3 },
+  { say: 3, lead: 0.0817 },
 
-  { who: 'Oscar Tusquets', col: 1 },
+  { who: 'Oscar Tusquets', col: 1, lead: 0.0746 },
   { who: 'David Bueno i Torrens', col: 2 },
 
-  { plate: PLATE_I },
+  { plate: PLATE_I, lead: 0.0707 },
 
-  { who: 'Siri Hustvedt', col: 1 },
+  { who: 'Siri Hustvedt', col: 1, lead: 0.0652 },
   { who: 'Flavia Company', col: 3, drop: 1 },
 
-  { who: 'Henry Giroux', col: 2 },
+  { who: 'Henry Giroux', col: 2, lead: 0.0444 },
 ];
 
 /**
@@ -95,28 +111,26 @@ export const SHEET_I: readonly SheetSlot[] = [
  * wide as it is tall, which is why they carry an aspect — the files themselves
  * are nothing like that shape.
  *
- * Two readings of her sheet are deliberately not followed, both because the
- * sheet is a mock-up rather than a source. Every entry on it carries the same
- * colour, `AC320 ARENA`, which is placeholder text: Claudia's document gives no
- * colours at all for this edition, so the entries here are set without one.
- * And an entry for Oscar Tusquets repeats Anna Vidal's answer word for word;
- * he answered in edition I and is not in this edition's roster, so Anna Vidal
- * takes the column he was drawn in.
+ * Every entry on her sheet carries the same colour, AC320 ARENA, which is
+ * placeholder text — Marc G\u00f3mez del Moral's real colour, repeated — so the
+ * colours here come from the book's printed index instead, through the
+ * answers document.
  *
  * The last four — Hanghar, Montse Vicens, Escobedo Soliz and Marc Morro —
- * answered but were never placed on the sheet. They are set after the writing
- * rather than dropped, because nothing in the source says to leave them out.
+ * answered but were never placed on the sheet (Hanghar was parked below its
+ * frame). They are set after the writing rather than dropped, because nothing
+ * in the source says to leave them out; their rows take a default lead.
  */
 export const SHEET_II: readonly SheetSlot[] = [
-  { title: true },
-  { say: 0 },
+  { title: true, lead: 0 },
+  { say: 0, lead: 0.0696 },
 
-  { who: 'Plantea Estudio', col: 2 },
+  { who: 'Plantea Estudio', col: 2, lead: 0.0992 },
   { who: 'Stefano Colli', col: 3 },
 
-  { say: 1 },
+  { say: 1, lead: 0.0833 },
 
-  { who: 'Elii', col: 1 },
+  { who: 'Elii', col: 1, lead: 0.1299, rule: true },
   { who: 'Isabel Francoy', col: 3 },
 
   {
@@ -125,26 +139,28 @@ export const SHEET_II: readonly SheetSlot[] = [
       w: 1024,
       h: 843,
       alt: 'Paint pots, mixing dishes and swatch cards laid out on a worktable under a row of colour samples.',
-      aspect: 2.3,
+      aspect: 2.294,
     },
+    lead: 0.0625,
   },
 
-  { say: 2 },
+  { say: 2, lead: 0.0789 },
 
-  { who: 'Tomás López Amat', col: 1 },
+  { who: 'Tom\u00e1s L\u00f3pez Amat', col: 1, lead: 0.1146 },
   { who: 'ContiCert', col: 2 },
-  { who: "Un parell d’arquitectes", col: 3, drop: 2 },
+  { who: 'Un parell d\u2019arquitectes', col: 3, drop: 2 },
 
-  { who: 'Isla arquitectos', col: 2 },
+  { who: 'Isla arquitectos', col: 2, lead: 0.0532 },
 
   {
     plate: {
       name: 'whats-color-ii-2',
       w: 683,
       h: 1024,
-      alt: 'A visitor walking past one of Claudia Valsells’ paintings in a white gallery.',
+      alt: 'A visitor walking past one of Claudia Valsells\u2019 paintings in a white gallery.',
     },
     col: 1,
+    lead: 0.0526,
   },
   {
     plate: {
@@ -156,16 +172,16 @@ export const SHEET_II: readonly SheetSlot[] = [
     col: 3,
   },
 
-  { say: 3 },
+  { say: 3, lead: 0.0636 },
 
-  { who: 'Antoni Arola', col: 1 },
+  { who: 'Antoni Arola', col: 1, lead: 0.0822 },
   { who: 'Laura Castanya', col: 2, drop: 2 },
   { who: 'Isabel Sendra', col: 3, drop: 1 },
 
-  { who: 'Kal-a', col: 1 },
+  { who: 'Kal-a', col: 1, lead: 0.0088 },
   { who: 'AMOO', col: 3 },
 
-  { say: 4 },
+  { say: 4, lead: 0.0702 },
 
   {
     plate: {
@@ -173,25 +189,34 @@ export const SHEET_II: readonly SheetSlot[] = [
       w: 482,
       h: 994,
       alt: 'Fan decks, colour guides and sample books spread out together.',
-      aspect: 2.1,
+      aspect: 2.063,
     },
+    lead: 0.0477,
   },
 
-  { who: 'Anna Vidal', col: 1 },
+  { who: 'Oscar Tusquets', col: 1, lead: 0.1036 },
   { who: 'Gema Sach', col: 2 },
-  { who: 'Barbara Aurell', col: 3, drop: 1 },
+  { who: 'Barbara Aurell', col: 3, drop: 2 },
 
-  { say: 5 },
+  // Her sheet sets Anna beside that row, three drop-steps below its top — the
+  // one place a column flows on while its neighbour still runs. A row of her
+  // own, pulled up into the band above; the pull is tuned against our own
+  // rendering rather than copied off the sheet, because it reaches past text
+  // whose height is the browser's to decide, and it holds across widths
+  // because everything on the sheet scales with the same width.
+  { who: 'Anna Vidal', col: 1, lead: -0.0867 },
 
-  { who: 'Mariona Espinet', col: 1 },
+  { say: 5, lead: 0.0757 },
+
+  { who: 'Mariona Espinet', col: 1, lead: 0.0921 },
   { who: 'Loca Studio', col: 2, drop: 1 },
-  { who: 'Auxi Gálvez', col: 3 },
+  { who: 'Auxi G\u00e1lvez', col: 3 },
 
-  { who: 'HANGHAR', col: 1 },
+  { who: 'HANGHAR', col: 1, lead: 0.1815 },
   { who: 'Montse Vicens', col: 2 },
   { who: 'Escobedo Soliz', col: 3 },
 
-  { who: 'Marc Morro', col: 1 },
+  { who: 'Marc Morro', col: 1, lead: 0.09 },
 ];
 
 /**
@@ -202,14 +227,14 @@ export const SHEET_II: readonly SheetSlot[] = [
  * it was compared against each photograph, and every match was unambiguous.
  */
 export const BOOKS_III: readonly Plate[] = [
-  { name: 'whats-color-iii-1', w: 750, h: 1000, alt: 'The book open at Tomás López Amat’s and Rupi Kaur’s colours.' },
-  { name: 'whats-color-iii-2', w: 750, h: 1000, alt: 'The book open at Sofia Romero y Miguel Sotos’ and Luis Cerveró’s colours.' },
-  { name: 'whats-color-iii-3', w: 750, h: 1000, alt: 'The book open at Carlota Guerrero’s and Escobedo Soliz’s colours.' },
-  { name: 'whats-color-iii-4', w: 750, h: 1000, alt: 'The book open at Ana Vidal’s and Tortell Poltrona’s colours.' },
-  { name: 'whats-color-iii-5', w: 750, h: 1000, alt: 'The book open at Plantea Estudio’s and Hanghar’s colours.' },
-  { name: 'whats-color-iii-6', w: 747, h: 995, alt: 'The book open at Carlota Casanova’s and Albert Riera Galcerán’s colours.' },
+  { name: 'whats-color-iii-1', w: 750, h: 1000, alt: 'The book open at Tom\u00e1s L\u00f3pez Amat\u2019s and Rupi Kaur\u2019s colours.' },
+  { name: 'whats-color-iii-2', w: 750, h: 1000, alt: 'The book open at Sofia Romero y Miguel Sotos\u2019 and Luis Cerver\u00f3\u2019s colours.' },
+  { name: 'whats-color-iii-3', w: 750, h: 1000, alt: 'The book open at Carlota Guerrero\u2019s and Escobedo Soliz\u2019s colours.' },
+  { name: 'whats-color-iii-4', w: 750, h: 1000, alt: 'The book open at Ana Vidal\u2019s and Tortell Poltrona\u2019s colours.' },
+  { name: 'whats-color-iii-5', w: 750, h: 1000, alt: 'The book open at Plantea Estudio\u2019s and Hanghar\u2019s colours.' },
+  { name: 'whats-color-iii-6', w: 747, h: 995, alt: 'The book open at Carlota Casanova\u2019s and Albert Riera Galcer\u00e1n\u2019s colours.' },
   { name: 'whats-color-iii-7', w: 768, h: 1024, alt: 'The book open at its index: every name with its colour reference.' },
-  { name: 'whats-color-iii-8', w: 768, h: 1024, alt: 'The book’s cover sheet, printed with rows of painted frames.' },
+  { name: 'whats-color-iii-8', w: 768, h: 1024, alt: 'The book\u2019s cover sheet, printed with rows of painted frames.' },
 ];
 
 /**
@@ -221,16 +246,16 @@ export const BOOKS_III: readonly Plate[] = [
  * statement of the page is the first, and it is read from the source.
  */
 export const SAYS_III_SHEET: readonly string[] = [
-  'During the past months I have invited them to consider and answer the question: ‘What does color mean to you?’',
+  'During the past months I have invited them to consider and answer the question: \u2018What does color mean to you?\u2019',
   'First of all, to open up a dialogue, to grasp new ways of seeing colors, other perspectives, but also to better understand the world. I wanted to think of color in a broader context, outside of the artistic view, and to discover the notion of color as it is thought of by others.',
-  'Now, this whole journey has become a process of identifying and synthesizing knowledge, when possible, into color, with the wish to create and share a ‘color glossary’ where color meets perception. For what purpose?',
+  'Now, this whole journey has become a process of identifying and synthesizing knowledge, when possible, into color, with the wish to create and share a \u2018color glossary\u2019 where color meets perception. For what purpose?',
   'Because to me, color is a universal visual emotion, capable of reaching and inspiring every human being.',
 ];
 
 /**
- * The third edition's sheet. The same system as the first two and the loosest
- * rhythm of the three: single entries drop as far as three steps, and the row
- * of book photographs stands where the other editions open with words.
+ * The third edition's sheet. The same system as the others and the loosest in
+ * its drops — single entries fall as far as three steps — with the row of
+ * book photographs standing where the other editions open with words.
  *
  * Two colour references on her sheet are typos — Marta D. Riezu and Juan
  * Diego Valera both carry a neighbour's colour there — and the entries here
@@ -238,19 +263,19 @@ export const SAYS_III_SHEET: readonly string[] = [
  * agrees with.
  */
 export const SHEET_III: readonly SheetSlot[] = [
-  { strip: true },
-  { say: 0 },
+  { strip: true, lead: 0 },
+  { say: 0, lead: 0.119 },
 
-  { who: 'Marc Gómez del Moral', col: 1 },
+  { who: 'Marc G\u00f3mez del Moral', col: 1, lead: 0.0614 },
   { who: 'Jose Javier Serrano', col: 2 },
   { who: 'Lucia Boned', col: 3, drop: 2 },
 
-  { say: 1 },
+  { say: 1, lead: 0.0044 },
 
-  { who: 'Albert Riera Galcerán', col: 2 },
-  { who: 'María Medem', col: 3 },
+  { who: 'Albert Riera Galcer\u00e1n', col: 2, lead: 0.0329 },
+  { who: 'Mar\u00eda Medem', col: 3 },
 
-  { who: 'Isabel Martinez', col: 1, drop: 1 },
+  { who: 'Isabel Martinez', col: 1, drop: 1, lead: 0.0384 },
   { who: 'Ana Cuba', col: 2 },
 
   {
@@ -258,28 +283,29 @@ export const SHEET_III: readonly SheetSlot[] = [
       name: 'whats-color-iii-1',
       w: 750,
       h: 1000,
-      alt: 'The book open at Tomás López Amat’s and Rupi Kaur’s colours, set large across the sheet.',
-      aspect: 1.13,
+      alt: 'The book open at Tom\u00e1s L\u00f3pez Amat\u2019s and Rupi Kaur\u2019s colours, set large across the sheet.',
+      aspect: 1.139,
     },
+    lead: 0.1047,
   },
 
-  { say: 2 },
+  { say: 2, lead: 0.0817 },
 
-  { who: 'Julia Ruiz Cabello', col: 1 },
+  { who: 'Julia Ruiz Cabello', col: 1, lead: 0.0619 },
   { who: 'Raquel Quevedo', col: 2, drop: 2 },
-  { who: 'José Quintanar', col: 3, drop: 3 },
+  { who: 'Jos\u00e9 Quintanar', col: 3, drop: 3 },
 
-  { say: 3 },
+  { say: 3, lead: 0.1157 },
 
-  { who: 'Luís Cerveró', col: 1 },
+  { who: 'Lu\u00eds Cerver\u00f3', col: 1, lead: 0.0839 },
   { who: 'Marta D. Riezu', col: 2, drop: 1 },
 
-  { who: 'Belén Gayán', col: 2 },
+  { who: 'Bel\u00e9n Gay\u00e1n', col: 2, lead: 0.0428 },
   { who: 'Cristina Stolhe', col: 3, drop: 1 },
 
-  { say: 4 },
+  { say: 4, lead: 0.0532 },
 
-  { who: 'Juan Diego Valera', col: 1 },
-  { who: 'Álvaro Galmés', col: 2, drop: 3 },
+  { who: 'Juan Diego Valera', col: 1, lead: 0.0932 },
+  { who: '\u00c1lvaro Galm\u00e9s', col: 2, drop: 3 },
   { who: 'Arnau Blanch', col: 3, drop: 1 },
 ];
