@@ -40,10 +40,13 @@ export function whatsColorNames(
   // On an edition's own page a name goes to that person's answer further down
   // it; on the opening view it goes to the edition they answered in. Every one
   // of them used to point at `#whats-color`, an id nothing on the site has.
+  // On an edition's own page, straight to the answer; on the opening view,
+  // to the answer on its edition's page — the address carries the person, so
+  // arriving can travel down to them the way an on-page click does.
   const target = (p: Participant) =>
     within && p.id
       ? `#${p.id}`
-      : withBase(`/whats-color/${(p.edition ?? 'i').toLowerCase()}/`);
+      : withBase(`/whats-color/${(p.edition ?? 'i').toLowerCase()}/`) + (p.id ? `#${p.id}` : '');
   return html`<p class="wc-names">
     ${join(
       participants.map(
@@ -103,12 +106,10 @@ export function whatsColorOpening(editions: readonly Edition[]): Html {
     -->
     <div class="wc-intro-mask">
       <div class="wc-intro-slide">
-        <p class="wc-title" aria-hidden="true">What&rsquo;s Color?</p>
         <p class="wc-lead">${LEAD}</p>
       </div>
     </div>
     ${join(editions.map(namesOfEdition))}
-    ${whatsColorIntros(editions)}
   </div>`;
 }
 
@@ -224,7 +225,7 @@ export function whatsColorFilm(): Html {
       muted
       loop
       playsinline
-      preload="metadata"
+      preload="auto"
       poster="${poster}"
     >
       <source src="${withBase('/video/whats-color.mp4')}" type="video/mp4" />
