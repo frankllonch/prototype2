@@ -381,6 +381,57 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .wordmark, .top-soon { font-weight: 700; }
 
 /*
+ * The page you are on, as a block of colour hanging from the top of the screen.
+ *
+ * The same mark the question wears in the opening text — a solid field of one
+ * of the palette's colours with the words knocked out of it — except that this
+ * one reaches the top edge, so it reads as a chip of paint laid on the screen
+ * rather than as a highlighter run across a line.
+ *
+ * Three things make it behave.
+ *
+ * The colour arrives as a negative, because the bar blends with `difference`:
+ * what it paints is the distance between the backdrop and the colour it is
+ * given, so over the page's white a negative comes back as the hue itself.
+ * `client/current.ts` draws it from the site's list, afresh on every load.
+ *
+ * The ink is black for the same reason and not by accident — black against
+ * white is the whole distance, which is paper. So the name is knocked out of
+ * its own colour without naming a second colour to keep in step.
+ *
+ * And it climbs without moving anything. The padding that carries it to the
+ * top edge is taken straight back as margin, on all three sides, so the item
+ * occupies exactly the space it did unpainted and the spacing measured off the
+ * designer's sheet is untouched. `--bar-rise` is measured rather than written
+ * down, since the opening page sets its bar a different height.
+ */
+.top [aria-current='page'] {
+  background: var(--bar-swatch, var(--neg-0));
+  color: #000;
+  --roll-color: #000;
+  padding: var(--bar-rise, 1.6rem) 0.18em var(--bar-drop, 0.5em);
+  margin: calc(-1 * var(--bar-rise, 1.6rem)) -0.18em calc(-1 * var(--bar-drop, 0.5em));
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+/*
+ * On the opening page it waits for the bar to leave the film. Over the film
+ * the bar is already the film's negative, and a second colour laid on that
+ * would be read as part of the picture; the block belongs to the page the bar
+ * lands on, so it arrives when the bar does.
+ */
+.has-film:not(.is-film-past) .top [aria-current='page'] {
+  background: none;
+  color: var(--bar-ink);
+  --roll-color: var(--bar-ink);
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/*
  * The gallery's own controls keep the size they had before the site went to
  * one type size. They are not text on the page: the year rail stands in the
  * margin beside the paintings and the density switch sits under them, and at
@@ -480,7 +531,8 @@ body.is-locked { overflow: hidden; }
  */
 .wordmark,
 .menu a:hover, .menu a:focus-visible, .menu a[aria-current='page'],
-.top-soon:hover, .top-soon:focus-visible, .top-soon[aria-current='page'] { color: rgb(252, 252, 250); }
+.top { --bar-ink: rgb(252, 252, 250); }
+.top-soon:hover, .top-soon:focus-visible, .top-soon[aria-current='page'] { color: var(--bar-ink); }
 .menu a, .top-soon { color: rgb(228, 228, 226); transition: color var(--hover) var(--ease); }
 
 /*
