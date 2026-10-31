@@ -1299,7 +1299,7 @@ html:has(body.has-film) {
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     .wc-write {
-      height: var(--wc-write-length, 240vh);
+      height: var(--wc-write-length, 370vh);
       /*
        * Pulled up under the film, so the stage pins — and the writing can
        * begin, at the fixed centre — while the film's last stretch is still
@@ -1344,6 +1344,32 @@ html:has(body.has-film) {
 
 @keyframes wc-word-in {
   to { opacity: 1; }
+}
+
+/*
+ * The names hold off until the sentence stands written. They already climb
+ * the lower half of the view while the pin holds — that is geometry, set by
+ * the stage's pull — but they only become visible from the moment the last
+ * word's fade is done (0.04 screens past END, 65.6% of the writing's own
+ * timeline) to the moment the pin lets go (70.6%). The timeline is the
+ * write stage's, reached across the page by scoping it to the view's root;
+ * where the scope is not understood the rule never applies, and the names
+ * are simply there, which is what every other fallback here does too.
+ */
+@supports (animation-timeline: view()) and (timeline-scope: --wc-write) {
+  @media (prefers-reduced-motion: no-preference) {
+    #whats-color {
+      timeline-scope: --wc-write;
+    }
+    #whats-color .wc-rise {
+      animation: wc-rise-in linear both;
+      animation-timeline: --wc-write;
+      animation-range: 65.8% 70%;
+    }
+  }
+}
+@keyframes wc-rise-in {
+  from { opacity: 0; }
 }
 
 

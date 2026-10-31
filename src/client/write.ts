@@ -1,10 +1,14 @@
 import { reduceMotion } from './env.ts';
 
 /**
- * Matches `writeOn()` in components/whats-color.ts: the writing ends at 85%
- * of the pinned stretch, and the rest of the pin is the held beat.
+ * Matches `writeOn()` in components/whats-color.ts: the words' slots end at
+ * 85% of the pinned stretch, but the last word's own fade is allowed to run
+ * 0.04 screens past its slot — (END + 0.04 - START) / (SCREENS - START) is
+ * 0.8786 — so landing at 85% left the final words a breath short of solid.
+ * This stands just past the last fade: the sentence whole, the held beat
+ * still ahead, the names still to come.
  */
-const WRITTEN = 0.85;
+const WRITTEN = 0.885;
 
 /**
  * The scroll offset at which the note stands fully written and the names have

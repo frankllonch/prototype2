@@ -262,10 +262,15 @@ function writeOn(text: string): Html {
 }
 
 function namesOfEdition(edition: Edition): Html {
+  // The inner wrapper is the thing that fades in once the note stands
+  // written: the group itself belongs to the farewell, and an animation's
+  // fill would hold its opacity against the farewell's hand.
   return html`<section class="wc-group">
-    <p class="wc-numeral" aria-hidden="true">(${edition.numeral})</p>
-    <h2 class="sr-only">What&rsquo;s Color? (${edition.numeral})</h2>
-    ${whatsColorNames(edition.participants)}
+    <div class="wc-rise">
+      <p class="wc-numeral" aria-hidden="true">(${edition.numeral})</p>
+      <h2 class="sr-only">What&rsquo;s Color? (${edition.numeral})</h2>
+      ${whatsColorNames(edition.participants)}
+    </div>
   </section>`;
 }
 
