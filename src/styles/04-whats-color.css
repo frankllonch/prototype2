@@ -429,10 +429,15 @@
   position: fixed;
   top: calc((var(--film-h) - var(--film-bar)) / 2);
   height: var(--film-bar);
-  padding-top: 0;
+  /*
+   * The line keeps the top padding it has on every other page rather than
+   * being centred in this taller box. Centred, it sat 21px down here against
+   * 25.6 everywhere else, so the menu stepped as you moved between pages. The
+   * height stays — the arithmetic above is built on it — but the type sits
+   * where type sits on the rest of the site.
+   */
   padding-bottom: 0;
-  /* One row in a taller box: centre it rather than leaving it on the baseline. */
-  align-content: center;
+  align-content: start;
   margin-top: 0;
 }
 .has-film main { margin-top: 0; }

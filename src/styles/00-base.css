@@ -699,7 +699,7 @@ html.is-scrolled .scroll-cue { opacity: 0; }
  */
 .top {
   --bar-rise: var(--bar-rise-measured, 1.6rem);
-  --bar-drop: 0.01em;
+  --bar-drop: 0.00000001em;
   --bar-side: 0.18em;
 }
 
@@ -750,6 +750,70 @@ html.is-leaving .top [aria-current='page']:is(a, button)::before {
 @keyframes swatch-lift {
   from { transform: translateY(0); }
   to { transform: translateY(-100%); }
+}
+
+/*
+ * The name twice over, for the stretch where the film is still passing it.
+ *
+ * `--edge` is where the film's bottom edge falls inside the name's own box:
+ * the edge sits --film-lift below the top of the item, and the name begins
+ * --bar-rise below that same top, so the difference is the edge measured from
+ * the name. Floored at nothing, since the edge passes the name and keeps going.
+ *
+ * The lower copy is the one in the document; the upper is drawn over it in the
+ * ink the bar wears over the film, with no block behind it. Each shows only its
+ * own side of that edge, so as the film clears, the name is handed from one to
+ * the other a letter at a time.
+ */
+.top-face { display: inline-block; }
+
+.top-echo {
+  position: absolute;
+  top: var(--bar-rise);
+  left: var(--bar-side);
+  display: none;
+  white-space: nowrap;
+  pointer-events: none;
+  color: var(--bar-ink);
+  --roll-color: var(--bar-ink);
+}
+
+.has-film.is-film-past .top [aria-current='page'] {
+  /* A plain length, not a guarded one: a clip-path keyframe will not
+     interpolate from a value still carrying a math function, and an inset
+     clamps a negative of its own accord anyway. */
+  --edge: calc(var(--film-lift) - var(--bar-rise));
+}
+.has-film.is-film-past .top-face { clip-path: inset(var(--edge) 0 0 0); }
+.has-film.is-film-past .top-echo {
+  display: block;
+  clip-path: inset(0 0 calc(100% - var(--edge)) 0);
+}
+
+/* Once the film has gone there is one name again. */
+.has-film.is-film-gone .top-face { clip-path: none; }
+.has-film.is-film-gone .top-echo { display: none; }
+
+@supports (animation-timeline: scroll()) {
+  .has-film.is-film-past .top-face,
+  .has-film.is-film-past .top-echo {
+    animation-duration: auto;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: scroll(root block);
+    animation-range: calc(var(--film-h) - var(--film-lift)) var(--film-h);
+  }
+  .has-film.is-film-past .top-face { animation-name: face-reveal; }
+  .has-film.is-film-past .top-echo { animation-name: echo-clear; }
+}
+
+@keyframes face-reveal {
+  from { clip-path: inset(var(--edge) 0 0 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+@keyframes echo-clear {
+  from { clip-path: inset(0 0 calc(100% - var(--edge)) 0); }
+  to { clip-path: inset(0 0 100% 0); }
 }
 
 /*
@@ -811,3 +875,42 @@ html.is-leaving .top [aria-current='page']:is(a, button)::before {
   to { clip-path: inset(0 0 0 0); }
 }
 
+
+/* ------------------------------------------------------------- scrollbar */
+
+/*
+ * The handle and nothing else.
+ *
+ * The browser's own bar draws a channel down the right edge — a pale box with
+ * a rule beside it — which on a site that is otherwise paper and ink reads as
+ * a piece of the operating system left on the page. The track is given no
+ * colour at all, so what is left is the handle, apparently floating on
+ * whatever the page happens to be behind it.
+ *
+ * The handle is a mid grey on purpose rather than the ink: it has to hold on
+ * the white pages and on the opening film alike, and nothing here can blend
+ * the way the bar does — a scrollbar is drawn by the browser, outside anything
+ * `mix-blend-mode` can reach. A grey at this weight reads against both.
+ *
+ * Its slimness comes from a transparent border with the paint clipped inside
+ * it, which is the one way to inset a handle: the track keeps its full width
+ * for the pointer to find, while the mark itself is narrow.
+ *
+ * Firefox has no pseudo-elements for this and takes the two properties above
+ * instead; between them every browser gets a handle and no box.
+ */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(140 140 140 / 0.55) transparent;
+}
+
+::-webkit-scrollbar { width: 11px; height: 11px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-corner { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgb(140 140 140 / 0.55);
+  background-clip: content-box;
+  border: 3px solid transparent;
+  border-radius: 11px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgb(120 120 120 / 0.75); background-clip: content-box; }
