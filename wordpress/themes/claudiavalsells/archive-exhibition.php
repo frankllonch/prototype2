@@ -14,6 +14,16 @@ $cv_desc  = $args['description'] ?? 'Exhibitions and art fairs of the painter Cl
 $cv_shows  = array_map( 'cv_exhibition', function_exists( 'cvc_exhibitions' ) ? cvc_exhibitions() : [] );
 $cv_panels = array_values( array_filter( $cv_shows, fn( $s ) => $s['hasPage'] ) );
 
+// The show at its own address joins the panels when the list does not carry
+// it — a draft being previewed, say — and a panel that is not on the page is
+// not opened: a veil locked over nothing would be the whole page.
+if ( ! empty( $args['show'] ) && $args['show']['hasPage'] && ! in_array( $args['show']['id'], array_column( $cv_panels, 'id' ), true ) ) {
+	$cv_panels[] = $args['show'];
+}
+if ( $cv_open && ! in_array( $cv_open, array_map( fn( $s ) => "exhibition-{$s['slug']}", $cv_panels ), true ) ) {
+	$cv_open = '';
+}
+
 cv_page( [
 	'title'       => $cv_title,
 	'description' => $cv_desc,

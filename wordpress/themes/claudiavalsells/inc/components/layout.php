@@ -38,7 +38,9 @@ function cv_loading_screen(): string {
 function cv_top_bar(): string {
 	$path = cv_page()['path'];
 	$out  = '<header class="top">'
-		. '<a class="wordmark" href="' . esc_url( home_url( '/' ) ) . '" data-roll>' . esc_html( strtoupper( get_bloginfo( 'name' ) ) ) . '</a>'
+		// Decoded before it is uppercased, since the site's name arrives already
+		// escaped and an entity's letters must not be touched; escaped once after.
+		. '<a class="wordmark" href="' . esc_url( home_url( '/' ) ) . '" data-roll>' . esc_html( mb_strtoupper( wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) ) ) . '</a>'
 		. '<a class="top-soon" href="' . esc_url( home_url( '/#whats-color' ) ) . '"' . ( '/' === $path ? ' aria-current="page"' : '' ) . ' data-roll>What&rsquo;s Color?</a>'
 		. '<nav class="menu" aria-label="Primary">';
 	foreach ( cv_menu() as $item ) {

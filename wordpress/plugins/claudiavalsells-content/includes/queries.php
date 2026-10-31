@@ -60,18 +60,68 @@ function cvc_works(): array {
 		set_transient( 'cvc_work_ids', $ids, HOUR_IN_SECONDS );
 	}
 	_prime_post_caches( $ids, true, true );
+	cvc_prime_pictures( $ids );
 	$works = array_values( array_filter( array_map( 'get_post', $ids ) ) );
 	return $works;
 }
 
-/** The list is remade whenever a work is saved, trashed or restored. */
-add_action( 'save_post_artwork', 'cvc_forget_works' );
+/**
+ * The pictures of a list of entries, read into the cache in one go.
+ *
+ * Each tile asks for its picture's metadata and mime type; without this,
+ * that is two queries per entry — some four hundred for the grid.
+ */
+function cvc_prime_pictures( array $post_ids ): void {
+	$pictures = [];
+	foreach ( $post_ids as $id ) {
+		$thumb = (int) get_post_meta( $id, '_thumbnail_id', true );
+		if ( $thumb ) {
+			$pictures[] = $thumb;
+		}
+	}
+	if ( $pictures ) {
+		_prime_post_caches( array_unique( $pictures ), false, true );
+	}
+}
+
+/**
+ * The list is remade whenever a work is saved, trashed or restored. The save
+ * is caught on wp_after_insert_post, which the block editor fires once an
+ * entry's fields are written — save_post fires before them, with the year
+ * still the old one.
+ */
+add_action( 'wp_after_insert_post', function ( int $post_id, WP_Post $post ) {
+	if ( 'artwork' === $post->post_type ) {
+		cvc_forget_works();
+	}
+}, 10, 2 );
 add_action( 'deleted_post', 'cvc_forget_works' );
 add_action( 'trashed_post', 'cvc_forget_works' );
 add_action( 'untrashed_post', 'cvc_forget_works' );
 function cvc_forget_works(): void {
 	delete_transient( 'cvc_work_ids' );
 }
+
+/**
+ * An entry saved without a year is this year's.
+ *
+ * The year is what the grid, the rail and the lists are ordered by, so an
+ * entry without one would not appear at all — and the editor only sends the
+ * fields that were touched, so a new painting published without opening the
+ * Year field has none. This year is the likeliest answer, and the field is
+ * there to correct it. Early, so the colour sampler and the list cache see it.
+ */
+add_action( 'wp_after_insert_post', function ( int $post_id, WP_Post $post ) {
+	if ( ! in_array( $post->post_type, [ 'artwork', 'exhibition', 'commissioned' ], true ) ) {
+		return;
+	}
+	if ( in_array( $post->post_status, [ 'auto-draft', 'trash' ], true ) ) {
+		return;
+	}
+	if ( '' === (string) get_post_meta( $post_id, '_cv_year', true ) ) {
+		update_post_meta( $post_id, '_cv_year', (int) current_time( 'Y' ) );
+	}
+}, 5, 2 );
 
 /** Exhibitions in their listed order: anything new (order 0) first, then as listed, then by year. */
 function cvc_exhibitions(): array {
@@ -85,6 +135,7 @@ function cvc_exhibitions(): array {
 			'meta_query'     => [ 'year' => [ 'key' => '_cv_year', 'type' => 'NUMERIC', 'compare' => 'EXISTS' ] ],
 			'orderby'        => [ 'menu_order' => 'ASC', 'year' => 'DESC', 'date' => 'DESC' ],
 		] );
+		cvc_prime_pictures( wp_list_pluck( $items, 'ID' ) );
 	}
 	return $items;
 }
@@ -116,9 +167,12 @@ function cvc_commissioned_groups(): array {
 		'meta_query'     => [ 'year' => [ 'key' => '_cv_year', 'type' => 'NUMERIC', 'compare' => 'EXISTS' ] ],
 		'orderby'        => [ 'menu_order' => 'ASC', 'year' => 'DESC', 'date' => 'DESC' ],
 	] );
+	cvc_prime_pictures( wp_list_pluck( $posts, 'ID' ) );
 	foreach ( $posts as $post ) {
-		$own = wp_get_post_terms( $post->ID, 'commissioned_group', [ 'fields' => 'ids' ] );
-		$key = ( is_array( $own ) && $own && isset( $groups[ $own[0] ] ) ) ? $own[0] : $first;
+		// get_the_terms reads the cache get_posts has just filled; wp_get_post_terms would query again.
+		$own = get_the_terms( $post, 'commissioned_group' );
+		$own = is_array( $own ) ? wp_list_pluck( $own, 'term_id' ) : [];
+		$key = ( $own && isset( $groups[ $own[0] ] ) ) ? $own[0] : $first;
 		if ( null === $key ) {
 			$groups[0] = [ 'name' => __( 'Commissioned', 'claudiavalsells' ), 'slug' => 'commissioned', 'items' => [] ];
 			$key = $first = 0;

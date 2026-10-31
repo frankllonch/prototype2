@@ -41,6 +41,19 @@ remove_action( 'wp_enqueue_scripts', 'wp_enqueue_global_styles' );
 remove_action( 'wp_footer', 'wp_enqueue_global_styles', 1 );
 remove_action( 'wp_enqueue_scripts', 'wp_enqueue_classic_theme_styles' );
 add_filter( 'emoji_svg_url', '__return_false' );
+// No speculative prefetching: the links WordPress would prefetch on hover —
+// an exhibition's row, a work in the grid — open as a panel or in the lightbox
+// without leaving the page, so the pages fetched would go unused.
+add_filter( 'wp_speculation_rules_configuration', '__return_null' );
+
+// One stylesheet, the design's own. WordPress 7.1 would otherwise give every
+// block its own inline style as it renders, after this has run; told not to,
+// it falls back to the one block-library sheet the loop below removes.
+add_filter( 'should_load_separate_core_block_assets', '__return_false' );
+// Nor the "block supports" styles WordPress stores while rendering and prints
+// at the foot: the blocks here carry no layout or colour attributes to style.
+remove_action( 'wp_enqueue_scripts', 'wp_enqueue_stored_styles' );
+remove_action( 'wp_footer', 'wp_enqueue_stored_styles', 1 );
 
 add_action( 'wp_enqueue_scripts', function () {
 	foreach ( [ 'wp-block-library', 'wp-block-library-theme', 'global-styles', 'classic-theme-styles', 'core-block-supports', 'wp-webfonts' ] as $handle ) {
@@ -69,7 +82,7 @@ function cv_modules(): array {
 	$names = [
 		'env', 'text-roll', 'transitions', 'controls', 'stack', 'years', 'hover-list', 'panels',
 		'figures', 'lightbox', 'cursor', 'film', 'tilt', 'paging', 'views',
-		'scroll-cue', 'inquiries', 'hues', 'index',
+		'scroll-cue', 'inquiries', 'book', 'focus', 'hues', 'index',
 	];
 	return array_map( fn( $m ) => cv_asset( "js/$m.js" ), $names );
 }
@@ -105,10 +118,11 @@ function cv_page( ?array $set = null ): array {
 add_filter( 'pre_get_document_title', function () {
 	$title = cv_page()['title'];
 	$site  = get_bloginfo( 'name' );
+	// Escaped here: a non-empty answer to this filter is printed as it is.
 	if ( '' === $title || $title === $site ) {
-		return $site;
+		return esc_html( $site );
 	}
-	return "$title — $site";
+	return esc_html( "$title — $site" );
 } );
 
 add_filter( 'body_class', function ( array $classes ) {

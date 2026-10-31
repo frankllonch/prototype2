@@ -20,6 +20,8 @@ add_action( 'enqueue_block_editor_assets', function () {
 		true
 	);
 	wp_localize_script( 'cvc-editor', 'cvEditor', cvc_editor_fields() );
+	// The three strings the script translates itself, from languages/*.json.
+	wp_set_script_translations( 'cvc-editor', 'claudiavalsells', CVC_DIR . 'languages' );
 } );
 
 /**

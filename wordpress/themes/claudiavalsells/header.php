@@ -13,7 +13,8 @@ $cv_desc = $cv_page['description'] ?: (string) cv_option( 'cv_tagline' );
 <?php if ( $cv_desc ) : ?>
 <meta name="description" content="<?php echo esc_attr( mb_substr( $cv_desc, 0, 300 ) ); ?>" />
 <?php endif; ?>
-<link rel="preload" href="<?php echo esc_url( cv_asset( 'fonts/Switzer-Variable.woff2' ) ); ?>" as="font" type="font/woff2" crossorigin />
+<?php // The address the stylesheet itself asks for — unstamped — or the preload fetches a second copy. ?>
+<link rel="preload" href="<?php echo esc_url( CV_THEME_URI . '/assets/fonts/Switzer-Variable.woff2' ); ?>" as="font" type="font/woff2" crossorigin />
 <?php foreach ( cv_modules() as $cv_module ) : ?>
 <link rel="modulepreload" href="<?php echo esc_url( $cv_module ); ?>" />
 <?php endforeach; ?>

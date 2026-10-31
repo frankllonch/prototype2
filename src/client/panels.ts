@@ -29,14 +29,21 @@ export function initPanels(): void {
   const root = document.querySelector<HTMLElement>('[data-panel-root]')?.dataset.panelRoot ?? page;
 
   let open: HTMLElement | null = null;
+  // What opened the panel, so that closing it hands the keyboard back there
+  // rather than dropping focus on the body when the Close link is hidden.
+  let opener: HTMLElement | null = null;
 
   const close = () => {
     if (!open) return;
+    const id = open.id;
     open.classList.remove('is-open');
     open = null;
     veil.classList.remove('is-open');
     document.body.classList.remove('is-locked');
     history.replaceState(null, '', root);
+    const back = opener ?? document.querySelector<HTMLElement>(`[data-panel-open="${id}"]`);
+    opener = null;
+    back?.focus({ preventScroll: true });
   };
 
   const show = (id: string) => {
@@ -64,6 +71,7 @@ export function initPanels(): void {
       // A panel with an address of its own is reached at that address; the
       // rest are reached by their anchor, which is also what the link says.
       history.replaceState(null, '', panel.dataset.panelUrl ?? `#${id}`);
+      opener = trigger;
       show(id);
     });
   }
@@ -76,12 +84,12 @@ export function initPanels(): void {
   veil.addEventListener('click', close);
   document.addEventListener('keydown', (event) => { if (open && event.key === 'Escape') close(); });
 
+  // Served already open — a panel loaded at its own address — so the script
+  // takes charge of what the page has done, and can close it. First, whatever
+  // the hash says: a stray #main from the skip link must not leave the panel
+  // open with nothing in charge of it.
+  const served = panels.find((panel) => panel.classList.contains('is-open'));
+  if (served) show(served.id);
   // Arriving on a shared #about or #exhibition-… link opens it straight away.
   if (location.hash.length > 1) show(location.hash.slice(1));
-  else {
-    // Served already open — a panel loaded at its own address — so the script
-    // only takes charge of what the page has done, and can close it.
-    const served = panels.find((panel) => panel.classList.contains('is-open'));
-    if (served) show(served.id);
-  }
 }

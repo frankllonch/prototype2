@@ -128,8 +128,15 @@ type Block =
   | { readonly type: 'image'; readonly image: ImageRef; readonly className?: string };
 
 const plain = (html: string) => html.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
+// A bare ampersand in the source's text — Arts&Claus — is written as the
+// entity the editor itself would save, so the page it renders is valid.
+const entities = (html: string) => html.replace(/&(?![a-zA-Z][a-zA-Z0-9]*;|#\d+;|#x[0-9a-fA-F]+;)/g, '&amp;');
 const tidy = (html: string) =>
-  html.replace(/<span>\s*<\/span>/g, '').replace(/<(strong|em|b|i)>\s*<\/\1>/g, '').replace(/\s+/g, ' ').trim();
+  entities(html)
+    .replace(/<span>\s*<\/span>/g, '')
+    .replace(/<(strong|em|b|i)>\s*<\/\1>/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
 
 const BLOCK_TAGS = new Set(['p', 'div', 'section', 'article', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'blockquote', 'figure', 'table']);
 
@@ -271,21 +278,33 @@ const normalise = (s: string) =>
  * own wording where it is not.
  */
 function kindOf(title: string, venue: string | undefined, year: number): 'solo' | 'group' | 'fair' | '' {
-  const key = normalise(title).slice(0, 18);
+  const mine = normalise(title);
+  const key = mine.slice(0, 18);
+  const kind = (heading: string) =>
+    heading.startsWith('Solo') ? 'solo' : heading.startsWith('Group') ? 'group' : 'fair';
+  const within = (show: { when: string }, years: number) => {
+    const theirs = Number(show.when.slice(0, 4));
+    return theirs > 0 && Math.abs(theirs - year) <= years;
+  };
+  // The same title first, within a few years: the two lists disagree on a
+  // year here and there — Transitions is 2023 on one and 2025 on the other.
   for (const column of ABOUT_SHOWS) {
     for (const show of column.shows) {
-      // The two lists disagree on a year here and there (Transitions is 2023 on
-      // one and 2025 on the other), so a year either side still counts.
-      const theirYear = Number(show.when.slice(0, 4));
-      if (!theirYear || Math.abs(theirYear - year) > 1) continue;
+      if (within(show, 3) && normalise(show.title) === mine) return kind(column.heading);
+    }
+  }
+  // A fair by its wording next, before a title that merely begins the same
+  // way can claim it: the 2018 Art Élysées fair starts like the 2019 solo show.
+  const text = `${title} ${venue ?? ''}`;
+  if (/\b(fair|feria|zona maco|almoneda|estampa|antica|scope|eurantica|art paris|art madrid|art elys|art week|aff|just lx)\b/i.test(text)) return 'fair';
+  for (const column of ABOUT_SHOWS) {
+    for (const show of column.shows) {
       const theirs = normalise(show.title);
-      if (key && (theirs.startsWith(key) || normalise(title).startsWith(theirs.slice(0, 18)))) {
-        return column.heading.startsWith('Solo') ? 'solo' : column.heading.startsWith('Group') ? 'group' : 'fair';
+      if (within(show, 1) && key && (theirs.startsWith(key) || mine.startsWith(theirs.slice(0, 18)))) {
+        return kind(column.heading);
       }
     }
   }
-  const text = `${title} ${venue ?? ''}`;
-  if (/\b(fair|feria|zona maco|almoneda|estampa|antica|scope|eurantica|art paris|art madrid|art elys|art week|aff|just lx)\b/i.test(text)) return 'fair';
   if (/\bgroup\b/i.test(text)) return 'group';
   if (/\bsolo\b/i.test(text)) return 'solo';
   return '';
@@ -299,7 +318,9 @@ async function exportExhibitions() {
     const blocks = derived ? await rowBlocks(derived.rows, alt) : [];
     const cover = derived?.cover ? await exportImage(derived.cover, alt(derived.cover)) : null;
     out.push({
-      slug: show.slug ?? normalise(`${show.title} ${show.year}`).replace(/\s+/g, '-').slice(0, 60),
+      // Cut the way WordPress would cut it, or a hyphen left at the end would
+      // be trimmed on save and the entry never found again.
+      slug: show.slug ?? normalise(`${show.title} ${show.year}`).replace(/\s+/g, '-').slice(0, 60).replace(/-+$/, ''),
       title: show.title,
       venue: show.venue ?? '',
       from: show.from ?? '',
@@ -324,7 +345,14 @@ function exportEditions() {
     sourceTitle: edition.sourceTitle,
     sourceSlug: edition.slug,
     intro: textBlocks(edition.intro),
-    statement: textBlocks(edition.statement),
+    // The edition's own text is what its page sets between the entries: on
+    // the composed sheets (I and II) that is Claudia's paragraphs one at a
+    // time, in the designer's order, which is more than the statement the
+    // opening view shows run together. The theme reads the sheet's paragraphs
+    // back out of this by position, so the order here is the order there.
+    statement: textBlocks(
+      edition.says ? edition.says.map((s) => `<p>${s}</p>`).join('') : edition.statement,
+    ),
     participants: edition.participants.map((p, i) => ({
       name: p.name,
       role: p.role ?? '',
@@ -353,7 +381,7 @@ async function exportAbout() {
         image: { id: `about-${n}`, src, name: `claudia-valsells-studio-${n}.jpg`, folder: '2026/10', alt: block.image.alt, ...size },
       });
     } else {
-      blocks.push({ type: 'paragraph', html: block.text, ...(block.kind === 'lead' ? { className: 'about-lead' } : {}) });
+      blocks.push({ type: 'paragraph', html: entities(block.text), ...(block.kind === 'lead' ? { className: 'about-lead' } : {}) });
     }
   }
   return {

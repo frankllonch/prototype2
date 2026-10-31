@@ -1,18 +1,49 @@
 # Moving the new site into WordPress
 
 Written 29 October 2026. Decision taken the same day: option B, the WordPress
-theme. **Status: Phase 1 is built and running locally** — see "Where Phase 1
-stands" just below, and `wordpress/README.md` for how to run it.
+theme. **Status: Phase 1 is built, reviewed and running locally** — see "Where
+things stand" just below, and `wordpress/README.md` for how to run it.
 
 This is the working document for taking the design in this repository live on
 Claudia's own WordPress, at hubsfera's hosting, with Claudia editing everything
 herself. It is written for someone who has not used WordPress before. It will be
 updated as each phase lands.
 
-## Where Phase 1 stands (29 October 2026)
+## Where things stand (30 October 2026)
 
 Built, imported and checked on this Mac at http://localhost:8888 (WordPress
 7.1, PHP 8.3, in Docker). Everything below was looked at in a browser.
+
+Since 29 October:
+
+- **The three editions of What's Color?** are the designer's composed sheets,
+  as on the static site: which column each person sits in, how far down, where
+  the photographs and Claudia's paragraphs fall. That placement is layout and
+  lives in the theme; what Claudia edits is the words — each edition's entry
+  holds her paragraphs in the order the sheet sets them, and each person is an
+  entry under Answers. A person she adds appears after the composition until
+  the sheet is redrawn to place them.
+- **Checked against the static site, byte for byte.** `npm run wp:diff` reads
+  every page from the static build and from WordPress and diffs the markup
+  with the intended differences set aside. Every page is the same, except the
+  three things listed under "For the designer" below.
+- **Reviewed.** A review of the theme, the plugin, the importer and the
+  exporter — eight readers, each finding checked three ways — turned up
+  thirty-four things, all fixed: among them, the importer no longer overwrites
+  an entry Claudia has edited since the last run, keeps the old site's
+  filenames in every case (a hundred of them were being renamed), and never
+  dates a show into the future where WordPress would hide it; a work saved
+  without a year gets the current one instead of vanishing from the grid; a
+  show or project at its own address while still a draft previews properly; a
+  page served with its panel open still works without scripting; old
+  addresses redirect with their query string and with headers a browser may
+  cache; WordPress's own block styles no longer reach the page; the artwork
+  index makes a handful of queries rather than four hundred.
+- **The admin in Spanish and Catalan.** Every label and help text of the
+  plugin, proofread; WordPress's own language packs do the rest. Set per site
+  or per user (`wordpress/README.md`).
+- **WebP** beside every JPEG, through the Modern Image Formats plugin, as the
+  static site serves it; the theme already offered the formats when present.
 
 - **The theme** draws every page of the site from WordPress with the design's
   own stylesheet and scripts, copied from `src/` unchanged: the home page with
@@ -44,18 +75,29 @@ Built, imported and checked on this Mac at http://localhost:8888 (WordPress
 Not done yet, in order:
 
 1. **Review** on this Mac by Frank and Claudia; her trying to add a work.
-2. **Modern image formats** (WebP/AVIF) on upload — a plugin on the host, or
-   the host's image library; the theme already serves them when present.
-3. **Admin in Spanish or Catalan**: the labels are in English for now.
-4. **The record on About** is now read out of the Exhibitions entries (one list
-   to maintain) rather than retyped, so a few lines read slightly differently
-   from the designer's sheet. The designer should look it over.
-5. **Edition I's sheet.** On 29 October, in parallel with this work, the static
-   site's page for the first edition became a designed composition (three
-   columns placed by hand, Claudia's paragraphs between them, a plate of the
-   work). The theme still shows edition I as a list, like II and III; the
-   composition is ported once that work is committed and settled.
-6. A **page cache** for the host, and the staging checklist (Phase 2).
+2. **For the designer** — the places where WordPress reads differently from
+   the static site, each on purpose, each needing a yes or a no:
+   - **The record on About** is read out of the Exhibitions entries (one list
+     to maintain) rather than retyped, so a few lines read differently from
+     her sheet.
+   - **The heading of a panel.** On the static site an exhibition's or a
+     project's panel opens with the title and venue of the old page it was
+     derived from (“TRANSITIONS”, “Color palette for Santa & Cole, 2023-on
+     going”); in WordPress with the entry's own title and venue, the ones the
+     row shows. One title per entry.
+   - **Two dates disagree between her two lists**: Transitions is 2023 on the
+     About record and 2025 on the exhibitions list, and Color Dialogues runs
+     December to January with its years the other way round. WordPress shows
+     the list's; the static site shows both.
+   - The static site carries a panel for the Terranova project that no row
+     opens; in WordPress that project is the third edition of What's Color?.
+3. **Edition III's sheet** follows the static site's work in progress of
+   30 October (the strip of photographs of the book and its viewer). When that
+   design settles, `npm run wp:diff` says where the theme has to follow.
+4. **Mail** from the order desk needs the host's mailer (Phase 2).
+5. A **page cache** for the host, and the staging checklist (Phase 2).
+6. Small: without scripting, an exhibition's own address lands at the top
+   of the list with its panel further down, rather than on the panel.
 
 ## 1. Where things stand
 

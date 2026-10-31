@@ -1,0 +1,567 @@
+# Catalan translation of the Claudia Valsells — Content plugin.
+# Copyright (C) 2026 Frank Llonch
+# This file is distributed under the same license as the Claudia Valsells — Content plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Claudia Valsells — Content 0.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/claudiavalsells-"
+"content\n"
+"POT-Creation-Date: 2026-10-30T21:54:00+00:00\n"
+"PO-Revision-Date: 2026-10-30 21:00+0100\n"
+"Last-Translator: Frank Llonch\n"
+"Language-Team: Catalan\n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Domain: claudiavalsells\n"
+
+#. Plugin Name of the plugin
+#: claudiavalsells-content.php
+msgid "Claudia Valsells — Content"
+msgstr "Claudia Valsells — Contingut"
+
+#. Description of the plugin
+#: claudiavalsells-content.php
+msgid ""
+"The content types, fields, redirects and order desk of claudiavalsells.com. "
+"The theme draws; this says what there is to draw."
+msgstr ""
+"Els tipus de contingut, els camps, les redireccions i el formulari de "
+"comanda de claudiavalsells.com. El tema dibuixa; això diu què hi ha per "
+"dibuixar."
+
+#. Author of the plugin
+#: claudiavalsells-content.php
+msgid "Frank Llonch"
+msgstr "Frank Llonch"
+
+#: includes/editor.php:31
+msgid "— not in the record"
+msgstr "— no consta a l’historial"
+
+#: includes/editor.php:32
+msgid "Solo exhibition"
+msgstr "Exposició individual"
+
+#: includes/editor.php:33
+msgid "Group exhibition"
+msgstr "Exposició col·lectiva"
+
+#: includes/editor.php:34
+msgid "Art fair"
+msgstr "Fira d’art"
+
+#: includes/editor.php:40
+msgid "This work"
+msgstr "Aquesta obra"
+
+#: includes/editor.php:42 includes/editor.php:54 includes/editor.php:63
+#: includes/editor.php:95 includes/post-types.php:248
+msgid "Year"
+msgstr "Any"
+
+#: includes/editor.php:43
+msgid "Dimensions"
+msgstr "Mides"
+
+#: includes/editor.php:43
+msgid "As it should read, e.g. 162 × 130 cm"
+msgstr "Tal com ha d’aparèixer, p. ex. 162 × 130 cm"
+
+#: includes/editor.php:44
+msgid "Materials"
+msgstr "Materials"
+
+#: includes/editor.php:44
+msgid "e.g. Acrylic on canvas"
+msgstr "p. ex. Acrylic on canvas"
+
+#: includes/editor.php:45
+msgid "Inventory reference"
+msgstr "Referència d’inventari"
+
+#: includes/editor.php:45
+msgid "Your own, e.g. L585. Not shown on the site."
+msgstr "La teva, p. ex. L585. No es mostra al lloc web."
+
+#: includes/editor.php:46
+msgid "Available"
+msgstr "Disponible"
+
+#: includes/editor.php:47
+msgid "The picture shows the painting alone"
+msgstr "La imatge mostra només el quadre"
+
+#: includes/editor.php:47
+msgid ""
+"On: the grid can draw it to scale. Off for a photograph of a room with the "
+"painting in it."
+msgstr ""
+"Activat: la graella el pot dibuixar a escala. Desactivat si és una "
+"fotografia d’una sala amb el quadre a dins."
+
+#: includes/editor.php:48
+msgid "Photograph of the work in place"
+msgstr "Fotografia de l’obra instal·lada"
+
+#: includes/editor.php:48
+msgid ""
+"The painting on the wall, if the main picture is a cut-out. Shown beside it "
+"on the work’s page."
+msgstr ""
+"El quadre a la paret, si la imatge principal és el quadre retallat. Es "
+"mostra al seu costat a la pàgina de l’obra."
+
+#: includes/editor.php:52
+msgid "This project"
+msgstr "Aquest projecte"
+
+#: includes/editor.php:54
+msgid "The year it began; decides its place in the list."
+msgstr "L’any en què va començar; en decideix el lloc a la llista."
+
+#: includes/editor.php:55
+msgid "When, as shown"
+msgstr "Quan, tal com ha d’aparèixer"
+
+#: includes/editor.php:55
+msgid "e.g. 2016 – 2020, or 2023 – Currently. Left empty, the year is shown."
+msgstr ""
+"p. ex. 2016 – 2020, o 2023 – Currently. Si es deixa buit, es mostra l’any."
+
+#: includes/editor.php:56
+msgid "Client"
+msgstr "Client"
+
+#: includes/editor.php:60
+msgid "This exhibition"
+msgstr "Aquesta exposició"
+
+#: includes/editor.php:62
+msgid "Where"
+msgstr "On"
+
+#: includes/editor.php:62
+msgid "e.g. Alzueta Gallery, Barcelona"
+msgstr "p. ex. Alzueta Gallery, Barcelona"
+
+#: includes/editor.php:64
+msgid "From"
+msgstr "Des de"
+
+#: includes/editor.php:64
+msgid "A month, or a month and a day: May 27"
+msgstr "Un mes, o un mes i un dia: May 27"
+
+#: includes/editor.php:65
+msgid "To"
+msgstr "Fins a"
+
+#: includes/editor.php:65
+msgid "Only when it ran across months."
+msgstr "Només si va acabar en un altre mes."
+
+#: includes/editor.php:66
+msgid "Ended in year"
+msgstr "Any en què va acabar"
+
+#: includes/editor.php:66
+msgid "Only when it ran into another year."
+msgstr "Només si va acabar en un altre any."
+
+#: includes/editor.php:67
+msgid "In the record as"
+msgstr "A l’historial com a"
+
+#: includes/editor.php:67
+msgid "Which column of About lists it."
+msgstr "A quina columna d’About apareix."
+
+#: includes/editor.php:68
+msgid "Note"
+msgstr "Nota"
+
+#: includes/editor.php:72
+msgid "This edition"
+msgstr "Aquesta edició"
+
+#: includes/editor.php:74
+msgid "Numeral"
+msgstr "Número romà"
+
+#: includes/editor.php:74
+msgid "I, II, III…"
+msgstr "I, II, III…"
+
+#: includes/editor.php:75
+msgid "Introduction on the opening page"
+msgstr "Introducció a la pàgina d’inici"
+
+#: includes/editor.php:75
+msgid ""
+"Only if it should differ from the text above. Left empty, the opening page "
+"shows the text above."
+msgstr ""
+"Només si ha de ser diferent del text de dalt. Si es deixa buit, la pàgina "
+"d’inici mostra el text de dalt."
+
+#: includes/editor.php:79
+msgid "This person"
+msgstr "Aquesta persona"
+
+#: includes/editor.php:81
+msgid "What they do"
+msgstr "A què es dedica"
+
+#: includes/editor.php:82
+msgid "Known as"
+msgstr "Nom amb què signa"
+
+#: includes/editor.php:82
+msgid "The name they publish under, if different."
+msgstr "El nom amb què publica, si és un altre."
+
+#: includes/editor.php:83
+msgid "Colour reference"
+msgstr "Referència del color"
+
+#: includes/editor.php:83
+msgid "e.g. AC011"
+msgstr "p. ex. AC011"
+
+#: includes/editor.php:84
+msgid "Colour name"
+msgstr "Nom del color"
+
+#: includes/editor.php:84
+msgid "e.g. Powder red"
+msgstr "p. ex. Powder red"
+
+#: includes/editor.php:85
+msgid "Colour, as a hex value"
+msgstr "Color, com a valor hexadecimal"
+
+#: includes/editor.php:85
+msgid "e.g. #d98f93. Left empty, one is read off the colour’s name."
+msgstr "p. ex. #d98f93. Si es deixa buit, es dedueix del nom del color."
+
+#: includes/editor.php:86
+msgid "Answered in images"
+msgstr "Ha respost amb imatges"
+
+#: includes/editor.php:92
+msgid "The card"
+msgstr "La targeta"
+
+#: includes/editor.php:94
+msgid "City"
+msgstr "Ciutat"
+
+#: includes/editor.php:96
+msgid "Phone"
+msgstr "Telèfon"
+
+#: includes/editor.php:97
+msgid "Emails"
+msgstr "Correus electrònics"
+
+#: includes/editor.php:97
+msgid "One per line."
+msgstr "Un per línia."
+
+#: includes/editor.php:98
+msgid "Private collections"
+msgstr "Col·leccions privades"
+
+#: includes/editor.php:98
+msgid "One per line: Name | Place"
+msgstr "Una per línia: Nom | Lloc"
+
+#: includes/editor.php:99
+msgid "Closing line"
+msgstr "Línia final"
+
+#: includes/editor.php:103
+msgid "The chart"
+msgstr "La carta"
+
+#: includes/editor.php:105
+msgid "Price"
+msgstr "Preu"
+
+#: includes/editor.php:105
+msgid "As it should read, e.g. 60,50€"
+msgstr "Tal com ha d’aparèixer, p. ex. 60,50€"
+
+#: includes/editor.php:106
+msgid "The bands"
+msgstr "Les franges"
+
+#: includes/editor.php:106
+msgid "One colour per line, as a hex value, top to bottom."
+msgstr "Un color per línia, com a valor hexadecimal, de dalt a baix."
+
+#: includes/post-types.php:22
+#, php-format
+msgid "All %s"
+msgstr "Llista: %s"
+
+#: includes/post-types.php:23
+#, php-format
+msgid "Add %s"
+msgstr "Afegeix %s"
+
+#: includes/post-types.php:24
+#, php-format
+msgid "Add a new %s"
+msgstr "Afegeix %s"
+
+#: includes/post-types.php:25
+#, php-format
+msgid "Edit %s"
+msgstr "Edita %s"
+
+#: includes/post-types.php:26
+#, php-format
+msgid "New %s"
+msgstr "Crea %s"
+
+#: includes/post-types.php:27
+#, php-format
+msgid "View %s"
+msgstr "Mostra %s"
+
+#: includes/post-types.php:28
+#, php-format
+msgid "Search %s"
+msgstr "Cerca %s"
+
+#: includes/post-types.php:29
+#, php-format
+msgid "No %s yet."
+msgstr "Encara no hi ha %s."
+
+#: includes/post-types.php:30
+#, php-format
+msgid "No %s in the bin."
+msgstr "No hi ha %s a la paperera."
+
+#: includes/post-types.php:36
+msgid "Artwork"
+msgstr "Obra"
+
+#: includes/post-types.php:36
+msgid "Work"
+msgstr "Obra"
+
+#: includes/post-types.php:37
+msgid "The painting"
+msgstr "El quadre"
+
+#: includes/post-types.php:38
+msgid "Choose the picture of the painting"
+msgstr "Tria la imatge del quadre"
+
+#: includes/post-types.php:39
+msgid "Remove the picture"
+msgstr "Suprimeix la imatge"
+
+#: includes/post-types.php:40
+msgid "Use this picture"
+msgstr "Utilitza aquesta imatge"
+
+#: includes/post-types.php:42
+msgid ""
+"A painting. The picture, its year, size and materials; the stack and the "
+"grid are built from these."
+msgstr ""
+"Un quadre. La imatge, l’any, les mides i els materials; amb això es "
+"construeixen la pila i la graella."
+
+#: includes/post-types.php:51
+msgid ""
+"Anything to say about this work — optional. Further photographs of it can be "
+"added here as images."
+msgstr ""
+"Alguna cosa a dir d’aquesta obra — opcional. Aquí se’n poden afegir més "
+"fotografies, com a imatges."
+
+#: includes/post-types.php:56 includes/queries.php:123
+msgid "Commissioned"
+msgstr "Encàrrecs"
+
+#: includes/post-types.php:56
+msgid "Project"
+msgstr "Projecte"
+
+#: includes/post-types.php:57 includes/post-types.php:73
+msgid "Main photograph"
+msgstr "Fotografia principal"
+
+#: includes/post-types.php:58 includes/post-types.php:74
+msgid "Choose the main photograph"
+msgstr "Tria la fotografia principal"
+
+#: includes/post-types.php:60
+msgid ""
+"Commissioned work and collaborations: colour charts, collections, workshops."
+msgstr ""
+"Treballs per encàrrec i col·laboracions: cartes de color, col·leccions, "
+"tallers."
+
+#: includes/post-types.php:72
+msgid "Exhibitions"
+msgstr "Exposicions"
+
+#: includes/post-types.php:72
+msgid "Exhibition"
+msgstr "Exposició"
+
+#: includes/post-types.php:76
+msgid ""
+"Every show and fair, newest first. One with text and photographs opens as a "
+"page; one without is a line in the list."
+msgstr ""
+"Totes les exposicions i fires, les més recents primer. La que té text i "
+"fotografies s’obre com a pàgina; la que no en té és una línia a la llista."
+
+#: includes/post-types.php:87 includes/post-types.php:139
+msgid "Editions"
+msgstr "Edicions"
+
+#: includes/post-types.php:87 includes/post-types.php:140
+#: includes/post-types.php:141
+msgid "Edition"
+msgstr "Edició"
+
+#: includes/post-types.php:88 includes/post-types.php:89
+msgid "What’s Color?"
+msgstr "What’s Color?"
+
+#: includes/post-types.php:91
+msgid ""
+"One edition of What’s Color?: Claudia’s paragraphs in the order the page "
+"sets them between the entries, and the people who answered."
+msgstr ""
+"Una edició de What’s Color?: els paràgrafs de Claudia, en l’ordre en què la "
+"pàgina els intercala entre les respostes, i les persones que hi van "
+"respondre."
+
+#: includes/post-types.php:102 includes/post-types.php:103
+msgid "Answers"
+msgstr "Respostes"
+
+#: includes/post-types.php:102
+msgid "Answer"
+msgstr "Resposta"
+
+#: includes/post-types.php:104
+msgid "Add a person"
+msgstr "Afegeix una persona"
+
+#: includes/post-types.php:105
+msgid "Add a person and their answer"
+msgstr "Afegeix una persona i la seva resposta"
+
+#: includes/post-types.php:107
+msgid ""
+"One person’s answer to “What’s color?”, filed under the edition they "
+"answered in."
+msgstr ""
+"La resposta d’una persona a “What’s color?”, arxivada a l’edició en què va "
+"respondre."
+
+#: includes/post-types.php:118
+msgid "Their answer, as they gave it. Leave empty if they gave none."
+msgstr ""
+"La seva resposta, tal com la va donar. Deixa-ho buit si no en va donar cap."
+
+#: includes/post-types.php:124 includes/post-types.php:126
+msgid "Groups"
+msgstr "Grups"
+
+#: includes/post-types.php:125
+msgid "Group"
+msgstr "Grup"
+
+#: includes/post-types.php:128
+msgid ""
+"The headings of the Commissioned page: Commissioned, Education, Solidary."
+msgstr ""
+"Els apartats de la pàgina d’encàrrecs: Commissioned, Education, Solidary."
+
+#: includes/post-types.php:143
+msgid "Which edition of What’s Color? this person answered in."
+msgstr "A quina edició de What’s Color? va respondre aquesta persona."
+
+#: includes/settings.php:36
+msgid "Texts"
+msgstr "Textos"
+
+#: includes/settings.php:37
+msgid "The order desk"
+msgstr "El formulari de comanda"
+
+#: includes/settings.php:38
+msgid ""
+"Where the Colour Chart’s order form sends. The address is never shown on the "
+"site."
+msgstr ""
+"On s’envia el formulari de comanda de la Carta de color. L’adreça no es "
+"mostra mai al lloc web."
+
+#: includes/settings.php:55
+msgid "Description"
+msgstr "Descripció"
+
+#: includes/settings.php:55
+msgid "What search engines show under the site’s name."
+msgstr "El que els cercadors mostren sota el nom del lloc web."
+
+#: includes/settings.php:56
+msgid "What’s Color? — the note above the names"
+msgstr "What’s Color? — la nota damunt dels noms"
+
+#: includes/settings.php:57
+msgid "The opening screen"
+msgstr "La pantalla d’obertura"
+
+#: includes/settings.php:57
+msgid "Five lines, one per line."
+msgstr "Cinc línies, una per línia."
+
+#: includes/settings.php:58
+msgid "Send inquiries to"
+msgstr "Envia les consultes a"
+
+#: includes/settings.php:59
+msgid "At most, per day"
+msgstr "Com a màxim, al dia"
+
+#: includes/settings.php:59
+msgid "A ceiling on messages a day, against a flood."
+msgstr "Un límit de missatges al dia, contra una allau."
+
+#: includes/settings.php:64 includes/settings.php:65 includes/settings.php:69
+msgid "Site texts"
+msgstr "Textos del lloc"
+
+#: admin/editor.js:63
+msgid "Change photograph"
+msgstr "Canvia la fotografia"
+
+#: admin/editor.js:63
+msgid "Choose photograph"
+msgstr "Tria la fotografia"
+
+#: admin/editor.js:79
+msgid "Remove"
+msgstr "Suprimeix"
+
+#~ msgid ""
+#~ "One edition of What’s Color?: the statement, and the people who answered."
+#~ msgstr ""
+#~ "Una edició de What’s Color?: la presentació i les persones que hi van "
+#~ "respondre."

@@ -19,8 +19,11 @@ function cvc_year_colours(): array {
 	return is_array( $stored ) ? $stored : [];
 }
 
-add_action( 'save_post_artwork', function ( int $post_id, WP_Post $post ) {
-	if ( 'publish' !== $post->post_status ) {
+// On wp_after_insert_post rather than save_post: the block editor saves the
+// entry first and its fields after, and save_post fires between the two, when
+// the year is still the old one. This fires once the fields are written.
+add_action( 'wp_after_insert_post', function ( int $post_id, WP_Post $post ) {
+	if ( 'artwork' !== $post->post_type || 'publish' !== $post->post_status ) {
 		return;
 	}
 	$year = (int) get_post_meta( $post_id, '_cv_year', true );
@@ -68,12 +71,15 @@ function cvc_sample_year( int $year ): ?string {
 		if ( ! $thumb ) {
 			continue;
 		}
+		// The thumbnail and nothing larger: decoding a full-size original in
+		// the middle of a save is what runs a small host out of memory.
 		$file = get_attached_file( $thumb );
 		$meta = wp_get_attachment_metadata( $thumb );
-		if ( $file && ! empty( $meta['sizes']['thumbnail']['file'] ) ) {
-			$file = path_join( dirname( $file ), $meta['sizes']['thumbnail']['file'] );
+		if ( ! $file || empty( $meta['sizes']['thumbnail']['file'] ) ) {
+			continue;
 		}
-		if ( ! $file || ! is_readable( $file ) ) {
+		$file = path_join( dirname( $file ), $meta['sizes']['thumbnail']['file'] );
+		if ( ! is_readable( $file ) ) {
 			continue;
 		}
 		$img = @imagecreatefromstring( (string) file_get_contents( $file ) );

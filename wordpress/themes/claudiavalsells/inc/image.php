@@ -138,3 +138,15 @@ function cv_image( int $id, string $sizes, array $o = [] ): string {
 		$priority ? 'fetchpriority="high"' : 'decoding="async"'
 	);
 }
+
+/**
+ * The theme's own sizes get WebP too. The Modern Image Formats plugin writes
+ * a second format only for WordPress's core sizes unless told otherwise, and
+ * the sizes the pictures are actually served at are these three.
+ */
+add_filter( 'webp_uploads_image_sizes_with_additional_mime_type_support', function ( array $sizes ): array {
+	foreach ( [ 'cv-400', 'cv-800', 'cv-1600' ] as $size ) {
+		$sizes[ $size ] = true;
+	}
+	return $sizes;
+} );

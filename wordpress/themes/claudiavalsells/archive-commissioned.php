@@ -16,6 +16,16 @@ foreach ( function_exists( 'cvc_commissioned_groups' ) ? cvc_commissioned_groups
 	$cv_items    = array_merge( $cv_items, $items );
 }
 
+// The project at its own address joins the panels when no group carries it
+// yet — a draft being previewed — and a panel that is not on the page is not
+// opened: a veil locked over nothing would be the whole page.
+if ( ! empty( $args['project'] ) && ! in_array( $args['project']['id'], array_column( $cv_items, 'id' ), true ) ) {
+	$cv_items[] = $args['project'];
+}
+if ( $cv_open && ! in_array( $cv_open, array_map( fn( $i ) => "commissioned-{$i['slug']}", $cv_items ), true ) ) {
+	$cv_open = '';
+}
+
 cv_page( [
 	'title'       => $cv_title,
 	'description' => $cv_desc,

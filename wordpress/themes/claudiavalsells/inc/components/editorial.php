@@ -34,7 +34,10 @@ function cv_editorial_body( array $item ): string {
 	if ( $venue ) {
 		$out .= '<p class="reader-venue">' . esc_html( $venue ) . '</p>';
 	}
-	if ( $kind ) {
+	// The kind on its own line, unless the venue already says it — the list
+	// writes "Solo show, Palau de Casavells" as one phrase, and the About page
+	// still needs the kind as a fact of its own.
+	if ( $kind && ( '' === $venue || false === stripos( $venue, $kind ) ) ) {
 		$out .= '<p class="reader-kind">' . esc_html( $kind ) . '</p>';
 	}
 	if ( $stated ) {

@@ -46,11 +46,32 @@ function cv_render_content( WP_Post $post, callable $image ): string {
 				}
 				continue;
 			}
-			$out .= render_block( $block );
+			$out .= cv_bare_block( render_block( $block ) );
 		}
 	};
 	$walk( parse_blocks( $post->post_content ) );
 	return trim( $out );
+}
+
+/**
+ * A rendered block without the class the editor stamps on it.
+ *
+ * WordPress marks each paragraph, heading and list it renders with
+ * `wp-block-paragraph` and the like, a hook for themes styled through
+ * theme.json. This theme is styled by the design's own stylesheet, written
+ * against bare elements, and its pages are meant to be the static site's
+ * markup to the byte — so the stamp comes off, and a class the editor was
+ * given for a block (about-lead, say) stays.
+ */
+function cv_bare_block( string $html ): string {
+	return (string) preg_replace_callback(
+		'/\sclass="([^"]*)"/',
+		function ( array $m ): string {
+			$kept = array_filter( explode( ' ', $m[1] ), fn( string $c ) => '' !== $c && ! str_starts_with( $c, 'wp-block-' ) );
+			return $kept ? ' class="' . implode( ' ', $kept ) . '"' : '';
+		},
+		$html
+	);
 }
 
 /** The text of an entry on one side, its pictures (ids, with any caption typed in the editor) on the other. */
@@ -61,7 +82,9 @@ function cv_content_parts( WP_Post $post ): array {
 	}
 	$images = [];
 	$text   = cv_render_content( $post, function ( int $id, string $caption ) use ( &$images ) {
-		if ( ! isset( $images[ $id ] ) ) {
+		// A picture deleted from the library leaves its id behind in the block;
+		// it is not a figure any more, and not counted as one.
+		if ( ! isset( $images[ $id ] ) && 'attachment' === get_post_type( $id ) ) {
 			$images[ $id ] = [ 'id' => $id, 'caption' => $caption ];
 		}
 		return '';
@@ -84,6 +107,9 @@ function cv_work( WP_Post $p ): array {
 	$parts = cv_content_parts( $p );
 	$cover = (int) get_post_thumbnail_id( $p );
 	$photo = (int) cv_meta( $p->ID, '_cv_photo_id', 0 );
+	if ( $photo && 'attachment' !== get_post_type( $photo ) ) {
+		$photo = 0;
+	}
 	$views = array_values( array_filter( $parts['images'], fn( $i ) => $i['id'] !== $cover && $i['id'] !== $photo ) );
 	$year  = (int) cv_meta( $p->ID, '_cv_year', 0 );
 
@@ -222,6 +248,13 @@ function cv_edition( WP_Post $p ): array {
 	$statement = cv_content_parts( $p )['text'];
 	$intro     = (string) cv_meta( $p->ID, '_cv_intro' );
 
+	// Claudia's paragraphs one at a time, for the composed sheets, which set
+	// them between the entries by position. The same text as `statement`,
+	// read back out of its rendered paragraphs; a heading or anything else in
+	// the entry is not one of them.
+	preg_match_all( '#<p\b[^>]*>(.*?)</p>#su', $statement, $m );
+	$says = array_values( array_filter( array_map( 'trim', $m[1] ), fn( $s ) => '' !== wp_strip_all_tags( $s ) ) );
+
 	$people = [];
 	$answers = function_exists( 'cvc_answers' ) ? cvc_answers( $p ) : [];
 	foreach ( $answers as $a ) {
@@ -240,6 +273,7 @@ function cv_edition( WP_Post $p ): array {
 			'inImages'   => (bool) get_post_meta( $a->ID, '_cv_in_images', true ),
 			'edition'    => $numeral,
 			'id'         => cv_id_for( get_the_title( $a ) ),
+			'url'        => get_permalink( $p ),
 		];
 		$person['colour'] = cv_swatch_for( $person, count( $people ) );
 		$people[]         = $person;
@@ -251,8 +285,10 @@ function cv_edition( WP_Post $p ): array {
 		'slug'         => $p->post_name,
 		'url'          => get_permalink( $p ),
 		'title'        => get_the_title( $p ),
-		'intro'        => $intro ? trim( do_blocks( $intro ) ) : $statement,
+		'intro'        => $intro ? cv_bare_block( trim( do_blocks( $intro ) ) ) : $statement,
 		'statement'    => $statement,
+		'says'         => $says,
+		'sourceTitle'  => (string) cv_meta( $p->ID, '_cv_source_title' ),
 		'participants' => $people,
 	];
 }
@@ -277,8 +313,13 @@ function cv_about(): array {
 	if ( null !== $about ) {
 		return $about;
 	}
-	$page = get_page_by_path( 'about' );
-	$id   = $page ? $page->ID : 0;
+	// The page as it is being looked at when it is the one being previewed;
+	// otherwise only as published — a draft of About is not on every page.
+	$page = is_page( 'about' ) ? get_queried_object() : get_page_by_path( 'about' );
+	if ( $page && 'publish' !== $page->post_status && ! is_preview() ) {
+		$page = null;
+	}
+	$id = $page ? $page->ID : 0;
 
 	$text = $page ? cv_render_content( $page, fn( int $image, string $caption ) =>
 		'<figure class="about-figure">' . cv_image( $image, '(max-width: 899px) 92vw, 79vw' ) . '</figure>' ) : '';

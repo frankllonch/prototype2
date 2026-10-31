@@ -42,8 +42,53 @@ cd wordpress && npx wp-env run cli wp theme activate claudiavalsells
 After editing `src/styles` or `src/client`, run `wp:assets` again — the built
 files carry a stamp, so browsers fetch the new ones.
 
-The import runs again safely: entries are found by their address and updated,
-pictures by the id the bundle gave them and reused.
+The import runs again safely: entries are found by their address (or the key
+the first run stamped on them, so a changed permalink is not a second copy)
+and updated, pictures by the id the bundle gave them and reused. An entry
+edited in WordPress since the last run is kept as it is and reported — what
+Claudia typed outranks the bundle. To overwrite anyway:
+
+```bash
+cd wordpress && npx wp-env run cli wp --exec='define("CV_IMPORT_OVERWRITE", true);' eval-file wp-content/plugins/claudiavalsells-content/import.php
+```
+
+The site's settings (name, timezone, permalinks, search engines kept out) are
+set on the first run only.
+
+## The admin in Spanish or Catalan
+
+The plugin ships its labels in both (`plugins/claudiavalsells-content/languages/`).
+WordPress itself is translated by its language packs: Settings → General →
+Site Language sets it for everyone, or each user picks their own under Users →
+Profile → Language. The public site stays in English either way. After a
+change to a label in the code:
+
+```bash
+cd wordpress
+npx wp-env run cli wp i18n make-pot wp-content/plugins/claudiavalsells-content wp-content/plugins/claudiavalsells-content/languages/claudiavalsells.pot --domain=claudiavalsells --exclude=languages
+cd plugins/claudiavalsells-content/languages
+msgmerge --update --backup=none claudiavalsells-es_ES.po claudiavalsells.pot   # then translate the new entries
+msgmerge --update --backup=none claudiavalsells-ca.po claudiavalsells.pot
+msgfmt -o claudiavalsells-es_ES.mo claudiavalsells-es_ES.po
+msgfmt -o claudiavalsells-ca.mo claudiavalsells-ca.po
+cd ../../.. && npx wp-env run cli wp i18n make-json wp-content/plugins/claudiavalsells-content/languages --no-purge
+```
+
+## Pictures in WebP
+
+The static site serves every picture as AVIF and WebP with a JPEG behind
+them. WordPress does the same with the **Modern Image Formats** plugin
+(`webp-uploads`, by the WordPress performance team), set to WebP with JPEG
+kept (Settings → Media); the theme reads the formats it writes into each
+picture's metadata and offers them in the same `<picture>` markup. Pictures
+uploaded before the plugin was on need regenerating once:
+
+```bash
+cd wordpress && npx wp-env run cli wp media regenerate --yes
+```
+
+The local site has it from `.wp-env.json`; on the host, install it from
+Plugins → Add New.
 
 ## What is where in the admin
 
@@ -52,13 +97,36 @@ pictures by the id the bundle gave them and reused.
 | Artwork | One entry per painting: the picture, year, dimensions, materials, reference, available, and the photograph of it in place |
 | Commissioned | The projects, in groups (Commissioned, Education, Solidary) |
 | Exhibitions | Every show and fair. One with text or photographs opens as a page; one without is a line in the list. "In the record as" decides which About column lists it |
-| What's Color? | The editions; under it, Answers: one person per entry, filed under an edition |
+| What's Color? | The editions: each entry's text is Claudia's paragraphs in the order the page sets them between the people. Under it, Answers: one person per entry, filed under an edition |
 | Pages → About | The card (city, year, phone, emails), the biography with its photographs, the collections |
 | Pages → Color Chart | The text, the price, the bands, the three photographs |
 | Settings → Site texts | The description, the What's Color? note, the opening screen's lines, and where the order form sends |
 
 Order of things: works newest year first; exhibitions and commissioned work in
-the order they were listed, with anything new on top.
+the order they were listed, with anything new on top. An entry saved without
+a year is given the current one — the year is what everything is ordered
+by, and the field is there to correct it.
+
+The three editions of What's Color? are compositions the designer drew by
+hand — which column each person sits in, how far down, where the photographs
+and Claudia's paragraphs fall. That placement is layout, so it lives in the
+theme (`inc/components/whats-color.php`, mirroring
+`src/content/whats-color-sheet.ts`), not in the editor. Claudia edits the
+words; a person she adds to an edition appears after the composition, column
+by column, until the sheet is redrawn to place them.
+
+## Keeping the two in step
+
+The design has one source and two readers. After a change in `src/`:
+
+```bash
+npm run build && npm run wp:assets && npm run wp:diff
+```
+
+`wp:diff` reads each page from `dist/` and from the local WordPress and
+diffs the markup, with what differs on purpose set aside (asset addresses,
+pictures' renditions, About's address). A page that differs means a PHP
+component has not been brought along with its TypeScript one.
 
 ## The order desk
 

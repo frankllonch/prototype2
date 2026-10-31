@@ -46,6 +46,12 @@ async function main() {
   }
   for (const dir of ['fonts', 'video', 'about', 'img']) await rm(path.join(ASSETS, dir, '.DS_Store'), { force: true });
 
+  // A stamp the theme reads to version its asset URLs, so a rebuild is a new
+  // address and no browser keeps serving the old one. The modules' own imports
+  // carry the same stamp: a browser keys its module map by the full URL, so a
+  // preload of `panels.js?v=…` only counts for an import that names exactly
+  // that, and a rebuild re-addresses every module rather than the entry alone.
+  const stamp = String(Date.now());
   const client = path.join(SRC, 'client');
   const files = (await readdir(client)).filter((f) => f.endsWith('.ts'));
   for (const file of files) {
@@ -55,13 +61,10 @@ async function main() {
     });
     await writeFile(
       path.join(ASSETS, 'js', file.replace(/\.ts$/, '.js')),
-      outputText.replace(/from '(\.\/[\w-]+)\.ts'/g, "from '$1.js'"),
+      outputText.replace(/from '(\.\/[\w-]+)\.ts'/g, `from '$1.js?v=${stamp}'`),
     );
   }
-
-  // A stamp the theme reads to version its asset URLs, so a rebuild is a new
-  // address and no browser keeps serving the old one.
-  await writeFile(path.join(ASSETS, 'version.txt'), String(Date.now()));
+  await writeFile(path.join(ASSETS, 'version.txt'), stamp);
 
   console.log(`Theme assets: ${parts.length} stylesheets into site.css, ${files.length} modules, fonts, film, About photographs.`);
 }

@@ -84,8 +84,11 @@ function cvc_register_post_types(): void {
 	] );
 
 	register_post_type( 'wc_edition', [
-		'labels'       => cvc_labels( __( 'What’s Color?', 'claudiavalsells' ), __( 'Edition', 'claudiavalsells' ) ),
-		'description'  => __( 'One edition of What’s Color?: the statement, and the people who answered.', 'claudiavalsells' ),
+		'labels'       => cvc_labels( __( 'Editions', 'claudiavalsells' ), __( 'Edition', 'claudiavalsells' ), [
+			'name'      => __( 'What’s Color?', 'claudiavalsells' ),
+			'menu_name' => __( 'What’s Color?', 'claudiavalsells' ),
+		] ),
+		'description'  => __( 'One edition of What’s Color?: Claudia’s paragraphs in the order the page sets them between the entries, and the people who answered.', 'claudiavalsells' ),
 		'public'       => true,
 		'has_archive'  => false,
 		'rewrite'      => [ 'slug' => 'whats-color', 'with_front' => false ],

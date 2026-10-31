@@ -4,14 +4,35 @@
  * here.
  */
 
-/* Signed in, the admin bar takes the top of the window; the chrome moves down under it. */
-.admin-bar .top,
+/*
+ * Signed in, the admin bar takes the top of the window; the chrome moves down
+ * under it. Not the bar across the middle of the film, which sets its own
+ * `top` — only once it has risen to the top of the window (is-film-past).
+ */
+.admin-bar:not(.has-film) .top,
+.admin-bar.has-film.is-film-past .top,
 .admin-bar .about,
 .admin-bar .panel,
 .admin-bar .lightbox,
 .admin-bar .inq,
 .admin-bar .panel-veil {
   top: var(--wp-admin--admin-bar--height, 32px);
+}
+
+/*
+ * A page served with a panel already open — an exhibition's own address,
+ * /about/ — must still be a page without scripting: the veil stands down,
+ * the body scrolls, and About shows in the flow where the script would have
+ * raised it. site.css leaves panels visible without scripting already.
+ */
+html:not(.js) body.is-locked { overflow: visible; }
+html:not(.js) .panel-veil.is-open { opacity: 0; pointer-events: none; }
+html:not(.js) .about.is-open {
+  display: block;
+  position: static;
+  opacity: 1;
+  visibility: visible;
+  transform: none;
 }
 
 /* A plain page — the privacy notice, a not-found — reads as a column of text. */

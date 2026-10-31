@@ -34,8 +34,15 @@ function cvc_redirect_rules(): array {
 	];
 }
 
-add_action( 'template_redirect', function () {
-	$request = wp_parse_url( $_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH );
+/*
+ * On parse_request, before WordPress runs the query: by template_redirect it
+ * has already decided the old address is a 404 and sent the no-cache headers
+ * that go with one, and a permanent redirect under those headers is one no
+ * browser or proxy keeps.
+ */
+add_action( 'parse_request', function () {
+	$uri     = $_SERVER['REQUEST_URI'] ?? '/';
+	$request = wp_parse_url( $uri, PHP_URL_PATH );
 	if ( ! is_string( $request ) || '' === $request ) {
 		return;
 	}
@@ -46,7 +53,10 @@ add_action( 'template_redirect', function () {
 	foreach ( cvc_redirect_rules() as [ $pattern, $target ] ) {
 		if ( preg_match( $pattern, $path ) ) {
 			$new = preg_replace( $pattern, $target, $path );
-			wp_safe_redirect( home_url( $new ), 301 );
+			// The query string travels: a campaign's tracking on an old link
+			// still counts at the new address.
+			$query = wp_parse_url( $uri, PHP_URL_QUERY );
+			wp_safe_redirect( home_url( $new ) . ( is_string( $query ) && '' !== $query ? '?' . $query : '' ), 301 );
 			exit;
 		}
 	}

@@ -118,9 +118,11 @@ function cvc_inquiry( WP_REST_Request $request ) {
 	}
 	$body = implode( "\n", $lines ) . "\n\n" . $message . "\n\n—\n" . sprintf( 'Sent from the Colour Chart order form on %s.', home_url( '/' ) );
 
+	// The address alone: wp_mail splits a Reply-To on commas, so a name with
+	// one in it would read as a second address. The name is in the body.
 	$headers = [
 		'Content-Type: text/plain; charset=UTF-8',
-		sprintf( 'Reply-To: %s <%s>', str_replace( [ '<', '>', '"' ], '', $name ), $email ),
+		'Reply-To: ' . $email,
 	];
 	$sent = wp_mail( $to, sprintf( 'Colour chart inquiry — %s', $subject ?: $name ), $body, $headers );
 

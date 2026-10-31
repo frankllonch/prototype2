@@ -3,8 +3,13 @@
   "phpVersion": "8.3",
   "port": 8888,
   "testsPort": 8889,
-  "themes": ["./themes/claudiavalsells"],
-  "plugins": ["./plugins/claudiavalsells-content"],
+  "themes": [
+    "./themes/claudiavalsells"
+  ],
+  "plugins": [
+    "./plugins/claudiavalsells-content",
+    "https://downloads.wordpress.org/plugin/webp-uploads.zip"
+  ],
   "mappings": {
     "wp-content/import": "./import"
   },

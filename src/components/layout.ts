@@ -51,7 +51,7 @@ const MENU = [
 const CLIENT_MODULES = [
   'env', 'text-roll', 'transitions', 'controls', 'stack', 'years', 'hover-list', 'panels',
   'figures', 'lightbox', 'cursor', 'film', 'tilt', 'paging', 'views',
-  'scroll-cue', 'inquiries', 'hues', 'index',
+  'scroll-cue', 'inquiries', 'book', 'focus', 'hues', 'index',
 ] as const;
 
 /** The loading screen's five lines, set in blue on peach. */

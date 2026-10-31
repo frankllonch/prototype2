@@ -69,7 +69,11 @@ function cv_imp_attachment( ?array $ref, int $parent, string $dir ): int {
 	$folder = preg_match( '#^\d{4}/\d{2}$#', $ref['folder'] ?? '' ) ? $ref['folder'] : null;
 	$upload = wp_upload_dir( $folder );
 	wp_mkdir_p( $upload['path'] );
-	$name = wp_unique_filename( $upload['path'], sanitize_file_name( $ref['name'] ) );
+	// The old site's filename, kept as it is while nothing else has it:
+	// wp_unique_filename() would rename every file ending in -scaled or
+	// -WxH on sight, and those are the addresses the old site published.
+	$base = sanitize_file_name( $ref['name'] );
+	$name = file_exists( $upload['path'] . '/' . $base ) ? wp_unique_filename( $upload['path'], $base ) : $base;
 	$path = $upload['path'] . '/' . $name;
 	if ( ! copy( $source, $path ) ) {
 		WP_CLI::warning( "could not copy {$ref['src']}" );
@@ -158,22 +162,72 @@ function cv_imp_paragraphs( string $text ): string {
 /* ---------------------------------------------------------------- posts */
 
 /** An entry, found by its address and kind and updated, or made. */
+/**
+ * An entry the bundle names, found again on a later run.
+ *
+ * By the key the first run stamped on it, so a permalink changed in the
+ * editor does not make a second copy; by its address before that, in any
+ * state — one in the bin stays there, one made private stays private.
+ */
+function cv_imp_find( string $type, string $slug ): ?WP_Post {
+	$states = [ 'publish', 'draft', 'pending', 'private', 'future', 'trash' ];
+	$found  = get_posts( [
+		'post_type'      => $type,
+		'post_status'    => $states,
+		'posts_per_page' => 1,
+		'meta_key'       => '_cv_import_slug',
+		'meta_value'     => $slug,
+	] );
+	foreach ( [ $slug, $slug . '__trashed' ] as $name ) {
+		if ( $found ) {
+			break;
+		}
+		$found = get_posts( [ 'post_type' => $type, 'post_status' => $states, 'name' => $name, 'posts_per_page' => 1 ] );
+	}
+	return $found ? $found[0] : null;
+}
+
+/**
+ * One entry, brought in or brought up to date — or left alone.
+ *
+ * An entry edited in WordPress since the last run is kept as it is and
+ * reported, because what Claudia typed outranks what the bundle says;
+ * `wp --exec='define("CV_IMPORT_OVERWRITE", true);' eval-file …` says
+ * otherwise for a run. An entry in the bin is left there. The state an
+ * existing entry is in — published, draft, private — is hers and stays.
+ */
 function cv_imp_post( string $type, string $slug, array $args, array $meta = [] ): int {
-	$existing = get_page_by_path( $slug, OBJECT, $type );
-	$data     = array_merge( [ 'post_type' => $type, 'post_name' => $slug, 'post_status' => 'publish' ], $args );
+	global $cv_touched;
+	$existing = cv_imp_find( $type, $slug );
+	if ( $existing && 'trash' === $existing->post_status ) {
+		WP_CLI::log( "  $type/$slug: in the bin, left there" );
+		return 0;
+	}
+	if ( $existing && ! ( defined( 'CV_IMPORT_OVERWRITE' ) && CV_IMPORT_OVERWRITE ) ) {
+		$imported = (int) get_post_meta( $existing->ID, '_cv_imported_at', true );
+		$modified = (int) strtotime( $existing->post_modified_gmt . ' UTC' );
+		if ( $imported && $modified > $imported + 5 ) {
+			WP_CLI::log( "  $type/$slug: edited in WordPress since the last run, kept" );
+			return 0;
+		}
+	}
+	$data = array_merge( [ 'post_type' => $type, 'post_name' => $slug ], $args );
 	if ( $existing ) {
 		$data['ID'] = $existing->ID;
-		$id = wp_update_post( wp_slash( $data ), true );
+		$id         = wp_update_post( wp_slash( $data ), true );
 	} else {
-		$id = wp_insert_post( wp_slash( $data ), true );
+		$data['post_status'] = 'publish';
+		$id                  = wp_insert_post( wp_slash( $data ), true );
 	}
 	if ( is_wp_error( $id ) ) {
 		WP_CLI::warning( "$type/$slug: " . $id->get_error_message() );
 		return 0;
 	}
+	update_post_meta( $id, '_cv_import_slug', $slug );
 	foreach ( $meta as $key => $value ) {
 		update_post_meta( $id, $key, $value );
 	}
+	$cv_touched[] = (int) $id;
 	return (int) $id;
 }
 
@@ -191,24 +245,32 @@ function cv_imp_dates( ?string $iso ): array {
 
 $m = $cv_manifest;
 WP_CLI::log( 'Importing from ' . $cv_dir . ' (bundle of ' . ( $m['generatedAt'] ?? '?' ) . ')' );
+$cv_touched = [];
+$cv_first   = ! get_option( 'cv_imported_at' );
 
-// The site itself.
-update_option( 'blogname', 'Claudia Valsells' );
-update_option( 'blogdescription', 'Artwork, exhibitions, commissioned work and the colour chart.' );
-update_option( 'timezone_string', 'Europe/Madrid' );
-update_option( 'date_format', 'j F Y' );
-update_option( 'start_of_week', 1 );
-update_option( 'uploads_use_yearmonth_folders', 1 );
-update_option( 'permalink_structure', '/%postname%/' );
-update_option( 'show_on_front', 'posts' );
-update_option( 'default_comment_status', 'closed' );
-update_option( 'default_ping_status', 'closed' );
-// Not on a test site, and not until go-live: nobody indexes a rehearsal.
-update_option( 'blog_public', 0 );
-update_option( 'cv_lead', $m['lead'] ?? '' );
-$colours = [];
+// The site itself — on the first run only. After that these are settings
+// someone may have changed on purpose: the tagline, the note on What's
+// Color?, and above all whether search engines are kept out, which a run
+// after go-live must not switch back on.
+if ( $cv_first ) {
+	update_option( 'blogname', 'Claudia Valsells' );
+	update_option( 'blogdescription', 'Artwork, exhibitions, commissioned work and the colour chart.' );
+	update_option( 'timezone_string', 'Europe/Madrid' );
+	update_option( 'date_format', 'j F Y' );
+	update_option( 'start_of_week', 1 );
+	update_option( 'uploads_use_yearmonth_folders', 1 );
+	update_option( 'permalink_structure', '/%postname%/' );
+	update_option( 'show_on_front', 'posts' );
+	update_option( 'default_comment_status', 'closed' );
+	update_option( 'default_ping_status', 'closed' );
+	// Not on a test site, and not until go-live: nobody indexes a rehearsal.
+	update_option( 'blog_public', 0 );
+	update_option( 'cv_lead', $m['lead'] ?? '' );
+}
+// The years' colours: the ones sampled since stay, the bundle fills the rest.
+$colours = is_array( get_option( 'cv_year_colours' ) ) ? get_option( 'cv_year_colours' ) : [];
 foreach ( $m['yearColours'] ?? [] as $y ) {
-	$colours[ (int) $y['year'] ] = $y['colour'];
+	$colours[ (int) $y['year'] ] = $colours[ (int) $y['year'] ] ?? $y['colour'];
 }
 update_option( 'cv_year_colours', $colours, false );
 
@@ -250,6 +312,11 @@ foreach ( $m['works'] as $w ) {
 	$cover = cv_imp_attachment( $w['cover'], $id, $cv_dir );
 	if ( $cover ) {
 		set_post_thumbnail( $id, $cover );
+	} elseif ( ! has_post_thumbnail( $id ) ) {
+		// A painting without its picture is an empty tile in the grid: kept as
+		// a draft, where it is noticed, until the picture is there.
+		wp_update_post( [ 'ID' => $id, 'post_status' => 'draft' ] );
+		WP_CLI::warning( "{$w['slug']}: no picture in the bundle, left as a draft" );
 	}
 	update_post_meta( $id, '_cv_photo_id', cv_imp_attachment( $w['photo'] ?? null, $id, $cv_dir ) );
 	$blocks = $w['text'];
@@ -287,7 +354,9 @@ WP_CLI::log( "Commissioned: $n" );
 // Exhibitions.
 $n = 0;
 foreach ( $m['exhibitions'] as $e ) {
-	$date = sprintf( '%04d-%02d-01 12:00:00', (int) $e['year'], 6 );
+	// Midsummer of its year, but never later than now: a show listed for next
+	// year dated in the future would be scheduled rather than published.
+	$date = min( sprintf( '%04d-%02d-01 12:00:00', (int) $e['year'], 6 ), current_time( 'mysql' ) );
 	$id   = cv_imp_post( 'exhibition', $e['slug'], [
 		'post_title'    => $e['title'],
 		'menu_order'    => (int) $e['order'],
@@ -389,6 +458,14 @@ if ( $id ) {
 	wp_update_post( [ 'ID' => $id, 'post_content' => wp_slash( cv_imp_blocks( $blocks, $id, $cv_dir ) ) ] );
 	WP_CLI::log( 'Colour Chart: done' );
 }
+
+// Every entry this run touched is stamped with the time, so the next run can
+// tell an edit made in WordPress since from one of its own.
+$cv_now = time();
+foreach ( array_unique( $cv_touched ) as $cv_id ) {
+	update_post_meta( $cv_id, '_cv_imported_at', $cv_now );
+}
+update_option( 'cv_imported_at', gmdate( 'c', $cv_now ), false );
 
 wp_defer_term_counting( false );
 delete_transient( 'cvc_work_ids' );
