@@ -1,5 +1,19 @@
 import { reduceMotion } from './env.js';
 import { SCROLL_SPAN } from './stack.js';
+/*
+ * THE JOURNEY TO A YEAR — the number to change is here.
+ *
+ *   JUMP_MS   how long the page takes to travel to a chosen year. The rail
+ *             drives this scroll itself, frame by frame, rather than asking the
+ *             browser for a smooth one. That is not taste: on this page the
+ *             browser's own smooth scroll was being abandoned — stalled by the
+ *             rail's transitions, killed outright by the click — and a journey
+ *             the page runs itself cannot be. The wheel is still the reader's:
+ *             touching it mid-journey hands the scroll straight back.
+ */
+const JUMP_MS = 900;
+/** In-and-out: leaves gently, arrives gently. */
+const jumpEase = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
 /**
  * The year rail. Clicking a swatch brings that year to the middle of the screen;
  * the swatch of the year you are looking at stays marked as you scroll.
@@ -27,6 +41,41 @@ export function initYears() {
      */
     let settledAt = 0;
     grid?.addEventListener('gridchange', () => { settledAt = performance.now() + 560; });
+    /*
+     * Takes the page to a scroll position over JUMP_MS. One journey at a time —
+     * a new one cancels the last — and any wheel, touch or key from the reader
+     * cancels it too, so the page never pulls against a hand.
+     */
+    let journey = 0;
+    const abandon = () => { journey = 0; };
+    for (const kind of ['wheel', 'touchmove', 'keydown']) {
+        window.addEventListener(kind, abandon, { passive: true });
+    }
+    const travel = (to) => {
+        if (reduceMotion.matches) {
+            window.scrollTo({ top: to, behavior: 'auto' });
+            return;
+        }
+        const from = window.scrollY;
+        if (Math.abs(to - from) < 1)
+            return;
+        const id = ++journey;
+        const t0 = performance.now();
+        // Timed by the same clock throughout, never by the frame's own timestamp:
+        // one clock cannot disagree with itself, and a frame stamp from another
+        // origin would make the first step read as the last and jump to the end.
+        const step = () => {
+            if (journey !== id)
+                return;
+            const t = Math.min(1, (performance.now() - t0) / JUMP_MS);
+            window.scrollTo({ top: from + (to - from) * jumpEase(t), behavior: 'auto' });
+            if (t < 1)
+                requestAnimationFrame(step);
+            else
+                journey = 0;
+        };
+        requestAnimationFrame(step);
+    };
     const afterRelayout = (run) => {
         const wait = settledAt - performance.now();
         if (wait > 0)
@@ -97,9 +146,7 @@ export function initYears() {
              * went and a second click was needed. Held until the tiles settle.
              */
             jumping = true;
-            const go = () => afterRelayout(() => {
-                window.scrollTo({ top: centreOn(target), behavior: reduceMotion.matches ? 'auto' : 'smooth' });
-            });
+            const go = () => afterRelayout(() => travel(centreOn(target)));
             go();
             /*
              * While the pile is still folded, the newest rows are behind it and

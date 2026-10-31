@@ -30,18 +30,9 @@ export function initCursor() {
             ? requestAnimationFrame(tick)
             : 0;
     };
-    document.addEventListener('pointermove', (event) => {
-        if (event.pointerType !== 'mouse')
-            return;
-        targetX = event.clientX;
-        targetY = event.clientY;
-        // Start where the pointer already is, or the label swoops in from 0,0.
-        if (!placed) {
-            placed = true;
-            x = targetX;
-            y = targetY;
-        }
-        const tile = event.target?.closest('.tile');
+    /** Decide what the pointer is over, given the element under it. */
+    const refresh = (target) => {
+        const tile = target?.closest('.tile');
         // A tile piled up in the opening animation, or dimmed by a year filter, is
         // not really under the pointer.
         const usable = tile && !tile.closest('.is-stacked') && !tile.classList.contains('is-dimmed')
@@ -66,7 +57,33 @@ export function initCursor() {
         }
         if (!frame)
             frame = requestAnimationFrame(tick);
+    };
+    document.addEventListener('pointermove', (event) => {
+        if (event.pointerType !== 'mouse')
+            return;
+        targetX = event.clientX;
+        targetY = event.clientY;
+        // Start where the pointer already is, or the label swoops in from 0,0.
+        if (!placed) {
+            placed = true;
+            x = targetX;
+            y = targetY;
+        }
+        refresh(event.target);
     }, { passive: true });
+    // The page can move under a pointer that has not: a scroll carries a tile
+    // away, or gathers the grid back into the pile, and the label would stay on
+    // as the name of nothing. Look again at what is under the pointer now.
+    const relook = () => { if (placed)
+        refresh(document.elementFromPoint(targetX, targetY)); };
+    window.addEventListener('scroll', relook, { passive: true });
+    document.addEventListener('stackrestart', relook);
+    // Coming back to the gallery restores it from the cache exactly as it was
+    // left — with the name of the painting just clicked still on the pointer,
+    // which then blinked off on the first movement. Arrive with it off.
+    const clear = () => { active = false; cursor.classList.remove('is-visible'); };
+    window.addEventListener('pageshow', clear);
+    window.addEventListener('pagehide', clear);
     document.addEventListener('pointerleave', () => {
         active = false;
         cursor.classList.remove('is-visible');

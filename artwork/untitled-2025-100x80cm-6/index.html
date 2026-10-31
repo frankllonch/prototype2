@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" style="--hues:11;--hue-0:#18817a;--neg-0:rgb(231, 126, 133);--hue-1:#b25f2a;--neg-1:rgb(77, 160, 213);--hue-2:#0f8557;--neg-2:rgb(240, 122, 168);--hue-3:#1f8440;--neg-3:rgb(224, 123, 191);--hue-4:#087e9c;--neg-4:rgb(247, 129, 99);--hue-5:#936e1f;--neg-5:rgb(108, 145, 224);--hue-6:#cf4230;--neg-6:rgb(48, 189, 207);--hue-7:#cf303a;--neg-7:rgb(48, 207, 197);--hue-8:#747c1d;--neg-8:rgb(139, 131, 226);--hue-9:#092cf6;--neg-9:rgb(246, 211, 9);--hue-10:#cf3c30;--neg-10:rgb(48, 195, 207)">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -15,13 +15,19 @@
 <link rel="modulepreload" href="/prototype2/js/years.js" />
 <link rel="modulepreload" href="/prototype2/js/hover-list.js" />
 <link rel="modulepreload" href="/prototype2/js/panels.js" />
-<link rel="modulepreload" href="/prototype2/js/panel-scroll.js" />
 <link rel="modulepreload" href="/prototype2/js/figures.js" />
 <link rel="modulepreload" href="/prototype2/js/lightbox.js" />
 <link rel="modulepreload" href="/prototype2/js/cursor.js" />
 <link rel="modulepreload" href="/prototype2/js/film.js" />
 <link rel="modulepreload" href="/prototype2/js/tilt.js" />
 <link rel="modulepreload" href="/prototype2/js/paging.js" />
+<link rel="modulepreload" href="/prototype2/js/views.js" />
+<link rel="modulepreload" href="/prototype2/js/scroll-cue.js" />
+<link rel="modulepreload" href="/prototype2/js/inquiries.js" />
+<link rel="modulepreload" href="/prototype2/js/book.js" />
+<link rel="modulepreload" href="/prototype2/js/focus.js" />
+<link rel="modulepreload" href="/prototype2/js/hues.js" />
+<link rel="modulepreload" href="/prototype2/js/current.js" />
 <link rel="modulepreload" href="/prototype2/js/index.js" />
 <script>document.documentElement.classList.add('js');
 // The loading screen belongs to arriving at the site, not to each page of it.
@@ -40,39 +46,41 @@ try { if (sessionStorage.getItem('cv-seen')) document.documentElement.classList.
     <a class="top-soon" href="/prototype2/#whats-color"  data-roll>What&rsquo;s Color?</a>
     <nav class="menu" aria-label="Primary">
       <a
-            href="/prototype2/#about"
-            data-panel-open="about"
-            
-            data-roll
-          >About</a><a
-            href="/prototype2/artwork/"
-            
-            aria-current="page"
-            data-roll
-          >Artwork</a><a
-            href="/prototype2/commissioned/"
+            href="/prototype2/color-chart/"
             
             
             data-roll
-          >Commissioned</a><a
+          >Color Chart</a><a
             href="/prototype2/exhibitions/"
             
             
             data-roll
           >Exhibitions</a><a
-            href="/prototype2/color-chart/"
+            href="/prototype2/commissioned/"
             
             
             data-roll
-          >Color Chart</a>
+          >Commissioned</a><a
+            href="/prototype2/artwork/"
+            
+            aria-current="page"
+            data-roll
+          >Artwork</a><a
+            href="/prototype2/#about"
+            data-panel-open="about"
+            
+            data-roll
+          >About</a>
     </nav>
   </header>
 
 <main id="main"><article class="detail">
       <a class="detail-back" href="/prototype2/artwork/">← Artwork</a>
-      <figure class="detail-plate" data-tilt>
-            <span class="detail-plate-inner">
-              <picture class="">
+      <div class="detail-stage">
+    <figure class="detail-plate" data-tilt>
+      <span class="detail-plate-inner">
+        <span class="detail-view is-shown" data-view="0" data-plate>
+          <picture class="">
       <source type="image/avif" srcset="/prototype2/media/1d36d9c0b664ac82c554a43ec-400.avif 400w" sizes="(max-width: 900px) 92vw, 46vw" />
       <source type="image/webp" srcset="/prototype2/media/1d36d9c0b664ac82c554a43ec-400.webp 400w" sizes="(max-width: 900px) 92vw, 46vw" />
       <img
@@ -85,119 +93,364 @@ try { if (sessionStorage.getItem('cv-seen')) document.documentElement.classList.
         fetchpriority="high"
       />
     </picture>
-            </span>
-          </figure>
+        </span><span class="detail-view" data-view="1">
+          <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/1d36d9c0b664ac82-400.avif 400w, /prototype2/media/1d36d9c0b664ac82-800.avif 800w, /prototype2/media/1d36d9c0b664ac82-1600.avif 1600w" sizes="(max-width: 900px) 92vw, 46vw" />
+      <source type="image/webp" srcset="/prototype2/media/1d36d9c0b664ac82-400.webp 400w, /prototype2/media/1d36d9c0b664ac82-800.webp 800w, /prototype2/media/1d36d9c0b664ac82-1600.webp 1600w" sizes="(max-width: 900px) 92vw, 46vw" />
+      <img
+        src="/prototype2/media/1d36d9c0b664ac82-1600.jpg"
+        alt="Photograph of Untitled, uncropped"
+        width="1707"
+        height="2560"
+        style="aspect-ratio:1707 / 2560"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+        </span>
+      </span>
+    </figure>
+    <div class="detail-thumbs" role="group" aria-label="Pictures of this work">
+          <button
+            type="button"
+            class="detail-thumb is-shown"
+            data-show="0"
+            aria-pressed="true"
+            aria-label="Untitled — Acrylic on canvas, 100 × 80 cm, 2025. Painting by Claudia Valsells."
+          ><picture class="">
+      <source type="image/avif" srcset="/prototype2/media/1d36d9c0b664ac82c554a43ec-400.avif 400w" sizes="72px" />
+      <source type="image/webp" srcset="/prototype2/media/1d36d9c0b664ac82c554a43ec-400.webp 400w" sizes="72px" />
+      <img
+        src="/prototype2/media/1d36d9c0b664ac82c554a43ec-400.jpg"
+        alt=""
+        width="683"
+        height="813"
+        style="aspect-ratio:683 / 813"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </picture></button><button
+            type="button"
+            class="detail-thumb"
+            data-show="1"
+            aria-pressed="false"
+            aria-label="Photograph of Untitled, uncropped"
+          ><picture class="">
+      <source type="image/avif" srcset="/prototype2/media/1d36d9c0b664ac82-400.avif 400w, /prototype2/media/1d36d9c0b664ac82-800.avif 800w, /prototype2/media/1d36d9c0b664ac82-1600.avif 1600w" sizes="72px" />
+      <source type="image/webp" srcset="/prototype2/media/1d36d9c0b664ac82-400.webp 400w, /prototype2/media/1d36d9c0b664ac82-800.webp 800w, /prototype2/media/1d36d9c0b664ac82-1600.webp 1600w" sizes="72px" />
+      <img
+        src="/prototype2/media/1d36d9c0b664ac82-1600.jpg"
+        alt=""
+        width="1707"
+        height="2560"
+        style="aspect-ratio:1707 / 2560"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </picture></button>
+        </div>
+  </div>
       <div class="detail-caption">
-        <h1 class="detail-title">Untitled</h1>
-        <p>100 × 80 cm</p><p>Acrylic on canvas</p><p>2025</p><p>M597</p>
+        <div class="detail-head">
+          <h1 class="detail-title">Untitled</h1>
+          <p class="detail-medium">Acrylic on canvas</p>
+        </div>
+        <div class="detail-facts">
+          <p class="detail-year">2025</p>
+          <p>100 × 80 cm</p>
+        </div>
+        <p class="detail-index"><b>26</b> of 181</p>
       </div>
       <nav class="detail-pager" aria-label="Between works">
-        <a href="/prototype2/artwork/untitled-2025-110-x-150cm/" rel="prev">← Previous</a>
-        <a href="/prototype2/artwork/untitled-2025-70x60cm-7/" rel="next">Next →</a>
+        <a href="/prototype2/artwork/untitled-2025-110-x-150cm/" rel="prev" data-replace>← Previous</a>
+        <a href="/prototype2/artwork/untitled-2025-70x60cm-7/" rel="next" data-replace>Next →</a>
       </nav>
     </article></main>
+
 
 
 <div class="cursor" data-cursor aria-hidden="true"><span class="cursor-label"></span></div>
 <div class="panel-veil" data-panel-veil></div>
 <section class="about" id="about" data-panel aria-label="About">
     <a class="about-close" href="#" data-panel-close>Close</a>
-
-    <div class="about-colour" aria-hidden="true"></div>
-    <div class="about-lines">
-      <p>CLAUDIA VALSELLS</p><p>1969</p><p>Alzueta Gallery</p><p>Barcelona, Spain</p><p>© All Rights Reserved</p>
-      <span class="about-more" aria-hidden="true">Scroll</span>
-    </div>
-
-    <div class="about-body">
-          <div class="about-head">
-            <div class="about-heading"><p><span><b>Claudia Valsells (1969) Barcelona, Spain<span> </span></b></span></p></div>
-            <div class="about-lead"> <p><span>Claudia is an artist specialized in color. A multidisciplinary creator, she discovered painting through her own instinct for color. Her formation as a mural painter gave her a professional opportunity, and her passion in color her own artistic language.<span> </span></span></p></div>
-          </div>
-          <div class="about-inner">
-            <div class="about-text">
-              <div class="about-prose"> <p><span>Based on her reflections as an artist, her experience in color prediction and mural painting, brings to all her work, with color as a primary tool, <em class="ink-accent">an identifiable language</em>.</span></p>
- <p><span>She began her artistic career painting and soon realized that she had <em class="ink-accent">a natural ability with color</em>. In her own words, ‘All I have done throughout my career has been to cultivate this natural gift.<span> </span>First as a mural painter, then designing color charts and prescribing color and finally as an artist’.</span></p>
- <p><span>The tireless search for <em class="ink-accent">the reason of color and its form</em> has obsessed artists throughout history, from the very creation of pictorial expression. Claudia Valsells knows about this and she aims to portray this into her artwork.</span></p>
- <p><span>In her beginnings as a colorist she worked on commissions, for architects, and on projects of different scales advising and prescribing color. Soon she founded her own Studio, under the name of ‘<em class="ink-accent">Arts&Claus</em>’, in allegory to the ‘Arts&Craft’ movement where she always found a lot of inspiration. She specialized in mural painting, color applied to architecture, and interior design for 20 years on projects in Spain and abroad. Her role was to convey the value of color and its texture in the decoration of interior spaces working closely with professionals in the fields of art, design, and architecture. It was in this context, working close with architects and designers,<span> </span>that she found out the communication between professionals was based by the painting companies, relegated the work of the colorist to the background due to ignorance or fear clients to make a mistake or be branded as eccentric. It was then when Claudia Valsells created a specific chromatic selection, <em class="ink-accent">a COLOUR CHART, with more than 200 references</em>, which have been used as color comunication tools by Spain’s best architects.</span></p>
- <p><span>Her work has two very defined characteristics: on the one hand her chromatic instinct, a gift of colors and on the other her ability to select, group and interact colors creating <em class="ink-accent">a chromatic language of her own</em>.</span></p>
- <p><span>The common denominator of all her work is color, and her obsession with <em class="ink-accent">the way colors interact with each other</em>. The interaction of color occurs when two or more colors are combined in a composition. The combination of colors varies its own appearance and it is in these moments when Claudia decides to put one color next to another in order to influence its perception and achieve the desired visual experience. For Claudia the interaction of color is a key concept in her work as an artist and as a colorist and allows her to experiment and explore an ever new visual and emotional perception of colors in each work and commission.</span></p>
- <p><span>Her most personal and ongoing project emerged from the pandemic in 2020 where she launched a <em class="ink-accent">‘Color glossary’</em> through the question ‘What’s color?’ to people of thought, philosophers, historians, thinkers, writers, and other artists, in order to think of color in a broader context. She wanted to discover the notion of color as it is thought of by others. She opened a dialogue to grasp new ways of seeing colors, other perspectives, but mostly to better understand the reason of color and its form, and this way to understand better human being.</span></p>
- <p><span>This project has been represented in three solo shows, one in Barcelona ( 2020) and the other two in Madrid ( 2021, 2022) since then<span> </span></span></p>
- <p><span>Currently she combines her activity as an artist with <em class="ink-accent">colour prescription in the areas of design and architecture</em>.<span> </span></span></p>
- <p><span>Her work is represented, in Spain and abroad, by the Barcelona gallery owner <em class="ink-accent">Miquel Alzueta</em>. <a href="http://alzuetagallery.com">ALZUETA GALLERY </a></span></p></div>
-            </div>
-            <div class="about-figures" data-about-figures>
-              <div class="about-sticky">
-                <figure class="about-figure is-current">
-                      <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/0d2c1af6977621e4-400.avif 400w, /prototype2/media/0d2c1af6977621e4-800.avif 800w" sizes="(max-width: 899px) 88vw, 38vw" />
-      <source type="image/webp" srcset="/prototype2/media/0d2c1af6977621e4-400.webp 400w, /prototype2/media/0d2c1af6977621e4-800.webp 800w" sizes="(max-width: 899px) 88vw, 38vw" />
+    <div class="about-sheet">
+      <div class="about-card-stage" data-tilt>
+      <div class="about-card" data-tilt-inner>
+        <p class="about-name">Claudia Valsells</p>
+        <p class="about-born">Barcelona<br />1969</p>
+        <address class="about-contact">
+          <a href="tel:+34609769186">+34 609 76 91 86</a>
+          <a href="mailto:editorial@alzuetagallery.com">editorial@alzuetagallery.com</a><a href="mailto:claudia@claudiacolor.com">claudia@claudiacolor.com</a>
+        </address>
+      </div>
+      </div>
+      <div class="about-text">
+        <p class="about-lead">Claudia is an artist specialized in color. A multidisciplinary creator, she discovered painting through her own instinct for color. Her formation as a mural painter gave her a professional opportunity, and her passion in color her own artistic language.</p><p>Based on her reflections as an artist, her experience in color prediction and mural painting, brings to all her work, with color as a primary tool, an identifiable language.</p><p>She began her artistic career painting and soon realized that she had a natural ability with color. In her own words, ‘All I have done throughout my career has been to cultivate this natural gift. First as a mural painter, then designing color charts and prescribing color and finally as an artist’.</p><figure class="about-figure">
+        <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-1-800.avif 800w, /prototype2/about/about-1-1600.avif 1600w, /prototype2/about/about-1-2692.avif 2692w" sizes="(max-width: 899px) 92vw, 79vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-1-800.webp 800w, /prototype2/about/about-1-1600.webp 1600w, /prototype2/about/about-1-2692.webp 2692w" sizes="(max-width: 899px) 92vw, 79vw" />
       <img
-        src="/prototype2/media/0d2c1af6977621e4-800.jpg"
-        alt=""
-        width="1140"
-        height="1710"
-        style="aspect-ratio:1140 / 1710"
-        loading="eager"
-        fetchpriority="high"
-      />
-    </picture>
-                    </figure><figure class="about-figure">
-                      <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/790d2d2760032466-400.avif 400w, /prototype2/media/790d2d2760032466-800.avif 800w, /prototype2/media/790d2d2760032466-1600.avif 1600w" sizes="(max-width: 899px) 88vw, 38vw" />
-      <source type="image/webp" srcset="/prototype2/media/790d2d2760032466-400.webp 400w, /prototype2/media/790d2d2760032466-800.webp 800w, /prototype2/media/790d2d2760032466-1600.webp 1600w" sizes="(max-width: 899px) 88vw, 38vw" />
-      <img
-        src="/prototype2/media/790d2d2760032466-1600.jpg"
-        alt=""
-        width="2560"
-        height="1740"
-        style="aspect-ratio:2560 / 1740"
+        src="/prototype2/about/about-1-2692.jpg"
+        alt="Claudia Valsells, seen from behind, painting fields of colour on a studio wall with a pot of paint in hand"
+        width="2692"
+        height="1830"
+        style="aspect-ratio:2692 / 1830"
         loading="lazy"
         decoding="async"
       />
     </picture>
-                    </figure>
-              </div>
-            </div>
-          </div>
-          <div class="about-tail"> <p>PRIVATE COLLECTIONS</p>
- <div> <div> <div> <div> <p>Fundació Vilacases (Barcelona)</p> <p>Fundació Banc Sabadell (Barcelona)</p> <p>Collection Hayot (France)</p> <p>Martinez Collection (Mexico-US)</p> <p>Niederberghaus Collection (Germany)</p> <p>Collection Richard (France)</p> <p>Smith Collection (Wyoming, US)</p> <p>EXHIBITIONS & ART FAIRS</p> <p>_2026 June_July, Palau de Casavells, ‘<i>Shift Towards Coincidnce’, </i>Group exhibition</p> <p>_2026 June_July, New York, <em>‘Abstract paintings’</em>, Scroll Ny , Group exhibition</p> <p>_2026 May _ June, Paris, ‘<em>Moll de l’os’ peintures 2026</em>, Alzueta Gallery Paris</p> <p>_2026 February, Zona Maco CDMX Mexico with Alzueta Gallery</p> <p>_2025 October, Estampa contemporary art fair, Madrid with Alzueta Gallery</p> <p>-2025 April, <em>‘Míra’m no deixis de mirar-me’</em> Solo show at Palau de Casavells with Alzueta Gallery</p> <p>-2025 March, ‘Marco, límite y lugar’, Madrid with Alzueta Gallery, Group Exhibition</p> <p>-2024 November, Luxemburg art week with Alzueta Gallery</p> </div> <p>-2024 July, Gallery_br, Tetbury, UK, ‘Painting as a gift from color’, solo show</p> <div> <p>-2024 February, ZONA MACO with Alzueta Gallery</p> <p>-2024 January, Alzueta Gallery Séneca, ‘ What abstract art means to me? ‘ Group exhibition</p> <p>-2023 November, Alzueta Gallery Madrid, «La terre est bleue comme une orange», Group exhibition</p> <p>-2023 September, Alzueta Gallery Turó, <em>‘Transitions’ </em>solo show</p> </div> <p>-2023 February, Art Rotterdam, Contemporary Art Fair</p> <div> <p>-2021 December, Alzueta Gallery Madrid, ‘Color Dialogues’ Solo Exhibition</p> <p>-2021 December, Espacio Pavillion, Madrid, 2nd Edition ‘What’s color?’</p> <p>-2021 October, Alzueta Gallery, Madrid, Estampa Contemporary Art Fair</p> <p>-2021 September, Alzueta Gallery, Paris, Art Paris Fair</p> </div> </div> </div> </div>
- <p>-2021 June, Alzueta Gallery, Madrid, Art Madrid Feria</p>
- <p>-2020 December, Alzueta Gallery, Barcelona, Solo Exhibition, ‘What’s color?’</p>
- <p><span>-2020 February, Alzueta Gallery, Barcelona, Aoo&Claudia Valsells ‘Silla8’ show</span></p>
- <p><span>-2019 November, Solo Exhibition, Almost Perfect, Tokyo, Japan</span></p>
- <p><span>-2019 October, Art Élysées-Art & Design, París.</span></p>
- <p><span>-2019 April, Art Paris Grand Palais, París.</span></p>
- <p><span>-2019 April, Almoneda, Ifema feria de Madrid, Palau de Casavells, Madrid.</span></p>
- <p><span>-2019 March, AFF Art Fair Brussels</span></p>
- <p><span>-2019 March, Art Madrid, Madrid</span></p>
- <p><span>-2018 November, T10 at Alzueta Gallery, Barcelona</span></p>
- <p><span>-2018 November, Palau de Casavells, solo exhibition, Girona, Spain</span></p>
- <p><span>-2018 Art fair Hamburg</span></p>
- <p><span>-2018 Art Elysees París</span></p>
- <p><span>-2018 Art fair Stockholm</span></p>
- <p><span>-2018 Contemporary Art Fair Just LX, Portugal</span></p>
- <p><span>-2018 Almoneda Antik Passion, Madrid</span></p>
- <p><span>-2018 Art Fair Grand Palais, París</span></p>
- <p><span>-2018 Eurantica art fair, Brussels</span></p>
- <p><span>-2018 Art Madrid, Madrid</span></p>
- <p><span>-2017/07 Uterqüe Art Essays AW2017</span></p>
- <p><span>-2017/03 Art París, International Art Fair, París</span></p>
- <p><span>-2017/02 Alzueta Gallery «Color y forma» solo exhibition, Barcelona</span></p>
- <p><span>-2017/02 Art Madrid, Madrid</span></p>
- <p><span>-2016/12 <a href="http://www.axelpairon-gallery.com">Galeria Axel Pairon</a> exposición colectiva.</span></p>
- <p><span>-2016/11 Antica Namur, Belgium</span></p>
- <p><span>-2016/10 Art Élysées, International Art Fair, París</span></p>
- <p><span>-2016/06 Scope Basel, Basel art fair</span></p>
- <p><span>-2007 <a href="http://www.palaudecasavells.com/" target="_blank" rel="noopener noreferrer">Palau de Casavells</a>, Baix Empordà, Solo exhibition , May 2007</span></p>
- <p><span>-2005 <a href="http://galeriamiquelalzueta.es/home/" target="_blank" rel="noopener noreferrer">Galeria Miquel Alzueta</a>, Barcelona, Solo exhibition, March 2005 – «Expresions de Mur». Abstract Informalism paintings.</span></p>
- <p><span>-2000/04 <a href="http://www.vincon.com/es/" target="_blank" rel="noopener noreferrer">Sala Vinçon</a>, Barcelona, Solo exhibition, Abril 2000 «El color no existe, existe la luz»/ «The color doesn’t exist, just the light». Individual exhibition where the interaction of the public with the installation was essential. I tried to demonstrate through personal experimentation that color only exists if there is light.<br> </span></p>
- <p>INQUIRES PLEASE CONTACT TO: editorial@alzuetagallery.com</p>
- <p><span>images:</span></p>
- <p><span>© yosigo_yosigo</span></p>
- <p><span>© Martina Domenech ( below)</span></p></div>
-        </div>
+      </figure><p>The tireless search for the reason of color and its form has obsessed artists throughout history, from the very creation of pictorial expression. Claudia Valsells knows about this and she aims to portray this into her artwork.</p><figure class="about-figure">
+        <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-2-800.avif 800w, /prototype2/about/about-2-1600.avif 1600w, /prototype2/about/about-2-2692.avif 2692w" sizes="(max-width: 899px) 92vw, 79vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-2-800.webp 800w, /prototype2/about/about-2-1600.webp 1600w, /prototype2/about/about-2-2692.webp 2692w" sizes="(max-width: 899px) 92vw, 79vw" />
+      <img
+        src="/prototype2/about/about-2-2692.jpg"
+        alt="Claudia Valsells painting a large canvas in her studio, pots of colour on the table beside her"
+        width="2692"
+        height="1830"
+        style="aspect-ratio:2692 / 1830"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+      </figure><p>In her beginnings as a colorist she worked on commissions, for architects, and on projects of different scales advising and prescribing color. Soon she founded her own Studio, under the name of ‘Arts&amp;Claus’, in allegory to the ‘Arts&amp;Craft’ movement where she always found a lot of inspiration. She specialized in mural painting, color applied to architecture, and interior design for 20 years on projects in Spain and abroad. Her role was to convey the value of color and its texture in the decoration of interior spaces working closely with professionals in the fields of art, design, and architecture. It was in this context, working close with architects and designers, that she found out the communication between professionals was based by the painting companies, relegated the work of the colorist to the background due to ignorance or fear clients to make a mistake or be branded as eccentric. It was then when Claudia Valsells created a specific chromatic selection, a COLOUR CHART, with more than 200 references, which have been used as color communication tools by Spain’s best architects.</p><p>Her work has two very defined characteristics: on the one hand her chromatic instinct, a gift of colors and on the other her ability to select, group and interact colors creating a chromatic language of her own.</p>
+      </div>
+      <div class="about-record">
+        <section class="about-shows">
+              <h3 class="about-label">Solo exhibitions</h3>
+              <ul class="about-show-list">
+                <li class="about-show">
+                      <span class="about-show-when">2026 May - June</span>
+                      <span class="about-show-title">‘Moll de l’os’ peintures 2026</span>
+                      <span class="about-show-line">Alzueta Gallery</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2025 April</span>
+                      <span class="about-show-title">‘Mira’m no deixis de mirar-me’</span>
+                      <span class="about-show-line">Solo show with Alzueta Gallery</span><span class="about-show-line">at Palau de Casavells</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2024 July</span>
+                      <span class="about-show-title">Painting as a gift from color</span>
+                      <span class="about-show-line">Solo show</span><span class="about-show-line">Gallery_br, Tetbury, UK</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2023 September</span>
+                      <span class="about-show-title">Transitions</span>
+                      <span class="about-show-line">Solo show</span><span class="about-show-line">Alzueta Gallery Turó</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2021 December</span>
+                      <span class="about-show-title">Color Dialogues</span>
+                      <span class="about-show-line">Solo exhibition</span><span class="about-show-line">Alzueta Gallery Madrid</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2021 December</span>
+                      <span class="about-show-title">What’s color?</span>
+                      <span class="about-show-line">2n edition</span><span class="about-show-line">Espacio Pavillion, Madrid</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2020 December</span>
+                      <span class="about-show-title">What’s color?</span>
+                      <span class="about-show-line">Solo Exhibition</span><span class="about-show-line">Alzueta Gallery, Barcelona</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2020 February</span>
+                      <span class="about-show-title">Aoo&amp;Claudia Valsells</span>
+                      <span class="about-show-line">Silla8 show</span><span class="about-show-line">Alzueta Gallery, Barcelona</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2019 November</span>
+                      <span class="about-show-title">Almost Perfect</span>
+                      <span class="about-show-line">Solo Exhibition</span><span class="about-show-line">Tokyo, Japan</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2019 October</span>
+                      <span class="about-show-title">Art Élysées-Art &amp; Design</span>
+                      <span class="about-show-line">Solo Exhibition</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2018 November</span>
+                      <span class="about-show-title">Solo exhibition</span>
+                      <span class="about-show-line">Palau de Casavells,</span><span class="about-show-line">Girona, Spain</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2017 February</span>
+                      <span class="about-show-title">Color y forma</span>
+                      <span class="about-show-line">Solo exhibition</span><span class="about-show-line">Alzueta Gallery</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2007 May</span>
+                      <span class="about-show-title">Solo Exhibition</span>
+                      <span class="about-show-line">Palau de Casavells,</span><span class="about-show-line">Baix Empordà</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2005 March</span>
+                      <span class="about-show-title">Expresions de mur. Abstract Informalism Paintings.</span>
+                      <span class="about-show-line">Solo exhibition,</span><span class="about-show-line">Galeria Miquel Alzueta, Barcelona</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2000 April</span>
+                      <span class="about-show-title">El color no existe, existe la luz</span>
+                      <span class="about-show-line">The color doesn’t exist, just the light</span>
+                    </li>
+              </ul>
+            </section><section class="about-shows">
+              <h3 class="about-label">Group exhibitions</h3>
+              <ul class="about-show-list">
+                <li class="about-show">
+                      <span class="about-show-when">2026 June - July</span>
+                      <span class="about-show-title">‘Shift Towards Coincidence’</span>
+                      <span class="about-show-line">Group exhibition</span><span class="about-show-line">Palau de Casavells</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2026 June - July</span>
+                      <span class="about-show-title">Abstract Paintings</span>
+                      <span class="about-show-line">Group Exhibition</span><span class="about-show-line">Scroll NY, New York</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2025 March</span>
+                      <span class="about-show-title">‘Marco, límite y lugar’</span>
+                      <span class="about-show-line">Group Exhibition,</span><span class="about-show-line">with Alzueta Gallery</span><span class="about-show-line">Madrid</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2024 January</span>
+                      <span class="about-show-title">What abstract art means to me?</span>
+                      <span class="about-show-line">Group exhibition</span><span class="about-show-line">Alzueta Gallery, Séneca</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2023 November</span>
+                      <span class="about-show-title">La terre est bleu comme une orange</span>
+                      <span class="about-show-line">Group exhibition</span><span class="about-show-line">Alzueta Gallery Madrid</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2018 November</span>
+                      <span class="about-show-title">T10 at Alzueta Gallery</span>
+                      <span class="about-show-line">Barcelona</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2016 December</span>
+                      <span class="about-show-title">Exposición colectiva</span>
+                      <span class="about-show-line">Galeria Axel Pairon</span>
+                    </li>
+              </ul>
+            </section><section class="about-shows is-wide">
+              <h3 class="about-label">Art fairs</h3>
+              <ul class="about-show-list">
+                <li class="about-show">
+                      <span class="about-show-when">2026 February</span>
+                      <span class="about-show-title">Zona Maco CDMX</span>
+                      <span class="about-show-line">with Alzueta Gallery</span><span class="about-show-line">Mexico</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2025 October</span>
+                      <span class="about-show-title">Estampa contemporary art fair</span>
+                      <span class="about-show-line">with Alzueta Gallery</span><span class="about-show-line">Madrid</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2024 February</span>
+                      <span class="about-show-title">ZONA MACO</span>
+                      <span class="about-show-line">with Alzueta Gallery</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2024 November</span>
+                      <span class="about-show-title">Luxemburg art week</span>
+                      <span class="about-show-line">with Alzueta Gallery</span><span class="about-show-line">Luxemburg</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2023 February</span>
+                      <span class="about-show-title">Contemporary Art Fair</span>
+                      <span class="about-show-line">Art Rotterdam</span><span class="about-show-line">Rotterdam</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2021 October</span>
+                      <span class="about-show-title">Estampa Contemporary Art Fair</span>
+                      <span class="about-show-line">Alzueta Gallery, Madrid</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2021 September</span>
+                      <span class="about-show-title">Art Paris Fair</span>
+                      <span class="about-show-line">Alzueta Gallery, Paris</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2021 June</span>
+                      <span class="about-show-title">Art Madrid Feria</span>
+                      <span class="about-show-line">Alzueta Gallery, Madrid</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2019 March</span>
+                      <span class="about-show-title">AFF Art Fair</span>
+                      <span class="about-show-line">Brussels</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2019 March</span>
+                      <span class="about-show-title">Art Madrid</span>
+                      <span class="about-show-line">Madrid</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2018</span>
+                      <span class="about-show-title">Art fair</span>
+                      <span class="about-show-line">Hamburg</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2018</span>
+                      <span class="about-show-title">Art Elysees</span>
+                      <span class="about-show-line">París</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2018</span>
+                      <span class="about-show-title">Art Fair</span>
+                      <span class="about-show-line">Stockholm</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2018</span>
+                      <span class="about-show-title">Contemporary Art Fair Just LX</span>
+                      <span class="about-show-line">Portugal</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2018</span>
+                      <span class="about-show-title">Almoneda Antik Passion</span>
+                      <span class="about-show-line">Madrid</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2019 April</span>
+                      <span class="about-show-title">Almoneda, Ifema feria de Madrid</span>
+                      <span class="about-show-line">Palau de Casavells, Madrid</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2018</span>
+                      <span class="about-show-title">Art Fair Grand Palais</span>
+                      <span class="about-show-line">Paris</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2018</span>
+                      <span class="about-show-title">Eurantica Art Fair</span>
+                      <span class="about-show-line">Brussels</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2019 April</span>
+                      <span class="about-show-title">Art Paris Grand Palais</span>
+                      <span class="about-show-line">París</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2018</span>
+                      <span class="about-show-title">Art Madrid</span>
+                      <span class="about-show-line">Madrid</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2017 July</span>
+                      <span class="about-show-title">Uterqüe Art Essays</span>
+                      <span class="about-show-line">AW2017</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2017 March</span>
+                      <span class="about-show-title">International Art Fair, Art Paris</span>
+                      <span class="about-show-line">París</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2017 February</span>
+                      <span class="about-show-title">Art Madrid</span>
+                      <span class="about-show-line">Madrid</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2016 November</span>
+                      <span class="about-show-title">Antica Namur</span>
+                      <span class="about-show-line">Belgium</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2016 October</span>
+                      <span class="about-show-title">Art Élysées, International Art Fair</span>
+                      <span class="about-show-line">París</span>
+                    </li><li class="about-show">
+                      <span class="about-show-when">2016 June</span>
+                      <span class="about-show-title">Scope Basel</span>
+                      <span class="about-show-line">Basel art fair</span>
+                    </li>
+              </ul>
+            </section>
+      </div>
+      <section class="about-collections">
+        <h3 class="about-label">Private collections</h3>
+        <ul class="about-collection-list">
+          <li class="about-collection">
+                <span class="about-collection-name">Fundació Vilacases</span>
+                <span class="about-collection-place">Barcelona</span>
+              </li><li class="about-collection">
+                <span class="about-collection-name">Fundació Banc Sabadell</span>
+                <span class="about-collection-place">Barcelona</span>
+              </li><li class="about-collection">
+                <span class="about-collection-name">Collection Hayot</span>
+                <span class="about-collection-place">France</span>
+              </li><li class="about-collection">
+                <span class="about-collection-name">Niederberghaus Collection</span>
+                <span class="about-collection-place">Mexico - US</span>
+              </li><li class="about-collection">
+                <span class="about-collection-name">Collection Richard</span>
+                <span class="about-collection-place">France</span>
+              </li><li class="about-collection">
+                <span class="about-collection-name">Smith Collection</span>
+                <span class="about-collection-place">Wyoming</span>
+              </li>
+        </ul>
+      </section>
+      <p class="about-foot"><b>Claudia Valsells</b> © All Rights Reserved</p>
+    </div>
   </section>
 <div class="lightbox" data-lightbox data-available-label="Available" hidden>
     <div class="lightbox-veil" data-lightbox-veil></div>

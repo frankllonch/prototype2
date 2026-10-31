@@ -17,7 +17,7 @@ export const OUT_MS = 420;
 /** Never hold a navigation longer than this, whatever the timer does. */
 const LEAVE_GUARD = 700;
 /** If the navigation has not happened by now, assume it never will. */
-const ABANDONED = 6000;
+export const ABANDONED = 6000;
 /**
  * When to stop trusting the entrance animations and simply show the page.
  *
@@ -43,17 +43,28 @@ export function initTransitions() {
      */
     let target = '';
     let gone = false;
-    const go = () => { if (!gone && target) {
+    /*
+     * A link marked `data-replace` takes the place of this page in the history
+     * rather than adding to it — walking from one painting to the next leaves
+     * the gallery one step back, however far the walk went.
+     */
+    let replace = false;
+    const go = () => {
+        if (gone || !target)
+            return;
         gone = true;
-        location.href = target;
-    } };
+        if (replace)
+            location.replace(target);
+        else
+            location.href = target;
+    };
     /**
      * Back-button navigations restore the page from the back/forward cache exactly
      * as it was left — including, on the page we faded out to leave, the class
      * that faded it and the departure that was in flight. Without this, going back
      * lands under an opaque sheet with every link already spoken for.
      */
-    const arrive = () => { root.classList.remove('is-leaving'); target = ''; gone = false; };
+    const arrive = () => { root.classList.remove('is-leaving'); target = ''; gone = false; replace = false; };
     window.addEventListener('pageshow', arrive);
     window.addEventListener('popstate', arrive);
     arrive();
@@ -79,6 +90,7 @@ export function initTransitions() {
         event.preventDefault();
         const first = !target;
         target = url.href;
+        replace = link.hasAttribute('data-replace');
         root.classList.add('is-leaving');
         if (!first)
             return; // already counting down; only the destination changed

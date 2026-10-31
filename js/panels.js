@@ -6,21 +6,42 @@ import { isPlainClick } from './env.js';
  *
  * The veil fades rather than appearing: it is always in the DOM and only its
  * opacity changes, so opening reads as the page receding, not a curtain dropping.
+ *
+ * A panel may have an address of its own (`data-panel-url`, as the WordPress
+ * theme gives each exhibition and commissioned project), in which case opening
+ * it puts that address in the bar rather than an anchor, and a page may be
+ * served with a panel already open — that same address, loaded directly. The
+ * static site does neither, and nothing here depends on either.
  */
 export function initPanels() {
     const panels = [...document.querySelectorAll('[data-panel]')];
     const veil = document.querySelector('[data-panel-veil]');
     if (!panels.length || !veil)
         return;
+    /*
+     * Where the bar goes back to when a panel closes. Normally the page itself,
+     * read once here because opening a panel may have replaced the address; a
+     * page served at a panel's own address names the index it belongs to instead
+     * (`data-panel-root`), so closing it does not leave the bar on the panel.
+     */
+    const page = location.pathname + location.search;
+    const root = document.querySelector('[data-panel-root]')?.dataset.panelRoot ?? page;
     let open = null;
+    // What opened the panel, so that closing it hands the keyboard back there
+    // rather than dropping focus on the body when the Close link is hidden.
+    let opener = null;
     const close = () => {
         if (!open)
             return;
+        const id = open.id;
         open.classList.remove('is-open');
         open = null;
         veil.classList.remove('is-open');
         document.body.classList.remove('is-locked');
-        history.replaceState(null, '', location.pathname + location.search);
+        history.replaceState(null, '', root);
+        const back = opener ?? document.querySelector(`[data-panel-open="${id}"]`);
+        opener = null;
+        back?.focus({ preventScroll: true });
     };
     const show = (id) => {
         const panel = document.getElementById(id);
@@ -43,10 +64,14 @@ export function initPanels() {
         trigger.addEventListener('click', (event) => {
             if (!isPlainClick(event))
                 return;
-            if (!document.getElementById(id))
+            const panel = document.getElementById(id);
+            if (!panel)
                 return; // not on this page: let the link go home
             event.preventDefault();
-            history.replaceState(null, '', `#${id}`);
+            // A panel with an address of its own is reached at that address; the
+            // rest are reached by their anchor, which is also what the link says.
+            history.replaceState(null, '', panel.dataset.panelUrl ?? `#${id}`);
+            opener = trigger;
             show(id);
         });
     }
@@ -59,6 +84,13 @@ export function initPanels() {
     veil.addEventListener('click', close);
     document.addEventListener('keydown', (event) => { if (open && event.key === 'Escape')
         close(); });
+    // Served already open — a panel loaded at its own address — so the script
+    // takes charge of what the page has done, and can close it. First, whatever
+    // the hash says: a stray #main from the skip link must not leave the panel
+    // open with nothing in charge of it.
+    const served = panels.find((panel) => panel.classList.contains('is-open'));
+    if (served)
+        show(served.id);
     // Arriving on a shared #about or #exhibition-… link opens it straight away.
     if (location.hash.length > 1)
         show(location.hash.slice(1));

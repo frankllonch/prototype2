@@ -21,12 +21,40 @@ import { reduceMotion } from './env.js';
  *    measure that never happened, the watchdog — disables the pile for good and
  *    ends with the transforms cleared and the grid interactive.
  */
-/**
- * Fraction of a viewport height over which the pile disperses. Exported because
- * the year rail has to know where the pile lets go: scrolling to a year above
- * that point would gather the paintings back up under the reader.
+/*
+ * THE OPENING — the two numbers that decide how the pile unfolds.
+ *
+ * The pile is a pure function of the scroll position: nothing is animated on a
+ * clock, the paintings are simply where the scroll says they are. So there is
+ * no duration to lengthen, and these two are the only speed there is.
+ *
+ *   SCROLL_SPAN  how much scrolling, in screen heights, it takes for the pile
+ *                to disperse completely. Larger means the same wheel travel
+ *                produces less unfolding, which reads as slower. It was 0.85.
+ *   EASE_IN      how gently it leaves the heap. 1 is a straight line; higher
+ *                holds the paintings together for the first part of the scroll
+ *                and lets them go faster later. The old curve was an ease-OUT —
+ *                most of the motion in the first few pixels — which is exactly
+ *                what felt like a jolt.
+ *
+ * SCROLL_SPAN is exported because the year rail has to know where the pile
+ * lets go: scrolling to a year above that point would gather the paintings
+ * back up under the reader.
  */
-export const SCROLL_SPAN = 0.85;
+export const SCROLL_SPAN = 1.3;
+const EASE_IN = 2;
+/*
+ *   FOLLOW       how closely the pile keeps up with the scroll. The paintings
+ *                ease towards where the scroll says they should be rather than
+ *                snapping there, by this fraction of the remaining distance
+ *                each frame. 1 is glued to the wheel — the old behaviour, where
+ *                a fast flick unfolded everything in an instant. Smaller lags
+ *                more: 0.14 settles in about half a second after the wheel
+ *                stops, and a flick still unfolds fluidly instead of at once.
+ *                This is the only way to make the opening feel slower without
+ *                taking the wheel away from the reader.
+ */
+const FOLLOW = 0.14;
 const FRONT = 0.38; // height of the front painting, as a fraction of the viewport
 const VISIBLE = 12; // tiles given their own offset in the pile; the rest sit behind
 const WATCHDOG = 4000; // ms: if the pile cannot be measured by now, show the grid
@@ -85,6 +113,8 @@ export function initStack() {
     let disabled = false;
     /** Whether the grid was fully settled on the previous frame. */
     let settled = false;
+    /** How far the pile is drawn unfolded, 0 to 1 — behind the scroll by FOLLOW. */
+    let shown = 0;
     const clearTransforms = () => {
         for (const tile of tiles) {
             tile.style.transform = '';
@@ -114,7 +144,14 @@ export function initStack() {
         });
         measured = live.length > 0 && live.every((tile) => tile.getBoundingClientRect().height > 0);
     };
-    const ease = (p) => 1 - Math.pow(1 - p, 3);
+    /*
+     * In-and-out: gentle leaving the heap, gentle arriving in the grid. The
+     * power is EASE_IN on the way in and mirrored on the way out, so 2 is the
+     * familiar smooth step and 1 is no easing at all.
+     */
+    const ease = (p) => (p < 0.5
+        ? Math.pow(2 * p, EASE_IN) / 2
+        : 1 - Math.pow(2 * (1 - p), EASE_IN) / 2);
     const render = () => {
         frame = 0;
         if (disabled)
@@ -130,7 +167,16 @@ export function initStack() {
                 return;
         }
         const h = window.innerHeight;
-        const p = Math.min(1, Math.max(0, window.scrollY / (h * SCROLL_SPAN)));
+        const wanted = Math.min(1, Math.max(0, window.scrollY / (h * SCROLL_SPAN)));
+        // Drawn behind the scroll, not at it: close the gap by FOLLOW each frame,
+        // snap the last sliver so it does not creep for ever, and keep drawing
+        // frames until the pile has caught up — the scroll may have stopped.
+        shown += (wanted - shown) * FOLLOW;
+        if (Math.abs(wanted - shown) < 0.0015)
+            shown = wanted;
+        if (shown !== wanted)
+            schedule();
+        const p = shown;
         if (p >= 1) {
             // Settled. Clear the transforms, but stay listening — scrolling back up
             // gathers the pile again.
