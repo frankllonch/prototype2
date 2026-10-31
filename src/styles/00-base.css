@@ -704,13 +704,52 @@ html.is-scrolled .scroll-cue { opacity: 0; }
 }
 
 .top [aria-current='page']:is(a, button) {
-  background: var(--bar-swatch, var(--neg-0));
+  position: relative;
   color: #000;
   --roll-color: #000;
   padding: var(--bar-rise) var(--bar-side) var(--bar-drop);
   margin: calc(-1 * var(--bar-rise)) calc(-1 * var(--bar-side)) calc(-1 * var(--bar-drop));
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
+}
+
+/*
+ * The colour is a layer of its own behind the name, and not the name's own
+ * background, so that it can move while the name stays where it is. Arriving,
+ * it drops into place from above the top edge; leaving, it withdraws the same
+ * way. The name is only ever still, and only changes colour.
+ */
+.top [aria-current='page']:is(a, button)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--bar-swatch, var(--neg-0));
+  animation: swatch-drop 0.46s var(--ease) both;
+}
+
+/*
+ * Going somewhere else. `is-leaving` is already on the document while the veil
+ * draws over the page, so the block has that long to withdraw and the name to
+ * go back to the ink it wears everywhere else — which over paper is black. The
+ * bar itself does not move through any of this: it sits a layer above the veil,
+ * so it is the one thing on the screen that does not fade, and the only change
+ * between one page and the next is this block leaving one name and dropping
+ * onto another.
+ */
+html.is-leaving .top [aria-current='page']:is(a, button) {
+  color: var(--bar-ink);
+  --roll-color: var(--bar-ink);
+}
+html.is-leaving .top [aria-current='page']:is(a, button)::before {
+  animation: swatch-lift 0.34s var(--ease) both;
+}
+
+@keyframes swatch-drop {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+@keyframes swatch-lift {
+  from { transform: translateY(0); }
+  to { transform: translateY(-100%); }
 }
 
 /*
@@ -733,8 +772,8 @@ html.is-scrolled .scroll-cue { opacity: 0; }
  * beneath the film. Where scroll timelines are not understood the cut is simply
  * dropped once the film has gone, which is the behaviour this replaces.
  */
+.has-film:not(.is-film-past) .top [aria-current='page']:is(a, button)::before { display: none; }
 .has-film:not(.is-film-past) .top [aria-current='page']:is(a, button) {
-  background: none;
   color: var(--bar-ink);
   --roll-color: var(--bar-ink);
   padding-top: 0;
