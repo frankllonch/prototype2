@@ -711,7 +711,7 @@ html.is-scrolled .scroll-cue { opacity: 0; }
    * cuts into that, so the block can finish above where the type stops without
    * the type moving: the block is a layer of its own and this trims the layer.
    */
-  --bar-trim: 0px;
+  --bar-trim: 6px;
 }
 
 .top [aria-current='page']:is(a, button) {
