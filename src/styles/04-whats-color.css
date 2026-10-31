@@ -1299,12 +1299,22 @@ html:has(body.has-film) {
     .wc-write {
       height: var(--wc-write-length, 240vh);
       /*
+       * Pulled up under the film, so the stage pins — and the writing can
+       * begin, at the fixed centre — while the film's last stretch is still
+       * leaving the top of the screen. THE knob for "the words come too
+       * soon / too late": what still shows of the film when the first word
+       * lands is this pull less the page's own top padding, so more is
+       * sooner, less is later, and at the padding's own size the writing
+       * waits for an empty page.
+       */
+      margin-top: calc(-1 * var(--wc-write-early, 30vh));
+      /*
        * Pulled up by half a screen: while the finished sentence holds the
        * centre, the names climb the lower half of the view, stop a breath
        * beneath it — the knob is the breath — and only then does the pin let
        * go, so the sentence travels up sitting right on top of them.
        */
-      margin: 0 0 calc(var(--wc-write-meet, 12vh) - 50vh);
+      margin-bottom: calc(var(--wc-write-meet, 12vh) - 50vh);
       view-timeline: --wc-write block;
     }
     .wc-write-pin {

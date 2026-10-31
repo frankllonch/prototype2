@@ -160,23 +160,27 @@ function writeOn(text: string): Html {
   /** The cover timeline's whole travel, in screens of scroll. */
   const COVER = SCREENS + 1;
   /**
-   * Where the writing starts, as a fraction of the section's approach — THE
-   * knob for "the words come too soon / too late". At 0.7 the first words
-   * appear while the film's last tenth is leaving the top of the screen;
-   * lower is sooner (more film still showing), higher is later, 1 is the
-   * moment the pin engages.
+   * The writing starts the moment the stage pins — never before, so the
+   * sentence only ever exists at the fixed centre of the view and no word
+   * appears while the paragraph is still travelling. How soon that moment
+   * comes while the film is still leaving is the stylesheet's business:
+   * --wc-write-early pulls the stage up under the film, and is now the knob
+   * for "the words come too soon / too late".
    */
-  const START = 0.8;
+  const START = 1;
   /** And ends at 85% of the pinned stretch; the last 15% is the held beat. */
   const END = 1 + 0.85 * (SCREENS - 1);
   const marked = (w: string) => w.length > 1 && /[A-Z]/.test(w) && w === w.toUpperCase();
-  // The question takes six times any other word's share of the scroll, and
-  // the word before it half a ramp, so the pace audibly drops as it arrives
-  // and picks back up after.
-  const weights: number[] = words.map((w) => (marked(w) ? 6 : 1));
+  // The question arrives a little slower than any other word — and then the
+  // writing stops dead. PAUSE is empty runway after the question's last
+  // word: fourteen words' worth of scroll in which nothing new appears, so
+  // the reader is genuinely held on the phrase before the rest resumes.
+  const weights: number[] = words.map((w) => (marked(w) ? 3 : 1));
   const ask = words.findIndex(marked);
-  if (ask > 0) weights[ask - 1] = 2.5;
-  const total = weights.reduce((a, b) => a + b, 0);
+  if (ask > 0) weights[ask - 1] = 2;
+  const lastAsk = words.map(marked).lastIndexOf(true);
+  const PAUSE = 14;
+  const total = weights.reduce((a, b) => a + b, 0) + (lastAsk >= 0 ? PAUSE : 0);
   let at = 0;
   return html`<section class="wc-write">
     <div class="wc-write-pin">
@@ -185,6 +189,7 @@ function writeOn(text: string): Html {
           words.map((word, i) => {
             const from = START + (at / total) * (END - START);
             at += weights[i] ?? 1;
+            if (i === lastAsk) at += PAUSE;
             const width = ((weights[i] ?? 1) / total) * (END - START) * 2.3;
             const to = Math.min(from + width, END + 0.04);
             const parts = marked(word) ? /^(.*?)([.,:;]*)$/.exec(word) : null;
