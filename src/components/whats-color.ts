@@ -104,11 +104,7 @@ export function whatsColorOpening(editions: readonly Edition[]): Html {
       reading order: the page already carries its heading, and the note is
       real text that has to be read.
     -->
-    <div class="wc-intro-mask">
-      <div class="wc-intro-slide">
-        <p class="wc-lead">${LEAD}</p>
-      </div>
-    </div>
+    ${writeOn(LEAD)}
     ${join(editions.map(namesOfEdition))}
   </div>`;
 }
@@ -126,6 +122,50 @@ export function whatsColorOpening(editions: readonly Edition[]): Html {
  * No name is in two blocks: nobody has answered in more than one edition.
  * Should that change, they would appear under each, which is the truth.
  */
+
+/**
+ * The note, written as you scroll.
+ *
+ * The section is given more height than it shows; the paragraph rides pinned
+ * at the centre of the view while the scroll spends that height, and each
+ * word is revealed over its own slice of the pinned stretch — the first 85%
+ * of it, with the rest held so the finished sentence can be read before the
+ * pin lets go and the page carries it up into the names. Every word occupies
+ * its place from the start and only becomes visible, so nothing reflows as
+ * the sentence appears.
+ *
+ * Each word's slice is computed here, at build, and rides on the element —
+ * no script measures anything. The question itself — the words the project
+ * is named after, written in capitals in the source — is marked and the
+ * stylesheet gives it a colour from the palette; trailing punctuation stays
+ * outside the mark, as a highlighter would leave it.
+ *
+ * Without scroll-driven animations, or with motion reduced, the stylesheet
+ * never hides a word and the section is an ordinary paragraph.
+ */
+function writeOn(text: string): Html {
+  const words = text.split(/\s+/);
+  const span = 85;
+  return html`<section class="wc-write">
+    <div class="wc-write-pin">
+      <p class="wc-lead">
+        ${join(
+          words.map((word, i) => {
+            const from = ((i / words.length) * span).toFixed(2);
+            const to = (((i + 1) / words.length) * span).toFixed(2);
+            const caps = word.length > 1 && /[A-Z]/.test(word) && word === word.toUpperCase();
+            const parts = caps ? /^(.*?)([.,:;!?]*)$/.exec(word) : null;
+            return html`<span
+              class="wc-word"
+              style="animation-range: contain ${from}% contain ${to}%"
+            >${parts ? html`<mark class="wc-ask">${parts[1] ?? ''}</mark>${parts[2] ?? ''}` : word}</span> `;
+          }),
+        )}
+      </p>
+    </div>
+  </section>`;
+}
+
 function namesOfEdition(edition: Edition): Html {
   return html`<section class="wc-group">
     <p class="wc-numeral" aria-hidden="true">(${edition.numeral})</p>
