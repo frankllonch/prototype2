@@ -38,9 +38,12 @@ export function initCurrent(): void {
 
   const rise = () => {
     const gap = neighbour.getBoundingClientRect().top - bar.getBoundingClientRect().top;
+    // Written to its own name, not to --bar-rise: the stylesheet keeps that
+    // one as the knob, falling back to this measurement, so a figure set by
+    // hand there is not overwritten by an inline style from here.
     // Floored at nothing: a bar that has not laid out yet should leave the
     // stylesheet's own figure standing rather than pull the block off the top.
-    if (gap > 0) bar.style.setProperty('--bar-rise', `${gap.toFixed(1)}px`);
+    if (gap > 0) bar.style.setProperty('--bar-rise-measured', `${gap.toFixed(1)}px`);
   };
 
   rise();

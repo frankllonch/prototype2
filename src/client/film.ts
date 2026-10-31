@@ -118,14 +118,36 @@ export function initFilm(): void {
   let crossing = 0;
   let past: boolean | null = null;
 
-  const measure = () => { crossing = mark.getBoundingClientRect().top + window.scrollY; };
+  /*
+   * A second line, further down: where the film has left the screen entirely.
+   *
+   * The first says the bar has stopped travelling with the film's edge, which
+   * is not the same thing — the bar settles a little inside that edge, so for
+   * the rest of the film's run it is still over the picture. Anything that
+   * belongs to the page rather than to the film waits for this one instead.
+   */
+  let gone = 0;
+  let cleared: boolean | null = null;
+
+  const measure = () => {
+    const top = window.scrollY;
+    crossing = mark.getBoundingClientRect().top + top;
+    gone = film.getBoundingClientRect().bottom + top;
+  };
 
   const update = () => {
-    const now = window.scrollY >= crossing;
-    // Only ever written when it changes, so a scroll costs one comparison.
-    if (now === past) return;
-    past = now;
-    document.body.classList.toggle('is-film-past', now);
+    const y = window.scrollY;
+    // Only ever written when it changes, so a scroll costs two comparisons.
+    const now = y >= crossing;
+    if (now !== past) {
+      past = now;
+      document.body.classList.toggle('is-film-past', now);
+    }
+    const clear = y >= gone;
+    if (clear !== cleared) {
+      cleared = clear;
+      document.body.classList.toggle('is-film-gone', clear);
+    }
   };
 
   measure();
