@@ -35,7 +35,7 @@ The dataset (`content/projects.json`), the crop decisions (`content/crops.json`,
 | `/artwork/<slug>/` | One painting — what a shared link opens; from the grid the same work opens in the lightbox |
 | `/exhibitions/` | The exhibitions as an index; each opens as a panel over the page |
 | `/commissioned/` | The commissioned work, grouped, likewise |
-| `/color-chart/` | The color chart on its own page |
+| `/color-chart/` | The color chart: the price and the way to order held still in the margin, the chart's own colours beside them, and only the text moving |
 | About | An overlay on any page — the red card, the biography with two studio photographs, the record of exhibitions and the collections, the work faint behind |
 
 ### The stack
@@ -54,6 +54,35 @@ gutters — the grid in the mockup. `--unit` (the row height) is the only thing
 the density control changes: 24 / 60 / 154, after tylermitchell.co's 50 / 200 /
 500, labelled by roughly how many works fit on a screen at that size. All 154
 are always shown; the year filter toggles `hidden`.
+
+### The colour chart, and the one thing that is not a file
+
+The Colour Chart is the only page of the site that is exactly a window tall.
+Nothing on it scrolls but the text: the price and **Order yours** stay beside
+the words for as long as anyone reads them, and the chart itself stands between
+them as twenty-three bands of its own colour, measured off the designer's
+reference (`src/content/colour-chart.ts`). A band under the pointer steps out to
+the right by about its own height, and nothing else moves.
+
+**Order yours** opens the inquiry form over the page. A static host cannot send
+mail, so the form posts to a small handler deployed separately —
+`server/inquiries/`, a Cloudflare Worker — which is where every check that
+matters happens: a honeypot, the time the form was open, field shapes, control
+characters stripped out of anything bound for a mail header, an origin
+allow-list, a per-sender rate limit, a daily ceiling, and Cloudflare's Turnstile
+if a key is configured. Its README covers deploying it.
+
+Claudia's address is not in this repository and not in the page. It is a secret
+in the handler's environment, so the page offers to write to her without saying
+where — and the two source paragraphs that used to print it, and the price, are
+taken out of the body and said by the margin instead.
+
+```bash
+INQUIRIES_ENDPOINT=https://… TURNSTILE_SITE_KEY=… npm run build
+```
+
+Built without the endpoint, the form renders and refuses to send, and the build
+says so.
 
 ### The crops
 
@@ -110,16 +139,19 @@ src/
   components/     html (the 40-line template tag), image, gallery, panels, slider, layout
   pages/index.ts  The pages and the artwork detail
   client/         stack, controls, slider, panels, lightbox, text-roll — no framework
-  styles/         base + top bar, grid + detail, overlays
+  styles/         base + top bar, grid + detail, overlays, colour chart
   build.ts        Renders every route
+server/
+  inquiries/      The order desk: the one piece that is not a static file
 content/
   projects.json   The dataset (172 records, 370 images)
   crops.json      Every crop decision, with reasons
   crops.final.json  Ids whose crop passed review
 ```
 
-Runtime dependencies: none. Build dependencies: `typescript`, `node-html-parser`,
-`sharp`.
+Runtime dependencies: none — the site is files. Build dependencies:
+`typescript`, `node-html-parser`, `sharp`. The order desk under `server/` is
+deployed on its own and shares none of this.
 
 ## Not in this build, by decision
 
@@ -128,4 +160,9 @@ Runtime dependencies: none. Build dependencies: `typescript`, `node-html-parser`
   overlay shows the designer's short version.
 - Catalan. The previous prototype carried it; it can return as a locale layer
   over the same dataset.
-- Inquiries as a section. The gallery contact remains on the source data.
+- Inquiries as a section of their own. The Colour Chart has an order form;
+  everything else still points at the gallery contact on the source data.
+- The designer's line breaks in the Colour Chart's text. Her reference sets it
+  in clauses — a break after each comma — where the source holds one run of
+  prose and the column wraps it. Those breaks belong in WordPress, which is
+  where the text is written.

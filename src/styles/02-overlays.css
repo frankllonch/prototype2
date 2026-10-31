@@ -209,7 +209,7 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
  * so it comes to rest rather than snapping.
  */
 .about-card-stage {
-  --tilt-max: 7deg;
+  --tilt-max: 2deg;
   --tilt-depth: 1400px;
   --tilt-lift: 1.012;
   --tilt-settle: 820ms;
