@@ -1291,6 +1291,13 @@ html:has(body.has-film) {
       height: 100vh;
       display: grid;
       place-items: center;
+      /*
+       * Nothing in here is for pointing at, and the pin is a positioned box:
+       * once the names are pulled up into its empty lower half, a positioned
+       * box sits above them for hit-testing and their links go dead. The
+       * whole stage waves pointers through instead.
+       */
+      pointer-events: none;
     }
     .wc-word {
       opacity: 0;
@@ -1305,22 +1312,3 @@ html:has(body.has-film) {
   to { opacity: 1; }
 }
 
-/*
- * Arrived by link rather than by reading down — the address names the roster
- * (/#whats-color) — the sentence has been seen before, and nobody should
- * scroll three screens to get past it: the section folds to an ordinary
- * paragraph with every word already standing.
- */
-#whats-color.wc-write-shown .wc-write {
-  height: auto;
-  margin: 0 0 calc(var(--wc-zoom, 1) * var(--wc-lead-gap, 7vw));
-}
-#whats-color.wc-write-shown .wc-write-pin {
-  position: static;
-  height: auto;
-  display: block;
-}
-#whats-color.wc-write-shown .wc-word {
-  animation: none;
-  opacity: 1;
-}

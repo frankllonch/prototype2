@@ -1,4 +1,5 @@
 import { isPlainClick, reduceMotion } from './env.ts';
+import { writtenPoint } from './write.ts';
 
 /**
  * Switches the bar between its two resting states over the opening film.
@@ -177,7 +178,11 @@ function samePageLinks(): void {
   if (names) {
     go(
       document.querySelector<HTMLAnchorElement>('.top-soon'),
-      () => names.getBoundingClientRect().top + window.scrollY,
+      // Through the writing, not past it: while the note writes itself on
+      // scroll, the travel runs the whole sentence and stops where it stands
+      // written, with the names still below. On any other footing — motion
+      // reduced, no scroll-run animations — the names themselves are the place.
+      () => writtenPoint() ?? names.getBoundingClientRect().top + window.scrollY,
       '#whats-color',
     );
   }

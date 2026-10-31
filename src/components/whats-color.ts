@@ -156,12 +156,23 @@ function writeOn(text: string): Html {
   const SCREENS = 2.4;
   /** The cover timeline's whole travel, in screens of scroll. */
   const COVER = SCREENS + 1;
-  /** Writing starts at entry 55% — the film still holds the top of the view. */
-  const START = 0.55;
+  /**
+   * Where the writing starts, as a fraction of the section's approach — THE
+   * knob for "the words come too soon / too late". At 0.7 the first words
+   * appear while the film's last tenth is leaving the top of the screen;
+   * lower is sooner (more film still showing), higher is later, 1 is the
+   * moment the pin engages.
+   */
+  const START = 0.7;
   /** And ends at 85% of the pinned stretch; the last 15% is the held beat. */
   const END = 1 + 0.85 * (SCREENS - 1);
   const marked = (w: string) => w.length > 1 && /[A-Z]/.test(w) && w === w.toUpperCase();
-  const weights = words.map((w) => (marked(w) ? 2.75 : 1));
+  // The question takes six times any other word's share of the scroll, and
+  // the word before it half a ramp, so the pace audibly drops as it arrives
+  // and picks back up after.
+  const weights: number[] = words.map((w) => (marked(w) ? 6 : 1));
+  const ask = words.findIndex(marked);
+  if (ask > 0) weights[ask - 1] = 2.5;
   const total = weights.reduce((a, b) => a + b, 0);
   let at = 0;
   return html`<section class="wc-write">

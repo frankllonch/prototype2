@@ -32,14 +32,16 @@ export function initScrollCue(): void {
   const write = document.querySelector<HTMLElement>('.wc-write');
   const writing =
     write &&
-    location.hash !== '#whats-color' &&
     CSS.supports('animation-timeline: view()') &&
     !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (writing && write) {
     let end = 0;
     const measure = () => {
       const pull = Number.parseFloat(getComputedStyle(write).marginBottom) || 0;
-      end = write.offsetTop + write.offsetHeight + pull - window.innerHeight;
+      // Not when the names first peek over the edge but when they have
+      // properly risen — half a screen — so a link arrival, which lands with
+      // the sentence written and the names just below, still shows the cue.
+      end = write.offsetTop + write.offsetHeight + pull - window.innerHeight * 0.5;
     };
     measure();
     window.addEventListener('resize', measure);

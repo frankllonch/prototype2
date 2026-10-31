@@ -95,10 +95,6 @@ function openingFocus(): void {
   const page = document.getElementById('whats-color');
   if (!page || page.classList.contains('wc-sheet-page')) return;
 
-  // Arrived with the roster named in the address: the sentence has been seen
-  // before, so it stands already written and the view opens at the names.
-  if (location.hash === '#whats-color') page.classList.add('wc-write-shown');
-
   const clear = () => {
     page.classList.remove('wc-focus');
     for (const el of page.querySelectorAll('.wc-focused')) el.classList.remove('wc-focused');
