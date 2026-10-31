@@ -46,7 +46,8 @@ export const LEAD =
   'people who inspire me \u2014 philosophers, historians, thinkers, writers, ' +
   'architects and artists \u2014 and ask each of them about their personal ' +
   'relationship with color. It has run three times: Barcelona in 2020, Madrid ' +
-  'in 2021, and Llibreria Terranova in Barcelona in 2024.';
+  'in 2021, and Llibreria Terranova in Barcelona in 2024. Click their ' +
+  'names to see what they said.';
 
 export interface Participant {
   readonly name: string;

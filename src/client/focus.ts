@@ -1,4 +1,4 @@
-import { isPlainClick } from './env.ts';
+import { isPlainClick, reduceMotion } from './env.ts';
 import { ABANDONED } from './transitions.ts';
 
 /**
@@ -46,7 +46,14 @@ function sheetFocus(): void {
     if (name) {
       if (focus(decodeURIComponent(name.hash.slice(1)))) return;
     }
-    if (!(event.target as Element).closest('.wc-focused')) clear();
+    // The quote itself is a thing to choose, not only its name in the roster:
+    // clicking an entry brings it forward the same way.
+    const cell = (event.target as Element).closest<HTMLElement>('.wc-cell');
+    if (cell && cell.id) {
+      focus(cell.id);
+      return;
+    }
+    clear();
   });
 
   window.addEventListener('wheel', clear, { passive: true });
@@ -65,7 +72,23 @@ function sheetFocus(): void {
     if (event.persisted) clear();
   });
 
-  if (location.hash) focus(decodeURIComponent(location.hash.slice(1)));
+  if (location.hash) {
+    const id = decodeURIComponent(location.hash.slice(1));
+    const cell = document.getElementById(id);
+    if (cell && focus(id)) {
+      /*
+       * The browser lands on the anchor in one jump. Arriving from the
+       * opening view should instead read as entering the page and travelling
+       * down to the answer, the way an on-page click does — so back to the
+       * top at once, then the same journey. Travel only: with motion reduced,
+       * the jump the browser already made is the right behaviour.
+       */
+      if (!reduceMotion.matches) {
+        window.scrollTo({ top: 0, behavior: 'auto' });
+        window.setTimeout(() => cell.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+      }
+    }
+  }
 }
 
 function openingFocus(): void {
