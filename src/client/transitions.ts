@@ -18,7 +18,7 @@ export const OUT_MS = 420;
 /** Never hold a navigation longer than this, whatever the timer does. */
 const LEAVE_GUARD = 700;
 /** If the navigation has not happened by now, assume it never will. */
-const ABANDONED = 6000;
+export const ABANDONED = 6000;
 /**
  * When to stop trusting the entrance animations and simply show the page.
  *
