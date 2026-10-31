@@ -698,9 +698,20 @@ html.is-scrolled .scroll-cue { opacity: 0; }
  *   --bar-side   how far it stands out either side of the name.
  */
 .top {
-  --bar-rise: var(--bar-rise-measured, 1.6rem);
-  --bar-drop: 0.00000001em;
+  --bar-rise: var(--bar-rise-measured, 1 rem);
+  --bar-drop: 0.001em;
   --bar-side: 0.18em;
+  /*
+   * How much is taken off the bottom of the block, and the knob to reach for
+   * when it wants to be shorter.
+   *
+   * --bar-drop can only add or remove space *below* the name, and at nothing
+   * the block still ends where the name's line ends — which is lower than the
+   * letters, because a line box carries its leading under the baseline. This
+   * cuts into that, so the block can finish above where the type stops without
+   * the type moving: the block is a layer of its own and this trims the layer.
+   */
+  --bar-trim: 0px;
 }
 
 .top [aria-current='page']:is(a, button) {
@@ -720,7 +731,7 @@ html.is-scrolled .scroll-cue { opacity: 0; }
 .top [aria-current='page']:is(a, button)::before {
   content: '';
   position: absolute;
-  inset: 0;
+  inset: 0 0 var(--bar-trim) 0;
   z-index: -1;
   background: var(--bar-swatch, var(--neg-0));
   animation: swatch-drop 0.46s var(--ease) both;
@@ -914,3 +925,45 @@ html {
   border-radius: 11px;
 }
 ::-webkit-scrollbar-thumb:hover { background: rgb(120 120 120 / 0.75); background-clip: content-box; }
+
+/*
+ * The drawn handle.
+ *
+ * It replaces the browser's bar rather than restyling it, because a native bar
+ * cannot be moved onto the page: however the track is painted, the column it
+ * sits in is still held open beside the content. Taking it away gives those
+ * pixels back to the page and leaves the handle floating over whatever is
+ * behind it.
+ *
+ * Both halves are behind the same support query, and deliberately so. The
+ * handle is carried by a scroll-driven animation, so where that is not
+ * understood there is no handle — and in that case the native bar has to stay,
+ * styled as far as it can be. Hiding it unconditionally would have left those
+ * browsers with no indication of position at all.
+ *
+ * Mid grey rather than the ink: it has to hold on the white pages and on the
+ * opening film alike, and nothing can blend it — this is drawn over the page,
+ * not into it.
+ */
+@supports (animation-timeline: scroll()) {
+  html { scrollbar-width: none; }
+  html::-webkit-scrollbar { width: 0; height: 0; }
+
+  .scroll-thumb {
+    position: fixed;
+    top: 0;
+    right: 3px;
+    z-index: 60;
+    width: 4px;
+    height: var(--thumb-h, 0px);
+    border-radius: 4px;
+    background: rgb(140 140 140 / 0.5);
+    pointer-events: none;
+    animation: thumb-run linear both;
+    animation-timeline: scroll(root block);
+  }
+}
+
+@keyframes thumb-run {
+  to { transform: translateY(calc(100vh - var(--thumb-h, 0px))); }
+}
