@@ -128,36 +128,55 @@ export function whatsColorOpening(editions: readonly Edition[]): Html {
  *
  * The section is given more height than it shows; the paragraph rides pinned
  * at the centre of the view while the scroll spends that height, and each
- * word is revealed over its own slice of the pinned stretch — the first 85%
- * of it, with the rest held so the finished sentence can be read before the
- * pin lets go and the page carries it up into the names. Every word occupies
- * its place from the start and only becomes visible, so nothing reflows as
- * the sentence appears.
+ * word is revealed over its own slice of the passage. The slices live on the
+ * timeline that covers the section's whole travel, so the writing can begin
+ * before the pin does — the first words appear while the film's last quarter
+ * is still leaving the top of the screen, and the sentence is done at 85% of
+ * the pinned stretch, with the rest held so it can be read whole.
  *
- * Each word's slice is computed here, at build, and rides on the element —
- * no script measures anything. The question itself — the words the project
- * is named after, written in capitals in the source — is marked and the
- * stylesheet gives it a colour from the palette; trailing punctuation stays
- * outside the mark, as a highlighter would leave it.
+ * Three decisions ride in the numbers. The question the project is named
+ * after is given almost three times any other word's share of the scroll, so
+ * the pace falls as it arrives and picks back up after. Every word fades over
+ * roughly two slots rather than one, because a mouse wheel moves in coarse
+ * steps and overlapping fades keep one step from popping a clutch of words at
+ * once. And SCREENS here must agree with --wc-write-length in the stylesheet,
+ * because the slices are fractions of that travel, computed at build.
+ *
+ * Every word occupies its place from the start and only becomes visible, so
+ * nothing reflows as the sentence appears. The question is marked and takes a
+ * colour from the palette, its punctuation kept inside the mark — a question
+ * mark is part of a question in a way a full stop is not part of a sentence.
  *
  * Without scroll-driven animations, or with motion reduced, the stylesheet
  * never hides a word and the section is an ordinary paragraph.
  */
 function writeOn(text: string): Html {
   const words = text.split(/\s+/);
-  const span = 85;
+  /** Screens of height the section spends; one is shown, the rest written. */
+  const SCREENS = 2.4;
+  /** The cover timeline's whole travel, in screens of scroll. */
+  const COVER = SCREENS + 1;
+  /** Writing starts at entry 55% — the film still holds the top of the view. */
+  const START = 0.55;
+  /** And ends at 85% of the pinned stretch; the last 15% is the held beat. */
+  const END = 1 + 0.85 * (SCREENS - 1);
+  const marked = (w: string) => w.length > 1 && /[A-Z]/.test(w) && w === w.toUpperCase();
+  const weights = words.map((w) => (marked(w) ? 2.75 : 1));
+  const total = weights.reduce((a, b) => a + b, 0);
+  let at = 0;
   return html`<section class="wc-write">
     <div class="wc-write-pin">
       <p class="wc-lead">
         ${join(
           words.map((word, i) => {
-            const from = ((i / words.length) * span).toFixed(2);
-            const to = (((i + 1) / words.length) * span).toFixed(2);
-            const caps = word.length > 1 && /[A-Z]/.test(word) && word === word.toUpperCase();
-            const parts = caps ? /^(.*?)([.,:;!?]*)$/.exec(word) : null;
+            const from = START + (at / total) * (END - START);
+            at += weights[i] ?? 1;
+            const width = ((weights[i] ?? 1) / total) * (END - START) * 2.3;
+            const to = Math.min(from + width, END + 0.04);
+            const parts = marked(word) ? /^(.*?)([.,:;]*)$/.exec(word) : null;
             return html`<span
               class="wc-word"
-              style="animation-range: contain ${from}% contain ${to}%"
+              style="animation-range: cover ${((from / COVER) * 100).toFixed(2)}% cover ${((to / COVER) * 100).toFixed(2)}%"
             >${parts ? html`<mark class="wc-ask">${parts[1] ?? ''}</mark>${parts[2] ?? ''}` : word}</span> `;
           }),
         )}

@@ -1,18 +1,25 @@
 /**
  * The scroll hint goes once it has been taken.
  *
- * A cue that stays put is no longer a cue — it becomes a fixture, and on these
- * two pages it would sit over the paintings and over the names for as long as
- * the reader kept going. So it leaves on the first real movement of the page
- * and does not come back, because by then its question has been answered.
+ * A cue that stays put is no longer a cue — it becomes a fixture, and on
+ * these pages it would sit over the paintings and over the names for as long
+ * as the reader kept going. So it leaves once its question has been answered
+ * and does not come back.
  *
- * The threshold is a tenth of the screen rather than a pixel: a trackpad's
- * smallest flick, a bounce at the top on a phone, or a browser restoring the
- * scroll by a few pixels should not count as having read it.
+ * On most pages that is the first real movement — a tenth of the screen, so a
+ * trackpad's smallest flick or a browser restoring a few pixels does not
+ * count. On the opening page the question is longer: the film and then the
+ * whole of the written sentence are one continuous "keep going", so there the
+ * cue stays until the names have arrived — the write section's end, its
+ * pulled-up margin included, measured once and again on resize rather than on
+ * every scroll. When the sentence is already folded flat (a link arrival, no
+ * scroll-run animations, motion reduced), the page is short again and the
+ * ordinary threshold is the right one.
  *
- * The class goes on the root rather than on the cue, so the stylesheet decides
- * what to do with it, and so a page that restores mid-document never shows the
- * cue at all — the first `update` runs before any scrolling of its own.
+ * The class goes on the root rather than on the cue, so the stylesheet
+ * decides what to do with it, and so a page that restores mid-document never
+ * shows the cue at all — the first `update` runs before any scrolling of its
+ * own.
  */
 export function initScrollCue(): void {
   if (!document.querySelector('[data-scroll-cue]')) return;
@@ -20,9 +27,28 @@ export function initScrollCue(): void {
   const root = document.documentElement;
   let gone = false;
 
+  let threshold = () => window.innerHeight * 0.1;
+
+  const write = document.querySelector<HTMLElement>('.wc-write');
+  const writing =
+    write &&
+    location.hash !== '#whats-color' &&
+    CSS.supports('animation-timeline: view()') &&
+    !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (writing && write) {
+    let end = 0;
+    const measure = () => {
+      const pull = Number.parseFloat(getComputedStyle(write).marginBottom) || 0;
+      end = write.offsetTop + write.offsetHeight + pull - window.innerHeight;
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    threshold = () => Math.max(end, window.innerHeight * 0.1);
+  }
+
   const update = () => {
     if (gone) return;
-    if (window.scrollY < window.innerHeight * 0.1) return;
+    if (window.scrollY < threshold()) return;
     gone = true;
     root.classList.add('is-scrolled');
     window.removeEventListener('scroll', update);
