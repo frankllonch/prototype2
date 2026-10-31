@@ -1219,7 +1219,8 @@ html:has(body.has-film) {
  */
 #whats-color .wc-intro-mask,
 #whats-color .wc-intros,
-#whats-color .wc-group {
+#whats-color .wc-group,
+#whats-color .wc-text {
   transition: filter 0.45s ease, opacity 0.45s ease;
 }
 #whats-color .wc-name,
@@ -1232,6 +1233,7 @@ html:has(body.has-film) {
 }
 #whats-color.wc-focus .wc-intro-mask,
 #whats-color.wc-focus .wc-intros:not(:has(.wc-focused)),
+#whats-color.wc-focus .wc-text:not(.wc-focused),
 #whats-color.wc-focus .wc-group:not(:has(.wc-focused)) {
   filter: blur(5px);
   opacity: 0.35;
@@ -1344,3 +1346,84 @@ html:has(body.has-film) {
   to { opacity: 1; }
 }
 
+
+/*
+ * The three editions' writing at the foot of the opening view, as the
+ * start-page sheets set it: full measure, a heading line with a blank line's
+ * air under it, the text at the page's own size on solid leading, and each
+ * block cut to the sentence the sheet cuts it at until 'Read more' lets the
+ * rest down. The sheet justifies the first and sets the other two ragged,
+ * which is what the inline alignment carries.
+ *
+ * Hovering one block steps the other two back — the same answer the
+ * introductions used to give — because the whole block is a doorway to its
+ * edition, and the heading inside is the real link the script widens.
+ */
+.wc-texts {
+  margin-top: calc(var(--wc-zoom, 1) * 9.1%);
+}
+.wc-text {
+  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.0833vw, 2.75rem));
+  font-weight: 500;
+  line-height: 1;
+  color: var(--ink);
+  text-align: var(--wc-text-align, left);
+  cursor: pointer;
+}
+.wc-text[data-edition='ii'] {
+  margin-top: calc(var(--wc-zoom, 1) * 10.47%);
+}
+.wc-text[data-edition='iii'] {
+  margin-top: calc(var(--wc-zoom, 1) * 7.29%);
+}
+.wc-text p {
+  margin: 0;
+}
+.wc-text .wc-text-head {
+  margin-bottom: 2em;
+}
+.wc-text .wc-text-head a {
+  color: inherit;
+  text-decoration: none;
+}
+/* The reader's controls, dressed as the text they continue. */
+.wc-more,
+.wc-less {
+  display: inline;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* Which half shows: cut with scripting, whole without, and never both. */
+html.js .wc-text:not(.is-open) .wc-text-open {
+  display: none;
+}
+html.js .wc-text.is-open .wc-text-closed {
+  display: none;
+}
+html:not(.js) .wc-text-closed {
+  display: none;
+}
+
+@media (hover: hover) {
+  .wc-texts:hover .wc-text:not(:hover) {
+    filter: blur(5px);
+    opacity: 0.35;
+  }
+}
+/* The keyboard's hover: only a visibly focused block holds the others back,
+   so a mouse click's lingering focus means nothing on return. */
+.wc-texts:has(.wc-text :focus-visible) .wc-text:not(:has(:focus-visible)) {
+  filter: blur(5px);
+  opacity: 0.35;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wc-text {
+    transition: none;
+  }
+}

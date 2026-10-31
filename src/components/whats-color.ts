@@ -109,6 +109,63 @@ export function whatsColorOpening(editions: readonly Edition[]): Html {
     -->
     ${writeOn(LEAD)}
     ${join(editions.map(namesOfEdition))}
+    ${whatsColorTexts(editions)}
+  </div>`;
+}
+
+/**
+ * The three editions' writing, at the foot of the opening view, the way the
+ * start-page sheets set it: each a full-width block — a heading line, a blank
+ * line, the text — cut to the sentence the sheet cuts it at, with the rest
+ * behind ‘Read more’. Forwards, I to III, against the rosters' newest-first
+ * above: chapters are read in order.
+ *
+ * Each block is a doorway to its edition as well as a text: the heading is a
+ * real link, and the script widens the click to the whole block. Without
+ * scripting there is nothing to expand with, so the whole text stands open
+ * and the link still works — the stylesheet swaps which half shows by the
+ * `js` class, so neither state flashes.
+ */
+function whatsColorTexts(editions: readonly Edition[]): Html {
+  const forwards = [...editions].reverse();
+  return html`<section class="wc-texts" aria-label="About the three editions">
+    ${join(forwards.map(openingText))}
+  </section>`;
+}
+
+function openingText(edition: Edition): Html {
+  const opening = edition.opening;
+  if (!opening) return html``;
+  const href = withBase(`/whats-color/${edition.numeral.toLowerCase()}/`);
+  const head = html`<p class="wc-text-head"><a href="${href}">${opening.heading}</a></p>`;
+  const teaser = opening.teaser.map(
+    (para, i) =>
+      html`<p>
+        ${para}${i === opening.teaser.length - 1
+          ? html` <button type="button" class="wc-more" aria-expanded="false">
+              Read more...
+            </button>`
+          : ''}
+      </p>`,
+  );
+  return html`<div
+    class="wc-text"
+    data-edition="${edition.numeral.toLowerCase()}"
+    style="--wc-text-align: ${opening.align}"
+  >
+    <div class="wc-text-closed">${head}${join(teaser)}</div>
+    <div class="wc-text-open">
+      ${head}${join(
+        opening.full.map(
+          (para, i) =>
+            html`<p>
+              ${para}${i === opening.full.length - 1
+                ? html` <button type="button" class="wc-less">Read less</button>`
+                : ''}
+            </p>`,
+        ),
+      )}
+    </div>
   </div>`;
 }
 

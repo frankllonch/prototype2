@@ -102,10 +102,13 @@ function openingFocus(): void {
 
   document.addEventListener('click', (event) => {
     if (!isPlainClick(event)) return;
-    const name = (event.target as Element).closest<HTMLAnchorElement>('a.wc-name, a.wc-intro');
+    const name = (event.target as Element).closest<HTMLAnchorElement>(
+      'a.wc-name, a.wc-intro, .wc-text-head a',
+    );
     if (!name || !page.contains(name)) return;
     for (const el of page.querySelectorAll('.wc-focused')) el.classList.remove('wc-focused');
-    name.classList.add('wc-focused');
+    // A text block holds as one; a name holds alone.
+    (name.closest('.wc-text') ?? name).classList.add('wc-focused');
     page.classList.add('wc-focus');
     // If the departure never commits — the load is stopped, the tab was
     // backgrounded — the page must come back whole, on the same clock the

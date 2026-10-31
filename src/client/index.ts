@@ -20,6 +20,7 @@ import { initScrollCue } from './scroll-cue.ts';
 import { initInquiries } from './inquiries.ts';
 import { initBook } from './book.ts';
 import { initWcFocus } from './focus.ts';
+import { initWcTexts } from './texts.ts';
 import { initWrite } from './write.ts';
 
 initTextRoll();
@@ -40,4 +41,5 @@ initScrollCue();
 initInquiries();
 initBook();
 initWcFocus();
+initWcTexts();
 initWrite();

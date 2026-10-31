@@ -102,6 +102,19 @@ export interface Edition {
    * only those with an answer, which is what the entries are built from.
    */
   readonly roster?: readonly Participant[];
+  /**
+   * The edition's text as the opening view sets it: a heading line, then the
+   * writing, shown cut to the sentence her start-page sheet cuts it at until
+   * the reader asks for more. Plain text, read from the source — the cut is
+   * the only thing the sheet adds. `align` is per edition because her sheet
+   * justifies the first and sets the other two ragged.
+   */
+  readonly opening?: {
+    readonly heading: string;
+    readonly align: 'justify' | 'left';
+    readonly teaser: readonly string[];
+    readonly full: readonly string[];
+  };
 }
 
 /* ------------------------------------------------------------------ parsing */
@@ -406,6 +419,26 @@ function fromDocument(doc: readonly DocumentEntry[], derived: readonly Participa
   });
 }
 
+/**
+ * The paragraphs up to and including the sentence the start-page sheet cuts
+ * at, as plain text. The sentinel is the cut's closing words; a source edit
+ * that removes them turns the teaser into the whole text, which reads fine
+ * and is noticed, rather than an empty block, which is neither.
+ */
+function cutAt(paras: readonly string[], sentinel: string): string[] {
+  const out: string[] = [];
+  for (const para of paras) {
+    const at = para.indexOf(sentinel);
+    if (at < 0) {
+      out.push(para);
+      continue;
+    }
+    out.push(para.slice(0, at + sentinel.length));
+    return out;
+  }
+  return out;
+}
+
 function build(): readonly Edition[] {
   const one = exhibitions.find((e) => e.slug === 'what-s-color-i');
   const two = exhibitions.find((e) => e.slug === 'what-s-color-ii-for-architects-and-designers');
@@ -433,6 +466,15 @@ function build(): readonly Edition[] {
           .map((p) => p.replace(/^<p\b[^>]*>/i, '').replace(/<\/p>$/i, '').trim()),
         ...SAYS_III_SHEET,
       ],
+      opening: (() => {
+        const full = paragraphs(column).slice(1, 2).map(plain);
+        return {
+          heading: 'WHAT\u2019S COLOR (III)',
+          align: 'left' as const,
+          teaser: cutAt(full, 'personal relationship with color.'),
+          full,
+        };
+      })(),
       hasAnswers: true,
     });
   }
@@ -449,6 +491,15 @@ function build(): readonly Edition[] {
       intro: intro(essay, 1),
       statement: intro(note, 1),
       participants: fromDocument(EDITION_II, readThanks(columns.join('\n'))),
+      opening: (() => {
+        const full = paragraphs(essay).slice(1, 8).map(plain);
+        return {
+          heading: 'WHAT\u2019S COLOR (II)',
+          align: 'left' as const,
+          teaser: cutAt(full, 'cannot be repeated today.\u00bb'),
+          full,
+        };
+      })(),
       // The six her sheet sets between the entries. Not a run of them: the
       // curators' credit opens the column, a note about who commissioned the
       // first paragraph follows it, and the sheet sets neither.
@@ -477,6 +528,15 @@ function build(): readonly Edition[] {
       says: paragraphs(textColumns(one.rows)[0] ?? '')
         .slice(0, 4)
         .map((p) => p.replace(/^<p\b[^>]*>/i, '').replace(/<\/p>$/i, '').trim()),
+      opening: (() => {
+        const full = paragraphs(textColumns(one.rows)[0] ?? '').slice(0, 4).map(plain);
+        return {
+          heading: 'WHAT\u2019S COLOR (I)',
+          align: 'justify' as const,
+          teaser: cutAt(full, 'but also to better understand the world.'),
+          full,
+        };
+      })(),
       hasAnswers: true,
     });
   }
