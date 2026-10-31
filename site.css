@@ -699,7 +699,7 @@ html.is-scrolled .scroll-cue { opacity: 0; }
  */
 .top {
   --bar-rise: var(--bar-rise-measured, 1.6rem);
-  --bar-drop: 0.5em;
+  --bar-drop: 0.01em;
   --bar-side: 0.18em;
 }
 
@@ -782,15 +782,24 @@ html.is-leaving .top [aria-current='page']:is(a, button)::before {
   margin-bottom: 0;
 }
 
-.has-film.is-film-past .top [aria-current='page']:is(a, button) {
+/*
+ * The cut falls on the colour and on nothing else.
+ *
+ * It used to be set on the item itself, which carries the name as well as the
+ * block behind it, so the moment the cut came in it took the top of the item
+ * away — and since the name sits in that top, the name went with it. What is
+ * wanted is a block emerging from under the film with its name on it the whole
+ * time, so the cut belongs to the layer that is the block.
+ */
+.has-film.is-film-past .top [aria-current='page']:is(a, button)::before {
   clip-path: inset(var(--film-lift) 0 0 0);
 }
-.has-film.is-film-gone .top [aria-current='page']:is(a, button) {
+.has-film.is-film-gone .top [aria-current='page']:is(a, button)::before {
   clip-path: none;
 }
 
 @supports (animation-timeline: scroll()) {
-  .has-film.is-film-past .top [aria-current='page']:is(a, button) {
+  .has-film.is-film-past .top [aria-current='page']:is(a, button)::before {
     animation: swatch-slide linear both;
     animation-timeline: scroll(root block);
     animation-range: calc(var(--film-h) - var(--film-lift)) var(--film-h);
