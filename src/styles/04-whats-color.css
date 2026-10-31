@@ -387,6 +387,24 @@
    * than that would run the words into the picture.
    */
   --film-lift: 50px;
+
+  /*
+   * How far the film is taken down beneath the bar, and the one number to
+   * change if the menu is hard to read over it.
+   *
+   * It has to be this deep, and a gentler figure makes things worse rather
+   * than better. The bar is a negative — `difference` draws it as |frame −
+   * source| — so it vanishes wherever the frame already sits at half the
+   * source, which is 114 grey for the menu and 126 for the wordmark. Measured
+   * across twenty-three frames, the band the bar crosses averages 132, just
+   * above that dead point, and dimming by a quarter drags the whole of it
+   * down onto it: the median contrast falls from 3.5:1 to 1.5:1 and three
+   * quarters of the band goes under 3:1. Only past 58% does the brightest
+   * pixel under the bar fall below the dead point and the blend become
+   * dependable again. At 65% the film's brightest pixel is 88 of 255, nothing
+   * can cancel, and the share of the band under 3:1 goes from 36% to 1%.
+   */
+  --film-dim: 0.65;
 }
 
 /*
@@ -465,6 +483,22 @@
   /* The poster shows through until the first frame paints, and is what remains
      when the film is withheld for reduced motion. */
   background: var(--ink) var(--film-poster, none) center / cover no-repeat;
+}
+
+/*
+ * The ground the bar reads against.
+ *
+ * Inside the film and over the picture, so the bar — which is outside `main`
+ * and blends with everything painted beneath it — meets the film already
+ * taken down. Nothing is listening for pointers here, and the poster is dimmed
+ * with the film so the two never disagree.
+ */
+.wc-film::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgb(0 0 0 / var(--film-dim, 0));
+  pointer-events: none;
 }
 
 /*
