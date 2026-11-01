@@ -49,17 +49,17 @@ export function platesBody(show: Show, images: readonly ProjectImage[]): Html {
           ),
         )}
       </div>
-
-      ${images.length > 1
-        ? html`<button type="button" class="plates-step plates-prev" data-figure-step="-1" aria-label="Previous photograph">
-            ${chevron('M8 1 1 8l7 7')}
-          </button>
-          <button type="button" class="plates-step plates-next" data-figure-step="1" aria-label="Next photograph">
-            ${chevron('m1 1 7 7-7 7')}
-          </button>
-          <p class="sr-only" data-figure-count data-template="Photograph {n} of {total}" aria-live="polite"></p>`
-        : ''}
     </div>
+
+    ${images.length > 1
+      ? html`<button type="button" class="plates-step plates-prev" data-figure-step="-1" aria-label="Previous photograph">
+          ${chevron('M8 1 1 8l7 7')}
+        </button>
+        <button type="button" class="plates-step plates-next" data-figure-step="1" aria-label="Next photograph">
+          ${chevron('m1 1 7 7-7 7')}
+        </button>
+        <p class="sr-only" data-figure-count data-template="Photograph {n} of {total}" aria-live="polite"></p>`
+      : ''}
   </div>`;
 }
 
