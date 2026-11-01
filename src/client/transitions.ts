@@ -66,7 +66,20 @@ export function initTransitions(): void {
    * lands under an opaque sheet with every link already spoken for.
    */
   const arrive = () => { root.classList.remove('is-leaving'); target = ''; gone = false; replace = false; };
-  window.addEventListener('pageshow', arrive);
+  window.addEventListener('pageshow', (event) => {
+    arrive();
+    /*
+     * Back on What's Color from the back/forward cache, below the film. Taking
+     * `is-leaving` off hands the bar's block from its lift straight to the
+     * film's scroll-driven reveal, which at this scroll is already over — so
+     * the block would pop back in one frame, where every other page drops it
+     * again. The same drop is asked for here, for as long as it runs.
+     */
+    if (event.persisted && document.body.classList.contains('has-film')) {
+      root.classList.add('wc-swatch-drop');
+      window.setTimeout(() => root.classList.remove('wc-swatch-drop'), 600);
+    }
+  });
   window.addEventListener('popstate', arrive);
   arrive();
 

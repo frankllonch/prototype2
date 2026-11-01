@@ -48,10 +48,13 @@ export function writtenPoint(): number | null {
 const HOLD_MS = 1800;
 
 export function initWrite(): void {
-  if (location.hash !== '#whats-color') return;
+  // Whatever happens below, the page is uncovered once this has run: the head
+  // holds it under the veil only until the landing has been made (00-base.css).
+  const uncover = () => document.documentElement.classList.remove('wc-arriving');
+  if (location.hash !== '#whats-color') return uncover();
   const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
-  if (nav && nav.type !== 'navigate') return;
-  if (writtenPoint() === null) return;
+  if (nav && nav.type !== 'navigate') return uncover();
+  if (writtenPoint() === null) return uncover();
 
   let held = true;
   const release = () => {
@@ -69,6 +72,12 @@ export function initWrite(): void {
   }
   window.addEventListener('scroll', land, { passive: true });
   land();
+  // The bar's place depends on the film's state, which the film module reads
+  // off the scroll — but the scroll event for this move only arrives with the
+  // next frame. Said now, so the bar is already in its settled state when the
+  // arrival hold lifts, and never steps back to the film's middle line.
+  window.dispatchEvent(new Event('scroll'));
+  uncover();
   void document.fonts?.ready.then(land);
 
   const settle = () => {

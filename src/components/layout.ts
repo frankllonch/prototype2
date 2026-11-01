@@ -214,7 +214,22 @@ ${modules.map((m) => `<link rel="modulepreload" href="${m}" />`).join('\n')}
 // The loading screen belongs to arriving at the site, not to each page of it.
 // Decided here, before the first paint, so pages after the first never show it
 // even for a frame.
-try { if (sessionStorage.getItem('cv-seen')) document.documentElement.classList.add('loaded') } catch (e) {}</script>
+try { if (sessionStorage.getItem('cv-seen')) document.documentElement.classList.add('loaded') } catch (e) {}
+// Arriving at What's Color by its link, the page is laid out at the top and
+// moved down to the written sentence by script — so it is kept covered until
+// it has been, and no frame is ever painted in the wrong place. The script
+// uncovers it as soon as it lands (client/write.ts); this timer is the net if
+// it never runs.
+// Only where that landing is made at all — the same tests client/write.ts
+// makes — so a browser that keeps the plain anchor jump never waits for it.
+try { var nav = performance.getEntriesByType('navigation')[0];
+  if (location.hash === '#whats-color' && (!nav || nav.type === 'navigate')
+    && CSS.supports('animation-timeline: view()')
+    && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('wc-arriving', 'wc-swatch-drop');
+    setTimeout(function () { document.documentElement.classList.remove('wc-arriving') }, 1500);
+    setTimeout(function () { document.documentElement.classList.remove('wc-swatch-drop') }, 700);
+  } } catch (e) {}</script>
 </head>
 <body${bodyClass ? ' class="' + bodyClass + '"' : ''}>
 ${loadingScreen().__html}

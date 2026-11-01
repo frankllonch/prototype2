@@ -198,6 +198,35 @@
 @keyframes veil-in { from { opacity: 0; } to { opacity: 1; } }
 
 /*
+ * Arriving at What's Color by its link. That page is laid out at its top and
+ * then moved down to the written sentence by script, and the browser paints
+ * before the script runs: measured in Safari, two to three frames of the film,
+ * with the bar riding it mid-screen and the top of the screen blank where the
+ * bar stands on every other page. So until the page stands where it should
+ * (client/write.ts lifts the class) the paper is held fully over it, and the
+ * bar is drawn as it is everywhere else — pinned at the top, its block
+ * dropping in — rather than in its first film state. The menu never leaves
+ * the top across the move, which is the continuity every other page has.
+ *
+ * The veil's fade starts from its own first frame when the hold lifts — a
+ * different animation name, so `veil-out` restarts rather than resumes.
+ * Only where the landing is made at all: the class is set in the head, and a
+ * timer there lifts it after 1.5s whatever happens to the script.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  html.wc-arriving body.has-film .page-veil { animation: veil-hold 1s linear both; }
+}
+html.wc-arriving body.has-film .top { top: 0; }
+html.wc-arriving body.has-film .top [aria-current='page']:is(a, button) {
+  color: #000;
+  --roll-color: #000;
+  padding: var(--bar-rise) var(--bar-side) var(--bar-drop);
+  margin: calc(-1 * var(--bar-rise)) calc(-1 * var(--bar-side)) calc(-1 * var(--bar-drop));
+}
+html.wc-arriving body.has-film .top [aria-current='page']:is(a, button)::before { display: block; }
+@keyframes veil-hold { from, to { opacity: 1; } }
+
+/*
  * And the guarantee underneath all of it.
  *
  * Everything above hides something and then reveals it by finishing. That is a
@@ -918,6 +947,30 @@ html.is-leaving .top [aria-current='page']:is(a, button)::before {
 @keyframes swatch-slide {
   from { clip-path: inset(var(--film-lift) 0 0 0); }
   to { clip-path: inset(0 0 0 0); }
+}
+
+/*
+ * Arriving and leaving, the block moves here as it does on every other page.
+ *
+ * The scroll-driven reveal above takes the block's animation slot for as long
+ * as the film is behind the bar — and, being the more specific rule, for good
+ * once it is: the drop on arrival never ran (landing below the film, the
+ * reveal is already over, so the block was simply there) and neither did the
+ * lift on leaving, so the block was cut off with the page instead of drawn up
+ * out of it. Both moments win the slot back here, by out-weighing that rule.
+ *
+ * The drop starts with the page's first frame (the arrival rules above) and
+ * this keeps it running through the hand-over to the film's own state — the
+ * same animation by name, so it continues rather than restarts; the head lifts
+ * the class once it has finished. The lift comes with the page-leaving class,
+ * as everywhere. The shorthand resets the timeline, so both run on the clock,
+ * not the scroll. Leaving comes last, so it wins if the two ever meet.
+ */
+html.wc-swatch-drop body.has-film.is-film-past .top [aria-current='page']:is(a, button)::before {
+  animation: swatch-drop 0.46s var(--ease) both;
+}
+html.is-leaving body.has-film.is-film-past .top [aria-current='page']:is(a, button)::before {
+  animation: swatch-lift 0.34s var(--ease) both;
 }
 
 
