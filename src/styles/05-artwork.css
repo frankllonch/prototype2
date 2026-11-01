@@ -27,6 +27,9 @@
   --tilt-depth: 1100px;
   --tilt-lift: 1.015;
   --tilt-settle: 620ms;
+  /* How closely the lean follows the pointer: the time it takes to cover
+     about two thirds of the way to where the pointer is. Smaller is tighter. */
+  --tilt-follow: 110ms;
 
   perspective: var(--tilt-depth);
 }
@@ -41,16 +44,26 @@
  * as its track, and the lean is bound to this, so the hover begins where the
  * picture does rather than anywhere in the empty half of the page.
  */
+/*
+ * No standing `will-change` and no 3D context of its own. A layer promoted
+ * for good is drawn once and then scaled as a bitmap, and Safari scales those
+ * with a cheaper filter than Chromium: the painting sat softened at rest even
+ * when nothing was moving. Promoted only while it actually leans; at rest it
+ * is an ordinary image, drawn sharp. `preserve-3d` bought nothing — there is
+ * one plane here — and costs Safari a 3D rendering context.
+ */
 .detail-plate-inner {
   display: block;
   width: fit-content;
-  transform-style: preserve-3d;
-  will-change: transform;
   transition: transform var(--tilt-settle) var(--ease);
 }
 
-.detail-plate.is-tilting .detail-plate-inner {
+/* The script moves it every frame while the pointer is on it; the settle
+   transition is only for coming back. The class is on the picture, not the
+   figure — the selector that used to look for it on the figure never matched. */
+.detail-plate-inner.is-tilting {
   transition: none;
+  will-change: transform;
 }
 
 /*

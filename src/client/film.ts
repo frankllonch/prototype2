@@ -60,7 +60,18 @@ function startFilm(): void {
   video.muted = true;
   video.playsInline = true;
 
-  const ask = () => video.play().then(() => true, () => false);
+  const ask = () =>
+    video.play().then(
+      () => true,
+      (error: unknown) => {
+        // Said once, in the console, so a refusal can be told apart from a
+        // fault: NotAllowedError is the browser's autoplay policy (Low Power
+        // Mode, or the site set to Never Auto-Play); anything else is the file.
+        const name = error instanceof DOMException ? error.name : String(error);
+        console.info(`[film] the browser declined to start the film: ${name}`);
+        return false;
+      },
+    );
 
   const onGesture = () => {
     for (const type of GESTURES) window.removeEventListener(type, onGesture);
@@ -80,8 +91,14 @@ function startFilm(): void {
   });
 }
 
-/** What counts as the reader having arrived, for a browser that wanted asking. */
-const GESTURES = ['pointerdown', 'touchstart', 'keydown', 'scroll'] as const;
+/**
+ * What counts as the reader having arrived, for a browser that wanted asking —
+ * the events a browser itself treats as a gesture, since only those lift the
+ * restriction. A scroll is not one in any browser and a touch's start is not
+ * one in Safari, where the touch's end is; listening for those only ever
+ * spent the one retry on a play() that was bound to be refused again.
+ */
+const GESTURES = ['pointerdown', 'pointerup', 'click', 'keydown', 'touchend'] as const;
 
 export function initFilm(): void {
   const film = document.querySelector<HTMLElement>('.wc-film');

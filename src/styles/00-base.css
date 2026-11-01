@@ -598,11 +598,20 @@ html.is-scrolled .scroll-cue { opacity: 0; }
   position: fixed; top: 0; left: 0; z-index: 90;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.22s var(--ease);
-  will-change: transform;
+  /* Hidden, not only transparent, once the fade is done: a transparent blended
+     layer is still blended on every frame, and Safari does that blending far
+     less cheaply than Chromium. The same for the standing layer hint, which
+     only earns its keep while the label moves. */
+  visibility: hidden;
+  transition: opacity 0.22s var(--ease), visibility 0s linear 0.22s;
   mix-blend-mode: difference;
 }
-.cursor.is-visible { opacity: 1; }
+.cursor.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.22s var(--ease), visibility 0s;
+  will-change: transform;
+}
 /* Centred on the pointer, because it *is* the pointer while it shows. */
 .cursor-label {
   display: inline-block;

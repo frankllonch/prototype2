@@ -68,8 +68,18 @@ export function initCursor(): void {
 
   // The page can move under a pointer that has not: a scroll carries a tile
   // away, or gathers the grid back into the pile, and the label would stay on
-  // as the name of nothing. Look again at what is under the pointer now.
-  const relook = () => { if (placed) refresh(document.elementFromPoint(targetX, targetY)); };
+  // as the name of nothing. Look again at what is under the pointer now —
+  // once a frame at most. A scroll can fire several times a frame, and each
+  // look is a synchronous hit test of the whole page; Chromium shrugs that
+  // off, Safari pays for every one, which it felt during the opening's unfold.
+  let looking = 0;
+  const relook = () => {
+    if (!placed || looking) return;
+    looking = requestAnimationFrame(() => {
+      looking = 0;
+      refresh(document.elementFromPoint(targetX, targetY));
+    });
+  };
   window.addEventListener('scroll', relook, { passive: true });
   document.addEventListener('stackrestart', relook);
 
