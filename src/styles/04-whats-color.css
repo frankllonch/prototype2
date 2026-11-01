@@ -758,8 +758,10 @@ html:has(body.has-film) {
 }
 
 
-/* The standing note is set bold, with the title above it. */
-.wc-lead { font-weight: 600; }
+/* The standing note is set at the page's own weight; only the question in it,
+   under its colour, is semibold. */
+.wc-lead { font-weight: 400; }
+.wc-lead .wc-ask { font-weight: 600; }
 
 /*
  * A name on an edition page points at that person's answer further down it, so

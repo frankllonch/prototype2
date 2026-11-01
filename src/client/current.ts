@@ -35,7 +35,12 @@ export function initCurrent(): void {
   if (!bar || !here) return;
 
   const n = nextHue();
-  if (n >= 0) here.style.setProperty('--bar-swatch', `var(--neg-${n})`);
+  if (n >= 0) {
+    here.style.setProperty('--bar-swatch', `var(--neg-${n})`);
+    // The question in the opening note wears the same colour as the block in
+    // the bar, so the two read as one mark. Set on the root so it reaches it.
+    document.documentElement.style.setProperty('--wc-ask', `var(--hue-${n})`);
+  }
 
   const rise = () => {
     const applied = parseFloat(getComputedStyle(here).paddingTop) || 0;
