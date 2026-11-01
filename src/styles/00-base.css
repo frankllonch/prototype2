@@ -395,6 +395,31 @@ body.is-locked { overflow: hidden; }
 /* ---------------------------------------------------------------- top bar */
 
 /*
+ * The bar holds still when a Mac rubber-bands past the top of a page — in
+ * Safari too.
+ *
+ * Pulled past the top, Chromium keeps fixed elements where they are and
+ * stretches only the page beneath them, so the bar stays pinned and its
+ * colours simply turn against whatever the gap shows. Safari moves the whole
+ * window instead, fixed elements and all: the bar slid down with the page and
+ * left a strip of white above it. Nothing in a stylesheet changes how Safari
+ * carries fixed elements through the bounce, so in Safari the page is asked
+ * not to overscroll at all — the Colour Chart page never could, scrolling
+ * inside its own panel, and the opening page already refuses it for the
+ * film's sake.
+ *
+ * Safari only. The test is a font keyword only WebKit's Apple builds
+ * understand; Chromium and Firefox answer no and keep the bounce they draw
+ * well. On iOS every browser is WebKit underneath and carries fixed elements
+ * the same way, so the same answer is the right one there. The cost is
+ * Safari's bounce at the foot of a page as well, since the property cannot
+ * tell the top from the bottom.
+ */
+@supports (font: -apple-system-body) {
+  html { overscroll-behavior-y: none; }
+}
+
+/*
  * The bar has no ground of its own. Instead the type is drawn as the negative of
  * whatever passes under it — after huyml.co — so it stays legible over a dark
  * painting and a light one alike, and over nothing at all.
