@@ -45,15 +45,20 @@ export interface DocumentEntry {
 /*
  * December 2020, Barcelona. Twenty-eight guests, fourteen of whom answered.
  * The fourteen answers are on the site already and are not repeated here.
+ *
+ * One colour name each, in English, because that is how the edition's sheet
+ * sets them ("AC011 POWDER RED"). The document sometimes gives two languages
+ * — "VERMELL POLS / POWDER RED" — and printed whole they broke the line's
+ * pattern, so the English half is kept.
  */
 export const EDITION_I: readonly DocumentEntry[] = [
-  { name: 'Marina Garcés', role: 'Filòsofa / Philosopher', code: 'AC011', colourName: 'Vermell pols / Powder red' },
+  { name: 'Marina Garcés', role: 'Filòsofa / Philosopher', code: 'AC011', colourName: 'Powder red' },
   { name: 'Olafur Eliasson', role: 'Artist', code: 'AC002', colourName: 'Yellow' },
   { name: 'Li Edelkoort', role: 'Trend forecaster', code: 'AC119', colourName: 'Natural off white' },
   { name: 'Rupi Kaur', role: 'Poet', code: 'AC206', colourName: 'Soft nude' },
-  { name: 'Ramón Andrés', role: 'Ensayista, pensador / Essayist and thinker', code: 'AC052', colourName: 'Verde oscuro / Dark green' },
+  { name: 'Ramón Andrés', role: 'Ensayista, pensador / Essayist and thinker', code: 'AC052', colourName: 'Dark green' },
   { name: 'Victoria Cirlot', role: 'Catedrática de Filología Románica / Professor of Romanic Philology', code: 'AC019' },
-  { name: 'Tortell Poltrona', role: 'Pallasso / Clown', code: 'AC009', colourName: 'Vermell / Rouge' },
+  { name: 'Tortell Poltrona', role: 'Pallasso / Clown', code: 'AC009', colourName: 'Red' },
   { name: 'Angelica Dass', role: 'Fotògrafa / Photographer — Humanae project', code: 'AC073', colourName: 'Beautiful sand' },
   { name: 'Jaume Funes', role: 'Psicòleg, educador i periodista / Psychologist, educator and journalist', code: 'AC048' },
   { name: 'Oscar Tusquets', role: 'Arquitecto, pintor y escritor / Architect, painter and writer', code: 'AC071', colourName: 'Pompeian red' },

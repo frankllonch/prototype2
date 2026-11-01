@@ -66,7 +66,7 @@ Preferimos pensar cada proyecto de manera específica, tanto en su dimensión es
     code: 'AC067',
     alias: 'Int_sight',
     aka: ['Montse Vicens (Int-sight)'],
-    answer: `Para emociones, los colores.`,
+    answer: `Para gustos emociones, los colores.`,
   },
   {
     name: 'Isabel Francoy',
