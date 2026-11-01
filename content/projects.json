@@ -16445,6 +16445,620 @@
         "year": 2021,
         "reference": "AC011"
       }
+    },
+    {
+      "slug": "shift-towards-coincidence",
+      "kind": "show",
+      "title": "‘Shift Towards Coincidence’",
+      "sourceUrl": "archive:2026 Shift towards coinidence Colectiva",
+      "rows": [],
+      "cover": {
+        "id": "3803ee4fa9e87f0e",
+        "source": "local/shows/shift-towards-coincidence/01.jpg",
+        "alt": "",
+        "width": 1920,
+        "height": 2880
+      },
+      "images": [
+        {
+          "id": "3803ee4fa9e87f0e",
+          "source": "local/shows/shift-towards-coincidence/01.jpg",
+          "alt": "",
+          "width": 1920,
+          "height": 2880
+        },
+        {
+          "id": "a6d25ea5ef538092",
+          "source": "local/shows/shift-towards-coincidence/02.jpg",
+          "alt": "",
+          "width": 2880,
+          "height": 1920
+        },
+        {
+          "id": "efca6da572ae9783",
+          "source": "local/shows/shift-towards-coincidence/03.jpg",
+          "alt": "",
+          "width": 1920,
+          "height": 2880
+        },
+        {
+          "id": "9cff81b978bb1999",
+          "source": "local/shows/shift-towards-coincidence/04.jpg",
+          "alt": "",
+          "width": 1920,
+          "height": 2880
+        },
+        {
+          "id": "89cb6cafaf2c8571",
+          "source": "local/shows/shift-towards-coincidence/05.jpg",
+          "alt": "",
+          "width": 2880,
+          "height": 1920
+        },
+        {
+          "id": "b84520fe439664a7",
+          "source": "local/shows/shift-towards-coincidence/06.jpg",
+          "alt": "",
+          "width": 1087,
+          "height": 1411
+        }
+      ],
+      "metadata": {}
+    },
+    {
+      "slug": "abstract-paintings",
+      "kind": "show",
+      "title": "‘Abstract Paintings’",
+      "sourceUrl": "archive:2026 Abstract Paintings SCROLL NY 2026",
+      "rows": [],
+      "cover": {
+        "id": "d5381f063600c5e0",
+        "source": "local/shows/abstract-paintings/01.jpg",
+        "alt": "",
+        "width": 1170,
+        "height": 936
+      },
+      "images": [
+        {
+          "id": "d5381f063600c5e0",
+          "source": "local/shows/abstract-paintings/01.jpg",
+          "alt": "",
+          "width": 1170,
+          "height": 936
+        },
+        {
+          "id": "ab9cea08aec60e69",
+          "source": "local/shows/abstract-paintings/02.jpg",
+          "alt": "",
+          "width": 6000,
+          "height": 8000
+        },
+        {
+          "id": "2365460d056084d3",
+          "source": "local/shows/abstract-paintings/03.jpg",
+          "alt": "",
+          "width": 6000,
+          "height": 8000
+        }
+      ],
+      "metadata": {}
+    },
+    {
+      "slug": "notas-al-pie",
+      "kind": "show",
+      "title": "Notas al Pie",
+      "sourceUrl": "archive:2025 ep titol 'notas al pie'  COLECTIVA paper DESEMBRE",
+      "rows": [],
+      "cover": {
+        "id": "015f81a8b2959bf7",
+        "source": "local/shows/notas-al-pie/01.jpg",
+        "alt": "",
+        "width": 1920,
+        "height": 2880
+      },
+      "images": [
+        {
+          "id": "015f81a8b2959bf7",
+          "source": "local/shows/notas-al-pie/01.jpg",
+          "alt": "",
+          "width": 1920,
+          "height": 2880
+        },
+        {
+          "id": "e3a02a3bdd808264",
+          "source": "local/shows/notas-al-pie/02.jpg",
+          "alt": "",
+          "width": 1920,
+          "height": 2880
+        },
+        {
+          "id": "28c084f6b4e43002",
+          "source": "local/shows/notas-al-pie/03.jpg",
+          "alt": "",
+          "width": 1920,
+          "height": 2880
+        },
+        {
+          "id": "28ca89eb95e4f0c6",
+          "source": "local/shows/notas-al-pie/04.jpg",
+          "alt": "",
+          "width": 1920,
+          "height": 2880
+        },
+        {
+          "id": "3d76841cc93f3e9f",
+          "source": "local/shows/notas-al-pie/05.jpg",
+          "alt": "",
+          "width": 1920,
+          "height": 2880
+        },
+        {
+          "id": "c04d7039854070fd",
+          "source": "local/shows/notas-al-pie/06.jpg",
+          "alt": "",
+          "width": 2880,
+          "height": 1920
+        }
+      ],
+      "metadata": {}
+    },
+    {
+      "slug": "marco-limite-y-lugar",
+      "kind": "show",
+      "title": "Marco, Límite y Lugar",
+      "sourceUrl": "archive:2024 colectiva MARCO LIMITE y lugar , Madrid",
+      "rows": [],
+      "cover": {
+        "id": "0ca4501d9ee02c96",
+        "source": "local/shows/marco-limite-y-lugar/01.jpg",
+        "alt": "",
+        "width": 8256,
+        "height": 5504
+      },
+      "images": [
+        {
+          "id": "0ca4501d9ee02c96",
+          "source": "local/shows/marco-limite-y-lugar/01.jpg",
+          "alt": "",
+          "width": 8256,
+          "height": 5504
+        },
+        {
+          "id": "a375d2b4392f5ca4",
+          "source": "local/shows/marco-limite-y-lugar/02.jpg",
+          "alt": "",
+          "width": 8256,
+          "height": 5504
+        },
+        {
+          "id": "962cef1a5e6b639b",
+          "source": "local/shows/marco-limite-y-lugar/03.jpg",
+          "alt": "",
+          "width": 8256,
+          "height": 5504
+        },
+        {
+          "id": "2ea7584a652bb97c",
+          "source": "local/shows/marco-limite-y-lugar/04.jpg",
+          "alt": "",
+          "width": 1600,
+          "height": 2400
+        },
+        {
+          "id": "e1ecd6f30b77dac3",
+          "source": "local/shows/marco-limite-y-lugar/05.jpg",
+          "alt": "",
+          "width": 3508,
+          "height": 2480
+        },
+        {
+          "id": "5b84408f70c401fe",
+          "source": "local/shows/marco-limite-y-lugar/06.jpg",
+          "alt": "",
+          "width": 3508,
+          "height": 2480
+        }
+      ],
+      "metadata": {}
+    },
+    {
+      "slug": "painting-as-a-gift-of-color",
+      "kind": "show",
+      "title": "Painting as a Gift of Color",
+      "sourceUrl": "archive:2024 'Painting as a gift from color' Tetbury England",
+      "rows": [],
+      "cover": {
+        "id": "b747c788581f9631",
+        "source": "local/shows/painting-as-a-gift-of-color/01.jpg",
+        "alt": "",
+        "width": 6134,
+        "height": 4089
+      },
+      "images": [
+        {
+          "id": "b747c788581f9631",
+          "source": "local/shows/painting-as-a-gift-of-color/01.jpg",
+          "alt": "",
+          "width": 6134,
+          "height": 4089
+        },
+        {
+          "id": "43fa910981fd4f26",
+          "source": "local/shows/painting-as-a-gift-of-color/02.jpg",
+          "alt": "",
+          "width": 5817,
+          "height": 3878
+        },
+        {
+          "id": "7df13797b19b6412",
+          "source": "local/shows/painting-as-a-gift-of-color/03.jpg",
+          "alt": "",
+          "width": 6050,
+          "height": 3522
+        },
+        {
+          "id": "a94f237ae11c27c1",
+          "source": "local/shows/painting-as-a-gift-of-color/04.jpg",
+          "alt": "",
+          "width": 5809,
+          "height": 3873
+        },
+        {
+          "id": "fc3dbaccbbaff1a2",
+          "source": "local/shows/painting-as-a-gift-of-color/05.jpg",
+          "alt": "",
+          "width": 6190,
+          "height": 4127
+        },
+        {
+          "id": "dc4513c48e3b36e5",
+          "source": "local/shows/painting-as-a-gift-of-color/06.jpg",
+          "alt": "",
+          "width": 6122,
+          "height": 4081
+        },
+        {
+          "id": "27f7b6b1545db9a4",
+          "source": "local/shows/painting-as-a-gift-of-color/07.jpg",
+          "alt": "",
+          "width": 5593,
+          "height": 3729
+        },
+        {
+          "id": "7987860e3ba16871",
+          "source": "local/shows/painting-as-a-gift-of-color/08.jpg",
+          "alt": "",
+          "width": 5738,
+          "height": 3825
+        },
+        {
+          "id": "d72544e21cc07073",
+          "source": "local/shows/painting-as-a-gift-of-color/09.jpg",
+          "alt": "",
+          "width": 5982,
+          "height": 3988
+        },
+        {
+          "id": "d78ac1d8ece7bd7e",
+          "source": "local/shows/painting-as-a-gift-of-color/10.jpg",
+          "alt": "",
+          "width": 6079,
+          "height": 4053
+        },
+        {
+          "id": "43a309d29cf95e1f",
+          "source": "local/shows/painting-as-a-gift-of-color/11.jpg",
+          "alt": "",
+          "width": 6086,
+          "height": 4057
+        },
+        {
+          "id": "affa224cf596a164",
+          "source": "local/shows/painting-as-a-gift-of-color/12.jpg",
+          "alt": "",
+          "width": 6066,
+          "height": 4044
+        },
+        {
+          "id": "3c8f00983263b540",
+          "source": "local/shows/painting-as-a-gift-of-color/13.jpg",
+          "alt": "",
+          "width": 4982,
+          "height": 3321
+        }
+      ],
+      "metadata": {}
+    },
+    {
+      "slug": "what-abstract-art-means-to-me",
+      "kind": "show",
+      "title": "What Abstract Art Means to Me?",
+      "sourceUrl": "archive:2024 Colectiva 'what abstract art means to me ?'",
+      "rows": [],
+      "cover": {
+        "id": "d4ceb466982a3a0f",
+        "source": "local/shows/what-abstract-art-means-to-me/01.jpg",
+        "alt": "",
+        "width": 2400,
+        "height": 1600
+      },
+      "images": [
+        {
+          "id": "d4ceb466982a3a0f",
+          "source": "local/shows/what-abstract-art-means-to-me/01.jpg",
+          "alt": "",
+          "width": 2400,
+          "height": 1600
+        },
+        {
+          "id": "f242ec8372225cd4",
+          "source": "local/shows/what-abstract-art-means-to-me/02.jpg",
+          "alt": "",
+          "width": 1600,
+          "height": 2400
+        },
+        {
+          "id": "a99c161076f20058",
+          "source": "local/shows/what-abstract-art-means-to-me/03.jpg",
+          "alt": "",
+          "width": 750,
+          "height": 913
+        },
+        {
+          "id": "530efe8e361f24ae",
+          "source": "local/shows/what-abstract-art-means-to-me/04.jpg",
+          "alt": "",
+          "width": 2250,
+          "height": 4000
+        }
+      ],
+      "metadata": {}
+    },
+    {
+      "slug": "la-terre-est-bleu",
+      "kind": "show",
+      "title": "La Terre est Bleu comme un Organge",
+      "sourceUrl": "archive:2023 COLECTIVA La terre est blue comen un orange",
+      "rows": [],
+      "cover": {
+        "id": "81dbcca0a2c8e826",
+        "source": "local/shows/la-terre-est-bleu/01.jpg",
+        "alt": "",
+        "width": 1440,
+        "height": 1794
+      },
+      "images": [
+        {
+          "id": "81dbcca0a2c8e826",
+          "source": "local/shows/la-terre-est-bleu/01.jpg",
+          "alt": "",
+          "width": 1440,
+          "height": 1794
+        },
+        {
+          "id": "4428d01c7c1d0d71",
+          "source": "local/shows/la-terre-est-bleu/02.jpg",
+          "alt": "",
+          "width": 1440,
+          "height": 1800
+        },
+        {
+          "id": "8097c5a891927198",
+          "source": "local/shows/la-terre-est-bleu/03.jpg",
+          "alt": "",
+          "width": 2400,
+          "height": 1602
+        },
+        {
+          "id": "dbf1f3ea4e2c9c61",
+          "source": "local/shows/la-terre-est-bleu/04.jpg",
+          "alt": "",
+          "width": 2400,
+          "height": 1602
+        },
+        {
+          "id": "b45dcc169d83844b",
+          "source": "local/shows/la-terre-est-bleu/05.jpg",
+          "alt": "",
+          "width": 2400,
+          "height": 1602
+        },
+        {
+          "id": "86ec50e7bc984956",
+          "source": "local/shows/la-terre-est-bleu/06.jpg",
+          "alt": "",
+          "width": 2400,
+          "height": 3596
+        },
+        {
+          "id": "1fdacc99883e20d0",
+          "source": "local/shows/la-terre-est-bleu/07.jpg",
+          "alt": "",
+          "width": 2400,
+          "height": 1569
+        },
+        {
+          "id": "14bb55ec19e0c1b0",
+          "source": "local/shows/la-terre-est-bleu/08.jpg",
+          "alt": "",
+          "width": 4696,
+          "height": 8367
+        }
+      ],
+      "metadata": {}
+    },
+    {
+      "slug": "t10",
+      "kind": "show",
+      "title": "T10",
+      "sourceUrl": "archive:2020 T10 project",
+      "rows": [],
+      "cover": {
+        "id": "b710b17e33151ddf",
+        "source": "local/shows/t10/01.jpg",
+        "alt": "",
+        "width": 3687,
+        "height": 4424
+      },
+      "images": [
+        {
+          "id": "b710b17e33151ddf",
+          "source": "local/shows/t10/01.jpg",
+          "alt": "",
+          "width": 3687,
+          "height": 4424
+        },
+        {
+          "id": "7a34d9efd879be31",
+          "source": "local/shows/t10/02.jpg",
+          "alt": "",
+          "width": 3687,
+          "height": 4424
+        },
+        {
+          "id": "fc92ccfe1d93a3fd",
+          "source": "local/shows/t10/03.jpg",
+          "alt": "",
+          "width": 3687,
+          "height": 4424
+        },
+        {
+          "id": "07dd801bb7bed074",
+          "source": "local/shows/t10/04.jpg",
+          "alt": "",
+          "width": 3687,
+          "height": 4424
+        },
+        {
+          "id": "14e0978ff5e5ac64",
+          "source": "local/shows/t10/05.jpg",
+          "alt": "",
+          "width": 1600,
+          "height": 1200
+        }
+      ],
+      "metadata": {}
+    },
+    {
+      "slug": "color-y-forma",
+      "kind": "show",
+      "title": "Color y forma",
+      "sourceUrl": "archive:2017 Color y forma",
+      "rows": [],
+      "cover": {
+        "id": "c355ab5ca0845497",
+        "source": "local/shows/color-y-forma/01.jpg",
+        "alt": "",
+        "width": 750,
+        "height": 743
+      },
+      "images": [
+        {
+          "id": "c355ab5ca0845497",
+          "source": "local/shows/color-y-forma/01.jpg",
+          "alt": "",
+          "width": 750,
+          "height": 743
+        },
+        {
+          "id": "378dd214b440680f",
+          "source": "local/shows/color-y-forma/02.jpg",
+          "alt": "",
+          "width": 725,
+          "height": 739
+        },
+        {
+          "id": "ace92abd9077349f",
+          "source": "local/shows/color-y-forma/03.jpg",
+          "alt": "",
+          "width": 1242,
+          "height": 1491
+        },
+        {
+          "id": "c728ba8dddd03f91",
+          "source": "local/shows/color-y-forma/04.jpg",
+          "alt": "",
+          "width": 865,
+          "height": 576
+        }
+      ],
+      "metadata": {}
+    },
+    {
+      "slug": "galeria-axel-pairon",
+      "kind": "show",
+      "title": "Galeria Axel Pairon",
+      "sourceUrl": "archive:2016 colectiva Axel Pairon Gallery Antwerp, Belgium",
+      "rows": [],
+      "cover": {
+        "id": "3ced528db43382b4",
+        "source": "local/shows/galeria-axel-pairon/01.jpg",
+        "alt": "",
+        "width": 746,
+        "height": 831
+      },
+      "images": [
+        {
+          "id": "3ced528db43382b4",
+          "source": "local/shows/galeria-axel-pairon/01.jpg",
+          "alt": "",
+          "width": 746,
+          "height": 831
+        },
+        {
+          "id": "bba224b69272f12f",
+          "source": "local/shows/galeria-axel-pairon/02.jpg",
+          "alt": "",
+          "width": 1280,
+          "height": 1600
+        }
+      ],
+      "metadata": {}
+    },
+    {
+      "slug": "el-color-no-existe",
+      "kind": "show",
+      "title": "‘El color no existe, existe la luz’",
+      "sourceUrl": "archive:2000 el color no existe existe la luz Sala VInçon Barcelona",
+      "rows": [],
+      "cover": {
+        "id": "67ccaefc7923a990",
+        "source": "local/shows/el-color-no-existe/01.jpg",
+        "alt": "",
+        "width": 1800,
+        "height": 1183
+      },
+      "images": [
+        {
+          "id": "67ccaefc7923a990",
+          "source": "local/shows/el-color-no-existe/01.jpg",
+          "alt": "",
+          "width": 1800,
+          "height": 1183
+        },
+        {
+          "id": "73c862cca2a3b1db",
+          "source": "local/shows/el-color-no-existe/02.jpg",
+          "alt": "",
+          "width": 1800,
+          "height": 1265
+        },
+        {
+          "id": "d064cc728f683d50",
+          "source": "local/shows/el-color-no-existe/03.jpg",
+          "alt": "",
+          "width": 1957,
+          "height": 1852
+        },
+        {
+          "id": "1d0ad99ec66e6f81",
+          "source": "local/shows/el-color-no-existe/04.jpg",
+          "alt": "",
+          "width": 2511,
+          "height": 2107
+        }
+      ],
+      "metadata": {}
     }
   ]
 }

@@ -79,7 +79,7 @@ export interface ProjectMetadata {
  * `project` — a collaboration / commission (WordPress page under /projects/)
  * `page`    — a long-form page (About, Color Chart, Exhibitions)
  */
-export type ProjectKind = 'work' | 'project' | 'page';
+export type ProjectKind = 'work' | 'project' | 'page' | 'show';
 
 export interface Project {
   readonly slug: string;

@@ -28,7 +28,8 @@
     "wp:start": "cd wordpress && npx wp-env start",
     "wp:stop": "cd wordpress && npx wp-env stop",
     "wp:import": "cd wordpress && npx wp-env run cli wp eval-file wp-content/plugins/claudiavalsells-content/import.php",
-    "wp:diff": "node --experimental-strip-types scripts/wp-diff.ts"
+    "wp:diff": "node --experimental-strip-types scripts/wp-diff.ts",
+    "add-shows": "node --experimental-strip-types scripts/add-shows.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
