@@ -1297,7 +1297,7 @@ html:has(body.has-film) {
   margin: 0 0 calc(var(--wc-zoom, 1) * var(--wc-lead-gap, 7vw));
 }
 .wc-write .wc-lead {
-  max-width: var(--wc-lead-measure, 100%);
+  max-width: var(--wc-lead-measure, 80%);
   margin: 0 auto;
 }
 
@@ -1350,7 +1350,9 @@ html:has(body.has-film) {
     }
     .wc-word {
       opacity: 0;
-      animation: wc-word-in linear both;
+      /* Each word arrives whole, the moment its turn comes: no fade-in, so
+         there is never a half-written word ahead of the reader. */
+      animation: wc-word-in steps(1, jump-start) both;
       animation-timeline: --wc-write;
       /* Each word's own animation-range rides on the element. */
     }
