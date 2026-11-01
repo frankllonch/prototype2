@@ -253,7 +253,11 @@ function writeOn(text: string): Html {
             return html`<span
               class="wc-word"
               style="animation-range: cover ${((from / COVER) * 100).toFixed(2)}% cover ${((to / COVER) * 100).toFixed(2)}%"
-            >${parts ? html`<mark class="wc-ask">${parts[1] ?? ''}</mark>${parts[2] ?? ''}` : word}</span> `;
+            >${parts ? html`<mark class="wc-ask">${parts[1] ?? ''}</mark>${parts[2] ?? ''}` : word}</span>${
+              // The last two words are held together, so the paragraph never
+              // ends on one word stranded at the left of a justified block.
+              i === words.length - 2 ? raw('&nbsp;') : ' '
+            }`;
           }),
         )}
       </p>
