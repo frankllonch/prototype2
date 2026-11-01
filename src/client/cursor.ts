@@ -22,16 +22,22 @@ export function initCursor(): void {
   let active = false;
   let frame = 0;
   let placed = false;
+  let tickedAt = 0;
 
-  const tick = () => {
-    // Lerp toward the pointer; the lag is what gives it weight.
-    const ease = reduceMotion.matches ? 1 : 0.2;
+  const tick = (time: number) => {
+    // Lerp toward the pointer; the lag is what gives it weight. A fifth of
+    // the way per frame at 120fps — the pace it was approved at — applied by
+    // elapsed time, so the weight is the same in Safari, which draws at 60.
+    const elapsed = tickedAt ? Math.min(time - tickedAt, 100) : 1000 / 120;
+    tickedAt = time;
+    const ease = reduceMotion.matches ? 1 : 1 - Math.pow(0.8, elapsed / (1000 / 120));
     x += (targetX - x) * ease;
     y += (targetY - y) * ease;
     cursor.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`;
     frame = Math.abs(targetX - x) > 0.1 || Math.abs(targetY - y) > 0.1 || active
       ? requestAnimationFrame(tick)
       : 0;
+    if (!frame) tickedAt = 0;
   };
 
   /** Decide what the pointer is over, given the element under it. */

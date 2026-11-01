@@ -54,8 +54,18 @@ const EASE_IN = 2;
  *                stops, and a flick still unfolds fluidly instead of at once.
  *                This is the only way to make the opening feel slower without
  *                taking the wheel away from the reader.
+ *
+ *                The fraction is per frame *at 120fps* — the pace it was
+ *                approved at, in a Chromium browser on a 120Hz display — and
+ *                applied by elapsed time rather than per frame drawn. It used
+ *                to be per frame, so the opening ran at the screen's pace:
+ *                Safari draws pages at 60 whatever the display, so there it
+ *                caught up half as fast and lingered in the half-dispersed
+ *                state, where the grid shows as a shrunken copy of itself.
  */
 const FOLLOW = 0.14;
+/** The frame length FOLLOW was tuned at. */
+const FOLLOW_FRAME_MS = 1000 / 120;
 const FRONT = 0.38;         // height of the front painting, as a fraction of the viewport
 const VISIBLE = 12;         // tiles given their own offset in the pile; the rest sit behind
 const WATCHDOG = 4000;      // ms: if the pile cannot be measured by now, show the grid
@@ -114,6 +124,8 @@ export function initStack(): void {
   let settled = false;
   /** How far the pile is drawn unfolded, 0 to 1 — behind the scroll by FOLLOW. */
   let shown = 0;
+  /** When the last frame was drawn, so the follow can be applied by time. */
+  let drawnAt = 0;
 
   const clearTransforms = () => {
     for (const tile of tiles) {
@@ -156,9 +168,15 @@ export function initStack(): void {
     ? Math.pow(2 * p, EASE_IN) / 2
     : 1 - Math.pow(2 * (1 - p), EASE_IN) / 2);
 
-  const render = () => {
+  const render = (time: number) => {
     frame = 0;
     if (disabled) return;
+    // The first frame after the pile has been at rest counts as one frame's
+    // worth — the clock is reset whenever it comes to rest, so a pause in the
+    // scrolling is never mistaken for time to catch up. Otherwise the real
+    // interval, capped so one long stall cannot throw it all the way.
+    const elapsed = drawnAt ? Math.min(time - drawnAt, 100) : FOLLOW_FRAME_MS;
+    drawnAt = time;
 
     // Without a trustworthy measurement there is nothing sensible to draw, so
     // try once more and otherwise sit this frame out — the grid is already in
@@ -172,9 +190,10 @@ export function initStack(): void {
     // Drawn behind the scroll, not at it: close the gap by FOLLOW each frame,
     // snap the last sliver so it does not creep for ever, and keep drawing
     // frames until the pile has caught up — the scroll may have stopped.
-    shown += (wanted - shown) * FOLLOW;
+    shown += (wanted - shown) * (1 - Math.pow(1 - FOLLOW, elapsed / FOLLOW_FRAME_MS));
     if (Math.abs(wanted - shown) < 0.0015) shown = wanted;
     if (shown !== wanted) schedule();
+    else drawnAt = 0;
     const p = shown;
 
     if (p >= 1) {
