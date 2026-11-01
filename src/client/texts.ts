@@ -1,4 +1,5 @@
-import { isPlainClick, reduceMotion } from './env.ts';
+import { isPlainClick } from './env.ts';
+import { glide, topOf } from './glide.ts';
 
 /**
  * The opening view's three texts.
@@ -35,10 +36,7 @@ export function initWcTexts(): void {
         // Folding a long text can leave the reader staring past its end;
         // bring the block's head back if it has gone over the top.
         if (block.getBoundingClientRect().top < 0) {
-          block.scrollIntoView({
-            block: 'start',
-            behavior: reduceMotion.matches ? 'auto' : 'smooth',
-          });
+          glide(topOf(block));
         }
       }
       return;

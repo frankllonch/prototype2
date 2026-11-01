@@ -763,18 +763,12 @@ html:has(body.has-film) {
 
 /*
  * A name on an edition page points at that person's answer further down it, so
- * it travels rather than jumps — the same as the heading in the bar, and for
- * the same reason: it should be plain that the answer is on this page.
+ * it travels rather than jumps. Not by `scroll-behavior: smooth` any more: the
+ * browser's own smooth scroll cannot be paced, and Safari's is a snap. The
+ * links glide by script instead (client/glide.ts), at the site's one speed.
  *
- * On the scrolling element, which is why it is reached through `:has`. Only
- * these pages: the gallery moves the page itself to settle its grid, and a
- * smooth scroll there would animate something meant to be instant.
- */
-@media (prefers-reduced-motion: no-preference) {
-  html:has(.wc-edition) { scroll-behavior: smooth; }
-}
-
-/* Clear of the fixed bar when an answer is scrolled to. */
+ * Clear of the fixed bar when an answer is travelled to — the glide reads
+ * this margin, as the browser would. */
 .wc-answer,
 .wc-cell { scroll-margin-top: var(--wc-answer-anchor, 7rem); }
 

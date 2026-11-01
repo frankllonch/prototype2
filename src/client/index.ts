@@ -23,6 +23,7 @@ import { initInquiries } from './inquiries.ts';
 import { initBook } from './book.ts';
 import { initWcFocus } from './focus.ts';
 import { initWcTexts } from './texts.ts';
+import { initGlide } from './glide.ts';
 import { initWrite } from './write.ts';
 
 initTextRoll();
@@ -46,4 +47,5 @@ initInquiries();
 initBook();
 initWcFocus();
 initWcTexts();
+initGlide();
 initWrite();

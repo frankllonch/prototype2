@@ -1,4 +1,5 @@
 import { isPlainClick, reduceMotion } from './env.ts';
+import { glide, topOf } from './glide.ts';
 import { ABANDONED } from './transitions.ts';
 
 /**
@@ -85,7 +86,7 @@ function sheetFocus(): void {
        */
       if (!reduceMotion.matches) {
         window.scrollTo({ top: 0, behavior: 'auto' });
-        window.setTimeout(() => cell.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+        window.setTimeout(() => glide(topOf(cell)), 80);
       }
     }
   }

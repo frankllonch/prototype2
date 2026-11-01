@@ -1,4 +1,5 @@
 import { isPlainClick, reduceMotion } from './env.ts';
+import { glide } from './glide.ts';
 import { writtenPoint } from './write.ts';
 
 /**
@@ -192,7 +193,7 @@ function samePageLinks(): void {
       if (!isPlainClick(event) || link.pathname !== window.location.pathname) return;
       event.preventDefault();
       window.history.replaceState(null, '', href);
-      window.scrollTo({ top: to(), behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+      glide(to());
     });
   };
 
