@@ -760,7 +760,21 @@ html:has(body.has-film) {
 
 /* The standing note is set at the page's own weight; only the question in it,
    under its colour, is semibold. */
-.wc-lead { font-weight: 400; }
+/*
+ * Set exactly as the three editions' texts at the foot of the view are: the
+ * same size, weight and solid leading, justified across the page's own
+ * margins. The one knob is how far it spreads:
+ *
+ *   --wc-lead-measure   the paragraph's width, as a share of the page between
+ *                       its margins. 100% is the full spread the editions'
+ *                       texts take; smaller draws it in, centred.
+ */
+.wc-lead {
+  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.0833vw, 2.75rem));
+  font-weight: 500;
+  line-height: 1;
+  text-align: justify;
+}
 .wc-lead .wc-ask { font-weight: 600; }
 
 /*
@@ -1272,7 +1286,7 @@ html:has(body.has-film) {
  *
  * Three knobs:
  *   --wc-write-length   how much scroll the writing takes. More is slower.
- *   --wc-write-measure  the paragraph's width while it is on stage.
+ *   --wc-lead-measure   the paragraph's width (set with the note's type above).
  *   --wc-ask            the colour behind the question. One of the palette's.
  *
  * Everything below the first rule asks the engine first: without scroll-run
@@ -1283,7 +1297,7 @@ html:has(body.has-film) {
   margin: 0 0 calc(var(--wc-zoom, 1) * var(--wc-lead-gap, 7vw));
 }
 .wc-write .wc-lead {
-  max-width: var(--wc-write-measure, 76%);
+  max-width: var(--wc-lead-measure, 100%);
   margin: 0 auto;
 }
 
