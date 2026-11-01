@@ -758,12 +758,12 @@ html:has(body.has-film) {
 }
 
 
-/* The standing note is set at the page's own weight; only the question in it,
-   under its colour, is semibold. */
+/* The standing note is set semibold throughout, the question in it included —
+   semibold, not bold. */
 /*
- * Set exactly as the three editions' texts at the foot of the view are: the
- * same size, weight and solid leading, justified across the page's own
- * margins. The one knob is how far it spreads:
+ * Set as the three editions' texts at the foot of the view are: the same size
+ * and solid leading, justified across the page's own margins, only heavier.
+ * The one knob is how far it spreads:
  *
  *   --wc-lead-measure   the paragraph's width, as a share of the page between
  *                       its margins. 100% is the full spread the editions'
@@ -771,11 +771,10 @@ html:has(body.has-film) {
  */
 .wc-lead {
   font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.0833vw, 2.75rem));
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1;
   text-align: justify;
 }
-.wc-lead .wc-ask { font-weight: 600; }
 
 /*
  * A name on an edition page points at that person's answer further down it, so
