@@ -89,6 +89,9 @@ function cv_editorial_body( array $item ): string {
  * page and raised over it on demand. Each carries its own address
  * (`data-panel-url`), which is what the bar shows while it is open; `$open`
  * names the one served open when that address was loaded directly.
+ *
+ * A commissioned project opens on the designer's sheet (sheet.php); an
+ * exhibition, for now, on the reader above.
  */
 function cv_panels( string $kind, array $items, string $open = '' ): string {
 	$out = '<div class="panels">';
@@ -96,7 +99,7 @@ function cv_panels( string $kind, array $items, string $open = '' ): string {
 		$id   = "{$kind}-{$item['slug']}";
 		$out .= '<article class="panel' . ( $open === $id ? ' is-open' : '' ) . '" id="' . esc_attr( $id ) . '" data-panel data-panel-url="' . esc_url( $item['url'] ) . '">'
 			. '<a class="panel-close" href="#" data-panel-close>Close</a>'
-			. cv_editorial_body( $item )
+			. ( 'commissioned' === $kind ? cv_sheet_body( cv_project_sheet( $item ) ) : cv_editorial_body( $item ) )
 			. '</article>';
 	}
 	return $out . '</div>';

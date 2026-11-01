@@ -197,11 +197,16 @@ function cvc_register_meta(): void {
 	cvc_field( 'artwork', '_cv_source_url', 'string' );
 	cvc_field( 'artwork', '_cv_source_title', 'string' );
 
-	// Commissioned work.
+	// Commissioned work. The last three are the masthead of its own page, which
+	// the designer words apart from its line on the index: "Color Chart" over
+	// "Bofill Taller d’Arquitectura" there, one line on the index.
 	cvc_field( 'commissioned', '_cv_year', 'integer', 0 );
 	cvc_field( 'commissioned', '_cv_when', 'string' );
 	cvc_field( 'commissioned', '_cv_client', 'string' );
 	cvc_field( 'commissioned', '_cv_source_url', 'string' );
+	cvc_field( 'commissioned', '_cv_heading', 'string' );
+	cvc_field( 'commissioned', '_cv_lines', 'string', '', 'cvc_sanitize_lines' );
+	cvc_field( 'commissioned', '_cv_page_when', 'string' );
 
 	// An exhibition.
 	cvc_field( 'exhibition', '_cv_year', 'integer', 0 );

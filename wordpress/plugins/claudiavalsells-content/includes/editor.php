@@ -56,6 +56,9 @@ function cvc_editor_fields(): array {
 					[ 'key' => '_cv_year', 'label' => __( 'Year', 'claudiavalsells' ), 'type' => 'number', 'help' => __( 'The year it began; decides its place in the list.', 'claudiavalsells' ) ],
 					[ 'key' => '_cv_when', 'label' => __( 'When, as shown', 'claudiavalsells' ), 'type' => 'text', 'help' => __( 'e.g. 2016 – 2020, or 2023 – Currently. Left empty, the year is shown.', 'claudiavalsells' ) ],
 					[ 'key' => '_cv_client', 'label' => __( 'Client', 'claudiavalsells' ), 'type' => 'text' ],
+					[ 'key' => '_cv_heading', 'label' => __( 'Name on its page', 'claudiavalsells' ), 'type' => 'text', 'help' => __( 'The bold name at the top of the project’s page, e.g. Color Chart. Left empty, the title above is used.', 'claudiavalsells' ) ],
+					[ 'key' => '_cv_lines', 'label' => __( 'Under the name', 'claudiavalsells' ), 'type' => 'textarea', 'help' => __( 'Who it was for or with, one line per line, written as it should read: FOR NANI MARQUINA.', 'claudiavalsells' ) ],
+					[ 'key' => '_cv_page_when', 'label' => __( 'When, on its page', 'claudiavalsells' ), 'type' => 'text', 'help' => __( 'e.g. 2023 - ON GOING. Left empty, the same as in the list.', 'claudiavalsells' ) ],
 				],
 			],
 			'exhibition' => [
@@ -111,6 +114,21 @@ function cvc_editor_fields(): array {
 		],
 	];
 }
+
+/**
+ * The ways a paragraph can be set, offered in the editor's Styles panel.
+ *
+ * A project's page opens on a statement in capitals, closes on its credits in
+ * a smaller hand, and once in a while asks the reader to do something. These
+ * are those three, by name, so Claudia picks one instead of typing a class.
+ * The classes they give — is-style-lead, is-style-note, is-style-cta — are
+ * the ones the design's stylesheet sets (src/styles/07-sheet.css).
+ */
+add_action( 'init', function () {
+	register_block_style( 'core/paragraph', [ 'name' => 'lead', 'label' => __( 'Statement, in capitals', 'claudiavalsells' ) ] );
+	register_block_style( 'core/paragraph', [ 'name' => 'note', 'label' => __( 'Credits, smaller', 'claudiavalsells' ) ] );
+	register_block_style( 'core/paragraph', [ 'name' => 'cta', 'label' => __( 'Call to act, leaning', 'claudiavalsells' ) ] );
+} );
 
 /** The blocks a page of this site can be made of. */
 add_filter( 'allowed_block_types_all', function ( $allowed, $context ) {

@@ -245,6 +245,11 @@ function cv_imp_dates( ?string $iso ): array {
 
 $m = $cv_manifest;
 WP_CLI::log( 'Importing from ' . $cv_dir . ' (bundle of ' . ( $m['generatedAt'] ?? '?' ) . ')' );
+// Global, not local: `wp eval-file` runs this file inside a function, so a
+// plain assignment here would be a local that cv_imp_post()'s `global` never
+// sees — the stamping at the end would walk an empty list, and every later
+// run would overwrite what Claudia had edited.
+global $cv_touched;
 $cv_touched = [];
 $cv_first   = ! get_option( 'cv_imported_at' );
 
@@ -337,6 +342,9 @@ foreach ( $m['commissioned'] as $c ) {
 		'_cv_year'       => (int) $c['year'],
 		'_cv_when'       => $c['when'],
 		'_cv_source_url' => $c['sourceUrl'],
+		'_cv_heading'    => $c['heading'] ?? '',
+		'_cv_lines'      => $c['lines'] ?? '',
+		'_cv_page_when'  => $c['pageWhen'] ?? '',
 	] );
 	if ( ! $id ) {
 		continue;

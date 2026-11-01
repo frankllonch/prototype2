@@ -11,6 +11,14 @@ updated as each phase lands.
 
 ## Where things stand (30 October 2026)
 
+**1 November:** the commissioned projects open on the designer's new detail
+sheet in WordPress too — the same markup as the static site (`wp:diff` reports
+the page identical). Each project has three new fields in its side panel
+(*Name on its page*, *Under the name*, *When, on its page*) and the paragraph
+block has three styles to pick from (*Statement, in capitals*, *Credits,
+smaller*, *Call to act, leaning*), labelled in Spanish and Catalan as well.
+The import fills all of them from the designer's sheets.
+
 Built, imported and checked on this Mac at http://localhost:8888 (WordPress
 7.1, PHP 8.3, in Docker). Everything below was looked at in a browser.
 
@@ -162,7 +170,7 @@ her: writing and uploading, not rebuilding pages.
 | Content type | Replaces | What she fills in | Where it shows |
 |---|---|---|---|
 | Artwork | the Portfolio entries | title, the painting image, more photographs (installation views), year, dimensions, materials, reference, available yes/no, optional text | the stack and grid, `/artwork/<slug>/`, the year filter, the lightbox |
-| Commissioned | the pages under `/projects/` | title, year, client, group (Commissioned, Education, Solidary), images, text | `/commissioned/`, each as a panel with its own URL |
+| Commissioned | the pages under `/projects/` | title (its line on the index), year, when, client, group (Commissioned, Education, Solidary); for its own page the name, the lines under it and the dates as the designer sets them; images; text, each paragraph in one of three styles — statement in capitals, credits, call to act | `/commissioned/`, each as a panel with its own URL |
 | Exhibition | the single Exhibitions page | title, venue, from and to, solo or group, images, text | `/exhibitions/`, each as a panel with its own URL |
 | What's Color edition | the one Terranova page and two shows | numeral, title, introduction | `/whats-color/<numeral>/` |
 | Answer | — (new) | a person's name and their answer, filed under an edition | the run of names on the home page, the three columns on the edition page |

@@ -7,6 +7,8 @@ import { platesBody } from '../components/plates.ts';
 import { exhibitionList } from '../components/exhibitions.ts';
 import { SHOWS } from '../content/exhibitions-list.ts';
 import { commissionedList } from '../components/commissioned.ts';
+import { sheetBody } from '../components/sheet.ts';
+import { SHEETS } from '../content/commissioned-sheets.ts';
 import { groupCommissioned } from '../content/groups.ts';
 import { yearRail } from '../components/years.ts';
 import { whatsColorOpening, whatsColorEdition, whatsColorFilm } from '../components/whats-color.ts';
@@ -202,14 +204,6 @@ export function whatsColorEditionPage(edition: Edition): Html {
   });
 }
 
-export const commissionedItem = (p: Project): PanelItem => ({
-  slug: p.slug,
-  title: displayTitle(p.title, 'project'),
-  year: p.metadata.year,
-  images: p.images,
-  rows: p.rows,
-});
-
 /**
  * The Color Chart, on the designer's own composition: the price and the way to
  * order held still in the margin, the chart's colours beside them, and only the
@@ -345,13 +339,32 @@ export function artworkDetailPage(
  * the row answers in a colour and brings up its photograph.
  */
 export function commissionedPage(items: readonly Project[]): Html {
+  const groups = groupCommissioned(items);
+  // Every project on the index opens on the designer's sheet. One drawn by the
+  // designer carries the designer's masthead and text; one added later, with
+  // no sheet yet, is set the same way from what it has — its name on the
+  // index, its dates, its own text — which is what the WordPress theme does
+  // with an entry whose sheet fields are empty. Nothing off the index gets a
+  // panel: one nothing links to would only be found by its address.
+  const sheets = groups.flatMap((group) => group.items).map((item) => {
+    const p = item.project;
+    const drawn = SHEETS[p.slug];
+    const own = p.rows.flatMap((row) => row.columns).map((c) => (c.kind === 'text' ? c.html : '')).join('');
+    return panelShell('commissioned', p.slug, sheetBody({
+      title: drawn?.title ?? item.title,
+      lines: drawn?.lines ?? [],
+      when: drawn?.when ?? item.when,
+      body: raw(drawn?.body ?? own),
+      images: p.images,
+    }));
+  });
   return layout({
     title: 'Commissioned',
     path: '/commissioned/',
-    overlays: panels('commissioned', items.map(commissionedItem)),
+    overlays: panels('commissioned', [], join(sheets)),
     children: html`
       <h1 class="sr-only">Commissioned</h1>
-      ${commissionedList(groupCommissioned(items))}
+      ${commissionedList(groups)}
     `,
   });
 }

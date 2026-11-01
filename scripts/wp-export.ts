@@ -24,6 +24,7 @@ import sharp from 'sharp';
 import { parse, type HTMLElement, type Node } from 'node-html-parser';
 import { works, commissioned, exhibitions, colourChart, yearColours, isPlate } from '../src/content/load.ts';
 import { groupCommissioned } from '../src/content/groups.ts';
+import { SHEETS } from '../src/content/commissioned-sheets.ts';
 import { SHOWS } from '../src/content/exhibitions-list.ts';
 import { EDITIONS_ALL, LEAD } from '../src/content/whats-color.ts';
 import { ABOUT_BLOCKS, ABOUT_CARD, ABOUT_COLLECTIONS, ABOUT_COPYRIGHT, ABOUT_SHOWS } from '../src/content/about.ts';
@@ -243,13 +244,37 @@ async function exportWorks() {
   return out;
 }
 
+/**
+ * A sheet's text as paragraph blocks, one per paragraph, each keeping its
+ * class — the paragraph style it was set in (is-style-lead and the rest) and
+ * any extra class such as `apart` — so the entry renders to the same markup.
+ */
+function sheetBlocks(body: string): Block[] {
+  // Split rather than parsed: a parser writes the markup back out its own way
+  // (<br> for <br />, its own entities), and the point is the same bytes.
+  return [...body.matchAll(/<p(?: class="([^"]*)")?>([\s\S]*?)<\/p>/g)].map(([, className, inner]) => ({
+    type: 'paragraph' as const,
+    html: inner!.replace(/\s+/g, ' ').trim(),
+    ...(className ? { className } : {}),
+  }));
+}
+
 async function exportCommissioned() {
   const out = [];
   for (const group of groupCommissioned(commissioned)) {
     for (const [i, item] of group.items.entries()) {
       const p = item.project;
       const alt = (image: ProjectImage) => image.alt || `${item.title} — ${image.caption ?? 'commissioned work by Claudia Valsells'}`;
-      const blocks = await rowBlocks(p.rows, alt, p.metadata.date);
+      // A project the designer drew is carried over as drawn: the sheet's text,
+      // then its photographs in their order. The rest keep the source's own.
+      const sheet = SHEETS[p.slug];
+      const blocks: Block[] = sheet ? sheetBlocks(sheet.body) : await rowBlocks(p.rows, alt, p.metadata.date);
+      if (sheet) {
+        for (const image of p.images) {
+          const ref = await exportImage(image, alt(image), p.metadata.date);
+          if (ref) blocks.push({ type: 'image', image: ref });
+        }
+      }
       const cover = p.cover ? await exportImage(p.cover, alt(p.cover), p.metadata.date) : null;
       out.push({
         slug: p.slug,
@@ -259,6 +284,9 @@ async function exportCommissioned() {
         date: p.metadata.date ?? null,
         year: p.metadata.year ?? null,
         when: item.when,
+        heading: sheet?.title ?? '',
+        lines: sheet?.lines.join('\n') ?? '',
+        pageWhen: sheet?.when ?? '',
         group: group.name,
         order: i + 1,
         cover,

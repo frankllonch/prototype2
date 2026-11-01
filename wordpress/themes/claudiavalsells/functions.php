@@ -27,6 +27,7 @@ foreach ( [
 	'components/layout',
 	'components/gallery',
 	'components/editorial',
+	'components/sheet',
 	'components/lists',
 	'components/chart',
 	'components/whats-color',

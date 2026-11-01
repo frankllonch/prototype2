@@ -233,6 +233,10 @@ function cv_project( WP_Post $p ): array {
 		'cover'  => $cover,
 		'images' => $images,
 		'text'   => $parts['text'],
+		// The masthead of its own page, where it differs from the index line.
+		'heading'  => (string) cv_meta( $p->ID, '_cv_heading' ),
+		'lines'    => array_values( array_filter( array_map( 'trim', explode( "\n", (string) cv_meta( $p->ID, '_cv_lines' ) ) ), 'strlen' ) ),
+		'pageWhen' => (string) cv_meta( $p->ID, '_cv_page_when' ),
 	];
 }
 

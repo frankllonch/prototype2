@@ -38,3 +38,20 @@
   color: #8f9093;
   font-size: 0.95rem;
 }
+
+/* The paragraph styles a project's page uses (the content plugin offers them
+   in the Styles panel), drawn here as the page draws them. */
+.editor-styles-wrapper .is-style-lead {
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.editor-styles-wrapper .is-style-note {
+  font-size: 0.78rem;
+  margin-top: 2.2em;
+}
+
+.editor-styles-wrapper .is-style-cta {
+  font-style: italic;
+  font-weight: 500;
+}

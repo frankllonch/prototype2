@@ -565,3 +565,39 @@ msgstr "Suprimeix"
 #~ msgstr ""
 #~ "Una edició de What’s Color?: la presentació i les persones que hi van "
 #~ "respondre."
+
+#: includes/editor.php
+msgid "Name on its page"
+msgstr "Nom a la seva pàgina"
+
+#: includes/editor.php
+msgid "The bold name at the top of the project’s page, e.g. Color Chart. Left empty, the title above is used."
+msgstr "El nom en negreta a dalt de la pàgina del projecte, p. ex. Color Chart. Si es deixa buit, es fa servir el títol de dalt."
+
+#: includes/editor.php
+msgid "Under the name"
+msgstr "Sota el nom"
+
+#: includes/editor.php
+msgid "Who it was for or with, one line per line, written as it should read: FOR NANI MARQUINA."
+msgstr "Per a qui o amb qui va ser, una línia per línia, escrit tal com s’ha de llegir: FOR NANI MARQUINA."
+
+#: includes/editor.php
+msgid "When, on its page"
+msgstr "Quan, a la seva pàgina"
+
+#: includes/editor.php
+msgid "e.g. 2023 - ON GOING. Left empty, the same as in the list."
+msgstr "p. ex. 2023 - ON GOING. Si es deixa buit, el mateix que a la llista."
+
+#: includes/editor.php
+msgid "Statement, in capitals"
+msgstr "Declaració, en majúscules"
+
+#: includes/editor.php
+msgid "Credits, smaller"
+msgstr "Crèdits, més petits"
+
+#: includes/editor.php
+msgid "Call to act, leaning"
+msgstr "Crida a l’acció, en cursiva"

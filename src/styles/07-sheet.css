@@ -1,0 +1,508 @@
+/*
+ * The sheet: a detail that is read and looked at (`components/sheet.ts`).
+ *
+ * Everything is placed off the designer's sheets, which are drawn on a
+ * 1920 x 1080 frame. `--f` is one pixel of that frame, so every figure below is
+ * the number read off the sheet times `--f`, and the composition scales with
+ * the window the way the type does. Measured as baselines and edges rather
+ * than boxes: the masthead's first baseline at 80, the text's at 345, the
+ * photograph's box from 1070 to 1840 across and 128 down to 80 from the
+ * bottom, the round button at 968, the arrow at the right margin.
+ *
+ * Only the text column scrolls. The sheet is the window's height and nothing
+ * else on it moves, which is what the design asks for: the name and the
+ * picture are held, and you read down past them.
+ */
+.panel:has(.sheet) {
+  --f: calc(100vw / 1920);
+  --s-pad: calc(var(--f) * 50);
+  --s-lead: 1.125;                 /* 45 over 40, the sheets' leading */
+  overflow: hidden;
+  padding: 0;
+  background: var(--paper);
+}
+
+.sheet {
+  position: relative;
+  display: grid;
+  grid-template-columns: calc(var(--f) * 960) minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  height: 100vh;
+  height: 100dvh;
+  color: var(--ink);
+}
+
+/* The Close link, as the sheet sets it: the size of the text, upright and
+   spaced, at the right margin on the masthead's line. */
+.panel:has(.sheet) .panel-close {
+  position: absolute;
+  top: calc(var(--f) * 80);
+  right: var(--s-pad);
+  translate: 0 -0.9em;            /* from its baseline to its box */
+  font-size: var(--type);
+  line-height: 1;
+  font-weight: 400;
+  letter-spacing: 0.071em;
+  margin-right: -0.071em;          /* the last letter's tracking hangs past the margin */
+  color: var(--ink);
+  z-index: 3;
+}
+.panel:has(.sheet) .panel-close:hover,
+.panel:has(.sheet) .panel-close:focus-visible { opacity: 0.55; }
+
+/* ---------------------------------------------------------------- masthead */
+
+/*
+ * The masthead's first baseline sits at 80 and the text's at 345, which leaves
+ * the text starting at 288. A masthead that runs to two or three lines pushes
+ * the text down rather than running into it, so the gap under the date is what
+ * is held, and 288 is only the least the text starts at.
+ *
+ * One rule for every sheet, on purpose. The fourteen sheets do not agree with
+ * each other — Terra Rossa and Edges start their text a hundred pixels lower,
+ * Dadà 2017 forty higher, five of them lead the text at 50 rather than 45 —
+ * and the designer's word is that this is one template, the same as the
+ * exhibitions' (Moll de l’Ós: 45, text at 345). Where the sheets differ, the
+ * template wins.
+ */
+.sheet-head {
+  grid-area: 1 / 1;
+  box-sizing: border-box;
+  min-height: calc(var(--f) * 288);
+  padding: calc(var(--f) * 80 - 0.95em) calc(var(--f) * 10) calc(var(--f) * 67) var(--s-pad);
+  font-size: var(--type);
+  line-height: var(--s-lead);
+  z-index: 2;
+}
+.sheet-title,
+.sheet-lines,
+.sheet-when { margin: 0; font-size: inherit; }
+.sheet-title {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.005em;
+}
+/* Cased as each sheet sets it — some are capitals, a few are not. */
+.sheet-lines {
+  margin-top: calc(var(--f) * 43);
+  font-weight: 500;
+  line-height: 1;
+}
+.sheet-when {
+  margin-top: calc(var(--f) * 1);
+  font-style: italic;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+
+/* -------------------------------------------------------------------- text */
+
+.sheet-text {
+  grid-area: 2 / 1;
+  min-height: 0;
+  box-sizing: border-box;
+  padding: calc(var(--f) * 20) 0 calc(var(--f) * 160) var(--s-pad);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  /* The lines leave under a short fade rather than being cut at the top. */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 calc(var(--f) * 20));
+          mask-image: linear-gradient(to bottom, transparent 0, #000 calc(var(--f) * 20));
+  outline: none;
+}
+.sheet-text::-webkit-scrollbar { display: none; }
+
+.sheet-prose {
+  font-size: var(--type);
+  line-height: var(--s-lead);
+  font-weight: 400;
+}
+/* A paragraph's gap is one empty line, as the sheets have it. */
+.sheet-prose p { margin: 0 0 calc(var(--s-lead) * 1em); }
+.sheet-prose p:last-child { margin-bottom: 0; }
+.sheet-prose .is-style-lead {
+  font-weight: 500;
+  text-transform: uppercase;
+}
+/* Some sheets leave a second empty line before a change of voice. */
+.sheet-prose .apart { margin-top: calc(var(--s-lead) * 1em); }
+.sheet-prose b { font-weight: 500; }
+/* Bold proper, the editor's B: the client's name where the sheet sets it apart. */
+.sheet-prose strong { font-weight: 700; }
+.sheet-prose em { font-style: italic; font-weight: 500; }
+.sheet-prose a { color: inherit; text-decoration: none; }
+.sheet-prose a:hover,
+.sheet-prose a:focus-visible { text-decoration: underline; text-underline-offset: 0.15em; text-decoration-thickness: 1px; }
+/* Credits: in a smaller hand, kept well clear of the text above — three of
+   the text's lines and more, which is what the sheets leave. */
+.sheet-prose .is-style-note {
+  margin-top: 5.2em;
+  font-size: 0.74em;               /* 30 at 1920, against the text's 40 */
+  line-height: 1.25;
+}
+.sheet-prose .is-style-cta {
+  margin-top: calc(var(--s-lead) * 3em);
+  font-style: italic;
+  font-weight: 500;
+}
+
+/* --------------------------------------------------- the button beside it */
+
+.sheet-more {
+  grid-area: 2 / 2;
+  justify-self: start;
+  align-self: start;
+  position: relative;
+  margin: calc(var(--f) * 20) 0 0 calc(var(--f) * 8);
+  width: calc(var(--f) * 36);
+  height: calc(var(--f) * 36);
+  min-width: 22px;
+  min-height: 22px;
+  padding: 0;
+  color: var(--ink);
+  z-index: 2;
+  transition: opacity var(--hover) var(--ease);
+}
+.sheet-more svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.sheet-more circle { fill: none; stroke: currentColor; stroke-width: 2; }
+.sheet-more .sheet-dot { fill: currentColor; stroke: none; }
+.sheet-more:hover, .sheet-more:focus-visible { opacity: 0.55; }
+/* Pressed, it is filled: the text has the sheet, and pressing again gives it back. */
+.sheet-more[aria-pressed='true'] circle:not(.sheet-dot) { fill: currentColor; }
+.sheet-more[aria-pressed='true'] .sheet-dot { fill: var(--paper); }
+
+/* --------------------------------------------------------------- the photo */
+
+.sheet-stage {
+  position: absolute;
+  left: calc(var(--f) * 1070);
+  width: calc(var(--f) * 770);
+  top: calc(var(--f) * 128);
+  bottom: calc(var(--f) * 80);
+}
+.sheet-frame { position: relative; height: 100%; }
+/* One at a time, once the script is there to turn them (figures.ts marks the
+   stage `is-live`); without it they stand in a column, every one visible. */
+.sheet .sheet-figure {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sheet .is-live .sheet-figure {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.9s var(--ease);
+}
+.sheet .is-live .sheet-figure.is-current { opacity: 1; pointer-events: auto; }
+.sheet .sheet-figure picture { display: contents; }
+.sheet .sheet-figure img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+/* A landscape hangs from the line the text starts on (308) at a reading width,
+   as the sheets draw Santa & Cole, Dadà 2017 and Uterqüe; a portrait or a
+   square fills the frame. */
+@media (min-width: 900px) {
+  .sheet .is-live .sheet-figure.is-wide {
+    align-items: flex-start;
+    padding-top: calc(var(--f) * 180);
+  }
+  .sheet .sheet-figure.is-wide img { max-width: calc(var(--f) * 700); }
+}
+
+/* The arrows sit either side of the box, on its middle: the next one on the
+   right margin as the sheet draws it, the previous one mirrored on the left. */
+.sheet-step {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  padding: calc(var(--f) * 24) calc(var(--f) * 14);
+  color: var(--ink);
+  transition: opacity var(--hover) var(--ease);
+}
+.sheet-step svg { display: block; width: calc(var(--f) * 9); min-width: 7px; height: auto; overflow: visible; }
+.sheet-step:hover, .sheet-step:focus-visible { opacity: 0.45; }
+.sheet-next { right: calc(var(--f) * (1870 - 1840) * -1 - var(--f) * 14); }
+.sheet-prev { left: calc(var(--f) * -30 - var(--f) * 14 - var(--f) * 9); }
+
+/* ---------------------------------------------------- the text on its own */
+
+/*
+ * Widened: the masthead folds into one line across the top — the name, then
+ * who it was for at the index's own column, then when — and the text takes
+ * the sheet's full measure underneath, a little more openly leaded, as the
+ * designer's expanded sheets set it.
+ */
+.sheet.is-wide-text {
+  --s-lead: 1.25;
+  grid-template-columns: minmax(0, 1fr);
+}
+.sheet.is-wide-text .sheet-stage { display: none; }
+/* The text then starts at 153 — its first baseline at 213 — unless the
+   masthead's lines need more. Kept clear of Close and the button on the right. */
+.sheet.is-wide-text .sheet-head {
+  display: flex;
+  align-items: baseline;
+  min-height: calc(var(--f) * 153);
+  padding-right: calc(var(--f) * 300);
+  padding-bottom: calc(var(--f) * 34);
+  line-height: 1.125;
+}
+.sheet.is-wide-text .sheet-title {
+  /* Shrinks to its column and wraps, so a long name never runs under the
+     button and Close. */
+  flex: 0 1 auto;
+  min-width: calc(var(--f) * 460);
+  padding-right: calc(var(--f) * 40);
+  box-sizing: border-box;
+}
+.sheet.is-wide-text .sheet-lines { margin: 0; }
+.sheet.is-wide-text .sheet-when {
+  flex: none;
+  margin: 0 0 0 calc(var(--f) * 100);
+}
+.sheet.is-wide-text .sheet-text { padding-right: var(--s-pad); }
+/* On the masthead's line, just short of Close. */
+.sheet.is-wide-text .sheet-more {
+  grid-area: auto;
+  position: absolute;
+  margin: 0;
+  right: calc(var(--s-pad) + var(--f) * 190);
+  top: calc(var(--f) * 80);
+  translate: 0 -80%;
+}
+
+/* ------------------------------------------------------------------- phone */
+
+/* Phones held sideways are below. Without scripting, at any width, the sheet
+   is a plain page: the masthead, the text, then every photograph. */
+html:not(.js) .panel:has(.sheet) { position: relative; overflow: visible; }
+html:not(.js) .sheet { display: block; height: auto; }
+html:not(.js) .sheet-text { overflow: visible; padding-bottom: var(--gap); -webkit-mask-image: none; mask-image: none; }
+html:not(.js) .sheet-stage { position: static; width: auto; margin: 0 var(--s-pad) var(--gap); }
+html:not(.js) .sheet-figure { margin-bottom: var(--gap); }
+html:not(.js) .sheet-more,
+html:not(.js) .sheet-step { display: none; }
+
+/*
+ * Too narrow for two columns. The masthead and the photograph stand at the
+ * top and the text scrolls beneath them — still the only thing that moves.
+ */
+@media (max-width: 899px) {
+  .panel:has(.sheet) {
+    --s-pad: var(--pad);
+    --s-lead: 1.2;
+  }
+  .sheet {
+    display: flex;
+    flex-direction: column;
+  }
+  .panel:has(.sheet) .panel-close { top: 1.6rem; translate: none; line-height: var(--lead); }
+  .sheet-head,
+  .sheet.is-wide-text .sheet-head {
+    display: block;
+    min-height: 0;
+    padding: 1.6rem calc(var(--s-pad) + 5rem) 0 var(--s-pad);
+  }
+  .sheet-lines { margin-top: 0.6rem; }
+  .sheet-when, .sheet.is-wide-text .sheet-when { margin: 0.3rem 0 0; }
+  .sheet.is-wide-text .sheet-title { min-width: 0; padding: 0; }
+  .sheet-stage {
+    position: relative;
+    order: 2;
+    left: auto; top: auto; bottom: auto; width: auto;
+    flex: none;
+    height: 36vh;
+    margin: 1.2rem calc(var(--s-pad) + 1.6rem) 0;
+  }
+  .sheet-prev { left: -1.9rem; }
+  .sheet-next { right: -1.9rem; }
+  .sheet-step { padding: 1rem 0.5rem; }
+  .sheet-text,
+  .sheet.is-wide-text .sheet-text {
+    order: 3;
+    flex: 1;
+    min-height: 0;
+    padding: 1.4rem var(--s-pad) 4rem;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 1.4rem);
+            mask-image: linear-gradient(to bottom, transparent 0, #000 1.4rem);
+  }
+  .sheet-more,
+  .sheet.is-wide-text .sheet-more {
+    position: absolute;
+    margin: 0;
+    right: var(--s-pad);
+    top: 4.2rem;
+    translate: none;
+    width: 26px;
+    height: 26px;
+  }
+}
+
+/* ------------------------------------------------------------ the index */
+
+/*
+ * The commissioned index, re-measured off the designer's new sheet at 1920:
+ * 50 to the margins, the rows' rules from 514 across, one row every 62, the
+ * first rule 460 down, and 183 and 209 from the last rule of one group to the
+ * first of the next. The rows are the shared `.xrow`; only the figures that
+ * differ from the exhibitions index are set here, scoped so that list keeps its
+ * own.
+ */
+.xlist.com-list {
+  --row-leading: 1;
+  /* 15 above a 40 line and 6 below it, and the 1 rule, make the 62; the
+     baseline sits 12.5 clear of the rule, as the sheet draws it. */
+  --row-top: 0.78125vw;
+  --row-bottom: 0.3125vw;
+  --list-top: 20.745vw;
+  padding-left: clamp(1.25rem, 2.604vw, 4rem);
+  padding-right: clamp(1.25rem, 2.604vw, 4rem);
+}
+.com-list .xgroup:nth-child(1) { margin-bottom: clamp(2.5rem, 6.302vw, 9rem); }
+.com-list .xgroup:nth-child(2) { margin-bottom: clamp(2.5rem, 7.656vw, 11rem); }
+
+/*
+ * A phone held sideways, or any window too short for the photograph above the
+ * text: the photograph goes beside the text instead, so the text keeps the
+ * height it needs and is still the only thing that moves.
+ */
+@media (max-width: 899px) and (max-height: 520px) {
+  html.js .sheet {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 38%;
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+  html.js .sheet-head { grid-area: 1 / 1; padding-top: 1rem; }
+  html.js .sheet-text { grid-area: 2 / 1; }
+  html.js .sheet-stage {
+    grid-area: 1 / 2 / 3 / 3;
+    height: auto;
+    /* Clear of Close and the round button above it. */
+    margin: 6.4rem calc(var(--s-pad) + 1.6rem) 1rem 0.6rem;
+  }
+}
+
+/* ------------------------------------------ the second sheet: photographs */
+
+/*
+ * A show that has pictures and no text (`components/plates.ts`).
+ *
+ * Same 1920 x 1080 frame and the same `--f`, so the figures below are the
+ * numbers read off the designer's eleven sheets of this kind. They agree with
+ * each other closely: the masthead's ink at 48 across and 50 down, and the
+ * photograph's box centred on the frame — between 49 and 50 per cent on every
+ * sheet — 1087 wide, from 91 down to 93 off the bottom.
+ *
+ * The box's height is given in vh rather than in `--f` so that it cannot
+ * outgrow a short window: the whole point of this sheet is that the show is
+ * looked at, all of it, without scrolling.
+ */
+.panel:has(.plates) {
+  --f: calc(100vw / 1920);
+  --s-pad: calc(var(--f) * 50);
+  --s-lead: 1.125;
+  overflow: hidden;
+  padding: 0;
+  background: var(--paper);
+}
+
+.plates {
+  position: relative;
+  height: 100vh;
+  height: 100dvh;
+  color: var(--ink);
+  font-size: var(--type);
+  line-height: var(--s-lead);
+}
+
+/* Alone in the top left. 360 wide keeps it clear of the widest photograph,
+   whose box opens at 416. */
+.plates-head {
+  position: absolute;
+  left: calc(var(--f) * 48);
+  top: 4.6vh;
+  width: calc(var(--f) * 360);
+  z-index: 2;
+}
+.plates-head .sheet-lines { margin-top: 1em; }
+.plates-head .sheet-when { margin-top: 1.6em; }
+
+.plates-stage {
+  position: absolute;
+  left: 50%;
+  translate: -50% 0;
+  width: calc(var(--f) * 1087);
+  top: 8.4vh;
+  bottom: 8.6vh;
+}
+.plates-frame { position: relative; height: 100%; }
+
+/* Stacked and faded: the photographs are different shapes, and sliding between
+   them makes the frame jump as each one lands. */
+.plates-figure {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s var(--ease);
+}
+.plates-figure.is-current { opacity: 1; pointer-events: auto; }
+.plates-figure picture { display: contents; }
+/*
+ * Fitted to the box, not capped by it. A maximum height alone is not enough
+ * here: a flex item's automatic minimum size makes its own intrinsic height a
+ * floor the maximum cannot pull below, so a tall photograph would stand at its
+ * natural size and push out of the window.
+ */
+.plates-figure img {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  object-fit: contain;
+}
+
+/* At the frame's margins, as the sheets place them, and level with the middle
+   of the picture — so they never meet the masthead in the top left. */
+.plates-step {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  padding: calc(var(--f) * 24) calc(var(--f) * 14);
+  color: var(--ink);
+  transition: opacity var(--hover) var(--ease);
+}
+.plates-step svg { display: block; width: calc(var(--f) * 9); min-width: 7px; height: auto; overflow: visible; }
+.plates-step:hover, .plates-step:focus-visible { opacity: 0.45; }
+.plates-prev { left: calc(var(--s-pad) - var(--f) * 14); }
+.plates-next { right: calc(var(--s-pad) - var(--f) * 14); }
+
+/* Without the script the photographs stand in a column, every one visible. */
+html:not(.js) .plates-step { display: none; }
+html:not(.js) .plates-figure { position: static; opacity: 1; }
+
+@media (max-width: 899px) {
+  .panel:has(.plates) { overflow: auto; }
+  .plates { height: auto; padding: calc(var(--bar) * 0.6) var(--pad) var(--gap); }
+  .plates-head { position: static; width: auto; }
+  .plates-stage {
+    position: static;
+    translate: none;
+    width: 100%;
+    height: 58vh;
+    margin-top: 1.4rem;
+  }
+  .plates-prev { left: 0; }
+  .plates-next { right: 0; }
+}

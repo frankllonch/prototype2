@@ -42,7 +42,7 @@ function cv_exhibition_list( array $shows ): string {
 
 /** `$groups`: [{name, items: [project arrays]}]. */
 function cv_commissioned_list( array $groups ): string {
-	$out = '<div class="xlist">';
+	$out = '<div class="xlist com-list">';
 	foreach ( $groups as $group ) {
 		$out .= '<section class="xgroup"><h2 class="xgroup-name">' . esc_html( $group['name'] ) . '</h2><div class="xrows">';
 		foreach ( $group['items'] as $item ) {

@@ -520,3 +520,39 @@ msgstr ""
 #: admin/editor.js:79
 msgid "Remove"
 msgstr ""
+
+#: includes/editor.php
+msgid "Name on its page"
+msgstr ""
+
+#: includes/editor.php
+msgid "The bold name at the top of the project’s page, e.g. Color Chart. Left empty, the title above is used."
+msgstr ""
+
+#: includes/editor.php
+msgid "Under the name"
+msgstr ""
+
+#: includes/editor.php
+msgid "Who it was for or with, one line per line, written as it should read: FOR NANI MARQUINA."
+msgstr ""
+
+#: includes/editor.php
+msgid "When, on its page"
+msgstr ""
+
+#: includes/editor.php
+msgid "e.g. 2023 - ON GOING. Left empty, the same as in the list."
+msgstr ""
+
+#: includes/editor.php
+msgid "Statement, in capitals"
+msgstr ""
+
+#: includes/editor.php
+msgid "Credits, smaller"
+msgstr ""
+
+#: includes/editor.php
+msgid "Call to act, leaning"
+msgstr ""

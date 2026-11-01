@@ -14,7 +14,7 @@ import type { ProjectGroup } from '../content/groups.ts';
  * picture being held up beside the name rather than filed under it.
  */
 export function commissionedList(groups: readonly ProjectGroup[]): Html {
-  return html`<div class="xlist">
+  return html`<div class="xlist com-list">
     ${join(groups.map(group))}
   </div>`;
 }
