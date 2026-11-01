@@ -202,18 +202,18 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 /*
  * The card leans a little towards the pointer, as a painting does on its own
  * page (`client/tilt.ts`, with the figures on `.detail-plate` in
- * `05-artwork.css`). The stage holds the perspective and the card turns in it;
- * a shade more lean than a painting gets, since it is a card and not a work,
- * and a shadow that deepens as it lifts, so it reads as a thing held up rather
- * than a plane that happens to rotate. Settling back takes most of a second,
- * so it comes to rest rather than snapping.
+ * `05-artwork.css`). The stage holds the perspective and the card turns in it.
+ * Less than half a painting's lean, in a long perspective, with a lift you
+ * feel more than see and a faint shadow as it lifts — a card on a table, not
+ * a panel on a hinge. Settling back takes a full second, so it comes to rest
+ * rather than snapping.
  */
 .about-card-stage {
   --tilt-max: 2deg;
-  --tilt-depth: 1400px;
-  --tilt-lift: 1.012;
-  --tilt-settle: 820ms;
-  --tilt-follow: 140ms;
+  --tilt-depth: 2000px;
+  --tilt-lift: 1.005;
+  --tilt-settle: 1000ms;
+  --tilt-follow: 260ms;
   perspective: var(--tilt-depth);
 }
 @media (prefers-reduced-motion: reduce) {
@@ -235,7 +235,17 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   font-size: var(--type);
   line-height: var(--lead);
 }
-.about-card.is-tilting { transition: box-shadow var(--tilt-settle) var(--ease); box-shadow: 0 1.6vw 4vw rgba(36, 37, 40, 0.18); will-change: transform; }
+/*
+ * Still eased while the pointer is on it. The script writes a new angle on every
+ * movement and the card follows each one a beat behind, so the pointer never
+ * drags it and an unsteady hand reads as a steady one. The paintings cut their
+ * transition while tilting; this one keeps a short one on purpose.
+ */
+.about-card.is-tilting {
+  transition: transform var(--tilt-follow) var(--ease), box-shadow var(--tilt-settle) var(--ease);
+  box-shadow: 0 1vw 3vw rgba(36, 37, 40, 0.09);
+  will-change: transform;
+}
 .about-card p, .about-card address { margin: 0; font-style: normal; }
 .about-name, .about-born {
   font-weight: 500;
