@@ -217,6 +217,21 @@ export function initStack(): void {
       settled = false;
       measure();
       hide();
+      /*
+       * Safari, and only Safari, leaves the settled grid painted behind the
+       * pile as it gathers again. Settled, the paintings are drawn into the
+       * page itself; gathering, each becomes a layer of its own — and WebKit
+       * does not erase what it drew of them in the page, so every painting
+       * showed twice, once moving and once frozen where it had settled. The
+       * first unfold never shows it because the paintings start out as
+       * layers. Hiding and showing the grid in the same frame is never drawn
+       * — nothing flickers — but it makes WebKit repaint the grid's area,
+       * which is the erasing it skipped. Found and checked in Safari 26.3
+       * over repeated unfolds, mid-motion.
+       */
+      grid.style.visibility = 'hidden';
+      void grid.offsetHeight;
+      grid.style.visibility = '';
     }
 
     grid.classList.add('is-stacked');

@@ -66,7 +66,28 @@ http.createServer(async (req, res) => {
    * browser check with the server before reusing anything.
    */
   const type = TYPES[path.extname(file)] ?? 'application/octet-stream';
-  const { size } = await stat(file);
+  const { size, mtime } = await stat(file);
+
+  /*
+   * And something to check *against*. `no-cache` asks the browser to confirm
+   * with the server before reusing a copy, but without a validator there is
+   * nothing to confirm, and Safari took that as licence to keep reusing the
+   * scripts it already held in memory: a rebuild changed the files on disk and
+   * Safari went on running the old ones, page load after page load, while
+   * Chromium fetched afresh. Every response now carries a fingerprint of the
+   * file — its size and when it last changed — and a request that already
+   * holds the current one is told so in a few bytes.
+   */
+  const etag = `"${size.toString(36)}-${mtime.getTime().toString(36)}"`;
+  const lastModified = mtime.toUTCString();
+  const unchanged = req.headers['if-none-match']
+    ? req.headers['if-none-match'].split(/\s*,\s*/).includes(etag)
+    : req.headers['if-modified-since'] === lastModified;
+  if (unchanged && !req.headers.range) {
+    res.writeHead(304, { etag, 'last-modified': lastModified, 'cache-control': 'no-cache' });
+    res.end();
+    return;
+  }
 
   /*
    * Byte ranges, which are what makes video work at all in Safari.
@@ -91,6 +112,8 @@ http.createServer(async (req, res) => {
     'content-type': type,
     'cache-control': 'no-cache',
     'accept-ranges': 'bytes',
+    etag,
+    'last-modified': lastModified,
   };
 
   if (range) {
