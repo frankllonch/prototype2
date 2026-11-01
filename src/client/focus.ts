@@ -85,8 +85,26 @@ function sheetFocus(): void {
        * the jump the browser already made is the right behaviour.
        */
       if (!reduceMotion.matches) {
+        /*
+         * The browser makes that jump itself, after this script has run —
+         * Chromium as parsing finishes, Safari some while after load — and
+         * once it has, the glide finds itself already at the answer and has
+         * nowhere to go. (The stylesheet's smooth scroll used to disguise the
+         * jump as a journey; it is gone, so the jump showed.) So the answer's
+         * id is taken off until the browser has stopped looking for it: there
+         * is no anchor to jump to, the page stays at the top, and the glide
+         * makes the trip. The id comes back once loading has settled, for the
+         * roster's own links and anyone copying the address.
+         */
+        cell.removeAttribute('id');
+        const restore = () => window.setTimeout(() => { cell.id = id; }, 1800);
+        if (document.readyState === 'complete') restore();
+        else window.addEventListener('load', restore, { once: true });
         window.scrollTo({ top: 0, behavior: 'auto' });
-        window.setTimeout(() => glide(topOf(cell)), 80);
+        window.setTimeout(() => {
+          window.scrollTo({ top: 0, behavior: 'auto' });
+          glide(topOf(cell));
+        }, 80);
       }
     }
   }
