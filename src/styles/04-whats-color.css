@@ -1410,7 +1410,8 @@ html:has(body.has-film) {
   font-weight: 500;
   line-height: 1;
   color: var(--ink);
-  text-align: var(--wc-text-align, left);
+  /* All three justified on the opening view, whatever their sheet set. */
+  text-align: justify;
   cursor: pointer;
 }
 .wc-text[data-edition='ii'] {
