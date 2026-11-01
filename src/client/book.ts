@@ -11,6 +11,13 @@ import { isPlainClick } from './env.ts';
  *
  * The picture is the strip's own markup cloned — the same sources, the same
  * alt — eagerly loaded at the larger size rather than fetched twice.
+ *
+ * Once open, the arrow keys walk the strip: left and right step to the
+ * neighbouring photograph and wrap at the ends, since eight spreads of one
+ * book read as a loop rather than a list with a dead end. The swap happens in
+ * place with no fade, so holding a key flips through the book. Leaving
+ * returns focus to whichever photograph was showing last, not the one first
+ * clicked, so the strip keeps the reader's place.
  */
 export function initBook(): void {
   const view = document.querySelector<HTMLElement>('[data-book-view]');
@@ -18,14 +25,30 @@ export function initBook(): void {
   const plate = view.querySelector<HTMLElement>('[data-book-plate]');
   if (!plate) return;
 
-  let opener: HTMLElement | null = null;
+  let opener: HTMLAnchorElement | null = null;
 
-  const open = (link: HTMLAnchorElement) => {
+  const books = () => [...document.querySelectorAll<HTMLAnchorElement>('a.wc-book')];
+
+  const show = (link: HTMLAnchorElement) => {
     const picture = link.querySelector('picture');
-    if (!picture) return;
+    if (!picture) return false;
     const copy = picture.cloneNode(true) as HTMLElement;
     copy.querySelector('img')?.setAttribute('loading', 'eager');
     plate.replaceChildren(copy);
+    opener = link;
+    return true;
+  };
+
+  const step = (by: number) => {
+    const list = books();
+    if (!list.length || !opener) return;
+    const at = list.indexOf(opener);
+    const next = list[(at + by + list.length) % list.length];
+    if (next) show(next);
+  };
+
+  const open = (link: HTMLAnchorElement) => {
+    if (!show(link)) return;
     view.hidden = false;
     // A forced layout between showing and fading, instead of waiting a frame:
     // a background pane may never be granted one, and a reflow is owed either
@@ -33,7 +56,6 @@ export function initBook(): void {
     void view.offsetWidth;
     view.classList.add('is-open');
     document.body.style.overflow = 'hidden';
-    opener = link;
     view.tabIndex = -1;
     view.focus({ preventScroll: true });
   };
@@ -68,6 +90,14 @@ export function initBook(): void {
   );
 
   document.addEventListener('keydown', (event) => {
+    if (view.hidden) return;
     if (event.key === 'Escape') close();
+    else if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      step(1);
+    } else if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      step(-1);
+    }
   });
 }
