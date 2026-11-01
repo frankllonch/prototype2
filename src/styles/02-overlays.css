@@ -168,10 +168,16 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
  *
  * Set from the designer's About frame, which is 1920 wide, measured off the
  * export to the pixel (the figures are in the comments). Every length is the
- * frame's own number times `--u`, one frame pixel: a 1920th of the panel's
- * width. The panel is a container and `--u` is in container units, so the
+ * frame's own number times `--u`, one frame pixel: a 1920th of the sheet's
+ * width. The sheet is a container and `--u` is in container units, so the
  * panel's scrollbar, which the viewport units would count, cannot push the
  * page sideways.
+ *
+ * The sheet and not the panel, though the panel would be the obvious place:
+ * Safari before 18.? and Chrome before 129 give a container layout
+ * containment, which makes it the containing block of anything fixed inside
+ * it. On the panel that took the Close link with it — it scrolled away with
+ * the card. The Close link is the sheet's sibling, so it stays put.
  *
  * Inside a block of type the lengths are in ems of that type instead, so that
  * on a phone, where each size stops shrinking at a floor, the gaps keep their
@@ -182,7 +188,6 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
  * line box; at a line-height of 1 it is 0.865em below.
  */
 .about {
-  container-type: inline-size;
   background: color-mix(in srgb, var(--paper) 64%, transparent);
   color: var(--ink);
   /* Nothing here is meant to be reachable sideways. */
@@ -190,6 +195,7 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 }
 
 .about-sheet {
+  container-type: inline-size;
   --u: calc(100cqw / 1920);
   /* The frame's margin: 48 at the sides and above the card. */
   --m: max(1.25rem, calc(48 * var(--u)));
@@ -197,16 +203,25 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
      the collections, 20 for the record, the labels and the copyright. */
   --about-body: max(1rem, calc(45 * var(--u)));
   --about-small: max(0.6875rem, calc(20 * var(--u)));
-  padding: 0 var(--m) max(2.5rem, calc(96 * var(--u)));
   /* Every line on the frame is set at 0, and the site's small type is not. */
   letter-spacing: 0;
 }
 
-/* In the middle of the margin above the card, so it never sits on the red. */
+/*
+ * The margin is on each block rather than on the sheet: a container's own
+ * padding would be measured against the window, not against itself.
+ */
+.about-sheet > * { margin-inline: var(--m); }
+
+/*
+ * In the middle of the margin above the card, so it never sits on the red.
+ * Outside the sheet, so in window units: the same 48 at 1920, give or take
+ * the scrollbar.
+ */
 .about-close {
   position: fixed;
-  top: calc(max(1.25rem, 48 * 100cqw / 1920) / 2);
-  right: max(1.25rem, calc(48 * 100cqw / 1920));
+  top: calc(max(1.25rem, 2.5vw) / 2);
+  right: max(1.25rem, 2.5vw);
   transform: translateY(-50%);
   z-index: 3;
   line-height: 1;
@@ -337,8 +352,11 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
  * level across the page and an entry of three lines simply leaves more air
  * under it than one of five. The heading's row is 132.14.
  *
- * Inside an entry the lines are 22.75 apart, and a line the sheet breaks in
- * two holds at 20. The heading's line box is 95.1 below the biography's last.
+ * Inside an entry the lines sit as the sheet sets them, a little over 22
+ * apart and not quite evenly — 22.48 from the date to the title, 22.62 from the
+ * title to the line under it, 23.13 from that to the place — and a line the
+ * sheet breaks in two holds at 20. The heading's line box is 95.1 below the
+ * biography's last.
  */
 .about-record {
   --row: calc(131.08em / 20);
@@ -382,9 +400,14 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   display: flex;
   flex-direction: column;
   align-items: start;
-  gap: calc(2.75em / 20);
 }
 .about-show > span { display: block; }
+.about-show-title { margin-top: calc(2.48em / 20); }
+.about-show-title + .about-show-line { margin-top: calc(2.62em / 20); }
+.about-show-line + .about-show-line { margin-top: calc(2.75em / 20); }
+.about-show-title + .about-show-place { margin-top: calc(2.88em / 20); }
+.about-show-line + .about-show-place { margin-top: calc(3.13em / 20); }
+.about-show-place + .about-show-place { margin-top: calc(3.1em / 20); }
 .about-show-when { font-style: italic; font-weight: 400; }
 .about-show-title { font-weight: 600; }
 .about-show-line { font-weight: 400; }
@@ -414,9 +437,13 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .about-collection-name { font-weight: 500; text-transform: uppercase; }
 .about-collection-place { font-weight: 300; }
 
-/* Her name at 600 and the rest at 400, at 20, centred, 167.3 below the last place. */
+/*
+ * Her name at 600 and the rest at 400, at 20, centred, 167.3 below the last
+ * place. The frame runs on in blank artboard below it; the page stops 96 under.
+ */
 .about-foot {
-  margin: calc(167.3em / 20) 0 0;
+  margin-top: calc(167.3em / 20);
+  padding-bottom: max(2.5rem, calc(96 * var(--u)));
   font-size: var(--about-small);
   line-height: 1;
   font-weight: 400;

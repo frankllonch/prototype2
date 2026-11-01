@@ -27,11 +27,22 @@ export type AboutBlock =
   | { readonly kind: 'text'; readonly text: string }
   | { readonly kind: 'figure'; readonly image: ProjectImage };
 
-/** One line of the record: when, what, and where — the where over several lines. */
+/**
+ * One entry of the record, as the designer sets it: the date, then the title,
+ * then any number of plain lines, then the place in a lighter weight.
+ *
+ * A line break inside a string (`\n`) is a break inside that line, set at the
+ * tighter 20-over-20 the sheet uses within a title, where separate lines sit
+ * 22.75 apart. The sheet breaks a long title that way rather than letting it
+ * wrap, and holds a few two-line places and details together the same way.
+ */
 export interface AboutShow {
   readonly when: string;
   readonly title: string;
+  /** Regular weight: what kind of show, and with whom. */
   readonly lines: readonly string[];
+  /** Light weight: where. */
+  readonly places?: readonly string[];
 }
 
 export interface AboutShows {
@@ -107,70 +118,79 @@ export const ABOUT_BLOCKS: readonly AboutBlock[] = [
   },
 ];
 
-/** The record, column by column, in the order the sheet gives it. */
+/**
+ * The record, column by column, as the designer's sheet sets it — the same
+ * entries, the same lines, the same breaks, the same weights.
+ *
+ * Kept from the sheet as it is, punctuation and all, with three exceptions:
+ * the misspellings 'Coincidnce', 'Clauida' and 'fromcolor' are corrected, and
+ * the Catalan title is written as the language writes it (‘Mira’m…’, opened
+ * and closed). The sheet's dates are in its own order, which is not strictly
+ * by date in the fourth column; that order is kept too.
+ */
 export const ABOUT_SHOWS: readonly AboutShows[] = [
   {
     heading: 'Solo exhibitions',
     shows: [
       { when: '2026 May - June', title: '‘Moll de l’os’ peintures 2026', lines: ['Alzueta Gallery'] },
-      { when: '2025 April', title: '‘Mira’m no deixis de mirar-me’', lines: ['Solo show with Alzueta Gallery', 'at Palau de Casavells'] },
-      { when: '2024 July', title: 'Painting as a gift from color', lines: ['Solo show', 'Gallery_br, Tetbury, UK'] },
-      { when: '2023 September', title: 'Transitions', lines: ['Solo show', 'Alzueta Gallery Turó'] },
-      { when: '2021 December', title: 'Color Dialogues', lines: ['Solo exhibition', 'Alzueta Gallery Madrid'] },
-      { when: '2021 December', title: 'What’s color?', lines: ['2n edition', 'Espacio Pavillion, Madrid'] },
-      { when: '2020 December', title: 'What’s color?', lines: ['Solo Exhibition', 'Alzueta Gallery, Barcelona'] },
-      { when: '2020 February', title: 'Aoo&Claudia Valsells', lines: ['Silla8 show', 'Alzueta Gallery, Barcelona'] },
-      { when: '2019 November', title: 'Almost Perfect', lines: ['Solo Exhibition', 'Tokyo, Japan'] },
+      { when: '2025 April', title: '‘Mira’m no deixis de mirar-me’', lines: ['Solo show with Alzueta Gallery'], places: ['at Palau de Casavells'] },
+      { when: '2024 July', title: 'Painting as a gift from color', lines: ['Solo show'], places: ['Gallery_br, Tetbury, UK'] },
+      { when: '2023 September', title: 'Transitions', lines: ['Solo show'], places: ['Alzueta Gallery Turó'] },
+      { when: '2021 December', title: 'Color Dialogues', lines: ['Solo exhibition'], places: ['Alzueta Gallery Madrid'] },
+      { when: '2021 December', title: 'What’s color?', lines: ['2n edition'], places: ['Espacio Pavillion, Madrid,'] },
+      { when: '2020 December', title: 'What’s color?', lines: ['Solo Exhibition'], places: ['Alzueta Gallery, Barcelona,'] },
+      { when: '2020 February', title: 'Aoo&Claudia Valsells\nSilla8 show', lines: [], places: ['Alzueta Gallery, Barcelona'] },
+      { when: '2019 November', title: 'Almost Perfect', lines: ['Solo Exhibition'], places: ['Tokyo, Japan'] },
       { when: '2019 October', title: 'Art Élysées-Art & Design', lines: ['Solo Exhibition'] },
-      { when: '2018 November', title: 'Solo exhibition', lines: ['Palau de Casavells,', 'Girona, Spain'] },
-      { when: '2017 February', title: 'Color y forma', lines: ['Solo exhibition', 'Alzueta Gallery'] },
-      { when: '2007 May', title: 'Solo Exhibition', lines: ['Palau de Casavells,', 'Baix Empordà'] },
-      { when: '2005 March', title: 'Expresions de mur. Abstract Informalism Paintings.', lines: ['Solo exhibition,', 'Galeria Miquel Alzueta, Barcelona'] },
-      { when: '2000 April', title: 'El color no existe, existe la luz', lines: ['The color doesn’t exist, just the light'] },
+      { when: '2018 November', title: 'solo exhibition', lines: [], places: ['Palau de Casavells,', 'Girona, Spain'] },
+      { when: '2017 February', title: 'Color y forma', lines: ['solo exhibition\nAlzueta Gallery'] },
+      { when: '2007 May', title: 'Solo Exhibition', lines: [], places: ['Palau de Casavells,\nBaix Empordà'] },
+      { when: '2005 March', title: 'Expresions de mur.\nAbstract Informalism Paintings.', lines: ['Solo exhibition,'], places: ['Galeria Miquel Alzueta, Barcelona'] },
+      { when: '2000 April', title: 'El color no existe, existe la luz\nThe color doesn’t exist, just the light', lines: [] },
     ],
   },
   {
     heading: 'Group exhibitions',
     shows: [
-      { when: '2026 June - July', title: '‘Shift Towards Coincidence’', lines: ['Group exhibition', 'Palau de Casavells'] },
-      { when: '2026 June - July', title: 'Abstract Paintings', lines: ['Group Exhibition', 'Scroll NY, New York'] },
-      { when: '2025 March', title: '‘Marco, límite y lugar’', lines: ['Group Exhibition,', 'with Alzueta Gallery', 'Madrid'] },
-      { when: '2024 January', title: 'What abstract art means to me?', lines: ['Group exhibition', 'Alzueta Gallery, Séneca'] },
-      { when: '2023 November', title: 'La terre est bleu comme une orange', lines: ['Group exhibition', 'Alzueta Gallery Madrid'] },
-      { when: '2018 November', title: 'T10 at Alzueta Gallery', lines: ['Barcelona'] },
-      { when: '2016 December', title: 'Exposición colectiva', lines: ['Galeria Axel Pairon'] },
+      { when: '2026 June - July', title: '‘Shift Towards Coincidence’,', lines: ['Group exhibition'], places: ['Palau de Casavells'] },
+      { when: '2026 June - July', title: 'Abstract Paintings', lines: ['Group Exhibition'], places: ['Scroll Ny, New York'] },
+      { when: '2025 March', title: '‘Marco, límite y lugar’,', lines: ['Group Exhibition,\nwith Alzueta Gallery'], places: ['Madrid'] },
+      { when: '2024 January', title: 'What abstract art means to me?', lines: ['Group exhibition'], places: ['Alzueta Gallery, Séneca'] },
+      { when: '2023 November', title: 'La terre est bleu comme\nune orange', lines: ['Group exhibition'], places: ['Alzueta Gallery Madrid.'] },
+      { when: '2018 November', title: 'T10 at Alzueta Gallery,', lines: [], places: ['Barcelona'] },
+      { when: '2016 December', title: 'Exposición colectiva', lines: [], places: ['Galeria Axel Pairon'] },
     ],
   },
   {
     heading: 'Art fairs',
     wide: true,
     shows: [
-      { when: '2026 February', title: 'Zona Maco CDMX', lines: ['with Alzueta Gallery', 'Mexico'] },
-      { when: '2025 October', title: 'Estampa contemporary art fair', lines: ['with Alzueta Gallery', 'Madrid'] },
+      { when: '2026 February', title: 'Zona Maco CDMX', lines: ['with Alzueta Gallery'], places: ['Mexico'] },
+      { when: '2025 October', title: 'Estampa contemporary\nart fair,', lines: ['with Alzueta Gallery'], places: ['Madrid'] },
       { when: '2024 February', title: 'ZONA MACO', lines: ['with Alzueta Gallery'] },
-      { when: '2024 November', title: 'Luxemburg art week', lines: ['with Alzueta Gallery', 'Luxemburg'] },
-      { when: '2023 February', title: 'Contemporary Art Fair', lines: ['Art Rotterdam', 'Rotterdam'] },
-      { when: '2021 October', title: 'Estampa Contemporary Art Fair', lines: ['Alzueta Gallery, Madrid'] },
-      { when: '2021 September', title: 'Art Paris Fair', lines: ['Alzueta Gallery, Paris'] },
-      { when: '2021 June', title: 'Art Madrid Feria', lines: ['Alzueta Gallery, Madrid'] },
-      { when: '2019 March', title: 'AFF Art Fair', lines: ['Brussels'] },
-      { when: '2019 March', title: 'Art Madrid', lines: ['Madrid'] },
-      { when: '2018', title: 'Art fair', lines: ['Hamburg'] },
-      { when: '2018', title: 'Art Elysees', lines: ['París'] },
-      { when: '2018', title: 'Art Fair', lines: ['Stockholm'] },
-      { when: '2018', title: 'Contemporary Art Fair Just LX', lines: ['Portugal'] },
-      { when: '2018', title: 'Almoneda Antik Passion', lines: ['Madrid'] },
-      { when: '2019 April', title: 'Almoneda, Ifema feria de Madrid', lines: ['Palau de Casavells, Madrid'] },
-      { when: '2018', title: 'Art Fair Grand Palais', lines: ['Paris'] },
-      { when: '2018', title: 'Eurantica Art Fair', lines: ['Brussels'] },
-      { when: '2019 April', title: 'Art Paris Grand Palais', lines: ['París'] },
-      { when: '2018', title: 'Art Madrid', lines: ['Madrid'] },
-      { when: '2017 July', title: 'Uterqüe Art Essays', lines: ['AW2017'] },
-      { when: '2017 March', title: 'International Art Fair, Art Paris', lines: ['París'] },
-      { when: '2017 February', title: 'Art Madrid', lines: ['Madrid'] },
-      { when: '2016 November', title: 'Antica Namur', lines: ['Belgium'] },
-      { when: '2016 October', title: 'Art Élysées, International Art Fair', lines: ['París'] },
-      { when: '2016 June', title: 'Scope Basel', lines: ['Basel art fair'] },
+      { when: '2024 November', title: 'Luxemburg art week', lines: ['with Alzueta Gallery'], places: ['Luxemburg'] },
+      { when: '2023 February', title: 'Contemporary Art Fair', lines: ['Art Rotterdam'], places: ['Rotterdam'] },
+      { when: '2021 October', title: 'Estampa Contemporary Art Fair', lines: [], places: ['Alzueta Gallery, Madrid'] },
+      { when: '2021 September', title: 'Art Paris Fair', lines: [], places: ['Alzueta Gallery, Paris'] },
+      { when: '2021 June', title: 'Art Madrid Feria', lines: [], places: ['Alzueta Gallery, Madrid'] },
+      { when: '2019 March', title: 'AFF Art Fair', lines: [], places: ['Brussels'] },
+      { when: '2019 March', title: 'Art Madrid', lines: [], places: ['Madrid'] },
+      { when: '2018', title: 'Art fair', lines: [], places: ['Hamburg'] },
+      { when: '2018', title: 'Art Elysees', lines: [], places: ['París'] },
+      { when: '2018', title: 'Art Fair', lines: [], places: ['Stockholm'] },
+      { when: '2018', title: 'Contemporary Art Fair\nJust LX,', lines: [], places: ['Portugal'] },
+      { when: '2018', title: 'Almoneda Antik Passion', lines: [], places: ['Madrid'] },
+      { when: '2019 April', title: 'Almoneda, Ifema feria de Madrid', lines: [], places: ['Palau de Casavells, Madrid.'] },
+      { when: '2018', title: 'Art Fair Grand Palais', lines: [], places: ['Paris'] },
+      { when: '2018', title: 'Eurantica Art Fair', lines: [], places: ['Brussels'] },
+      { when: '2019 April', title: 'Art Paris Grand Palais', lines: [], places: ['París'] },
+      { when: '2018', title: 'Art Madrid,', lines: [], places: ['Madrid'] },
+      { when: '2017 July', title: 'Uterqüe Art Essays', lines: ['AW\u200a2017'] },
+      { when: '2017 March', title: 'International Art Fair, Art Paris', lines: [], places: ['París'] },
+      { when: '2017 February', title: 'Art Madrid', lines: [], places: ['Madrid'] },
+      { when: '2016 November', title: 'Antica Namur,', lines: [], places: ['Belgium'] },
+      { when: '2016 October', title: 'Art Élysées,\nInternational Art Fair,', lines: [], places: ['París'] },
+      { when: '2016 June', title: 'Scope Basel,', lines: [], places: ['Basel art fair'] },
     ],
   },
 ];

@@ -120,13 +120,14 @@ function aboutOverlay(): Html {
           ABOUT_SHOWS.map(
             (group) => html`<section class="about-shows${group.wide ? ' is-wide' : ''}">
               <h3 class="about-label">${group.heading}</h3>
-              <ul class="about-show-list">
+              <ul class="about-show-list"${group.wide ? raw(` style="--rows:${wideRows(group.shows.length)}"`) : ''}>
                 ${join(
                   group.shows.map(
                     (show) => html`<li class="about-show">
                       <span class="about-show-when">${show.when}</span>
-                      <span class="about-show-title">${show.title}</span>
-                      ${join(show.lines.map((line) => html`<span class="about-show-line">${line}</span>`))}
+                      <span class="about-show-title">${broken(show.title)}</span>
+                      ${join(show.lines.map((line) => html`<span class="about-show-line">${broken(line)}</span>`))}
+                      ${join((show.places ?? []).map((place) => html`<span class="about-show-place">${broken(place)}</span>`))}
                     </li>`,
                   ),
                 )}
@@ -151,6 +152,22 @@ function aboutOverlay(): Html {
       <p class="about-foot"><b>${ABOUT_CARD.name}</b> ${ABOUT_COPYRIGHT}</p>
     </div>
   </section>`;
+}
+
+/**
+ * How many entries the first column of a wide list holds before it carries on
+ * in the next: level with the longest of the other columns, as the sheet breaks
+ * the fairs level with the end of the solo shows — or half, if that is more.
+ * The WordPress theme uses the same rule (`cv_about_overlay`).
+ */
+function wideRows(count: number): number {
+  const others = ABOUT_SHOWS.filter((g) => !g.wide).map((g) => g.shows.length);
+  return Math.max(Math.ceil(count / 2), ...others);
+}
+
+/** A line the sheet breaks in two (`\n`), held together at the tighter pitch. */
+function broken(text: string): Html {
+  return join(text.split('\n').map((part, i) => (i ? html`<br />${part}` : html`${part}`)));
 }
 
 /** The opening statement is set in capitals; the photographs take the column. */

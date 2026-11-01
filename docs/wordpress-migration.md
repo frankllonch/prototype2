@@ -79,7 +79,10 @@ Not done yet, in order:
    the static site, each on purpose, each needing a yes or a no:
    - **The record on About** is read out of the Exhibitions entries (one list
      to maintain) rather than retyped, so a few lines read differently from
-     her sheet.
+     her sheet. Her sheet also sets each entry's place in a lighter weight
+     (`.about-show-place`); WordPress has no place field yet, so every line
+     under a title there is regular weight. The fairs break into their second
+     column at the same row on both sides.
    - **The heading of a panel.** On the static site an exhibition's or a
      project's panel opens with the title and venue of the old page it was
      derived from (“TRANSITIONS”, “Color palette for Santa & Cole, 2023-on

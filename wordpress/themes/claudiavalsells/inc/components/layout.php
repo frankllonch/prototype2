@@ -79,12 +79,23 @@ function cv_about_overlay( bool $open = false ): string {
 	foreach ( $card['emails'] as $email ) {
 		$out .= '<a href="mailto:' . esc_attr( $email ) . '">' . esc_html( $email ) . '</a>';
 	}
+	// A wide list fills its first column before the next, level with the longest
+	// of the other columns — as the sheet breaks the fairs level with the end of
+	// the solo shows — or half, if that is more. The static site uses the same
+	// rule (wideRows in src/components/layout.ts).
+	$longest = 0;
+	foreach ( $a['record'] as $group ) {
+		if ( ! $group['wide'] ) {
+			$longest = max( $longest, count( $group['shows'] ) );
+		}
+	}
 	$out .= '</address></div></div>'
 		. '<div class="about-text">' . $a['text'] . '</div>'
 		. '<div class="about-record">';
 	foreach ( $a['record'] as $group ) {
 		$out .= '<section class="about-shows' . ( $group['wide'] ? ' is-wide' : '' ) . '">'
-			. '<h3 class="about-label">' . esc_html( $group['heading'] ) . '</h3><ul class="about-show-list">';
+			. '<h3 class="about-label">' . esc_html( $group['heading'] ) . '</h3><ul class="about-show-list"'
+			. ( $group['wide'] ? ' style="--rows:' . (int) max( ceil( count( $group['shows'] ) / 2 ), $longest ) . '"' : '' ) . '>';
 		foreach ( $group['shows'] as $show ) {
 			$out .= '<li class="about-show"><span class="about-show-when">' . esc_html( $show['when'] ) . '</span>'
 				. '<span class="about-show-title">' . esc_html( $show['title'] ) . '</span>';
