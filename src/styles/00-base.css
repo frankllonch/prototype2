@@ -698,7 +698,7 @@ html.is-scrolled .scroll-cue { opacity: 0; }
  *   --bar-side   how far it stands out either side of the name.
  */
 .top {
-  --bar-rise: var(--bar-rise-measured, 1 rem);
+  --bar-rise: var(--bar-rise-measured, 1rem);
   --bar-drop: 0.001em;
   --bar-side: 0.18em;
   /*

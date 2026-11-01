@@ -34,24 +34,48 @@ export function writtenPoint(): number | null {
  *
  * Only on an arrival: a reload or a back-navigation restores the reader's own
  * position, and correcting that would be taking the page out of their hands.
+ *
+ * The browser makes its own jump to the anchor, and when it makes it is its
+ * own business: Chromium before `load`, Safari some while after — which, with
+ * one correction at `load`, left Safari readers at the top of the section with
+ * the sentence not yet begun. So the landing is held rather than made once:
+ * for a short while after arrival, wherever the page has been put, it is put
+ * back on the written point — at `load`, when the fonts have settled the
+ * layout, on a few beats after, and on any scroll that the reader did not
+ * make. The reader's first wheel, touch, key or press ends the hold, so it
+ * never pulls against a hand.
  */
+const HOLD_MS = 1800;
+
 export function initWrite(): void {
   if (location.hash !== '#whats-color') return;
   const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
   if (nav && nav.type !== 'navigate') return;
-  const to = writtenPoint();
-  if (to === null) return;
-  window.scrollTo(0, to);
-  /*
-   * The browser scrolls to the anchor itself once loading settles, which
-   * would land at the empty start of the scene; said again, after it.
-   */
-  window.addEventListener(
-    'load',
-    () => {
-      const again = writtenPoint();
-      if (again !== null) window.scrollTo(0, again);
-    },
-    { once: true },
-  );
+  if (writtenPoint() === null) return;
+
+  let held = true;
+  const release = () => {
+    held = false;
+    window.removeEventListener('scroll', land);
+  };
+  const land = () => {
+    if (!held) return;
+    const to = writtenPoint();
+    if (to !== null && Math.abs(window.scrollY - to) > 1) window.scrollTo(0, to);
+  };
+
+  for (const kind of ['wheel', 'touchstart', 'keydown', 'pointerdown'] as const) {
+    window.addEventListener(kind, release, { passive: true, once: true });
+  }
+  window.addEventListener('scroll', land, { passive: true });
+  land();
+  void document.fonts?.ready.then(land);
+
+  const settle = () => {
+    land();
+    for (const ms of [60, 180, 400, 800, 1300]) window.setTimeout(land, ms);
+    window.setTimeout(release, HOLD_MS);
+  };
+  if (document.readyState === 'complete') settle();
+  else window.addEventListener('load', settle, { once: true });
 }
