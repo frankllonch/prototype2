@@ -96,3 +96,15 @@ const longform = (slug: string) => by('page').find((p) => p.slug === slug);
 export const exhibitions: readonly Exhibition[] = splitExhibitions(longform('whats-color-exhibitions'));
 export const colourChart: Project | undefined = longform('colour-chart');
 
+
+/**
+ * The photographs Claudia sent from her archive, by exhibition slug.
+ *
+ * These shows have no page on the old site and so no prose — a record here is
+ * a title and a set of pictures. `add-shows.ts` files them as projects of kind
+ * `show` purely so the image pipeline treats them like everything else; this
+ * is where the rest of the site asks for them.
+ */
+export const showPhotos: ReadonlyMap<string, Project> = new Map(
+  by('show').map((p) => [p.slug, p] as const),
+);

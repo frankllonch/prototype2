@@ -2,7 +2,8 @@ import { html, join, raw, type Html } from '../components/html.ts';
 import { layout } from '../components/layout.ts';
 import { grid, gridControls, type GridItem } from '../components/gallery.ts';
 import { responsiveImage } from '../components/image.ts';
-import { panels, type PanelItem } from '../components/panels.ts';
+import { panels, panelShell, type PanelItem } from '../components/panels.ts';
+import { platesBody } from '../components/plates.ts';
 import { exhibitionList } from '../components/exhibitions.ts';
 import { SHOWS } from '../content/exhibitions-list.ts';
 import { commissionedList } from '../components/commissioned.ts';
@@ -11,7 +12,7 @@ import { yearRail } from '../components/years.ts';
 import { whatsColorOpening, whatsColorEdition, whatsColorFilm } from '../components/whats-color.ts';
 import { colourChart, inquiries } from '../components/colour-chart.ts';
 import { EDITIONS, allParticipants, type Edition } from '../content/whats-color.ts';
-import { isPlate, type YearColour } from '../content/load.ts';
+import { isPlate, showPhotos, type YearColour } from '../content/load.ts';
 import { describeImage } from '../content/describe.ts';
 import { displayTitle } from '../content/title.ts';
 import { withBase } from '../content/paths.ts';
@@ -127,12 +128,23 @@ export function exhibitionsPage(items: readonly Exhibition[]): Html {
   // links to.
   // Every show Claudia listed is on the page; the few that came from the source
   // page keep their photograph and their panel, matched by slug.
-  const covers = new Map(items.flatMap((e) => (e.cover ? [[e.slug, e.cover] as const] : [])));
+  // Both kinds of show give the index its hover photograph: the ones that came
+  // from the site carry a cover of their own, and the ones from the archive
+  // lead with their first photograph.
+  const covers = new Map([
+    ...items.flatMap((e) => (e.cover ? [[e.slug, e.cover] as const] : [])),
+    ...[...showPhotos].flatMap(([slug, p]) => (p.cover ? [[slug, p.cover] as const] : [])),
+  ]);
   const shown = items;
+  // A show with photographs and no prose gets the picture-only detail.
+  const plates = SHOWS.flatMap((s) => {
+    const record = s.slug ? showPhotos.get(s.slug) : undefined;
+    return record ? [panelShell('exhibition', s.slug!, platesBody(s, record.images))] : [];
+  });
   return layout({
     title: 'Exhibitions',
     path: '/exhibitions/',
-    overlays: panels('exhibition', shown.map(exhibitionItem)),
+    overlays: panels('exhibition', shown.map(exhibitionItem), join(plates)),
     children: html`
       <h1 class="sr-only">Exhibitions</h1>
       ${exhibitionList(SHOWS, covers)}
