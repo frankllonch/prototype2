@@ -22,19 +22,16 @@ import type { DocumentEntry } from './whats-color-document.ts';
  */
 
 /*
- * The colours below are the one part of this file that does not come from
- * Claudia's answers document, which gives no colours for this edition at all.
- * They are read from the printed index of her ‘What’s Color?’ book — the
- * page is among the photographs on the third edition's sheet — and five of
- * the seven are confirmed a second time by the book pages photographed beside
- * it. Where the same code appears in the answers document with a colour name,
- * the name is carried over; the index prints codes alone.
+ * No colours, on purpose. Claudia's document of all three editions assigns
+ * none for this one, so none is shown: the entries are the name and the
+ * answer, and a name's highlight is drawn from the site's palette instead.
+ * Codes for some of these guests exist elsewhere — the printed index of her
+ * book — but she has not given them for this edition, and this file follows
+ * the document.
  */
 export const EDITION_II: readonly DocumentEntry[] = [
   {
     name: 'Plantea Estudio',
-    code: 'AC071',
-    colourName: 'Pompeian red',
     aka: ['Plantea Estudi'],
     answer: `“…opté por un amarillo dorado y un rojo vivo oscuro, y como tercer color un pardo. Se tejió la alfombra, pero con gran sorpresa mía, la fuerte y cálida vecindad del amarillo y el rojo transformó por completo el color pardo en un azul” Carl Petersen, “Colores”, 1923.
 
@@ -54,7 +51,6 @@ Preferimos pensar cada proyecto de manera específica, tanto en su dimensión es
   },
   {
     name: 'HANGHAR',
-    code: 'AC219',
     answer: `El color es materia. El color es yeso y agua. El color es barro cocido. El color es aceite y serrín. El color es metal extruido. El color es reflejos en un espejo. El color es luz en nuestros ojos.`,
   },
   {
@@ -63,7 +59,6 @@ Preferimos pensar cada proyecto de manera específica, tanto en su dimensión es
   },
   {
     name: 'Montse Vicens',
-    code: 'AC067',
     alias: 'Int_sight',
     aka: ['Montse Vicens (Int-sight)'],
     answer: `Para gustos emociones, los colores.`,
@@ -76,8 +71,6 @@ Aquí mi vida empezó a ser una carta de colores. Con el tiempo, el color se ha 
   },
   {
     name: 'Tomás López Amat',
-    code: 'AC071',
-    colourName: 'Pompeian red',
     aka: ['Tomás López Design'],
     answer: `“Siento el color como un vehículo de transmisión vibracional, una herramienta perceptiva de gran poder y potencia transformadora, en cualquier espacio o persona. El color es indisociable del fenómeno físico de la luz. La luz y el color son las materias de mayor carga poética y reveladora de un lugar o de un objeto, que existen en el diseño y la arquitectura, así como en la naturaleza. El color y la luz son siempre, siempre, parte del proyecto. Sin luz no hay color, o sí… el color negro: la oscuridad.
 
@@ -113,13 +106,11 @@ El resultado convenció a todos. Las fotos que hizo Luis no necesitaron retoque 
   },
   {
     name: 'Auxi Gálvez',
-    code: 'AC222',
     aka: ['Auxi Gálvez (PSAAP)'],
     answer: `Para mí el color de un proyecto es el de los múltiples cuerpos que aloja.`,
   },
   {
     name: 'Escobedo Soliz',
-    code: 'AC035',
     answer: `“El color es materia.”`,
   },
   {
@@ -144,7 +135,6 @@ El resultado convenció a todos. Las fotos que hizo Luis no necesitaron retoque 
   },
   {
     name: 'Anna Vidal',
-    code: 'AC032',
     aka: ['Anna Vidal (Vis arquitectes)'],
     answer: `Quan un color em crida l’atenció, penso en la llum que en aquell instant hi ha a l’escena. M’agrada veure i pensar les dues coses alhora.
 
@@ -193,8 +183,6 @@ Así que como arquitectos decimos sí, totalmente sí al color, a espacios lleno
    */
   {
     name: 'Oscar Tusquets',
-    code: 'AC071',
-    colourName: 'Pompeian red',
     answer: '“En Arquitectura, la posibilidad de huir osadamente de la dictadura contemporánea del blanco ¡Viva Barragán!”.',
   },
 ];
