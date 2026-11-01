@@ -3,9 +3,9 @@ import { layout } from '../components/layout.ts';
 import { grid, gridControls, type GridItem } from '../components/gallery.ts';
 import { responsiveImage } from '../components/image.ts';
 import { panels, panelShell, type PanelItem } from '../components/panels.ts';
-import { platesBody } from '../components/plates.ts';
 import { exhibitionList } from '../components/exhibitions.ts';
 import { SHOWS } from '../content/exhibitions-list.ts';
+import { platesBody } from '../components/plates.ts';
 import { commissionedList } from '../components/commissioned.ts';
 import { sheetBody } from '../components/sheet.ts';
 import { SHEETS } from '../content/commissioned-sheets.ts';
@@ -137,16 +137,53 @@ export function exhibitionsPage(items: readonly Exhibition[]): Html {
     ...items.flatMap((e) => (e.cover ? [[e.slug, e.cover] as const] : [])),
     ...[...showPhotos].flatMap(([slug, p]) => (p.cover ? [[slug, p.cover] as const] : [])),
   ]);
-  const shown = items;
-  // A show with photographs and no prose gets the picture-only detail.
-  const plates = SHOWS.flatMap((s) => {
-    const record = s.slug ? showPhotos.get(s.slug) : undefined;
-    return record ? [panelShell('exhibition', s.slug!, platesBody(s, record.images))] : [];
+
+  /*
+   * Two sheets, as the designer draws two.
+   *
+   * A show that came from the site has a press release, and takes the sheet
+   * the commissioned work uses: masthead at the left, text under it, the
+   * photograph holding the right of the screen. A show from the archive has no
+   * text at all, and takes the other one: the masthead alone in the top left
+   * and the photograph centred on the frame.
+   *
+   * Which one a show gets is decided by whether it has anything to read, not
+   * by a list — so a show that gains a press release later moves across on its
+   * own.
+   */
+  const bySlug = new Map(items.map((e) => [e.slug, e] as const));
+  const sheets = SHOWS.flatMap((show) => {
+    if (!show.slug) return [];
+    const derived = bySlug.get(show.slug);
+    const archive = showPhotos.get(show.slug);
+    const images = derived?.images.length ? derived.images : archive?.images ?? [];
+    if (!images.length) return [];
+
+    const prose = derived
+      ? derived.rows.flatMap((r) => r.columns).map((c) => (c.kind === 'text' ? c.html : '')).join('')
+      : '';
+
+    if (!prose.trim()) {
+      return [panelShell('exhibition', show.slug, platesBody(show, images))];
+    }
+
+    const when = [
+      show.from && show.to ? `From ${show.from} to ${show.to}` : show.from ?? '',
+      String(show.year),
+    ].filter(Boolean).join(' ');
+    return [panelShell('exhibition', show.slug, sheetBody({
+      title: show.title,
+      lines: show.venue ? [show.venue] : [],
+      when,
+      body: raw(prose),
+      images,
+    }))];
   });
+
   return layout({
     title: 'Exhibitions',
     path: '/exhibitions/',
-    overlays: panels('exhibition', shown.map(exhibitionItem), join(plates)),
+    overlays: html`<div class="panels">${join(sheets)}</div>`,
     children: html`
       <h1 class="sr-only">Exhibitions</h1>
       ${exhibitionList(SHOWS, covers)}

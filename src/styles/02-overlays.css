@@ -651,18 +651,61 @@ body:has(.panel.is-open) .top { opacity: 0; pointer-events: none; }
   transition: opacity var(--hover) var(--ease);
 }
 .reader-expand:hover, .reader-expand:focus-visible { opacity: 1; }
-.reader-expand > span { position: relative; display: block; width: 14px; height: 14px; }
-.reader-expand > span::before, .reader-expand > span::after {
+/*
+ * Three dots in a thin ring, which is the mark the sheet uses. It was two
+ * corner brackets before — a crop mark, which says 'frame this' rather than
+ * 'there is more here'.
+ */
+.reader-expand > span {
+  position: relative;
+  display: block;
+  width: 20px;
+  height: 20px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+}
+.reader-expand > span::before,
+.reader-expand > span::after {
   content: '';
   position: absolute;
-  width: 6px; height: 6px;
-  border: 1px solid currentColor;
-  transition: transform 0.3s var(--ease);
+  top: 50%;
+  width: 2.4px;
+  height: 2.4px;
+  margin-top: -1.2px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 0 currentColor;
 }
-.reader-expand > span::before { top: 0; left: 0; border-right: 0; border-bottom: 0; }
-.reader-expand > span::after { right: 0; bottom: 0; border-left: 0; border-top: 0; }
-.reader-expand[aria-pressed='true'] > span::before { transform: translate(3px, 3px); }
-.reader-expand[aria-pressed='true'] > span::after { transform: translate(-3px, -3px); }
+.reader-expand > span::before { left: 50%; margin-left: -1.2px; }
+.reader-expand > span::after {
+  left: 50%;
+  margin-left: -1.2px;
+  box-shadow: -5px 0 0 currentColor, 5px 0 0 currentColor;
+}
+.reader-expand[aria-pressed='true'] > span { background: currentColor; }
+.reader-expand[aria-pressed='true'] > span::before,
+.reader-expand[aria-pressed='true'] > span::after { background: var(--paper); }
+.reader-expand[aria-pressed='true'] > span::after {
+  box-shadow: -5px 0 0 var(--paper), 5px 0 0 var(--paper);
+}
+
+/* Each side of the picture, and nothing under it: the sheet has no count. */
+[data-panel] .reader:not(.plates) .reader-step {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  padding: 0.6rem 0.9rem;
+  color: var(--ink);
+  opacity: 0.45;
+  font-size: var(--type);
+  line-height: 1;
+  transition: opacity var(--hover) var(--ease);
+}
+[data-panel] .reader:not(.plates) .reader-step:hover,
+[data-panel] .reader:not(.plates) .reader-step:focus-visible { opacity: 1; }
+[data-panel] .reader:not(.plates) .reader-prev { left: -3.2rem; }
+[data-panel] .reader:not(.plates) .reader-next { right: -3.2rem; }
 
 /* The columns need somewhere to hang the button from. */
 .reader-text, .reader-figures { position: relative; }
@@ -709,120 +752,4 @@ body:has(.panel.is-open) .top { opacity: 0; pointer-events: none; }
   font-style: italic;
   font-size: 1.06em;
   letter-spacing: 0;
-}
-
-/* ------------------------------------------- detail: photographs, no words */
-
-/*
- * A show that has pictures and no press release.
- *
- * Nothing here scrolls. The panel is the window's height and the photograph is
- * fitted into whatever the masthead leaves, so the whole show is on screen at
- * once and the arrows move through it. The other kind of detail keeps its
- * scrolling column, because there a press release has to be read down.
- */
-.panel:has(.plates) { overflow: hidden; }
-.plates {
-  display: grid;
-  grid-template-columns: 26% minmax(0, 1fr);
-  /* An explicit row that may shrink. With the row left to size itself the
-     stage had no height to resolve 100% against, so the photograph took its
-     natural size and the panel scrolled — which is the one thing this layout
-     is for preventing. */
-  grid-template-rows: minmax(0, 1fr);
-  gap: var(--pad);
-  height: 100vh;
-  padding: calc(var(--bar) * 0.6) var(--pad) var(--pad);
-  box-sizing: border-box;
-}
-.plates-head { align-self: start; }
-
-/* The masthead holds still of its own accord here: there is nothing to scroll
-   under it, so it neither pins nor blends. */
-.plates-head {
-  position: static;
-  mix-blend-mode: normal;
-  color: var(--ink);
-  padding: 0;
-  margin: 0;
-}
-.plates-head .reader-venue { margin-top: 1.1em; }
-.plates-when { margin: 1.6em 0 0; font-style: italic; }
-
-.plates-stage {
-  position: relative;
-  min-height: 0;
-  height: 100%;
-}
-.plates-frame { position: relative; height: 100%; }
-
-/* Stacked and faded rather than slid: the photographs are different shapes, and
-   sliding between them makes the frame jump as each one lands. */
-.plates-figure {
-  position: absolute;
-  inset: 0;
-  margin: 0;
-  display: grid;
-  place-items: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.5s var(--ease);
-}
-.plates-figure.is-current { opacity: 1; pointer-events: auto; }
-.plates-figure picture { display: contents; }
-/*
- * Fitted to the frame rather than capped by it.
- *
- * `max-height: 100%` was not enough: the photograph is a grid item, and a grid
- * item's `min-height: auto` makes its own intrinsic height a floor that the
- * maximum cannot pull below — so a 968px photograph stayed 968px in an 810px
- * window and the panel scrolled. Giving it the frame's size and letting
- * `object-fit` letterbox it inside makes the fit hold for every shape the
- * archive contains, portrait or landscape.
- */
-.plates-figure img {
-  width: 100%;
-  height: 100%;
-  min-width: 0;
-  min-height: 0;
-  object-fit: contain;
-}
-
-/* Beside the picture, not over it, and quiet until reached for. */
-.plates-step {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 2;
-  padding: 0.6rem 0.9rem;
-  color: var(--ink);
-  opacity: 0.45;
-  font-size: var(--type);
-  line-height: 1;
-  transition: opacity var(--hover) var(--ease);
-}
-.plates-step:hover, .plates-step:focus-visible { opacity: 1; }
-.plates-prev { left: 0; }
-.plates-next { right: 0; }
-
-.plates-count {
-  position: absolute;
-  left: 0; right: 0; bottom: 0;
-  margin: 0;
-  text-align: center;
-  font-size: var(--type-menu);
-  color: var(--ink-soft);
-  font-variant-numeric: tabular-nums;
-}
-
-@media (max-width: 899px) {
-  .plates {
-    grid-template-columns: 1fr;
-    height: auto;
-    gap: 1.2rem;
-  }
-  .panel:has(.plates) { overflow: auto; }
-  .plates-stage { height: 62vh; }
-  .plates-prev { left: 0; }
-  .plates-next { right: 0; }
 }

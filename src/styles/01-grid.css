@@ -606,9 +606,15 @@ html.js .hero[data-hero]+.grid[data-stack] {
   outline: none;
 }
 
-.hrow:focus-visible .exh-plate {
-  opacity: 1;
-}
+/*
+ * The preview is a pointer affordance and stays one.
+ *
+ * It used to answer to focus as well, and closing a detail returns focus to
+ * the row that opened it — so coming back left that row lit with its
+ * photograph hanging over the list, with no pointer anywhere near it. The
+ * colour change is the focus indicator, which is enough to say where you are;
+ * the photograph is for reaching towards a row, not for landing back on one.
+ */
 
 /* ------------------------------------------------------- exhibitions list */
 
