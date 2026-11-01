@@ -2,6 +2,7 @@ import { exhibitions, commissioned } from './load.ts';
 import { EDITION_I, EDITION_III, type DocumentEntry } from './whats-color-document.ts';
 import { EDITION_II } from './whats-color-edition-ii.ts';
 import { SAYS_III_SHEET } from './whats-color-sheet.ts';
+import { hues } from './palette.ts';
 
 /**
  * What's Color?, read out of the source rather than retyped.
@@ -545,52 +546,111 @@ function build(): readonly Edition[] {
 }
 
 /**
- * A stand-in colour for a participant's swatch.
+ * The colour behind a participant's name, when it is hovered.
  *
- * The source names a colour for everyone in editions I and III — POWDER RED,
- * AZUL PISCINA, DARK GREEN — but nowhere in the dataset is there a value for
- * any of them: the AC numbers index Claudia's own chart, and that chart is on
- * paper. So these are read off the names, in the two languages the source
- * writes them in, and they are approximations of a word rather than the
- * colour itself. Claudia has the real mapping and it replaces this wholesale.
+ * It has to be the colour the entry says — the line under the name reads
+ * "AC071 POMPEIAN RED", and the highlight is that colour. The AC numbers index
+ * Claudia's chart, which is on paper, so the values come from the closest
+ * thing to it there is, in this order:
  *
- * Reading the name beats a random palette for one practical reason: a wrong
- * green sitting behind DARK GREEN looks like a tuning problem, while a random
- * pink behind it looks like the page is broken, and only one of those is the
- * truth of where this stands.
+ *   1. The paint itself, photographed. The third edition's book prints a
+ *      page per guest with their colour brushed on it, and ten of those pages
+ *      are in the photographs on its sheet. Each value is the middle of the
+ *      painted patch, set against the white of the page it is on, so the
+ *      photograph's exposure is taken out. Keyed by code, so everyone given
+ *      the same colour shares it — Oscar Tusquets's AC071 is the paint on
+ *      Tomás López Amat's and Plantea Estudio's pages.
+ *   2. The colour's name, for everyone else who has one: a value chosen for
+ *      each name the editions actually use, listed whole rather than guessed
+ *      at from words — guessing coloured OCHER RED yellow and left NEGRE,
+ *      VAINILLA and TERRACOTA to chance.
+ *   3. Nobody named a colour: one of the site's own palette, chosen at random
+ *      but the same every time for the same person, so a name keeps its
+ *      colour from the opening view to its edition and on into WordPress.
+ *
+ * The theme draws the same three steps (inc/colour.php), after a hex typed
+ * into the answer in WordPress, which wins over all of them.
  */
-const WORDS: ReadonlyArray<readonly [RegExp, string]> = [
-  [/off\s*white|blanco|white|crudo/i, '#efebe3'],
-  [/powder\s*red|rosa|pink/i, '#d98f93'],
-  [/pompeian|rouge|rojo|\bred\b/i, '#b23a2e'],
-  [/burdeos|granate|wine/i, '#7d2a35'],
-  [/naranja|orange|teja/i, '#d2762f'],
-  [/ocre\s*rojizo/i, '#c07a3e'],
-  [/ocre|ocher|ochre|mostaza|amarillo|yellow/i, '#e3b23c'],
-  [/rojizo/i, '#b23a2e'],
-  [/arena|sand|beige|nude|crema/i, '#dcc9a8'],
-  [/marr[oó]n|brown|tierra/i, '#8a5a3b'],
-  [/verde\s*oscuro|dark\s*green/i, '#2f4b35'],
-  [/verde|green/i, '#5f7f4f'],
-  [/azul\s*celeste|celeste|sky/i, '#8fb3cc'],
-  [/azul\s*piscina|turquesa|turquoise|cyan/i, '#3f9aa6'],
-  [/azul\s*oscuro|navy|marino/i, '#2b3a58'],
-  [/azul|blue/i, '#4a6b96'],
-  [/violeta|morado|purple|lila/i, '#6b4a78'],
-  [/gris|grey|gray/i, '#8d8d87'],
-  [/negro|black/i, '#2b2b2b'],
-  [/fresa|strawberry/i, '#c4455c'],
-  [/mandarina|tangerine/i, '#e08a3c'],
-  [/blau\s*verd|verd\s*blau|teal/i, '#2f7a74'],
-  [/blau/i, '#4a6b96'],
-  [/verd\b/i, '#5f7f4f'],
-  [/vermell|carmes[ií]/i, '#b23a2e'],
-  [/groc/i, '#e3b23c'],
-  [/plom|lead/i, '#6e7681'],
-];
+const PAINTED: Readonly<Record<string, string>> = {
+  AC001: '#dfcb6c', // Carlota Guerrero
+  AC009: '#642625', // Tortell Poltrona
+  AC016: '#af8385', // Albert Riera Galcerán's page; María Medem shares the code
+  AC032: '#051352', // Anna Vidal
+  AC035: '#183b81', // Escobedo Soliz
+  AC071: '#2b0803', // Tomás López Amat and Plantea Estudio, averaged
+  AC206: '#c0aa8b', // Rupi Kaur
+  AC219: '#66605a', // Hanghar
+  AC250: '#11151f', // Luís Cerveró
+};
 
-/** When the source names no colour, a steady sweep so neighbours differ. */
-const SWEEP = ['#c96a3f', '#4a6b96', '#5f7f4f', '#b23a2e', '#8d8d87', '#e3b23c', '#6b4a78', '#3f9aa6'];
+/** By colour name, lower-cased and without accents. */
+const NAMED: Readonly<Record<string, string>> = {
+  // first edition
+  'powder red': '#c4706a',
+  yellow: '#e6c33f',
+  'natural off white': '#ece5d3',
+  'soft nude': '#c0aa8b',
+  'dark green': '#2f4b35',
+  rouge: '#8e2a33',
+  red: '#b5302a',
+  'beautiful sand': '#d8c3a0',
+  'green blue': '#2f7a74',
+  'pompeian red': '#2b0803',
+  'grey green': '#8a9a85',
+  'ocher green': '#8f8a3c',
+  'dark orange': '#c4581f',
+  'warm red': '#c8402e',
+  'deep blue': '#1f3466',
+  lilac: '#b7a3c9',
+  'ocher red': '#b5562f',
+  orange: '#e07a2b',
+  green: '#5f8a4f',
+  gris: '#8d8d87',
+  'blue to green': '#2f7f86',
+  'ice blue': '#c9dde6',
+  'deep green': '#1f4a35',
+  'sand colour': '#d6c29c',
+  // third edition
+  'ocre amarillo': '#d1a03a',
+  verde: '#5f8a4f',
+  negre: '#1e1e1e',
+  vainilla: '#dfcb6c',
+  'azul celeste oscuro': '#5f8fb3',
+  'rosa intens': '#af8385',
+  azul: '#2f5ea8',
+  'verde oscuro casi negro': '#1d2a20',
+  amarillo: '#e6c33f',
+  'azul profundo': '#11151f',
+  'rosa salmon': '#e8a08a',
+  fresa: '#c4455c',
+  terracota: '#b5582f',
+  arena: '#d6c4a3',
+  'azul piscina': '#3fa3b5',
+  'gris perla': '#c4c4be',
+  'gris pols': '#a39f98',
+  'azul plomo': '#4f6070',
+  'lila magenta': '#b0577f',
+  mandarina: '#e8823a',
+  'blau casi verd': '#2f7a7c',
+  'verde gris': '#7f9284',
+  'ocre rojizo': '#b8693a',
+};
+
+/** "AC 16", "AC016" and "ac16" are one code. */
+const codeKey = (code: string | undefined): string => {
+  const m = code ? AC.exec(code) : null;
+  return m ? `AC${m[1]!.padStart(3, '0')}` : '';
+};
+
+const colourKey = (name: string): string =>
+  name.toLocaleLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim();
+
+/** A number from a name, the same in PHP: the URL-safe id, character by character. */
+const seed = (id: string): number => {
+  let h = 0;
+  for (const ch of id) h = (h * 31 + ch.charCodeAt(0)) % 1000003;
+  return h;
+};
 
 /* ---------------------------------------------------- making a colour legible */
 
@@ -640,11 +700,12 @@ export function readable(hex: string, ratio = 4.5): string {
   return '#242528';
 }
 
-export function swatchFor(p: Participant, index: number): string {
-  if (p.colourName) {
-    for (const [pattern, hex] of WORDS) if (pattern.test(p.colourName)) return hex;
-  }
-  return SWEEP[index % SWEEP.length]!;
+export function swatchFor(p: Participant): string {
+  const painted = PAINTED[codeKey(p.code)];
+  if (painted) return painted;
+  const named = p.colourName ? NAMED[colourKey(p.colourName)] : undefined;
+  if (named) return named;
+  return hues[seed(idFor(p.name)) % hues.length] ?? '#8d8d87';
 }
 
 /** A name reduced to something that can live in a URL fragment. */

@@ -275,7 +275,7 @@ function cv_edition( WP_Post $p ): array {
 			'id'         => cv_id_for( get_the_title( $a ) ),
 			'url'        => get_permalink( $p ),
 		];
-		$person['colour'] = cv_swatch_for( $person, count( $people ) );
+		$person['colour'] = cv_swatch_for( $person );
 		$people[]         = $person;
 	}
 

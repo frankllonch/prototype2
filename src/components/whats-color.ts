@@ -51,7 +51,7 @@ export function whatsColorNames(
     ${join(
       participants.map((p, i) => {
         const sep = i > 0 ? raw('<span class="wc-sep">, </span>') : '';
-        const paint = `--swatch: ${swatchFor(p, i)}; --swatch-ink: var(--${inkOn(swatchFor(p, i))})`;
+        const paint = `--swatch: ${swatchFor(p)}; --swatch-ink: var(--${inkOn(swatchFor(p))})`;
         // On an edition's own page a name with no answer has no entry to point
         // at, so it stands in the sentence as a name rather than as a link.
         if (within && !p.id) {
@@ -286,7 +286,7 @@ function namesOfEdition(edition: Edition): Html {
  * and nothing else. That is what the page has to say.
  */
 function answer(p: Participant, index: number): Html {
-  const swatch = swatchFor(p, index);
+  const swatch = swatchFor(p);
   return html`<article class="wc-answer" id="${p.id ?? ''}">
     <h2 class="wc-answer-name">${p.name}${p.alias ? html`<span class="wc-answer-alias">${p.alias}</span>` : ''}</h2>
     <p class="wc-answer-meta">

@@ -119,55 +119,101 @@ function cv_readable( string $hex, float $ratio = 4.5 ): string {
 }
 
 /**
- * A stand-in colour for a participant's swatch, read off the colour's name in
- * the two languages the source writes them in. Claudia's chart has the real
- * values and a hex typed into the entry replaces this.
+ * The colour behind a participant's name, when it is hovered — the colour the
+ * entry says. A port of swatchFor() in src/content/whats-color.ts, with one
+ * step ahead of it: a hex typed into the answer in WordPress wins. After that
+ * the paint photographed in the book, by code; then a value per colour name;
+ * and for nobody-named-a-colour, the site's palette, at random but the same
+ * every time for the same person. The tables are the static site's, kept in
+ * step by hand: a change there is a change here.
  */
-const CV_SWATCH_WORDS = [
-	[ '/off\s*white|blanco|white|crudo/iu', '#efebe3' ],
-	[ '/powder\s*red|rosa|pink/iu', '#d98f93' ],
-	[ '/pompeian|rouge|rojo|\bred\b/iu', '#b23a2e' ],
-	[ '/burdeos|granate|wine/iu', '#7d2a35' ],
-	[ '/naranja|orange|teja/iu', '#d2762f' ],
-	[ '/ocre\s*rojizo/iu', '#c07a3e' ],
-	[ '/ocre|ocher|ochre|mostaza|amarillo|yellow/iu', '#e3b23c' ],
-	[ '/rojizo/iu', '#b23a2e' ],
-	[ '/arena|sand|beige|nude|crema/iu', '#dcc9a8' ],
-	[ '/marr[oó]n|brown|tierra/iu', '#8a5a3b' ],
-	[ '/verde\s*oscuro|dark\s*green/iu', '#2f4b35' ],
-	[ '/verde|green/iu', '#5f7f4f' ],
-	[ '/azul\s*celeste|celeste|sky/iu', '#8fb3cc' ],
-	[ '/azul\s*piscina|turquesa|turquoise|cyan/iu', '#3f9aa6' ],
-	[ '/azul\s*oscuro|navy|marino/iu', '#2b3a58' ],
-	[ '/azul|blue/iu', '#4a6b96' ],
-	[ '/violeta|morado|purple|lila/iu', '#6b4a78' ],
-	[ '/gris|grey|gray/iu', '#8d8d87' ],
-	[ '/negro|black/iu', '#2b2b2b' ],
-	[ '/fresa|strawberry/iu', '#c4455c' ],
-	[ '/mandarina|tangerine/iu', '#e08a3c' ],
-	[ '/blau\s*verd|verd\s*blau|teal/iu', '#2f7a74' ],
-	[ '/blau/iu', '#4a6b96' ],
-	[ '/verd\b/iu', '#5f7f4f' ],
-	[ '/vermell|carmes[ií]/iu', '#b23a2e' ],
-	[ '/groc/iu', '#e3b23c' ],
-	[ '/plom|lead/iu', '#6e7681' ],
+const CV_SWATCH_PAINTED = [
+	'AC001' => '#dfcb6c',
+	'AC009' => '#642625',
+	'AC016' => '#af8385',
+	'AC032' => '#051352',
+	'AC035' => '#183b81',
+	'AC071' => '#2b0803',
+	'AC206' => '#c0aa8b',
+	'AC219' => '#66605a',
+	'AC250' => '#11151f',
 ];
 
-/** When the source names no colour, a steady sweep so neighbours differ. */
-const CV_SWATCH_SWEEP = [ '#c96a3f', '#4a6b96', '#5f7f4f', '#b23a2e', '#8d8d87', '#e3b23c', '#6b4a78', '#3f9aa6' ];
+const CV_SWATCH_NAMED = [
+	'powder red'              => '#c4706a',
+	'yellow'                  => '#e6c33f',
+	'natural off white'       => '#ece5d3',
+	'soft nude'               => '#c0aa8b',
+	'dark green'              => '#2f4b35',
+	'rouge'                   => '#8e2a33',
+	'red'                     => '#b5302a',
+	'beautiful sand'          => '#d8c3a0',
+	'green blue'              => '#2f7a74',
+	'pompeian red'            => '#2b0803',
+	'grey green'              => '#8a9a85',
+	'ocher green'             => '#8f8a3c',
+	'dark orange'             => '#c4581f',
+	'warm red'                => '#c8402e',
+	'deep blue'               => '#1f3466',
+	'lilac'                   => '#b7a3c9',
+	'ocher red'               => '#b5562f',
+	'orange'                  => '#e07a2b',
+	'green'                   => '#5f8a4f',
+	'gris'                    => '#8d8d87',
+	'blue to green'           => '#2f7f86',
+	'ice blue'                => '#c9dde6',
+	'deep green'              => '#1f4a35',
+	'sand colour'             => '#d6c29c',
+	'ocre amarillo'           => '#d1a03a',
+	'verde'                   => '#5f8a4f',
+	'negre'                   => '#1e1e1e',
+	'vainilla'                => '#dfcb6c',
+	'azul celeste oscuro'     => '#5f8fb3',
+	'rosa intens'             => '#af8385',
+	'azul'                    => '#2f5ea8',
+	'verde oscuro casi negro' => '#1d2a20',
+	'amarillo'                => '#e6c33f',
+	'azul profundo'           => '#11151f',
+	'rosa salmon'             => '#e8a08a',
+	'fresa'                   => '#c4455c',
+	'terracota'               => '#b5582f',
+	'arena'                   => '#d6c4a3',
+	'azul piscina'            => '#3fa3b5',
+	'gris perla'              => '#c4c4be',
+	'gris pols'               => '#a39f98',
+	'azul plomo'              => '#4f6070',
+	'lila magenta'            => '#b0577f',
+	'mandarina'               => '#e8823a',
+	'blau casi verd'          => '#2f7a7c',
+	'verde gris'              => '#7f9284',
+	'ocre rojizo'             => '#b8693a',
+];
 
-function cv_swatch_for( array $participant, int $index ): string {
+function cv_swatch_for( array $participant ): string {
 	if ( ! empty( $participant['swatch'] ) && preg_match( '/^#[0-9a-f]{6}$/i', $participant['swatch'] ) ) {
 		return strtolower( $participant['swatch'] );
 	}
-	if ( ! empty( $participant['colourName'] ) ) {
-		foreach ( CV_SWATCH_WORDS as [ $pattern, $hex ] ) {
-			if ( preg_match( $pattern, $participant['colourName'] ) ) {
-				return $hex;
-			}
+	if ( ! empty( $participant['code'] ) && preg_match( '/\bAC\s*0*(\d{1,3})\b/i', $participant['code'], $m ) ) {
+		$key = 'AC' . str_pad( $m[1], 3, '0', STR_PAD_LEFT );
+		if ( isset( CV_SWATCH_PAINTED[ $key ] ) ) {
+			return CV_SWATCH_PAINTED[ $key ];
 		}
 	}
-	return CV_SWATCH_SWEEP[ $index % count( CV_SWATCH_SWEEP ) ];
+	if ( ! empty( $participant['colourName'] ) ) {
+		$key = trim( preg_replace( '/\s+/', ' ', strtolower( remove_accents( $participant['colourName'] ) ) ) );
+		if ( isset( CV_SWATCH_NAMED[ $key ] ) ) {
+			return CV_SWATCH_NAMED[ $key ];
+		}
+	}
+	$hues = array_map( fn( $y ) => cv_vivid( $y['colour'] ), cv_years() );
+	if ( ! $hues ) {
+		return '#8d8d87';
+	}
+	$h = 0;
+	foreach ( str_split( cv_id_for( (string) $participant['name'] ) ) as $c ) {
+		$h = ( $h * 31 + ord( $c ) ) % 1000003;
+	}
+	return $hues[ $h % count( $hues ) ];
 }
 
 /** A name reduced to something that can live in a URL fragment. */
