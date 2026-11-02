@@ -44,6 +44,30 @@ export function initFigures() {
         for (const button of reader.querySelectorAll('[data-figure-step]')) {
             button.addEventListener('click', () => show(shown + Number(button.dataset.figureStep)));
         }
+        /*
+         * The arrow keys turn the pictures too, which is how anyone looking at a
+         * set of photographs expects to move through them.
+         *
+         * Bound to the document and gated on this panel being the open one, rather
+         * than to the panel itself: the panel is not focused when it opens, so a
+         * listener on it would only answer after something inside had been clicked.
+         * A press is ignored while the caret is in a field, and when a modifier is
+         * held, so it never takes a key away from the browser or from typing.
+         */
+        document.addEventListener('keydown', (event) => {
+            if (!panel.classList.contains('is-open'))
+                return;
+            if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey)
+                return;
+            const target = event.target;
+            if (target?.closest('input, textarea, select, [contenteditable]'))
+                return;
+            const step = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
+            if (!step || figures.length < 2)
+                return;
+            event.preventDefault();
+            show(shown + step);
+        });
         const expanders = [...reader.querySelectorAll('[data-expand]')];
         const widen = (which) => {
             reader.classList.toggle('is-wide-text', which === 'text');

@@ -34,7 +34,22 @@
 // The loading screen belongs to arriving at the site, not to each page of it.
 // Decided here, before the first paint, so pages after the first never show it
 // even for a frame.
-try { if (sessionStorage.getItem('cv-seen')) document.documentElement.classList.add('loaded') } catch (e) {}</script>
+try { if (sessionStorage.getItem('cv-seen')) document.documentElement.classList.add('loaded') } catch (e) {}
+// Arriving at What's Color by its link, the page is laid out at the top and
+// moved down to the written sentence by script — so it is kept covered until
+// it has been, and no frame is ever painted in the wrong place. The script
+// uncovers it as soon as it lands (client/write.ts); this timer is the net if
+// it never runs.
+// Only where that landing is made at all — the same tests client/write.ts
+// makes — so a browser that keeps the plain anchor jump never waits for it.
+try { var nav = performance.getEntriesByType('navigation')[0];
+  if (location.hash === '#whats-color' && (!nav || nav.type === 'navigate')
+    && CSS.supports('animation-timeline: view()')
+    && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('wc-arriving', 'wc-swatch-drop');
+    setTimeout(function () { document.documentElement.classList.remove('wc-arriving') }, 1500);
+    setTimeout(function () { document.documentElement.classList.remove('wc-swatch-drop') }, 700);
+  } } catch (e) {}</script>
 </head>
 <body>
 <div class="loader" data-loader aria-hidden="true">
@@ -79,7 +94,7 @@ try { if (sessionStorage.getItem('cv-seen')) document.documentElement.classList.
     <p class="wc-numeral" aria-hidden="true">(II)</p>
     <h1 class="sr-only">What&rsquo;s Color? (II)</h1>
     <p class="wc-names">
-    <a class="wc-name" href="#wc-plantea-estudio" style="--swatch: #b23a2e; --swatch-ink: var(--paper)">Plantea Estudio</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-kal-a" style="--swatch: #4a6b96; --swatch-ink: var(--paper)">Kal-a</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-elii" style="--swatch: #5f7f4f; --swatch-ink: var(--paper)">Elii</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-hanghar" style="--swatch: #b23a2e; --swatch-ink: var(--paper)">HANGHAR</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #8d8d87; --swatch-ink: var(--paper)">Nomos arquitectos</span><span class="wc-sep">, </span><a class="wc-name" href="#wc-montse-vicens" style="--swatch: #e3b23c; --swatch-ink: var(--ink)">Montse Vicens</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-isabel-francoy" style="--swatch: #6b4a78; --swatch-ink: var(--paper)">Isabel Francoy</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-tomas-lopez-amat" style="--swatch: #b23a2e; --swatch-ink: var(--paper)">Tomás López Amat</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-stefano-colli" style="--swatch: #c96a3f; --swatch-ink: var(--paper)">Stefano Colli</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-conticert" style="--swatch: #4a6b96; --swatch-ink: var(--paper)">ContiCert</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-un-parell-d-arquitectes" style="--swatch: #5f7f4f; --swatch-ink: var(--paper)">Un parell d’arquitectes</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #b23a2e; --swatch-ink: var(--paper)">Naso ++</span><span class="wc-sep">, </span><a class="wc-name" href="#wc-isla-arquitectos" style="--swatch: #8d8d87; --swatch-ink: var(--paper)">Isla arquitectos</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-auxi-galvez" style="--swatch: #e3b23c; --swatch-ink: var(--ink)">Auxi Gálvez</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-escobedo-soliz" style="--swatch: #6b4a78; --swatch-ink: var(--paper)">Escobedo Soliz</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-antoni-arola" style="--swatch: #3f9aa6; --swatch-ink: var(--paper)">Antoni Arola</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-barbara-aurell" style="--swatch: #c96a3f; --swatch-ink: var(--paper)">Barbara Aurell</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-laura-castanya" style="--swatch: #4a6b96; --swatch-ink: var(--paper)">Laura Castanya</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #5f7f4f; --swatch-ink: var(--paper)">Andrea Batlló y Adrià Escolano</span><span class="wc-sep">, </span><a class="wc-name" href="#wc-marc-morro" style="--swatch: #b23a2e; --swatch-ink: var(--paper)">Marc Morro</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-anna-vidal" style="--swatch: #8d8d87; --swatch-ink: var(--paper)">Anna Vidal</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-gema-sach" style="--swatch: #e3b23c; --swatch-ink: var(--ink)">Gema Sach</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-mariona-espinet" style="--swatch: #6b4a78; --swatch-ink: var(--paper)">Mariona Espinet</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-isabel-sendra" style="--swatch: #3f9aa6; --swatch-ink: var(--paper)">Isabel Sendra</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-amoo" style="--swatch: #c96a3f; --swatch-ink: var(--paper)">AMOO</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-loca-studio" style="--swatch: #4a6b96; --swatch-ink: var(--paper)">Loca Studio</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #5f7f4f; --swatch-ink: var(--paper)">Paula Arroyo</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #b23a2e; --swatch-ink: var(--paper)">Cierto Estudio</span><span class="wc-sep">, </span><a class="wc-name" href="#wc-oscar-tusquets" style="--swatch: #b23a2e; --swatch-ink: var(--paper)">Oscar Tusquets</a>
+    <a class="wc-name" href="#wc-plantea-estudio" style="--swatch: #cf4230; --swatch-ink: var(--paper)">Plantea Estudio</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-kal-a" style="--swatch: #cf3c30; --swatch-ink: var(--paper)">Kal-a</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-elii" style="--swatch: #092cf6; --swatch-ink: var(--paper)">Elii</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-hanghar" style="--swatch: #cf303a; --swatch-ink: var(--paper)">HANGHAR</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #1f8440; --swatch-ink: var(--paper)">Nomos arquitectos</span><span class="wc-sep">, </span><a class="wc-name" href="#wc-montse-vicens" style="--swatch: #cf3c30; --swatch-ink: var(--paper)">Montse Vicens</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-isabel-francoy" style="--swatch: #b25f2a; --swatch-ink: var(--paper)">Isabel Francoy</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-tomas-lopez-amat" style="--swatch: #092cf6; --swatch-ink: var(--paper)">Tomás López Amat</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-stefano-colli" style="--swatch: #cf303a; --swatch-ink: var(--paper)">Stefano Colli</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-conticert" style="--swatch: #cf303a; --swatch-ink: var(--paper)">ContiCert</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-un-parell-d-arquitectes" style="--swatch: #18817a; --swatch-ink: var(--paper)">Un parell d’arquitectes</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #18817a; --swatch-ink: var(--paper)">Naso ++</span><span class="wc-sep">, </span><a class="wc-name" href="#wc-isla-arquitectos" style="--swatch: #087e9c; --swatch-ink: var(--paper)">Isla arquitectos</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-auxi-galvez" style="--swatch: #18817a; --swatch-ink: var(--paper)">Auxi Gálvez</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-escobedo-soliz" style="--swatch: #1f8440; --swatch-ink: var(--paper)">Escobedo Soliz</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-antoni-arola" style="--swatch: #1f8440; --swatch-ink: var(--paper)">Antoni Arola</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-barbara-aurell" style="--swatch: #b25f2a; --swatch-ink: var(--paper)">Barbara Aurell</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-laura-castanya" style="--swatch: #1f8440; --swatch-ink: var(--paper)">Laura Castanya</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #936e1f; --swatch-ink: var(--paper)">Andrea Batlló y Adrià Escolano</span><span class="wc-sep">, </span><a class="wc-name" href="#wc-marc-morro" style="--swatch: #092cf6; --swatch-ink: var(--paper)">Marc Morro</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-anna-vidal" style="--swatch: #cf3c30; --swatch-ink: var(--paper)">Anna Vidal</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-gema-sach" style="--swatch: #cf3c30; --swatch-ink: var(--paper)">Gema Sach</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-mariona-espinet" style="--swatch: #cf4230; --swatch-ink: var(--paper)">Mariona Espinet</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-isabel-sendra" style="--swatch: #0f8557; --swatch-ink: var(--paper)">Isabel Sendra</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-amoo" style="--swatch: #cf4230; --swatch-ink: var(--paper)">AMOO</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-loca-studio" style="--swatch: #b25f2a; --swatch-ink: var(--paper)">Loca Studio</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #0f8557; --swatch-ink: var(--paper)">Paula Arroyo</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #936e1f; --swatch-ink: var(--paper)">Cierto Estudio</span><span class="wc-sep">, </span><a class="wc-name" href="#wc-oscar-tusquets" style="--swatch: #087e9c; --swatch-ink: var(--paper)">Oscar Tusquets</a>
   </p>
 
     <div class="wc-sheet">
@@ -97,7 +112,7 @@ try { if (sessionStorage.getItem('cv-seen')) document.documentElement.classList.
     <p class="wc-cell-meta">
       
       
-      <span class="wc-cell-code">AC071 Pompeian red</span>
+      
     </p>
     <div class="wc-cell-text">
           <p>“…opté por un amarillo dorado y un rojo vivo oscuro, y como tercer color un pardo. Se tejió la alfombra, pero con gran sorpresa mía, la fuerte y cálida vecindad del amarillo y el rojo transformó por completo el color pardo en un azul” Carl Petersen, “Colores”, 1923.</p><p>Para nosotros, como para Petersen, el color es sorprendente, innombrable, efímero, inaprensible… es el puente que se tiende entre el mundo real y nuestra imaginación. También perseguimos colores a los que no llegamos y encontramos otros que no habíamos imaginado.</p>
@@ -164,7 +179,7 @@ try { if (sessionStorage.getItem('cv-seen')) document.documentElement.classList.
     <p class="wc-cell-meta">
       
       
-      <span class="wc-cell-code">AC071 Pompeian red</span>
+      
     </p>
     <div class="wc-cell-text">
           <p>“Siento el color como un vehículo de transmisión vibracional, una herramienta perceptiva de gran poder y potencia transformadora, en cualquier espacio o persona. El color es indisociable del fenómeno físico de la luz. La luz y el color son las materias de mayor carga poética y reveladora de un lugar o de un objeto, que existen en el diseño y la arquitectura, así como en la naturaleza. El color y la luz son siempre, siempre, parte del proyecto. Sin luz no hay color, o sí… el color negro: la oscuridad.</p><p>Todos tenemos un color asociado a nuestra persona, a nuestro cuerpo, a nuestra vibración. El color es energía, es la expresión perceptiva de la energía de la luz. La energía ni se crea ni se destruye, se transforma. Está en nuestras manos, en nuestros dedos, hacer el mejor uso posible de su poder de transformación en los espacios y objetos que creamos y proyectamos, mediante las prácticas artísticas y del diseño.”</p>
@@ -326,7 +341,7 @@ try { if (sessionStorage.getItem('cv-seen')) document.documentElement.classList.
     <p class="wc-cell-meta">
       
       
-      <span class="wc-cell-code">AC071 Pompeian red</span>
+      
     </p>
     <div class="wc-cell-text">
           <p>“En Arquitectura, la posibilidad de huir osadamente de la dictadura contemporánea del blanco ¡Viva Barragán!”.</p>
@@ -365,7 +380,7 @@ try { if (sessionStorage.getItem('cv-seen')) document.documentElement.classList.
     <p class="wc-cell-meta">
       
       
-      <span class="wc-cell-code">AC032</span>
+      
     </p>
     <div class="wc-cell-text">
           <p>Quan un color em crida l’atenció, penso en la llum que en aquell instant hi ha a l’escena. M’agrada veure i pensar les dues coses alhora.</p><p>El color que més utilitzo a la meva paleta es el blau ultramar.</p>
@@ -404,7 +419,7 @@ try { if (sessionStorage.getItem('cv-seen')) document.documentElement.classList.
     <p class="wc-cell-meta">
       
       
-      <span class="wc-cell-code">AC222</span>
+      
     </p>
     <div class="wc-cell-text">
           <p>Para mí el color de un proyecto es el de los múltiples cuerpos que aloja.</p>
@@ -417,7 +432,7 @@ try { if (sessionStorage.getItem('cv-seen')) document.documentElement.classList.
     <p class="wc-cell-meta">
       
       
-      <span class="wc-cell-code">AC219</span>
+      
     </p>
     <div class="wc-cell-text">
           <p>El color es materia. El color es yeso y agua. El color es barro cocido. El color es aceite y serrín. El color es metal extruido. El color es reflejos en un espejo. El color es luz en nuestros ojos.</p>
@@ -430,10 +445,10 @@ try { if (sessionStorage.getItem('cv-seen')) document.documentElement.classList.
     <p class="wc-cell-meta">
       
       
-      <span class="wc-cell-code">AC067</span>
+      
     </p>
     <div class="wc-cell-text">
-          <p>Para emociones, los colores.</p>
+          <p>Para gustos emociones, los colores.</p>
         </div>
   </article></div><div
           class="wc-slot"
@@ -443,7 +458,7 @@ try { if (sessionStorage.getItem('cv-seen')) document.documentElement.classList.
     <p class="wc-cell-meta">
       
       
-      <span class="wc-cell-code">AC035</span>
+      
     </p>
     <div class="wc-cell-text">
           <p>“El color es materia.”</p>
@@ -530,62 +545,77 @@ try { if (sessionStorage.getItem('cv-seen')) document.documentElement.classList.
                       <span class="about-show-when">2026 May - June</span>
                       <span class="about-show-title">‘Moll de l’os’ peintures 2026</span>
                       <span class="about-show-line">Alzueta Gallery</span>
+                      
                     </li><li class="about-show">
                       <span class="about-show-when">2025 April</span>
                       <span class="about-show-title">‘Mira’m no deixis de mirar-me’</span>
-                      <span class="about-show-line">Solo show with Alzueta Gallery</span><span class="about-show-line">at Palau de Casavells</span>
+                      <span class="about-show-line">Solo show with Alzueta Gallery</span>
+                      <span class="about-show-place">at Palau de Casavells</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2024 July</span>
                       <span class="about-show-title">Painting as a gift from color</span>
-                      <span class="about-show-line">Solo show</span><span class="about-show-line">Gallery_br, Tetbury, UK</span>
+                      <span class="about-show-line">Solo show</span>
+                      <span class="about-show-place">Gallery_br, Tetbury, UK</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2023 September</span>
                       <span class="about-show-title">Transitions</span>
-                      <span class="about-show-line">Solo show</span><span class="about-show-line">Alzueta Gallery Turó</span>
+                      <span class="about-show-line">Solo show</span>
+                      <span class="about-show-place">Alzueta Gallery Turó</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2021 December</span>
                       <span class="about-show-title">Color Dialogues</span>
-                      <span class="about-show-line">Solo exhibition</span><span class="about-show-line">Alzueta Gallery Madrid</span>
+                      <span class="about-show-line">Solo exhibition</span>
+                      <span class="about-show-place">Alzueta Gallery Madrid</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2021 December</span>
                       <span class="about-show-title">What’s color?</span>
-                      <span class="about-show-line">2n edition</span><span class="about-show-line">Espacio Pavillion, Madrid</span>
+                      <span class="about-show-line">2n edition</span>
+                      <span class="about-show-place">Espacio Pavillion, Madrid,</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2020 December</span>
                       <span class="about-show-title">What’s color?</span>
-                      <span class="about-show-line">Solo Exhibition</span><span class="about-show-line">Alzueta Gallery, Barcelona</span>
+                      <span class="about-show-line">Solo Exhibition</span>
+                      <span class="about-show-place">Alzueta Gallery, Barcelona,</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2020 February</span>
-                      <span class="about-show-title">Aoo&amp;Claudia Valsells</span>
-                      <span class="about-show-line">Silla8 show</span><span class="about-show-line">Alzueta Gallery, Barcelona</span>
+                      <span class="about-show-title">Aoo&amp;Claudia Valsells<br />Silla8 show</span>
+                      
+                      <span class="about-show-place">Alzueta Gallery, Barcelona</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2019 November</span>
                       <span class="about-show-title">Almost Perfect</span>
-                      <span class="about-show-line">Solo Exhibition</span><span class="about-show-line">Tokyo, Japan</span>
+                      <span class="about-show-line">Solo Exhibition</span>
+                      <span class="about-show-place">Tokyo, Japan</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2019 October</span>
                       <span class="about-show-title">Art Élysées-Art &amp; Design</span>
                       <span class="about-show-line">Solo Exhibition</span>
+                      
                     </li><li class="about-show">
                       <span class="about-show-when">2018 November</span>
-                      <span class="about-show-title">Solo exhibition</span>
-                      <span class="about-show-line">Palau de Casavells,</span><span class="about-show-line">Girona, Spain</span>
+                      <span class="about-show-title">solo exhibition</span>
+                      
+                      <span class="about-show-place">Palau de Casavells,</span><span class="about-show-place">Girona, Spain</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2017 February</span>
                       <span class="about-show-title">Color y forma</span>
-                      <span class="about-show-line">Solo exhibition</span><span class="about-show-line">Alzueta Gallery</span>
+                      <span class="about-show-line">solo exhibition<br />Alzueta Gallery</span>
+                      
                     </li><li class="about-show">
                       <span class="about-show-when">2007 May</span>
                       <span class="about-show-title">Solo Exhibition</span>
-                      <span class="about-show-line">Palau de Casavells,</span><span class="about-show-line">Baix Empordà</span>
+                      
+                      <span class="about-show-place">Palau de Casavells,<br />Baix Empordà</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2005 March</span>
-                      <span class="about-show-title">Expresions de mur. Abstract Informalism Paintings.</span>
-                      <span class="about-show-line">Solo exhibition,</span><span class="about-show-line">Galeria Miquel Alzueta, Barcelona</span>
+                      <span class="about-show-title">Expresions de mur.<br />Abstract Informalism Paintings.</span>
+                      <span class="about-show-line">Solo exhibition,</span>
+                      <span class="about-show-place">Galeria Miquel Alzueta, Barcelona</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2000 April</span>
-                      <span class="about-show-title">El color no existe, existe la luz</span>
-                      <span class="about-show-line">The color doesn’t exist, just the light</span>
+                      <span class="about-show-title">El color no existe, existe la luz<br />The color doesn’t exist, just the light</span>
+                      
+                      
                     </li>
               </ul>
             </section><section class="about-shows">
@@ -593,141 +623,174 @@ try { if (sessionStorage.getItem('cv-seen')) document.documentElement.classList.
               <ul class="about-show-list">
                 <li class="about-show">
                       <span class="about-show-when">2026 June - July</span>
-                      <span class="about-show-title">‘Shift Towards Coincidence’</span>
-                      <span class="about-show-line">Group exhibition</span><span class="about-show-line">Palau de Casavells</span>
+                      <span class="about-show-title">‘Shift Towards Coincidence’,</span>
+                      <span class="about-show-line">Group exhibition</span>
+                      <span class="about-show-place">Palau de Casavells</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2026 June - July</span>
                       <span class="about-show-title">Abstract Paintings</span>
-                      <span class="about-show-line">Group Exhibition</span><span class="about-show-line">Scroll NY, New York</span>
+                      <span class="about-show-line">Group Exhibition</span>
+                      <span class="about-show-place">Scroll Ny, New York</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2025 March</span>
-                      <span class="about-show-title">‘Marco, límite y lugar’</span>
-                      <span class="about-show-line">Group Exhibition,</span><span class="about-show-line">with Alzueta Gallery</span><span class="about-show-line">Madrid</span>
+                      <span class="about-show-title">‘Marco, límite y lugar’,</span>
+                      <span class="about-show-line">Group Exhibition,<br />with Alzueta Gallery</span>
+                      <span class="about-show-place">Madrid</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2024 January</span>
                       <span class="about-show-title">What abstract art means to me?</span>
-                      <span class="about-show-line">Group exhibition</span><span class="about-show-line">Alzueta Gallery, Séneca</span>
+                      <span class="about-show-line">Group exhibition</span>
+                      <span class="about-show-place">Alzueta Gallery, Séneca</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2023 November</span>
-                      <span class="about-show-title">La terre est bleu comme une orange</span>
-                      <span class="about-show-line">Group exhibition</span><span class="about-show-line">Alzueta Gallery Madrid</span>
+                      <span class="about-show-title">La terre est bleu comme<br />une orange</span>
+                      <span class="about-show-line">Group exhibition</span>
+                      <span class="about-show-place">Alzueta Gallery Madrid.</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2018 November</span>
-                      <span class="about-show-title">T10 at Alzueta Gallery</span>
-                      <span class="about-show-line">Barcelona</span>
+                      <span class="about-show-title">T10 at Alzueta Gallery,</span>
+                      
+                      <span class="about-show-place">Barcelona</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2016 December</span>
                       <span class="about-show-title">Exposición colectiva</span>
-                      <span class="about-show-line">Galeria Axel Pairon</span>
+                      
+                      <span class="about-show-place">Galeria Axel Pairon</span>
                     </li>
               </ul>
             </section><section class="about-shows is-wide">
               <h3 class="about-label">Art fairs</h3>
-              <ul class="about-show-list">
+              <ul class="about-show-list" style="--rows:15">
                 <li class="about-show">
                       <span class="about-show-when">2026 February</span>
                       <span class="about-show-title">Zona Maco CDMX</span>
-                      <span class="about-show-line">with Alzueta Gallery</span><span class="about-show-line">Mexico</span>
+                      <span class="about-show-line">with Alzueta Gallery</span>
+                      <span class="about-show-place">Mexico</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2025 October</span>
-                      <span class="about-show-title">Estampa contemporary art fair</span>
-                      <span class="about-show-line">with Alzueta Gallery</span><span class="about-show-line">Madrid</span>
+                      <span class="about-show-title">Estampa contemporary<br />art fair,</span>
+                      <span class="about-show-line">with Alzueta Gallery</span>
+                      <span class="about-show-place">Madrid</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2024 February</span>
                       <span class="about-show-title">ZONA MACO</span>
                       <span class="about-show-line">with Alzueta Gallery</span>
+                      
                     </li><li class="about-show">
                       <span class="about-show-when">2024 November</span>
                       <span class="about-show-title">Luxemburg art week</span>
-                      <span class="about-show-line">with Alzueta Gallery</span><span class="about-show-line">Luxemburg</span>
+                      <span class="about-show-line">with Alzueta Gallery</span>
+                      <span class="about-show-place">Luxemburg</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2023 February</span>
                       <span class="about-show-title">Contemporary Art Fair</span>
-                      <span class="about-show-line">Art Rotterdam</span><span class="about-show-line">Rotterdam</span>
+                      <span class="about-show-line">Art Rotterdam</span>
+                      <span class="about-show-place">Rotterdam</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2021 October</span>
                       <span class="about-show-title">Estampa Contemporary Art Fair</span>
-                      <span class="about-show-line">Alzueta Gallery, Madrid</span>
+                      
+                      <span class="about-show-place">Alzueta Gallery, Madrid</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2021 September</span>
                       <span class="about-show-title">Art Paris Fair</span>
-                      <span class="about-show-line">Alzueta Gallery, Paris</span>
+                      
+                      <span class="about-show-place">Alzueta Gallery, Paris</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2021 June</span>
                       <span class="about-show-title">Art Madrid Feria</span>
-                      <span class="about-show-line">Alzueta Gallery, Madrid</span>
+                      
+                      <span class="about-show-place">Alzueta Gallery, Madrid</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2019 March</span>
                       <span class="about-show-title">AFF Art Fair</span>
-                      <span class="about-show-line">Brussels</span>
+                      
+                      <span class="about-show-place">Brussels</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2019 March</span>
                       <span class="about-show-title">Art Madrid</span>
-                      <span class="about-show-line">Madrid</span>
+                      
+                      <span class="about-show-place">Madrid</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2018</span>
                       <span class="about-show-title">Art fair</span>
-                      <span class="about-show-line">Hamburg</span>
+                      
+                      <span class="about-show-place">Hamburg</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2018</span>
                       <span class="about-show-title">Art Elysees</span>
-                      <span class="about-show-line">París</span>
+                      
+                      <span class="about-show-place">París</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2018</span>
                       <span class="about-show-title">Art Fair</span>
-                      <span class="about-show-line">Stockholm</span>
+                      
+                      <span class="about-show-place">Stockholm</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2018</span>
-                      <span class="about-show-title">Contemporary Art Fair Just LX</span>
-                      <span class="about-show-line">Portugal</span>
+                      <span class="about-show-title">Contemporary Art Fair<br />Just LX,</span>
+                      
+                      <span class="about-show-place">Portugal</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2018</span>
                       <span class="about-show-title">Almoneda Antik Passion</span>
-                      <span class="about-show-line">Madrid</span>
+                      
+                      <span class="about-show-place">Madrid</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2019 April</span>
                       <span class="about-show-title">Almoneda, Ifema feria de Madrid</span>
-                      <span class="about-show-line">Palau de Casavells, Madrid</span>
+                      
+                      <span class="about-show-place">Palau de Casavells, Madrid.</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2018</span>
                       <span class="about-show-title">Art Fair Grand Palais</span>
-                      <span class="about-show-line">Paris</span>
+                      
+                      <span class="about-show-place">Paris</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2018</span>
                       <span class="about-show-title">Eurantica Art Fair</span>
-                      <span class="about-show-line">Brussels</span>
+                      
+                      <span class="about-show-place">Brussels</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2019 April</span>
                       <span class="about-show-title">Art Paris Grand Palais</span>
-                      <span class="about-show-line">París</span>
+                      
+                      <span class="about-show-place">París</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2018</span>
-                      <span class="about-show-title">Art Madrid</span>
-                      <span class="about-show-line">Madrid</span>
+                      <span class="about-show-title">Art Madrid,</span>
+                      
+                      <span class="about-show-place">Madrid</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2017 July</span>
                       <span class="about-show-title">Uterqüe Art Essays</span>
-                      <span class="about-show-line">AW2017</span>
+                      <span class="about-show-line">AW 2017</span>
+                      
                     </li><li class="about-show">
                       <span class="about-show-when">2017 March</span>
                       <span class="about-show-title">International Art Fair, Art Paris</span>
-                      <span class="about-show-line">París</span>
+                      
+                      <span class="about-show-place">París</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2017 February</span>
                       <span class="about-show-title">Art Madrid</span>
-                      <span class="about-show-line">Madrid</span>
+                      
+                      <span class="about-show-place">Madrid</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2016 November</span>
-                      <span class="about-show-title">Antica Namur</span>
-                      <span class="about-show-line">Belgium</span>
+                      <span class="about-show-title">Antica Namur,</span>
+                      
+                      <span class="about-show-place">Belgium</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2016 October</span>
-                      <span class="about-show-title">Art Élysées, International Art Fair</span>
-                      <span class="about-show-line">París</span>
+                      <span class="about-show-title">Art Élysées,<br />International Art Fair,</span>
+                      
+                      <span class="about-show-place">París</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2016 June</span>
-                      <span class="about-show-title">Scope Basel</span>
-                      <span class="about-show-line">Basel art fair</span>
+                      <span class="about-show-title">Scope Basel,</span>
+                      
+                      <span class="about-show-place">Basel art fair</span>
                     </li>
               </ul>
             </section>

@@ -34,7 +34,22 @@
 // The loading screen belongs to arriving at the site, not to each page of it.
 // Decided here, before the first paint, so pages after the first never show it
 // even for a frame.
-try { if (sessionStorage.getItem('cv-seen')) document.documentElement.classList.add('loaded') } catch (e) {}</script>
+try { if (sessionStorage.getItem('cv-seen')) document.documentElement.classList.add('loaded') } catch (e) {}
+// Arriving at What's Color by its link, the page is laid out at the top and
+// moved down to the written sentence by script — so it is kept covered until
+// it has been, and no frame is ever painted in the wrong place. The script
+// uncovers it as soon as it lands (client/write.ts); this timer is the net if
+// it never runs.
+// Only where that landing is made at all — the same tests client/write.ts
+// makes — so a browser that keeps the plain anchor jump never waits for it.
+try { var nav = performance.getEntriesByType('navigation')[0];
+  if (location.hash === '#whats-color' && (!nav || nav.type === 'navigate')
+    && CSS.supports('animation-timeline: view()')
+    && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('wc-arriving', 'wc-swatch-drop');
+    setTimeout(function () { document.documentElement.classList.remove('wc-arriving') }, 1500);
+    setTimeout(function () { document.documentElement.classList.remove('wc-swatch-drop') }, 700);
+  } } catch (e) {}</script>
 </head>
 <body class="chart-body">
 <div class="loader" data-loader aria-hidden="true">
@@ -304,62 +319,77 @@ try { if (sessionStorage.getItem('cv-seen')) document.documentElement.classList.
                       <span class="about-show-when">2026 May - June</span>
                       <span class="about-show-title">‘Moll de l’os’ peintures 2026</span>
                       <span class="about-show-line">Alzueta Gallery</span>
+                      
                     </li><li class="about-show">
                       <span class="about-show-when">2025 April</span>
                       <span class="about-show-title">‘Mira’m no deixis de mirar-me’</span>
-                      <span class="about-show-line">Solo show with Alzueta Gallery</span><span class="about-show-line">at Palau de Casavells</span>
+                      <span class="about-show-line">Solo show with Alzueta Gallery</span>
+                      <span class="about-show-place">at Palau de Casavells</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2024 July</span>
                       <span class="about-show-title">Painting as a gift from color</span>
-                      <span class="about-show-line">Solo show</span><span class="about-show-line">Gallery_br, Tetbury, UK</span>
+                      <span class="about-show-line">Solo show</span>
+                      <span class="about-show-place">Gallery_br, Tetbury, UK</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2023 September</span>
                       <span class="about-show-title">Transitions</span>
-                      <span class="about-show-line">Solo show</span><span class="about-show-line">Alzueta Gallery Turó</span>
+                      <span class="about-show-line">Solo show</span>
+                      <span class="about-show-place">Alzueta Gallery Turó</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2021 December</span>
                       <span class="about-show-title">Color Dialogues</span>
-                      <span class="about-show-line">Solo exhibition</span><span class="about-show-line">Alzueta Gallery Madrid</span>
+                      <span class="about-show-line">Solo exhibition</span>
+                      <span class="about-show-place">Alzueta Gallery Madrid</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2021 December</span>
                       <span class="about-show-title">What’s color?</span>
-                      <span class="about-show-line">2n edition</span><span class="about-show-line">Espacio Pavillion, Madrid</span>
+                      <span class="about-show-line">2n edition</span>
+                      <span class="about-show-place">Espacio Pavillion, Madrid,</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2020 December</span>
                       <span class="about-show-title">What’s color?</span>
-                      <span class="about-show-line">Solo Exhibition</span><span class="about-show-line">Alzueta Gallery, Barcelona</span>
+                      <span class="about-show-line">Solo Exhibition</span>
+                      <span class="about-show-place">Alzueta Gallery, Barcelona,</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2020 February</span>
-                      <span class="about-show-title">Aoo&amp;Claudia Valsells</span>
-                      <span class="about-show-line">Silla8 show</span><span class="about-show-line">Alzueta Gallery, Barcelona</span>
+                      <span class="about-show-title">Aoo&amp;Claudia Valsells<br />Silla8 show</span>
+                      
+                      <span class="about-show-place">Alzueta Gallery, Barcelona</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2019 November</span>
                       <span class="about-show-title">Almost Perfect</span>
-                      <span class="about-show-line">Solo Exhibition</span><span class="about-show-line">Tokyo, Japan</span>
+                      <span class="about-show-line">Solo Exhibition</span>
+                      <span class="about-show-place">Tokyo, Japan</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2019 October</span>
                       <span class="about-show-title">Art Élysées-Art &amp; Design</span>
                       <span class="about-show-line">Solo Exhibition</span>
+                      
                     </li><li class="about-show">
                       <span class="about-show-when">2018 November</span>
-                      <span class="about-show-title">Solo exhibition</span>
-                      <span class="about-show-line">Palau de Casavells,</span><span class="about-show-line">Girona, Spain</span>
+                      <span class="about-show-title">solo exhibition</span>
+                      
+                      <span class="about-show-place">Palau de Casavells,</span><span class="about-show-place">Girona, Spain</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2017 February</span>
                       <span class="about-show-title">Color y forma</span>
-                      <span class="about-show-line">Solo exhibition</span><span class="about-show-line">Alzueta Gallery</span>
+                      <span class="about-show-line">solo exhibition<br />Alzueta Gallery</span>
+                      
                     </li><li class="about-show">
                       <span class="about-show-when">2007 May</span>
                       <span class="about-show-title">Solo Exhibition</span>
-                      <span class="about-show-line">Palau de Casavells,</span><span class="about-show-line">Baix Empordà</span>
+                      
+                      <span class="about-show-place">Palau de Casavells,<br />Baix Empordà</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2005 March</span>
-                      <span class="about-show-title">Expresions de mur. Abstract Informalism Paintings.</span>
-                      <span class="about-show-line">Solo exhibition,</span><span class="about-show-line">Galeria Miquel Alzueta, Barcelona</span>
+                      <span class="about-show-title">Expresions de mur.<br />Abstract Informalism Paintings.</span>
+                      <span class="about-show-line">Solo exhibition,</span>
+                      <span class="about-show-place">Galeria Miquel Alzueta, Barcelona</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2000 April</span>
-                      <span class="about-show-title">El color no existe, existe la luz</span>
-                      <span class="about-show-line">The color doesn’t exist, just the light</span>
+                      <span class="about-show-title">El color no existe, existe la luz<br />The color doesn’t exist, just the light</span>
+                      
+                      
                     </li>
               </ul>
             </section><section class="about-shows">
@@ -367,141 +397,174 @@ try { if (sessionStorage.getItem('cv-seen')) document.documentElement.classList.
               <ul class="about-show-list">
                 <li class="about-show">
                       <span class="about-show-when">2026 June - July</span>
-                      <span class="about-show-title">‘Shift Towards Coincidence’</span>
-                      <span class="about-show-line">Group exhibition</span><span class="about-show-line">Palau de Casavells</span>
+                      <span class="about-show-title">‘Shift Towards Coincidence’,</span>
+                      <span class="about-show-line">Group exhibition</span>
+                      <span class="about-show-place">Palau de Casavells</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2026 June - July</span>
                       <span class="about-show-title">Abstract Paintings</span>
-                      <span class="about-show-line">Group Exhibition</span><span class="about-show-line">Scroll NY, New York</span>
+                      <span class="about-show-line">Group Exhibition</span>
+                      <span class="about-show-place">Scroll Ny, New York</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2025 March</span>
-                      <span class="about-show-title">‘Marco, límite y lugar’</span>
-                      <span class="about-show-line">Group Exhibition,</span><span class="about-show-line">with Alzueta Gallery</span><span class="about-show-line">Madrid</span>
+                      <span class="about-show-title">‘Marco, límite y lugar’,</span>
+                      <span class="about-show-line">Group Exhibition,<br />with Alzueta Gallery</span>
+                      <span class="about-show-place">Madrid</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2024 January</span>
                       <span class="about-show-title">What abstract art means to me?</span>
-                      <span class="about-show-line">Group exhibition</span><span class="about-show-line">Alzueta Gallery, Séneca</span>
+                      <span class="about-show-line">Group exhibition</span>
+                      <span class="about-show-place">Alzueta Gallery, Séneca</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2023 November</span>
-                      <span class="about-show-title">La terre est bleu comme une orange</span>
-                      <span class="about-show-line">Group exhibition</span><span class="about-show-line">Alzueta Gallery Madrid</span>
+                      <span class="about-show-title">La terre est bleu comme<br />une orange</span>
+                      <span class="about-show-line">Group exhibition</span>
+                      <span class="about-show-place">Alzueta Gallery Madrid.</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2018 November</span>
-                      <span class="about-show-title">T10 at Alzueta Gallery</span>
-                      <span class="about-show-line">Barcelona</span>
+                      <span class="about-show-title">T10 at Alzueta Gallery,</span>
+                      
+                      <span class="about-show-place">Barcelona</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2016 December</span>
                       <span class="about-show-title">Exposición colectiva</span>
-                      <span class="about-show-line">Galeria Axel Pairon</span>
+                      
+                      <span class="about-show-place">Galeria Axel Pairon</span>
                     </li>
               </ul>
             </section><section class="about-shows is-wide">
               <h3 class="about-label">Art fairs</h3>
-              <ul class="about-show-list">
+              <ul class="about-show-list" style="--rows:15">
                 <li class="about-show">
                       <span class="about-show-when">2026 February</span>
                       <span class="about-show-title">Zona Maco CDMX</span>
-                      <span class="about-show-line">with Alzueta Gallery</span><span class="about-show-line">Mexico</span>
+                      <span class="about-show-line">with Alzueta Gallery</span>
+                      <span class="about-show-place">Mexico</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2025 October</span>
-                      <span class="about-show-title">Estampa contemporary art fair</span>
-                      <span class="about-show-line">with Alzueta Gallery</span><span class="about-show-line">Madrid</span>
+                      <span class="about-show-title">Estampa contemporary<br />art fair,</span>
+                      <span class="about-show-line">with Alzueta Gallery</span>
+                      <span class="about-show-place">Madrid</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2024 February</span>
                       <span class="about-show-title">ZONA MACO</span>
                       <span class="about-show-line">with Alzueta Gallery</span>
+                      
                     </li><li class="about-show">
                       <span class="about-show-when">2024 November</span>
                       <span class="about-show-title">Luxemburg art week</span>
-                      <span class="about-show-line">with Alzueta Gallery</span><span class="about-show-line">Luxemburg</span>
+                      <span class="about-show-line">with Alzueta Gallery</span>
+                      <span class="about-show-place">Luxemburg</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2023 February</span>
                       <span class="about-show-title">Contemporary Art Fair</span>
-                      <span class="about-show-line">Art Rotterdam</span><span class="about-show-line">Rotterdam</span>
+                      <span class="about-show-line">Art Rotterdam</span>
+                      <span class="about-show-place">Rotterdam</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2021 October</span>
                       <span class="about-show-title">Estampa Contemporary Art Fair</span>
-                      <span class="about-show-line">Alzueta Gallery, Madrid</span>
+                      
+                      <span class="about-show-place">Alzueta Gallery, Madrid</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2021 September</span>
                       <span class="about-show-title">Art Paris Fair</span>
-                      <span class="about-show-line">Alzueta Gallery, Paris</span>
+                      
+                      <span class="about-show-place">Alzueta Gallery, Paris</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2021 June</span>
                       <span class="about-show-title">Art Madrid Feria</span>
-                      <span class="about-show-line">Alzueta Gallery, Madrid</span>
+                      
+                      <span class="about-show-place">Alzueta Gallery, Madrid</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2019 March</span>
                       <span class="about-show-title">AFF Art Fair</span>
-                      <span class="about-show-line">Brussels</span>
+                      
+                      <span class="about-show-place">Brussels</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2019 March</span>
                       <span class="about-show-title">Art Madrid</span>
-                      <span class="about-show-line">Madrid</span>
+                      
+                      <span class="about-show-place">Madrid</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2018</span>
                       <span class="about-show-title">Art fair</span>
-                      <span class="about-show-line">Hamburg</span>
+                      
+                      <span class="about-show-place">Hamburg</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2018</span>
                       <span class="about-show-title">Art Elysees</span>
-                      <span class="about-show-line">París</span>
+                      
+                      <span class="about-show-place">París</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2018</span>
                       <span class="about-show-title">Art Fair</span>
-                      <span class="about-show-line">Stockholm</span>
+                      
+                      <span class="about-show-place">Stockholm</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2018</span>
-                      <span class="about-show-title">Contemporary Art Fair Just LX</span>
-                      <span class="about-show-line">Portugal</span>
+                      <span class="about-show-title">Contemporary Art Fair<br />Just LX,</span>
+                      
+                      <span class="about-show-place">Portugal</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2018</span>
                       <span class="about-show-title">Almoneda Antik Passion</span>
-                      <span class="about-show-line">Madrid</span>
+                      
+                      <span class="about-show-place">Madrid</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2019 April</span>
                       <span class="about-show-title">Almoneda, Ifema feria de Madrid</span>
-                      <span class="about-show-line">Palau de Casavells, Madrid</span>
+                      
+                      <span class="about-show-place">Palau de Casavells, Madrid.</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2018</span>
                       <span class="about-show-title">Art Fair Grand Palais</span>
-                      <span class="about-show-line">Paris</span>
+                      
+                      <span class="about-show-place">Paris</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2018</span>
                       <span class="about-show-title">Eurantica Art Fair</span>
-                      <span class="about-show-line">Brussels</span>
+                      
+                      <span class="about-show-place">Brussels</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2019 April</span>
                       <span class="about-show-title">Art Paris Grand Palais</span>
-                      <span class="about-show-line">París</span>
+                      
+                      <span class="about-show-place">París</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2018</span>
-                      <span class="about-show-title">Art Madrid</span>
-                      <span class="about-show-line">Madrid</span>
+                      <span class="about-show-title">Art Madrid,</span>
+                      
+                      <span class="about-show-place">Madrid</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2017 July</span>
                       <span class="about-show-title">Uterqüe Art Essays</span>
-                      <span class="about-show-line">AW2017</span>
+                      <span class="about-show-line">AW 2017</span>
+                      
                     </li><li class="about-show">
                       <span class="about-show-when">2017 March</span>
                       <span class="about-show-title">International Art Fair, Art Paris</span>
-                      <span class="about-show-line">París</span>
+                      
+                      <span class="about-show-place">París</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2017 February</span>
                       <span class="about-show-title">Art Madrid</span>
-                      <span class="about-show-line">Madrid</span>
+                      
+                      <span class="about-show-place">Madrid</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2016 November</span>
-                      <span class="about-show-title">Antica Namur</span>
-                      <span class="about-show-line">Belgium</span>
+                      <span class="about-show-title">Antica Namur,</span>
+                      
+                      <span class="about-show-place">Belgium</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2016 October</span>
-                      <span class="about-show-title">Art Élysées, International Art Fair</span>
-                      <span class="about-show-line">París</span>
+                      <span class="about-show-title">Art Élysées,<br />International Art Fair,</span>
+                      
+                      <span class="about-show-place">París</span>
                     </li><li class="about-show">
                       <span class="about-show-when">2016 June</span>
-                      <span class="about-show-title">Scope Basel</span>
-                      <span class="about-show-line">Basel art fair</span>
+                      <span class="about-show-title">Scope Basel,</span>
+                      
+                      <span class="about-show-place">Basel art fair</span>
                     </li>
               </ul>
             </section>

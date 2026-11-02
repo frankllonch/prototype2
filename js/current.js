@@ -19,10 +19,14 @@ import { nextHue } from './hues.js';
  * Rather than keep two numbers in step with rules that may move again, it is
  * measured.
  *
- * Measured off an item that is *not* the one being painted, which matters: the
- * swatch climbs by giving itself that much padding and taking the same amount
- * back as margin, so reading the painted item would be reading a number this
- * had already moved. Its neighbours share its line and never carry a swatch.
+ * Measured off the painted item itself. It used to be read off a neighbour,
+ * on the assumption that everything in the bar shares one top — true in
+ * Chromium, but the bar aligns its items on their baselines and Safari places
+ * them differently, so the wordmark sat higher than the menu and the block
+ * stopped short of the edge. The swatch climbs by giving itself padding and
+ * taking the same back as margin, so the item's box has already moved by
+ * whatever rise is applied; adding that back gives where the item really
+ * sits, and the measurement corrects itself to the right figure on any engine.
  */
 export function initCurrent() {
     const bar = document.querySelector('.top');
@@ -30,13 +34,15 @@ export function initCurrent() {
     if (!bar || !here)
         return;
     const n = nextHue();
-    if (n >= 0)
+    if (n >= 0) {
         here.style.setProperty('--bar-swatch', `var(--neg-${n})`);
-    const neighbour = [...bar.querySelectorAll('a, button')].find((el) => el !== here);
-    if (!neighbour)
-        return;
+        // The question in the opening note wears the same colour as the block in
+        // the bar, so the two read as one mark. Set on the root so it reaches it.
+        document.documentElement.style.setProperty('--wc-ask', `var(--hue-${n})`);
+    }
     const rise = () => {
-        const gap = neighbour.getBoundingClientRect().top - bar.getBoundingClientRect().top;
+        const applied = parseFloat(getComputedStyle(here).paddingTop) || 0;
+        const gap = here.getBoundingClientRect().top + applied - bar.getBoundingClientRect().top;
         // Written to its own name, not to --bar-rise: the stylesheet keeps that
         // one as the knob, falling back to this measurement, so a figure set by
         // hand there is not overwritten by an inline style from here.
@@ -47,6 +53,14 @@ export function initCurrent() {
     };
     rise();
     window.addEventListener('resize', rise);
+    // The type's own face can arrive after the first measurement and move the
+    // line; measured again once it has.
+    void document.fonts?.ready.then(rise);
+    // On the opening page the bar changes footing as the film passes, and the
+    // block only shows once it has; measured again whenever that state turns.
+    if (document.body.classList.contains('has-film')) {
+        new MutationObserver(rise).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    }
     if (document.body.classList.contains('has-film'))
         split(here);
 }

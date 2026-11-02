@@ -20,15 +20,22 @@ export function initCursor() {
     let active = false;
     let frame = 0;
     let placed = false;
-    const tick = () => {
-        // Lerp toward the pointer; the lag is what gives it weight.
-        const ease = reduceMotion.matches ? 1 : 0.2;
+    let tickedAt = 0;
+    const tick = (time) => {
+        // Lerp toward the pointer; the lag is what gives it weight. A fifth of
+        // the way per frame at 120fps — the pace it was approved at — applied by
+        // elapsed time, so the weight is the same in Safari, which draws at 60.
+        const elapsed = tickedAt ? Math.min(time - tickedAt, 100) : 1000 / 120;
+        tickedAt = time;
+        const ease = reduceMotion.matches ? 1 : 1 - Math.pow(0.8, elapsed / (1000 / 120));
         x += (targetX - x) * ease;
         y += (targetY - y) * ease;
         cursor.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`;
         frame = Math.abs(targetX - x) > 0.1 || Math.abs(targetY - y) > 0.1 || active
             ? requestAnimationFrame(tick)
             : 0;
+        if (!frame)
+            tickedAt = 0;
     };
     /** Decide what the pointer is over, given the element under it. */
     const refresh = (target) => {
@@ -73,9 +80,19 @@ export function initCursor() {
     }, { passive: true });
     // The page can move under a pointer that has not: a scroll carries a tile
     // away, or gathers the grid back into the pile, and the label would stay on
-    // as the name of nothing. Look again at what is under the pointer now.
-    const relook = () => { if (placed)
-        refresh(document.elementFromPoint(targetX, targetY)); };
+    // as the name of nothing. Look again at what is under the pointer now —
+    // once a frame at most. A scroll can fire several times a frame, and each
+    // look is a synchronous hit test of the whole page; Chromium shrugs that
+    // off, Safari pays for every one, which it felt during the opening's unfold.
+    let looking = 0;
+    const relook = () => {
+        if (!placed || looking)
+            return;
+        looking = requestAnimationFrame(() => {
+            looking = 0;
+            refresh(document.elementFromPoint(targetX, targetY));
+        });
+    };
     window.addEventListener('scroll', relook, { passive: true });
     document.addEventListener('stackrestart', relook);
     // Coming back to the gallery restores it from the cache exactly as it was
