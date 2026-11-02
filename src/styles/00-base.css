@@ -724,25 +724,11 @@ html.is-scrolled .scroll-cue { opacity: 0; }
   padding-bottom: 0.18em; margin-bottom: -0.18em; }
 .roll::before, .roll::after {
   content: attr(data-ch); position: absolute; left: 0; top: 0; color: var(--roll-color, var(--ink));
-  transition: transform 500ms ease-in-out, opacity 260ms ease-in-out;
-  /*
-   * The wait is on the way in only.
-   *
-   * It used to sit on this rule, which meant it applied leaving as well as
-   * arriving: take the pointer off a sixteen-letter word mid-roll and its last
-   * letters would not begin to come back for the better part of a second, and
-   * a second pass across the word inside that time caught them at every stage
-   * at once. That is the word appearing to stick half-turned.
-   *
-   * Arriving, it still runs across the letters a few at a time. Leaving, they
-   * all return together, so whichever state a roll is interrupted in, the word
-   * is itself again within one transition.
-   */
-  transition-delay: 0ms;
-}
-[data-roll]:hover .roll::before,
-[data-roll]:hover .roll::after {
-  transition-delay: calc(var(--i) * 40ms);
+  transition: transform 350ms ease-in-out, opacity 260ms ease-in-out;
+  /* Each character a step behind the one before it, going and coming back:
+     staggered, the word turns over; in step, it swaps all at once, which
+     reads as the two copies trading places rather than as one roll. */
+  transition-delay: calc(var(--i) * 60ms);
 }
 .roll::after { transform: translateY(100%); opacity: 0; }
 [data-roll]:hover .roll::before { transform: translateY(-100%); opacity: 0; }
@@ -1092,4 +1078,23 @@ html {
 
 @keyframes thumb-run {
   to { transform: translateY(calc(100vh - var(--thumb-h, 0px))); }
+}
+
+/* ---------------------------------------------------------- text scramble */
+
+/*
+ * The churning hover's characters.
+ *
+ * Each keeps the width it measured while the word was still, so whatever
+ * nonsense lands in it cannot push the word wider and shove the rest of the
+ * bar along — every position up there was set against the designer's sheet and
+ * none of it may move. A piece too wide for its box is centred and cut rather
+ * than allowed to spread.
+ */
+.scram {
+  display: inline-block;
+  width: var(--w);
+  overflow: hidden;
+  text-align: center;
+  white-space: pre;
 }

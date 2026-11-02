@@ -48,10 +48,21 @@ const MENU = [
 ] as const;
 
 /** Client modules, in boot order. Preloaded so the first interaction is instant. */
+/*
+ * Which hover the bar's words wear. The one knob for it.
+ *
+ *   'roll'     — each letter turns over like a split-flap board
+ *   'scramble' — the word churns through nonsense and settles back
+ *
+ * Only one is ever wired up: the choice is written onto the document and the
+ * boot reads it, so the other costs nothing but the file it sits in.
+ */
+const HOVER: 'roll' | 'scramble' = 'scramble';
+
 const CLIENT_MODULES = [
   'env', 'text-roll', 'transitions', 'controls', 'stack', 'years', 'hover-list', 'panels',
   'figures', 'lightbox', 'cursor', 'film', 'tilt', 'paging', 'views',
-  'scroll-cue', 'inquiries', 'book', 'focus', 'hues', 'current', 'scrollbar', 'index',
+  'scroll-cue', 'inquiries', 'book', 'focus', 'hues', 'current', 'scrollbar', 'scramble', 'index',
 ] as const;
 
 /** The loading screen's five lines, set in blue on peach. */
@@ -201,7 +212,7 @@ export function layout({ title, description, path, rail, controls, overlays, cue
   const fullTitle = title === 'Claudia Valsells' ? title : `${title} — Claudia Valsells`;
   const modules = CLIENT_MODULES.map((m) => withBase(`/js/${m}.js`));
   return raw(`<!doctype html>
-<html lang="en" style="${hueVars()}">
+<html lang="en" data-hover="${HOVER}" style="${hueVars()}">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />

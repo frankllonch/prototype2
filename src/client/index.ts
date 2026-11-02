@@ -3,6 +3,7 @@
  * with scripting off — tiles are real links, panels are real anchors.
  */
 import { initTextRoll } from './text-roll.ts';
+import { initScramble } from './scramble.ts';
 import { initTransitions } from './transitions.ts';
 import { initControls } from './controls.ts';
 import { initStack } from './stack.ts';
@@ -27,7 +28,10 @@ import { initWcTexts } from './texts.ts';
 import { initGlide } from './glide.ts';
 import { initWrite } from './write.ts';
 
-initTextRoll();
+// One hover or the other, never both: the document says which, and
+// components/layout.ts is where that is decided.
+if (document.documentElement.dataset.hover === 'scramble') initScramble();
+else initTextRoll();
 initTransitions();
 initControls();
 initStack();
