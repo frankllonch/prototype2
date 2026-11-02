@@ -393,7 +393,25 @@
    * further; 21px would put the type's own top on the film's edge, and more
    * than that would run the words into the picture.
    */
-  --film-lift: 50px;
+  /*
+   * Measured at runtime, with this as the figure to fall back on.
+   *
+   * 50px is right at 1440 and wrong on a wide monitor, because it is a fixed
+   * distance in a bar whose contents are not. The menu is sized in `vw`
+   * (`--type-menu`), so the line it sets grows with the window while the bar's
+   * own 4.2rem and this lift do not — and the line, and the block behind the
+   * current name, slide down the bar until they cross the film's bottom edge
+   * and sit on the white below it. Measured: the block clears the edge by 7px
+   * at 1440, overhangs it by 0.5px at 1920 and by 10.6px at 2560, which is a
+   * pixel and a half for every pixel the type gains.
+   *
+   * Too many coupled parts to express here — the bar's height, the leading,
+   * the rise the block is given, the trim taken off it, each in its own unit
+   * and one of them already measured by a script — so `client/film.ts`
+   * measures where the block actually ends and sets the lift to hold it the
+   * same distance clear at any width. The same arrangement as --bar-rise.
+   */
+  --film-lift: var(--film-lift-measured, 50px);
 
   /*
    * How far the film is taken down beneath the bar, and the one number to
