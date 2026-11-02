@@ -508,8 +508,30 @@ body.is-locked { overflow: hidden; }
   white-space: nowrap;
   cursor: pointer;
 }
+/*
+ * The bar passes the pointer through; only what you can actually press takes
+ * it. `.top > *` once covered this, but the third of those children is the
+ * nav, which is a column 853px wide holding five short words — so most of it
+ * was an invisible catcher laid over the page. The links take the pointer, the
+ * box they sit in does not.
+ */
 .top > * { pointer-events: auto; }
-.wordmark { letter-spacing: 0.033em; white-space: nowrap; }
+.menu { pointer-events: none; }
+.menu a { pointer-events: auto; }
+
+/*
+ * The wordmark is as wide as the wordmark.
+ *
+ * It sits in a grid column a quarter of the page across, and a grid item fills
+ * its column unless told otherwise — so its box ran 337px for 145px of
+ * lettering, and the roll answered anywhere in the 192px of nothing beside it.
+ * Hovering near the title, not on it, turned it over.
+ */
+.wordmark {
+  justify-self: start;
+  letter-spacing: 0.033em;
+  white-space: nowrap;
+}
 /* Evenly spaced, and the sheet says how far apart: 75px of 1866, four times
    over, to within a pixel each time. */
 .menu { display: flex; justify-content: flex-end; gap: clamp(1rem, 4.019vw, 4.7rem); }
@@ -702,8 +724,25 @@ html.is-scrolled .scroll-cue { opacity: 0; }
   padding-bottom: 0.18em; margin-bottom: -0.18em; }
 .roll::before, .roll::after {
   content: attr(data-ch); position: absolute; left: 0; top: 0; color: var(--roll-color, var(--ink));
-  transition: transform 260ms ease-in-out, opacity 260ms ease-in-out;
-  transition-delay: calc(var(--i) * 25ms);
+  transition: transform 500ms ease-in-out, opacity 260ms ease-in-out;
+  /*
+   * The wait is on the way in only.
+   *
+   * It used to sit on this rule, which meant it applied leaving as well as
+   * arriving: take the pointer off a sixteen-letter word mid-roll and its last
+   * letters would not begin to come back for the better part of a second, and
+   * a second pass across the word inside that time caught them at every stage
+   * at once. That is the word appearing to stick half-turned.
+   *
+   * Arriving, it still runs across the letters a few at a time. Leaving, they
+   * all return together, so whichever state a roll is interrupted in, the word
+   * is itself again within one transition.
+   */
+  transition-delay: 0ms;
+}
+[data-roll]:hover .roll::before,
+[data-roll]:hover .roll::after {
+  transition-delay: calc(var(--i) * 40ms);
 }
 .roll::after { transform: translateY(100%); opacity: 0; }
 [data-roll]:hover .roll::before { transform: translateY(-100%); opacity: 0; }
