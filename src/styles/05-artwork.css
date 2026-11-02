@@ -125,13 +125,14 @@
   padding: 0;
   width: 4.5rem;
   cursor: pointer;
-  opacity: 0.5;
   transition: opacity var(--hover) var(--ease);
 }
 .detail-thumb img { display: block; width: 100%; height: auto; }
-.detail-thumb.is-shown,
-.detail-thumb:hover,
-.detail-thumb:focus-visible { opacity: 1; }
+/* The one already on the plate steps back — it is the one there is no point
+   choosing; the others stand forward as what can be looked at next. */
+.detail-thumb.is-shown { opacity: 0.35; cursor: default; }
+.detail-thumb:not(.is-shown):hover,
+.detail-thumb:not(.is-shown):focus-visible { opacity: 0.7; }
 .detail-thumb:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
 
 @media (max-width: 899px) {
