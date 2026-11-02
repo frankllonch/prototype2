@@ -76,8 +76,15 @@ async function render(image: ProjectImage, file: string, key: string): Promise<I
   };
 
   // Never upscale: drop any target wider than the source, but always keep one size.
-  const targets = WIDTHS.filter((w) => w <= srcWidth);
+  const targets: number[] = WIDTHS.filter((w) => w <= srcWidth);
   if (targets.length === 0) targets.push(WIDTHS[0]);
+  /*
+   * And never throw pixels away either. A source between two steps — the
+   * 683 px cut-outs were the case — used to be served at the step below it,
+   * 400, which is what a detail page on a 2× screen then stretched to twice
+   * its size. Its own width is offered as the largest size instead.
+   */
+  if (srcWidth < WIDTHS[WIDTHS.length - 1]! && srcWidth > targets[targets.length - 1]!) targets.push(srcWidth);
 
   for (const width of targets) {
     const resized = () => sharp(file, { failOn: 'none' }).rotate().resize({ width, withoutEnlargement: true });
