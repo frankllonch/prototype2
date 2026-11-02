@@ -1,11 +1,18 @@
 import { reduceMotion } from './env.ts';
 
 /**
- * The other hover: the word churns through nonsense and settles back into
- * itself, left to right.
+ * The other hover: the letters under the pointer churn, and the rest of the
+ * word stays as it is.
  *
  * One of two, and only one runs — `data-hover` on the document says which, and
  * it is set in one place in `components/layout.ts`. The roll is the other.
+ *
+ * It follows the pointer across the word rather than running the whole word at
+ * once: what churns is whatever falls inside `RADIUS` of where the pointer is,
+ * so moving along a word opens and closes the effect under the hand. The edge
+ * of that reach is soft — a letter at the very edge takes a piece of nonsense
+ * only now and then, and more often the nearer it is — because a hard circle
+ * reads as a rectangle of noise sliding about.
  *
  * Two things this has to respect.
  *
@@ -19,20 +26,30 @@ import { reduceMotion } from './env.ts';
  * The second is coming back. The real character is kept on the element it
  * belongs to, not in a variable somewhere, so putting a word right is reading
  * each box's own text back out of it. That happens when the pointer leaves,
- * whatever state the churn is in, and again on the frame the last character
- * settles — a word cannot be left as nonsense by taking the pointer away
- * mid-way, which is the failing the roll had.
+ * whatever state the churn is in, and on every frame for any letter that has
+ * fallen out of reach — a word cannot be left as nonsense by taking the
+ * pointer away mid-way, which is the failing the roll had.
  */
 
-/** What the churn draws from. Latin capitals and figures, as the bar is set. */
-const GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+/** What the churn draws from. One character here means a mask rather than noise. */
+const GLYPHS = '*';
 
 /** How long a character holds one piece of nonsense before taking another. */
 const STEP = 45;
-/** How long the first character churns before it settles. */
-const HOLD = 150;
-/** And how much longer each character after it waits. */
-const STAGGER = 55;
+
+/**
+ * How far either side of the pointer the churn reaches, in pixels. The knob
+ * for "only the letters I am on" against "most of the word": at 0 nothing
+ * churns, and at the width of the longest word it all does.
+ */
+const RADIUS = 48;
+
+/**
+ * How much of that reach is the soft edge, as a fraction of it. At 0 the reach
+ * is a hard edge and letters snap in and out of the churn; at 1 it fades the
+ * whole way from the pointer outwards.
+ */
+const EDGE = 0.55;
 
 export function initScramble(): void {
   const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' });
@@ -68,6 +85,8 @@ export function initScramble(): void {
 
 function wire(root: HTMLElement, cells: readonly HTMLElement[]): void {
   let frame = 0;
+  let pointer = 0;
+  let centres: number[] = [];
 
   const settle = () => {
     if (frame) cancelAnimationFrame(frame);
@@ -75,40 +94,62 @@ function wire(root: HTMLElement, cells: readonly HTMLElement[]): void {
     for (const cell of cells) cell.textContent = cell.dataset.ch ?? '';
   };
 
-  const churn = () => {
+  /*
+   * Where each letter is, taken when the pointer arrives rather than kept from
+   * before. The bar is fixed to the window, so these are good for as long as
+   * the pointer is on the word, and reading them again on each arrival costs
+   * one layout and saves having to watch for everything that could move them.
+   */
+  const locate = () => {
+    centres = cells.map((cell) => {
+      const box = cell.getBoundingClientRect();
+      return box.left + box.width / 2;
+    });
+  };
+
+  const run = () => {
     if (reduceMotion.matches) return;
-    if (frame) cancelAnimationFrame(frame);
-    const began = performance.now();
+    if (frame) return;
+    let piece = -1;
 
-    const tick = (now: number) => {
-      const elapsed = now - began;
-      const piece = Math.floor(elapsed / STEP);
-      let churning = false;
-
-      cells.forEach((cell, i) => {
-        if (elapsed >= HOLD + i * STAGGER) {
-          cell.textContent = cell.dataset.ch ?? '';
-          return;
-        }
-        churning = true;
-        // A character only changes when the piece does, so the whole word
-        // turns over on one clock rather than each box on its own.
-        if (cell.dataset.piece !== String(piece)) {
-          cell.dataset.piece = String(piece);
-          cell.textContent = GLYPHS[Math.floor(Math.random() * GLYPHS.length)] ?? '';
-        }
-      });
-
-      frame = churning ? requestAnimationFrame(tick) : 0;
-      if (!churning) settle();
+    const tick = () => {
+      const now = Math.floor(performance.now() / STEP);
+      if (now !== piece) {
+        piece = now;
+        cells.forEach((cell, i) => {
+          const away = Math.abs((centres[i] ?? 0) - pointer);
+          // Certain within the solid part of the reach, thinning to nothing at
+          // its edge, so the churn frays rather than stopping at a line.
+          const solid = RADIUS * (1 - EDGE);
+          const chance = away <= solid ? 1 : 1 - (away - solid) / Math.max(1, RADIUS - solid);
+          cell.textContent = chance > 0 && Math.random() < chance
+            ? GLYPHS[Math.floor(Math.random() * GLYPHS.length)] ?? ''
+            : cell.dataset.ch ?? '';
+        });
+      }
+      frame = requestAnimationFrame(tick);
     };
 
     frame = requestAnimationFrame(tick);
   };
 
-  root.addEventListener('pointerenter', churn);
+  const enter = (event: PointerEvent) => { pointer = event.clientX; locate(); run(); };
+  const move = (event: PointerEvent) => { pointer = event.clientX; };
+
+  root.addEventListener('pointerenter', enter);
+  root.addEventListener('pointermove', move);
   root.addEventListener('pointerleave', settle);
-  // A keyboard reaches these too, and leaving by tab is still leaving.
-  root.addEventListener('focus', churn);
+
+  /*
+   * A keyboard reaches these too and has no pointer to follow, so focus churns
+   * the middle of the word and leaves the ends alone, which is the same effect
+   * standing still.
+   */
+  root.addEventListener('focus', () => {
+    const box = root.getBoundingClientRect();
+    pointer = box.left + box.width / 2;
+    locate();
+    run();
+  });
   root.addEventListener('blur', settle);
 }

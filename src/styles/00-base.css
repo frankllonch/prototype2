@@ -555,9 +555,9 @@ body.is-locked { overflow: hidden; }
  * rest: over paper, 3 against 27, where it used to be 36 against 150. The step
  * is still there and it is the same one the opening film has always used.
  */
+.top { --bar-ink: rgb(252, 252, 250); }
 .wordmark,
 .menu a:hover, .menu a:focus-visible, .menu a[aria-current='page'],
-.top { --bar-ink: rgb(252, 252, 250); }
 .top-soon:hover, .top-soon:focus-visible, .top-soon[aria-current='page'] { color: var(--bar-ink); }
 
 .menu a, .top-soon { color: rgb(228, 228, 226); transition: color var(--hover) var(--ease); }
