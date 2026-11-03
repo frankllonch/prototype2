@@ -1415,9 +1415,9 @@ html:has(body.has-film) {
  * rest down. The sheet justifies the first and sets the other two ragged,
  * which is what the inline alignment carries.
  *
- * Hovering one block steps the other two back — the same answer the
- * introductions used to give — because the whole block is a doorway to its
- * edition, and the heading inside is the real link the script widens.
+ * The whole block is a doorway to its edition — the heading inside is the
+ * real link the script widens — but nothing answers to hovering it: the
+ * other blocks stay as they are.
  */
 .wc-texts {
   margin-top: calc(var(--wc-zoom, 1) * 9.1%);
@@ -1468,19 +1468,6 @@ html.js .wc-text.is-open .wc-text-closed {
 }
 html:not(.js) .wc-text-closed {
   display: none;
-}
-
-@media (hover: hover) {
-  .wc-texts:hover .wc-text:not(:hover) {
-    filter: blur(5px);
-    opacity: 0.35;
-  }
-}
-/* The keyboard's hover: only a visibly focused block holds the others back,
-   so a mouse click's lingering focus means nothing on return. */
-.wc-texts:has(.wc-text :focus-visible) .wc-text:not(:has(:focus-visible)) {
-  filter: blur(5px);
-  opacity: 0.35;
 }
 
 @media (prefers-reduced-motion: reduce) {
