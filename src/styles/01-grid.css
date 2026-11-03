@@ -155,10 +155,13 @@ html.js .hero[data-hero]+.grid[data-stack] {
   object-fit: contain;
 }
 
-/* While the stack is dispersing, tiles move every frame: no size transitions,
-   and a compositing hint. Cleared once they settle. */
+/* While the stack is dispersing, tiles move every frame: no size transitions.
+   Each is its own layer while it moves (is-layered), and keeps it for a
+   moment after the grid settles — client/stack.ts releases it when idle. */
 .grid.is-stacked .tile {
   transition: none;
+}
+.grid.is-layered .tile {
   will-change: transform;
 }
 
