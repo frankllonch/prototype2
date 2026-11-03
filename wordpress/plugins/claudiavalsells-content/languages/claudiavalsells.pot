@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-30T21:54:00+00:00\n"
+"POT-Creation-Date: 2026-11-02T18:26:57+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: claudiavalsells\n"
@@ -29,433 +29,1251 @@ msgstr ""
 msgid "Frank Llonch"
 msgstr ""
 
-#: includes/editor.php:31
+#: includes/editor.php:33
 msgid "— not in the record"
 msgstr ""
 
-#: includes/editor.php:32
+#: includes/editor.php:34
 msgid "Solo exhibition"
 msgstr ""
 
-#: includes/editor.php:33
+#: includes/editor.php:35
 msgid "Group exhibition"
 msgstr ""
 
-#: includes/editor.php:34
+#: includes/editor.php:36
 msgid "Art fair"
 msgstr ""
 
-#: includes/editor.php:40
+#: includes/editor.php:42
 msgid "This work"
 msgstr ""
 
-#: includes/editor.php:42
-#: includes/editor.php:54
-#: includes/editor.php:63
-#: includes/editor.php:95
-#: includes/post-types.php:248
+#: includes/editor.php:44
+#: includes/editor.php:56
+#: includes/editor.php:68
+#: includes/editor.php:102
+#: includes/post-types.php:302
 msgid "Year"
 msgstr ""
 
-#: includes/editor.php:43
+#: includes/editor.php:45
 msgid "Dimensions"
 msgstr ""
 
-#: includes/editor.php:43
+#: includes/editor.php:45
 msgid "As it should read, e.g. 162 × 130 cm"
 msgstr ""
 
-#: includes/editor.php:44
+#: includes/editor.php:46
 msgid "Materials"
 msgstr ""
 
-#: includes/editor.php:44
+#: includes/editor.php:46
 msgid "e.g. Acrylic on canvas"
 msgstr ""
 
-#: includes/editor.php:45
+#: includes/editor.php:47
 msgid "Inventory reference"
 msgstr ""
 
-#: includes/editor.php:45
+#: includes/editor.php:47
 msgid "Your own, e.g. L585. Not shown on the site."
 msgstr ""
 
-#: includes/editor.php:46
+#: includes/editor.php:48
 msgid "Available"
 msgstr ""
 
-#: includes/editor.php:47
+#: includes/editor.php:49
 msgid "The picture shows the painting alone"
 msgstr ""
 
-#: includes/editor.php:47
+#: includes/editor.php:49
 msgid "On: the grid can draw it to scale. Off for a photograph of a room with the painting in it."
 msgstr ""
 
-#: includes/editor.php:48
+#: includes/editor.php:50
 msgid "Photograph of the work in place"
 msgstr ""
 
-#: includes/editor.php:48
+#: includes/editor.php:50
 msgid "The painting on the wall, if the main picture is a cut-out. Shown beside it on the work’s page."
 msgstr ""
 
-#: includes/editor.php:52
+#: includes/editor.php:54
 msgid "This project"
 msgstr ""
 
-#: includes/editor.php:54
-msgid "The year it began; decides its place in the list."
+#: includes/editor.php:56
+msgid "The year it began. A new project goes to the top of its group; the Order field in the side panel moves it."
 msgstr ""
 
-#: includes/editor.php:55
+#: includes/editor.php:57
 msgid "When, as shown"
 msgstr ""
 
-#: includes/editor.php:55
+#: includes/editor.php:57
 msgid "e.g. 2016 – 2020, or 2023 – Currently. Left empty, the year is shown."
 msgstr ""
 
-#: includes/editor.php:56
+#: includes/editor.php:58
 msgid "Client"
 msgstr ""
 
+#: includes/editor.php:59
+msgid "Name on its page"
+msgstr ""
+
+#: includes/editor.php:59
+msgid "The bold name at the top of the project’s page, e.g. Color Chart. Left empty, the title above is used."
+msgstr ""
+
 #: includes/editor.php:60
+msgid "Under the name"
+msgstr ""
+
+#: includes/editor.php:60
+msgid "Who it was for or with, one line per line, written as it should read: FOR NANI MARQUINA."
+msgstr ""
+
+#: includes/editor.php:61
+msgid "When, on its page"
+msgstr ""
+
+#: includes/editor.php:61
+msgid "e.g. 2023 - ON GOING. Left empty, the same as in the list."
+msgstr ""
+
+#: includes/editor.php:65
 msgid "This exhibition"
 msgstr ""
 
-#: includes/editor.php:62
+#: includes/editor.php:67
 msgid "Where"
 msgstr ""
 
-#: includes/editor.php:62
+#: includes/editor.php:67
 msgid "e.g. Alzueta Gallery, Barcelona"
 msgstr ""
 
-#: includes/editor.php:64
+#: includes/editor.php:69
 msgid "From"
 msgstr ""
 
-#: includes/editor.php:64
+#: includes/editor.php:69
 msgid "A month, or a month and a day: May 27"
 msgstr ""
 
-#: includes/editor.php:65
+#: includes/editor.php:70
 msgid "To"
 msgstr ""
 
-#: includes/editor.php:65
+#: includes/editor.php:70
 msgid "Only when it ran across months."
 msgstr ""
 
-#: includes/editor.php:66
+#: includes/editor.php:71
 msgid "Ended in year"
 msgstr ""
 
-#: includes/editor.php:66
+#: includes/editor.php:71
 msgid "Only when it ran into another year."
 msgstr ""
 
-#: includes/editor.php:67
+#: includes/editor.php:72
 msgid "In the record as"
 msgstr ""
 
-#: includes/editor.php:67
+#: includes/editor.php:72
 msgid "Which column of About lists it."
 msgstr ""
 
-#: includes/editor.php:68
+#: includes/editor.php:73
 msgid "Note"
 msgstr ""
 
-#: includes/editor.php:72
+#: includes/editor.php:77
 msgid "This edition"
 msgstr ""
 
-#: includes/editor.php:74
+#: includes/editor.php:79
 msgid "Numeral"
 msgstr ""
 
-#: includes/editor.php:74
+#: includes/editor.php:79
 msgid "I, II, III…"
 msgstr ""
 
-#: includes/editor.php:75
+#: includes/editor.php:80
 msgid "Introduction on the opening page"
 msgstr ""
 
-#: includes/editor.php:75
+#: includes/editor.php:80
 msgid "Only if it should differ from the text above. Left empty, the opening page shows the text above."
 msgstr ""
 
-#: includes/editor.php:79
-msgid "This person"
+#: includes/editor.php:81
+msgid "Opening page: cut after"
 msgstr ""
 
 #: includes/editor.php:81
-msgid "What they do"
+msgid "The words the short version ends on, copied from the introduction. The rest shows behind “Read more”. Left empty, the whole introduction shows."
 msgstr ""
 
 #: includes/editor.php:82
-msgid "Known as"
+msgid "Opening page: setting"
 msgstr ""
 
 #: includes/editor.php:82
-msgid "The name they publish under, if different."
+msgid "Ragged right"
 msgstr ""
 
-#: includes/editor.php:83
-msgid "Colour reference"
-msgstr ""
-
-#: includes/editor.php:83
-msgid "e.g. AC011"
-msgstr ""
-
-#: includes/editor.php:84
-msgid "Colour name"
-msgstr ""
-
-#: includes/editor.php:84
-msgid "e.g. Powder red"
-msgstr ""
-
-#: includes/editor.php:85
-msgid "Colour, as a hex value"
-msgstr ""
-
-#: includes/editor.php:85
-msgid "e.g. #d98f93. Left empty, one is read off the colour’s name."
+#: includes/editor.php:82
+msgid "Justified"
 msgstr ""
 
 #: includes/editor.php:86
-msgid "Answered in images"
+msgid "This person"
+msgstr ""
+
+#: includes/editor.php:88
+msgid "What they do"
+msgstr ""
+
+#: includes/editor.php:89
+msgid "Known as"
+msgstr ""
+
+#: includes/editor.php:89
+msgid "The name they publish under, if different."
+msgstr ""
+
+#: includes/editor.php:90
+msgid "Colour reference"
+msgstr ""
+
+#: includes/editor.php:90
+msgid "e.g. AC011"
+msgstr ""
+
+#: includes/editor.php:91
+msgid "Colour name"
+msgstr ""
+
+#: includes/editor.php:91
+msgid "e.g. Powder red"
 msgstr ""
 
 #: includes/editor.php:92
-msgid "The card"
+msgid "Colour, as a hex value"
 msgstr ""
 
-#: includes/editor.php:94
-msgid "City"
+#: includes/editor.php:92
+msgid "e.g. #d98f93. Left empty, the colour comes from the colour reference, or else from the colour’s name."
 msgstr ""
 
-#: includes/editor.php:96
-msgid "Phone"
-msgstr ""
-
-#: includes/editor.php:97
-msgid "Emails"
-msgstr ""
-
-#: includes/editor.php:97
-msgid "One per line."
-msgstr ""
-
-#: includes/editor.php:98
-msgid "Private collections"
-msgstr ""
-
-#: includes/editor.php:98
-msgid "One per line: Name | Place"
+#: includes/editor.php:93
+msgid "Answered in images"
 msgstr ""
 
 #: includes/editor.php:99
-msgid "Closing line"
+msgid "The card"
+msgstr ""
+
+#: includes/editor.php:101
+msgid "City"
+msgstr ""
+
+#: includes/editor.php:102
+msgid "The year under her name on the card."
 msgstr ""
 
 #: includes/editor.php:103
+msgid "Phone"
+msgstr ""
+
+#: includes/editor.php:104
+msgid "Emails"
+msgstr ""
+
+#: includes/editor.php:104
+msgid "One per line."
+msgstr ""
+
+#: includes/editor.php:105
+msgid "Private collections"
+msgstr ""
+
+#: includes/editor.php:105
+msgid "One per line: Name | Place"
+msgstr ""
+
+#: includes/editor.php:106
+msgid "Closing line"
+msgstr ""
+
+#: includes/editor.php:110
 msgid "The chart"
 msgstr ""
 
-#: includes/editor.php:105
+#: includes/editor.php:112
 msgid "Price"
 msgstr ""
 
-#: includes/editor.php:105
+#: includes/editor.php:112
 msgid "As it should read, e.g. 60,50€"
 msgstr ""
 
-#: includes/editor.php:106
+#: includes/editor.php:113
 msgid "The bands"
 msgstr ""
 
-#: includes/editor.php:106
+#: includes/editor.php:113
 msgid "One colour per line, as a hex value, top to bottom."
 msgstr ""
 
-#: includes/post-types.php:22
+#: includes/editor.php:130
+msgid "Statement, in capitals"
+msgstr ""
+
+#: includes/editor.php:131
+msgid "Credits, smaller"
+msgstr ""
+
+#: includes/editor.php:132
+msgid "Call to act, leaning"
+msgstr ""
+
+#: includes/environment.php:55
+msgid "Staging — not the live site"
+msgstr ""
+
+#: includes/environment.php:56
+msgid "Development — not the live site"
+msgstr ""
+
+#: includes/environment.php:57
+msgid "Local copy — not the live site"
+msgstr ""
+
+#: includes/guide.php:30
+#: includes/guide.php:43
+msgid "How to…"
+msgstr ""
+
+#: includes/guide.php:35
+#: includes/guide.php:86
+msgid "Guide"
+msgstr ""
+
+#: includes/guide.php:44
+msgid "Print, or save as PDF"
+msgstr ""
+
+#. translators: 1: the Dashboard menu, 2: the guide's own page in it, a link to it.
+#: includes/guide.php:83
+#, php-format
+msgid "The whole guide is also under %1$s → %2$s, to read on one page or to print."
+msgstr ""
+
+#: includes/guide.php:96
+msgid "The things you will do most often, a few steps each."
+msgstr ""
+
+#: includes/guide.php:97
+msgid "Words in bold are what the screen says: a menu, a button or a field."
+msgstr ""
+
+#: includes/guide.php:100
+msgid "In the editor, the fields of an entry are in the panel on the right."
+msgstr ""
+
+#. translators: “Settings” is the editor's own button that opens its side panel; write it as the editor shows it in this language.
+#: includes/guide.php:103
+msgid "If it is closed, press <strong>Settings</strong> at the top right to open it."
+msgstr ""
+
+#: includes/guide.php:121
+msgid "Add a painting"
+msgstr ""
+
+#: includes/guide.php:124
+msgid "Have the picture ready first: the painting alone, cut out of its photograph and saved as a PNG with a transparent background, so that it sits on the page with nothing around it."
+msgstr ""
+
+#: includes/guide.php:125
+msgid "A photograph with the wall around it looks wrong in the grid."
+msgstr ""
+
+#. translators: “Add title” is what the editor shows in an empty title; write it as the editor shows it in this language.
+#: includes/guide.php:132
+msgid "Type the painting’s title where it says <strong>Add title</strong>."
+msgstr ""
+
+#. translators: 1: the tab of the editor's side panel that holds the entry's own fields, 2: a button on it.
+#: includes/guide.php:137
+#, php-format
+msgid "In the panel on the right, on the %1$s tab, press %2$s."
+msgstr ""
+
+#. translators: %s: the same button, which the window that opens repeats.
+#: includes/guide.php:143
+#, php-format
+msgid "Drag the PNG into the window that opens, then press %s again at its bottom right."
+msgstr ""
+
+#. translators: 1: a panel of fields in the editor, 2–5: four of its fields.
+#: includes/guide.php:150
+#, php-format
+msgid "Further down, under %1$s, fill in %2$s, %3$s, %4$s and %5$s."
+msgstr ""
+
+#: includes/guide.php:157
+msgid "Write the dimensions with × or x between the two sides, as in 100 × 80 cm: the grid reads them to draw the painting to scale."
+msgstr ""
+
+#. translators: %s: a switch in the editor's side panel.
+#: includes/guide.php:161
+#, php-format
+msgid "Switch %s on if the painting is for sale."
+msgstr ""
+
+#. translators: %s: a switch in the editor's side panel.
+#: includes/guide.php:167
+#, php-format
+msgid "Leave %s switched on: it lets the grid draw the painting to scale."
+msgstr ""
+
+#: includes/guide.php:170
+msgid "Switch it off only if the picture is a photograph of a room with the painting in it."
+msgstr ""
+
+#. translators: 1: a field in the editor's side panel, 2: its button. “Select” is the button of WordPress's media window; write it as WordPress shows it in this language.
+#: includes/guide.php:175
+#, php-format
+msgid "Under %1$s, press %2$s, choose or upload the photograph of the painting on the wall, and press <strong>Select</strong>."
+msgstr ""
+
+#: includes/guide.php:178
+#: admin/editor.js:63
+msgid "Choose photograph"
+msgstr ""
+
+#: includes/guide.php:180
+msgid "It is shown with the cut-out on the painting’s page."
+msgstr ""
+
+#. translators: %s: the button the editor offers once the entry is published.
+#: includes/guide.php:186
+#, php-format
+msgid "To see it on the site, press %s in the panel that follows."
+msgstr ""
+
+#. translators: %s: the address of the site's Artwork page.
+#: includes/guide.php:191
+#, php-format
+msgid "It is also on <a href=\"%s\">the artwork page</a>, among the works of its year."
+msgstr ""
+
+#: includes/guide.php:200
+msgid "Mark a painting available or sold"
+msgstr ""
+
+#. translators: %s: the search button above the list of works.
+#: includes/guide.php:206
+#, php-format
+msgid "Find the painting: type its title in the box at the top right and press %s."
+msgstr ""
+
+#: includes/guide.php:209
+msgid "Click its title to open it."
+msgstr ""
+
+#. translators: 1: a panel of fields in the editor, 2: a switch in it.
+#: includes/guide.php:213
+#, php-format
+msgid "In the panel on the right, under %1$s, switch %2$s on while the painting is for sale and off once it has sold."
+msgstr ""
+
+#: includes/guide.php:220
+msgid "A sold painting stays on the site with all the others."
+msgstr ""
+
+#: includes/guide.php:227
+msgid "Add an exhibition"
+msgstr ""
+
+#. translators: “Add title” is what the editor shows in an empty title; write it as the editor shows it in this language.
+#: includes/guide.php:232
+msgid "Type the exhibition’s title where it says <strong>Add title</strong>."
+msgstr ""
+
+#. translators: 1: a panel of fields in the editor, 2–4: three of its fields.
+#: includes/guide.php:237
+#, php-format
+msgid "In the panel on the right, under %1$s, fill in %2$s, %3$s and %4$s."
+msgstr ""
+
+#. translators: 1, 2: fields in the editor's side panel.
+#: includes/guide.php:245
+#, php-format
+msgid "Fill in %1$s only if it ran across months, and %2$s only if it ran into another year."
+msgstr ""
+
+#. translators: 1: a field in the editor's side panel, 2–4: its choices.
+#: includes/guide.php:253
+#, php-format
+msgid "%1$s decides which column of About lists the show: %2$s, %3$s or %4$s."
+msgstr ""
+
+#. translators: %s: the choice that keeps a show off the About page.
+#: includes/guide.php:261
+#, php-format
+msgid "Choose %s to leave it out of About."
+msgstr ""
+
+#: includes/guide.php:265
+msgid "If there is a text about the show, write it in the large space below the title."
+msgstr ""
+
+#: includes/guide.php:267
+msgid "A new exhibition goes to the top of the list."
+msgstr ""
+
+#: includes/guide.php:271
+msgid "A show with a text opens on the reading sheet, the text beside its photographs."
+msgstr ""
+
+#: includes/guide.php:272
+msgid "A show with photographs and no text opens on the photographs sheet, the photographs alone."
+msgstr ""
+
+#: includes/guide.php:273
+msgid "A show with neither stays a line in the list, with nothing to open."
+msgstr ""
+
+#: includes/guide.php:282
+msgid "Add a commissioned project"
+msgstr ""
+
+#. translators: “Add title” is what the editor shows in an empty title; write it as the editor shows it in this language.
+#: includes/guide.php:287
+msgid "Type the project’s title, as its line in the list should read, where it says <strong>Add title</strong>."
+msgstr ""
+
+#. translators: 1: a panel in the editor's side panel, 2: the groups it offers, as a list.
+#: includes/guide.php:291
+#, php-format
+msgid "In the panel on the right, under %1$s, tick the group it belongs to: %2$s."
+msgstr ""
+
+#. translators: 1: a panel of fields in the editor, 2, 3: two of its fields.
+#: includes/guide.php:297
+#, php-format
+msgid "Under %1$s, fill in %2$s, the year it began, and %3$s, the dates as the list shows them."
+msgstr ""
+
+#. translators: 1–3: fields in the editor's side panel.
+#: includes/guide.php:305
+#, php-format
+msgid "Its own page opens with a heading that can differ from the list: %1$s, %2$s and %3$s."
+msgstr ""
+
+#: includes/guide.php:310
+msgid "Write each as it should read there, the lines under the name one per line: FOR NANI MARQUINA."
+msgstr ""
+
+#: includes/guide.php:311
+msgid "Left empty, the page uses the title and the dates of the list."
+msgstr ""
+
+#: includes/guide.php:315
+msgid "Write the text below the title."
+msgstr ""
+
+#. translators: 1–3: the names of the paragraph styles. “Block” and “Styles” are the editor's own words for its side panel; write them as the editor shows them in this language.
+#: includes/guide.php:318
+#, php-format
+msgid "To set a paragraph as the designer does, click it, then in the panel on the right, on the <strong>Block</strong> tab, under <strong>Styles</strong>, choose %1$s, %2$s or %3$s."
+msgstr ""
+
+#: includes/guide.php:323
+msgid "A project’s text usually opens with a statement in capitals and ends with its credits, set smaller."
+msgstr ""
+
+#: includes/guide.php:325
+msgid "A new project goes to the top of its group."
+msgstr ""
+
+#: includes/guide.php:331
+msgid "Add a person to What’s Color?"
+msgstr ""
+
+#. translators: 1: a menu in the column on the left of the admin, 2: one of its items, a link to it, 3: the button above the list it opens, a link to it.
+#: includes/guide.php:335
+#, php-format
+msgid "In the menu on the left, go to %1$s → %2$s and press %3$s at the top."
+msgstr ""
+
+#. translators: “Add title” is what the editor shows in an empty title; write it as the editor shows it in this language.
+#: includes/guide.php:342
+msgid "Type their name where it says <strong>Add title</strong>."
+msgstr ""
+
+#. translators: 1: a panel in the editor's side panel, 2: the editions it offers, as a list.
+#: includes/guide.php:346
+#, php-format
+msgid "In the panel on the right, under %1$s, tick the edition they answered in: %2$s."
+msgstr ""
+
+#. translators: 1: a panel of fields in the editor, 2, 3: two of its fields.
+#: includes/guide.php:352
+#, php-format
+msgid "Under %1$s, fill in %2$s, and %3$s if they publish under another name."
+msgstr ""
+
+#. translators: 1, 2: fields in the editor's side panel.
+#: includes/guide.php:360
+#, php-format
+msgid "Fill in %1$s and %2$s with the colour of their answer, for example AC011 and Powder red."
+msgstr ""
+
+#. translators: %s: a field in the editor's side panel.
+#: includes/guide.php:366
+#, php-format
+msgid "%s can stay empty: the site then finds the colour from the reference or the name."
+msgstr ""
+
+#: includes/guide.php:371
+msgid "Write their answer, as they gave it, in the large space below the name."
+msgstr ""
+
+#. translators: %s: a switch in the editor's side panel.
+#: includes/guide.php:374
+#, php-format
+msgid "If they answered in pictures rather than words, switch on %s."
+msgstr ""
+
+#: includes/guide.php:382
+msgid "Once published with an answer, their name joins the edition’s names on the home page and on the edition’s own page."
+msgstr ""
+
+#: includes/guide.php:383
+msgid "On the edition’s page they come after the people the designer has placed, until the page is redrawn."
+msgstr ""
+
+#: includes/guide.php:384
+msgid "The people already on the page are placed by their names, so keep their names as they are."
+msgstr ""
+
+#: includes/guide.php:396
+msgid "Edit About"
+msgstr ""
+
+#. translators: 1: a panel of fields in the editor, 2–5: its fields.
+#: includes/guide.php:401
+#, php-format
+msgid "The card is in the panel on the right, under %1$s: %2$s, %3$s, %4$s and %5$s, one email per line."
+msgstr ""
+
+#. translators: %s: a field in the editor's side panel.
+#: includes/guide.php:410
+#, php-format
+msgid "The collections are there too, under %s: one per line, the name and the place with a vertical bar between them, as in Fundació Vilacases | Barcelona."
+msgstr ""
+
+#: includes/guide.php:414
+msgid "The biography is the text of the page: click into a paragraph to change it."
+msgstr ""
+
+#. translators: “Replace” is the editor's own button above a selected image; write it as the editor shows it in this language.
+#: includes/guide.php:417
+msgid "The studio photographs are images between the paragraphs: click one and press <strong>Replace</strong> to change it."
+msgstr ""
+
+#. translators: 1: the Exhibitions menu, 2: a field of each exhibition.
+#: includes/guide.php:422
+#, php-format
+msgid "The exhibitions on About are not typed here: they come from %1$s, each in the column its %2$s says."
+msgstr ""
+
+#: includes/guide.php:435
+msgid "Change the Color Chart’s price and texts"
+msgstr ""
+
+#. translators: 1: a panel of fields in the editor, 2: one of its fields.
+#: includes/guide.php:440
+#, php-format
+msgid "In the panel on the right, under %1$s, change %2$s, written as it should read: 60,50€."
+msgstr ""
+
+#: includes/guide.php:444
+msgid "The text beside the chart is the text of the page: click into it to change it."
+msgstr ""
+
+#. translators: %s: a field in the editor's side panel.
+#: includes/guide.php:447
+#, php-format
+msgid "%s are the chart’s colours, top to bottom: leave them as they are unless the chart itself changes."
+msgstr ""
+
+#: includes/guide.php:460
+#: includes/settings.php:64
+#: includes/settings.php:65
+#: includes/settings.php:69
+msgid "Site texts"
+msgstr ""
+
+#: includes/guide.php:464
+#: includes/guide.php:503
+msgid "Where the order form’s messages go"
+msgstr ""
+
+#. translators: 1: a part of the Site texts page, 2: its field.
+#: includes/guide.php:470
+#, php-format
+msgid "Under %1$s, %2$s is the address every message from the Color Chart’s order form is sent to."
+msgstr ""
+
+#: includes/guide.php:471
+#: includes/settings.php:37
+msgid "The order desk"
+msgstr ""
+
+#: includes/guide.php:472
+#: includes/settings.php:58
+msgid "Send inquiries to"
+msgstr ""
+
+#: includes/guide.php:474
+msgid "It never appears on the site."
+msgstr ""
+
+#. translators: %s: a field of the Site texts page.
+#: includes/guide.php:478
+#, php-format
+msgid "%s is the most messages the form sends in a day, a guard against a flood."
+msgstr ""
+
+#: includes/guide.php:479
+#: includes/settings.php:59
+msgid "At most, per day"
+msgstr ""
+
+#. translators: “Save Changes” is WordPress's own button at the foot of a settings page; write it as WordPress shows it in this language.
+#: includes/guide.php:483
+msgid "Press <strong>Save Changes</strong> at the foot of the page."
+msgstr ""
+
+#: includes/guide.php:488
+msgid "Each message arrives as an email, and nothing of it is kept on the site."
+msgstr ""
+
+#: includes/guide.php:489
+msgid "Reply to it as to any email: the answer goes to the person who wrote."
+msgstr ""
+
+#. translators: 1–3: fields of the Site texts page.
+#: includes/guide.php:493
+#, php-format
+msgid "The same page holds the site’s other texts: %1$s, %2$s and %3$s."
+msgstr ""
+
+#: includes/guide.php:494
+#: includes/settings.php:55
+msgid "Description"
+msgstr ""
+
+#: includes/guide.php:495
+#: includes/settings.php:56
+msgid "What’s Color? — the note above the names"
+msgstr ""
+
+#: includes/guide.php:496
+#: includes/settings.php:57
+msgid "The opening screen"
+msgstr ""
+
+#. translators: 1: a menu in the column on the left of the admin, 2: one of its items.
+#: includes/guide.php:507
+#, php-format
+msgid "Messages from the Color Chart’s order form arrive by email, at the address set in %1$s → %2$s."
+msgstr ""
+
+#: includes/guide.php:511
+msgid "Only an administrator can see that page and change the address."
+msgstr ""
+
+#: includes/guide.php:519
+msgid "Before you publish"
+msgstr ""
+
+#. translators: “View” and “Preview in new tab” are the editor's own button and menu item; write them as the editor shows them in this language.
+#: includes/guide.php:523
+msgid "To see an entry as the site will show it, before anyone else can, press <strong>View</strong> at the top right and choose <strong>Preview in new tab</strong>."
+msgstr ""
+
+#. translators: “Save draft” is the editor's own button; write it as the editor shows it in this language.
+#: includes/guide.php:527
+msgid "<strong>Save draft</strong> keeps your work without publishing it."
+msgstr ""
+
+#: includes/guide.php:530
+msgid "A painting’s year and its picture decide where it appears."
+msgstr ""
+
+#: includes/guide.php:531
+msgid "The works run from the newest year to the oldest, so the year places it in the grid; a painting saved without a year is given the current one."
+msgstr ""
+
+#: includes/guide.php:532
+msgid "Without a picture, it is not shown in the grid at all."
+msgstr ""
+
+#. translators: 1: a menu in the column on the left of the admin, 2: one of its items, a link to the screen it opens.
+#: includes/guide.php:558
+#, php-format
+msgid "In the menu on the left, go to %1$s → %2$s."
+msgstr ""
+
+#. translators: 1: the Pages menu, 2: its first item, 3: the page to click, a link to it.
+#: includes/guide.php:568
+#, php-format
+msgid "In the menu on the left, go to %1$s → %2$s and click %3$s."
+msgstr ""
+
+#. translators: “Publish” is the editor's own button, at the top right and again in the panel that asks to confirm; write it as the editor shows it in this language.
+#: includes/guide.php:578
+msgid "Press <strong>Publish</strong> at the top right, and <strong>Publish</strong> again to confirm."
+msgstr ""
+
+#. translators: “Save” is the editor's own button for an entry already published; write it as the editor shows it in this language.
+#: includes/guide.php:585
+msgid "Press <strong>Save</strong> at the top right."
+msgstr ""
+
+#. translators: %s: the button for the entry's main photograph, at the top of the editor's side panel.
+#: includes/guide.php:593
+#, php-format
+msgid "At the top of the panel, press %s: the list shows that photograph, and its page opens on it."
+msgstr ""
+
+#. translators: /image and /gallery are typed on an empty line of the editor to add an Image or a Gallery block; give the blocks' names as the editor does in this language.
+#: includes/guide.php:600
+msgid "Add more photographs in the text: on an empty line, type /image or /gallery and press Enter."
+msgstr ""
+
+#: includes/import-admin.php:20
+#: includes/import-admin.php:21
+#: includes/import-admin.php:60
+msgid "Import content"
+msgstr ""
+
+#: includes/import-admin.php:33
+msgid "Site settings"
+msgstr ""
+
+#: includes/import-admin.php:34
+#: includes/import-admin.php:75
+#: includes/post-types.php:45
+msgid "Artwork"
+msgstr ""
+
+#: includes/import-admin.php:35
+#: includes/import-admin.php:76
+#: includes/post-types.php:65
+#: includes/queries.php:177
+msgid "Commissioned"
+msgstr ""
+
+#: includes/import-admin.php:36
+#: includes/import-admin.php:77
+#: includes/post-types.php:85
+msgid "Exhibitions"
+msgstr ""
+
+#: includes/import-admin.php:37
+#: includes/post-types.php:101
+#: includes/post-types.php:102
+msgid "What’s Color?"
+msgstr ""
+
+#: includes/import-admin.php:38
+msgid "About and Color Chart"
+msgstr ""
+
+#: includes/import-admin.php:39
+msgid "Clearing out what the bundle no longer has"
+msgstr ""
+
+#: includes/import-admin.php:40
+msgid "Finishing"
+msgstr ""
+
+#: includes/import-admin.php:61
+msgid "Brings the works, exhibitions, commissioned projects, What’s Color? and the About and Color Chart pages in from the bundle prepared from the site’s dataset. Entries already here are brought up to date; entries edited in WordPress since the last import are left as they are."
+msgstr ""
+
+#. translators: %s: the folder on the server where the bundle goes.
+#: includes/import-admin.php:67
+#, php-format
+msgid "No bundle found. Upload the import folder by SFTP so that its manifest.json is at %s, then come back to this page."
+msgstr ""
+
+#: includes/import-admin.php:71
+msgid "The bundle"
+msgstr ""
+
+#: includes/import-admin.php:74
+msgid "Prepared on"
+msgstr ""
+
+#: includes/import-admin.php:78
+msgid "What’s Color? editions and people"
+msgstr ""
+
+#: includes/import-admin.php:79
+msgid "Pictures in the bundle"
+msgstr ""
+
+#: includes/import-admin.php:80
+msgid "Last import"
+msgstr ""
+
+#: includes/import-admin.php:80
+msgid "never"
+msgstr ""
+
+#: includes/import-admin.php:85
+msgid "An import was stopped, and the bundle has been replaced since. Start the import again: it brings everything up to date and skips nothing."
+msgstr ""
+
+#. translators: 1: the step it stopped at, 2: how far into that step.
+#: includes/import-admin.php:92
+#, php-format
+msgid "An import stopped at “%1$s” (%2$d done). Continue it, or start again from the beginning."
+msgstr ""
+
+#: includes/import-admin.php:99
+msgid "Also overwrite entries edited in WordPress since the last import"
+msgstr ""
+
+#: includes/import-admin.php:100
+msgid "Applies when starting again; a continued import keeps the choice it was started with."
+msgstr ""
+
+#: includes/import-admin.php:103
+#: includes/import-admin.php:202
+msgid "Continue the import"
+msgstr ""
+
+#: includes/import-admin.php:104
+msgid "Start again"
+msgstr ""
+
+#: includes/import-admin.php:106
+msgid "Import"
+msgstr ""
+
+#: includes/import-admin.php:114
+msgid "Keep this page open until it says the import is complete. It takes a few minutes the first time, while every picture is resized."
+msgstr ""
+
+#: includes/import-admin.php:131
+msgid "Only an administrator can import."
+msgstr ""
+
+#: includes/import-admin.php:135
+msgid "No bundle found."
+msgstr ""
+
+#: includes/import-admin.php:155
+msgid "The bundle has been replaced since this import began. Start the import again."
+msgstr ""
+
+#: includes/import-admin.php:156
+msgid "There is no import to continue. Start a new one."
+msgstr ""
+
+#: includes/import-admin.php:200
+msgid "The import is complete."
+msgstr ""
+
+#: includes/import-admin.php:201
+msgid "The import stopped: the server did not answer. Press “Continue the import” to carry on from where it stopped."
+msgstr ""
+
+#: includes/import-admin.php:203
+msgid "Starting…"
+msgstr ""
+
+#. translators: %s: the kind of entry, plural and in lower case — artwork, exhibitions, answers.
+#: includes/post-types.php:23
 #, php-format
 msgid "All %s"
 msgstr ""
 
-#: includes/post-types.php:23
+#. translators: %s: the kind of entry, singular and in lower case — work, exhibition, project.
+#: includes/post-types.php:25
 #, php-format
 msgid "Add %s"
 msgstr ""
 
-#: includes/post-types.php:24
+#. translators: %s: the kind of entry, singular and in lower case — work, exhibition, project.
+#: includes/post-types.php:27
 #, php-format
 msgid "Add a new %s"
 msgstr ""
 
-#: includes/post-types.php:25
+#. translators: %s: the kind of entry, singular and in lower case — work, exhibition, project.
+#: includes/post-types.php:29
 #, php-format
 msgid "Edit %s"
 msgstr ""
 
-#: includes/post-types.php:26
+#. translators: %s: the kind of entry, singular and in lower case — work, exhibition, project.
+#: includes/post-types.php:31
 #, php-format
 msgid "New %s"
 msgstr ""
 
-#: includes/post-types.php:27
+#. translators: %s: the kind of entry, singular and in lower case — work, exhibition, project.
+#: includes/post-types.php:33
 #, php-format
 msgid "View %s"
 msgstr ""
 
-#: includes/post-types.php:28
+#. translators: %s: the kind of entry, plural and in lower case — artwork, exhibitions, answers.
+#: includes/post-types.php:35
 #, php-format
 msgid "Search %s"
 msgstr ""
 
-#: includes/post-types.php:29
+#. translators: %s: the kind of entry, plural and in lower case — artwork, exhibitions, answers.
+#: includes/post-types.php:37
 #, php-format
 msgid "No %s yet."
 msgstr ""
 
-#: includes/post-types.php:30
+#. translators: %s: the kind of entry, plural and in lower case — artwork, exhibitions, answers.
+#: includes/post-types.php:39
 #, php-format
 msgid "No %s in the bin."
 msgstr ""
 
-#: includes/post-types.php:36
-msgid "Artwork"
-msgstr ""
-
-#: includes/post-types.php:36
+#: includes/post-types.php:45
 msgid "Work"
 msgstr ""
 
-#: includes/post-types.php:37
+#: includes/post-types.php:46
 msgid "The painting"
 msgstr ""
 
-#: includes/post-types.php:38
+#: includes/post-types.php:47
 msgid "Choose the picture of the painting"
 msgstr ""
 
-#: includes/post-types.php:39
+#: includes/post-types.php:48
 msgid "Remove the picture"
 msgstr ""
 
-#: includes/post-types.php:40
+#: includes/post-types.php:49
 msgid "Use this picture"
 msgstr ""
 
-#: includes/post-types.php:42
+#: includes/post-types.php:51
 msgid "A painting. The picture, its year, size and materials; the stack and the grid are built from these."
 msgstr ""
 
-#: includes/post-types.php:51
+#: includes/post-types.php:60
 msgid "Anything to say about this work — optional. Further photographs of it can be added here as images."
 msgstr ""
 
-#: includes/post-types.php:56
-#: includes/queries.php:123
-msgid "Commissioned"
-msgstr ""
-
-#: includes/post-types.php:56
+#: includes/post-types.php:65
 msgid "Project"
 msgstr ""
 
-#: includes/post-types.php:57
-#: includes/post-types.php:73
+#: includes/post-types.php:66
+msgid "All projects"
+msgstr ""
+
+#: includes/post-types.php:67
+msgid "Search projects"
+msgstr ""
+
+#: includes/post-types.php:68
+msgid "No projects yet."
+msgstr ""
+
+#: includes/post-types.php:69
+msgid "No projects in the bin."
+msgstr ""
+
+#: includes/post-types.php:70
+#: includes/post-types.php:86
 msgid "Main photograph"
 msgstr ""
 
-#: includes/post-types.php:58
-#: includes/post-types.php:74
+#: includes/post-types.php:71
+#: includes/post-types.php:87
 msgid "Choose the main photograph"
 msgstr ""
 
-#: includes/post-types.php:60
+#: includes/post-types.php:73
 msgid "Commissioned work and collaborations: colour charts, collections, workshops."
 msgstr ""
 
-#: includes/post-types.php:72
-msgid "Exhibitions"
-msgstr ""
-
-#: includes/post-types.php:72
+#: includes/post-types.php:85
 msgid "Exhibition"
 msgstr ""
 
-#: includes/post-types.php:76
+#: includes/post-types.php:89
 msgid "Every show and fair, newest first. One with text and photographs opens as a page; one without is a line in the list."
 msgstr ""
 
-#: includes/post-types.php:87
-#: includes/post-types.php:139
+#: includes/post-types.php:100
+#: includes/post-types.php:165
 msgid "Editions"
 msgstr ""
 
-#: includes/post-types.php:87
-#: includes/post-types.php:140
-#: includes/post-types.php:141
+#: includes/post-types.php:100
+#: includes/post-types.php:166
+#: includes/post-types.php:167
 msgid "Edition"
 msgstr ""
 
-#: includes/post-types.php:88
-#: includes/post-types.php:89
-msgid "What’s Color?"
-msgstr ""
-
-#: includes/post-types.php:91
+#: includes/post-types.php:104
 msgid "One edition of What’s Color?: Claudia’s paragraphs in the order the page sets them between the entries, and the people who answered."
 msgstr ""
 
-#: includes/post-types.php:102
-#: includes/post-types.php:103
+#: includes/post-types.php:115
+#: includes/post-types.php:116
 msgid "Answers"
 msgstr ""
 
-#: includes/post-types.php:102
+#: includes/post-types.php:115
 msgid "Answer"
 msgstr ""
 
-#: includes/post-types.php:104
+#: includes/post-types.php:117
 msgid "Add a person"
 msgstr ""
 
-#: includes/post-types.php:105
+#: includes/post-types.php:118
 msgid "Add a person and their answer"
 msgstr ""
 
-#: includes/post-types.php:107
+#: includes/post-types.php:120
 msgid "One person’s answer to “What’s color?”, filed under the edition they answered in."
 msgstr ""
 
-#: includes/post-types.php:118
+#: includes/post-types.php:131
 msgid "Their answer, as they gave it. Leave empty if they gave none."
 msgstr ""
 
-#: includes/post-types.php:124
-#: includes/post-types.php:126
+#: includes/post-types.php:139
+#: includes/post-types.php:141
 msgid "Groups"
 msgstr ""
 
-#: includes/post-types.php:125
+#: includes/post-types.php:140
 msgid "Group"
 msgstr ""
 
-#: includes/post-types.php:128
-msgid "The headings of the Commissioned page: Commissioned, Education, Solidary."
+#: includes/post-types.php:142
+msgid "All groups"
 msgstr ""
 
 #: includes/post-types.php:143
+msgid "Edit group"
+msgstr ""
+
+#: includes/post-types.php:144
+msgid "View group"
+msgstr ""
+
+#: includes/post-types.php:145
+msgid "Update group"
+msgstr ""
+
+#: includes/post-types.php:146
+msgid "Add a new group"
+msgstr ""
+
+#: includes/post-types.php:147
+msgid "New group name"
+msgstr ""
+
+#: includes/post-types.php:148
+msgid "Inside the group"
+msgstr ""
+
+#: includes/post-types.php:149
+msgid "Inside the group:"
+msgstr ""
+
+#: includes/post-types.php:150
+msgid "Search groups"
+msgstr ""
+
+#: includes/post-types.php:151
+msgid "No groups yet."
+msgstr ""
+
+#: includes/post-types.php:152
+msgid "← Back to the groups"
+msgstr ""
+
+#: includes/post-types.php:154
+msgid "The headings of the Commissioned page: Commissioned, Education, Solidary."
+msgstr ""
+
+#: includes/post-types.php:168
+msgid "All editions"
+msgstr ""
+
+#: includes/post-types.php:169
+msgid "Edit edition"
+msgstr ""
+
+#: includes/post-types.php:170
+msgid "View edition"
+msgstr ""
+
+#: includes/post-types.php:171
+msgid "Update edition"
+msgstr ""
+
+#: includes/post-types.php:172
+msgid "Add a new edition"
+msgstr ""
+
+#: includes/post-types.php:173
+msgid "New edition name"
+msgstr ""
+
+#: includes/post-types.php:174
+msgid "Inside the edition"
+msgstr ""
+
+#: includes/post-types.php:175
+msgid "Inside the edition:"
+msgstr ""
+
+#: includes/post-types.php:176
+msgid "Search editions"
+msgstr ""
+
+#: includes/post-types.php:177
+msgid "No editions yet."
+msgstr ""
+
+#: includes/post-types.php:178
+msgid "← Back to the editions"
+msgstr ""
+
+#: includes/post-types.php:180
 msgid "Which edition of What’s Color? this person answered in."
 msgstr ""
 
@@ -463,96 +1281,618 @@ msgstr ""
 msgid "Texts"
 msgstr ""
 
-#: includes/settings.php:37
-msgid "The order desk"
-msgstr ""
-
 #: includes/settings.php:38
-msgid "Where the Colour Chart’s order form sends. The address is never shown on the site."
-msgstr ""
-
-#: includes/settings.php:55
-msgid "Description"
+msgid "Where the Color Chart’s order form sends. The address is never shown on the site."
 msgstr ""
 
 #: includes/settings.php:55
 msgid "What search engines show under the site’s name."
 msgstr ""
 
-#: includes/settings.php:56
-msgid "What’s Color? — the note above the names"
-msgstr ""
-
-#: includes/settings.php:57
-msgid "The opening screen"
-msgstr ""
-
 #: includes/settings.php:57
 msgid "Five lines, one per line."
-msgstr ""
-
-#: includes/settings.php:58
-msgid "Send inquiries to"
-msgstr ""
-
-#: includes/settings.php:59
-msgid "At most, per day"
 msgstr ""
 
 #: includes/settings.php:59
 msgid "A ceiling on messages a day, against a flood."
 msgstr ""
 
-#: includes/settings.php:64
-#: includes/settings.php:65
-#: includes/settings.php:69
-msgid "Site texts"
+#: includes/site-check.php:29
+#: includes/site-check.php:30
+#: includes/site-check.php:333
+msgid "Site check"
+msgstr ""
+
+#: includes/site-check.php:65
+msgid "The site"
+msgstr ""
+
+#: includes/site-check.php:68
+msgid "production — the live site"
+msgstr ""
+
+#: includes/site-check.php:69
+msgid "staging — the private test copy"
+msgstr ""
+
+#: includes/site-check.php:70
+msgid "development"
+msgstr ""
+
+#: includes/site-check.php:71
+msgid "local — a copy on a laptop"
+msgstr ""
+
+#: includes/site-check.php:73
+msgid "Which site this is"
+msgstr ""
+
+#: includes/site-check.php:74
+msgid "Set by WP_ENVIRONMENT_TYPE in wp-config.php. The live site must not set it (or set it to production)."
+msgstr ""
+
+#: includes/site-check.php:78
+#: includes/site-check.php:82
+msgid "Search engines"
+msgstr ""
+
+#: includes/site-check.php:79
+msgid "Allowed to index the site."
+msgstr ""
+
+#: includes/site-check.php:79
+msgid "Asked to stay away — the live site would not appear on Google."
+msgstr ""
+
+#: includes/site-check.php:80
+msgid "Settings → Reading: untick “Discourage search engines from indexing this site”."
+msgstr ""
+
+#: includes/site-check.php:83
+msgid "Allowed to index this copy, which would compete with the live site."
+msgstr ""
+
+#: includes/site-check.php:83
+msgid "Asked to stay away, as a copy should be. Every page also sends a no-index header."
+msgstr ""
+
+#: includes/site-check.php:84
+msgid "Settings → Reading: tick “Discourage search engines from indexing this site”."
+msgstr ""
+
+#: includes/site-check.php:92
+msgid "HTTPS"
+msgstr ""
+
+#. translators: %s: the site's address.
+#: includes/site-check.php:94
+#, php-format
+msgid "The site’s address is %s."
+msgstr ""
+
+#: includes/site-check.php:95
+msgid "Settings → General: both addresses must start with https:// once the certificate is in place."
+msgstr ""
+
+#: includes/site-check.php:98
+msgid "Addresses (permalinks)"
+msgstr ""
+
+#: includes/site-check.php:99
+msgid "plain"
+msgstr ""
+
+#: includes/site-check.php:100
+msgid "Settings → Permalinks: choose “Post name” and save."
+msgstr ""
+
+#: includes/site-check.php:105
+#: includes/site-check.php:108
+msgid "Theme"
+msgstr ""
+
+#: includes/site-check.php:105
+msgid "Appearance → Themes: activate Claudia Valsells."
+msgstr ""
+
+#. translators: %s: the build stamp of the theme's stylesheet and scripts.
+#: includes/site-check.php:111
+#, php-format
+msgid "Claudia Valsells, with its stylesheet and scripts (build %s)."
+msgstr ""
+
+#: includes/site-check.php:112
+msgid "Active, but its stylesheet and scripts are missing: pages would show unstyled."
+msgstr ""
+
+#: includes/site-check.php:113
+msgid "Upload the theme package made by npm run wp:package, which includes them."
+msgstr ""
+
+#: includes/site-check.php:117
+msgid "Privacy notice"
+msgstr ""
+
+#. translators: %s: the address of the privacy notice.
+#: includes/site-check.php:120
+#, php-format
+msgid "Published at %s and linked under the order form."
+msgstr ""
+
+#: includes/site-check.php:121
+msgid "None published, so the order form links to none. The form collects a name and an email address."
+msgstr ""
+
+#: includes/site-check.php:122
+msgid "Settings → Privacy: create or choose the page, have the wording confirmed, publish it."
+msgstr ""
+
+#: includes/site-check.php:125
+msgid "Content"
+msgstr ""
+
+#: includes/site-check.php:127
+msgid "artwork"
+msgstr ""
+
+#: includes/site-check.php:127
+msgid "exhibitions"
+msgstr ""
+
+#: includes/site-check.php:127
+msgid "commissioned"
+msgstr ""
+
+#: includes/site-check.php:127
+msgid "editions"
+msgstr ""
+
+#: includes/site-check.php:127
+msgid "people in What’s Color?"
+msgstr ""
+
+#: includes/site-check.php:131
+msgid "Published entries"
+msgstr ""
+
+#. translators: %s: date and time of the last import.
+#: includes/site-check.php:133
+#, php-format
+msgid "Last import: %s."
+msgstr ""
+
+#. translators: %s: date and time of the last import.
+#: includes/site-check.php:133
+msgid "Never imported."
+msgstr ""
+
+#: includes/site-check.php:137
+msgctxt "the name of a check on the site check page"
+msgid "Import"
+msgstr ""
+
+#: includes/site-check.php:137
+msgid "An import was started and did not finish."
+msgstr ""
+
+#: includes/site-check.php:137
+msgid "Tools → Import content: continue it."
+msgstr ""
+
+#: includes/site-check.php:142
+msgid "Import folder"
+msgstr ""
+
+#: includes/site-check.php:143
+msgid "wp-content/import is on the server."
+msgstr ""
+
+#: includes/site-check.php:144
+msgid "Once the last import is done, delete the folder by SFTP: it is not needed and its files can be downloaded by anyone who guesses their names."
+msgstr ""
+
+#: includes/site-check.php:149
+msgid "Uploads folder"
+msgstr ""
+
+#: includes/site-check.php:150
+msgid "Writable: pictures can be added."
+msgstr ""
+
+#: includes/site-check.php:150
+msgid "Not writable: adding a picture will fail."
+msgstr ""
+
+#: includes/site-check.php:151
+msgid "Ask the host to give the web server write access to wp-content/uploads."
+msgstr ""
+
+#: includes/site-check.php:154
+msgid "Order form"
+msgstr ""
+
+#: includes/site-check.php:156
+msgid "Recipient"
+msgstr ""
+
+#. translators: %s: email address.
+#: includes/site-check.php:159
+#, php-format
+msgid "Messages go to %s."
+msgstr ""
+
+#: includes/site-check.php:160
+msgid "No address set: the form answers that it cannot send."
+msgstr ""
+
+#: includes/site-check.php:162
+msgid "On a copy, this should be your own address; on the live site, Claudia’s."
+msgstr ""
+
+#: includes/site-check.php:163
+msgid "Settings → Site texts: “Send inquiries to”."
+msgstr ""
+
+#: includes/site-check.php:171
+msgid "How mail is sent"
+msgstr ""
+
+#. translators: %s: name of the mail plugin.
+#. translators: %s: name of the cache plugin.
+#: includes/site-check.php:174
+#: includes/site-check.php:279
+#, php-format
+msgid "Through %s."
+msgstr ""
+
+#: includes/site-check.php:175
+msgid "On this laptop, written to wp-content/cv-mail.log.php instead of sent."
+msgstr ""
+
+#: includes/site-check.php:175
+msgid "Through the server’s own mail function, which often lands in spam or is not delivered at all."
+msgstr ""
+
+#: includes/site-check.php:176
+msgid "Send a test message below, and check it arrives (and not in spam)."
+msgstr ""
+
+#: includes/site-check.php:176
+msgid "Install WP Mail SMTP and connect it to the domain’s mail account (the host has the details); then send a test message below."
+msgstr ""
+
+#: includes/site-check.php:179
+msgid "Old addresses"
+msgstr ""
+
+#: includes/site-check.php:199
+msgid "Redirect rules"
+msgstr ""
+
+#: includes/site-check.php:200
+msgid "The rules send old addresses where the plan says."
+msgstr ""
+
+#: includes/site-check.php:201
+msgid "Check includes/redirects.php in the content plugin."
+msgstr ""
+
+#: includes/site-check.php:201
+msgid "Every old address is checked from outside with npm run wp:check-links."
+msgstr ""
+
+#: includes/site-check.php:208
+#: includes/site-check.php:216
+#: includes/site-check.php:219
+msgid "A redirect, requested"
+msgstr ""
+
+#. translators: %s: the error.
+#: includes/site-check.php:210
+#, php-format
+msgid "The site could not reach itself to try one: %s"
+msgstr ""
+
+#: includes/site-check.php:211
+msgid "Normal on a laptop. On a server, ask the host to allow the site to call its own address."
+msgstr ""
+
+#: includes/site-check.php:216
+msgid "The server password stopped the request — expected on staging."
+msgstr ""
+
+#. translators: 1: HTTP status, 2: where it pointed.
+#: includes/site-check.php:221
+#, php-format
+msgid "/colour-chart/ answered %1$d %2$s"
+msgstr ""
+
+#: includes/site-check.php:222
+msgid "Settings → Permalinks: press Save once, then check again."
+msgstr ""
+
+#: includes/site-check.php:228
+#: includes/site-check.php:235
+msgid "Sitemap"
+msgstr ""
+
+#. translators: %s: sitemap address.
+#: includes/site-check.php:231
+#, php-format
+msgid "Served at %s, where the old site’s sitemap address now leads."
+msgstr ""
+
+#: includes/site-check.php:232
+msgid "Switched off — search engines are told to stay away, or a plugin turned it off."
+msgstr ""
+
+#: includes/site-check.php:233
+msgid "Submit it in Google Search Console."
+msgstr ""
+
+#: includes/site-check.php:233
+msgid "Allow search engines (Settings → Reading)."
+msgstr ""
+
+#: includes/site-check.php:235
+msgid "On."
+msgstr ""
+
+#: includes/site-check.php:235
+msgid "Off while search engines are told to stay away — it comes on with them."
+msgstr ""
+
+#: includes/site-check.php:239
+msgid "Pictures"
+msgstr ""
+
+#: includes/site-check.php:242
+msgid "What the server can make"
+msgstr ""
+
+#. translators: 1: the image library, 2: yes/no, 3: yes/no.
+#: includes/site-check.php:244
+#, php-format
+msgid "Image library %1$s; WebP %2$s; AVIF %3$s."
+msgstr ""
+
+#. translators: 1: the image library, 2: yes/no, 3: yes/no.
+#: includes/site-check.php:244
+msgid "yes"
+msgstr ""
+
+#. translators: 1: the image library, 2: yes/no, 3: yes/no.
+#: includes/site-check.php:244
+msgid "no"
+msgstr ""
+
+#: includes/site-check.php:245
+msgid "Without WebP the pages serve heavier JPEG and PNG files. Ask the host for GD or Imagick with WebP."
+msgstr ""
+
+#: includes/site-check.php:248
+msgid "Modern Image Formats"
+msgstr ""
+
+#: includes/site-check.php:250
+msgid "On, making WebP beside every JPEG and PNG."
+msgstr ""
+
+#: includes/site-check.php:250
+msgid "On, making WebP only."
+msgstr ""
+
+#: includes/site-check.php:251
+msgid "Not active: pictures are served as JPEG and PNG only."
+msgstr ""
+
+#: includes/site-check.php:252
+msgid "Plugins → Add New: “Modern Image Formats”, install and activate; then Settings → Media."
+msgstr ""
+
+#: includes/site-check.php:255
+msgid "Server"
+msgstr ""
+
+#: includes/site-check.php:261
+msgid "PHP"
+msgstr ""
+
+#. translators: 1: PHP version, 2: memory limit, 3: time limit, 4: upload size limit.
+#: includes/site-check.php:263
+#, php-format
+msgid "Version %1$s; memory %2$s; time limit %3$s s; uploads up to %4$s."
+msgstr ""
+
+#: includes/site-check.php:264
+msgid "Memory under 256M can fail on large photographs; ask the host to raise it."
+msgstr ""
+
+#: includes/site-check.php:264
+msgid "The content plugin needs PHP 8.1 or newer."
+msgstr ""
+
+#: includes/site-check.php:276
+msgid "Page cache"
+msgstr ""
+
+#: includes/site-check.php:280
+msgid "The server caches pages (WP_CACHE)."
+msgstr ""
+
+#: includes/site-check.php:280
+msgid "None: every visit builds the page anew, which is slow on shared hosting."
+msgstr ""
+
+#: includes/site-check.php:281
+msgid "Empty the cache after every change to the theme."
+msgstr ""
+
+#: includes/site-check.php:281
+msgid "Ask the host whether the server caches pages; if not, install a cache plugin."
+msgstr ""
+
+#: includes/site-check.php:284
+msgid "Safety"
+msgstr ""
+
+#: includes/site-check.php:289
+#: includes/site-check.php:293
+msgid "Debugging"
+msgstr ""
+
+#: includes/site-check.php:290
+msgid "Errors are shown on the pages."
+msgstr ""
+
+#: includes/site-check.php:290
+msgid "Errors are written to wp-content/debug.log, which anyone can download by its address."
+msgstr ""
+
+#: includes/site-check.php:291
+msgid "In wp-config.php: define( 'WP_DEBUG', false );"
+msgstr ""
+
+#: includes/site-check.php:293
+msgid "Off."
+msgstr ""
+
+#: includes/site-check.php:298
+msgid "Accounts"
+msgstr ""
+
+#: includes/site-check.php:299
+msgid "An account named “admin” exists — the first name every attack tries."
+msgstr ""
+
+#. translators: %d: number of administrator accounts.
+#: includes/site-check.php:301
+#, php-format
+msgid "%d administrator."
+msgid_plural "%d administrators."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/site-check.php:302
+msgid "Users: make your own administrator account, sign in with it, then delete “admin” and give its content to your account."
+msgstr ""
+
+#: includes/site-check.php:305
+msgid "Editing code from the admin"
+msgstr ""
+
+#: includes/site-check.php:306
+msgid "Switched off."
+msgstr ""
+
+#: includes/site-check.php:306
+msgid "Possible: anyone who gets into an administrator account can change the theme’s code."
+msgstr ""
+
+#: includes/site-check.php:307
+msgid "In wp-config.php: define( 'DISALLOW_FILE_EDIT', true );"
+msgstr ""
+
+#: includes/site-check.php:310
+msgid "Security plugin"
+msgstr ""
+
+#: includes/site-check.php:311
+msgid "None."
+msgstr ""
+
+#: includes/site-check.php:312
+msgid "The old site uses Wordfence; install it here too, or confirm with the host what protects the login."
+msgstr ""
+
+#: includes/site-check.php:323
+msgid "Right"
+msgstr ""
+
+#: includes/site-check.php:324
+msgid "To know"
+msgstr ""
+
+#: includes/site-check.php:325
+msgid "Look at it"
+msgstr ""
+
+#: includes/site-check.php:326
+msgid "Fix it"
+msgstr ""
+
+#: includes/site-check.php:334
+msgid "The go-live checklist, read from the site as it is now. Red must be fixed before go-live; amber wants a look."
+msgstr ""
+
+#. translators: 1: number fixed, 2: number to look at, 3: number right.
+#: includes/site-check.php:338
+#, php-format
+msgid "%1$d to fix, %2$d to look at, %3$d right."
+msgstr ""
+
+#: includes/site-check.php:343
+msgid "Test message handed to the mail system. Check that it arrived, and not in spam."
+msgstr ""
+
+#: includes/site-check.php:345
+msgid "The test message could not be sent."
+msgstr ""
+
+#: includes/site-check.php:350
+msgid "State"
+msgstr ""
+
+#: includes/site-check.php:351
+msgid "Check"
+msgstr ""
+
+#: includes/site-check.php:352
+msgid "What the site says"
+msgstr ""
+
+#: includes/site-check.php:353
+msgid "What to do"
+msgstr ""
+
+#: includes/site-check.php:374
+msgid "Test the order form’s mail"
+msgstr ""
+
+#: includes/site-check.php:378
+msgid "Sends one short message to the order form’s recipient, the way the form does."
+msgstr ""
+
+#: includes/site-check.php:379
+msgid "Send a test message"
+msgstr ""
+
+#: includes/site-check.php:382
+msgid "The report as text"
+msgstr ""
+
+#: includes/site-check.php:383
+msgid "To paste into an email to the host."
+msgstr ""
+
+#: includes/site-check.php:397
+msgid "Only an administrator can do this."
+msgstr ""
+
+#. translators: %s: the site's address.
+#: includes/site-check.php:410
+#, php-format
+msgid "Site check: a test message from %s"
+msgstr ""
+
+#: includes/site-check.php:411
+msgid "This is a test sent from Tools → Site check. If it arrived, the order form’s messages will arrive too."
 msgstr ""
 
 #: admin/editor.js:63
 msgid "Change photograph"
 msgstr ""
 
-#: admin/editor.js:63
-msgid "Choose photograph"
-msgstr ""
-
 #: admin/editor.js:79
 msgid "Remove"
-msgstr ""
-
-#: includes/editor.php
-msgid "Name on its page"
-msgstr ""
-
-#: includes/editor.php
-msgid "The bold name at the top of the project’s page, e.g. Color Chart. Left empty, the title above is used."
-msgstr ""
-
-#: includes/editor.php
-msgid "Under the name"
-msgstr ""
-
-#: includes/editor.php
-msgid "Who it was for or with, one line per line, written as it should read: FOR NANI MARQUINA."
-msgstr ""
-
-#: includes/editor.php
-msgid "When, on its page"
-msgstr ""
-
-#: includes/editor.php
-msgid "e.g. 2023 - ON GOING. Left empty, the same as in the list."
-msgstr ""
-
-#: includes/editor.php
-msgid "Statement, in capitals"
-msgstr ""
-
-#: includes/editor.php
-msgid "Credits, smaller"
-msgstr ""
-
-#: includes/editor.php
-msgid "Call to act, leaning"
 msgstr ""

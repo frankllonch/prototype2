@@ -35,6 +35,50 @@ html:not(.js) .about.is-open {
   transform: none;
 }
 
+/*
+ * And it shows what its address names. site.css sets every panel in the flow
+ * after the list, so the show asked for would be somewhere far below the top;
+ * served open, the list and the other panels stand aside and the page is that
+ * panel alone (About alone, at /about/). A show's or a project's Close link
+ * leads back to its index. Scripted, none of this applies: the panel rises
+ * over the list.
+ */
+html:not(.js) body.is-locked main,
+html:not(.js) body.is-locked .panel:not(.is-open) { display: none; }
+
+/*
+ * The photographs-only sheet, served open without scripting: its fixed
+ * screen — the masthead and one photograph at a time, turned by arrows a
+ * script drives — becomes a column, the masthead and then every photograph
+ * in the flow, as site.css already does for the reading sheet.
+ */
+html:not(.js) .panel:has(.plates) { overflow: visible; }
+html:not(.js) .plates { height: auto; padding: calc(var(--bar) * 0.6) var(--pad) var(--gap); }
+html:not(.js) .plates-head { position: static; width: auto; }
+html:not(.js) .plates-stage { position: static; translate: none; width: auto; margin-top: 1.4rem; }
+html:not(.js) .plates-frame { height: auto; }
+html:not(.js) .plates-figure { position: static; opacity: 1; margin-bottom: var(--gap); }
+html:not(.js) .plates-figure img { height: auto; }
+
+/*
+ * The line under the order form that links the privacy notice: under the
+ * message, in the form's own small soft type, so it reads as a footnote to
+ * the form rather than one of its fields.
+ */
+.inq-privacy {
+  grid-column: 2 / -1;
+  margin: 0;
+  font-size: var(--type);
+  line-height: var(--lead);
+  letter-spacing: -0.01em;
+  color: var(--ink-soft);
+}
+.inq-privacy a { color: inherit; text-decoration: underline; text-underline-offset: 0.15em; }
+.inq-privacy a:hover, .inq-privacy a:focus-visible { color: var(--ink); }
+@media (max-width: 899px) {
+  .inq-privacy { grid-column: 1; }
+}
+
 /* A plain page — the privacy notice, a not-found — reads as a column of text. */
 .page-plain {
   max-width: 44rem;

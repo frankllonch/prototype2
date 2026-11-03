@@ -53,7 +53,7 @@ function cvc_editor_fields(): array {
 			'commissioned' => [
 				'title'  => __( 'This project', 'claudiavalsells' ),
 				'fields' => [
-					[ 'key' => '_cv_year', 'label' => __( 'Year', 'claudiavalsells' ), 'type' => 'number', 'help' => __( 'The year it began; decides its place in the list.', 'claudiavalsells' ) ],
+					[ 'key' => '_cv_year', 'label' => __( 'Year', 'claudiavalsells' ), 'type' => 'number', 'help' => __( 'The year it began. A new project goes to the top of its group; the Order field in the side panel moves it.', 'claudiavalsells' ) ],
 					[ 'key' => '_cv_when', 'label' => __( 'When, as shown', 'claudiavalsells' ), 'type' => 'text', 'help' => __( 'e.g. 2016 – 2020, or 2023 – Currently. Left empty, the year is shown.', 'claudiavalsells' ) ],
 					[ 'key' => '_cv_client', 'label' => __( 'Client', 'claudiavalsells' ), 'type' => 'text' ],
 					[ 'key' => '_cv_heading', 'label' => __( 'Name on its page', 'claudiavalsells' ), 'type' => 'text', 'help' => __( 'The bold name at the top of the project’s page, e.g. Color Chart. Left empty, the title above is used.', 'claudiavalsells' ) ],
@@ -78,6 +78,8 @@ function cvc_editor_fields(): array {
 				'fields' => [
 					[ 'key' => '_cv_numeral', 'label' => __( 'Numeral', 'claudiavalsells' ), 'type' => 'text', 'help' => __( 'I, II, III…', 'claudiavalsells' ) ],
 					[ 'key' => '_cv_intro', 'label' => __( 'Introduction on the opening page', 'claudiavalsells' ), 'type' => 'textarea', 'help' => __( 'Only if it should differ from the text above. Left empty, the opening page shows the text above.', 'claudiavalsells' ) ],
+					[ 'key' => '_cv_opening_cut', 'label' => __( 'Opening page: cut after', 'claudiavalsells' ), 'type' => 'text', 'help' => __( 'The words the short version ends on, copied from the introduction. The rest shows behind “Read more”. Left empty, the whole introduction shows.', 'claudiavalsells' ) ],
+					[ 'key' => '_cv_opening_align', 'label' => __( 'Opening page: setting', 'claudiavalsells' ), 'type' => 'select', 'options' => [ [ 'value' => 'left', 'label' => __( 'Ragged right', 'claudiavalsells' ) ], [ 'value' => 'justify', 'label' => __( 'Justified', 'claudiavalsells' ) ] ] ],
 				],
 			],
 			'wc_answer' => [
@@ -87,7 +89,7 @@ function cvc_editor_fields(): array {
 					[ 'key' => '_cv_alias', 'label' => __( 'Known as', 'claudiavalsells' ), 'type' => 'text', 'help' => __( 'The name they publish under, if different.', 'claudiavalsells' ) ],
 					[ 'key' => '_cv_code', 'label' => __( 'Colour reference', 'claudiavalsells' ), 'type' => 'text', 'help' => __( 'e.g. AC011', 'claudiavalsells' ) ],
 					[ 'key' => '_cv_colour_name', 'label' => __( 'Colour name', 'claudiavalsells' ), 'type' => 'text', 'help' => __( 'e.g. Powder red', 'claudiavalsells' ) ],
-					[ 'key' => '_cv_swatch', 'label' => __( 'Colour, as a hex value', 'claudiavalsells' ), 'type' => 'text', 'help' => __( 'e.g. #d98f93. Left empty, one is read off the colour’s name.', 'claudiavalsells' ) ],
+					[ 'key' => '_cv_swatch', 'label' => __( 'Colour, as a hex value', 'claudiavalsells' ), 'type' => 'text', 'help' => __( 'e.g. #d98f93. Left empty, the colour comes from the colour reference, or else from the colour’s name.', 'claudiavalsells' ) ],
 					[ 'key' => '_cv_in_images', 'label' => __( 'Answered in images', 'claudiavalsells' ), 'type' => 'toggle' ],
 				],
 			],
@@ -97,7 +99,7 @@ function cvc_editor_fields(): array {
 				'title'  => __( 'The card', 'claudiavalsells' ),
 				'fields' => [
 					[ 'key' => '_cv_city', 'label' => __( 'City', 'claudiavalsells' ), 'type' => 'text' ],
-					[ 'key' => '_cv_born', 'label' => __( 'Year', 'claudiavalsells' ), 'type' => 'text' ],
+					[ 'key' => '_cv_born', 'label' => __( 'Year', 'claudiavalsells' ), 'type' => 'text', 'help' => __( 'The year under her name on the card.', 'claudiavalsells' ) ],
 					[ 'key' => '_cv_phone', 'label' => __( 'Phone', 'claudiavalsells' ), 'type' => 'text' ],
 					[ 'key' => '_cv_emails', 'label' => __( 'Emails', 'claudiavalsells' ), 'type' => 'textarea', 'help' => __( 'One per line.', 'claudiavalsells' ) ],
 					[ 'key' => '_cv_collections', 'label' => __( 'Private collections', 'claudiavalsells' ), 'type' => 'textarea', 'help' => __( 'One per line: Name | Place', 'claudiavalsells' ) ],

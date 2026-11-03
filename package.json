@@ -29,6 +29,9 @@
     "wp:stop": "cd wordpress && npx wp-env stop",
     "wp:import": "cd wordpress && npx wp-env run cli wp eval-file wp-content/plugins/claudiavalsells-content/import.php",
     "wp:diff": "node --experimental-strip-types scripts/wp-diff.ts",
+    "wp:check-links": "node --experimental-strip-types scripts/wp-check-links.ts",
+    "wp:package": "node --experimental-strip-types scripts/wp-package.ts",
+    "wp:rehearsal": "cd wordpress/rehearsal && npx wp-env start",
     "add-shows": "node --experimental-strip-types scripts/add-shows.ts"
   },
   "devDependencies": {

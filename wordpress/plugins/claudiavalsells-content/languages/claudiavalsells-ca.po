@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: Claudia Valsells — Content 0.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/claudiavalsells-"
 "content\n"
-"POT-Creation-Date: 2026-10-30T21:54:00+00:00\n"
-"PO-Revision-Date: 2026-10-30 21:00+0100\n"
+"POT-Creation-Date: 2026-11-02T18:26:57+00:00\n"
+"PO-Revision-Date: 2026-11-02 20:00+0100\n"
 "Last-Translator: Frank Llonch\n"
 "Language-Team: Catalan\n"
 "Language: ca\n"
@@ -37,64 +37,64 @@ msgstr ""
 msgid "Frank Llonch"
 msgstr "Frank Llonch"
 
-#: includes/editor.php:31
+#: includes/editor.php:33
 msgid "— not in the record"
 msgstr "— no consta a l’historial"
 
-#: includes/editor.php:32
+#: includes/editor.php:34
 msgid "Solo exhibition"
 msgstr "Exposició individual"
 
-#: includes/editor.php:33
+#: includes/editor.php:35
 msgid "Group exhibition"
 msgstr "Exposició col·lectiva"
 
-#: includes/editor.php:34
+#: includes/editor.php:36
 msgid "Art fair"
 msgstr "Fira d’art"
 
-#: includes/editor.php:40
+#: includes/editor.php:42
 msgid "This work"
 msgstr "Aquesta obra"
 
-#: includes/editor.php:42 includes/editor.php:54 includes/editor.php:63
-#: includes/editor.php:95 includes/post-types.php:248
+#: includes/editor.php:44 includes/editor.php:56 includes/editor.php:68
+#: includes/editor.php:102 includes/post-types.php:302
 msgid "Year"
 msgstr "Any"
 
-#: includes/editor.php:43
+#: includes/editor.php:45
 msgid "Dimensions"
 msgstr "Mides"
 
-#: includes/editor.php:43
+#: includes/editor.php:45
 msgid "As it should read, e.g. 162 × 130 cm"
 msgstr "Tal com ha d’aparèixer, p. ex. 162 × 130 cm"
 
-#: includes/editor.php:44
+#: includes/editor.php:46
 msgid "Materials"
 msgstr "Materials"
 
-#: includes/editor.php:44
+#: includes/editor.php:46
 msgid "e.g. Acrylic on canvas"
 msgstr "p. ex. Acrylic on canvas"
 
-#: includes/editor.php:45
+#: includes/editor.php:47
 msgid "Inventory reference"
 msgstr "Referència d’inventari"
 
-#: includes/editor.php:45
+#: includes/editor.php:47
 msgid "Your own, e.g. L585. Not shown on the site."
 msgstr "La teva, p. ex. L585. No es mostra al lloc web."
 
-#: includes/editor.php:46
+#: includes/editor.php:48
 msgid "Available"
 msgstr "Disponible"
 
-#: includes/editor.php:47
+#: includes/editor.php:49
 msgid "The picture shows the painting alone"
 msgstr "La imatge mostra només el quadre"
 
-#: includes/editor.php:47
+#: includes/editor.php:49
 msgid ""
 "On: the grid can draw it to scale. Off for a photograph of a room with the "
 "painting in it."
@@ -102,11 +102,11 @@ msgstr ""
 "Activat: la graella el pot dibuixar a escala. Desactivat si és una "
 "fotografia d’una sala amb el quadre a dins."
 
-#: includes/editor.php:48
+#: includes/editor.php:50
 msgid "Photograph of the work in place"
 msgstr "Fotografia de l’obra instal·lada"
 
-#: includes/editor.php:48
+#: includes/editor.php:50
 msgid ""
 "The painting on the wall, if the main picture is a cut-out. Shown beside it "
 "on the work’s page."
@@ -114,92 +114,128 @@ msgstr ""
 "El quadre a la paret, si la imatge principal és el quadre retallat. Es "
 "mostra al seu costat a la pàgina de l’obra."
 
-#: includes/editor.php:52
+#: includes/editor.php:54
 msgid "This project"
 msgstr "Aquest projecte"
 
-#: includes/editor.php:54
-msgid "The year it began; decides its place in the list."
-msgstr "L’any en què va començar; en decideix el lloc a la llista."
+#: includes/editor.php:56
+msgid ""
+"The year it began. A new project goes to the top of its group; the Order "
+"field in the side panel moves it."
+msgstr ""
+"L’any en què va començar. Un projecte nou va a dalt de tot del seu grup; el "
+"camp Ordre del panell lateral el mou de lloc."
 
-#: includes/editor.php:55
+#: includes/editor.php:57
 msgid "When, as shown"
 msgstr "Quan, tal com ha d’aparèixer"
 
-#: includes/editor.php:55
+#: includes/editor.php:57
 msgid "e.g. 2016 – 2020, or 2023 – Currently. Left empty, the year is shown."
 msgstr ""
 "p. ex. 2016 – 2020, o 2023 – Currently. Si es deixa buit, es mostra l’any."
 
-#: includes/editor.php:56
+#: includes/editor.php:58
 msgid "Client"
 msgstr "Client"
 
+#: includes/editor.php:59
+msgid "Name on its page"
+msgstr "Nom a la seva pàgina"
+
+#: includes/editor.php:59
+msgid ""
+"The bold name at the top of the project’s page, e.g. Color Chart. Left "
+"empty, the title above is used."
+msgstr ""
+"El nom en negreta a dalt de la pàgina del projecte, p. ex. Color Chart. Si "
+"es deixa buit, es fa servir el títol de dalt."
+
 #: includes/editor.php:60
+msgid "Under the name"
+msgstr "Sota el nom"
+
+#: includes/editor.php:60
+msgid ""
+"Who it was for or with, one line per line, written as it should read: FOR "
+"NANI MARQUINA."
+msgstr ""
+"Per a qui o amb qui va ser, una línia per línia, escrit tal com s’ha de "
+"llegir: FOR NANI MARQUINA."
+
+#: includes/editor.php:61
+msgid "When, on its page"
+msgstr "Quan, a la seva pàgina"
+
+#: includes/editor.php:61
+msgid "e.g. 2023 - ON GOING. Left empty, the same as in the list."
+msgstr "p. ex. 2023 - ON GOING. Si es deixa buit, el mateix que a la llista."
+
+#: includes/editor.php:65
 msgid "This exhibition"
 msgstr "Aquesta exposició"
 
-#: includes/editor.php:62
+#: includes/editor.php:67
 msgid "Where"
 msgstr "On"
 
-#: includes/editor.php:62
+#: includes/editor.php:67
 msgid "e.g. Alzueta Gallery, Barcelona"
 msgstr "p. ex. Alzueta Gallery, Barcelona"
 
-#: includes/editor.php:64
+#: includes/editor.php:69
 msgid "From"
 msgstr "Des de"
 
-#: includes/editor.php:64
+#: includes/editor.php:69
 msgid "A month, or a month and a day: May 27"
 msgstr "Un mes, o un mes i un dia: May 27"
 
-#: includes/editor.php:65
+#: includes/editor.php:70
 msgid "To"
 msgstr "Fins a"
 
-#: includes/editor.php:65
+#: includes/editor.php:70
 msgid "Only when it ran across months."
 msgstr "Només si va acabar en un altre mes."
 
-#: includes/editor.php:66
+#: includes/editor.php:71
 msgid "Ended in year"
 msgstr "Any en què va acabar"
 
-#: includes/editor.php:66
+#: includes/editor.php:71
 msgid "Only when it ran into another year."
 msgstr "Només si va acabar en un altre any."
 
-#: includes/editor.php:67
+#: includes/editor.php:72
 msgid "In the record as"
 msgstr "A l’historial com a"
 
-#: includes/editor.php:67
+#: includes/editor.php:72
 msgid "Which column of About lists it."
 msgstr "A quina columna d’About apareix."
 
-#: includes/editor.php:68
+#: includes/editor.php:73
 msgid "Note"
 msgstr "Nota"
 
-#: includes/editor.php:72
+#: includes/editor.php:77
 msgid "This edition"
 msgstr "Aquesta edició"
 
-#: includes/editor.php:74
+#: includes/editor.php:79
 msgid "Numeral"
 msgstr "Número romà"
 
-#: includes/editor.php:74
+#: includes/editor.php:79
 msgid "I, II, III…"
 msgstr "I, II, III…"
 
-#: includes/editor.php:75
+#: includes/editor.php:80
 msgid "Introduction on the opening page"
 msgstr "Introducció a la pàgina d’inici"
 
-#: includes/editor.php:75
+#: includes/editor.php:80
 msgid ""
 "Only if it should differ from the text above. Left empty, the opening page "
 "shows the text above."
@@ -207,172 +243,1090 @@ msgstr ""
 "Només si ha de ser diferent del text de dalt. Si es deixa buit, la pàgina "
 "d’inici mostra el text de dalt."
 
-#: includes/editor.php:79
+#: includes/editor.php:81
+msgid "Opening page: cut after"
+msgstr "Pàgina d’inici: talla després de"
+
+#: includes/editor.php:81
+msgid ""
+"The words the short version ends on, copied from the introduction. The rest "
+"shows behind “Read more”. Left empty, the whole introduction shows."
+msgstr ""
+"Les paraules amb què acaba la versió curta, copiades de la introducció. La "
+"resta apareix darrere de «Read more». Si es deixa buit, es mostra la "
+"introducció sencera."
+
+#: includes/editor.php:82
+msgid "Opening page: setting"
+msgstr "Pàgina d’inici: composició"
+
+#: includes/editor.php:82
+msgid "Ragged right"
+msgstr "Alineat a l’esquerra"
+
+#: includes/editor.php:82
+msgid "Justified"
+msgstr "Justificat"
+
+#: includes/editor.php:86
 msgid "This person"
 msgstr "Aquesta persona"
 
-#: includes/editor.php:81
+#: includes/editor.php:88
 msgid "What they do"
 msgstr "A què es dedica"
 
-#: includes/editor.php:82
+#: includes/editor.php:89
 msgid "Known as"
 msgstr "Nom amb què signa"
 
-#: includes/editor.php:82
+#: includes/editor.php:89
 msgid "The name they publish under, if different."
 msgstr "El nom amb què publica, si és un altre."
 
-#: includes/editor.php:83
+#: includes/editor.php:90
 msgid "Colour reference"
 msgstr "Referència del color"
 
-#: includes/editor.php:83
+#: includes/editor.php:90
 msgid "e.g. AC011"
 msgstr "p. ex. AC011"
 
-#: includes/editor.php:84
+#: includes/editor.php:91
 msgid "Colour name"
 msgstr "Nom del color"
 
-#: includes/editor.php:84
+#: includes/editor.php:91
 msgid "e.g. Powder red"
 msgstr "p. ex. Powder red"
 
-#: includes/editor.php:85
+#: includes/editor.php:92
 msgid "Colour, as a hex value"
 msgstr "Color, com a valor hexadecimal"
 
-#: includes/editor.php:85
-msgid "e.g. #d98f93. Left empty, one is read off the colour’s name."
-msgstr "p. ex. #d98f93. Si es deixa buit, es dedueix del nom del color."
+#: includes/editor.php:92
+msgid ""
+"e.g. #d98f93. Left empty, the colour comes from the colour reference, or "
+"else from the colour’s name."
+msgstr ""
+"p. ex. #d98f93. Si es deixa buit, el color es dedueix de la referència del "
+"color o, si no n’hi ha, del nom del color."
 
-#: includes/editor.php:86
+#: includes/editor.php:93
 msgid "Answered in images"
 msgstr "Ha respost amb imatges"
 
-#: includes/editor.php:92
+#: includes/editor.php:99
 msgid "The card"
 msgstr "La targeta"
 
-#: includes/editor.php:94
+#: includes/editor.php:101
 msgid "City"
 msgstr "Ciutat"
 
-#: includes/editor.php:96
+#: includes/editor.php:102
+msgid "The year under her name on the card."
+msgstr "L’any que apareix sota el seu nom a la targeta."
+
+#: includes/editor.php:103
 msgid "Phone"
 msgstr "Telèfon"
 
-#: includes/editor.php:97
+#: includes/editor.php:104
 msgid "Emails"
 msgstr "Correus electrònics"
 
-#: includes/editor.php:97
+#: includes/editor.php:104
 msgid "One per line."
 msgstr "Un per línia."
 
-#: includes/editor.php:98
+#: includes/editor.php:105
 msgid "Private collections"
 msgstr "Col·leccions privades"
 
-#: includes/editor.php:98
+#: includes/editor.php:105
 msgid "One per line: Name | Place"
 msgstr "Una per línia: Nom | Lloc"
 
-#: includes/editor.php:99
+#: includes/editor.php:106
 msgid "Closing line"
 msgstr "Línia final"
 
-#: includes/editor.php:103
+#: includes/editor.php:110
 msgid "The chart"
 msgstr "La carta"
 
-#: includes/editor.php:105
+#: includes/editor.php:112
 msgid "Price"
 msgstr "Preu"
 
-#: includes/editor.php:105
+#: includes/editor.php:112
 msgid "As it should read, e.g. 60,50€"
 msgstr "Tal com ha d’aparèixer, p. ex. 60,50€"
 
-#: includes/editor.php:106
+#: includes/editor.php:113
 msgid "The bands"
 msgstr "Les franges"
 
-#: includes/editor.php:106
+#: includes/editor.php:113
 msgid "One colour per line, as a hex value, top to bottom."
 msgstr "Un color per línia, com a valor hexadecimal, de dalt a baix."
 
-#: includes/post-types.php:22
+#: includes/editor.php:130
+msgid "Statement, in capitals"
+msgstr "Declaració, en majúscules"
+
+#: includes/editor.php:131
+msgid "Credits, smaller"
+msgstr "Crèdits, més petits"
+
+#: includes/editor.php:132
+msgid "Call to act, leaning"
+msgstr "Crida a l’acció, en cursiva"
+
+#: includes/environment.php:55
+msgid "Staging — not the live site"
+msgstr "Còpia de proves (staging) — no és el lloc públic"
+
+#: includes/environment.php:56
+msgid "Development — not the live site"
+msgstr "Desenvolupament — no és el lloc públic"
+
+#: includes/environment.php:57
+msgid "Local copy — not the live site"
+msgstr "Còpia local — no és el lloc públic"
+
+#: includes/guide.php:30 includes/guide.php:43
+msgid "How to…"
+msgstr "Com es fa…"
+
+#: includes/guide.php:35 includes/guide.php:86
+msgid "Guide"
+msgstr "Guia"
+
+#: includes/guide.php:44
+msgid "Print, or save as PDF"
+msgstr "Imprimeix o desa com a PDF"
+
+#. translators: 1: the Dashboard menu, 2: the guide's own page in it, a link to it.
+#: includes/guide.php:83
+#, php-format
+msgid ""
+"The whole guide is also under %1$s → %2$s, to read on one page or to print."
+msgstr ""
+"La guia sencera també és a %1$s → %2$s, per llegir-la en una sola pàgina o "
+"imprimir-la."
+
+#: includes/guide.php:96
+msgid "The things you will do most often, a few steps each."
+msgstr "Les coses que faràs més sovint, cadascuna en uns quants passos."
+
+#: includes/guide.php:97
+msgid "Words in bold are what the screen says: a menu, a button or a field."
+msgstr ""
+"Les paraules en negreta són el que diu la pantalla: un menú, un botó o un "
+"camp."
+
+#: includes/guide.php:100
+msgid "In the editor, the fields of an entry are in the panel on the right."
+msgstr "A l’editor, els camps de cada entrada són al panell de la dreta."
+
+#. translators: “Settings” is the editor's own button that opens its side panel; write it as the editor shows it in this language.
+#: includes/guide.php:103
+msgid ""
+"If it is closed, press <strong>Settings</strong> at the top right to open it."
+msgstr ""
+"Si està tancat, prem <strong>Configuració</strong> a dalt a la dreta per "
+"obrir-lo."
+
+#: includes/guide.php:121
+msgid "Add a painting"
+msgstr "Afegeix un quadre"
+
+#: includes/guide.php:124
+msgid ""
+"Have the picture ready first: the painting alone, cut out of its photograph "
+"and saved as a PNG with a transparent background, so that it sits on the "
+"page with nothing around it."
+msgstr ""
+"Abans de res, tingues a punt la imatge: només el quadre, retallat de la "
+"fotografia i desat com a PNG amb el fons transparent, perquè quedi a la "
+"pàgina sense res al voltant."
+
+#: includes/guide.php:125
+msgid "A photograph with the wall around it looks wrong in the grid."
+msgstr "Una fotografia amb la paret al voltant queda malament a la graella."
+
+#. translators: “Add title” is what the editor shows in an empty title; write it as the editor shows it in this language.
+#: includes/guide.php:132
+msgid "Type the painting’s title where it says <strong>Add title</strong>."
+msgstr "Escriu el títol del quadre on diu <strong>Afegiu un títol</strong>."
+
+#. translators: 1: the tab of the editor's side panel that holds the entry's own fields, 2: a button on it.
+#: includes/guide.php:137
+#, php-format
+msgid "In the panel on the right, on the %1$s tab, press %2$s."
+msgstr "Al panell de la dreta, a la pestanya %1$s, prem %2$s."
+
+#. translators: %s: the same button, which the window that opens repeats.
+#: includes/guide.php:143
+#, php-format
+msgid ""
+"Drag the PNG into the window that opens, then press %s again at its bottom "
+"right."
+msgstr ""
+"Arrossega el PNG a la finestra que s’obre i després torna a prémer %s, a "
+"baix a la dreta de la finestra."
+
+#. translators: 1: a panel of fields in the editor, 2–5: four of its fields.
+#: includes/guide.php:150
+#, php-format
+msgid "Further down, under %1$s, fill in %2$s, %3$s, %4$s and %5$s."
+msgstr "Més avall, a l’apartat %1$s, omple els camps %2$s, %3$s, %4$s i %5$s."
+
+#: includes/guide.php:157
+msgid ""
+"Write the dimensions with × or x between the two sides, as in 100 × 80 cm: "
+"the grid reads them to draw the painting to scale."
+msgstr ""
+"Escriu les mides amb × o x entre els dos costats, per exemple 100 × 80 cm: "
+"la graella les llegeix per dibuixar el quadre a escala."
+
+#. translators: %s: a switch in the editor's side panel.
+#: includes/guide.php:161
+#, php-format
+msgid "Switch %s on if the painting is for sale."
+msgstr "Activa l’opció %s si el quadre està a la venda."
+
+#. translators: %s: a switch in the editor's side panel.
+#: includes/guide.php:167
+#, php-format
+msgid "Leave %s switched on: it lets the grid draw the painting to scale."
+msgstr ""
+"Deixa activada l’opció %s: així la graella pot dibuixar el quadre a escala."
+
+#: includes/guide.php:170
+msgid ""
+"Switch it off only if the picture is a photograph of a room with the "
+"painting in it."
+msgstr ""
+"Desactiva-la només si la imatge és una fotografia d’una sala amb el quadre a "
+"dins."
+
+#. translators: 1: a field in the editor's side panel, 2: its button. “Select” is the button of WordPress's media window; write it as WordPress shows it in this language.
+#: includes/guide.php:175
+#, php-format
+msgid ""
+"Under %1$s, press %2$s, choose or upload the photograph of the painting on "
+"the wall, and press <strong>Select</strong>."
+msgstr ""
+"Al camp %1$s, prem %2$s, tria o puja la fotografia del quadre a la paret i "
+"prem <strong>Selecciona</strong>."
+
+#: includes/guide.php:178 admin/editor.js:63
+msgid "Choose photograph"
+msgstr "Tria la fotografia"
+
+#: includes/guide.php:180
+msgid "It is shown with the cut-out on the painting’s page."
+msgstr "Es mostra al costat del quadre retallat, a la pàgina de l’obra."
+
+#. translators: %s: the button the editor offers once the entry is published.
+#: includes/guide.php:186
+#, php-format
+msgid "To see it on the site, press %s in the panel that follows."
+msgstr "Per veure’l al lloc web, prem %s al panell que apareix tot seguit."
+
+#. translators: %s: the address of the site's Artwork page.
+#: includes/guide.php:191
+#, php-format
+msgid ""
+"It is also on <a href=\"%s\">the artwork page</a>, among the works of its "
+"year."
+msgstr ""
+"També és a <a href=\"%s\">la pàgina Artwork</a>, entre les obres del seu any."
+
+#: includes/guide.php:200
+msgid "Mark a painting available or sold"
+msgstr "Marca un quadre com a disponible o venut"
+
+#. translators: %s: the search button above the list of works.
+#: includes/guide.php:206
+#, php-format
+msgid ""
+"Find the painting: type its title in the box at the top right and press %s."
+msgstr ""
+"Busca el quadre: escriu-ne el títol al camp de dalt a la dreta i prem %s."
+
+#: includes/guide.php:209
+msgid "Click its title to open it."
+msgstr "Fes clic al títol per obrir-lo."
+
+#. translators: 1: a panel of fields in the editor, 2: a switch in it.
+#: includes/guide.php:213
+#, php-format
+msgid ""
+"In the panel on the right, under %1$s, switch %2$s on while the painting is "
+"for sale and off once it has sold."
+msgstr ""
+"Al panell de la dreta, a l’apartat %1$s, activa l’opció %2$s mentre el "
+"quadre estigui a la venda i desactiva-la quan s’hagi venut."
+
+#: includes/guide.php:220
+msgid "A sold painting stays on the site with all the others."
+msgstr "Un quadre venut es queda al lloc web amb tots els altres."
+
+#: includes/guide.php:227
+msgid "Add an exhibition"
+msgstr "Afegeix una exposició"
+
+#. translators: “Add title” is what the editor shows in an empty title; write it as the editor shows it in this language.
+#: includes/guide.php:232
+msgid "Type the exhibition’s title where it says <strong>Add title</strong>."
+msgstr ""
+"Escriu el títol de l’exposició on diu <strong>Afegiu un títol</strong>."
+
+#. translators: 1: a panel of fields in the editor, 2–4: three of its fields.
+#: includes/guide.php:237
+#, php-format
+msgid "In the panel on the right, under %1$s, fill in %2$s, %3$s and %4$s."
+msgstr ""
+"Al panell de la dreta, a l’apartat %1$s, omple els camps %2$s, %3$s i %4$s."
+
+#. translators: 1, 2: fields in the editor's side panel.
+#: includes/guide.php:245
+#, php-format
+msgid ""
+"Fill in %1$s only if it ran across months, and %2$s only if it ran into "
+"another year."
+msgstr ""
+"Omple el camp %1$s només si va acabar en un altre mes, i el camp %2$s només "
+"si va acabar en un altre any."
+
+#. translators: 1: a field in the editor's side panel, 2–4: its choices.
+#: includes/guide.php:253
+#, php-format
+msgid "%1$s decides which column of About lists the show: %2$s, %3$s or %4$s."
+msgstr ""
+"El camp %1$s decideix en quina columna d’About apareix l’exposició: %2$s, "
+"%3$s o %4$s."
+
+#. translators: %s: the choice that keeps a show off the About page.
+#: includes/guide.php:261
+#, php-format
+msgid "Choose %s to leave it out of About."
+msgstr "Tria %s perquè no aparegui a About."
+
+#: includes/guide.php:265
+msgid ""
+"If there is a text about the show, write it in the large space below the "
+"title."
+msgstr ""
+"Si hi ha un text sobre l’exposició, escriu-lo a l’espai gran de sota el "
+"títol."
+
+#: includes/guide.php:267
+msgid "A new exhibition goes to the top of the list."
+msgstr "Una exposició nova va a dalt de tot de la llista."
+
+#: includes/guide.php:271
+msgid ""
+"A show with a text opens on the reading sheet, the text beside its "
+"photographs."
+msgstr ""
+"Una exposició amb text s’obre en el full de lectura, amb el text al costat "
+"de les fotografies."
+
+#: includes/guide.php:272
+msgid ""
+"A show with photographs and no text opens on the photographs sheet, the "
+"photographs alone."
+msgstr ""
+"Una exposició amb fotografies i sense text s’obre en el full de fotografies, "
+"només amb les fotografies."
+
+#: includes/guide.php:273
+msgid "A show with neither stays a line in the list, with nothing to open."
+msgstr ""
+"Una exposició sense text ni fotografies es queda en una línia de la llista, "
+"sense res per obrir."
+
+#: includes/guide.php:282
+msgid "Add a commissioned project"
+msgstr "Afegeix un projecte per encàrrec"
+
+#. translators: “Add title” is what the editor shows in an empty title; write it as the editor shows it in this language.
+#: includes/guide.php:287
+msgid ""
+"Type the project’s title, as its line in the list should read, where it says "
+"<strong>Add title</strong>."
+msgstr ""
+"Escriu el títol del projecte, tal com ha d’aparèixer a la seva línia de la "
+"llista, on diu <strong>Afegiu un títol</strong>."
+
+#. translators: 1: a panel in the editor's side panel, 2: the groups it offers, as a list.
+#: includes/guide.php:291
+#, php-format
+msgid ""
+"In the panel on the right, under %1$s, tick the group it belongs to: %2$s."
+msgstr ""
+"Al panell de la dreta, a l’apartat %1$s, marca el grup al qual pertany: %2$s."
+
+#. translators: 1: a panel of fields in the editor, 2, 3: two of its fields.
+#: includes/guide.php:297
+#, php-format
+msgid ""
+"Under %1$s, fill in %2$s, the year it began, and %3$s, the dates as the list "
+"shows them."
+msgstr ""
+"A l’apartat %1$s, omple el camp %2$s, l’any en què va començar, i el camp "
+"%3$s, les dates tal com les mostra la llista."
+
+#. translators: 1–3: fields in the editor's side panel.
+#: includes/guide.php:305
+#, php-format
+msgid ""
+"Its own page opens with a heading that can differ from the list: %1$s, %2$s "
+"and %3$s."
+msgstr ""
+"La seva pàgina s’obre amb una capçalera que pot ser diferent del que mostra "
+"la llista: els camps %1$s, %2$s i %3$s."
+
+#: includes/guide.php:310
+msgid ""
+"Write each as it should read there, the lines under the name one per line: "
+"FOR NANI MARQUINA."
+msgstr ""
+"Escriu cada camp tal com s’ha de llegir allà, i les línies de sota el nom, "
+"una per línia: FOR NANI MARQUINA."
+
+#: includes/guide.php:311
+msgid "Left empty, the page uses the title and the dates of the list."
+msgstr ""
+"Si es deixen buits, la pàgina fa servir el títol i les dates de la llista."
+
+#: includes/guide.php:315
+msgid "Write the text below the title."
+msgstr "Escriu el text sota el títol."
+
+#. translators: 1–3: the names of the paragraph styles. “Block” and “Styles” are the editor's own words for its side panel; write them as the editor shows them in this language.
+#: includes/guide.php:318
+#, php-format
+msgid ""
+"To set a paragraph as the designer does, click it, then in the panel on the "
+"right, on the <strong>Block</strong> tab, under <strong>Styles</strong>, "
+"choose %1$s, %2$s or %3$s."
+msgstr ""
+"Per donar a un paràgraf l’estil del disseny, fes-hi clic i, al panell de la "
+"dreta, a la pestanya <strong>Bloc</strong>, a <strong>Estils</strong>, tria "
+"%1$s, %2$s o %3$s."
+
+#: includes/guide.php:323
+msgid ""
+"A project’s text usually opens with a statement in capitals and ends with "
+"its credits, set smaller."
+msgstr ""
+"El text d’un projecte sol començar amb una declaració en majúscules i acabar "
+"amb els crèdits, en una lletra més petita."
+
+#: includes/guide.php:325
+msgid "A new project goes to the top of its group."
+msgstr "Un projecte nou va a dalt de tot del seu grup."
+
+#: includes/guide.php:331
+msgid "Add a person to What’s Color?"
+msgstr "Afegeix una persona a What’s Color?"
+
+#. translators: 1: a menu in the column on the left of the admin, 2: one of its items, a link to it, 3: the button above the list it opens, a link to it.
+#: includes/guide.php:335
+#, php-format
+msgid "In the menu on the left, go to %1$s → %2$s and press %3$s at the top."
+msgstr "Al menú de l’esquerra, ves a %1$s → %2$s i prem %3$s a dalt."
+
+#. translators: “Add title” is what the editor shows in an empty title; write it as the editor shows it in this language.
+#: includes/guide.php:342
+msgid "Type their name where it says <strong>Add title</strong>."
+msgstr "Escriu el nom de la persona on diu <strong>Afegiu un títol</strong>."
+
+#. translators: 1: a panel in the editor's side panel, 2: the editions it offers, as a list.
+#: includes/guide.php:346
+#, php-format
+msgid ""
+"In the panel on the right, under %1$s, tick the edition they answered in: "
+"%2$s."
+msgstr ""
+"Al panell de la dreta, a l’apartat %1$s, marca l’edició en què va respondre: "
+"%2$s."
+
+#. translators: 1: a panel of fields in the editor, 2, 3: two of its fields.
+#: includes/guide.php:352
+#, php-format
+msgid "Under %1$s, fill in %2$s, and %3$s if they publish under another name."
+msgstr ""
+"A l’apartat %1$s, omple el camp %2$s i, si publica amb un altre nom, el camp "
+"%3$s."
+
+#. translators: 1, 2: fields in the editor's side panel.
+#: includes/guide.php:360
+#, php-format
+msgid ""
+"Fill in %1$s and %2$s with the colour of their answer, for example AC011 and "
+"Powder red."
+msgstr ""
+"Omple els camps %1$s i %2$s amb el color de la seva resposta, per exemple "
+"AC011 i Powder red."
+
+#. translators: %s: a field in the editor's side panel.
+#: includes/guide.php:366
+#, php-format
+msgid ""
+"%s can stay empty: the site then finds the colour from the reference or the "
+"name."
+msgstr ""
+"El camp %s es pot deixar buit: llavors el lloc web dedueix el color de la "
+"referència o del nom."
+
+#: includes/guide.php:371
+msgid "Write their answer, as they gave it, in the large space below the name."
+msgstr ""
+"Escriu la seva resposta, tal com la va donar, a l’espai gran de sota el nom."
+
+#. translators: %s: a switch in the editor's side panel.
+#: includes/guide.php:374
+#, php-format
+msgid "If they answered in pictures rather than words, switch on %s."
+msgstr "Si va respondre amb imatges en lloc de paraules, activa l’opció %s."
+
+#: includes/guide.php:382
+msgid ""
+"Once published with an answer, their name joins the edition’s names on the "
+"home page and on the edition’s own page."
+msgstr ""
+"Quan es publica amb una resposta, el seu nom s’afegeix als noms de l’edició "
+"a la pàgina d’inici i a la pàgina de l’edició."
+
+#: includes/guide.php:383
+msgid ""
+"On the edition’s page they come after the people the designer has placed, "
+"until the page is redrawn."
+msgstr ""
+"A la pàgina de l’edició surt després de les persones col·locades en el "
+"disseny, fins que es torni a dibuixar la pàgina."
+
+#: includes/guide.php:384
+msgid ""
+"The people already on the page are placed by their names, so keep their "
+"names as they are."
+msgstr ""
+"Les persones que ja hi ha a la pàgina s’hi col·loquen pel nom, així que no "
+"els canviïs el nom."
+
+#: includes/guide.php:396
+msgid "Edit About"
+msgstr "Edita la pàgina About"
+
+#. translators: 1: a panel of fields in the editor, 2–5: its fields.
+#: includes/guide.php:401
+#, php-format
+msgid ""
+"The card is in the panel on the right, under %1$s: %2$s, %3$s, %4$s and "
+"%5$s, one email per line."
+msgstr ""
+"La targeta és al panell de la dreta, a l’apartat %1$s: els camps %2$s, %3$s, "
+"%4$s i %5$s, amb un correu per línia."
+
+#. translators: %s: a field in the editor's side panel.
+#: includes/guide.php:410
+#, php-format
+msgid ""
+"The collections are there too, under %s: one per line, the name and the "
+"place with a vertical bar between them, as in Fundació Vilacases | Barcelona."
+msgstr ""
+"Les col·leccions també hi són, al camp %s: una per línia, el nom i el lloc "
+"separats per una barra vertical, per exemple Fundació Vilacases | Barcelona."
+
+#: includes/guide.php:414
+msgid ""
+"The biography is the text of the page: click into a paragraph to change it."
+msgstr ""
+"La biografia és el text de la pàgina: fes clic en un paràgraf per canviar-lo."
+
+#. translators: “Replace” is the editor's own button above a selected image; write it as the editor shows it in this language.
+#: includes/guide.php:417
+msgid ""
+"The studio photographs are images between the paragraphs: click one and "
+"press <strong>Replace</strong> to change it."
+msgstr ""
+"Les fotografies de l’estudi són imatges entre els paràgrafs: fes clic en una "
+"i prem <strong>Reemplaça</strong> per canviar-la."
+
+#. translators: 1: the Exhibitions menu, 2: a field of each exhibition.
+#: includes/guide.php:422
+#, php-format
+msgid ""
+"The exhibitions on About are not typed here: they come from %1$s, each in "
+"the column its %2$s says."
+msgstr ""
+"Les exposicions d’About no s’escriuen aquí: surten del menú %1$s, cadascuna "
+"a la columna que indica el seu camp %2$s."
+
+#: includes/guide.php:435
+msgid "Change the Color Chart’s price and texts"
+msgstr "Canvia el preu i els textos de la Carta de color"
+
+#. translators: 1: a panel of fields in the editor, 2: one of its fields.
+#: includes/guide.php:440
+#, php-format
+msgid ""
+"In the panel on the right, under %1$s, change %2$s, written as it should "
+"read: 60,50€."
+msgstr ""
+"Al panell de la dreta, a l’apartat %1$s, canvia el camp %2$s; escriu el preu "
+"tal com ha d’aparèixer: 60,50€."
+
+#: includes/guide.php:444
+msgid ""
+"The text beside the chart is the text of the page: click into it to change "
+"it."
+msgstr ""
+"El text del costat de la carta és el text de la pàgina: fes-hi clic per "
+"canviar-lo."
+
+#. translators: %s: a field in the editor's side panel.
+#: includes/guide.php:447
+#, php-format
+msgid ""
+"%s are the chart’s colours, top to bottom: leave them as they are unless the "
+"chart itself changes."
+msgstr ""
+"El camp %s conté els colors de la carta, de dalt a baix: deixa’ls tal com "
+"estan, tret que canviï la mateixa carta."
+
+#: includes/guide.php:460 includes/settings.php:64 includes/settings.php:65
+#: includes/settings.php:69
+msgid "Site texts"
+msgstr "Textos del lloc"
+
+#: includes/guide.php:464 includes/guide.php:503
+msgid "Where the order form’s messages go"
+msgstr "On van els missatges del formulari de comanda"
+
+#. translators: 1: a part of the Site texts page, 2: its field.
+#: includes/guide.php:470
+#, php-format
+msgid ""
+"Under %1$s, %2$s is the address every message from the Color Chart’s order "
+"form is sent to."
+msgstr ""
+"A l’apartat %1$s, el camp %2$s és l’adreça a la qual s’envien tots els "
+"missatges del formulari de comanda de la Carta de color."
+
+#: includes/guide.php:471 includes/settings.php:37
+msgid "The order desk"
+msgstr "El formulari de comanda"
+
+#: includes/guide.php:472 includes/settings.php:58
+msgid "Send inquiries to"
+msgstr "Envia les consultes a"
+
+#: includes/guide.php:474
+msgid "It never appears on the site."
+msgstr "No apareix mai al lloc web."
+
+#. translators: %s: a field of the Site texts page.
+#: includes/guide.php:478
+#, php-format
+msgid ""
+"%s is the most messages the form sends in a day, a guard against a flood."
+msgstr ""
+"El camp %s és el nombre màxim de missatges que el formulari envia en un dia, "
+"com a protecció contra una allau."
+
+#: includes/guide.php:479 includes/settings.php:59
+msgid "At most, per day"
+msgstr "Com a màxim, al dia"
+
+#. translators: “Save Changes” is WordPress's own button at the foot of a settings page; write it as WordPress shows it in this language.
+#: includes/guide.php:483
+msgid "Press <strong>Save Changes</strong> at the foot of the page."
+msgstr "Prem <strong>Desa els canvis</strong> al peu de la pàgina."
+
+#: includes/guide.php:488
+msgid ""
+"Each message arrives as an email, and nothing of it is kept on the site."
+msgstr ""
+"Cada missatge arriba com a correu electrònic, i no se’n guarda res al lloc "
+"web."
+
+#: includes/guide.php:489
+msgid "Reply to it as to any email: the answer goes to the person who wrote."
+msgstr ""
+"Respon-hi com a qualsevol altre correu: la resposta va a la persona que l’ha "
+"escrit."
+
+#. translators: 1–3: fields of the Site texts page.
+#: includes/guide.php:493
+#, php-format
+msgid "The same page holds the site’s other texts: %1$s, %2$s and %3$s."
+msgstr "La mateixa pàgina conté els altres textos del lloc: %1$s, %2$s i %3$s."
+
+#: includes/guide.php:494 includes/settings.php:55
+msgid "Description"
+msgstr "Descripció"
+
+#: includes/guide.php:495 includes/settings.php:56
+msgid "What’s Color? — the note above the names"
+msgstr "What’s Color? — la nota damunt dels noms"
+
+#: includes/guide.php:496 includes/settings.php:57
+msgid "The opening screen"
+msgstr "La pantalla d’obertura"
+
+#. translators: 1: a menu in the column on the left of the admin, 2: one of its items.
+#: includes/guide.php:507
+#, php-format
+msgid ""
+"Messages from the Color Chart’s order form arrive by email, at the address "
+"set in %1$s → %2$s."
+msgstr ""
+"Els missatges del formulari de comanda de la Carta de color arriben per "
+"correu electrònic, a l’adreça definida a %1$s → %2$s."
+
+#: includes/guide.php:511
+msgid "Only an administrator can see that page and change the address."
+msgstr "Només un administrador pot veure aquesta pàgina i canviar l’adreça."
+
+#: includes/guide.php:519
+msgid "Before you publish"
+msgstr "Abans de publicar"
+
+#. translators: “View” and “Preview in new tab” are the editor's own button and menu item; write them as the editor shows them in this language.
+#: includes/guide.php:523
+msgid ""
+"To see an entry as the site will show it, before anyone else can, press "
+"<strong>View</strong> at the top right and choose <strong>Preview in new "
+"tab</strong>."
+msgstr ""
+"Per veure una entrada tal com la mostrarà el lloc web, abans que la pugui "
+"veure ningú més, prem <strong>Visualitza</strong> a dalt a la dreta i tria "
+"<strong>Previsualització en una pestanya nova</strong>."
+
+#. translators: “Save draft” is the editor's own button; write it as the editor shows it in this language.
+#: includes/guide.php:527
+msgid "<strong>Save draft</strong> keeps your work without publishing it."
+msgstr "<strong>Desa l'esborrany</strong> guarda la feina sense publicar-la."
+
+#: includes/guide.php:530
+msgid "A painting’s year and its picture decide where it appears."
+msgstr "L’any i la imatge d’un quadre decideixen on apareix."
+
+#: includes/guide.php:531
+msgid ""
+"The works run from the newest year to the oldest, so the year places it in "
+"the grid; a painting saved without a year is given the current one."
+msgstr ""
+"Les obres van de l’any més recent al més antic, de manera que l’any el situa "
+"a la graella; a un quadre desat sense any se li assigna l’any actual."
+
+#: includes/guide.php:532
+msgid "Without a picture, it is not shown in the grid at all."
+msgstr "Sense imatge, no apareix enlloc de la graella."
+
+#. translators: 1: a menu in the column on the left of the admin, 2: one of its items, a link to the screen it opens.
+#: includes/guide.php:558
+#, php-format
+msgid "In the menu on the left, go to %1$s → %2$s."
+msgstr "Al menú de l’esquerra, ves a %1$s → %2$s."
+
+#. translators: 1: the Pages menu, 2: its first item, 3: the page to click, a link to it.
+#: includes/guide.php:568
+#, php-format
+msgid "In the menu on the left, go to %1$s → %2$s and click %3$s."
+msgstr "Al menú de l’esquerra, ves a %1$s → %2$s i fes clic a %3$s."
+
+#. translators: “Publish” is the editor's own button, at the top right and again in the panel that asks to confirm; write it as the editor shows it in this language.
+#: includes/guide.php:578
+msgid ""
+"Press <strong>Publish</strong> at the top right, and <strong>Publish</"
+"strong> again to confirm."
+msgstr ""
+"Prem <strong>Publica</strong> a dalt a la dreta, i un altre cop "
+"<strong>Publica</strong> per confirmar-ho."
+
+#. translators: “Save” is the editor's own button for an entry already published; write it as the editor shows it in this language.
+#: includes/guide.php:585
+msgid "Press <strong>Save</strong> at the top right."
+msgstr "Prem <strong>Desa</strong> a dalt a la dreta."
+
+#. translators: %s: the button for the entry's main photograph, at the top of the editor's side panel.
+#: includes/guide.php:593
+#, php-format
+msgid ""
+"At the top of the panel, press %s: the list shows that photograph, and its "
+"page opens on it."
+msgstr ""
+"A dalt de tot del panell, prem %s: és la fotografia que mostra la llista i "
+"la primera que es veu a la seva pàgina."
+
+#. translators: /image and /gallery are typed on an empty line of the editor to add an Image or a Gallery block; give the blocks' names as the editor does in this language.
+#: includes/guide.php:600
+msgid ""
+"Add more photographs in the text: on an empty line, type /image or /gallery "
+"and press Enter."
+msgstr ""
+"Afegeix més fotografies al text: en una línia buida, escriu /imatge o /"
+"galeria i prem la tecla Intro."
+
+#: includes/import-admin.php:20 includes/import-admin.php:21
+#: includes/import-admin.php:60
+msgid "Import content"
+msgstr "Importa el contingut"
+
+#: includes/import-admin.php:33
+msgid "Site settings"
+msgstr "Opcions del lloc"
+
+#: includes/import-admin.php:34 includes/import-admin.php:75
+#: includes/post-types.php:45
+msgid "Artwork"
+msgstr "Obra"
+
+#: includes/import-admin.php:35 includes/import-admin.php:76
+#: includes/post-types.php:65 includes/queries.php:177
+msgid "Commissioned"
+msgstr "Encàrrecs"
+
+#: includes/import-admin.php:36 includes/import-admin.php:77
+#: includes/post-types.php:85
+msgid "Exhibitions"
+msgstr "Exposicions"
+
+#: includes/import-admin.php:37 includes/post-types.php:101
+#: includes/post-types.php:102
+msgid "What’s Color?"
+msgstr "What’s Color?"
+
+#: includes/import-admin.php:38
+msgid "About and Color Chart"
+msgstr "About i Color Chart"
+
+#: includes/import-admin.php:39
+msgid "Clearing out what the bundle no longer has"
+msgstr "Neteja del que el paquet ja no conté"
+
+#: includes/import-admin.php:40
+msgid "Finishing"
+msgstr "Finalització"
+
+#: includes/import-admin.php:61
+msgid ""
+"Brings the works, exhibitions, commissioned projects, What’s Color? and the "
+"About and Color Chart pages in from the bundle prepared from the site’s "
+"dataset. Entries already here are brought up to date; entries edited in "
+"WordPress since the last import are left as they are."
+msgstr ""
+"Importa les obres, les exposicions, els projectes per encàrrec, What’s "
+"Color? i les pàgines About i Color Chart des del paquet preparat a partir de "
+"les dades del lloc. Les entrades que ja hi són s’actualitzen; les que s’han "
+"editat a WordPress des de l’última importació es deixen tal com estan."
+
+#. translators: %s: the folder on the server where the bundle goes.
+#: includes/import-admin.php:67
+#, php-format
+msgid ""
+"No bundle found. Upload the import folder by SFTP so that its manifest.json "
+"is at %s, then come back to this page."
+msgstr ""
+"No s’ha trobat cap paquet. Puja la carpeta d’importació per SFTP de manera "
+"que el seu manifest.json quedi a %s, i després torna a aquesta pàgina."
+
+#: includes/import-admin.php:71
+msgid "The bundle"
+msgstr "El paquet"
+
+#: includes/import-admin.php:74
+msgid "Prepared on"
+msgstr "Preparat el"
+
+#: includes/import-admin.php:78
+msgid "What’s Color? editions and people"
+msgstr "Edicions i persones de What’s Color?"
+
+#: includes/import-admin.php:79
+msgid "Pictures in the bundle"
+msgstr "Imatges del paquet"
+
+#: includes/import-admin.php:80
+msgid "Last import"
+msgstr "Última importació"
+
+#: includes/import-admin.php:80
+msgid "never"
+msgstr "mai"
+
+#: includes/import-admin.php:85
+msgid ""
+"An import was stopped, and the bundle has been replaced since. Start the "
+"import again: it brings everything up to date and skips nothing."
+msgstr ""
+"Es va aturar una importació i, des de llavors, s’ha substituït el paquet. "
+"Torna a començar la importació: ho actualitza tot i no se salta res."
+
+#. translators: 1: the step it stopped at, 2: how far into that step.
+#: includes/import-admin.php:92
+#, php-format
+msgid ""
+"An import stopped at “%1$s” (%2$d done). Continue it, or start again from "
+"the beginning."
+msgstr ""
+"Una importació es va aturar a «%1$s» (n’havia fet %2$d). Continua-la o torna "
+"a començar des del principi."
+
+#: includes/import-admin.php:99
+msgid "Also overwrite entries edited in WordPress since the last import"
+msgstr ""
+"Sobreescriu també les entrades editades a WordPress des de l’última "
+"importació"
+
+#: includes/import-admin.php:100
+msgid ""
+"Applies when starting again; a continued import keeps the choice it was "
+"started with."
+msgstr ""
+"S’aplica en tornar a començar; una importació que es continua manté l’opció "
+"amb què es va començar."
+
+#: includes/import-admin.php:103 includes/import-admin.php:202
+msgid "Continue the import"
+msgstr "Continua la importació"
+
+#: includes/import-admin.php:104
+msgid "Start again"
+msgstr "Torna a començar"
+
+#: includes/import-admin.php:106
+msgid "Import"
+msgstr "Importa"
+
+#: includes/import-admin.php:114
+msgid ""
+"Keep this page open until it says the import is complete. It takes a few "
+"minutes the first time, while every picture is resized."
+msgstr ""
+"Mantén aquesta pàgina oberta fins que digui que la importació s’ha "
+"completat. La primera vegada triga uns minuts, mentre es redimensionen totes "
+"les imatges."
+
+#: includes/import-admin.php:131
+msgid "Only an administrator can import."
+msgstr "Només un administrador pot importar."
+
+#: includes/import-admin.php:135
+msgid "No bundle found."
+msgstr "No s’ha trobat cap paquet."
+
+#: includes/import-admin.php:155
+msgid ""
+"The bundle has been replaced since this import began. Start the import again."
+msgstr ""
+"El paquet s’ha substituït des que va començar aquesta importació. Torna a "
+"començar la importació."
+
+#: includes/import-admin.php:156
+msgid "There is no import to continue. Start a new one."
+msgstr "No hi ha cap importació per continuar. Comença’n una de nova."
+
+#: includes/import-admin.php:200
+msgid "The import is complete."
+msgstr "La importació s’ha completat."
+
+#: includes/import-admin.php:201
+msgid ""
+"The import stopped: the server did not answer. Press “Continue the import” "
+"to carry on from where it stopped."
+msgstr ""
+"La importació s’ha aturat: el servidor no ha respost. Prem «Continua la "
+"importació» per seguir des d’on s’ha aturat."
+
+#: includes/import-admin.php:203
+msgid "Starting…"
+msgstr "S’està iniciant…"
+
+#. translators: %s: the kind of entry, plural and in lower case — artwork, exhibitions, answers.
+#: includes/post-types.php:23
 #, php-format
 msgid "All %s"
 msgstr "Llista: %s"
 
-#: includes/post-types.php:23
+#. translators: %s: the kind of entry, singular and in lower case — work, exhibition, project.
+#: includes/post-types.php:25
 #, php-format
 msgid "Add %s"
 msgstr "Afegeix %s"
 
-#: includes/post-types.php:24
+#. translators: %s: the kind of entry, singular and in lower case — work, exhibition, project.
+#: includes/post-types.php:27
 #, php-format
 msgid "Add a new %s"
 msgstr "Afegeix %s"
 
-#: includes/post-types.php:25
+#. translators: %s: the kind of entry, singular and in lower case — work, exhibition, project.
+#: includes/post-types.php:29
 #, php-format
 msgid "Edit %s"
 msgstr "Edita %s"
 
-#: includes/post-types.php:26
+#. translators: %s: the kind of entry, singular and in lower case — work, exhibition, project.
+#: includes/post-types.php:31
 #, php-format
 msgid "New %s"
 msgstr "Crea %s"
 
-#: includes/post-types.php:27
+#. translators: %s: the kind of entry, singular and in lower case — work, exhibition, project.
+#: includes/post-types.php:33
 #, php-format
 msgid "View %s"
 msgstr "Mostra %s"
 
-#: includes/post-types.php:28
+#. translators: %s: the kind of entry, plural and in lower case — artwork, exhibitions, answers.
+#: includes/post-types.php:35
 #, php-format
 msgid "Search %s"
 msgstr "Cerca %s"
 
-#: includes/post-types.php:29
+#. translators: %s: the kind of entry, plural and in lower case — artwork, exhibitions, answers.
+#: includes/post-types.php:37
 #, php-format
 msgid "No %s yet."
 msgstr "Encara no hi ha %s."
 
-#: includes/post-types.php:30
+#. translators: %s: the kind of entry, plural and in lower case — artwork, exhibitions, answers.
+#: includes/post-types.php:39
 #, php-format
 msgid "No %s in the bin."
 msgstr "No hi ha %s a la paperera."
 
-#: includes/post-types.php:36
-msgid "Artwork"
-msgstr "Obra"
-
-#: includes/post-types.php:36
+#: includes/post-types.php:45
 msgid "Work"
 msgstr "Obra"
 
-#: includes/post-types.php:37
+#: includes/post-types.php:46
 msgid "The painting"
 msgstr "El quadre"
 
-#: includes/post-types.php:38
+#: includes/post-types.php:47
 msgid "Choose the picture of the painting"
 msgstr "Tria la imatge del quadre"
 
-#: includes/post-types.php:39
+#: includes/post-types.php:48
 msgid "Remove the picture"
 msgstr "Suprimeix la imatge"
 
-#: includes/post-types.php:40
+#: includes/post-types.php:49
 msgid "Use this picture"
 msgstr "Utilitza aquesta imatge"
 
-#: includes/post-types.php:42
+#: includes/post-types.php:51
 msgid ""
 "A painting. The picture, its year, size and materials; the stack and the "
 "grid are built from these."
@@ -380,7 +1334,7 @@ msgstr ""
 "Un quadre. La imatge, l’any, les mides i els materials; amb això es "
 "construeixen la pila i la graella."
 
-#: includes/post-types.php:51
+#: includes/post-types.php:60
 msgid ""
 "Anything to say about this work — optional. Further photographs of it can be "
 "added here as images."
@@ -388,38 +1342,46 @@ msgstr ""
 "Alguna cosa a dir d’aquesta obra — opcional. Aquí se’n poden afegir més "
 "fotografies, com a imatges."
 
-#: includes/post-types.php:56 includes/queries.php:123
-msgid "Commissioned"
-msgstr "Encàrrecs"
-
-#: includes/post-types.php:56
+#: includes/post-types.php:65
 msgid "Project"
 msgstr "Projecte"
 
-#: includes/post-types.php:57 includes/post-types.php:73
+#: includes/post-types.php:66
+msgid "All projects"
+msgstr "Tots els projectes"
+
+#: includes/post-types.php:67
+msgid "Search projects"
+msgstr "Cerca projectes"
+
+#: includes/post-types.php:68
+msgid "No projects yet."
+msgstr "Encara no hi ha projectes."
+
+#: includes/post-types.php:69
+msgid "No projects in the bin."
+msgstr "No hi ha projectes a la paperera."
+
+#: includes/post-types.php:70 includes/post-types.php:86
 msgid "Main photograph"
 msgstr "Fotografia principal"
 
-#: includes/post-types.php:58 includes/post-types.php:74
+#: includes/post-types.php:71 includes/post-types.php:87
 msgid "Choose the main photograph"
 msgstr "Tria la fotografia principal"
 
-#: includes/post-types.php:60
+#: includes/post-types.php:73
 msgid ""
 "Commissioned work and collaborations: colour charts, collections, workshops."
 msgstr ""
 "Treballs per encàrrec i col·laboracions: cartes de color, col·leccions, "
 "tallers."
 
-#: includes/post-types.php:72
-msgid "Exhibitions"
-msgstr "Exposicions"
-
-#: includes/post-types.php:72
+#: includes/post-types.php:85
 msgid "Exhibition"
 msgstr "Exposició"
 
-#: includes/post-types.php:76
+#: includes/post-types.php:89
 msgid ""
 "Every show and fair, newest first. One with text and photographs opens as a "
 "page; one without is a line in the list."
@@ -427,20 +1389,16 @@ msgstr ""
 "Totes les exposicions i fires, les més recents primer. La que té text i "
 "fotografies s’obre com a pàgina; la que no en té és una línia a la llista."
 
-#: includes/post-types.php:87 includes/post-types.php:139
+#: includes/post-types.php:100 includes/post-types.php:165
 msgid "Editions"
 msgstr "Edicions"
 
-#: includes/post-types.php:87 includes/post-types.php:140
-#: includes/post-types.php:141
+#: includes/post-types.php:100 includes/post-types.php:166
+#: includes/post-types.php:167
 msgid "Edition"
 msgstr "Edició"
 
-#: includes/post-types.php:88 includes/post-types.php:89
-msgid "What’s Color?"
-msgstr "What’s Color?"
-
-#: includes/post-types.php:91
+#: includes/post-types.php:104
 msgid ""
 "One edition of What’s Color?: Claudia’s paragraphs in the order the page "
 "sets them between the entries, and the people who answered."
@@ -449,23 +1407,23 @@ msgstr ""
 "pàgina els intercala entre les respostes, i les persones que hi van "
 "respondre."
 
-#: includes/post-types.php:102 includes/post-types.php:103
+#: includes/post-types.php:115 includes/post-types.php:116
 msgid "Answers"
 msgstr "Respostes"
 
-#: includes/post-types.php:102
+#: includes/post-types.php:115
 msgid "Answer"
 msgstr "Resposta"
 
-#: includes/post-types.php:104
+#: includes/post-types.php:117
 msgid "Add a person"
 msgstr "Afegeix una persona"
 
-#: includes/post-types.php:105
+#: includes/post-types.php:118
 msgid "Add a person and their answer"
 msgstr "Afegeix una persona i la seva resposta"
 
-#: includes/post-types.php:107
+#: includes/post-types.php:120
 msgid ""
 "One person’s answer to “What’s color?”, filed under the edition they "
 "answered in."
@@ -473,26 +1431,114 @@ msgstr ""
 "La resposta d’una persona a “What’s color?”, arxivada a l’edició en què va "
 "respondre."
 
-#: includes/post-types.php:118
+#: includes/post-types.php:131
 msgid "Their answer, as they gave it. Leave empty if they gave none."
 msgstr ""
 "La seva resposta, tal com la va donar. Deixa-ho buit si no en va donar cap."
 
-#: includes/post-types.php:124 includes/post-types.php:126
+#: includes/post-types.php:139 includes/post-types.php:141
 msgid "Groups"
 msgstr "Grups"
 
-#: includes/post-types.php:125
+#: includes/post-types.php:140
 msgid "Group"
 msgstr "Grup"
 
-#: includes/post-types.php:128
+#: includes/post-types.php:142
+msgid "All groups"
+msgstr "Tots els grups"
+
+#: includes/post-types.php:143
+msgid "Edit group"
+msgstr "Edita el grup"
+
+#: includes/post-types.php:144
+msgid "View group"
+msgstr "Mostra el grup"
+
+#: includes/post-types.php:145
+msgid "Update group"
+msgstr "Actualitza el grup"
+
+#: includes/post-types.php:146
+msgid "Add a new group"
+msgstr "Afegeix un grup nou"
+
+#: includes/post-types.php:147
+msgid "New group name"
+msgstr "Nom del grup nou"
+
+#: includes/post-types.php:148
+msgid "Inside the group"
+msgstr "Dins del grup"
+
+#: includes/post-types.php:149
+msgid "Inside the group:"
+msgstr "Dins del grup:"
+
+#: includes/post-types.php:150
+msgid "Search groups"
+msgstr "Cerca grups"
+
+#: includes/post-types.php:151
+msgid "No groups yet."
+msgstr "Encara no hi ha grups."
+
+#: includes/post-types.php:152
+msgid "← Back to the groups"
+msgstr "← Torna als grups"
+
+#: includes/post-types.php:154
 msgid ""
 "The headings of the Commissioned page: Commissioned, Education, Solidary."
 msgstr ""
 "Els apartats de la pàgina d’encàrrecs: Commissioned, Education, Solidary."
 
-#: includes/post-types.php:143
+#: includes/post-types.php:168
+msgid "All editions"
+msgstr "Totes les edicions"
+
+#: includes/post-types.php:169
+msgid "Edit edition"
+msgstr "Edita l’edició"
+
+#: includes/post-types.php:170
+msgid "View edition"
+msgstr "Mostra l’edició"
+
+#: includes/post-types.php:171
+msgid "Update edition"
+msgstr "Actualitza l’edició"
+
+#: includes/post-types.php:172
+msgid "Add a new edition"
+msgstr "Afegeix una edició nova"
+
+#: includes/post-types.php:173
+msgid "New edition name"
+msgstr "Nom de l’edició nova"
+
+#: includes/post-types.php:174
+msgid "Inside the edition"
+msgstr "Dins de l’edició"
+
+#: includes/post-types.php:175
+msgid "Inside the edition:"
+msgstr "Dins de l’edició:"
+
+#: includes/post-types.php:176
+msgid "Search editions"
+msgstr "Cerca edicions"
+
+#: includes/post-types.php:177
+msgid "No editions yet."
+msgstr "Encara no hi ha edicions."
+
+#: includes/post-types.php:178
+msgid "← Back to the editions"
+msgstr "← Torna a les edicions"
+
+#: includes/post-types.php:180
 msgid "Which edition of What’s Color? this person answered in."
 msgstr "A quina edició de What’s Color? va respondre aquesta persona."
 
@@ -500,104 +1546,751 @@ msgstr "A quina edició de What’s Color? va respondre aquesta persona."
 msgid "Texts"
 msgstr "Textos"
 
-#: includes/settings.php:37
-msgid "The order desk"
-msgstr "El formulari de comanda"
-
 #: includes/settings.php:38
 msgid ""
-"Where the Colour Chart’s order form sends. The address is never shown on the "
+"Where the Color Chart’s order form sends. The address is never shown on the "
 "site."
 msgstr ""
 "On s’envia el formulari de comanda de la Carta de color. L’adreça no es "
 "mostra mai al lloc web."
 
 #: includes/settings.php:55
-msgid "Description"
-msgstr "Descripció"
-
-#: includes/settings.php:55
 msgid "What search engines show under the site’s name."
 msgstr "El que els cercadors mostren sota el nom del lloc web."
-
-#: includes/settings.php:56
-msgid "What’s Color? — the note above the names"
-msgstr "What’s Color? — la nota damunt dels noms"
-
-#: includes/settings.php:57
-msgid "The opening screen"
-msgstr "La pantalla d’obertura"
 
 #: includes/settings.php:57
 msgid "Five lines, one per line."
 msgstr "Cinc línies, una per línia."
 
-#: includes/settings.php:58
-msgid "Send inquiries to"
-msgstr "Envia les consultes a"
-
-#: includes/settings.php:59
-msgid "At most, per day"
-msgstr "Com a màxim, al dia"
-
 #: includes/settings.php:59
 msgid "A ceiling on messages a day, against a flood."
 msgstr "Un límit de missatges al dia, contra una allau."
 
-#: includes/settings.php:64 includes/settings.php:65 includes/settings.php:69
-msgid "Site texts"
-msgstr "Textos del lloc"
+#: includes/site-check.php:29 includes/site-check.php:30
+#: includes/site-check.php:333
+msgid "Site check"
+msgstr "Comprovació del lloc"
+
+#: includes/site-check.php:65
+msgid "The site"
+msgstr "El lloc"
+
+#: includes/site-check.php:68
+msgid "production — the live site"
+msgstr "production — el lloc públic"
+
+#: includes/site-check.php:69
+msgid "staging — the private test copy"
+msgstr "staging — la còpia privada de proves"
+
+#: includes/site-check.php:70
+msgid "development"
+msgstr "development — una còpia de desenvolupament"
+
+#: includes/site-check.php:71
+msgid "local — a copy on a laptop"
+msgstr "local — una còpia en un portàtil"
+
+#: includes/site-check.php:73
+msgid "Which site this is"
+msgstr "Quin lloc és aquest"
+
+#: includes/site-check.php:74
+msgid ""
+"Set by WP_ENVIRONMENT_TYPE in wp-config.php. The live site must not set it "
+"(or set it to production)."
+msgstr ""
+"Ho defineix WP_ENVIRONMENT_TYPE a wp-config.php. El lloc públic no l’ha de "
+"definir (o l’ha de definir com a production)."
+
+#: includes/site-check.php:78 includes/site-check.php:82
+msgid "Search engines"
+msgstr "Motors de cerca"
+
+#: includes/site-check.php:79
+msgid "Allowed to index the site."
+msgstr "Poden indexar el lloc."
+
+#: includes/site-check.php:79
+msgid "Asked to stay away — the live site would not appear on Google."
+msgstr ""
+"Se’ls demana que no l’indexin — el lloc públic no apareixeria a Google."
+
+#: includes/site-check.php:80
+msgid ""
+"Settings → Reading: untick “Discourage search engines from indexing this "
+"site”."
+msgstr ""
+"Opcions → Lectura: desmarca «Desanima els motors de cerca d'indexar aquest "
+"lloc web»."
+
+#: includes/site-check.php:83
+msgid "Allowed to index this copy, which would compete with the live site."
+msgstr "Poden indexar aquesta còpia, que competiria amb el lloc públic."
+
+#: includes/site-check.php:83
+msgid ""
+"Asked to stay away, as a copy should be. Every page also sends a no-index "
+"header."
+msgstr ""
+"Se’ls demana que no l’indexin, com correspon a una còpia. A més, cada pàgina "
+"envia una capçalera no-index."
+
+#: includes/site-check.php:84
+msgid ""
+"Settings → Reading: tick “Discourage search engines from indexing this site”."
+msgstr ""
+"Opcions → Lectura: marca «Desanima els motors de cerca d'indexar aquest lloc "
+"web»."
+
+#: includes/site-check.php:92
+msgid "HTTPS"
+msgstr "HTTPS"
+
+#. translators: %s: the site's address.
+#: includes/site-check.php:94
+#, php-format
+msgid "The site’s address is %s."
+msgstr "L’adreça del lloc és %s."
+
+#: includes/site-check.php:95
+msgid ""
+"Settings → General: both addresses must start with https:// once the "
+"certificate is in place."
+msgstr ""
+"Opcions → General: totes dues adreces han de començar per https:// un cop "
+"instal·lat el certificat."
+
+#: includes/site-check.php:98
+msgid "Addresses (permalinks)"
+msgstr "Adreces (enllaços permanents)"
+
+#: includes/site-check.php:99
+msgid "plain"
+msgstr "text pla"
+
+#: includes/site-check.php:100
+msgid "Settings → Permalinks: choose “Post name” and save."
+msgstr ""
+"Opcions → Enllaços permanents: tria «Nom de l'entrada» i desa els canvis."
+
+#: includes/site-check.php:105 includes/site-check.php:108
+msgid "Theme"
+msgstr "Tema"
+
+#: includes/site-check.php:105
+msgid "Appearance → Themes: activate Claudia Valsells."
+msgstr "Aparença → Temes: activa Claudia Valsells."
+
+#. translators: %s: the build stamp of the theme's stylesheet and scripts.
+#: includes/site-check.php:111
+#, php-format
+msgid "Claudia Valsells, with its stylesheet and scripts (build %s)."
+msgstr "Claudia Valsells, amb el full d’estils i els scripts (compilació %s)."
+
+#: includes/site-check.php:112
+msgid ""
+"Active, but its stylesheet and scripts are missing: pages would show "
+"unstyled."
+msgstr ""
+"Actiu, però li falten el full d’estils i els scripts: les pàgines es veurien "
+"sense estils."
+
+#: includes/site-check.php:113
+msgid ""
+"Upload the theme package made by npm run wp:package, which includes them."
+msgstr ""
+"Puja el paquet del tema generat amb npm run wp:package, que els inclou."
+
+#: includes/site-check.php:117
+msgid "Privacy notice"
+msgstr "Avís de privadesa"
+
+#. translators: %s: the address of the privacy notice.
+#: includes/site-check.php:120
+#, php-format
+msgid "Published at %s and linked under the order form."
+msgstr "Publicat a %s i enllaçat sota el formulari de comanda."
+
+#: includes/site-check.php:121
+msgid ""
+"None published, so the order form links to none. The form collects a name "
+"and an email address."
+msgstr ""
+"No n’hi ha cap de publicat, així que el formulari de comanda no enllaça a "
+"cap. El formulari recull un nom i una adreça electrònica."
+
+#: includes/site-check.php:122
+msgid ""
+"Settings → Privacy: create or choose the page, have the wording confirmed, "
+"publish it."
+msgstr ""
+"Opcions → Privadesa: crea o tria la pàgina, fes confirmar-ne el text i "
+"publica-la."
+
+#: includes/site-check.php:125
+msgid "Content"
+msgstr "Contingut"
+
+#: includes/site-check.php:127
+msgid "artwork"
+msgstr "obres"
+
+#: includes/site-check.php:127
+msgid "exhibitions"
+msgstr "exposicions"
+
+#: includes/site-check.php:127
+msgid "commissioned"
+msgstr "encàrrecs"
+
+#: includes/site-check.php:127
+msgid "editions"
+msgstr "edicions"
+
+#: includes/site-check.php:127
+msgid "people in What’s Color?"
+msgstr "persones de What’s Color?"
+
+#: includes/site-check.php:131
+msgid "Published entries"
+msgstr "Entrades publicades"
+
+#. translators: %s: date and time of the last import.
+#: includes/site-check.php:133
+#, php-format
+msgid "Last import: %s."
+msgstr "Última importació: %s."
+
+#. translators: %s: date and time of the last import.
+#: includes/site-check.php:133
+msgid "Never imported."
+msgstr "No s’ha importat mai."
+
+#: includes/site-check.php:137
+msgctxt "the name of a check on the site check page"
+msgid "Import"
+msgstr "Importació"
+
+#: includes/site-check.php:137
+msgid "An import was started and did not finish."
+msgstr "Es va començar una importació i no es va acabar."
+
+#: includes/site-check.php:137
+msgid "Tools → Import content: continue it."
+msgstr "Eines → Importa el contingut: continua-la."
+
+#: includes/site-check.php:142
+msgid "Import folder"
+msgstr "Carpeta d’importació"
+
+#: includes/site-check.php:143
+msgid "wp-content/import is on the server."
+msgstr "wp-content/import és al servidor."
+
+#: includes/site-check.php:144
+msgid ""
+"Once the last import is done, delete the folder by SFTP: it is not needed "
+"and its files can be downloaded by anyone who guesses their names."
+msgstr ""
+"Quan s’hagi fet l’última importació, esborra la carpeta per SFTP: ja no cal, "
+"i qualsevol que endevini el nom dels fitxers els pot descarregar."
+
+#: includes/site-check.php:149
+msgid "Uploads folder"
+msgstr "Carpeta de càrregues"
+
+#: includes/site-check.php:150
+msgid "Writable: pictures can be added."
+msgstr "Té permís d’escriptura: s’hi poden afegir imatges."
+
+#: includes/site-check.php:150
+msgid "Not writable: adding a picture will fail."
+msgstr "No té permís d’escriptura: no es podran afegir imatges."
+
+#: includes/site-check.php:151
+msgid "Ask the host to give the web server write access to wp-content/uploads."
+msgstr ""
+"Demana al proveïdor d’allotjament que doni al servidor web permís "
+"d’escriptura a wp-content/uploads."
+
+#: includes/site-check.php:154
+msgid "Order form"
+msgstr "Formulari de comanda"
+
+#: includes/site-check.php:156
+msgid "Recipient"
+msgstr "Destinatari"
+
+#. translators: %s: email address.
+#: includes/site-check.php:159
+#, php-format
+msgid "Messages go to %s."
+msgstr "Els missatges van a %s."
+
+#: includes/site-check.php:160
+msgid "No address set: the form answers that it cannot send."
+msgstr ""
+"No hi ha cap adreça: el formulari respon que no pot enviar el missatge."
+
+#: includes/site-check.php:162
+msgid ""
+"On a copy, this should be your own address; on the live site, Claudia’s."
+msgstr ""
+"En una còpia, hauria de ser la teva adreça; al lloc públic, la de Claudia."
+
+#: includes/site-check.php:163
+msgid "Settings → Site texts: “Send inquiries to”."
+msgstr "Opcions → Textos del lloc: «Envia les consultes a»."
+
+#: includes/site-check.php:171
+msgid "How mail is sent"
+msgstr "Com s’envia el correu"
+
+#. translators: %s: name of the mail plugin.
+#. translators: %s: name of the cache plugin.
+#: includes/site-check.php:174 includes/site-check.php:279
+#, php-format
+msgid "Through %s."
+msgstr "Mitjançant %s."
+
+#: includes/site-check.php:175
+msgid "On this laptop, written to wp-content/cv-mail.log.php instead of sent."
+msgstr ""
+"En aquest portàtil, s’escriu a wp-content/cv-mail.log.php en lloc d’enviar-"
+"se."
+
+#: includes/site-check.php:175
+msgid ""
+"Through the server’s own mail function, which often lands in spam or is not "
+"delivered at all."
+msgstr ""
+"Mitjançant la funció de correu del mateix servidor, que sovint va a parar al "
+"correu brossa o no arriba mai."
+
+#: includes/site-check.php:176
+msgid "Send a test message below, and check it arrives (and not in spam)."
+msgstr ""
+"Envia un missatge de prova aquí sota i comprova que arriba (i que no va al "
+"correu brossa)."
+
+#: includes/site-check.php:176
+msgid ""
+"Install WP Mail SMTP and connect it to the domain’s mail account (the host "
+"has the details); then send a test message below."
+msgstr ""
+"Instal·la WP Mail SMTP i connecta’l al compte de correu del domini (el "
+"proveïdor d’allotjament en té les dades); després, envia un missatge de "
+"prova aquí sota."
+
+#: includes/site-check.php:179
+msgid "Old addresses"
+msgstr "Adreces antigues"
+
+#: includes/site-check.php:199
+msgid "Redirect rules"
+msgstr "Regles de redirecció"
+
+#: includes/site-check.php:200
+msgid "The rules send old addresses where the plan says."
+msgstr "Les regles envien les adreces antigues on diu el pla."
+
+#: includes/site-check.php:201
+msgid "Check includes/redirects.php in the content plugin."
+msgstr "Revisa includes/redirects.php a l’extensió de contingut."
+
+#: includes/site-check.php:201
+msgid "Every old address is checked from outside with npm run wp:check-links."
+msgstr ""
+"Totes les adreces antigues es comproven des de fora amb npm run wp:check-"
+"links."
+
+#: includes/site-check.php:208 includes/site-check.php:216
+#: includes/site-check.php:219
+msgid "A redirect, requested"
+msgstr "Una redirecció, demanada al servidor"
+
+#. translators: %s: the error.
+#: includes/site-check.php:210
+#, php-format
+msgid "The site could not reach itself to try one: %s"
+msgstr "El lloc no s’ha pogut connectar amb si mateix per provar-ne una: %s"
+
+#: includes/site-check.php:211
+msgid ""
+"Normal on a laptop. On a server, ask the host to allow the site to call its "
+"own address."
+msgstr ""
+"És normal en un portàtil. En un servidor, demana al proveïdor d’allotjament "
+"que permeti al lloc connectar-se a la seva pròpia adreça."
+
+#: includes/site-check.php:216
+msgid "The server password stopped the request — expected on staging."
+msgstr ""
+"La contrasenya del servidor ha aturat la petició — és normal a staging."
+
+#. translators: 1: HTTP status, 2: where it pointed.
+#: includes/site-check.php:221
+#, php-format
+msgid "/colour-chart/ answered %1$d %2$s"
+msgstr "/colour-chart/ ha respost %1$d %2$s"
+
+#: includes/site-check.php:222
+msgid "Settings → Permalinks: press Save once, then check again."
+msgstr ""
+"Opcions → Enllaços permanents: prem «Desa els canvis» un cop i torna a "
+"comprovar-ho."
+
+#: includes/site-check.php:228 includes/site-check.php:235
+msgid "Sitemap"
+msgstr "Mapa del lloc"
+
+#. translators: %s: sitemap address.
+#: includes/site-check.php:231
+#, php-format
+msgid "Served at %s, where the old site’s sitemap address now leads."
+msgstr "Disponible a %s, on ara porta l’adreça del mapa del lloc antic."
+
+#: includes/site-check.php:232
+msgid ""
+"Switched off — search engines are told to stay away, or a plugin turned it "
+"off."
+msgstr ""
+"Desactivat — es demana als motors de cerca que no indexin el lloc, o bé una "
+"extensió l’ha desactivat."
+
+#: includes/site-check.php:233
+msgid "Submit it in Google Search Console."
+msgstr "Envia’l a Google Search Console."
+
+#: includes/site-check.php:233
+msgid "Allow search engines (Settings → Reading)."
+msgstr "Permet que els motors de cerca indexin el lloc (Opcions → Lectura)."
+
+#: includes/site-check.php:235
+msgid "On."
+msgstr "Activat."
+
+#: includes/site-check.php:235
+msgid "Off while search engines are told to stay away — it comes on with them."
+msgstr ""
+"Desactivat mentre es demani als motors de cerca que no indexin el lloc — "
+"s’activa quan se’ls permet."
+
+#: includes/site-check.php:239
+msgid "Pictures"
+msgstr "Imatges"
+
+#: includes/site-check.php:242
+msgid "What the server can make"
+msgstr "Què pot generar el servidor"
+
+#. translators: 1: the image library, 2: yes/no, 3: yes/no.
+#: includes/site-check.php:244
+#, php-format
+msgid "Image library %1$s; WebP %2$s; AVIF %3$s."
+msgstr "Biblioteca d’imatges %1$s; WebP %2$s; AVIF %3$s."
+
+#. translators: 1: the image library, 2: yes/no, 3: yes/no.
+#: includes/site-check.php:244
+msgid "yes"
+msgstr "sí"
+
+#. translators: 1: the image library, 2: yes/no, 3: yes/no.
+#: includes/site-check.php:244
+msgid "no"
+msgstr "no"
+
+#: includes/site-check.php:245
+msgid ""
+"Without WebP the pages serve heavier JPEG and PNG files. Ask the host for GD "
+"or Imagick with WebP."
+msgstr ""
+"Sense WebP, les pàgines serveixen fitxers JPEG i PNG més pesants. Demana al "
+"proveïdor d’allotjament GD o Imagick amb WebP."
+
+#: includes/site-check.php:248
+msgid "Modern Image Formats"
+msgstr "Modern Image Formats"
+
+#: includes/site-check.php:250
+msgid "On, making WebP beside every JPEG and PNG."
+msgstr "Activada: genera un WebP al costat de cada JPEG i PNG."
+
+#: includes/site-check.php:250
+msgid "On, making WebP only."
+msgstr "Activada: genera només WebP."
+
+#: includes/site-check.php:251
+msgid "Not active: pictures are served as JPEG and PNG only."
+msgstr "No està activa: les imatges se serveixen només en JPEG i PNG."
+
+#: includes/site-check.php:252
+msgid ""
+"Plugins → Add New: “Modern Image Formats”, install and activate; then "
+"Settings → Media."
+msgstr ""
+"Extensions → Afegeix una extensió: «Modern Image Formats», instal·la-la i "
+"activa-la; després, Opcions → Mèdia."
+
+#: includes/site-check.php:255
+msgid "Server"
+msgstr "Servidor"
+
+#: includes/site-check.php:261
+msgid "PHP"
+msgstr "PHP"
+
+#. translators: 1: PHP version, 2: memory limit, 3: time limit, 4: upload size limit.
+#: includes/site-check.php:263
+#, php-format
+msgid "Version %1$s; memory %2$s; time limit %3$s s; uploads up to %4$s."
+msgstr ""
+"Versió %1$s; memòria %2$s; límit de temps %3$s s; càrregues de fins a %4$s."
+
+#: includes/site-check.php:264
+msgid ""
+"Memory under 256M can fail on large photographs; ask the host to raise it."
+msgstr ""
+"Amb menys de 256M de memòria, les fotografies grans poden fallar; demana al "
+"proveïdor d’allotjament que l’apugi."
+
+#: includes/site-check.php:264
+msgid "The content plugin needs PHP 8.1 or newer."
+msgstr "L’extensió de contingut necessita PHP 8.1 o posterior."
+
+#: includes/site-check.php:276
+msgid "Page cache"
+msgstr "Memòria cau de pàgines"
+
+#: includes/site-check.php:280
+msgid "The server caches pages (WP_CACHE)."
+msgstr "El servidor desa les pàgines a la memòria cau (WP_CACHE)."
+
+#: includes/site-check.php:280
+msgid ""
+"None: every visit builds the page anew, which is slow on shared hosting."
+msgstr ""
+"Cap: cada visita torna a generar la pàgina, cosa que és lenta en un "
+"allotjament compartit."
+
+#: includes/site-check.php:281
+msgid "Empty the cache after every change to the theme."
+msgstr "Buida la memòria cau després de cada canvi al tema."
+
+#: includes/site-check.php:281
+msgid ""
+"Ask the host whether the server caches pages; if not, install a cache plugin."
+msgstr ""
+"Pregunta al proveïdor d’allotjament si el servidor desa les pàgines a la "
+"memòria cau; si no, instal·la una extensió de memòria cau."
+
+#: includes/site-check.php:284
+msgid "Safety"
+msgstr "Seguretat"
+
+#: includes/site-check.php:289 includes/site-check.php:293
+msgid "Debugging"
+msgstr "Depuració"
+
+#: includes/site-check.php:290
+msgid "Errors are shown on the pages."
+msgstr "Els errors es mostren a les pàgines."
+
+#: includes/site-check.php:290
+msgid ""
+"Errors are written to wp-content/debug.log, which anyone can download by its "
+"address."
+msgstr ""
+"Els errors s’escriuen a wp-content/debug.log, que qualsevol pot descarregar "
+"des de la seva adreça."
+
+#: includes/site-check.php:291
+msgid "In wp-config.php: define( 'WP_DEBUG', false );"
+msgstr "A wp-config.php: define( 'WP_DEBUG', false );"
+
+#: includes/site-check.php:293
+msgid "Off."
+msgstr "Desactivada."
+
+#: includes/site-check.php:298
+msgid "Accounts"
+msgstr "Comptes"
+
+#: includes/site-check.php:299
+msgid "An account named “admin” exists — the first name every attack tries."
+msgstr ""
+"Hi ha un compte que es diu «admin» — el primer nom que proven tots els atacs."
+
+#. translators: %d: number of administrator accounts.
+#: includes/site-check.php:301
+#, php-format
+msgid "%d administrator."
+msgid_plural "%d administrators."
+msgstr[0] "%d administrador."
+msgstr[1] "%d administradors."
+
+#: includes/site-check.php:302
+msgid ""
+"Users: make your own administrator account, sign in with it, then delete "
+"“admin” and give its content to your account."
+msgstr ""
+"Usuaris: crea el teu propi compte d’administrador, inicia la sessió amb "
+"aquest compte, després suprimeix «admin» i atribueix-ne el contingut al teu "
+"compte."
+
+#: includes/site-check.php:305
+msgid "Editing code from the admin"
+msgstr "Edició de codi des de l’administració"
+
+#: includes/site-check.php:306
+msgid "Switched off."
+msgstr "Desactivada."
+
+#: includes/site-check.php:306
+msgid ""
+"Possible: anyone who gets into an administrator account can change the "
+"theme’s code."
+msgstr ""
+"Permesa: qualsevol que entri en un compte d’administrador pot canviar el "
+"codi del tema."
+
+#: includes/site-check.php:307
+msgid "In wp-config.php: define( 'DISALLOW_FILE_EDIT', true );"
+msgstr "A wp-config.php: define( 'DISALLOW_FILE_EDIT', true );"
+
+#: includes/site-check.php:310
+msgid "Security plugin"
+msgstr "Extensió de seguretat"
+
+#: includes/site-check.php:311
+msgid "None."
+msgstr "Cap."
+
+#: includes/site-check.php:312
+msgid ""
+"The old site uses Wordfence; install it here too, or confirm with the host "
+"what protects the login."
+msgstr ""
+"El lloc antic fa servir Wordfence; instal·la’l també aquí, o confirma amb el "
+"proveïdor d’allotjament què protegeix l’inici de sessió."
+
+#: includes/site-check.php:323
+msgid "Right"
+msgstr "Correcte"
+
+#: includes/site-check.php:324
+msgid "To know"
+msgstr "A tenir en compte"
+
+#: includes/site-check.php:325
+msgid "Look at it"
+msgstr "Revisa-ho"
+
+#: includes/site-check.php:326
+msgid "Fix it"
+msgstr "Arregla-ho"
+
+#: includes/site-check.php:334
+msgid ""
+"The go-live checklist, read from the site as it is now. Red must be fixed "
+"before go-live; amber wants a look."
+msgstr ""
+"La llista de comprovació per a la posada en marxa, llegida del lloc tal com "
+"és ara. El que surt en vermell s’ha d’arreglar abans de la posada en marxa; "
+"el que surt en groc s’ha de revisar."
+
+#. translators: 1: number fixed, 2: number to look at, 3: number right.
+#: includes/site-check.php:338
+#, php-format
+msgid "%1$d to fix, %2$d to look at, %3$d right."
+msgstr "Per arreglar: %1$d; per revisar: %2$d; correctes: %3$d."
+
+#: includes/site-check.php:343
+msgid ""
+"Test message handed to the mail system. Check that it arrived, and not in "
+"spam."
+msgstr ""
+"S’ha lliurat el missatge de prova al sistema de correu. Comprova que ha "
+"arribat, i que no és al correu brossa."
+
+#: includes/site-check.php:345
+msgid "The test message could not be sent."
+msgstr "No s’ha pogut enviar el missatge de prova."
+
+#: includes/site-check.php:350
+msgid "State"
+msgstr "Estat"
+
+#: includes/site-check.php:351
+msgid "Check"
+msgstr "Comprovació"
+
+#: includes/site-check.php:352
+msgid "What the site says"
+msgstr "Què diu el lloc"
+
+#: includes/site-check.php:353
+msgid "What to do"
+msgstr "Què cal fer"
+
+#: includes/site-check.php:374
+msgid "Test the order form’s mail"
+msgstr "Prova el correu del formulari de comanda"
+
+#: includes/site-check.php:378
+msgid ""
+"Sends one short message to the order form’s recipient, the way the form does."
+msgstr ""
+"Envia un missatge breu al destinatari del formulari de comanda, de la "
+"mateixa manera que ho fa el formulari."
+
+#: includes/site-check.php:379
+msgid "Send a test message"
+msgstr "Envia un missatge de prova"
+
+#: includes/site-check.php:382
+msgid "The report as text"
+msgstr "L’informe en text"
+
+#: includes/site-check.php:383
+msgid "To paste into an email to the host."
+msgstr "Per enganxar-lo en un correu al proveïdor d’allotjament."
+
+#: includes/site-check.php:397
+msgid "Only an administrator can do this."
+msgstr "Només un administrador pot fer això."
+
+#. translators: %s: the site's address.
+#: includes/site-check.php:410
+#, php-format
+msgid "Site check: a test message from %s"
+msgstr "Comprovació del lloc: un missatge de prova des de %s"
+
+#: includes/site-check.php:411
+msgid ""
+"This is a test sent from Tools → Site check. If it arrived, the order form’s "
+"messages will arrive too."
+msgstr ""
+"Això és una prova enviada des d’Eines → Comprovació del lloc. Si ha arribat, "
+"també arribaran els missatges del formulari de comanda."
 
 #: admin/editor.js:63
 msgid "Change photograph"
 msgstr "Canvia la fotografia"
 
-#: admin/editor.js:63
-msgid "Choose photograph"
-msgstr "Tria la fotografia"
-
 #: admin/editor.js:79
 msgid "Remove"
 msgstr "Suprimeix"
+
+#~ msgid "Settings → Site texts: “Where the order form sends”."
+#~ msgstr "Opcions → Textos del lloc: «Envia les consultes a»."
+
+#~ msgid "The year it began; decides its place in the list."
+#~ msgstr "L’any en què va començar; en decideix el lloc a la llista."
 
 #~ msgid ""
 #~ "One edition of What’s Color?: the statement, and the people who answered."
 #~ msgstr ""
 #~ "Una edició de What’s Color?: la presentació i les persones que hi van "
 #~ "respondre."
-
-#: includes/editor.php
-msgid "Name on its page"
-msgstr "Nom a la seva pàgina"
-
-#: includes/editor.php
-msgid "The bold name at the top of the project’s page, e.g. Color Chart. Left empty, the title above is used."
-msgstr "El nom en negreta a dalt de la pàgina del projecte, p. ex. Color Chart. Si es deixa buit, es fa servir el títol de dalt."
-
-#: includes/editor.php
-msgid "Under the name"
-msgstr "Sota el nom"
-
-#: includes/editor.php
-msgid "Who it was for or with, one line per line, written as it should read: FOR NANI MARQUINA."
-msgstr "Per a qui o amb qui va ser, una línia per línia, escrit tal com s’ha de llegir: FOR NANI MARQUINA."
-
-#: includes/editor.php
-msgid "When, on its page"
-msgstr "Quan, a la seva pàgina"
-
-#: includes/editor.php
-msgid "e.g. 2023 - ON GOING. Left empty, the same as in the list."
-msgstr "p. ex. 2023 - ON GOING. Si es deixa buit, el mateix que a la llista."
-
-#: includes/editor.php
-msgid "Statement, in capitals"
-msgstr "Declaració, en majúscules"
-
-#: includes/editor.php
-msgid "Credits, smaller"
-msgstr "Crèdits, més petits"
-
-#: includes/editor.php
-msgid "Call to act, leaning"
-msgstr "Crida a l’acció, en cursiva"

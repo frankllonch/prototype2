@@ -232,7 +232,9 @@ export function whatsColorEditionPage(edition: Edition): Html {
     path: `/whats-color/${edition.numeral.toLowerCase()}/`,
     description: (() => {
       const answered = edition.participants.filter((p) => p.answer).length;
-      const n = edition.participants.length;
+      // Everyone who took part — the roster — not only those who answered,
+      // which is all `participants` holds on these pages.
+      const n = (edition.roster ?? edition.participants).length;
       return answered
         ? `What’s Color? edition ${edition.numeral} — ${n} people, ${answered} of them on what color is.`
         : `What’s Color? edition ${edition.numeral} — the ${n} studios and people who took part.`;

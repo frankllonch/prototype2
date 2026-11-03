@@ -23,14 +23,17 @@ if ( ! empty( $args['show'] ) && $args['show']['hasPage'] && ! in_array( $args['
 if ( $cv_open && ! in_array( $cv_open, array_map( fn( $s ) => "exhibition-{$s['slug']}", $cv_panels ), true ) ) {
 	$cv_open = '';
 }
+// Where a served panel closes to: the bar's address once the script closes
+// it, and its Close link's for a reader without scripting.
+$cv_root = $cv_open ? home_url( '/exhibitions/' ) : '';
 
 cv_page( [
 	'title'       => $cv_title,
 	'description' => $cv_desc,
 	'path'        => '/exhibitions/',
-	'overlays'    => cv_panels( 'exhibition', $cv_panels, $cv_open ),
+	'overlays'    => cv_panels( 'exhibition', $cv_panels, $cv_open, $cv_root ),
 	'open'        => $cv_open,
-	'root'        => $cv_open ? home_url( '/exhibitions/' ) : '',
+	'root'        => $cv_root,
 ] );
 get_header();
 echo '<h1 class="sr-only">Exhibitions</h1>';

@@ -35,7 +35,7 @@ add_action( 'admin_init', function () {
 
 	add_settings_section( 'cvc_texts', __( 'Texts', 'claudiavalsells' ), '__return_false', 'cvc_site' );
 	add_settings_section( 'cvc_desk', __( 'The order desk', 'claudiavalsells' ), function () {
-		echo '<p>' . esc_html__( 'Where the Colour Chart’s order form sends. The address is never shown on the site.', 'claudiavalsells' ) . '</p>';
+		echo '<p>' . esc_html__( 'Where the Color Chart’s order form sends. The address is never shown on the site.', 'claudiavalsells' ) . '</p>';
 	}, 'cvc_site' );
 
 	$text = function ( string $key, string $kind = 'text', array $attrs = [] ) {

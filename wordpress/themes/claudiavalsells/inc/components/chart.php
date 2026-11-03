@@ -69,5 +69,21 @@ function cv_inquiries(): string {
 		. '<div class="inq-check" data-inquiries-check></div>'
 		. '<div class="inq-send"><p class="inq-status" data-inquiries-status role="status" aria-live="polite"></p>'
 		. '<button type="submit" class="inq-button" data-inquiries-submit>Send</button></div>'
+		. cv_inquiries_privacy()
 		. '</form></section>';
+}
+
+/**
+ * One line under the form, linking the privacy notice: the form takes a name
+ * and an email address, and data-protection law asks for a notice wherever
+ * that happens. The page is WordPress's own (Settings → Privacy); the line
+ * appears once that page is published, and not before, so the form never
+ * links to a notice nobody has written.
+ */
+function cv_inquiries_privacy(): string {
+	$url = get_privacy_policy_url();
+	if ( '' === $url ) {
+		return '';
+	}
+	return '<p class="inq-privacy">Your message goes to Claudia Valsells to answer your inquiry, and is not kept on this site. <a href="' . esc_url( $url ) . '">Privacy notice</a></p>';
 }

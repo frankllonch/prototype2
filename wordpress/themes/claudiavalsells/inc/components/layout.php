@@ -67,7 +67,10 @@ function cv_about_overlay( bool $open = false ): string {
 	$card = $a['card'];
 
 	$out = '<section class="about' . ( $open ? ' is-open' : '' ) . '" id="about" data-panel data-panel-url="' . esc_url( $a['url'] ) . '" aria-label="About">'
-		. '<a class="about-close" href="#" data-panel-close>Close</a>'
+		// Served open at /about/, its Close leads to the start page for a reader
+		// without scripting, as a served panel's leads to its index; with
+		// scripting the click never leaves the page.
+		. '<a class="about-close" href="' . ( $open ? esc_url( home_url( '/' ) ) : '#' ) . '" data-panel-close>Close</a>'
 		. '<div class="about-sheet">'
 		. '<div class="about-card-stage" data-tilt><div class="about-card" data-tilt-inner>'
 		. '<p class="about-name">' . esc_html( $card['name'] ) . '</p>'

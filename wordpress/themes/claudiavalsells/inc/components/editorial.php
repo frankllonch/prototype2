@@ -88,18 +88,23 @@ function cv_editorial_body( array $item ): string {
  * Detail bodies for exhibitions and commissioned work, rendered once into the
  * page and raised over it on demand. Each carries its own address
  * (`data-panel-url`), which is what the bar shows while it is open; `$open`
- * names the one served open when that address was loaded directly.
+ * names the one served open when that address was loaded directly, and
+ * `$root` the index it closes to.
+ *
+ * The served panel's Close link leads to that index, so it closes without
+ * scripting too; with it, client/panels.ts takes the click and the link goes
+ * nowhere. The others are closed already and keep `#`, as on the static site.
  *
  * A commissioned project opens on the designer's sheet (sheet.php); an
- * exhibition, for now, on the reader above.
+ * exhibition on that sheet or on the plates, by what it holds (plates.php).
  */
-function cv_panels( string $kind, array $items, string $open = '' ): string {
+function cv_panels( string $kind, array $items, string $open = '', string $root = '' ): string {
 	$out = '<div class="panels">';
 	foreach ( $items as $item ) {
 		$id   = "{$kind}-{$item['slug']}";
 		$out .= '<article class="panel' . ( $open === $id ? ' is-open' : '' ) . '" id="' . esc_attr( $id ) . '" data-panel data-panel-url="' . esc_url( $item['url'] ) . '">'
-			. '<a class="panel-close" href="#" data-panel-close>Close</a>'
-			. ( 'commissioned' === $kind ? cv_sheet_body( cv_project_sheet( $item ) ) : cv_editorial_body( $item ) )
+			. '<a class="panel-close" href="' . ( $open === $id && $root ? esc_url( $root ) : '#' ) . '" data-panel-close>Close</a>'
+			. ( 'commissioned' === $kind ? cv_sheet_body( cv_project_sheet( $item ) ) : ( 'exhibition' === $kind ? cv_exhibition_body( $item ) : cv_editorial_body( $item ) ) )
 			. '</article>';
 	}
 	return $out . '</div>';

@@ -259,14 +259,16 @@ function cv_edition( WP_Post $p ): array {
 	preg_match_all( '#<p\b[^>]*>(.*?)</p>#su', $statement, $m );
 	$says = array_values( array_filter( array_map( 'trim', $m[1] ), fn( $s ) => '' !== wp_strip_all_tags( $s ) ) );
 
-	$people = [];
+	// Everyone filed under the edition is on its roster, the names across the
+	// top of its page; only the ones who answered have an entry below, and so
+	// only they get an id for a name to point at.
+	$people  = [];
+	$roster  = [];
 	$answers = function_exists( 'cvc_answers' ) ? cvc_answers( $p ) : [];
 	foreach ( $answers as $a ) {
-		$text = cv_content_parts( $a )['text'];
-		if ( '' === trim( wp_strip_all_tags( $text ) ) ) {
-			continue;
-		}
-		$person = [
+		$text     = cv_content_parts( $a )['text'];
+		$answered = '' !== trim( wp_strip_all_tags( $text ) );
+		$person   = [
 			'name'       => get_the_title( $a ),
 			'role'       => (string) cv_meta( $a->ID, '_cv_role' ),
 			'alias'      => (string) cv_meta( $a->ID, '_cv_alias' ),
@@ -276,11 +278,41 @@ function cv_edition( WP_Post $p ): array {
 			'answer'     => $text,
 			'inImages'   => (bool) get_post_meta( $a->ID, '_cv_in_images', true ),
 			'edition'    => $numeral,
-			'id'         => cv_id_for( get_the_title( $a ) ),
+			'id'         => $answered ? cv_id_for( get_the_title( $a ) ) : '',
 			'url'        => get_permalink( $p ),
 		];
 		$person['colour'] = cv_swatch_for( $person );
-		$people[]         = $person;
+		$roster[]         = $person;
+		if ( $answered ) {
+			$people[] = $person;
+		}
+	}
+
+	// The edition's text as the opening view sets it: the writing in full,
+	// shown cut after the words in "cut" until the reader asks for more.
+	// The introduction field when there is one, the edition's own text when not.
+	// The field is plain text in the side panel: typed as lines rather than as
+	// paragraph blocks, it still reads as paragraphs.
+	$source = '' !== trim( $intro ) ? cv_bare_block( do_blocks( $intro ) ) : $statement;
+	if ( '' !== trim( $intro ) && ! preg_match( '#<p\b#i', $source ) ) {
+		$source = wpautop( $source );
+	}
+	preg_match_all( '#<p\b[^>]*>(.*?)</p>#su', $source, $fm );
+	$full = array_values( array_filter( array_map( 'trim', $fm[1] ), fn( $s ) => '' !== wp_strip_all_tags( $s ) ) );
+	$cut    = trim( (string) cv_meta( $p->ID, '_cv_opening_cut' ) );
+	$teaser = [];
+	foreach ( $full as $para ) {
+		// Searched in the paragraph's text as read, entities decoded; the
+		// opening texts are plain, and a paragraph with markup in it is kept
+		// whole rather than cut through a tag.
+		$text = html_entity_decode( wp_strip_all_tags( $para ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+		$at   = '' !== $cut ? mb_strpos( $text, $cut ) : false;
+		if ( false === $at ) {
+			$teaser[] = $para;
+			continue;
+		}
+		$teaser[] = wp_strip_all_tags( $para ) === $para ? esc_html( mb_substr( $text, 0, $at + mb_strlen( $cut ) ) ) : $para;
+		break;
 	}
 
 	return $cache[ $p->ID ] = [
@@ -294,6 +326,13 @@ function cv_edition( WP_Post $p ): array {
 		'says'         => $says,
 		'sourceTitle'  => (string) cv_meta( $p->ID, '_cv_source_title' ),
 		'participants' => $people,
+		'roster'       => $roster,
+		'opening'      => $full ? [
+			'heading' => 'WHAT’S COLOR (' . $numeral . ')',
+			'align'   => 'justify' === cv_meta( $p->ID, '_cv_opening_align' ) ? 'justify' : 'left',
+			'teaser'  => $teaser,
+			'full'    => $full,
+		] : null,
 	];
 }
 

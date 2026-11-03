@@ -1,15 +1,92 @@
 # Moving the new site into WordPress
 
 Written 29 October 2026. Decision taken the same day: option B, the WordPress
-theme. **Status: Phase 1 is built, reviewed and running locally** — see "Where
-things stand" just below, and `wordpress/README.md` for how to run it.
+theme. **Status: Phase 1 is built, reviewed and running locally, and Phase 2 is
+ready to start the day hubsfera gives us a staging address** — the site
+packs into two files, installs on a fresh WordPress and imports its content
+from the admin, rehearsed end to end on this Mac. See "Where things stand" just
+below, and `wordpress/README.md` for how to run it.
+
+**Decided 2 November:** the static site is built alongside the theme only until
+staging goes up at hubsfera; from that day WordPress is the only build. See
+"From staging day, WordPress is the only build" in section 2.
 
 This is the working document for taking the design in this repository live on
 Claudia's own WordPress, at hubsfera's hosting, with Claudia editing everything
 herself. It is written for someone who has not used WordPress before. It will be
 updated as each phase lands.
 
-## Where things stand (30 October 2026)
+## Where things stand (2 November 2026)
+
+**2 November — ready for staging.** Everything Phase 2 needs from our side is
+built and has been through a rehearsal: a second, empty WordPress on this Mac,
+marked as staging, where the site was installed from the package and imported
+from the admin exactly as it will be at hubsfera — every page then matched the
+main local site.
+
+- **The package.** `npm run wp:package` makes the theme and the plugin as the
+  two zips WordPress installs from its own upload screens, with
+  `INSTALL.txt`: the nine steps for a fresh WordPress, in order. The content
+  bundle (310 MB) goes up by SFTP.
+- **The import without a command line** — Tools → Import content. A shared
+  host stops any request after half a minute or so, and the first import
+  resizes six hundred pictures, so it runs a few entries per request with a
+  progress bar, and a run cut short continues where it stopped (tried: the
+  rehearsal was interrupted on purpose and carried on). It is also how the
+  Phase 3 re-import happens on staging. A picture whose file changed in the
+  dataset since — a painting re-cut — is replaced in place; one Claudia has
+  edited in WordPress is left alone, as are entries she has edited.
+- **Tools → Site check**, the go-live checklist read from the site itself:
+  search engines, HTTPS, permalinks, the theme's files, the privacy notice,
+  the order form's recipient and a test message, the redirects, the
+  sitemap, what the server can do with pictures, PHP and its limits, a page
+  cache, debug output, the default "admin" account, code editing from the
+  admin, a security plugin — each right, to look at, or to fix, for the kind
+  of site it is. On staging it answers the PHP and picture questions for Toni
+  by itself, and its report comes as text to paste into an email.
+- **Staging can't be mistaken for the live site**: anywhere but production the
+  admin bar says so in red, and every page tells search engines not to index
+  it, on top of Settings → Reading. One line in staging's wp-config.php.
+- **Every old address, listed and checked.** `wordpress/old-urls.txt` is a
+  snapshot of the old site's 624 page addresses (436 of them the old pictures'
+  own pages) and 390 files, taken from its sitemaps and the dataset, so the
+  check never depends on the old site being up. `npm run wp:check-links` asks a
+  site for each one; nine new redirect rules send the picture pages to their
+  work's or project's new page. 619 of 624 pass here; the other five are the
+  sitemap, which WordPress switches off while search engines are kept out.
+  `wordpress/redirects.csv` is the list for Toni.
+- **The order desk, end to end.** On this Mac mail is written to a log
+  instead of sent, so a message went through the real endpoint and was read
+  as Claudia would receive it; the honeypot dropped a fake one silently.
+  Under the form, a line links the privacy notice once one is published.
+- **Link previews.** A link shared on WhatsApp or Instagram shows the page's
+  title, a line and a picture — a painting's photograph in place, an
+  exhibition's photograph, the film's first frame elsewhere — as the old
+  site's Yoast did.
+- **Claudia's guide** — Dashboard → Guide, and a panel at the top of the
+  dashboard: adding a painting (and why its picture must be a transparent
+  cut-out), marking one sold, adding an exhibition, a commissioned project, a
+  person to What's Color?, editing About and the Color Chart, where the order
+  form's messages go, checking before publishing. It reads the admin's own
+  labels, so it matches the screen in every language, and prints to PDF.
+- **Caught up with the static site**: What's Color's opening note written as
+  you scroll, the editions' texts and complete rosters, the exhibitions' two
+  sheets with the archive's photographs (eleven shows), the paintings as
+  transparent cut-outs at their new resolution. Pictures are made at six
+  sizes, not nine — a third less disk and import time — and always on the
+  server, so every upload gets its WebP.
+- **Reviewed, and in two languages.** A second review of all of the above —
+  five readers, each finding checked three ways — confirmed fifteen faults and
+  every one is fixed: chiefly, an import cut short at any point now finishes
+  cleanly on the next request, without a duplicate picture or an entry
+  wrongly taken for one Claudia edited; a picture replaced in place keeps its
+  old files until the new one is safely there; a painting Claudia makes by
+  hand is never overwritten by one of the same name from the old site; a run
+  can't be continued against a different bundle. The new admin screens and
+  Claudia's guide are in Spanish and Catalan too (423 strings, proofread).
+  Every page of the rehearsal site, installed from the package, matches the
+  static site, head included — except the colour chart, which follows once
+  its redesign settles.
 
 **1 November:** the commissioned projects open on the designer's new detail
 sheet in WordPress too — the same markup as the static site (`wp:diff` reports
@@ -82,7 +159,8 @@ Since 29 October:
 
 Not done yet, in order:
 
-1. **Review** on this Mac by Frank and Claudia; her trying to add a work.
+1. **Review** on this Mac by Frank and Claudia; her trying to add a work, with
+   Dashboard → Guide beside her.
 2. **For the designer** — the places where WordPress reads differently from
    the static site, each on purpose, each needing a yes or a no:
    - **The record on About** is read out of the Exhibitions entries (one list
@@ -102,13 +180,34 @@ Not done yet, in order:
      the list's; the static site shows both.
    - The static site carries a panel for the Terranova project that no row
      opens; in WordPress that project is the third edition of What's Color?.
-3. **Edition III's sheet** follows the static site's work in progress of
-   30 October (the strip of photographs of the book and its viewer). When that
-   design settles, `npm run wp:diff` says where the theme has to follow.
-4. **Mail** from the order desk needs the host's mailer (Phase 2).
-5. A **page cache** for the host, and the staging checklist (Phase 2).
-6. Small: without scripting, an exhibition's own address lands at the top
-   of the list with its panel further down, rather than on the panel.
+   - **Fields the site never shows**: an exhibition's *Note*, a project's
+     *Client*, and a painting's *Available*, which only marks the tile in the
+     grid since nothing opens the lightbox that printed it. Show them, or take
+     them out of the admin.
+   - **Link previews** use a painting's photograph in place rather than its
+     cut-out (some apps draw a transparent background black). Confirm.
+3. **For Frank**:
+   - **Who makes a new painting's cut-out**: the guide tells Claudia to upload
+     a transparent PNG of the painting alone. If the crop script stays the
+     way, the guide's first paragraph on paintings changes.
+   - The colour chart is being redesigned in `src/` right now; the theme
+     follows once it settles (`npm run wp:diff` says what moved).
+4. **Mail** from the order desk needs the host's mailer (Phase 2): WP Mail
+   SMTP with the domain's mail account. Tools → Site check sends the test.
+5. A **page cache** at the host (Phase 2) — the site check says whether
+   there is one.
+6. A **privacy notice** for the order form (Phase 2): the line under the form
+   appears the moment the page is published. For whoever writes it, what the
+   form does: the message goes by email to the address in Settings → Site
+   texts and nothing is stored on the site; to limit abuse, the site keeps a
+   one-way fingerprint of the sender's IP address for at most a day.
+7. **The old files** (Phase 3): copying the old uploads folder across covers
+   the 57 old picture and file addresses the import does not bring (sizes,
+   images of pages not carried over, a PDF, a film). One file sits outside it,
+   at the old site's root, and the What's Color shows' texts link it by its
+   full address: `/whats-color.mp4` must be copied too.
+8. Re-take the snapshot of old addresses (`npm run wp:check-links --
+   --snapshot`) after the Phase 3 re-extract, while the old site is still up.
 
 ## 1. Where things stand
 
@@ -164,6 +263,48 @@ design here is exact and code-driven (the stack, the colour chart, the About
 card), so the layouts stay in code and Claudia gets the block editor plus a
 few fields per content type. That is what "the one with blocks" should mean for
 her: writing and uploading, not rebuilding pages.
+
+### From staging day, WordPress is the only build
+
+Decided 2 November 2026. Until now the site has been built twice: every change
+to a page's markup is made in `src/` for the static site and then carried into
+the theme, with `npm run wp:diff` showing what is still to carry. That stops on
+one day, the day staging goes up at hubsfera (Phase 2).
+
+**Until staging day**
+
+- The static site stays the design workbench, and its GitHub Pages deploy the
+  one preview others can open without this Mac.
+- Content still goes in where it goes now: the dataset under `content/` and the
+  lists under `src/content/`. The local WordPress lives only in Docker on this
+  Mac, with no backup, so nothing is written there that the dataset does not
+  also hold.
+- Markup changes are carried into the theme in small batches, `npm run wp:diff`
+  saying what is left.
+
+**From staging day**
+
+- Content is entered only in WordPress, on staging. The dataset is frozen, and
+  read once more in Phase 3 for whatever Claudia added to the old site in the
+  meantime; the importer leaves alone anything edited in WordPress since its
+  last run.
+- Page markup is built only in the theme, `wordpress/themes/claudiavalsells/`.
+  The TypeScript page components (`src/components/`, `src/pages/`) and the
+  static build are frozen, kept as the reference until go-live, and the GitHub
+  Pages deploy is no longer updated: staging is the preview.
+- `src/styles/` and `src/client/` stay where they are. They are the theme's own
+  stylesheet and scripts, which `npm run wp:assets` builds into it — the design
+  itself, not the static site.
+- Just before the day, the What's Color sheet placements, which `wp:assets` now
+  writes into the theme from `src/content/whats-color-sheet.ts`, become a data
+  file committed in the theme, so the theme reads nothing from the static
+  site's content any more.
+
+**After go-live**
+
+Retired: the static build and its GitHub Pages deploy, the TypeScript page
+components, `npm run wp:diff`, the extract-and-import pipeline once the Phase 3
+import is done, and the Cloudflare worker under `server/inquiries/`.
 
 ## 3. What Claudia will edit
 
@@ -229,23 +370,55 @@ Replace.
 ### Phase 2 — Staging at hubsfera, private
 
 - Toni provides a subdomain (for example nova.claudiavalsells.com) with its own
-  folder, a database and HTTPS, plus SFTP access. Alternatively we hand him a
-  Duplicator package of the local site and he installs it.
-- We install with Duplicator (package built locally, installer run on staging).
+  folder, a database and HTTPS, plus SFTP access, and a fresh WordPress in it
+  with one line in its wp-config.php:
+  `define( 'WP_ENVIRONMENT_TYPE', 'staging' );`.
+- We install from the package, not from a copy of this Mac's site: on a fresh
+  WordPress, upload the plugin and the theme from their zips, add Modern Image
+  Formats, put the content bundle in `wp-content/import` by SFTP, and run
+  Tools → Import content — `wordpress/package/INSTALL.txt`, nine steps,
+  rehearsed here on an empty WordPress. A fresh install starts clean, where a
+  Duplicator copy of the local site would carry its test account and database
+  along; Duplicator stays the fallback if the host can't take uploads.
+- Then Tools → Site check, until nothing is red: it reads the server's PHP,
+  memory, image formats and mail by itself, and its report goes to Toni as
+  text.
+- From that day WordPress is the only build: content goes in on staging, and
+  markup changes go into the theme alone (section 2, "From staging day,
+  WordPress is the only build").
 - The staging stays private: Settings → Reading → "Discourage search engines",
   plus a password at the server door (HTTP authentication, which Toni can set
   in a minute). Nobody without the password sees anything. The order form
   sends to your address only.
 - Testing on the real server: PHP version, image generation, mail delivery,
   speed, phone and tablet.
+- **A privacy notice for the order form.** The form collects a name and an
+  email address, and data-protection law (the GDPR, and Spain's LOPDGDD) asks
+  for a short notice wherever personal data is collected: who receives the
+  message, what it is used for, how long it is kept, and how to have it
+  deleted. A plain page, made from Settings → Privacy, which offers a starting
+  text, and linked by one line under the form. Claudia, or whoever looks after
+  her legal side, confirms the wording.
 - Claudia and the designer review there. Fixes go into this repository and up
   again.
 
 ### Phase 3 — Content freeze and final import: one or two days before go-live
 
 - Claudia stops editing the old site. The extract runs once more against the
-  live site, the import runs again on staging, and the counts are checked
-  against the old site (works added since the dataset's date included).
+  live site, the import runs again on staging (Tools → Import content; what
+  Claudia edited on staging is kept), and the counts are checked against the
+  old site — the site check lists them (works added since the dataset's date
+  included). The snapshot of old addresses is taken again at the same time:
+  `npm run wp:check-links -- --snapshot`.
+- **The old uploads folder comes across.** The import puts each photograph it
+  uses in the folder and under the filename the old site gave it, but the old
+  `wp-content/uploads` holds more: the sizes WordPress cut from every picture,
+  images from pages that were not carried over, any PDF. After the freeze,
+  Toni copies the whole folder into staging's, skipping any file already
+  there, so every old image or file address keeps answering — and the one
+  file at the old site's root that pages link to, `/whats-color.mp4`. Those files stay
+  out of the media library; they are there only for the old links. They count
+  against the 4 GB (section 9).
 - Claudia gets her user on the new site and sets her own password.
 
 ### Phase 4 — Go-live: one morning, with Toni on hand
@@ -254,23 +427,31 @@ Replace.
   folder stays untouched as the rollback. Alternative: a Duplicator package of
   staging installed over the live folder, with the staging address replaced by
   the real one.
-- Then, in order: remove the staging password and the "discourage search
-  engines" flag; confirm the redirects (section 5) by crawling every old URL;
-  save permalinks once; check HTTPS; test the order form; submit the sitemap in
-  Google Search Console; confirm Wordfence and the scheduled backup.
+- Then, in order: remove the staging password, the `WP_ENVIRONMENT_TYPE` line
+  and the "discourage search engines" flag; Tools → Site check until nothing
+  is red (it knows it is now production, and checks what only matters there:
+  search engines let in, sitemap on, debug off, no "admin" account, the import
+  folder deleted); confirm the redirects by asking the live site for every
+  old address, images and files included —
+  `npm run wp:check-links -- https://www.claudiavalsells.com --images`;
+  save permalinks once; test the order form and the privacy notice linked
+  under it; submit the sitemap in Google Search Console; confirm Wordfence and
+  the scheduled backup.
 - Keep the old folder and the Phase 0 backup for a month.
 
 ### Phase 5 — Handover
 
 A one-page guide inside WordPress (a dashboard panel) and as a PDF: add a work,
-add an exhibition, edit About, change the price. A half-hour session with
-Claudia.
+add an exhibition, edit About, change the price — built: Dashboard → Guide,
+which prints to PDF, and its tasks fold at the top of the dashboard. A
+half-hour session with Claudia. Then what only the static site needed is retired (section 2, "After
+go-live").
 
 ## 5. Link map — old URLs to new
 
 Every address the old site ever published keeps working: it answers with a
 permanent redirect (301) to its new home, so bookmarks, Instagram links and
-Google keep resolving. Three patterns cover almost everything.
+Google keep resolving. A handful of patterns cover everything.
 
 | Old | New | Note |
 |---|---|---|
@@ -288,13 +469,18 @@ Google keep resolving. Three patterns cover almost everything.
 | `/contacto/` | `/about/` | the card carries phone and emails |
 | `/carrito/`, `/finalizar-compra/` | `/artwork/` | shop leftovers |
 | `/4824-2/` | `/` | a test page |
-| `/wp-content/uploads/…` | unchanged | the import keeps the year/month folders and filenames, so old image links keep working |
+| `/wp-content/uploads/…` | unchanged | the import keeps the year/month folders and filenames of every photograph it brings in, and the rest of the old uploads folder is copied across in Phase 3, so every old image and file link keeps working |
 | `/sitemap_index.xml` | `/wp-sitemap.xml` | Yoast's sitemap to WordPress's own |
+| `/page-sitemap.xml`, `/attachment-sitemap.xml`, `/portfolio-sitemap.xml`, `/portfolio_category-sitemap.xml` | `/wp-sitemap.xml` | the sitemaps Yoast's index listed |
+| `/portfolio/<work>/<picture>/`, `/projects/<project>/<picture>/`, `/whats-color-exhibitions/<picture>/`, `/colour-chart/<picture>/`, `/home/<picture>/`, three under `/about/` | the work's, project's or page's new address | 436 pages the old site gave each picture; WordPress would otherwise guess, and guessed three wrong |
 
-The redirects live in the theme's companion plugin, versioned here, and are
-exported as a list for Toni. The full list of 220 old addresses, each with its
-target, is generated from `content/projects.json` and the old sitemaps, and a
-script checks every one after go-live.
+The redirects live in the theme's companion plugin, versioned here
+(`includes/redirects.php`). `wordpress/old-urls.txt` is the full list of old
+addresses — 624 pages and 390 files, from the old site's sitemaps and the
+dataset, taken 2 November — and `npm run wp:check-links -- <site>` asks a site
+for every one and says where each ends; with `--csv` it writes the list for
+Toni (`wordpress/redirects.csv`). It runs against staging before go-live and
+against the live address right after.
 
 ## 6. Keeping the test private
 
@@ -336,6 +522,19 @@ A draft, in Catalan, to read over and send:
 > Merci,
 > Frank
 
+If the email has not gone yet, three more points belong in it, now that the
+install is settled (or a short second email):
+
+> 9. **wp-config.php de l'entorn de proves.** Hi podeu afegir
+>    `define( 'WP_ENVIRONMENT_TYPE', 'staging' );`? Així la web nova sap que
+>    és la còpia de proves i ho mostra a l'administració.
+> 10. **Contrasenya del servidor.** Si poseu una contrasenya HTTP a l'entorn
+>    de proves, deixeu que el WordPress es pugui cridar a si mateix (loopback):
+>    ho fan servir les comprovacions i les tasques programades.
+> 11. **SFTP.** Pujarem el contingut (uns 310 MB) a `wp-content/import` per
+>    SFTP i l'importarem des de l'escriptori del WordPress, així que no cal
+>    accés SSH ni WP-CLI, tot i que si n'hi ha, millor.
+
 ## 8. What is needed from you now
 
 1. The decision in section 2.
@@ -358,3 +557,7 @@ A draft, in Catalan, to read over and send:
   Frank runs now and then, or Claudia uploads cut-outs herself.
 - Space: the old site, the new site and the backups must all fit in 4 GB until
   go-live. Toni's answer to question 7 decides whether that is comfortable.
+  The new site's pictures took 770 MB on this Mac at nine sizes each, before
+  they were cut to six (about a third less); the content bundle is 310 MB and
+  is deleted after the last import; the old uploads folder copied in Phase 3
+  adds whatever it weighs on the old site.

@@ -17,18 +17,18 @@
  * white, named after the photograph with `-painting` added. The import makes the
  * cut-out the work's main image and keeps the photograph beside it.
  */
-import { copyFile, mkdir, readFile, writeFile } from 'node:fs/promises';
+import { copyFile, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
 import { parse, type HTMLElement, type Node } from 'node-html-parser';
-import { works, commissioned, exhibitions, colourChart, yearColours, isPlate } from '../src/content/load.ts';
+import { works, commissioned, exhibitions, colourChart, yearColours, isPlate, showPhotos } from '../src/content/load.ts';
 import { groupCommissioned } from '../src/content/groups.ts';
 import { SHEETS } from '../src/content/commissioned-sheets.ts';
 import { SHOWS } from '../src/content/exhibitions-list.ts';
 import { EDITIONS_ALL, LEAD } from '../src/content/whats-color.ts';
 import { ABOUT_BLOCKS, ABOUT_CARD, ABOUT_COLLECTIONS, ABOUT_COPYRIGHT, ABOUT_SHOWS } from '../src/content/about.ts';
-import { BANDS, photographs, price, prose } from '../src/content/colour-chart.ts';
+import { BANDS, price, sections, statement } from '../src/content/colour-chart.ts';
 import { displayTitle } from '../src/content/title.ts';
 import { describeImage } from '../src/content/describe.ts';
 import type { Project, ProjectImage, Row } from '../src/content/types.ts';
@@ -70,9 +70,14 @@ const folderOf = (image: ProjectImage, fallbackDate?: string): string => {
     : '2026/10';
 };
 
+/**
+ * A picture's filename as the old site served it. Only what no filesystem
+ * should hold is replaced — path separators, control characters, a leading
+ * dot — so a © or a double hyphen stays, and the old address keeps working.
+ */
 const basenameOf = (image: ProjectImage): string => {
   const file = localFile(image.source) ? path.basename(image.source) : decodeURIComponent(path.basename(new URL(image.source).pathname));
-  return file.replace(/[^\w.\- ]+/g, '-').replace(/\s+/g, '-');
+  return file.replace(/[\/\\\u0000-\u001f\u007f:*?"<>|]+/g, '-').replace(/\s+/g, '-').replace(/^\.+/, '');
 };
 
 async function measure(file: string): Promise<{ width: number; height: number }> {
@@ -80,20 +85,45 @@ async function measure(file: string): Promise<{ width: number; height: number }>
   return { width: meta.width ?? 0, height: meta.height ?? 0 };
 }
 
-/** The photograph as the site served it, copied byte for byte. */
-async function exportImage(image: ProjectImage, alt: string, fallbackDate?: string): Promise<ImageRef | null> {
+/**
+ * WordPress's own ceiling for an uploaded photograph's long side: anything
+ * larger it scales down on upload and keeps as "-scaled". The old site's
+ * pictures were all through that already; the archive's were not, and some
+ * are 8256 pixels across — on a shared host, resizing one of those can run
+ * out of memory mid-import.
+ */
+const LONG_EDGE = 2560;
+
+/**
+ * A photograph as the site served it, copied byte for byte — or, for the
+ * archive's (`scale`), brought down to WordPress's ceiling first.
+ */
+async function exportImage(image: ProjectImage, alt: string, fallbackDate?: string, name?: string, scale = false): Promise<ImageRef | null> {
   const held = exported.get(image.id);
   if (held) return held;
 
   const file = localFile(image.source) ?? path.join(MEDIA, `${image.id}${sourceExt(image.source)}`);
   if (!existsSync(file)) { missing++; console.warn(`  ! missing ${image.source}`); return null; }
 
-  const ext = path.extname(file).toLowerCase() || '.jpg';
+  const original = await measure(file);
+  const scaling = scale && Math.max(original.width, original.height) > LONG_EDGE;
+  // Scaled, the picture is written as a JPEG, so it is named as one.
+  const ext = scaling ? '.jpg' : path.extname(file).toLowerCase() || '.jpg';
   const src = `files/${image.id}${ext}`;
-  await copyFile(file, path.join(OUT, src));
-  const size = await measure(file);
+  if (scaling) {
+    // Scaled the way WordPress would, turned upright first, and saved without
+    // the camera's metadata — one archive photograph's is malformed enough
+    // that WordPress warns on reading it.
+    await sharp(file, { failOn: 'none' }).rotate()
+      .resize({ width: LONG_EDGE, height: LONG_EDGE, fit: 'inside', withoutEnlargement: true })
+      .jpeg({ quality: 88, progressive: true, mozjpeg: true })
+      .toFile(path.join(OUT, src));
+  } else {
+    await copyFile(file, path.join(OUT, src));
+  }
+  const size = await measure(path.join(OUT, src));
   const ref: ImageRef = {
-    id: image.id, src, name: basenameOf(image), folder: folderOf(image, fallbackDate),
+    id: image.id, src, name: (name ?? basenameOf(image)).replace(/\.[^.]+$/, '') + (scaling ? '.jpg' : path.extname(name ?? basenameOf(image)) || ext), folder: folderOf(image, fallbackDate),
     alt, ...(image.caption ? { caption: image.caption } : {}), ...size,
   };
   exported.set(image.id, ref);
@@ -109,13 +139,24 @@ async function exportCrop(image: ProjectImage, alt: string, folder: string): Pro
   const crop = existsSync(png) ? png : existsSync(jpg) ? jpg : null;
   if (!crop) return null;
 
-  const src = `files/${image.id}c.jpg`;
-  await sharp(crop, { failOn: 'none' }).rotate().flatten({ background: PAPER })
-    .jpeg({ quality: 90, progressive: true, mozjpeg: true })
-    .toFile(path.join(OUT, src));
-  const size = await measure(path.join(OUT, src));
+  // A cut-out with transparency stays a PNG, so the painting sits on the page
+  // with nothing around it, as the static site's AVIF and WebP serve it; the
+  // Modern Image Formats plugin writes a WebP beside it that keeps the
+  // transparency too. The few cut-outs that are JPEG have none to keep.
+  // A new id for the PNG (p rather than c), so a run after the flattened JPEG
+  // was imported brings the PNG in rather than reusing the old picture.
   const base = basenameOf(image).replace(/\.[^.]+$/, '');
-  const ref: ImageRef = { id: `${image.id}c`, src, name: `${base}-painting.jpg`, folder, alt, ...size };
+  const alpha = crop === png;
+  const src = alpha ? `files/${image.id}p.png` : `files/${image.id}c.jpg`;
+  const pipe = sharp(crop, { failOn: 'none' }).rotate();
+  await (alpha
+    ? pipe.png({ compressionLevel: 9, adaptiveFiltering: true })
+    : pipe.flatten({ background: PAPER }).jpeg({ quality: 90, progressive: true, mozjpeg: true })
+  ).toFile(path.join(OUT, src));
+  const size = await measure(path.join(OUT, src));
+  const ref: ImageRef = alpha
+    ? { id: `${image.id}p`, src, name: `${base}-painting.png`, folder, alt, ...size }
+    : { id: `${image.id}c`, src, name: `${base}-painting.jpg`, folder, alt, ...size };
   exportedCrops.set(image.id, ref);
   return ref;
 }
@@ -146,6 +187,9 @@ const BLOCK_TAGS = new Set(['p', 'div', 'section', 'article', 'h1', 'h2', 'h3', 
  * become their own kind of block, so Claudia edits them as text; anything the
  * editor has no block for is kept whole as HTML, where she can still reach it.
  */
+/** What makes an element a film or an embed rather than text. */
+const EMBED = /<(video|audio|iframe|object|embed)\b/i;
+
 function textBlocks(html: string | undefined): Block[] {
   if (!html || html.trim() === 'null' || !plain(html)) return [];
   const out: Block[] = [];
@@ -159,7 +203,12 @@ function textBlocks(html: string | undefined): Block[] {
       const el = node as HTMLElement;
       const tag = el.tagName?.toLowerCase();
       if (!tag) continue;
-      if (tag === 'p') {
+      if (EMBED.test(el.innerHTML)) {
+        // A film or an embed, with or without a line of fallback text inside:
+        // an HTML block of its own, as the page sets it, not a paragraph that
+        // wraps it.
+        out.push({ type: 'html', html: tidy(el.innerHTML) });
+      } else if (tag === 'p') {
         const inner = tidy(el.innerHTML);
         if (plain(inner)) out.push({ type: 'paragraph', html: inner });
       } else if (/^h[1-6]$/.test(tag)) {
@@ -204,17 +253,20 @@ async function rowBlocks(rows: readonly Row[], alt: (image: ProjectImage) => str
 async function exportWorks() {
   const out = [];
   for (const work of works) {
+    // A work whose picture is missing here is still written out, with no
+    // picture: left out of the manifest, the importer would take it for a work
+    // taken off the site and move it to the bin. The importer keeps the
+    // picture it already has, or files a new work as a draft until it has one.
     const cover = work.cover;
-    if (!cover) continue;
     const name = displayTitle(work.title, 'work');
-    const alt = describeImage(work, cover.alt);
-    const photo = await exportImage(cover, alt, work.metadata.date);
-    if (!photo) continue;
-    const plate = isPlate(cover);
-    const crop = plate ? await exportCrop(cover, alt, photo.folder) : null;
+    const alt = cover ? describeImage(work, cover.alt) : name;
+    const photo = cover ? await exportImage(cover, alt, work.metadata.date) : null;
+    if (!cover) { missing++; console.warn(`  ! no picture for ${work.slug}`); }
+    const plate = cover ? isPlate(cover) : false;
+    const crop = cover && photo && plate ? await exportCrop(cover, alt, photo.folder) : null;
 
     const views = [];
-    for (const image of work.images.filter((i) => i.id !== cover.id)) {
+    for (const image of work.images.filter((i) => i.id !== cover?.id)) {
       const ref = await exportImage(image, image.alt || `${name}, another view`, work.metadata.date);
       if (ref) views.push(ref);
     }
@@ -344,7 +396,21 @@ async function exportExhibitions() {
     const derived = show.slug ? exhibitions.find((e) => e.slug === show.slug) : undefined;
     const alt = (image: ProjectImage) => image.alt || `${show.title}${show.venue ? `, ${show.venue}` : ''} — installation view`;
     const blocks = derived ? await rowBlocks(derived.rows, alt) : [];
-    const cover = derived?.cover ? await exportImage(derived.cover, alt(derived.cover)) : null;
+    // A show from Claudia's archive has photographs and nothing to read: they
+    // come in as the entry's pictures, under names that say whose they are
+    // (the archive numbers them 01, 02… in every folder), filed in the year
+    // of the show.
+    const archive = show.slug && !derived?.images.length ? showPhotos.get(show.slug) : undefined;
+    const photos: Block[] = [];
+    for (const [n, image] of (archive?.images ?? []).entries()) {
+      const ext = path.extname(image.source).toLowerCase() || '.jpg';
+      const name = `claudia-valsells-${show.slug}-${String(n + 1).padStart(2, '0')}${ext}`;
+      const ref = await exportImage(image, alt(image), `${show.year}-06-01`, name, true);
+      if (ref) photos.push({ type: 'image', image: ref });
+    }
+    blocks.push(...photos);
+    const coverImage = derived?.cover ?? archive?.cover;
+    const cover = coverImage ? await exportImage(coverImage, alt(coverImage)) : null;
     out.push({
       // Cut the way WordPress would cut it, or a hyphen left at the end would
       // be trimmed on save and the entry never found again.
@@ -365,6 +431,19 @@ async function exportExhibitions() {
   return out;
 }
 
+/**
+ * The words the opening view's teaser ends on, for an editor to read and
+ * change: the last few words of its last paragraph, which the theme finds
+ * again in the full text and cuts after. Nothing when the teaser is the
+ * whole text.
+ */
+function cutWords(teaser: readonly string[], full: readonly string[]): string {
+  const last = teaser[teaser.length - 1];
+  if (!last || (teaser.length === full.length && last === full[full.length - 1])) return '';
+  const words = last.trim().split(/\s+/);
+  return words.slice(-Math.min(6, words.length)).join(' ');
+}
+
 function exportEditions() {
   return EDITIONS_ALL.map((edition) => ({
     numeral: edition.numeral,
@@ -372,7 +451,13 @@ function exportEditions() {
     title: `What’s Color? (${edition.numeral})`,
     sourceTitle: edition.sourceTitle,
     sourceSlug: edition.slug,
-    intro: textBlocks(edition.intro),
+    // The text the opening view sets for the edition, in full, plain; the
+    // theme shows it cut after `openingCut` until the reader asks for more.
+    intro: edition.opening
+      ? edition.opening.full.map((para) => ({ type: 'paragraph' as const, html: entities(para.replace(/</g, '&lt;')) }))
+      : textBlocks(edition.intro),
+    openingCut: edition.opening ? cutWords(edition.opening.teaser, edition.opening.full) : '',
+    openingAlign: edition.opening?.align ?? 'left',
     // The edition's own text is what its page sets between the entries: on
     // the composed sheets (I and II) that is Claudia's paragraphs one at a
     // time, in the designer's order, which is more than the statement the
@@ -420,23 +505,54 @@ async function exportAbout() {
   };
 }
 
+/**
+ * The Colour Chart.
+ *
+ * The page is hand-set — a statement in clauses, then Features, six technical
+ * notes and About a colour chart — and `content/colour-chart.ts` is where that
+ * setting lives. It is flattened back into one run of blocks here because that
+ * is what goes into `post_content`, and `post_content` is what Claudia edits:
+ * she should find her own paragraphs under her own headings in the editor, not
+ * a structure this build invented.
+ *
+ * The three photographs are not on the sheet and their credits went with them,
+ * so there are none to export.
+ */
 async function exportChart() {
-  const plates = [];
-  for (const image of photographs) {
-    const ref = await exportImage(image, image.alt || 'Claudia Valsells’ colour chart', colourChart?.metadata.date);
-    if (ref) plates.push(ref);
-  }
+  const body = [
+    ...statement.map((block) => `<p>${block}</p>`),
+    ...sections.flatMap((s) => [
+      `<h2>${s.title}</h2>`,
+      ...s.blocks.map((block) => `<p>${block}</p>`),
+    ]),
+  ].join('');
+
   return {
     price: price ?? '',
     bands: BANDS,
-    prose: textBlocks(prose),
-    photographs: plates,
+    prose: textBlocks(body),
+    photographs: [],
+    /*
+     * The same content, still in its sections, for the theme's own component
+     * to lay out. The theme renders `post_content` today and so gets `prose`;
+     * this is here for the port that gives it the sheet's composition.
+     */
+    statement,
+    sections,
     sourceTitle: colourChart?.title ?? 'Colour Chart',
   };
 }
 
 async function main() {
+  // A clean folder each time, so the bundle holds exactly what the manifest
+  // names — a picture replaced since the last export (a flattened cut-out by
+  // its transparent one, say) would otherwise ride along to the server.
+  await rm(FILES, { recursive: true, force: true });
+  await rm(path.join(OUT, 'manifest.json'), { force: true });
   await mkdir(FILES, { recursive: true });
+  // The bundle is meant for the importer, not for visitors: on Apache this
+  // keeps its folder from being served while it sits in wp-content/import.
+  await writeFile(path.join(OUT, '.htaccess'), 'Require all denied\n');
   console.log('Exporting for WordPress…');
 
   const manifest = {
@@ -461,6 +577,13 @@ async function main() {
     `${exported.size} photographs and ${exportedCrops.size} cut-outs` +
     (missing ? `; ${missing} files missing` : '') + '.',
   );
+  // A bundle with holes in it is still written, so it can be looked at, but
+  // the run fails: nothing chained after it (`&& npm run wp:import`, a
+  // package) goes ahead on pictures that are not there.
+  if (missing) {
+    console.warn('The bundle is incomplete: find the missing files above before importing it.');
+    process.exitCode = 1;
+  }
 }
 
 await main();

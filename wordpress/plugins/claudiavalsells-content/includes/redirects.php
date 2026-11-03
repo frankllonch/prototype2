@@ -19,18 +19,36 @@ if ( ! defined( 'ABSPATH' ) ) {
 function cvc_redirect_rules(): array {
 	return [
 		[ '#^/portfolio/([^/]+)/?$#', '/artwork/$1/' ],
+		// A picture's own page, which the old site kept under the work it was uploaded to.
+		[ '#^/portfolio/([^/]+)/(?:attachment/)?[^/]+/?$#', '/artwork/$1/' ],
 		[ '#^/portfolio/?$#', '/artwork/' ],
 		[ '#^/portfolio_category/[^/]+/?$#', '/artwork/' ],
 		[ '#^/available-works/?$#', '/artwork/' ],
 		[ '#^/projects/whats-color-3rd-edition-llibreria-terranova-abril-2024/?$#', '/whats-color/iii/' ],
+		// Its pictures' pages, under attachment/ where their names are numbers.
+		[ '#^/projects/whats-color-3rd-edition-llibreria-terranova-abril-2024/(?:attachment/)?[^/]+/?$#', '/whats-color/iii/' ],
+		// The pictures of the old /projects/ page itself, whose own pages look like projects'.
+		[ '#^/projects/(aoo-claudia-valsells-w|claudia-valsells-aoo-w|imagen-destacada|solidary-fulard-2022-(?:1|2|3|thumb|thumbs-2))/?$#', '/commissioned/' ],
 		[ '#^/projects/([^/]+)/?$#', '/commissioned/$1/' ],
+		// A picture's own page, under the project it was uploaded to.
+		[ '#^/projects/([^/]+)/(?:attachment/)?[^/]+/?$#', '/commissioned/$1/' ],
 		[ '#^/projects/?$#', '/commissioned/' ],
 		[ '#^/whats-color-exhibitions/?$#', '/exhibitions/' ],
+		// A picture's own page under the old exhibitions page.
+		[ '#^/whats-color-exhibitions/(?:attachment/)?[^/]+/?$#', '/exhibitions/' ],
 		[ '#^/colour-chart/?$#', '/color-chart/' ],
+		// The one picture's page under the old Colour Chart.
+		[ '#^/colour-chart/(?:attachment/)?[^/]+/?$#', '/color-chart/' ],
 		[ '#^/contacto/?$#', '/about/' ],
+		// The pictures' pages under About, each named, since /about/ is still an address.
+		[ '#^/about/(img_7927|r1-00056-001a|r1-00056-004a)/?$#', '/about/' ],
 		[ '#^/(carrito|finalizar-compra)/?$#', '/artwork/' ],
 		[ '#^/4824-2/?$#', '/' ],
+		// The picture's page under the old home page, which was /home/.
+		[ '#^/home/(?:attachment/)?[^/]+/?$#', '/' ],
 		[ '#^/sitemap_index\.xml$#', '/wp-sitemap.xml' ],
+		// The sitemaps Yoast's index listed, which search engines were given as well.
+		[ '#^/(page|attachment|portfolio|portfolio_category)-sitemap\.xml$#', '/wp-sitemap.xml' ],
 	];
 }
 

@@ -3,16 +3,26 @@
  * The head and the chrome above `main` — the first half of
  * src/components/layout.ts's `layout()`. Each template sets cv_page() first.
  */
-$cv_page = cv_page();
-$cv_desc = $cv_page['description'] ?: (string) cv_option( 'cv_tagline' );
+$cv_page      = cv_page();
+$cv_desc      = $cv_page['description'] ?: (string) cv_option( 'cv_tagline' );
+$cv_canonical = cv_canonical_url();
+// The pages are in English whatever language the admin is set to, and Site
+// Language (Settings → General) is WordPress's locale for the public side
+// too, so the language is stated here rather than read from it. data-hover is
+// which hover the bar's words wear, as HOVER in src/components/layout.ts sets
+// it; `npm run wp:diff` says when the two part.
 ?><!doctype html>
-<html <?php language_attributes(); ?> style="<?php echo esc_attr( cv_hue_vars() ); ?>">
+<html lang="en" data-hover="scramble" style="<?php echo esc_attr( cv_hue_vars() ); ?>">
 <head>
 <meta charset="<?php bloginfo( 'charset' ); ?>" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <?php if ( $cv_desc ) : ?>
 <meta name="description" content="<?php echo esc_attr( mb_substr( $cv_desc, 0, 300 ) ); ?>" />
 <?php endif; ?>
+<?php if ( $cv_canonical ) : ?>
+<link rel="canonical" href="<?php echo esc_url( $cv_canonical ); ?>" />
+<?php endif; ?>
+<?php echo cv_share_tags( mb_substr( $cv_desc, 0, 300 ), $cv_canonical ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped inside ?>
 <?php // The address the stylesheet itself asks for — unstamped — or the preload fetches a second copy. ?>
 <link rel="preload" href="<?php echo esc_url( CV_THEME_URI . '/assets/fonts/Switzer-Variable.woff2' ); ?>" as="font" type="font/woff2" crossorigin />
 <?php foreach ( cv_modules() as $cv_module ) : ?>
