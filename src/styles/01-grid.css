@@ -636,8 +636,14 @@ html.js .hero[data-hero]+.grid[data-stack] {
    */
   /* The year stands in the last twelfth, right-aligned at the margin. */
   --year-col: 12%;
-  --row-top: 1.09vw;     /* 21 of the frame's pixels */
-  --row-bottom: 1.09vw;
+  /*
+   * 188 from rule to rule on the sheet, which is 99 at the frame. The two
+   * lines sit 40.4 apart there — measured baseline to baseline, title ink at
+   * 736 and location at 812.7 — so each line box is given that and the rest
+   * is the air above and below the pair.
+   */
+  --row-top: 0.344vw;    /* 6.6 of the frame's pixels */
+  --row-bottom: 0.448vw;
   margin: 0 auto;
   padding: max(calc(var(--bar) + 1rem), var(--list-top, 16.050vw)) var(--pad) 18vh;
 }
@@ -672,14 +678,16 @@ html.js .hero[data-hero]+.grid[data-stack] {
 .exh-title {
   font-size: var(--t-45);
   font-weight: 600;
-  line-height: var(--lead-45);
+  /* 40.4 over 45: the sheet sets the name and its line tight to each other,
+     not on the 45 leading that the prose takes. */
+  line-height: 0.942;
 }
 .exh-venue {
   font-size: var(--t-40);
   font-weight: 500;
   font-style: normal;
   text-transform: uppercase;
-  line-height: var(--lead-45);
+  line-height: 1.01;     /* 40.4 over 40 */
 }
 /* What the sheet says about the one show it describes on the list itself. */
 .exh-note {
