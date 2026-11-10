@@ -628,66 +628,31 @@ html.js .hero[data-hero]+.grid[data-stack] {
 .exh-list {
   --exh-hover: var(--ink);
   /*
-   * Set off the designer's exhibitions sheet, measured rather than estimated.
-   *
-   * The sheet is a 1598px render of a 1508px-wide frame, so nothing in it can
-   * be read against the commissioned sheet until both are put on one scale.
-   * The menu gives that scale — its ink spans 1794 there and 1508 here, so
-   * 1.1897 — and the wordmark's cap height confirms it independently (12 x
-   * 1.1897 = 14.3, against 14). Scaled up, this list's title cap is 28.6 where
-   * commissioned's is 28: the same size. An earlier pass had this at 0.91,
-   * which came of measuring against the image's width instead of the frame's.
-   *
-   * What does differ is the rhythm, and by a lot. Commissioned is one line
-   * sitting tight on its rule. These are two lines with real air under them:
-   * 226.6px from rule to rule, 40.4 between the baselines, 61.9 from the last
-   * baseline down to the line.
+   * The designer's final sheet, measured: 3648 wide, which is exactly 1.900
+   * times the 1920 frame the rest of the site is set on. The rules begin at
+   * 25.2% and run to the margin, which is the commissioned plate's own column,
+   * and the rows are 188 apart — 99 at the frame — for the two lines each one
+   * carries.
    */
-  /*
-   * Measured off the sheet, which is 1232px wide with its content running
-   * 34..1225 — so 1191 of content, and everything below is that read against
-   * the 1920 frame the rest of the site is set in.
-   *
-   * 83px from rule to rule becomes 129. The two lines sit 25 apart, which is
-   * 39 at the frame and a 0.95 line on 41px type — tighter than the site's
-   * 1.25, because a name and its address are one thing said twice, not two
-   * paragraphs. That leaves 51 for the air, 25 above and 25 below the pair.
-   */
-  --row-top: 1.302vw;
-  --row-bottom: 1.302vw;
-  /*
-   * The sheet right-aligns the months at 81.5% of the content and the year at
-   * the margin, so the year column is what holds the 18.5% between them.
-   */
-  --when-col: 16%;
-  --year-col: 18.5%;
-  /* No cap: the margin governs, as it does in the design. A capped box plus the
-     padding inside it put the rules 77px from the edge at the width the mockup
-     was drawn at, not the 30 it specifies — the cap was centring the box and the
-     padding was then measured from the box, not from the screen. These are short
-     rows, so there is no measure to protect. */
+  /* The year stands in the last twelfth, right-aligned at the margin. */
+  --year-col: 12%;
+  --row-top: 1.09vw;     /* 21 of the frame's pixels */
+  --row-bottom: 1.09vw;
   margin: 0 auto;
-  /*
-   * The sheet puts the first rule 447px down its 1598 export, 522 at 1866.
-   * Pure vw, because adding a fixed bar height to it meant the offset did not
-   * scale: it was right at 1866 and 13px long at 1598. The bar is a floor
-   * instead, so a narrow window still cannot slide the list under the menu.
-   */
   padding: max(calc(var(--bar) + 1rem), var(--list-top, 16.050vw)) var(--pad) 18vh;
 }
 
 /*
- * The date and year columns are fixed rather than `auto` because each row is
- * its own grid: `auto` would size every row to its own contents and the dates
- * would stagger down the page instead of standing in a column.
- */
-/*
+ * The same plate as the commissioned index, with one line more. A show states
+ * what kind it was and where under its name, which a commission does not.
+ *
  * `.xlist.exh-list`, not `.exh-list`: the commissioned `.xlist .xrow` rule
- * sits further down this file at the same specificity, so the plainer selector
- * loses on source order alone and the row stacks instead of laying out.
+ * sits further down this file at the same specificity, so the plainer
+ * selector loses on source order alone and the row stacks instead of laying
+ * out.
  */
 .xlist.exh-list .xrow {
-  grid-template-columns: minmax(0, 1fr) var(--when-col) var(--year-col);
+  grid-template-columns: minmax(0, 1fr) var(--year-col, 10%);
   align-items: start;
   gap: 0;
 }
@@ -696,68 +661,69 @@ html.js .hero[data-hero]+.grid[data-stack] {
   display: grid;
   min-width: 0;
 }
-/* On the lines, not on the block: the shared type rule sets `--lead` on these
-   two directly, and a line-height on their parent never reaches them. */
-.exh-list .exh-title,
-.exh-list .exh-venue { line-height: 0.95; }
-/* The name is said twice: what it was called, then where it was. */
-.exh-venue { font-style: italic; }
 
 /*
- * The months are the one thing on the row set small — half the size, near the
- * bar's — and they stack rather than running along, because 'From December'
- * and 'To January' side by side is what ran into the year on the sheet.
+ * The sheet's type, and only the sheet's type.
+ *
+ * Semibold at 45 for the name, medium at 40 in capitals for the line under
+ * it, regular at 40 for the year. The leading is 45 over 40 throughout, which
+ * is the one figure every style on the sheet shares.
  */
-.exh-when {
-  display: grid;
-  justify-items: end;
-  text-align: right;
-  font-size: var(--type-menu);
-  line-height: 1.25;
-  white-space: nowrap;
+.exh-title {
+  font-size: var(--t-45);
+  font-weight: 600;
+  line-height: var(--lead-45);
 }
-
-/* The year leans, and a run that crosses one states both, stacked. */
+.exh-venue {
+  font-size: var(--t-40);
+  font-weight: 500;
+  font-style: normal;
+  text-transform: uppercase;
+  line-height: var(--lead-45);
+}
+/* What the sheet says about the one show it describes on the list itself. */
+.exh-note {
+  font-size: var(--t-40);
+  font-weight: 400;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: var(--lead-45);
+}
 .exh-year {
   display: grid;
   justify-items: end;
   text-align: right;
-  font-style: italic;
-  line-height: 0.95;
+  font-size: var(--t-40);
+  font-weight: 400;
+  font-style: normal;
+  line-height: var(--lead-45);
   font-variant-numeric: tabular-nums;
 }
 
-/* Held just clear of the dates rather than over them: at 52% the plate landed
-   on top of the date column, which on this list starts further left. */
+/*
+ * A private collection is a place rather than an event: it states no year, and
+ * the sheet sets its line light and in sentence case where every other group
+ * is medium and in capitals.
+ */
+.xgroup[data-group='Private collections'] .exh-venue {
+  font-weight: 300;
+  text-transform: none;
+}
+
+/* Held clear of the year rather than over it. */
 .xlist.exh-list .xrow .exh-plate {
   left: auto;
-  right: calc(var(--when-col) + var(--year-col) + 2rem);
+  right: calc(var(--year-col, 10%) + 2rem);
 }
 
 @media (max-width: 899px) {
   .xlist.exh-list .xrow {
     grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas: 'name year' 'when year';
     gap: 0.3rem 1rem;
   }
-
-  .exh-name {
-    grid-area: name;
-  }
-
-  .exh-when {
-    grid-area: when;
-  }
-
-  .exh-year {
-    grid-area: year;
-    align-self: start;
-  }
-
+  .exh-year { align-self: start; }
   /* No pointer to hover with, and no room to spare. */
-  .exh-plate {
-    display: none;
-  }
+  .exh-plate { display: none; }
 }
 
 /* ---------------------------------------------------------- to-scale grid */

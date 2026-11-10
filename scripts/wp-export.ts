@@ -357,6 +357,14 @@ const normalise = (s: string) =>
  * read off the designer's record where the show is in it, and off the show's
  * own wording where it is not.
  */
+/** The sheet's four groups in the vocabulary the export already uses. */
+const KIND_OF_GROUP: Readonly<Record<string, 'solo' | 'group' | 'fair' | ''>> = {
+  'Solo shows': 'solo',
+  'Group shows': 'group',
+  'Art fairs': 'fair',
+  'Private collections': '',
+};
+
 function kindOf(title: string, venue: string | undefined, year: number): 'solo' | 'group' | 'fair' | '' {
   const mine = normalise(title);
   const key = mine.slice(0, 18);
@@ -414,14 +422,17 @@ async function exportExhibitions() {
     out.push({
       // Cut the way WordPress would cut it, or a hyphen left at the end would
       // be trimmed on save and the entry never found again.
-      slug: show.slug ?? normalise(`${show.title} ${show.year}`).replace(/\s+/g, '-').slice(0, 60).replace(/-+$/, ''),
+      slug: show.slug ?? normalise(`${show.title} ${show.year ?? ''}`).replace(/\s+/g, '-').slice(0, 60).replace(/-+$/, ''),
       title: show.title,
       venue: show.venue ?? '',
       from: show.from ?? '',
       to: show.to ?? '',
-      year: show.year,
+      year: show.year ?? null,
       yearEnd: show.yearEnd ?? null,
-      kind: kindOf(show.title, show.venue, show.year),
+      // The designer's sheet states the group, so it is read rather than
+      // guessed. `kindOf` inferred it by matching titles against the About
+      // page's columns, which was the best available before the sheet existed.
+      kind: KIND_OF_GROUP[show.group],
       note: show.note ?? '',
       order: i + 1,
       cover,

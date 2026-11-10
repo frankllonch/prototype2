@@ -101,7 +101,18 @@
    * phone, above it a ceiling stops it running away on a very wide screen.
    */
   --type: clamp(1rem, 2.0833vw, 3.4rem);
-  --lead: 1.25;                        /* 50 over 40 */
+  --lead: 1.25;
+
+  /*
+   * The designer's scale for the exhibitions and commissioned sheets, and the
+   * whole of it: five styles over two sizes and one leading. 45 and 40 of the
+   * 1920 frame, with 45 over 40 — 1.125 — throughout. Semibold 45 names a
+   * thing; medium 40 in capitals says what and where; light 40 does the same
+   * where there is no event, only a place; regular 40 carries years and prose.
+   */
+  --t-40: var(--type);
+  --t-45: calc(var(--type) * 1.125);
+  --lead-45: 1.125;      /* 45 over 40, the sheets own leading */
   --type-menu: clamp(0.75rem, 1.0417vw, 1.7rem);
   /* Measured off the mockups, which agree on a fixed margin rather than a
      proportional one: the left inset is 40px at 1866 wide, 43px at 1368 and
