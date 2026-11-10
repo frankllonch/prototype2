@@ -54,8 +54,7 @@ html:not(.js) .hero,
  *
  * The amount is `--grid-start`, set with the other knobs in 00-base.css: the
  * pile lets go after SCROLL_SPAN screens (stack.ts), so the first row lands at
- * `--grid-start` minus the scroll past the first screen. It is set so the row
- * comes to rest under the controls at the top right.
+ * `--grid-start` minus the scroll past the first screen.
  *
  * Only where the pile actually runs. `stack.ts` deletes the hero on every path
  * where it does not — reduced motion, or no tiles to pile — and the sibling
@@ -225,100 +224,162 @@ html.js .hero[data-hero]+.grid[data-stack] {
 /* ---------------------------------------------------------------- detail */
 
 /*
- * One screen, never more. The page is the height of the window and nothing in
- * it scrolls: the back link on the first row, the painting and its caption on
- * the second, which takes whatever height is left, and the pager on the last.
- * The painting is then sized to its cell (see .detail-plate), so a tall work
- * shrinks rather than pushing the pager below the fold.
+ * One screen, never more, after the designer's final sheet (ARTWORK DETAIL,
+ * 1920 × 1080). No menu: the page's four corners say where to go — the
+ * section and Close at the top, Previous and Next at the foot. The painting
+ * stands on the left with its other pictures under it, the caption starts
+ * 60% across and runs from the painting's top edge to its bottom edge, and
+ * the gallery shows faintly through the paper behind them.
+ *
+ * THE DETAIL PAGE — the numbers to change are all here.
+ *
+ *   --edge           how far the four corner words stand in from the window's
+ *                    edges: 50 of 1920.
+ *   --plate-top      where the painting's top edge is, down the window: 261
+ *                    of 1080.
+ *   --plate-max      the most height the painting may take: 518 of 1080. A
+ *                    wide work is held by the column's width instead and
+ *                    comes out shorter.
+ *   --caption-x      where the caption starts across the window: 1152 of 1920.
+ *   --stage-gap      the space kept clear between the painting's column and
+ *                    the caption.
+ *   --thumb-h        the height of the small pictures under the painting:
+ *                    126 of 1920 wide.
+ *   --ghost-opacity  how strongly the gallery shows through: 0.05 on the
+ *                    sheet. 0 takes it away.
  */
+.is-detail .top { display: none; }
+
 .detail {
+  --edge: 2.6vw;
+  --plate-top: 24.2vh;
+  --plate-max: 48vh;
+  --caption-x: 60vw;
+  --stage-gap: 4vw;
+  --thumb-h: 6.56vw;
+  --ghost-opacity: 0.05;
+
+  position: relative;
   height: 100dvh;
-  box-sizing: border-box;
   overflow: hidden;
-  display: grid;
-  /* The sheet: the painting in the left two thirds, the text starting two
-     thirds across (618 of 927). The second column is sized so that, with
-     the page's own padding and the gap, it begins exactly there. */
-  grid-template-columns: 1fr calc(33.3% - 0.334 * var(--pad));
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  align-items: center;
-  gap: var(--pad);
-  padding: var(--bar) var(--pad) var(--pad);
 }
+
+/* The gallery behind, as it stands at the top of its grid. Inert in the
+   markup; out of the pointer's way here. */
+.detail-ghost {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  opacity: var(--ghost-opacity);
+  pointer-events: none;
+}
+.detail-ghost .grid { padding-top: 17.8vh; }
+.detail-ghost .tile { transition: none; }
+
+/*
+ * The corners. The page's type size, tracked out (the sheet's ARTWORK runs 218
+ * wide at 40: 0.09 em between letters), set on a line exactly one em tall so
+ * the capitals can be put on the margin: in Switzer the cap sits 0.17 em
+ * below such a line's top and the baseline 0.137 em above its foot.
+ */
+.detail-back,
+.detail-pager a {
+  font-size: var(--type);
+  line-height: 1;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  font-weight: 400;
+  color: var(--ink);
+  transition: color var(--hover) var(--ease);
+}
+.detail-back:hover, .detail-back:focus-visible,
+.detail-pager a:hover, .detail-pager a:focus-visible { color: var(--ink-soft); }
 
 .detail-back {
-  grid-column: 1;
-  grid-row: 1;
-  align-self: start;
-  color: var(--ink-soft);
+  position: absolute;
+  z-index: 2;
+  top: calc(var(--edge) - 0.17em);
 }
+.detail-section { left: var(--edge); }
+.detail-close { right: var(--edge); }
 
-.detail-back:hover, .detail-back:focus-visible {
-  color: var(--ink);
-}
-
-.detail-plate {
-  grid-column: 2;
-  margin: 0;
-  display: grid;
-  place-items: center;
+.detail-pager {
+  position: absolute;
+  z-index: 2;
+  left: var(--edge);
+  right: var(--edge);
+  bottom: calc(var(--edge) - 0.137em * 1);
+  display: flex;
+  justify-content: space-between;
+  /* The em above is the links' own: the nav is set at their size too. */
+  font-size: var(--type);
+  line-height: 1;
 }
 
 /*
- * The picture is bounded by the plate's own box, in container units, because
- * nothing between the plate and the image has a height of its own to measure
- * a percentage against: the inner span hugs the picture so the lean begins at
- * its edge. The plate takes its size from the grid cell it sits in.
+ * The painting's column: from the left margin to the gap before the caption.
+ * The painting is centred in it, its top edge on --plate-top, and the small
+ * pictures follow under it. client/views.ts sizes the painting by its painted
+ * part, not by the cut-out's transparent canvas; until it has, the picture is
+ * held to the same room as a whole.
  */
+.detail-stage {
+  position: absolute;
+  z-index: 1;
+  left: var(--edge);
+  top: var(--plate-top);
+  width: calc(var(--caption-x) - var(--stage-gap) - var(--edge));
+}
+
+.detail-plate {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}
+
 .detail-plate img {
-  max-height: 100cqh;
-  max-width: 100cqw;
+  max-height: var(--plate-max);
+  max-width: calc(var(--caption-x) - var(--stage-gap) - var(--edge));
   width: auto;
   height: auto;
 }
 
 /*
- * The caption, measured off the designer's sheet (927 wide, painting 242
- * tall, caps 13):
+ * The caption, held to the painting's own box. client/views.ts hands it the
+ * box — its top as `--plate-shift` from --plate-top, and its height as
+ * `--plate-height` — and the three groups are spread over it:
  *
- *   title and medium     cap top on the painting's top edge; the medium's
- *                        baseline 31 below the title's, against 24 between
- *                        year and size — so the title carries 7/13 of a cap,
- *                        0.3 em, of extra room under it
- *   year and size        the year's cap top 141 down, 0.583 of the height
- *   87 of 154            baseline on the painting's bottom edge
+ *   title and medium     the title's capitals on the painting's top edge
+ *   year and size        the year's capitals 0.583 of the way down
+ *   87 of 154            the baseline on the painting's bottom edge
  *
- * The column is given the painting's own box by client/views.ts — its top and
- * its height, as `--plate-shift` and `--plate-height` — and the three groups
- * are held to it from there. The small negative margins take off the part of
- * the line box above a cap and below a baseline, so the ink, not the box,
- * sits on the edges: in Switzer (ascent 0.987 em, descent 0.261 em, caps
- * 0.680 em, measured) that is half the leading less 0.317 em above, and half
- * the leading less 0.363 em below, whatever the leading is set to. Without
- * scripting the column takes the cell's height, which is near enough.
+ * The small negative margins take off the part of the line box above a cap
+ * and below a baseline, so the ink, not the box, sits on the edges: in
+ * Switzer (ascent 0.987 em, descent 0.261 em, caps 0.680 em, measured) that
+ * is half the leading less 0.317 em above, and half the leading less 0.363 em
+ * below, whatever the leading is set to. Without scripting the column takes
+ * the most room the painting could have.
  */
 .detail-caption {
   /* THE CAPTION'S LEADING — line height as a multiple of the type size. The
      rest of the page is 1.25 (50 over 40); the caption is set tighter. */
   --caption-lead: 1.1;
-  /* HOW FAR DOWN THE PAINTING THE CAPTION REACHES — the three groups are
-     spread over this share of the painting's height, from its top edge: 1 is
-     the sheet, with the numbering on the bottom edge; smaller gathers the
-     groups up towards the title. */
-  --caption-span: 0.85;
-  /* HOW FAR DOWN IT STARTS — the title's cap top sits this share of the
-     painting's height below its top edge; with the span, 0.15 + 0.85 puts
-     the numbering on the bottom edge. 0 is the sheet. */
-  --caption-drop: 0.3;
-  grid-column: 2;
-  grid-row: 2;
-  align-self: start;
-  position: relative;
+  /* HOW FAR DOWN THE PAINTING THE CAPTION REACHES — the groups are spread
+     over this share of the painting's height. 1 runs top edge to bottom edge. */
+  --caption-span: 1;
+  /* HOW FAR DOWN IT STARTS — the title's capitals sit this share of the
+     painting's height below its top edge. 0 is on the edge. */
+  --caption-drop: 0;
+  position: absolute;
+  z-index: 1;
+  left: var(--caption-x);
+  right: var(--edge);
+  top: var(--plate-top);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   box-sizing: border-box;
-  height: calc(var(--plate-height, 100%) * var(--caption-span));
+  height: calc(var(--plate-height, var(--plate-max)) * var(--caption-span));
   margin-top: calc(var(--plate-shift, 0px) + var(--plate-height, 0px) * var(--caption-drop));
   font-size: var(--type);
   line-height: var(--caption-lead);
@@ -345,34 +406,38 @@ html.js .hero[data-hero]+.grid[data-stack] {
 .detail-caption .detail-index { margin-bottom: calc((0.363 - var(--caption-lead) / 2) * 1em); }
 .detail-index b { font-weight: 600; }
 
-.detail-pager {
-  grid-column: 1 / -1;
-  grid-row: 3;
-  display: flex;
-  justify-content: space-between;
-  color: var(--ink-soft);
-}
-
-.detail-pager a:hover, .detail-pager a:focus-visible {
-  color: var(--ink);
-}
-
+/*
+ * A phone: one column that scrolls if it must. The corners stay corners at
+ * the top; the painting, its pictures, the caption and the way through
+ * follow in order.
+ */
 @media (max-width: 899px) {
   .detail {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto minmax(0, 1fr) auto auto;
+    --edge: var(--pad);
+    --plate-max: 52vh;
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+    padding: calc(var(--edge) + 2.4rem) var(--edge) var(--edge);
+    box-sizing: border-box;
   }
-
-  .detail-back,
-  .detail-plate,
-  .detail-caption {
-    grid-column: 1;
+  .detail-ghost { display: none; }
+  .detail-back { font-size: 1rem; }
+  .detail-stage, .detail-caption, .detail-pager {
+    position: static;
+    width: auto;
+    margin: 0;
+    height: auto;
   }
-  /* Under the painting there is no edge to follow: the groups stack. */
-  .detail-caption { grid-row: 3; height: auto; margin-top: 0; gap: 0.6em; }
+  .detail-plate img { max-width: calc(100vw - 2 * var(--edge)); }
+  .detail-caption { gap: 0.6em; font-size: 1.25rem; }
   .detail-facts { position: static; }
-  .detail-head, .detail-index { margin: 0; }
-  .detail-pager { grid-row: 4; }
+  .detail-head, .detail-caption .detail-index { margin: 0; }
+  .detail-pager, .detail-pager a { font-size: 1rem; }
+  .detail-pager { margin-top: auto; }
 }
 
 /* ------------------------------------------------------------------- feed */
@@ -628,66 +693,29 @@ html.js .hero[data-hero]+.grid[data-stack] {
 .exh-list {
   --exh-hover: var(--ink);
   /*
-   * Set off the designer's exhibitions sheet, measured rather than estimated.
-   *
-   * The sheet is a 1598px render of a 1508px-wide frame, so nothing in it can
-   * be read against the commissioned sheet until both are put on one scale.
-   * The menu gives that scale — its ink spans 1794 there and 1508 here, so
-   * 1.1897 — and the wordmark's cap height confirms it independently (12 x
-   * 1.1897 = 14.3, against 14). Scaled up, this list's title cap is 28.6 where
-   * commissioned's is 28: the same size. An earlier pass had this at 0.91,
-   * which came of measuring against the image's width instead of the frame's.
-   *
-   * What does differ is the rhythm, and by a lot. Commissioned is one line
-   * sitting tight on its rule. These are two lines with real air under them:
-   * 226.6px from rule to rule, 40.4 between the baselines, 61.9 from the last
-   * baseline down to the line.
+   * The designer's final sheet, measured: 3648 wide, which is exactly 1.900
+   * times the 1920 frame the rest of the site is set on. The rules begin at
+   * 25.2% and run to the margin, which is the commissioned plate's own column,
+   * and the rows are 188 apart — 99 at the frame — for the two lines each one
+   * carries.
    */
-  /*
-   * Measured off the sheet, which is 1232px wide with its content running
-   * 34..1225 — so 1191 of content, and everything below is that read against
-   * the 1920 frame the rest of the site is set in.
-   *
-   * 83px from rule to rule becomes 129. The two lines sit 25 apart, which is
-   * 39 at the frame and a 0.95 line on 41px type — tighter than the site's
-   * 1.25, because a name and its address are one thing said twice, not two
-   * paragraphs. That leaves 51 for the air, 25 above and 25 below the pair.
-   */
-  --row-top: 1.302vw;
-  --row-bottom: 1.302vw;
-  /*
-   * The sheet right-aligns the months at 81.5% of the content and the year at
-   * the margin, so the year column is what holds the 18.5% between them.
-   */
-  --when-col: 16%;
-  --year-col: 18.5%;
-  /* No cap: the margin governs, as it does in the design. A capped box plus the
-     padding inside it put the rules 77px from the edge at the width the mockup
-     was drawn at, not the 30 it specifies — the cap was centring the box and the
-     padding was then measured from the box, not from the screen. These are short
-     rows, so there is no measure to protect. */
+  --row-top: 1.09vw;     /* 21 of the frame's pixels */
+  --row-bottom: 1.09vw;
   margin: 0 auto;
-  /*
-   * The sheet puts the first rule 447px down its 1598 export, 522 at 1866.
-   * Pure vw, because adding a fixed bar height to it meant the offset did not
-   * scale: it was right at 1866 and 13px long at 1598. The bar is a floor
-   * instead, so a narrow window still cannot slide the list under the menu.
-   */
   padding: max(calc(var(--bar) + 1rem), var(--list-top, 16.050vw)) var(--pad) 18vh;
 }
 
 /*
- * The date and year columns are fixed rather than `auto` because each row is
- * its own grid: `auto` would size every row to its own contents and the dates
- * would stagger down the page instead of standing in a column.
- */
-/*
+ * The same plate as the commissioned index, with one line more. A show states
+ * what kind it was and where under its name, which a commission does not.
+ *
  * `.xlist.exh-list`, not `.exh-list`: the commissioned `.xlist .xrow` rule
- * sits further down this file at the same specificity, so the plainer selector
- * loses on source order alone and the row stacks instead of laying out.
+ * sits further down this file at the same specificity, so the plainer
+ * selector loses on source order alone and the row stacks instead of laying
+ * out.
  */
 .xlist.exh-list .xrow {
-  grid-template-columns: minmax(0, 1fr) var(--when-col) var(--year-col);
+  grid-template-columns: minmax(0, 1fr) var(--year-col, 10%);
   align-items: start;
   gap: 0;
 }
@@ -696,68 +724,69 @@ html.js .hero[data-hero]+.grid[data-stack] {
   display: grid;
   min-width: 0;
 }
-/* On the lines, not on the block: the shared type rule sets `--lead` on these
-   two directly, and a line-height on their parent never reaches them. */
-.exh-list .exh-title,
-.exh-list .exh-venue { line-height: 0.95; }
-/* The name is said twice: what it was called, then where it was. */
-.exh-venue { font-style: italic; }
 
 /*
- * The months are the one thing on the row set small — half the size, near the
- * bar's — and they stack rather than running along, because 'From December'
- * and 'To January' side by side is what ran into the year on the sheet.
+ * The sheet's type, and only the sheet's type.
+ *
+ * Semibold at 45 for the name, medium at 40 in capitals for the line under
+ * it, regular at 40 for the year. The leading is 45 over 40 throughout, which
+ * is the one figure every style on the sheet shares.
  */
-.exh-when {
-  display: grid;
-  justify-items: end;
-  text-align: right;
-  font-size: var(--type-menu);
-  line-height: 1.25;
-  white-space: nowrap;
+.exh-title {
+  font-size: var(--t-45);
+  font-weight: 600;
+  line-height: var(--lead-45);
 }
-
-/* The year leans, and a run that crosses one states both, stacked. */
+.exh-venue {
+  font-size: var(--t-40);
+  font-weight: 500;
+  font-style: normal;
+  text-transform: uppercase;
+  line-height: var(--lead-45);
+}
+/* What the sheet says about the one show it describes on the list itself. */
+.exh-note {
+  font-size: var(--t-40);
+  font-weight: 400;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: var(--lead-45);
+}
 .exh-year {
   display: grid;
   justify-items: end;
   text-align: right;
-  font-style: italic;
-  line-height: 0.95;
+  font-size: var(--t-40);
+  font-weight: 400;
+  font-style: normal;
+  line-height: var(--lead-45);
   font-variant-numeric: tabular-nums;
 }
 
-/* Held just clear of the dates rather than over them: at 52% the plate landed
-   on top of the date column, which on this list starts further left. */
+/*
+ * A private collection is a place rather than an event: it states no year, and
+ * the sheet sets its line light and in sentence case where every other group
+ * is medium and in capitals.
+ */
+.xgroup[data-group='Private collections'] .exh-venue {
+  font-weight: 300;
+  text-transform: none;
+}
+
+/* Held clear of the year rather than over it. */
 .xlist.exh-list .xrow .exh-plate {
   left: auto;
-  right: calc(var(--when-col) + var(--year-col) + 2rem);
+  right: calc(var(--year-col, 10%) + 2rem);
 }
 
 @media (max-width: 899px) {
   .xlist.exh-list .xrow {
     grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas: 'name year' 'when year';
     gap: 0.3rem 1rem;
   }
-
-  .exh-name {
-    grid-area: name;
-  }
-
-  .exh-when {
-    grid-area: when;
-  }
-
-  .exh-year {
-    grid-area: year;
-    align-self: start;
-  }
-
+  .exh-year { align-self: start; }
   /* No pointer to hover with, and no room to spare. */
-  .exh-plate {
-    display: none;
-  }
+  .exh-plate { display: none; }
 }
 
 /* ---------------------------------------------------------- to-scale grid */

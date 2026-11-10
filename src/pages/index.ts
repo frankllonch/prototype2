@@ -314,7 +314,7 @@ function plateStage(work: Project, name: string): Html {
     <figure class="detail-plate" data-tilt>
       <span class="detail-plate-inner${plate ? '' : ' is-photo'}">
         ${join(views.map((v, i) => html`<span class="detail-view${i === 0 ? ' is-shown' : ''}" data-view="${String(i)}"${plate && i === 0 ? ' data-plate' : ''}>
-          ${responsiveImage({ image: v.image, sizes: '(max-width: 900px) 92vw, 46vw', priority: i === 0, alt: v.alt })}
+          ${responsiveImage({ image: v.image, sizes: '(max-width: 900px) 92vw, 54vw', priority: i === 0, alt: v.alt })}
         </span>`))}
       </span>
     </figure>
@@ -326,7 +326,7 @@ function plateStage(work: Project, name: string): Html {
             data-show="${String(i)}"
             aria-pressed="${i === 0 ? 'true' : 'false'}"
             aria-label="${v.alt}"
-          >${responsiveImage({ image: v.image, sizes: '72px', priority: true, alt: '' })}</button>`))}
+          >${responsiveImage({ image: v.image, sizes: '(max-width: 899px) 5rem, 9vw', priority: true, alt: '' })}</button>`))}
         </div>`
       : ''}
   </div>`;
@@ -338,20 +338,48 @@ function plateStage(work: Project, name: string): Html {
  * in the archive at its bottom edge — the three held to the picture's own box
  * by client/views.ts, since only the browser knows how tall it came out.
  */
+/*
+ * THE GALLERY BEHIND A PAINTING — how many of the first works are drawn,
+ * faintly, under the detail page (the designer's final sheet shows the
+ * gallery through it). Enough to fill a window at the default size; how
+ * faint it is lives in the stylesheet, as --ghost-opacity.
+ */
+const GHOST_COUNT = 66;
+
 export function artworkDetailPage(
   work: Project, previous?: Project, next?: Project, place?: { index: number; total: number },
+  gallery: readonly Project[] = [],
 ): Html {
   const name = displayTitle(work.title, 'work');
   const { year, dimensions, materials } = work.metadata;
   const link = (p: Project | undefined, label: string, rel: string) =>
     p ? html`<a href="${withBase(`/artwork/${p.slug}/`)}" rel="${rel}" data-replace>${label}</a>` : html`<span></span>`;
 
+  /*
+   * The gallery as it stands behind the painting: the same grid component, so
+   * it is laid out exactly as the gallery is, but inert — nothing in it can be
+   * clicked, tabbed to or read out — and its pictures load only lazily.
+   */
+  const ghost = gallery.length
+    ? html`<div class="detail-ghost" aria-hidden="true" inert>${grid({
+        items: gallery.filter((w) => w.cover).slice(0, GHOST_COUNT).map(workItem),
+        basePath: '/artwork',
+        stack: true,
+        toScale: true,
+        eagerCount: 0,
+      })}</div>`
+    : html``;
+
   return layout({
     title: name,
     path: '/artwork/',
     description: work.description ?? '',
+    // No menu over a painting: its corners say where to go instead.
+    bodyClass: 'is-detail',
     children: html`<article class="detail">
-      <a class="detail-back" href="${withBase('/artwork/')}">← Artwork</a>
+      ${ghost}
+      <a class="detail-back detail-section" href="${withBase('/artwork/')}">Artwork</a>
+      <a class="detail-back detail-close" href="${withBase('/artwork/')}" aria-label="Close, back to the gallery">Close</a>
       ${plateStage(work, name)}
       <div class="detail-caption">
         <div class="detail-head">
@@ -365,8 +393,8 @@ export function artworkDetailPage(
         ${place ? html`<p class="detail-index"><b>${String(place.index)}</b> of ${String(place.total)}</p>` : ''}
       </div>
       <nav class="detail-pager" aria-label="Between works">
-        ${link(previous, '← Previous', 'prev')}
-        ${link(next, 'Next →', 'next')}
+        ${link(previous, 'Previous', 'prev')}
+        ${link(next, 'Next', 'next')}
       </nav>
     </article>`,
   });

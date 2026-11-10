@@ -23,11 +23,119 @@ const loaded = (img: HTMLImageElement) => new Promise<void>((resolve) => {
   img.addEventListener('error', done);
 });
 
+/*
+ * Where the paint is.
+ *
+ * A cut-out is the painting on a transparent canvas of one fixed shape, so a
+ * landscape work arrives with a band of nothing above and below it, and the
+ * picture's box is not the painting's. The page is laid out from the painting:
+ * its size on the plate, the caption that runs from its top edge to its
+ * bottom edge, the small pictures under it. This reads the transparency once
+ * per picture, at a few hundred pixels — a pixel there is a fraction of one
+ * on the plate — and hands back the painted rectangle as shares of the whole.
+ * A photograph, or anything that cannot be read, is painted edge to edge.
+ */
+interface Ink { readonly l: number; readonly t: number; readonly r: number; readonly b: number }
+const EDGE_TO_EDGE: Ink = { l: 0, t: 0, r: 1, b: 1 };
+const inks = new Map<string, Ink>();
+
+function inkOf(img: HTMLImageElement): Ink {
+  const key = img.currentSrc || img.src;
+  const known = inks.get(key);
+  if (known) return known;
+  const w = img.naturalWidth, h = img.naturalHeight;
+  if (!w || !h) return EDGE_TO_EDGE;
+  const SIDE = 360;
+  const cw = w >= h ? SIDE : Math.max(1, Math.round((SIDE * w) / h));
+  const ch = w >= h ? Math.max(1, Math.round((SIDE * h) / w)) : SIDE;
+  const canvas = document.createElement('canvas');
+  canvas.width = cw;
+  canvas.height = ch;
+  const g = canvas.getContext('2d', { willReadFrequently: true });
+  if (!g) return EDGE_TO_EDGE;
+  let data: Uint8ClampedArray;
+  try {
+    g.drawImage(img, 0, 0, cw, ch);
+    data = g.getImageData(0, 0, cw, ch).data;
+  } catch {
+    return EDGE_TO_EDGE;
+  }
+  // Faint enough to keep the soft edge of the cut, not so faint that a stray
+  // pixel of fringe pushes the box out.
+  const SOLID = 12;
+  let l = cw, t = ch, r = -1, b = -1;
+  for (let y = 0; y < ch; y++) {
+    for (let x = 0; x < cw; x++) {
+      if (data[(y * cw + x) * 4 + 3]! > SOLID) {
+        if (x < l) l = x;
+        if (x > r) r = x;
+        if (y < t) t = y;
+        if (y > b) b = y;
+      }
+    }
+  }
+  const ink = r < 0 ? EDGE_TO_EDGE : { l: l / cw, t: t / ch, r: (r + 1) / cw, b: (b + 1) / ch };
+  inks.set(key, ink);
+  return ink;
+}
+
+/**
+ * Sizes a picture so its painted part fits `maxW` × `maxH`, and makes `frame`
+ * exactly that painted part: the transparent margin hangs outside it, unseen
+ * and taking no room, so everything laid out against the frame is laid out
+ * against the painting.
+ */
+function fit(frame: HTMLElement, img: HTMLImageElement, ink: Ink, maxW: number, maxH: number): boolean {
+  const nw = img.naturalWidth, nh = img.naturalHeight;
+  if (!nw || !nh || !maxH) return false;
+  const iw = (ink.r - ink.l) * nw, ih = (ink.b - ink.t) * nh;
+  const s = Math.min(maxW / iw, maxH / ih);
+  const W = nw * s, H = nh * s;
+  Object.assign(img.style, {
+    width: `${W}px`, height: `${H}px`, maxWidth: 'none', maxHeight: 'none',
+    marginLeft: `${-ink.l * W}px`, marginTop: `${-ink.t * H}px`,
+  });
+  frame.style.width = `${(ink.r - ink.l) * W}px`;
+  frame.style.height = `${(ink.b - ink.t) * H}px`;
+  frame.classList.add('is-fitted');
+  return true;
+}
+
 export function initViews(): void {
   for (const stage of document.querySelectorAll<HTMLElement>('.detail-stage')) {
     const views = [...stage.querySelectorAll<HTMLElement>('.detail-view')];
     const thumbs = [...stage.querySelectorAll<HTMLButtonElement>('.detail-thumb')];
     const caption = document.querySelector<HTMLElement>('.detail-caption');
+    const plate = stage.querySelector<HTMLElement>('.detail-plate');
+
+    /*
+     * The room the painting has: the stage's width, and the height the
+     * stylesheet gives as --plate-max (any unit — a probe resolves it).
+     */
+    const probe = document.createElement('div');
+    probe.style.cssText = 'position:absolute;visibility:hidden;pointer-events:none;width:0;height:var(--plate-max)';
+    stage.append(probe);
+    const room = () => ({ w: plate?.clientWidth || stage.clientWidth, h: probe.offsetHeight });
+
+    const isCut = (i: number) => views[i]?.hasAttribute('data-plate') ?? false;
+    const fitView = (i: number) => {
+      const view = views[i];
+      const img = view?.querySelector('img');
+      if (!view || !img || !img.naturalWidth) return;
+      const { w, h } = room();
+      fit(view, img, isCut(i) ? inkOf(img) : EDGE_TO_EDGE, w, h);
+    };
+    const fitThumb = (i: number) => {
+      const thumb = thumbs[i];
+      const img = thumb?.querySelector('img');
+      if (!thumb || !img || !img.naturalWidth) return;
+      fit(thumb, img, isCut(i) ? inkOf(img) : EDGE_TO_EDGE, Infinity, thumb.clientHeight);
+    };
+    const fitAll = () => {
+      views.forEach((view, i) => { if (view.classList.contains('is-shown')) fitView(i); });
+      thumbs.forEach((_, i) => fitThumb(i));
+      follow();
+    };
 
     /*
      * The caption follows the painting's own edges, and only the browser knows
@@ -37,22 +145,26 @@ export function initViews(): void {
      * is — and the stylesheet holds the text to it. Read with the shift at
      * zero, so the cell's own top is what is measured against.
      */
-    const follow = () => {
-      const img = stage.querySelector<HTMLImageElement>('.detail-view.is-shown img');
-      if (!img || !caption) return;
+    function follow() {
+      // The view, once fitted, is the painting's own box; before that, the
+      // picture's.
+      const shown = stage.querySelector<HTMLElement>('.detail-view.is-shown');
+      const target = shown?.classList.contains('is-fitted') ? shown : shown?.querySelector('img');
+      if (!target || !caption) return;
       caption.style.setProperty('--plate-shift', '0px');
       const cell = caption.getBoundingClientRect().top;
-      const box = img.getBoundingClientRect();
+      const box = target.getBoundingClientRect();
       if (!box.height) return;
       caption.style.setProperty('--plate-shift', `${box.top - cell}px`);
       caption.style.setProperty('--plate-height', `${box.height}px`);
-    };
-    follow();
-    window.addEventListener('resize', follow);
-    // The box may change as the picture arrives (a lazily measured size, a
+    }
+    fitAll();
+    window.addEventListener('resize', fitAll);
+    // The box may change as the pictures arrive (a lazily measured size, a
     // font that settles the caption's own cell), so it is read again then.
-    window.addEventListener('load', follow);
-    void document.fonts.ready.then(follow);
+    for (const img of stage.querySelectorAll('img')) if (!img.complete) img.addEventListener('load', fitAll, { once: true });
+    window.addEventListener('load', fitAll);
+    void document.fonts.ready.then(fitAll);
 
     if (views.length < 2 || thumbs.length !== views.length) continue;
 
@@ -94,7 +206,9 @@ export function initViews(): void {
         await loaded(img);
         await Promise.race([img.decode().catch(() => undefined), new Promise((r) => setTimeout(r, 250))]);
       }
-      if (stamp === chosen) swap(n);
+      if (stamp !== chosen) return;
+      fitView(n);
+      swap(n);
     };
 
     thumbs.forEach((thumb, i) => thumb.addEventListener('click', () => { void show(i); }));

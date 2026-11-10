@@ -1,70 +1,72 @@
 /*
- * The year rail: a column of colour swatches down the left edge, one per year,
- * each in a colour sampled from that year's own paintings (scripts/palette.ts).
- *
- * At rest it is a stack of short bars. The year you are looking at is drawn
- * longer and names itself; hovering any of them draws it longer still. Clicking
- * jumps to that year in the grid.
+ * The year rail: the years down the left margin, each in a colour sampled from
+ * that year's own paintings (scripts/palette.ts), and under them the grid's
+ * controls (00-base.css). Clicking a year travels to it in the grid.
  *
  * It is hidden while the opening pile is still moving — it is drawn hidden and
  * `stack-settled` is set once the grid has come to rest — and fades in once
  * the scroll has unfolded the whole grid. Scrolling back into the pile takes
  * the class away again and the rail goes with it.
  *
- * Sized off the designer's sheet, exported at 1654: bars 120 × 26 on a pitch
- * of 46.5, so each figure is that share of the window's width.
+ * Off the designer's final sheet at 1920: the years at the page's size, 50
+ * apart, their capitals starting on the first row of paintings; then the
+ * controls at 30, 40 apart. The knobs are in 00-base.css, under THE SIDE
+ * COLUMN, next to --rail.
  */
+:root {
+  /* The column's lines. Years at the page's leading (50 over 40), controls at
+     40 over 30. */
+  --year-lead: 1.25;
+  --side-lead: 1.3333;
+  /* How many years there are: written by client/years.ts, eleven until then. */
+  --years-count: 11;
+  --years-height: calc(var(--years-count) * var(--type) * var(--year-lead));
+  --controls-top: calc(var(--side-top) + var(--years-height) + var(--controls-gap));
+  /* Five controls: three sizes, then equal and to scale. */
+  --side-height: calc(var(--years-height) + var(--controls-gap) + 5 * var(--type-side) * var(--side-lead));
+  /* How far the column has to rise for its foot to clear the window's, by a margin. */
+  --side-lift: max(0px, calc(var(--side-top) + var(--side-height) + var(--pad) - 100vh));
+}
+
 .years {
   position: fixed;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  left: var(--pad);
+  top: var(--side-top);
   z-index: 30;
   display: flex;
   flex-direction: column;
-  gap: 1.24vw;
+  align-items: flex-start;
+  font-size: var(--type);
+  line-height: var(--year-lead);
+  /* The capitals, not the line box, start on --side-top: half the leading less
+     the 0.317 em Switzer puts above a capital (see .detail-caption). */
+  margin-top: calc((0.317 - var(--year-lead) / 2) * 1em);
   transition: opacity 0.8s var(--ease);
 }
 
-.year {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  /* The hit area is the whole row, not just the bar. */
-  padding: 0;
+.controls {
+  top: var(--controls-top);
+  margin-top: calc((0.317 - var(--side-lead) / 2) * 1em);
 }
 
-.year-swatch {
+.year {
   display: block;
-  width: 7.26vw;
-  height: 1.57vw;
-  background: var(--c);
-  transition: width 0.9s var(--ease);
+  color: var(--c);
+  transition: opacity var(--hover) var(--ease);
 }
+
+/* The bars are the phone's rail (below); on a wide screen the years are type. */
+.year-swatch { display: none; }
 
 .year-label {
-  color: var(--ink);
-  opacity: 0;
-  transform: translateX(-4px);
-  transition: opacity 0.3s var(--ease), transform 0.4s var(--ease);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
-/* The current year names itself; hovering any year reaches out the same way —
-   one position out, never further. */
-.year.is-current .year-swatch { width: 9.7vw; }
-.year.is-current .year-label { opacity: 1; transform: none; }
-.years:hover .year.is-current:not(:hover) .year-swatch { width: 7.26vw; }
-.years:hover .year.is-current:not(:hover) .year-label { opacity: 0; transform: translateX(-4px); }
-.year:hover .year-swatch, .year:focus-visible .year-swatch { width: 9.7vw; }
-.year:hover .year-label, .year:focus-visible .year-label { opacity: 1; transform: none; }
+/* While a year is in focus the rail says so: the chosen one stays, the rest
+   step back. */
+.years.is-focused .year:not([aria-pressed='true']) { opacity: 0.35; }
 
-/* While a year is in focus the rail says so: the chosen swatch stays out and
-   named, and the rest step back. */
-.years.is-focused .year:not([aria-pressed='true']) .year-swatch { opacity: 0.4; }
-.years.is-focused .year[aria-pressed='true'] .year-swatch { width: 9.7vw; }
-.years.is-focused .year[aria-pressed='true'] .year-label { opacity: 1; transform: none; }
 
 /*
  * Nothing that waits on the opening animation may be reachable, or visible,
@@ -110,25 +112,70 @@ html.js.stack-running .years {
   to { opacity: 1; pointer-events: auto; }
 }
 
+/*
+ * Riding up with the paintings. The column is drawn from --side-top, level with
+ * the first row, at the moment the opening lets go — 130vh of scroll, the
+ * pile's SCROLL_SPAN in stack.ts. From there it climbs with the page, pixel
+ * for pixel, for exactly as far as it needs to (--side-lift) and then holds.
+ * Driven by the scroll itself, so it moves on the same frame as the grid.
+ *
+ * Where scroll-driven animation is missing the column simply stands where its
+ * foot fits the window.
+ */
+@supports (animation-timeline: scroll()) {
+  html.js.stack-settled .years,
+  html.js.stack-settled .controls,
+  html:not(.js) .years,
+  html:not(.js) .controls {
+    animation: side-lift linear both;
+    animation-timeline: scroll(root);
+    animation-range: 130vh calc(130vh + var(--side-lift) + 1px);
+  }
+  /* No opening to wait for — scripting off, reduced motion, or back from a
+     painting, where stack.ts removes the runway: it rises from the top. */
+  html:not(.js) .years,
+  html:not(.js) .controls,
+  html.js.stack-settled:not(:has([data-hero])) .years,
+  html.js.stack-settled:not(:has([data-hero])) .controls {
+    animation-range: 0px calc(var(--side-lift) + 1px);
+  }
+}
+@supports not (animation-timeline: scroll()) {
+  .years { top: calc(var(--side-top) - var(--side-lift)); }
+  .controls { top: calc(var(--controls-top) - var(--side-lift)); }
+}
+@keyframes side-lift {
+  from { translate: 0 0; }
+  to { translate: 0 calc(-1 * var(--side-lift)); }
+}
+
 @media (max-width: 899px) {
-  /* No room for a rail beside the grid on a phone: it lies along the foot. */
+  /* No room for a column beside the grid on a phone: the years lie along the
+     foot as bars, and the controls stand in one line above them. */
   .years {
     top: auto; bottom: 0; left: 0; right: 0;
-    transform: none;
+    margin-top: 0;
     flex-direction: row;
     justify-content: center;
+    align-items: flex-end;
     gap: 3px;
     padding: 0.6rem var(--pad);
+    font-size: 9px;
+    line-height: 1.2;
     background: color-mix(in srgb, var(--paper) 88%, transparent);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
   }
-  .years { gap: 3px; }
-  .year { flex-direction: column; gap: 0.25rem; padding: 2px 0; }
-  .year-swatch { width: 13px; height: 22px; transition: height 0.4s var(--ease); }
-  .year.is-current .year-swatch, .year:hover .year-swatch { width: 13px; height: 34px; }
-  .year-label { display: none; }
-  .year.is-current .year-label { display: block; opacity: 1; transform: none; font-size: 9px; }
-  /* Clear of the rail along the foot, and centred rather than tucked in a corner. */
-  .controls { top: auto; bottom: 5.4rem; right: auto; left: 0; justify-content: center; width: 100%; }
+  html.js.stack-settled .years, html.js.stack-settled .controls,
+  html:not(.js) .years, html:not(.js) .controls { animation: none; translate: none; }
+  .year { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; padding: 2px 0; }
+  .year-swatch { display: block; width: 13px; height: 22px; background: var(--c); transition: height 0.4s var(--ease); }
+  .year.is-current .year-swatch, .year:hover .year-swatch { height: 34px; }
+  .year-label { display: none; color: var(--ink); }
+  .year.is-current .year-label { display: block; }
+  .controls {
+    top: auto; bottom: 5.4rem; left: 0; margin-top: 0; width: 100%;
+    flex-direction: row; justify-content: center; align-items: baseline; gap: 2em;
+  }
+  .control-group { flex-direction: row; gap: 1em; }
 }

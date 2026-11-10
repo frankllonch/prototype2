@@ -77,43 +77,37 @@
 /* ------------------------------------------------- the other pictures */
 
 /*
- * The plate and the row of small pictures under it share one cell of the
- * detail grid, so adding the row moves nothing else — the caption stays on
- * the middle line and the pager stays at the foot. The plate used to claim
- * the grid's second column itself; inside this cell that would open a second
- * column, so the claim is withdrawn here.
+ * The small pictures stand under the painting, centred on it: 29 below its
+ * bottom edge and 25 apart on the final sheet at 1920. Where the column itself
+ * stands is in 01-grid.css, with the rest of the detail page.
  */
 .detail-stage {
-  grid-column: 1;
-  grid-row: 2;
-  /* Fills its cell top to bottom, so the plate has a height to be sized by;
-     the row of small pictures takes its own height under it. */
-  align-self: stretch;
-  min-height: 0;
-  display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
-  justify-items: center;
-  gap: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5vw;
 }
-.detail-stage .detail-plate {
-  grid-column: auto;
-  justify-self: stretch;
-  min-height: 0;
-  /* Its size comes from the cell, not from the picture, which is sized to it. */
-  container-type: size;
-}
+.detail-stage .detail-plate { align-self: stretch; }
 
 /* Only one picture is ever on the plate. The rest are kept out of layout, not
    merely hidden, so a lazy one does not load until it is asked for and the
    plate's box — which the lean measures — is the box of what is shown. */
 .detail-view { display: none; }
 .detail-view.is-shown { display: block; }
+/* Fitted to the painted part of a cut-out by client/views.ts: the transparent
+   canvas round it hangs outside, clipped so it cannot catch the pointer. */
+.detail-view.is-fitted { overflow: clip; overflow-clip-margin: 1px; }
+/* A formatting context of their own, or the picture's negative top margin
+   collapses through the frame and lifts the frame with it. */
+.detail-view.is-fitted, .detail-thumb { display: flow-root; }
+.detail-view.is-fitted:not(.is-shown) { display: none; }
+.detail-view.is-fitted img { max-width: none; }
 
 .detail-thumbs {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 0.7rem;
+  gap: 1.3vw;
 }
 
 /* Small, quiet, and not a plate: no shadow and no lean, so there is no doubt
@@ -123,11 +117,12 @@
   border: 0;
   background: none;
   padding: 0;
-  width: 4.5rem;
+  height: var(--thumb-h);
+  overflow: clip;
   cursor: pointer;
   transition: opacity var(--hover) var(--ease);
 }
-.detail-thumb img { display: block; width: 100%; height: auto; }
+.detail-thumb img { display: block; height: 100%; width: auto; max-width: none; }
 /* The one already on the plate steps back — it is the one there is no point
    choosing; the others stand forward as what can be looked at next. */
 .detail-thumb.is-shown { opacity: 0.35; cursor: default; }
@@ -136,6 +131,5 @@
 .detail-thumb:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
 
 @media (max-width: 899px) {
-  .detail-stage { grid-column: 1; }
-  .detail-thumb { width: 3.6rem; }
+  .detail-thumb { height: 3.6rem; }
 }
