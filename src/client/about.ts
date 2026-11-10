@@ -67,7 +67,7 @@ export function initAbout(): void {
   if (!sheet || !opening || !stage || !leadEl) return;
   const reel = about.querySelector<HTMLElement>('[data-about-reel]');
   const track = about.querySelector<HTMLElement>('[data-about-track]');
-  const cue = about.querySelector<HTMLElement>('[data-about-cue]');
+  const cue = document.querySelector<HTMLElement>('[data-about-cue]');
 
   const lead = splitWords(leadEl);
   const body = [...about.querySelectorAll<HTMLElement>('.about-text > p:not(.about-lead)')].flatMap(splitWords);
@@ -266,7 +266,10 @@ export function initAbout(): void {
   };
 
   about.addEventListener('scroll', schedule, { passive: true });
-  about.addEventListener('keydown', (event) => keyScroll(about, event));
+  // On the document: focus opens on the Close link, which stands beside the panel.
+  document.addEventListener('keydown', (event) => {
+    if (about.classList.contains('is-open')) keyScroll(about, event);
+  });
   about.addEventListener('panelopen', start);
   window.addEventListener('resize', () => requestAnimationFrame(measure));
   void document.fonts?.ready.then(measure);
@@ -284,8 +287,8 @@ export function initAbout(): void {
 
 /**
  * The keys that scroll a page, scrolling the panel. Focus opens on the Close
- * link, which is fixed, and a fixed element hands its keys to the window —
- * which is locked while About is up — rather than to the panel it sits in.
+ * link, which stands outside the panel, so the keys would go to the window —
+ * which is locked while About is up — rather than to the panel.
  * Not while a field, a button or the photograph viewer has the keys.
  */
 function keyScroll(about: HTMLElement, event: KeyboardEvent): void {
@@ -349,7 +352,9 @@ function initViewer(about: HTMLElement): void {
   const items = [...about.querySelectorAll<HTMLButtonElement>('.about-reel-item')];
   if (!viewer || !plate || !items.length) return;
   const count = viewer.querySelector<HTMLElement>('[data-about-count]');
-  viewer.classList.toggle('is-single', items.length < 2);
+  // The chevrons stand beside the panel (components/layout.ts), and are only
+  // there when there is more than one photograph to step through.
+  const steps = [...document.querySelectorAll<HTMLElement>('[data-about-step]')];
 
   let at = -1;
 
@@ -391,11 +396,8 @@ function initViewer(about: HTMLElement): void {
 
   items.forEach((item, i) => item.addEventListener('click', () => open(i)));
 
-  viewer.addEventListener('click', (event) => {
-    const step = (event.target as Element).closest<HTMLElement>('[data-about-step]');
-    if (step) draw(at + Number(step.dataset.aboutStep));
-    else close();
-  });
+  viewer.addEventListener('click', () => close());
+  for (const step of steps) step.addEventListener('click', () => draw(at + Number(step.dataset.aboutStep)));
 
   document.addEventListener(
     'keydown',
@@ -407,7 +409,7 @@ function initViewer(about: HTMLElement): void {
       else if (event.key === 'Tab') {
         // Kept to the viewer: its two chevrons, or itself when there is one
         // photograph and so nothing to step to.
-        const stops = items.length > 1 ? [...viewer.querySelectorAll<HTMLElement>('[data-about-step]')] : [viewer];
+        const stops = steps.length ? steps : [viewer];
         const i = stops.indexOf(document.activeElement as HTMLElement);
         stops[(i + (event.shiftKey ? -1 : 1) + stops.length) % stops.length]?.focus();
       } else return;

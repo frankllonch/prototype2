@@ -519,24 +519,20 @@ async function exportAbout() {
 /**
  * The Colour Chart.
  *
- * The page is hand-set — a statement in clauses, then Features, six technical
- * notes and About a colour chart — and `content/colour-chart.ts` is where that
- * setting lives. It is flattened back into one run of blocks here because that
- * is what goes into `post_content`, and `post_content` is what Claudia edits:
- * she should find her own paragraphs under her own headings in the editor, not
- * a structure this build invented.
+ * The simplified sheet sets three paragraphs and nothing else, so three
+ * paragraphs are what goes into `post_content` — and `post_content` is what
+ * Claudia edits, so what she finds in the editor has to be what the page
+ * shows. The record that used to follow it (Features, the six technical notes,
+ * About a colour chart) is still read out of the source and still travels in
+ * the manifest below, but it is no longer the page's body: an import after
+ * this will take those sections off the WordPress page as well, which is the
+ * simplification arriving there too.
  *
  * The three photographs are not on the sheet and their credits went with them,
  * so there are none to export.
  */
 async function exportChart() {
-  const body = [
-    ...statement.map((block) => `<p>${block}</p>`),
-    ...sections.flatMap((s) => [
-      `<h2>${s.title}</h2>`,
-      ...s.blocks.map((block) => `<p>${block}</p>`),
-    ]),
-  ].join('');
+  const body = statement.map((block) => `<p>${block}</p>`).join('');
 
   return {
     price: price ?? '',
@@ -544,9 +540,10 @@ async function exportChart() {
     prose: textBlocks(body),
     photographs: [],
     /*
-     * The same content, still in its sections, for the theme's own component
-     * to lay out. The theme renders `post_content` today and so gets `prose`;
-     * this is here for the port that gives it the sheet's composition.
+     * The statement again on its own, and the record the page no longer sets.
+     * The theme renders `post_content` today and so gets `prose`; these are
+     * here for the port, and so that nothing the source carries is dropped on
+     * the floor by this build.
      */
     statement,
     sections,

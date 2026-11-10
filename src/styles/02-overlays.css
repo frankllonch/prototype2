@@ -40,7 +40,7 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
  * and nothing that reads as a floating card over the blurred page behind it.
  */
 .panel { background: color-mix(in srgb, var(--paper) 90%, transparent); padding: 0 0 var(--gap); }
-.panel-close { position: fixed; top: 1.6rem; right: var(--pad); z-index: 2; color: var(--ink-soft); }
+.panel-close { position: fixed; top: var(--bar-top); right: var(--pad); z-index: 2; color: var(--ink-soft); }
 .panel-close:hover, .panel-close:focus-visible { color: var(--ink); }
 .reader {
   display: grid;
@@ -145,24 +145,6 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 /* ------------------------------------------------------------------ about */
 
 /*
- * The five colour pairs the designer set, held and turned, which the loading
- * screen strobes through (`00-base.css`). About used to blink through them too;
- * it no longer does, and these stay here for the loader alone. The colours
- * are registered custom properties so the keyframes interpolate them properly
- * instead of falling back to the discrete behaviour unregistered properties get.
- */
-@property --blink-bg { syntax: '<color>'; inherits: true; initial-value: #ed373f; }
-@property --blink-fg { syntax: '<color>'; inherits: true; initial-value: #013787; }
-@keyframes about-blink {
-  0%,   17% { --blink-bg: #ed373f; --blink-fg: #013787; }
-  20%,  37% { --blink-bg: #ffd090; --blink-fg: #013787; }
-  40%,  57% { --blink-bg: #392524; --blink-fg: #e8bc00; }
-  60%,  77% { --blink-bg: #054d9f; --blink-fg: #e6a085; }
-  80%,  97% { --blink-bg: #2c402f; --blink-fg: #f5c041; }
-  100%      { --blink-bg: #ed373f; --blink-fg: #013787; }
-}
-
-/*
  * About opens over whatever page you are on: the page stays there behind it,
  * blurred by the veil and faint through the panel's own ground.
  *
@@ -219,33 +201,42 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
  * of the text, upright and spaced, its baseline 80 down the 1920 frame and its
  * last letter at the right margin, 50 in.
  *
- * Held to the top of About's own scroll rather than fixed to the window, and
- * taking no room. Fixed, it moved: while the panel rises in it is transformed,
- * which makes it the box a fixed child is placed in — so the opening's glide
- * carried the link up with the text, and it snapped back once the rise was
- * over. Sticky, it keeps to the panel's scrollport whatever the panel is doing,
- * and rises in with the page exactly as the detail pages' Close does.
+ * Drawn as the bar is: the negative of whatever passes under it, so the text
+ * and the photographs scrolling up beneath it never cover it. The source is
+ * the colour that comes out as the ink over paper (255 − the ink's 36, 37, 40),
+ * as on the detail panels' heads.
+ *
+ * Beside the panel rather than in it (components/layout.ts). A blend only sees
+ * what shares its stacking context, and inside the panel that is a ground of
+ * 64% paper, against which the ink comes out a mid grey. Out here it sees the
+ * whole screen. It is also out of reach of the panel's rise and of its scroll,
+ * so it stands still: it fades in and out with the panel instead.
  */
 .about-close {
   --f: calc(100vw / 1920);
-  position: sticky;
+  position: fixed;
   top: calc(var(--f) * 80);
-  z-index: 3;
-  display: block;
-  width: fit-content;
-  height: 0;
-  margin: 0 calc(var(--f) * 50 - 0.071em) 0 auto;
+  right: calc(var(--f) * 50 - 0.071em);
+  z-index: 71;
   translate: 0 -0.9em;            /* from its baseline to its box */
   font-size: var(--type);
   line-height: 1;
   font-weight: 400;
   letter-spacing: 0.071em;
   text-transform: uppercase;
-  color: var(--ink);
+  color: rgb(219, 218, 215);
+  mix-blend-mode: difference;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0s linear 0.9s;
 }
-.about-close:hover, .about-close:focus-visible { opacity: 0.55; }
+.about.is-open ~ .about-close { opacity: 1; visibility: visible; transition-delay: 0s; }
+.about.is-open ~ .about-close:hover,
+.about.is-open ~ .about-close:focus-visible { opacity: 0.55; }
 @media (max-width: 899px) {
-  .about-close { top: 1.6rem; translate: none; line-height: var(--lead); margin-right: calc(var(--pad) - 0.071em); }
+  .about-close { top: 1.6rem; right: calc(var(--pad) - 0.071em); translate: none; line-height: var(--lead); }
 }
 
 /* -------------------------------------------------------------- the text */
@@ -356,20 +347,24 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .about.is-staged .about-pop.is-in { opacity: 1; filter: none; transform: none; }
 
 /* The start page's chevron, for About's own scroll: shown from the moment About
-   opens until the end of the panel. */
+   opens until the end of the panel. Beside the panel and drawn in the
+   negative, like Close, since text and photographs pass under it all the way. */
 .about-cue {
   position: fixed;
   left: 50%;
   bottom: 1.9rem;
-  z-index: 3;
+  z-index: 71;
   width: var(--cue-size);
   margin-left: calc(var(--cue-size) / -2);
-  color: var(--ink);
+  color: rgb(219, 218, 215);
+  mix-blend-mode: difference;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.7s var(--ease);
 }
-.about-cue.is-shown { opacity: 1; }
+.about.is-open ~ .about-cue.is-shown { opacity: 1; }
+/* Not while a photograph is up: the panel does not scroll then. */
+.about.is-viewing ~ .about-cue.is-shown { opacity: 0; }
 @media (prefers-reduced-motion: no-preference) {
   .about-cue svg { animation: scroll-cue-fall 2.4s var(--ease) infinite; }
 }
@@ -381,7 +376,7 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
  * A photograph large over the page, as the book's are on What's Color: a pale
  * blur behind it, a click anywhere or Escape to put it away, and the plain
  * pointers the rest of the site uses rather than zoom marks. The exhibitions'
- * chevrons either side step through the row, and so do the arrow keys and a
+ * chevrons either side (below) step through the row, and so do the arrow keys and a
  * swipe. The panel stops scrolling while it is up (`.is-viewing`).
  */
 .about.is-viewing { overflow: hidden; }
@@ -409,20 +404,30 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   max-width: min(82vw, 1600px);
   max-height: 84vh;
 }
+/*
+ * The chevrons stand beside the panel, like Close, and are drawn the same way:
+ * the negative of what is under them, so the photograph can run beneath them
+ * on a phone. There only while a photograph is up.
+ */
 .about-viewer-step {
-  position: absolute;
+  position: fixed;
   top: 50%;
   translate: 0 -50%;
+  z-index: 72;
   padding: 1.5rem 1rem;
-  color: var(--ink);
+  color: rgb(219, 218, 215);
+  mix-blend-mode: difference;
   cursor: pointer;
-  transition: opacity var(--hover) var(--ease);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
 }
+.about.is-viewing ~ .about-viewer-step { opacity: 1; visibility: visible; transition-delay: 0s; }
 .about-viewer-step.is-prev { left: max(0.5rem, 2.5vw); }
 .about-viewer-step.is-next { right: max(0.5rem, 2.5vw); }
-.about-viewer-step:hover, .about-viewer-step:focus-visible { opacity: 0.45; }
+.about.is-viewing ~ .about-viewer-step:hover,
+.about.is-viewing ~ .about-viewer-step:focus-visible { opacity: 0.45; }
 .about-viewer-step svg { display: block; width: 0.9rem; height: auto; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
-.about-viewer.is-single .about-viewer-step { display: none; }
 
 /* ----------------------------------------------------------- the record */
 
@@ -534,6 +539,7 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 
 html:not(.js) .about { display: none; }
 html:not(.js) .about:target { display: block; position: static; opacity: 1; visibility: visible; transform: none; }
+html:not(.js) .about:target ~ .about-close { opacity: 1; visibility: visible; }
 
 /* --------------------------------------------------------------- lightbox */
 
@@ -570,7 +576,7 @@ html:not(.js) .about:target { display: block; position: static; opacity: 1; visi
 }
 /* The veil is positioned, so anything meant to sit in front must be positioned too. */
 .lightbox-plate, .lightbox-caption, .lightbox-nav { position: relative; z-index: 1; }
-.lightbox-close { position: fixed; top: 1.6rem; right: var(--pad); z-index: 1; color: var(--ink-soft); }
+.lightbox-close { position: fixed; top: var(--bar-top); right: var(--pad); z-index: 1; color: var(--ink-soft); }
 .lightbox-close:hover, .lightbox-close:focus-visible { color: var(--ink); }
 .lightbox-plate { grid-column: 3; display: grid; place-items: center; min-width: 0; min-height: 0; transition: opacity 0.42s var(--ease); }
 .lightbox.is-changing .lightbox-plate, .lightbox.is-changing .lightbox-caption { opacity: 0; }

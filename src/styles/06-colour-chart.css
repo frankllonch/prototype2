@@ -1,309 +1,175 @@
 /*
  * The Colour Chart.
  *
- * One screen, three columns, and only the middle of them is a picture. The
- * figures below are measured off the designer's reference at the 1520 CSS
- * pixels it was drawn at, and written as the fractions that produce them, so
- * the composition holds at other widths rather than only at hers.
+ * A page of type and nothing else: the statement across the full width, the
+ * way to order one under it, the price, her thanks, and the site's line at the
+ * foot. No columns, no stack of colours, no record — the sheet before this one
+ * had all three and this is the simplification.
+ *
+ *
+ * THE DESIGNER'S POINT
+ *
+ * Her sheets are now drawn at 1728 — a laptop's own width — and the sizes on
+ * them are given in points of that frame: 40 for text, 45 for a heading or a
+ * control, 45 of leading on 40 of text. The site's one type size is 40 of a
+ * 1920 frame (`--type`, 2.0833vw), so her point is a tenth larger than the
+ * site's: 40pt comes out at 44.4 where `--type` gives 40.
+ *
+ * Rather than scatter that ratio through the file as 1.111s, it is stated once
+ * as a unit. Everything below is then the sheet's own figure, and the page
+ * still scales with the site rather than against it.
+ *
+ *     --pt  =  --type / 36        (40pt = 1.111 × --type; 45pt = 1.25 ×)
+ *
+ * The page margin is the one figure not taken from the sheet. She sets it at
+ * 45pt, which is 50 against the site's 40, and the bar is set at 40 everywhere
+ * — so following her here would put the first word of the statement ten pixels
+ * to the right of the wordmark above it. The sheet shows them flush, and flush
+ * is the thing to keep; `--pad` is a decision for the whole site, not for this
+ * page.
  */
 
 .chart {
-  /*
-   * Exactly the window, and no more: this page does not scroll. `dvh` rather
-   * than `vh` because on a phone the two differ by the height of the browser's
-   * own chrome, and a page that is a window tall has to agree with the window
-   * it is in as that chrome comes and goes.
-   */
-  height: 100dvh;
-  display: grid;
-  /*
-   * The first column is the bar's first column — 25.53%, the same figure the
-   * top bar uses — so the band stack begins exactly under What's Color?. The
-   * second is the stack itself, at the 171px of the reference. The third takes
-   * what is left.
-   */
-  grid-template-columns: 25.53% clamp(5rem, 11.25vw, 13rem) minmax(0, 1fr);
-  /* The heading, then everything else, which takes the rest of the height. */
-  grid-template-rows: auto minmax(0, 1fr);
-  /*
-   * The foot is a little deeper than the sides. The sheet sets the stack of
-   * colours 51px clear of the bottom of the window against the 40 it keeps at
-   * the edges, and at this size the difference is the whole of what stops the
-   * last band reading as having been cut off by the screen.
-   */
-  padding: calc(var(--bar) + 3rem) var(--pad) calc(var(--pad) + 0.7rem);
+  --pt: calc(var(--type) / 36);
+  /* One line of the statement: 45pt of leading on 40pt of text. */
+  --chart-line: calc(var(--pt) * 45);
+
+  padding: calc(var(--bar) + var(--pt) * 205) var(--pad) calc(var(--pt) * 230);
 }
 
-/*
- * Nothing for the document to scroll, and nothing to leave a scrollbar standing
- * in the margin: the page is the window's height and the reading happens inside
- * it. Only with scripting, because without it the form is a section at the foot
- * of this page and has to be reachable.
- */
-html.js .chart-body { overflow: hidden; }
+/* ----------------------------------------------------------- the statement */
 
-.chart-title {
-  grid-column: 1 / -1;
-  grid-row: 1;
-  margin: 0 0 var(--gap);
-  font-size: var(--type);
-  font-weight: 700;
-  /*
-   * Tighter than the 0.06em the site's other capitals take.
-   *
-   * Those are the bar's, set at half this size, where tracking is what keeps
-   * eleven small letters from closing up. At the page size the same figure runs
-   * COLOR CHART to 241px where the sheet draws it at 213, and a tracked-out
-   * heading reads as a label rather than as the name of the page.
-   */
-  letter-spacing: -0.02em;
+/*
+ * What the chart is, in her own words, across the whole width of the page.
+ *
+ * 40pt medium in capitals, led at 45 — the sheet's "MEDIUM 40 pt MAJUSCULA"
+ * and its "INTERLINEAT 45". One clear line between paragraphs, which at this
+ * leading is one more line box.
+ */
+.chart-statement {
+  font-size: calc(var(--pt) * 40);
+  font-weight: 500;
+  line-height: 1.125;
   text-transform: uppercase;
-  line-height: var(--lead);
+  /* None. Capitals are already wide; a page of them does not need help, and
+     the sheet's line measures to within a third of a pixel of zero. */
+  letter-spacing: 0;
 }
 
-/* ------------------------------------------------------------- the margin */
+.chart-statement p { margin: 0 0 1.125em; }
+.chart-statement p:last-child { margin-bottom: 0; }
+
+/* ------------------------------------------------------------- the ordering */
 
 /*
- * What the chart costs and how to get one. It sits in the left column and stays
- * there: the text beside it can run for pages, and the price is still on the
- * screen at the end of them.
- *
- * The two offsets are the reference's, in the type's own units rather than in
- * pixels, so they move with the type: the price a little under two lines below
- * the top of the stack beside it, the order a little over two lines below that.
+ * The way to get one, and what it costs. 45pt semibold over 40pt, with the
+ * price itself the only thing on the page set heavier than the words around
+ * it — "Cost:" is the sheet's LIGHT, the figure its SEMIBOLD.
  */
-.chart-aside {
-  grid-column: 1;
-  grid-row: 2;
-  align-self: start;
-}
-
-/*
- * The two things the page exists to say are set a quarter larger than the page.
- *
- * Measured, not chosen: on the sheet "Cost: 60,50€" runs 217px and ORDER YOURS
- * with its arrow 315, against the 178 and 256 the site's one type size gives.
- * Both land on 1.25 — which is the site's own leading, and the only figure it
- * steps by. The margins stay keyed to the page's size rather than to this one,
- * so enlarging the price does not also push it down the column.
- */
-.chart-price {
-  margin: calc(var(--type) * 2) 0 0;
-  font-size: calc(var(--type) * var(--lead));
-  line-height: var(--lead);
-  letter-spacing: -0.01em;
-}
-
-.chart-price b { font-weight: 700; }
-
 .chart-order {
   display: inline-flex;
   align-items: center;
-  gap: 0.5em;
-  margin-top: calc(var(--type) * 2);
-  font-size: calc(var(--type) * var(--lead));
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  line-height: var(--lead);
+  gap: 0.55em;
+  margin-top: calc(var(--pt) * 103);
+  font-size: calc(var(--pt) * 45);
+  font-weight: 600;
+  line-height: 1.125;
+  letter-spacing: 0;
   text-transform: uppercase;
   color: var(--ink);
 }
 
 /*
- * The arrow goes where it points. Nothing else on the control moves — this is
- * the site's one gesture for "this opens something", and it reads at a glance
- * without the type shifting under the pointer.
+ * The arrow turns, slowly, all the way over.
+ *
+ * Half a turn and nothing else: no colour change, no movement of the words, no
+ * travel across the page. It is the one piece of movement on a page that has
+ * none, so it is given more than twice the site's usual hover to make it —
+ * long enough that the turn is something you watch rather than something that
+ * has already happened.
+ *
+ * Eased at both ends rather than with the site's `--ease`, which decelerates
+ * into place from a fast start. That is right for something arriving; a thing
+ * turning on its own centre should start as gently as it stops.
+ *
+ * The viewBox is square and the arrow sits in the middle of it, so the turn has
+ * nothing to drift against.
  */
 .chart-arrow {
-  width: 0.72em;
-  height: 0.72em;
+  width: 0.68em;
+  height: 0.68em;
   overflow: visible;
-  transition: transform var(--hover) var(--ease);
+  transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 .chart-order:hover .chart-arrow,
-.chart-order:focus-visible .chart-arrow { transform: translate(0.18em, -0.18em); }
+.chart-order:focus-visible .chart-arrow { transform: rotate(90deg); }
 
 /* The site shows focus the way it shows hover; this one also underlines, since
    a keyboard arriving on a control that opens a form should be unmistakable. */
 .chart-order:focus-visible { text-decoration: underline; text-underline-offset: 0.3em; }
 
-/* ------------------------------------------------------------- the colours */
-
 /*
- * The chart itself: twenty-three bands filling the height of the column in one
- * unbroken stack. Equal shares of whatever height there is, rather than a band
- * height set here — the stack is as tall as the screen allows and the bands
- * divide it, which is how the reference reads at any size.
+ * 45pt, not the 40 the style list gives for LIGHT: measured off the sheet, the
+ * line runs 277 where 40pt would set it at 248. The price is the one fact on
+ * the page a buyer is looking for, and it is set at the size of the control
+ * above it rather than the size of the words above that.
  */
-.chart-bands {
-  grid-column: 2;
-  grid-row: 2;
-  display: grid;
-  grid-auto-rows: minmax(0, 1fr);
-  /* The hovered band steps out past the column, so nothing may clip it. */
-  overflow: visible;
-}
-
-/*
- * Each band paints half a pixel past its own box, in its own colour, so the
- * bands overlap instead of meeting.
- *
- * Twenty-three equal shares of a height that is not a multiple of twenty-three
- * leave every edge on a fraction of a pixel. Two bands meeting there are
- * composited one after the other rather than together — the first lays down
- * 56% of its colour over white, the second 44% over that — and a quarter of the
- * paper survives between them as a hairline. It is faint when the stack is
- * still and obvious the moment one band moves, which is exactly when the stack
- * is being looked at. A shadow rather than a size: it costs no layout, it
- * scales with the band when the band scales, and it cannot push the stack past
- * the foot of the page. A whole pixel rather than the half the seam needs,
- * because half a pixel is half a device pixel on a screen that is not Retina
- * and would cover the hairline only halfway. Each boundary moves by at most a
- * pixel on a band twenty-five deep; the white between them goes entirely.
- */
-.chart-band {
-  display: block;
-  background: var(--band);
-  box-shadow: 0 0 0 1px var(--band);
-  transform-origin: left center;
-  transition: transform var(--hover) var(--ease);
-}
-
-/*
- * The slight hover: the band under the pointer steps out to the right by about
- * one band's height, and nothing else changes. `scaleX` rather than a width, so
- * twenty-three neighbours are not laid out again every frame; on a plain
- * rectangle of one colour the two are indistinguishable.
- *
- * A step into the gap before the text, which is wider than this — so a band
- * reaching out never touches a word.
- */
-.chart-bands:hover .chart-band:hover { transform: scaleX(1.14); }
-
-@media (prefers-reduced-motion: reduce) {
-  .chart-band, .chart-arrow { transition: none; }
-}
-
-/* ---------------------------------------------------------------- the text */
-
-/*
- * The one thing on the page that moves.
- *
- * Uppercase, as the sheet sets it — the chart's text is a statement about
- * colour rather than a page of prose, and the designer gives it the same voice
- * as everything else on the site that is set in capitals.
- */
-.chart-text {
-  grid-column: 3;
-  grid-row: 2;
-  min-height: 0;
-  padding-left: var(--gap);
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  /* Thin, and in the ink's quiet tint: the column has to say it can be
-     scrolled, and a full-dress scrollbar in the middle of this page would be
-     the loudest thing on it. */
-  scrollbar-width: thin;
-  scrollbar-color: var(--ink-soft) transparent;
-}
-
-/*
- * The site shows no focus rings, but a scrolling region is the one place a
- * keyboard genuinely needs to be told where it has landed — the arrow keys do
- * nothing until it is here. A rule down its left edge, in the gap it already
- * has, says so without drawing a box round the text.
- */
-.chart-text:focus-visible {
-  box-shadow: inset 1px 0 0 var(--ink-soft);
-}
-
-.chart-text .prose {
-  font-size: var(--type);
-  line-height: var(--lead);
-  text-transform: uppercase;
-  /*
-   * None, against the 0.01em the site sets on everything else. Measured: the
-   * sheet's "COLOUR HAS ALWAYS BEEN MY INSPIRATION:" runs 664px at this size
-   * and the site's default tracking makes it 673. Capitals are already wide;
-   * a column of them does not need help.
-   */
+.chart-price {
+  margin: calc(var(--pt) * 25) 0 0;
+  font-size: calc(var(--pt) * 45);
+  font-weight: 300;
+  line-height: 1.125;
   letter-spacing: 0;
 }
 
-/* One clear line between paragraphs, which is the reference's rhythm. */
-.chart-text .prose p { margin: 0 0 1.25em; }
+.chart-price b { font-weight: 600; }
 
-/* The source wraps the closing note in italics and bolds its two headings; in
-   capitals at one size neither reads as a difference worth keeping. */
-.chart-text .prose em { font-style: normal; }
-.chart-text .prose strong { font-weight: 700; }
+/* ---------------------------------------------------------------- the close */
+
+/* Her thanks, down the middle: 45pt, the same size as the control above it. */
+.chart-thanks {
+  margin: calc(var(--pt) * 69) 0 0;
+  text-align: center;
+  font-size: calc(var(--pt) * 45);
+  font-weight: 500;
+  line-height: 1.125;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
 
 /*
- * The photographs of the chart, at the foot of the column that scrolls.
- *
- * The composition has given their old column to the colours, and the text ends
- * by crediting all three by number — so they follow the words rather than
- * disappearing. Not uppercase: a caption is a caption.
+ * The site's line, at the foot. Small, centred, and the name set apart from
+ * the notice by weight alone — there is no second size for it to use.
  */
-.chart-plates {
-  display: grid;
-  gap: var(--gap);
-  padding: var(--gap) 0 var(--bar);
+.chart-footer {
+  margin-top: calc(var(--pt) * 136);
+  text-align: center;
+  font-size: calc(var(--pt) * 18);
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: 0;
+  color: var(--ink);
 }
 
-.chart-plate { margin: 0; }
-.chart-plate img { width: 100%; height: auto; }
-.chart-plate figcaption {
-  margin-top: 0.4rem;
-  font-size: var(--type);
-  color: var(--ink-soft);
-}
+.chart-footer b { font-weight: 600; }
 
 /* ------------------------------------------------------------------ narrow */
 
 /*
- * On a phone the three columns are one, and the page scrolls as every other
- * page does: holding the window's height and scrolling a column inside it
- * leaves the text in a slot a few lines deep, which is no way to read.
- *
- * The stack turns on its side and becomes a band across the top — the same
- * twenty-three colours, read left to right.
+ * Nothing to rearrange — the page is one column at every width. Only the room
+ * around it comes in, since the sheet's spacing is drawn for a screen twice as
+ * wide as a phone and leaves half of one empty.
  */
 @media (max-width: 899px) {
   .chart {
-    height: auto;
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: none;
-    gap: var(--gap);
-    padding: calc(var(--bar) + 1.5rem) var(--pad) var(--gap);
+    padding-top: calc(var(--bar) + var(--pt) * 90);
+    padding-bottom: calc(var(--pt) * 110);
   }
 
-  .chart-title { margin-bottom: 0; }
-
-  .chart-aside, .chart-bands, .chart-text {
-    grid-column: 1;
-    grid-row: auto;
-  }
-
-  .chart-bands {
-    grid-auto-rows: none;
-    grid-auto-flow: column;
-    grid-auto-columns: minmax(0, 1fr);
-    height: clamp(3.5rem, 14vw, 6rem);
-  }
-
-  /* Turned on its side, the step out would run off the bottom of the strip. */
-  .chart-bands:hover .chart-band:hover { transform: none; }
-
-  .chart-price { margin-top: 0; }
-
-  .chart-text {
-    padding-left: 0;
-    overflow-y: visible;
-  }
-
-  .chart-plates { padding-bottom: var(--gap); }
+  .chart-order { margin-top: calc(var(--pt) * 60); }
+  .chart-thanks { margin-top: calc(var(--pt) * 48); }
+  .chart-footer { margin-top: calc(var(--pt) * 80); }
 }
 
 /* --------------------------------------------------------------- inquiries */
@@ -366,7 +232,7 @@ html:not(.js) .inq-close { display: none; }
 
 .inq-close {
   position: fixed;
-  top: 1.6rem;
+  top: var(--bar-top);
   right: var(--pad);
   z-index: 2;
   font-size: var(--type);

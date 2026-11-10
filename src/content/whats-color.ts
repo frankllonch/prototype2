@@ -46,8 +46,11 @@ export const LEAD =
   'I assign a color to people who inspire me \u2014 philosophers, historians, ' +
   'thinkers, writers, architects and artists \u2014 and ask each of them a ' +
   "simple question: WHAT\u2019S COLOR? It has run three times: Barcelona in " +
-  '2020, Madrid in 2021, and Llibreria Terranova in Barcelona in 2024. Click on ' +
-  'their names to see what they said.';
+  '2020, Madrid in 2021, and Llibreria Terranova in Barcelona in 2024.' +
+  // A blank line, then the invitation: its own paragraph on the sheet, set
+  // semibold in capitals by the stylesheet. Written in sentence case here,
+  // because a word in capitals is how the note marks the question.
+  '\n\nClick on their names to see what they said.';
 
 export interface Participant {
   readonly name: string;

@@ -4,9 +4,9 @@
  * All three editions are compositions rather than lists. The designer placed
  * every entry herself — which of the three columns it sits in, how far it is
  * dropped below the one beside it, and how much air each band gets before it —
- * and set Claudia's own words across the full width between them, with plates
- * of the work partway down. None of that can be worked out from the content,
- * so it is written here.
+ * and set Claudia's own words across the full width between them, under a
+ * reel of photographs of the edition. None of that can be worked out from the
+ * content, so it is written here.
  *
  * Read off the Figma file itself (the three DISSENY frames, drawn at 1920 with
  * a content width of 1824), not off exported pictures of it: every `lead` and
@@ -21,7 +21,7 @@
  * quietly dropping someone off the page.
  */
 
-/** A photograph on a sheet, with the shape the design crops it to. */
+/** A photograph in a reel, set whole at the shape of its file. */
 export interface Plate {
   /** Basename of the pair in `src/assets/img`, without extension. */
   readonly name: string;
@@ -29,10 +29,11 @@ export interface Plate {
   readonly h: number;
   readonly alt: string;
   /**
-   * Width over height, where the design crops the photograph rather than
-   * setting it whole. Left off, the plate keeps the shape of the file.
+   * Width over height of the cell, where the sheet frames the photograph a
+   * shade tighter than its file and crops the difference. Left off, the cell
+   * is the file's own shape.
    */
-  readonly aspect?: number;
+  readonly cell?: number;
 }
 
 export interface SheetSlot {
@@ -40,12 +41,10 @@ export interface SheetSlot {
   readonly who?: string;
   /** One of Claudia's paragraphs, by its position in `says`. */
   readonly say?: number;
-  /** A photograph. */
-  readonly plate?: Plate;
   /** The edition's own title, across the full width. */
   readonly title?: boolean;
-  /** The row of photographs of the book, across the full width. */
-  readonly strip?: boolean;
+  /** A reel of photographs across the full width, in the order it runs. */
+  readonly strip?: readonly Plate[];
   /** Which of the three columns, 1 to 3. Full width when left off. */
   readonly col?: 1 | 2 | 3;
   /** How many steps below the top of its row, each step 7.32% of the width. */
@@ -62,17 +61,44 @@ export interface SheetSlot {
   readonly rule?: boolean;
 }
 
-const PLATE_I: Plate = {
-  name: 'whats-color-i',
-  w: 1000,
-  h: 667,
-  alt: 'The exhibition at Alzueta Gallery: answers hung in a row along a white wall.',
-};
+/**
+ * The reels: a row of photographs under each edition's roster, every picture
+ * whole at its own shape, all one height, centred. Their order is the sheets'.
+ *
+ * The designer's folders for the first two editions arrived with their names
+ * swapped — the one named for the first held the Madrid photographs, which
+ * show the second's own title on the wall — so each picture was matched to
+ * its cell on the sheets by colour, not by folder. Every match was
+ * unambiguous. The second edition's frames run a shade wider than its
+ * photographs, so its cells carry the sheet's own shape and crop the sliver.
+ * Where the live site holds the original, the reel uses it;
+ * otherwise the designer's export, which is all there is — and for two of the
+ * first edition's, whose exports came clipped to their top third, the cell
+ * cut out of her sheet itself, the one place they appear whole.
+ */
+export const REEL_I: readonly Plate[] = [
+  { name: 'whats-color-i-reel-1', w: 1000, h: 667, alt: 'A painting of tall bands of colour on the white wall of Alzueta Gallery.' },
+  { name: 'whats-color-i-reel-2', w: 1000, h: 667, alt: 'Painted battens standing in a row in the white gallery, a painting beyond.' },
+  { name: 'whats-color-i-reel-3', w: 577, h: 383, alt: 'Two paintings on the white walls of the gallery.' },
+  { name: 'whats-color-i-reel-4', w: 577, h: 383, alt: 'The gallery from its far end: paintings on two walls under the lighting rig.' },
+];
+
+export const REEL_II: readonly Plate[] = [
+  { name: 'whats-color-ii-reel-1', w: 890, h: 1200, alt: 'Painted battens of many colours leaning against a wall.', cell: 0.7565 },
+  { name: 'whats-color-ii-reel-2', w: 900, h: 1200, alt: 'The way in, with the exhibition\u2019s title on the wall.', cell: 0.7565 },
+  { name: 'whats-color-ii-reel-3', w: 276, h: 368, alt: 'A page projected above a table laid with colour swatches.', cell: 0.7565 },
+  { name: 'whats-color-ii-reel-4', w: 274, h: 362, alt: 'Painted battens standing on a white plinth.', cell: 0.7565 },
+  { name: 'whats-color-ii-reel-5', w: 274, h: 366, alt: 'A projection on the wall above long tables of samples.', cell: 0.7565 },
+  { name: 'whats-color-ii-reel-6', w: 488, h: 366, alt: 'Painted battens leaning either side of a cast-iron column.', cell: 1.349 },
+  { name: 'whats-color-ii-reel-7', w: 272, h: 366, alt: 'A grid of colour fields projected above the tables.', cell: 0.7565 },
+];
 
 export const SHEET_I: readonly SheetSlot[] = [
+  { strip: REEL_I, lead: 0 },
+
   // One block on the sheet, two paragraphs in the source: the second runs
   // straight on from the first, so it gets no air of its own.
-  { say: 0, lead: 0 },
+  { say: 0, lead: 0.0439 },
   { say: 1, lead: 0 },
 
   { who: 'Marina Garc\u00e9s', col: 1, lead: 0.0877 },
@@ -95,9 +121,7 @@ export const SHEET_I: readonly SheetSlot[] = [
   { who: 'Oscar Tusquets', col: 1, lead: 0.0746 },
   { who: 'David Bueno i Torrens', col: 2 },
 
-  { plate: PLATE_I, lead: 0.0707 },
-
-  { who: 'Siri Hustvedt', col: 1, lead: 0.0652 },
+  { who: 'Siri Hustvedt', col: 1, lead: 0.0791 },
   { who: 'Flavia Company', col: 3, drop: 1 },
 
   { who: 'Henry Giroux', col: 2, lead: 0.0444 },
@@ -105,11 +129,6 @@ export const SHEET_I: readonly SheetSlot[] = [
 
 /**
  * The second edition's sheet.
- *
- * Four photographs: two set across the full width, two side by side in the
- * outer columns. The design crops the wide pair to a band roughly twice as
- * wide as it is tall, which is why they carry an aspect — the files themselves
- * are nothing like that shape.
  *
  * Every entry on her sheet carries the same colour, AC320 ARENA, which is
  * placeholder text — Marc G\u00f3mez del Moral's real colour, repeated — so the
@@ -122,7 +141,8 @@ export const SHEET_I: readonly SheetSlot[] = [
  * in the source says to leave them out; their rows take a default lead.
  */
 export const SHEET_II: readonly SheetSlot[] = [
-  { title: true, lead: 0 },
+  { strip: REEL_II, lead: 0 },
+  { title: true, lead: 0.039 },
   { say: 0, lead: 0.0696 },
 
   { who: 'Plantea Estudio', col: 2, lead: 0.0992 },
@@ -133,18 +153,7 @@ export const SHEET_II: readonly SheetSlot[] = [
   { who: 'Elii', col: 1, lead: 0.1299, rule: true },
   { who: 'Isabel Francoy', col: 3 },
 
-  {
-    plate: {
-      name: 'whats-color-ii-1',
-      w: 1024,
-      h: 843,
-      alt: 'Paint pots, mixing dishes and swatch cards laid out on a worktable under a row of colour samples.',
-      aspect: 2.294,
-    },
-    lead: 0.0625,
-  },
-
-  { say: 2, lead: 0.0789 },
+  { say: 2, lead: 0.0696 },
 
   { who: 'Tom\u00e1s L\u00f3pez Amat', col: 1, lead: 0.1146 },
   { who: 'ContiCert', col: 2 },
@@ -152,27 +161,7 @@ export const SHEET_II: readonly SheetSlot[] = [
 
   { who: 'Isla arquitectos', col: 2, lead: 0.0532 },
 
-  {
-    plate: {
-      name: 'whats-color-ii-2',
-      w: 683,
-      h: 1024,
-      alt: 'A visitor walking past one of Claudia Valsells\u2019 paintings in a white gallery.',
-    },
-    col: 1,
-    lead: 0.0526,
-  },
-  {
-    plate: {
-      name: 'whats-color-ii-3',
-      w: 800,
-      h: 1200,
-      alt: 'Painted timber battens in many colours, leaning against a wall.',
-    },
-    col: 3,
-  },
-
-  { say: 3, lead: 0.0636 },
+  { say: 3, lead: 0.0513 },
 
   { who: 'Antoni Arola', col: 1, lead: 0.0822 },
   { who: 'Laura Castanya', col: 2, drop: 2 },
@@ -183,18 +172,7 @@ export const SHEET_II: readonly SheetSlot[] = [
 
   { say: 4, lead: 0.0702 },
 
-  {
-    plate: {
-      name: 'whats-color-ii-4',
-      w: 482,
-      h: 994,
-      alt: 'Fan decks, colour guides and sample books spread out together.',
-      aspect: 2.063,
-    },
-    lead: 0.0477,
-  },
-
-  { who: 'Oscar Tusquets', col: 1, lead: 0.1036 },
+  { who: 'Oscar Tusquets', col: 1, lead: 0.049 },
   { who: 'Gema Sach', col: 2 },
   { who: 'Barbara Aurell', col: 3, drop: 2 },
 
@@ -222,11 +200,10 @@ export const SHEET_II: readonly SheetSlot[] = [
 /**
  * The photographs of the book, in the order the third edition's sheet runs
  * them along its top. Each one is a spread, photographed on the studio's pink
- * ground, and the first doubles as the plate the sheet sets large further
- * down. Matched to the sheet by colour rather than by eye: each thumbnail on
+ * ground. Matched to the sheet by colour rather than by eye: each thumbnail on
  * it was compared against each photograph, and every match was unambiguous.
  */
-export const BOOKS_III: readonly Plate[] = [
+export const REEL_III: readonly Plate[] = [
   { name: 'whats-color-iii-1', w: 750, h: 1000, alt: 'The book open at Tom\u00e1s L\u00f3pez Amat\u2019s and Rupi Kaur\u2019s colours.' },
   { name: 'whats-color-iii-2', w: 750, h: 1000, alt: 'The book open at Sofia Romero y Miguel Sotos\u2019 and Luis Cerver\u00f3\u2019s colours.' },
   { name: 'whats-color-iii-3', w: 750, h: 1000, alt: 'The book open at Carlota Guerrero\u2019s and Escobedo Soliz\u2019s colours.' },
@@ -254,8 +231,7 @@ export const SAYS_III_SHEET: readonly string[] = [
 
 /**
  * The third edition's sheet. The same system as the others and the loosest in
- * its drops — single entries fall as far as three steps — with the row of
- * book photographs standing where the other editions open with words.
+ * its drops — single entries fall as far as three steps.
  *
  * Two colour references on her sheet are typos — Marta D. Riezu and Juan
  * Diego Valera both carry a neighbour's colour there — and the entries here
@@ -263,8 +239,8 @@ export const SAYS_III_SHEET: readonly string[] = [
  * agrees with.
  */
 export const SHEET_III: readonly SheetSlot[] = [
-  { strip: true, lead: 0 },
-  { say: 0, lead: 0.119 },
+  { strip: REEL_III, lead: 0 },
+  { say: 0, lead: 0.1199 },
 
   { who: 'Marc G\u00f3mez del Moral', col: 1, lead: 0.0614 },
   { who: 'Jose Javier Serrano', col: 2 },
@@ -278,18 +254,7 @@ export const SHEET_III: readonly SheetSlot[] = [
   { who: 'Isabel Martinez', col: 1, drop: 1, lead: 0.0384 },
   { who: 'Ana Cuba', col: 2 },
 
-  {
-    plate: {
-      name: 'whats-color-iii-1',
-      w: 750,
-      h: 1000,
-      alt: 'The book open at Tom\u00e1s L\u00f3pez Amat\u2019s and Rupi Kaur\u2019s colours, set large across the sheet.',
-      aspect: 1.139,
-    },
-    lead: 0.1047,
-  },
-
-  { say: 2, lead: 0.0817 },
+  { say: 2, lead: 0.0404 },
 
   { who: 'Julia Ruiz Cabello', col: 1, lead: 0.0619 },
   { who: 'Raquel Quevedo', col: 2, drop: 2 },

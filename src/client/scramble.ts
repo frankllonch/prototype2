@@ -42,7 +42,7 @@ const STEP = 45;
  * for "only the letters I am on" against "most of the word": at 0 nothing
  * churns, and at the width of the longest word it all does.
  */
-const RADIUS = 48;
+const RADIUS = 30;
 
 /**
  * How much of that reach is the soft edge, as a fraction of it. At 0 the reach

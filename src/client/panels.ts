@@ -28,6 +28,16 @@ export function initPanels(): void {
   const page = location.pathname + location.search;
   const root = document.querySelector<HTMLElement>('[data-panel-root]')?.dataset.panelRoot ?? page;
 
+  /*
+   * A panel's Close link is inside it, or — where it has to be drawn over the
+   * panel as the bar is, as the negative of whatever passes under it — beside
+   * it, naming the panel it closes (`data-panel-close="about"`). A blend
+   * reaches only what shares its stacking context, and a panel is one.
+   */
+  const closer = (panel: HTMLElement) =>
+    panel.querySelector<HTMLElement>('[data-panel-close]') ??
+    document.querySelector<HTMLElement>(`[data-panel-close="${panel.id}"]`);
+
   let open: HTMLElement | null = null;
   // What opened the panel, so that closing it hands the keyboard back there
   // rather than dropping focus on the body when the Close link is hidden.
@@ -58,7 +68,7 @@ export function initPanels(): void {
     // scroll just went back to the top.
     panel.dispatchEvent(new CustomEvent('panelopen'));
     document.body.classList.add('is-locked');
-    panel.querySelector<HTMLElement>('[data-panel-close]')?.focus({ preventScroll: true });
+    closer(panel)?.focus({ preventScroll: true });
   };
 
   for (const trigger of document.querySelectorAll<HTMLAnchorElement>('[data-panel-open]')) {
@@ -76,7 +86,7 @@ export function initPanels(): void {
     });
   }
   for (const panel of panels) {
-    panel.querySelector('[data-panel-close]')?.addEventListener('click', (event) => {
+    closer(panel)?.addEventListener('click', (event) => {
       event.preventDefault();
       close();
     });

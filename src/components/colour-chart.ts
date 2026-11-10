@@ -1,85 +1,72 @@
 import { html, join, raw, type Html } from './html.ts';
-import { responsiveImage } from './image.ts';
-import { BANDS, photographs, price, prose } from '../content/colour-chart.ts';
+import { price, statement } from '../content/colour-chart.ts';
 import { ENDPOINT, TURNSTILE_SITE_KEY } from '../content/inquiries.ts';
 
 /**
  * The Colour Chart, after the designer's sheet.
  *
- * Three columns across one screen. The margin states what the chart costs and
- * how to get one; the chart's own colours stand in the next column as a single
- * stack of bands; the text has the rest of the page. Nothing moves except the
- * text — the page itself is exactly the height of the window and does not
- * scroll, so the price and the way to order are never scrolled off the thing
- * they are about. That is the whole argument of the layout: the facts stay put,
- * and the reading passes them.
+ * Simplified to five things: what the chart is, in her own words; the way to
+ * order one; what it costs; her thanks; and the site's own line at the foot.
+ * The record that used to follow — Features, the technical characteristics,
+ * About a colour chart — is not on the sheet any more, and neither are the
+ * stack of colours, the photographs or the heading, which the bar already
+ * carries. `content/colour-chart.ts` still reads every one of those out of
+ * WordPress; this page simply no longer sets them.
  *
- * The band column lines up with the second column of the bar — where What's
- * Color? sits — because the sheet puts them on the same line and because the
- * bar is the only other thing on the page that divides the width.
+ * The statement runs the full width of the page, which is the whole of the
+ * change: there is no margin column to hold anything still beside it, so
+ * nothing here is a composition — it is a page of type.
  */
 export function colourChart(): Html {
   return html`<div class="chart">
-    <h1 class="chart-title">Color Chart</h1>
+    <!--
+      The bar names the page, so the heading would be the same words twice. It
+      is here for the document's structure and for anything reading the page
+      rather than looking at it.
+    -->
+    <h1 class="sr-only">Color Chart</h1>
 
-    <div class="chart-aside">
-      ${price ? html`<p class="chart-price">Cost: <b>${price}</b></p>` : ''}
+    <div class="chart-statement">
+      ${join(statement.map((block) => html`<p>${raw(block)}</p>`))}
+    </div>
+
+    <!--
+      An anchor rather than a button, and to a real section further down the
+      document. With scripting the click opens the form over the page; without
+      it the same href simply walks to the form, which is standing open at the
+      foot of the page. The site makes this bargain everywhere — About and each
+      exhibition are plain anchors too — so nothing here is reachable only by
+      way of a script.
+    -->
+    <a class="chart-order" href="#inquiries" data-inquiries-open>
+      Order yours
       <!--
-        An anchor rather than a button, and to a real section further down the
-        document. With scripting the click opens the form over the page; without
-        it the same href simply walks to the form, which is standing open at the
-        foot of the page. The site makes this bargain everywhere — About and each
-        exhibition are plain anchors too — so nothing here is reachable only by
-        way of a script.
+        The arrow is drawn rather than typed. An upward-right arrow is a
+        character Switzer may or may not carry, and a missing glyph would be
+        answered with whatever fallback face the machine has, at a weight
+        nothing here chose. Drawn, it is the designer's arrow at the designer's
+        weight — lighter than the stems beside it — everywhere.
+
+        Drawn about its own centre, too, because it turns: the viewBox is
+        square and the arrow is set in the middle of it, so a rotation has
+        nothing to drift against.
       -->
-      <a class="chart-order" href="#inquiries" data-inquiries-open>
-        Order yours
-        <!--
-          The arrow is drawn rather than typed. ↗ is a character Switzer may or
-          may not carry, and a missing glyph would be answered with whatever
-          fallback face the machine has, at a weight nothing here chose. Drawn,
-          it is the designer's arrow at the designer's weight — lighter than the
-          stems beside it — on every machine.
-        -->
-        <svg class="chart-arrow" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
-          <path d="M2.4 9.6 9.4 2.6M4.3 2.6h5.1v5.1" fill="none" stroke="currentColor" stroke-width="1.2" />
-        </svg>
-      </a>
-    </div>
+      <svg class="chart-arrow" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
+        <path d="M2.4 9.6 9.4 2.6M4.3 2.6h5.1v5.1" fill="none" stroke="currentColor" stroke-width="1.2" />
+      </svg>
+    </a>
+
+    ${price ? html`<p class="chart-price">Cost: <b>${price}</b></p>` : ''}
+
+    <p class="chart-thanks">Thanks to everyone!</p>
 
     <!--
-      The chart itself, as colour and nothing else.
-
-      One labelled image rather than twenty-three elements a screen reader
-      would read as twenty-three nothings: what is here is a picture of the
-      chart, made of divs because the chart is flat colour and a photograph of
-      flat colour is a worse picture of it than the colour.
+      The site's own line, not the chart's: the same one stands at the foot of
+      the About sheet. It is here rather than in components/layout.ts because
+      this is the only page of the new set that is built; when the others land
+      it belongs in the layout, once, for all of them.
     -->
-    <div class="chart-bands" role="img" aria-label="The colour chart: ${BANDS.length} of its colours, stacked">
-      ${join(BANDS.map((colour) => html`<span class="chart-band" style="--band: ${colour}"></span>`))}
-    </div>
-
-    <!--
-      The one thing that scrolls. It is given a tabindex because a region that
-      scrolls has to be reachable by keyboard — otherwise the arrow keys have
-      nothing to act on and the text below the fold is simply unreadable without
-      a pointer.
-    -->
-    <div class="chart-text" tabindex="0">
-      <div class="prose">${raw(prose)}</div>
-      ${photographs.length
-        ? html`<div class="chart-plates">
-            ${join(
-              photographs.map(
-                (image) => html`<figure class="chart-plate">
-                  ${responsiveImage({ image, sizes: '(max-width: 899px) 92vw, 46vw' })}
-                  ${image.caption ? html`<figcaption>${image.caption}</figcaption>` : ''}
-                </figure>`,
-              ),
-            )}
-          </div>`
-        : ''}
-    </div>
+    <footer class="chart-footer"><b>Claudia Valsells</b> &copy; All Rights Reserved</footer>
   </div>`;
 }
 

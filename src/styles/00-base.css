@@ -114,13 +114,31 @@
   --t-45: calc(var(--type) * 1.125);
   --lead-45: 1.125;      /* 45 over 40, the sheets own leading */
   --type-menu: clamp(0.75rem, 1.0417vw, 1.7rem);
-  /* Measured off the mockups, which agree on a fixed margin rather than a
-     proportional one: the left inset is 40px at 1866 wide, 43px at 1368 and
-     47px at 1588 — near-constant while the frames differ by 500px. 2.5rem is
-     40px; the clamp only takes over on screens narrower than the designs. */
-  --pad: clamp(1.25rem, 3.5vw, 2.5rem);
+  /*
+   * The page margin, which the mockups agree is a fixed inset rather than a
+   * proportional one: on the earlier set it measured 40px at 1866 wide, 43 at
+   * 1368 and 47 at 1588 — near-constant while the frames differ by 500px. So
+   * it stays a clamp with a flat ceiling, and only the ceiling has moved.
+   *
+   * 3.125rem is 50, which is the designer's 45pt at the 1728 she now draws at,
+   * and what every one of her final sheets measures: the wordmark's stem lands
+   * at 49–52 on all of them against the 40 this was. The bar and the pages
+   * take the same variable, so they move together and stay flush.
+   */
+  --pad: clamp(1.25rem, 3.5vw, 3.125rem);
   --gap: clamp(1.5rem, 4.5vw, 5rem);
   --bar: 5.5rem;
+  /*
+   * Where the bar's first line sits, and with it everything that lines up on
+   * it — the close control of every overlay.
+   *
+   * 3rem, off the designer's final sheets: she puts the cap of the wordmark 48
+   * below the top of the window on all of them, against the 25.6 this was. One
+   * figure rather than four literals, so the bar and the controls that answer
+   * to it can never drift apart again. `--bar`, the room kept clear below it,
+   * is unchanged: the bar's ink now ends around 64 and still has 24 to spare.
+   */
+  --bar-top: 3rem;
   /* Width kept clear for the year rail: the grid starts at 211 of the sheet's
      1654, with the rail's bars 120 wide in it. */
   --rail: clamp(9rem, 12.76vw, 17rem);
@@ -303,84 +321,6 @@ html.is-revealed .detail { animation-name: none; }
   .feed-column:nth-child(2) { animation-delay: 0.25s; }
 }
 
-/* ---------------------------------------------------------------- loading */
-
-/*
- * The first arrival of a session: the About title, blinking through the palette,
- * while the page loads behind it.
- *
- * It has to be able to clear itself without script. The fade-out is a plain
- * animation on a delay, so a browser that never runs a line of JavaScript still
- * gets the page — the script only brings that moment forward once the load has
- * actually finished. Anything else risks a blank site, which is a far worse
- * failure than a loading screen nobody wanted.
- *
- * `visibility` rather than `display` in the final frame, so it stops taking
- * clicks and leaves the tab order without the animation having to be undone.
- */
-.loader {
-  position: fixed; inset: 0; z-index: 200;
-  display: grid;
-  align-content: center;
-  justify-items: center;
-  text-align: center;
-  gap: 0.1rem;
-  padding: var(--bar) var(--pad);
-  background: var(--blink-bg);
-  color: var(--blink-fg);
-  /*
-   * A strobe: the five pairs in under two seconds, so it flashes rather than
-   * turns.
-   * The opposite of About, which holds each colour for a second and a half.
-   *
-   * Not faster than this on purpose. The keyframes hold and then cut, so the
-   * rate you see is one change per 0.36s — under three a second, which is where
-   * the guidance on flashing stops. Anyone who has asked for less movement gets
-   * no loading screen at all rather than a slower one.
-   */
-  animation:
-    about-blink 1.8s ease-in-out infinite,
-    loader-out 0.75s var(--ease) 2.9s both;
-}
-.loader p {
-  margin: 0;
-  font-size: var(--type);
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: var(--lead);
-}
-/*
- * Once the load is done the script brings that exit forward by naming a
- * different animation in the exit's slot, exactly as `.page-veil` does.
- *
- * Shortening the delay instead does not work, and looked as though it did.
- * Changing `animation-delay` or `animation-duration` retimes an animation but
- * leaves its start time alone, so its local clock still reads the 1.6s or more
- * that has actually elapsed — already past the end of the shortened run. The
- * screen jumped to the last frame in one step rather than fading over it.
- * A new name is a new animation, which starts at its own first frame; the blink
- * keeps its name and its position in the list, so it carries on mid-turn instead
- * of snapping back to peach.
- */
-.loader.is-done {
-  animation-name: about-blink, loader-now;
-  animation-delay: 0s, 0s;
-  animation-duration: 1.8s, 0.55s;
-}
-/* Same frames, two names: one for the delayed fallback, one for the early exit. */
-@keyframes loader-out { to { opacity: 0; visibility: hidden; } }
-@keyframes loader-now { to { opacity: 0; visibility: hidden; } }
-/*
- * Never shown at all: already seen once this session, motion turned down, or no
- * scripting — in the last case nothing would be there to take it away early, and
- * a loading screen in front of a page that has already loaded is only a delay.
- */
-html.loaded .loader,
-html:not(.js) .loader { display: none; }
-@media (prefers-reduced-motion: reduce) {
-  .loader { display: none; }
-}
-
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
 body {
@@ -498,7 +438,7 @@ body.is-locked { overflow: hidden; }
   grid-template-columns: 25.53% auto minmax(0, 1fr);
   align-items: baseline;
   gap: 0;
-  padding: 1.6rem var(--pad) 1rem;
+  padding: var(--bar-top) var(--pad) 1rem;
   pointer-events: none;
   mix-blend-mode: difference;
 }
@@ -625,18 +565,35 @@ body.is-locked { overflow: hidden; }
  * Pointer events off: it says where to go, it does not go there, so the film
  * and the tiles under it stay clickable.
  */
+/*
+ * The two knobs for the scroll-down chevron, shared by the page's cue and the
+ * one inside About so they cannot drift apart.
+ *
+ *   --cue-size    how wide the chevron is
+ *   --cue-stroke  how heavy its line is, in the drawing's own units (the
+ *                 chevron is 28 wide, so 2 is a hairline and 5 is bold)
+ */
+:root {
+  --cue-size: 2.8rem;
+  --cue-stroke: 4.5;
+}
+
 .scroll-cue {
   position: fixed;
   left: 50%;
   bottom: 1.9rem;
   /* Under the bar, over the page. */
   z-index: 35;
-  width: 1.6rem;
-  margin-left: -0.8rem;
+  width: var(--cue-size);
+  margin-left: calc(var(--cue-size) / -2);
   pointer-events: none;
   transition: opacity 0.7s var(--ease);
 }
-.scroll-cue svg { display: block; width: 100%; height: auto; }
+/* The stroke is set here rather than on the path so the knob reaches it, and
+   the drawing may spill past its box: a heavy line on a chevron drawn 1.5 from
+   the edge would otherwise lose its top corners. */
+.scroll-cue svg, .about-cue svg { display: block; width: 100%; height: auto; overflow: visible; }
+.scroll-cue path, .about-cue path { stroke-width: var(--cue-stroke); }
 
 /* Taken, and so no longer a cue. `client/scroll-cue.ts` sets this once, on the
    first movement worth the name, and never takes it off. */
@@ -675,7 +632,7 @@ html.is-scrolled .scroll-cue { opacity: 0; }
 
 /* No room to spare, and a phone's own scrollbar already says the page is long. */
 @media (max-width: 899px) {
-  .scroll-cue { bottom: 1.1rem; width: 1.3rem; margin-left: -0.65rem; }
+  .scroll-cue { bottom: 1.1rem; --cue-size: 2rem; }
 }
 
 @media (max-width: 899px) {

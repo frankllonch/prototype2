@@ -56,21 +56,22 @@ function cv_top_bar(): string {
 }
 
 /**
- * About opens over whatever page you are on. The first screen is the designer's
- * card: red, her name at the top, her city and year beneath it, how to reach her
- * at the foot. Scrolling brings the biography up under the card, with the two
- * studio photographs set into it, then the record of exhibitions in columns, the
- * private collections, and the line of copyright.
+ * About opens over whatever page you are on, which stays faintly visible and
+ * blurred behind it, and tells itself in four parts as you scroll (the theme's
+ * client/about.js): the capitals lead writes itself, the photographs slide in
+ * from the side, the rest of the biography writes itself as it rises, and the
+ * record, the collections and how to reach her come in last.
+ *
+ * The markup is the page at rest and matches the static site's byte for byte
+ * (`aboutOverlay` in src/components/layout.ts): the opening paragraph, then
+ * every photograph on the About page — Image blocks or a Gallery, wherever
+ * they stand — in one row, then the rest of the text.
  */
 function cv_about_overlay( bool $open = false ): string {
 	$a    = cv_about();
 	$card = $a['card'];
 
 	$out = '<section class="about' . ( $open ? ' is-open' : '' ) . '" id="about" data-panel data-panel-url="' . esc_url( $a['url'] ) . '" aria-label="About">'
-		// Served open at /about/, its Close leads to the start page for a reader
-		// without scripting, as a served panel's leads to its index; with
-		// scripting the click never leaves the page.
-		. '<a class="about-close" href="' . ( $open ? esc_url( home_url( '/' ) ) : '#' ) . '" data-panel-close>Close</a>'
 		. '<div class="about-sheet">'
 		. '<div class="about-text">'
 		. '<div class="about-opening" data-about-opening><div class="about-stage" data-about-stage>'
@@ -129,20 +130,30 @@ function cv_about_overlay( bool $open = false ): string {
 		$out .= '</address>';
 	}
 	$out .= '<p class="about-foot"><b>' . esc_html( $card['name'] ) . '</b> ' . esc_html( $a['copyright'] ) . '</p>'
-		. '</div>'
-		. '<div class="about-cue" data-about-cue aria-hidden="true"><svg viewBox="0 0 28 16" focusable="false">'
-		. '<path d="M1.5 1.5 L14 13 L26.5 1.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" /></svg></div>';
+		. '</div>';
 	if ( $a['images'] ) {
 		$out .= '<div class="about-viewer" data-about-viewer hidden>'
 			. '<figure class="about-viewer-plate" data-about-plate></figure>'
-			. '<button type="button" class="about-viewer-step is-prev" data-about-step="-1" aria-label="Previous photograph">'
-			. '<svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="M8 1 1 8l7 7" /></svg></button>'
-			. '<button type="button" class="about-viewer-step is-next" data-about-step="1" aria-label="Next photograph">'
-			. '<svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="m1 1 7 7-7 7" /></svg></button>'
 			. '<p class="sr-only" data-about-count data-template="Photograph {n} of {total}" aria-live="polite"></p>'
 			. '</div>';
 	}
-	return $out . '</section>';
+	// Close and the chevron stand beside the panel, so that they can be drawn as
+	// the bar is, the negative of whatever passes under them: a blend only sees
+	// what shares its stacking context. Served open at /about/, Close leads to
+	// the start page for a reader without scripting, as a served panel's leads
+	// to its index; with scripting the click never leaves the page.
+	return $out . '</section>'
+		. '<a class="about-close" href="' . ( $open ? esc_url( home_url( '/' ) ) : '#' ) . '" data-panel-close="about">Close</a>'
+		. '<div class="about-cue" data-about-cue aria-hidden="true"><svg viewBox="0 0 28 16" focusable="false">'
+		. '<path d="M1.5 1.5 L14 13 L26.5 1.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" /></svg></div>'
+		// The chevrons for the photographs, beside the panel for the same reason,
+		// and only when there is more than one to step through.
+		. ( count( $a['images'] ) > 1
+			? '<button type="button" class="about-viewer-step is-prev" data-about-step="-1" aria-label="Previous photograph">'
+				. '<svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="M8 1 1 8l7 7" /></svg></button>'
+				. '<button type="button" class="about-viewer-step is-next" data-about-step="1" aria-label="Next photograph">'
+				. '<svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="m1 1 7 7-7 7" /></svg></button>'
+			: '' );
 }
 
 function cv_about_show_list( array $shows ): string {

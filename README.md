@@ -57,12 +57,25 @@ are always shown; the year filter toggles `hidden`.
 
 ### The colour chart, and the one thing that is not a file
 
-The Colour Chart is the only page of the site that is exactly a window tall.
-Nothing on it scrolls but the text: the price and **Order yours** stay beside
-the words for as long as anyone reads them, and the chart itself stands between
-them as twenty-three bands of its own colour, measured off the designer's
-reference (`src/content/colour-chart.ts`). A band under the pointer steps out to
-the right by about its own height, and nothing else moves.
+The Colour Chart is a page of type and nothing else: the statement across the
+full width, the way to order one under it, the price, her thanks, and the site's
+line at the foot. The sheet before it had a margin column, a stack of the
+chart's own colours, the three photographs and a record of Features, technical
+notes and About a colour chart; the simplification took all of them.
+
+`src/content/colour-chart.ts` still reads every one of those out of WordPress —
+the sections are parsed and still travel in the WordPress manifest — the page
+simply no longer sets them.
+
+The sizes come from the designer's own sheet, which is drawn at 1728 and
+specified in points of that frame: 40 for text, 45 for a control, 45 of leading
+on 40 of text. The site's one type size is 40 of a 1920 frame, so her point is a
+tenth larger. Rather than scatter 1.111 through the stylesheet, it is stated
+once as a unit — `--pt: calc(var(--type) / 36)` — and every figure below it is
+hers.
+
+The arrow beside **Order yours** turns a slow half-circle on hover: 1.2s, eased
+at both ends, and the only movement on the page.
 
 **Order yours** opens the inquiry form over the page. A static host cannot send
 mail, so the form posts to a small handler deployed separately —
@@ -162,7 +175,26 @@ deployed on its own and shares none of this.
   over the same dataset.
 - Inquiries as a section of their own. The Colour Chart has an order form;
   everything else still points at the gallery contact on the source data.
-- The designer's line breaks in the Colour Chart's text. Her reference sets it
-  in clauses — a break after each comma — where the source holds one run of
-  prose and the column wraps it. Those breaks belong in WordPress, which is
-  where the text is written.
+- The Colour Chart's three photographs and the credits that named them, and its
+  record — Features, the technical characteristics, About a colour chart. None
+  is on the simplified sheet. All of it is still read out of the source; the
+  page's component is what no longer sets it.
+The chrome has moved with the final sheets, in three places in `00-base.css`:
+
+- `--bar-top` is where the bar's first line sits, and with it the close control
+  of every overlay. 3rem, because all of her sheets put the cap of the wordmark
+  48 below the top of the window, against the 25.6 it was.
+- `--pad`, the page margin, has its ceiling at 3.125rem — her 45pt, which is 50
+  where ours was 40. The bar and the pages take the same variable, so they move
+  together and stay flush.
+- The menu order is hers: Color Chart, Commissioned, Exhibitions, Artwork,
+  About.
+
+`--bar`, the room kept clear below the bar, is unchanged, and so is the mobile
+bar, which sets its own padding. Seven page types were checked at 1200, 900 and
+390 for anything the narrower measure pushes off the edge; nothing does.
+- The WordPress theme's own Colour Chart component
+  (`wordpress/themes/claudiavalsells/inc/components/chart.php`) is a hand-port
+  of the markup this page had before the sheet arrived, so it still renders the
+  old composition. The stylesheet it serves is built from `src/styles`, so the
+  two are now out of step until that component is ported.

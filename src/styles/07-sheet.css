@@ -33,7 +33,10 @@
 }
 
 /* The Close link, as the sheet sets it: the size of the text, upright and
-   spaced, at the right margin on the masthead's line. */
+   spaced, at the right margin on the masthead's line. Drawn as the bar is, as
+   the negative of what is under it: on a phone the text scrolls up beneath it.
+   The source comes out as the ink over the sheet's paper (255 − 36, 37, 40),
+   and the sheet's paper is opaque, so the blend has a true ground to work on. */
 .panel:has(.sheet) .panel-close {
   position: absolute;
   top: calc(var(--f) * 80);
@@ -44,7 +47,8 @@
   font-weight: 400;
   letter-spacing: 0.071em;
   margin-right: -0.071em;          /* the last letter's tracking hangs past the margin */
-  color: var(--ink);
+  color: rgb(219, 218, 215);
+  mix-blend-mode: difference;
   z-index: 3;
 }
 .panel:has(.sheet) .panel-close:hover,

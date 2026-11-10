@@ -5,7 +5,6 @@ import {
   SHEET_I,
   SHEET_II,
   SHEET_III,
-  BOOKS_III,
   type Plate,
   type SheetSlot,
 } from '../content/whats-color-sheet.ts';
@@ -52,9 +51,10 @@ export function whatsColorNames(
       participants.map((p, i) => {
         const sep = i > 0 ? raw('<span class="wc-sep">, </span>') : '';
         const paint = `--swatch: ${swatchFor(p)}; --swatch-ink: var(--${inkOn(swatchFor(p))})`;
-        // On an edition's own page a name with no answer has no entry to point
-        // at, so it stands in the sentence as a name rather than as a link.
-        if (within && !p.id) {
+        // A name with no answer has no entry to point at, on either view, so
+        // it stands in the sentence as a name rather than as a link — set
+        // exactly like the others, as the sheets set every name alike.
+        if (!p.id) {
           return html`${sep}<span class="wc-name" style="${paint}">${p.name}</span>`;
         }
         return html`${sep}<a class="wc-name" href="${target(p)}" style="${paint}">${p.name}</a>`;
@@ -117,8 +117,8 @@ export function whatsColorOpening(editions: readonly Edition[]): Html {
  * The three editions' writing, at the foot of the opening view, the way the
  * start-page sheets set it: each a full-width block — a heading line, a blank
  * line, the text — cut to the sentence the sheet cuts it at, with the rest
- * behind ‘Read more’. Forwards, I to III, against the rosters' newest-first
- * above: chapters are read in order.
+ * behind ‘Read more’. Newest first, III to I, in the order of the rosters
+ * above, so each edition's writing stands in the same place as its names.
  *
  * Each block is a doorway to its edition as well as a text: the heading is a
  * real link, and the script widens the click to the whole block. Without
@@ -127,9 +127,8 @@ export function whatsColorOpening(editions: readonly Edition[]): Html {
  * `js` class, so neither state flashes.
  */
 function whatsColorTexts(editions: readonly Edition[]): Html {
-  const forwards = [...editions].reverse();
   return html`<section class="wc-texts" aria-label="About the three editions">
-    ${join(forwards.map(openingText))}
+    ${join(editions.map(openingText))}
   </section>`;
 }
 
@@ -205,13 +204,23 @@ function openingText(edition: Edition): Html {
  * Every word occupies its place from the start and only becomes visible, so
  * nothing reflows as the sentence appears. The question is marked and takes a
  * colour from the palette, its punctuation kept inside the mark — a question
- * mark is part of a question in a way a full stop is not part of a sentence.
+ * mark is part of a question in a way a full stop is not part of a sentence —
+ * and its words are joined, the space between them inside the colour, so the
+ * band runs unbroken across the phrase and the phrase never splits a line.
+ *
+ * A blank line in the text starts a new paragraph; the last of several is the
+ * invitation, which the stylesheet sets semibold in capitals. The schedule
+ * runs across all of them as one sentence.
  *
  * Without scroll-driven animations, or with motion reduced, the stylesheet
  * never hides a word and the section is an ordinary paragraph.
  */
 function writeOn(text: string): Html {
-  const words = text.split(/\s+/);
+  const paragraphs = text
+    .trim()
+    .split(/\n\s*\n/)
+    .map((p) => p.trim().split(/\s+/));
+  const words = paragraphs.flat();
   /** Screens of height the section spends; one is shown, the rest written. */
   const SCREENS = 2.4;
   /** The cover timeline's whole travel, in screens of scroll. */
@@ -239,33 +248,52 @@ function writeOn(text: string): Html {
   const PAUSE = 14;
   const total = weights.reduce((a, b) => a + b, 0) + (lastAsk >= 0 ? PAUSE : 0);
   let at = 0;
+  let i = 0;
+  const word = (w: string, last: boolean): Html => {
+    const n = i++;
+    const from = START + (at / total) * (END - START);
+    at += weights[n] ?? 1;
+    if (n === lastAsk) at += PAUSE;
+    const width = ((weights[n] ?? 1) / total) * (END - START) * 2.3;
+    const to = Math.min(from + width, END + 0.04);
+    const joined = marked(w) && !last && marked(words[n + 1] ?? '');
+    const parts = marked(w) ? /^(.*?)([.,:;]*)$/.exec(w) : null;
+    const mark = parts
+      ? html`<mark
+          class="wc-ask${n === 0 || !marked(words[n - 1] ?? '') ? ' wc-ask-start' : ''}${joined ? '' : ' wc-ask-end'}"
+        >${parts[1] ?? ''}${joined ? '\u00a0' : ''}</mark>${parts[2] ?? ''}`
+      : w;
+    return html`<span
+      class="wc-word"
+      style="animation-range: cover ${((from / COVER) * 100).toFixed(2)}% cover ${((to / COVER) * 100).toFixed(2)}%"
+    >${mark}</span>`;
+  };
   return html`<section class="wc-write">
     <div class="wc-write-pin">
-      <p class="wc-lead">
+      <div class="wc-lead-block">
         ${join(
-          words.map((word, i) => {
-            const from = START + (at / total) * (END - START);
-            at += weights[i] ?? 1;
-            if (i === lastAsk) at += PAUSE;
-            const width = ((weights[i] ?? 1) / total) * (END - START) * 2.3;
-            const to = Math.min(from + width, END + 0.04);
-            const parts = marked(word) ? /^(.*?)([.,:;]*)$/.exec(word) : null;
-            return html`<span
-              class="wc-word"
-              style="animation-range: cover ${((from / COVER) * 100).toFixed(2)}% cover ${((to / COVER) * 100).toFixed(2)}%"
-            >${parts ? html`<mark class="wc-ask">${parts[1] ?? ''}</mark>${parts[2] ?? ''}` : word}</span>${
-              // The last two words are held together, so the paragraph never
-              // ends on one word stranded at the left of a justified block.
-              i === words.length - 2 ? raw('&nbsp;') : ' '
-            }`;
-          }),
+          paragraphs.map(
+            (ws, p) => html`<p class="wc-lead${p > 0 && p === paragraphs.length - 1 ? ' wc-lead-call' : ''}">${join(
+              ws.map((w, k) => {
+                const last = k === ws.length - 1;
+                const joinedOn = marked(w) && !last && marked(ws[k + 1] ?? '');
+                // The last two words are held together, so a paragraph never
+                // ends on one word stranded at the left of a justified block;
+                // joined words already carry their space inside the colour.
+                const gap = last || joinedOn ? '' : k === ws.length - 2 ? raw('&nbsp;') : ' ';
+                return html`${word(w, last)}${gap}`;
+              }),
+            )}</p>`,
+          ),
         )}
-      </p>
+      </div>
     </div>
   </section>`;
 }
 
 function namesOfEdition(edition: Edition): Html {
+  // Everyone the edition names, answered or not — the roster, as each
+  // edition's own page sets it — so the opening view shows the same people.
   // The inner wrapper is the thing that fades in once the note stands
   // written: the group itself belongs to the farewell, and an animation's
   // fill would hold its opacity against the farewell's hand.
@@ -273,7 +301,7 @@ function namesOfEdition(edition: Edition): Html {
     <div class="wc-rise">
       <p class="wc-numeral" aria-hidden="true">(${edition.numeral})</p>
       <h2 class="sr-only">What&rsquo;s Color? (${edition.numeral})</h2>
-      ${whatsColorNames(edition.participants)}
+      ${whatsColorNames(edition.roster ?? edition.participants)}
     </div>
   </section>`;
 }
@@ -392,10 +420,11 @@ function editionList(edition: Edition): Html {
 /**
  * The first edition's sheet.
  *
- * A composition rather than a list: three columns, with each entry placed in
- * one of them by the designer, Claudia's own paragraphs set across the full
- * width between them, and a plate of the work partway down. The placement is
- * in `whats-color-sheet.ts`, because none of it follows from the content.
+ * A composition rather than a list: a reel of photographs, then three
+ * columns, with each entry placed in one of them by the designer and
+ * Claudia's own paragraphs set across the full width between them. The
+ * placement is in `whats-color-sheet.ts`, because none of it follows from the
+ * content.
  *
  * Entries are looked up by name. One that does not match simply does not
  * appear, which is the failure that gets noticed — a page short of a person is
@@ -421,21 +450,13 @@ function sheet(edition: Edition, table: readonly SheetSlot[]): Html {
         }
         if (slot.strip) {
           band = undefined;
-          return strip(slot.lead);
+          return strip(slot.strip, slot.lead);
         }
         if (slot.say !== undefined) {
           band = undefined;
           return html`<p class="wc-say" style="${air(slot.lead)}">${raw(
             edition.says?.[slot.say] ?? '',
           )}</p>`;
-        }
-        if (slot.plate) {
-          if (slot.col) {
-            if (slot.lead !== undefined) band = slot.lead;
-            return plate(slot.plate, slot, band);
-          }
-          band = undefined;
-          return plate(slot.plate, slot, slot.lead);
         }
         const person = slot.who ? byName.get(slot.who) : undefined;
         if (slot.lead !== undefined) band = slot.lead;
@@ -451,16 +472,21 @@ function sheet(edition: Edition, table: readonly SheetSlot[]): Html {
 }
 
 /**
- * The row of photographs of the book, along the top of the third edition's
- * sheet. Each one is a real link to the photograph, so without scripting a
- * click still shows the picture; with it, the script opens the same picture
- * over the page instead.
+ * An edition's reel: a row of its photographs under the roster, all one
+ * height, each whole at the shape of its file. Each one is a real link to the
+ * photograph, so without scripting a click still shows the picture; with it,
+ * the script opens the same picture over the page instead.
  */
-function strip(lead?: number): Html {
+function strip(plates: readonly Plate[], lead?: number): Html {
   return html`<div class="wc-strip" style="${lead === undefined ? '' : `--lead: ${String(lead)}`}">
     ${join(
-      BOOKS_III.map(
-        (book) => html`<a class="wc-book" href="${withBase(`/img/${book.name}.jpg`)}" data-book>
+      plates.map(
+        (book) => html`<a
+          class="wc-book"
+          href="${withBase(`/img/${book.name}.jpg`)}"
+          style="aspect-ratio: ${book.cell === undefined ? `${String(book.w)} / ${String(book.h)}` : String(book.cell)}"
+          data-book
+        >
           <picture>
             <source srcset="${withBase(`/img/${book.name}.webp`)}" type="image/webp" />
             <img
@@ -511,39 +537,6 @@ function sheetTitle(edition: Edition, lead?: number): Html {
   >
     <strong>What&rsquo;s Color? (${edition.numeral})</strong>${tail ? ` ${tail}` : ''}
   </p>`;
-}
-
-/**
- * A photograph on the sheet: across all three columns, or in one of them where
- * the design sets a pair side by side.
- *
- * Where the design crops the picture to a band, the shape it crops to rides on
- * the element and the file is covered into it. Without that the plate keeps the
- * shape of the file, which is what the first edition's does.
- */
-function plate(p: Plate, slot: SheetSlot, lead?: number): Html {
-  // Always stated, never left to `auto`: these load lazily, and an `auto`
-  // ratio gives a lazy image no height until it arrives, which collapses the
-  // row and shifts the page under the reader when it does.
-  const shape = `--plate-aspect: ${String(p.aspect ?? p.w / p.h)}`;
-  const column = slot.col ? `--col: ${String(slot.col)}; --drop: ${String(slot.drop ?? 0)}` : '';
-  const air = lead === undefined ? '' : `--lead: ${String(lead)}`;
-  return html`<figure
-    class="wc-plate${slot.col ? ' wc-plate-col' : ''}"
-    style="${[shape, column, air].filter(Boolean).join('; ')}"
-  >
-    <picture>
-      <source srcset="${withBase(`/img/${p.name}.webp`)}" type="image/webp" />
-      <img
-        src="${withBase(`/img/${p.name}.jpg`)}"
-        alt="${p.alt}"
-        width="${String(p.w)}"
-        height="${String(p.h)}"
-        loading="lazy"
-        decoding="async"
-      />
-    </picture>
-  </figure>`;
 }
 
 /**

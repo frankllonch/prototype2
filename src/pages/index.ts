@@ -248,12 +248,6 @@ export function whatsColorEditionPage(edition: Edition): Html {
  * order held still in the margin, the chart's colours beside them, and only the
  * text moving.
  *
- * It is the one page of the site that is exactly a screen tall, so `bodyClass`
- * takes the document's own scrollbar away: with the page fixed at the window's
- * height there is nothing for it to scroll, and leaving it to appear and vanish
- * as the browser chrome changes would shift the whole composition sideways by
- * its width.
- *
  * The order form goes in `overlays` rather than in the page, for the reason that
  * prop exists: `main` is its own stacking context, and anything that has to rise
  * above the veil has to be outside it.
@@ -264,7 +258,6 @@ export function colourChartPage(): Html {
     path: '/color-chart/',
     description:
       'Claudia Valsells\u2019 artist colour chart for architects and designers \u2014 a fan deck of 142 colours in real paint.',
-    bodyClass: 'chart-body',
     children: colourChart(),
     overlays: inquiries(),
   });

@@ -78,11 +78,12 @@ async function main() {
   // Where everything sits on What's Color's composed sheets, as the static
   // site places it (src/content/whats-color-sheet.ts). The placement is
   // layout, owned by the design; the theme reads it from here rather than
-  // keeping a copy that drifts every time a sheet is re-traced.
+  // keeping a copy that drifts every time a sheet is re-traced. Each reel
+  // travels inside its sheet, on the slot that places it.
   const sheets = await import('../src/content/whats-color-sheet.ts');
   await writeFile(
     path.join(ASSETS, 'whats-color-sheets.json'),
-    JSON.stringify({ I: sheets.SHEET_I, II: sheets.SHEET_II, III: sheets.SHEET_III, books: sheets.BOOKS_III }),
+    JSON.stringify({ I: sheets.SHEET_I, II: sheets.SHEET_II, III: sheets.SHEET_III }),
   );
 
   console.log(`Theme assets: ${parts.length} stylesheets into site.css, ${files.length} modules, fonts, film, About photographs.`);

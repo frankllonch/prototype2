@@ -776,8 +776,8 @@ html:has(body.has-film) {
 }
 
 
-/* The standing note is set semibold throughout, the question in it included —
-   semibold, not bold. */
+/* The standing note is set in the regular weight, the question in it
+   included; only the invitation that closes it is semibold. */
 /*
  * Set as the three editions' texts at the foot of the view are: the same size
  * and solid leading, justified across the page's own margins, only heavier.
@@ -789,7 +789,7 @@ html:has(body.has-film) {
  */
 .wc-lead {
   font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.0833vw, 2.75rem));
-  font-weight: 600;
+  font-weight: 400;
   line-height: 1;
   text-align: justify;
 }
@@ -1046,35 +1046,20 @@ html:has(body.has-film) {
   text-indent: 2.5em;
 }
 
-/* The work, inset from the sheet's own margins and centred. */
-.wc-sheet-page .wc-plate {
-  grid-column: 1 / -1;
-  margin: calc(var(--sheet-v) * var(--lead, 0.06)) auto 0;
-  width: var(--sheet-plate, 100%);
-}
-.wc-sheet-page .wc-plate img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
 @media (max-width: 899px) {
   /* Three columns of this at a phone's width is a column of single words.
      And a floor under the type: the width-driven scale was drawn for a
      desktop page and all but vanishes at a phone's — the proper phone
      setting of these sheets is still its own piece of work. */
   .wc-sheet-page .wc-sheet { grid-template-columns: minmax(0, 1fr); --sheet: 1.1rem; }
-  .wc-sheet-page .wc-slot,
-  .wc-sheet-page .wc-plate-col {
+  .wc-sheet-page .wc-slot {
     grid-column: 1;
     margin-top: 1.6rem;
   }
   .wc-sheet-page .wc-say,
-  .wc-sheet-page .wc-plate,
   .wc-sheet-page .wc-strip {
     margin-top: 1.6rem;
   }
-  .wc-sheet-page .wc-plate { width: 100%; }
   .wc-sheet-page .wc-slot-rule::after { content: none; }
 }
 
@@ -1096,72 +1081,63 @@ html:has(body.has-film) {
 }
 
 /*
- * A plate set in one column rather than across all three, which is how the
- * second edition sets its pair: two pictures side by side in the outer columns
- * with the middle left empty. It takes a slot's spacing, not a plate's, so the
- * pair sits in the rhythm of the entries around it.
+ * Each sheet opens with its reel, a breath under the roster — the air and the
+ * reel's height measured off her sheets, as a share of the sheet's width:
+ *
+ *   --sheet-top       the air between the roster and the reel
+ *   --sheet-strip-h   the reel's height; every photograph is set to it
  */
-.wc-sheet-page .wc-plate-col {
-  grid-column: var(--col, 1);
-  width: 100%;
-  margin-top: calc(
-    var(--sheet-v) * (var(--lead, 0.05) + var(--drop, 0) * var(--sheet-drop, 0.0732))
-  );
-  margin-bottom: 0;
+.wc-edition-i .wc-sheet {
+  --sheet-top: 0.0705;
+  --sheet-strip-h: 0.1059;
 }
-
-/*
- * Where the design crops a photograph to a band, the shape rides on the figure
- * and the file is covered into it. Left unset the ratio is `auto`, so a plate
- * without one keeps the shape of its file — which is what the first edition's
- * does, and why this can be added without touching it.
- */
-.wc-sheet-page .wc-plate img {
-  aspect-ratio: var(--plate-aspect, auto);
-  object-fit: cover;
-}
-
-/* Her second sheet opens a little higher than her first. */
 .wc-edition-ii .wc-sheet {
-  --sheet-top: 0.177;
+  --sheet-top: 0.0727;
+  --sheet-strip-h: 0.0991;
 }
-
-/*
- * The third edition's sheet: it opens with the photographs of the book rather
- * than with words, sits a touch higher under its roster than the others, and
- * its plate reaches the margins the way the second edition's do.
- */
 .wc-edition-iii .wc-sheet {
-  --sheet-top: 0.0595;
+  --sheet-top: 0.0537;
+  --sheet-strip-h: 0.1;
 }
 
 /*
- * The photographs of the book, in one row: eight of them, two thirds of the
- * sheet wide and centred, each cell a twelfth of a column apart. Measured off
- * the sheet — cells of 7.6% with 0.85% between, 66.9% across — and kept as a
- * grid so the cells stay equal however the pictures are cut.
+ * The reel: one row of photographs, centred, all one height and each whole at
+ * the shape of its file — portraits narrow, landscapes wide, as her sheets
+ * run them. 0.9% of the width between, measured off all three sheets alike.
+ * Height and gap are horizontal measures, true to the width like the
+ * columns; only the air above it scales with the type.
  */
 .wc-sheet-page .wc-strip {
   grid-column: 1 / -1;
-  width: var(--sheet-strip, 66.34%);
-  margin: calc(var(--sheet-v) * var(--lead, 0)) auto 0;
-  display: grid;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
-  column-gap: var(--sheet-strip-gutter, 1.324%);
+  display: flex;
+  justify-content: center;
+  gap: calc(var(--sheet-w) * var(--sheet-strip-gutter, 0.009));
+  height: calc(var(--sheet-w) * var(--sheet-strip-h, 0.1));
+  margin-top: calc(var(--sheet-v) * var(--lead, 0));
 }
 
 /*
- * One photograph of the book. A real link to the picture — the script opens
- * it over the page instead — with a small lift on hover, which is the only
- * thing on the sheet that moves.
+ * One photograph. A real link to the picture — the script opens it over the
+ * page instead — with a small lift on hover, which is the only thing on the
+ * sheet that moves. Each cell carries its file's own shape as an aspect ratio,
+ * so its width follows from the reel's height whether or not the picture has
+ * arrived: a lazy photograph holds its place, and nothing shifts when it lands.
  */
 .wc-book {
   display: block;
+  flex: none;
+  height: 100%;
+}
+.wc-book picture {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 .wc-book img {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   transition: transform 0.35s ease;
 }
 .wc-book:hover img,
@@ -1313,19 +1289,48 @@ html:has(body.has-film) {
 .wc-write {
   margin: 0 0 calc(var(--wc-zoom, 1) * var(--wc-lead-gap, 7vw));
 }
-.wc-write .wc-lead {
-  max-width: var(--wc-lead-measure, 80%);
+/* The note and its invitation as one block: 1516 of the sheet's 1824, centred. */
+.wc-write .wc-lead-block {
+  width: 100%;
+  max-width: var(--wc-lead-measure, 83.1%);
   margin: 0 auto;
 }
+.wc-write .wc-lead {
+  margin: 0;
+}
+/* A blank line, then the invitation, semibold in capitals. */
+.wc-write .wc-lead-call {
+  margin-top: 1em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
 
-/* The question, under a colour from the palette. */
+/*
+ * The question, under a colour from the palette — a band, not a block. An
+ * inline background fills the font's whole height, ascender to descender,
+ * which is 1.23em of Switzer; her sheet draws 0.905em, from 0.1em above the
+ * capitals to 0.125em below the line. So the colour is a gradient sized to
+ * that band and set 0.2em down from the top of the box (Switzer's ascent of
+ * 0.98em, less its capitals of 0.68em, less the 0.1em above them). The band
+ * runs on past the first letter's ink by 0.175em and past the question mark's
+ * by 0.05em, as drawn, overhanging rather than pushing the words apart — the
+ * letters' own side bearings counted in, which is why the figures below are
+ * smaller than those, and why the end of the band stops short of the box.
+ */
 .wc-ask {
-  background: var(--wc-ask, var(--hue-7, #cf303a));
+  --wc-ask-c: var(--wc-ask, var(--hue-7, #cf303a));
+  background: linear-gradient(var(--wc-ask-c), var(--wc-ask-c)) no-repeat 0 0.2em / 100% 0.905em;
   color: var(--paper);
-  padding: 0 0.18em;
-  margin: 0 -0.04em;
+  padding: 0;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
+}
+.wc-ask-start {
+  padding-left: 0.117em;
+  margin-left: -0.117em;
+}
+.wc-ask-end {
+  background-size: calc(100% - 0.033em) 0.905em;
 }
 
 @supports (animation-timeline: view()) {
@@ -1431,11 +1436,13 @@ html:has(body.has-film) {
   text-align: justify;
   cursor: pointer;
 }
+/* Newest first, III to I. Each gap belongs to the pair it stands between —
+   III and II, II and I — as measured, whichever way round they run. */
 .wc-text[data-edition='ii'] {
-  margin-top: calc(var(--wc-zoom, 1) * 10.47%);
-}
-.wc-text[data-edition='iii'] {
   margin-top: calc(var(--wc-zoom, 1) * 7.29%);
+}
+.wc-text[data-edition='i'] {
+  margin-top: calc(var(--wc-zoom, 1) * 10.47%);
 }
 .wc-text p {
   margin: 0;

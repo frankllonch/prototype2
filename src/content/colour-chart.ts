@@ -1,23 +1,24 @@
 /**
- * The Colour Chart, as the designer's sheet sets it: a price and a way to order
- * in the margin, the chart's own colours in a column beside them, and the text
- * running down the rest of the page.
+ * The Colour Chart, as the designer sets it.
  *
- * Two of the source paragraphs move out of the prose here, and that is the whole
- * reason this file exists. The WordPress page ends with
+ * This file exists because her page is hand-set and the source is not. WordPress
+ * holds one run of twenty-nine paragraphs; the sheet makes four things of them —
+ * a statement at the top, broken into lines by hand, beside the chart's own
+ * colours; Features; six technical notes across a grid; and About a colour
+ * chart — with a price in the margin and the same price again at the foot.
  *
- *   cost 60,50€
- *   make your order at: claudia@claudiacolor.com
+ * Everything below is that setting, written down. It is deliberately matched on
+ * how each paragraph opens rather than on its whole text: Claudia goes on
+ * editing this page in WordPress, and a comma moved should cost the page a line
+ * break, not a section. Where a rule stops matching, the paragraph simply falls
+ * back to being an ordinary paragraph in the section it is already in — the
+ * page gets plainer, never broken.
  *
- * and the new composition says both of those things in the left column instead —
- * the price set large, the address behind a form. Leaving them in the prose
- * would print the price twice and, worse, leave Claudia's address sitting in the
- * markup of a public page for anything that reads HTML to harvest. The price is
- * read out of the first of them so the figure still has exactly one source: when
- * she edits it in WordPress, the column follows.
+ * The one thing taken rather than arranged is the price: it is read out of the
+ * `cost` paragraph, so the figure still has exactly one source. When she raises
+ * it, the margin and the foot both follow.
  */
 import { colourChart } from './load.ts';
-import type { ProjectImage } from './types.ts';
 
 /**
  * The chart's colours, measured off the designer's reference at the 1520 it was
@@ -37,66 +38,159 @@ export const BANDS: readonly string[] = [
   '#d69a2a', '#ec692b', '#85709d', '#5c7e52', '#a9a2a1',
 ];
 
+/* ------------------------------------------------------------ the setting */
+
 /**
- * The two paragraphs the left column now carries.
+ * What the page says somewhere other than in the body.
  *
- * Matched on how each opens rather than on the whole sentence, so a typo fixed
- * or a price raised in WordPress does not silently put them back into the body.
- * Both are matched against the paragraph's text, with its tags removed, because
- * the source wraps parts of these lines in `<strong>` and `<em>` at will.
+ * `cost 60,50€` and `make your order at: claudia@claudiacolor.com` are the
+ * margin and the foot now — the price set large beside the chart and again
+ * under the last line, the address behind a form. Leaving them in the body
+ * would print the price three times and, worse, leave Claudia's address in the
+ * markup of a public page for anything that reads HTML to harvest.
  */
 const MOVED: readonly RegExp[] = [/^cost\b/i, /^make your order\b/i];
 
 /**
- * And the two the text no longer opens with.
+ * What the page does not say at all.
  *
- * The designer's reference starts the column at "Colour has always been my
- * inspiration" — the date range and the byline that stand above it in
- * WordPress are not in it. They are the caption of the object rather than part
- * of the statement, and the new page captions the object in its own heading and
- * margin. Matched the same way as the two above: on how each opens, against the
- * paragraph's text with its tags stripped.
+ * The date range and the byline stand above the text in WordPress and the sheet
+ * opens at the statement instead; the three photographs and their credits are
+ * not on the sheet either, and the credits go with the photographs rather than
+ * being left pointing at nothing.
  */
-const CAPTIONS: readonly RegExp[] = [/^\d{4}\s*\/\s*\d{4}$/, /^artist colour chart\b/i];
+const WITHHELD: readonly RegExp[] = [
+  /^\d{4}\s*\/\s*\d{4}$/,
+  /^artist colour chart\b/i,
+  /^images:/i,
+  /^#\d/,
+];
 
-const text = (markup: string): string => markup.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-
-/** Every `<p>` of the page body, in order, as it appears in the source markup. */
-function paragraphs(markup: string): readonly string[] {
-  return [...markup.matchAll(/<p\b[^>]*>[\s\S]*?<\/p>/g)].map((m) => m[0]);
-}
-
-const body: string = (colourChart?.rows ?? [])
-  .flatMap((row) => row.columns)
-  .map((column) => (column.kind === 'text' ? column.html : ''))
-  .join('');
+/** The three headings, which are where the page divides. */
+const HEADINGS: readonly { readonly match: RegExp; readonly title: string }[] = [
+  { match: /^features\b/i, title: 'Features' },
+  { match: /^technical characteristics\b/i, title: 'Technical characteristics' },
+  { match: /^about a colour chart\b/i, title: 'About a colour chart' },
+];
 
 /**
- * The price, exactly as she wrote it — "60,50€", comma and all.
+ * Paragraphs the sheet runs on from the one before — a new line, not a new
+ * paragraph.
  *
- * Read out of the `cost` paragraph rather than stated here. Absent if that
- * paragraph is ever removed, and the column then simply has no price in it,
- * which is better than a figure this file believes and the page does not.
+ * Three places, and each is a sentence finishing a thought rather than opening
+ * one: the chart's two decades after what it is, its timelessness after how it
+ * sold, its use in industrial design after what it was designed for. In
+ * WordPress they are separate paragraphs because that is how the editor works.
+ */
+const RUN_ON: readonly RegExp[] = [
+  /^this chart is the fruit\b/i,
+  /^this reissue confirms\b/i,
+  /^it can also be used\b/i,
+];
+
+/**
+ * Where the statement breaks.
+ *
+ * One break, after the colon, and the rest of the statement wraps as the
+ * column gives it. The sheet before this one set all three paragraphs in
+ * clauses, a line to a thought; the simplified page keeps only the one that
+ * does not survive wrapping — "a source of knowledge, a way of life!" is the
+ * answer to the colon and belongs under it, and at this measure it would
+ * otherwise be dragged up and left with "life!" on a line of its own.
+ *
+ * The paragraph carries no markup, so inserting into it cannot land inside a
+ * tag. The guard in `broken()` holds that true rather than trusting it.
+ */
+const LINES: readonly RegExp[] = [
+  /\s+(?=a source of knowledge)/i,
+];
+
+/* -------------------------------------------------------------- the parse */
+
+const strip = (markup: string): string =>
+  markup.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+
+/** The inner markup of every `<p>` of the page body, in document order. */
+const paragraphs: readonly string[] = (() => {
+  const body = (colourChart?.rows ?? [])
+    .flatMap((row) => row.columns)
+    .map((column) => (column.kind === 'text' ? column.html : ''))
+    .join('');
+  return [...body.matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/g)].map((m) => (m[1] ?? '').trim());
+})();
+
+/**
+ * The price, exactly as she wrote it — "60,50€", comma and all. Absent if the
+ * `cost` paragraph is ever removed, and the page then simply has no price on
+ * it, which is better than a figure this file believes and the page does not.
  */
 export const price: string | undefined = (() => {
-  const line = paragraphs(body).map(text).find((p) => /^cost\b/i.test(p));
+  const line = paragraphs.map(strip).find((p) => /^cost\b/i.test(p));
   return line?.match(/[\d][\d.,]*\s*€/)?.[0].replace(/\s+/g, '');
 })();
 
-/** The body with those four paragraphs taken out, and nothing else touched. */
-export const prose: string = paragraphs(body).reduce((markup, para) => {
-  const plain = text(para);
-  const withheld = [...MOVED, ...CAPTIONS].some((pattern) => pattern.test(plain));
-  return withheld ? markup.replace(para, '') : markup;
-}, body);
+/** The designer's line breaks, put in. Markup in the paragraph vetoes them. */
+function broken(markup: string): string {
+  if (markup.includes('<')) return markup;
+  return LINES.reduce((line, at) => line.replace(at, '<br />'), markup);
+}
+
+/** A section of the page: a heading and the blocks under it. */
+export interface ChartSection {
+  readonly title: string;
+  /** `notes` is the grid of short technical facts; everything else reads down. */
+  readonly kind: 'prose' | 'notes';
+  /** One `<p>` each, already carrying any run-on line. */
+  readonly blocks: readonly string[];
+}
+
+/** Paragraphs run together where the sheet runs them together. */
+function joined(items: readonly string[]): readonly string[] {
+  return items.reduce<string[]>((blocks, para) => {
+    const runsOn = blocks.length > 0 && RUN_ON.some((pattern) => pattern.test(strip(para)));
+    if (runsOn) blocks[blocks.length - 1] += `<br />${para}`;
+    else blocks.push(para);
+    return blocks;
+  }, []);
+}
 
 /**
- * The three photographs of the chart.
+ * The page, divided.
  *
- * The composition gives the middle column to the band stack, so they are no
- * longer beside the text — they follow it, at the foot of the column that
- * scrolls. The text ends by crediting each of them by number; dropping them to
- * match the reference, which is a screenshot of the top of the page, would have
- * left those credits pointing at nothing.
+ * One pass down the paragraphs: anything withheld or moved is dropped, a
+ * heading starts a new section, and everything else joins whichever section is
+ * open. What falls before the first heading is the statement.
  */
-export const photographs: readonly ProjectImage[] = colourChart?.images ?? [];
+const divided = (() => {
+  const statement: string[] = [];
+  const sections: { title: string; kind: 'prose' | 'notes'; items: string[] }[] = [];
+
+  for (const para of paragraphs) {
+    const plain = strip(para);
+    if (!plain) continue;
+    if ([...MOVED, ...WITHHELD].some((pattern) => pattern.test(plain))) continue;
+
+    const heading = HEADINGS.find((h) => h.match.test(plain));
+    if (heading) {
+      sections.push({
+        title: heading.title,
+        kind: /^technical/i.test(heading.title) ? 'notes' : 'prose',
+        items: [],
+      });
+      continue;
+    }
+    if (sections.length) sections[sections.length - 1]!.items.push(para);
+    else statement.push(para);
+  }
+  return { statement, sections };
+})();
+
+/** The three opening paragraphs, set in the designer's lines. */
+export const statement: readonly string[] = divided.statement.map(broken);
+
+/** Features, the technical notes, and About a colour chart. */
+export const sections: readonly ChartSection[] = divided.sections.map((s) => ({
+  title: s.title,
+  kind: s.kind,
+  blocks: joined(s.items),
+}));
