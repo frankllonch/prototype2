@@ -72,44 +72,40 @@ function cv_about_overlay( bool $open = false ): string {
 		// scripting the click never leaves the page.
 		. '<a class="about-close" href="' . ( $open ? esc_url( home_url( '/' ) ) : '#' ) . '" data-panel-close>Close</a>'
 		. '<div class="about-sheet">'
-		. '<div class="about-card-stage" data-tilt><div class="about-card" data-tilt-inner>'
-		. '<p class="about-name">' . esc_html( $card['name'] ) . '</p>'
-		. '<p class="about-born">' . esc_html( $card['city'] ) . '<br />' . esc_html( $card['year'] ) . '</p>'
-		. '<address class="about-contact">';
-	if ( $card['phone'] ) {
-		$out .= '<a href="tel:' . esc_attr( preg_replace( '/\s+/', '', $card['phone'] ) ) . '">' . esc_html( $card['phone'] ) . '</a>';
+		. '<div class="about-text">'
+		. '<div class="about-opening" data-about-opening><div class="about-stage" data-about-stage>'
+		. $a['lead'];
+	if ( $a['images'] ) {
+		$out .= '<div class="about-reel" data-about-reel><div class="about-reel-track" data-about-track>';
+		foreach ( $a['images'] as $image ) {
+			$out .= '<button type="button" class="about-reel-item">' . cv_image( $image, '(max-width: 899px) 45vw, 20vw' ) . '</button>';
+		}
+		$out .= '</div></div>';
 	}
-	foreach ( $card['emails'] as $email ) {
-		$out .= '<a href="mailto:' . esc_attr( $email ) . '">' . esc_html( $email ) . '</a>';
-	}
-	// A wide list fills its first column before the next, level with the longest
-	// of the other columns — as the sheet breaks the fairs level with the end of
-	// the solo shows — or half, if that is more. The static site uses the same
-	// rule (wideRows in src/components/layout.ts).
-	$longest = 0;
+	$out .= '</div></div>' . $a['rest'] . '</div>'
+		. '<div class="about-record">';
+
+	$others = [];
 	foreach ( $a['record'] as $group ) {
 		if ( ! $group['wide'] ) {
-			$longest = max( $longest, count( $group['shows'] ) );
+			$others[] = $group['shows'];
 		}
 	}
-	$out .= '</address></div></div>'
-		. '<div class="about-text">' . $a['text'] . '</div>'
-		. '<div class="about-record">';
 	foreach ( $a['record'] as $group ) {
 		$out .= '<section class="about-shows' . ( $group['wide'] ? ' is-wide' : '' ) . '">'
-			. '<h3 class="about-label">' . esc_html( $group['heading'] ) . '</h3><ul class="about-show-list"'
-			. ( $group['wide'] ? ' style="--rows:' . (int) max( ceil( count( $group['shows'] ) / 2 ), $longest ) . '"' : '' ) . '>';
-		foreach ( $group['shows'] as $show ) {
-			$out .= '<li class="about-show"><span class="about-show-when">' . esc_html( $show['when'] ) . '</span>'
-				. '<span class="about-show-title">' . esc_html( $show['title'] ) . '</span>';
-			foreach ( $show['lines'] as $line ) {
-				$out .= '<span class="about-show-line">' . esc_html( $line ) . '</span>';
+			. '<h3 class="about-label">' . esc_html( $group['heading'] ) . '</h3>';
+		if ( $group['wide'] ) {
+			$n    = cv_about_first_column( $group['shows'], $others );
+			$out .= '<div class="about-show-columns">' . cv_about_show_list( array_slice( $group['shows'], 0, $n ) );
+			if ( $n < count( $group['shows'] ) ) {
+				$out .= cv_about_show_list( array_slice( $group['shows'], $n ) );
 			}
-			$out .= '</li>';
+			$out .= '</div>';
+		} else {
+			$out .= cv_about_show_list( $group['shows'] );
 		}
-		$out .= '</ul></section>';
+		$out .= '</section>';
 	}
-	$out .= '</div>';
 	if ( $a['collections'] ) {
 		$out .= '<section class="about-collections"><h3 class="about-label">Private collections</h3><ul class="about-collection-list">';
 		foreach ( $a['collections'] as $c ) {
@@ -118,9 +114,86 @@ function cv_about_overlay( bool $open = false ): string {
 		}
 		$out .= '</ul></section>';
 	}
+	$out .= '</div>';
+
+	// How to reach her, above the copyright: the phone and emails from the
+	// About page's side panel.
+	if ( $card['phone'] || $card['emails'] ) {
+		$out .= '<address class="about-contact">';
+		if ( $card['phone'] ) {
+			$out .= '<a href="tel:' . esc_attr( preg_replace( '/\s+/', '', $card['phone'] ) ) . '">' . esc_html( $card['phone'] ) . '</a>';
+		}
+		foreach ( $card['emails'] as $email ) {
+			$out .= '<a href="mailto:' . esc_attr( $email ) . '">' . esc_html( $email ) . '</a>';
+		}
+		$out .= '</address>';
+	}
 	$out .= '<p class="about-foot"><b>' . esc_html( $card['name'] ) . '</b> ' . esc_html( $a['copyright'] ) . '</p>'
-		. '</div></section>';
-	return $out;
+		. '</div>'
+		. '<div class="about-cue" data-about-cue aria-hidden="true"><svg viewBox="0 0 28 16" focusable="false">'
+		. '<path d="M1.5 1.5 L14 13 L26.5 1.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" /></svg></div>';
+	if ( $a['images'] ) {
+		$out .= '<div class="about-viewer" data-about-viewer hidden>'
+			. '<figure class="about-viewer-plate" data-about-plate></figure>'
+			. '<button type="button" class="about-viewer-step is-prev" data-about-step="-1" aria-label="Previous photograph">'
+			. '<svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="M8 1 1 8l7 7" /></svg></button>'
+			. '<button type="button" class="about-viewer-step is-next" data-about-step="1" aria-label="Next photograph">'
+			. '<svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="m1 1 7 7-7 7" /></svg></button>'
+			. '<p class="sr-only" data-about-count data-template="Photograph {n} of {total}" aria-live="polite"></p>'
+			. '</div>';
+	}
+	return $out . '</section>';
+}
+
+function cv_about_show_list( array $shows ): string {
+	$out = '<ul class="about-show-list">';
+	foreach ( $shows as $show ) {
+		$out .= '<li class="about-show"><span class="about-show-when">' . esc_html( $show['when'] ) . '</span>'
+			. '<span class="about-show-title">' . esc_html( $show['title'] ) . '</span>';
+		foreach ( $show['lines'] as $line ) {
+			$out .= '<span class="about-show-line">' . esc_html( $line ) . '</span>';
+		}
+		$out .= '</li>';
+	}
+	return $out . '</ul>';
+}
+
+/**
+ * How many of a two-column list stand in its first column: filled until it is
+ * level with the longest of the other columns, and never fewer than would leave
+ * the second the taller. Measured as the sheet sets it — a line 20, a separate
+ * line under it 22.75 further, a broken one 20, 65.5 between entries. The same
+ * arithmetic as `firstColumn` in src/components/layout.ts.
+ */
+function cv_about_first_column( array $shows, array $others ): int {
+	$entry = function ( array $s ): float {
+		$parts = array_merge( [ $s['when'], $s['title'] ], $s['lines'] ?? [], $s['places'] ?? [] );
+		$h     = 0.0;
+		foreach ( array_values( $parts ) as $i => $part ) {
+			$h += ( $i ? 22.75 : 20 ) + substr_count( (string) $part, "\n" ) * 20;
+		}
+		return $h;
+	};
+	$column = function ( array $list ) use ( $entry ): float {
+		$h = 0.0;
+		foreach ( array_values( $list ) as $i => $s ) {
+			$h += $entry( $s ) + ( $i ? 65.5 : 0 );
+		}
+		return $h;
+	};
+	$level = 0.0;
+	foreach ( $others as $list ) {
+		$level = max( $level, $column( $list ) );
+	}
+	$height = 0.0;
+	$shows  = array_values( $shows );
+	foreach ( $shows as $i => $s ) {
+		$height += $entry( $s ) + ( $i ? 65.5 : 0 );
+		if ( $height >= $level && $height >= $column( array_slice( $shows, $i + 1 ) ) ) {
+			return $i + 1;
+		}
+	}
+	return count( $shows );
 }
 
 function cv_lightbox(): string {

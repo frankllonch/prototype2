@@ -136,7 +136,7 @@ Since 29 October:
   density controls, each painting's page with its cut-out, the photograph
   behind it and the way through the collection, the exhibitions and
   commissioned indexes with their panels, each edition of What's Color?, the
-  Colour Chart with its order form, About as the red card over the start page.
+  Colour Chart with its order form, About over the start page.
 - **Real addresses.** Each exhibition and project has one (`/exhibitions/<slug>/`,
   `/commissioned/<slug>/`) that opens the index with its panel up, and About is
   `/about/`. Closing a panel returns to the index.
@@ -315,7 +315,7 @@ import is done, and the Cloudflare worker under `server/inquiries/`.
 | Exhibition | the single Exhibitions page | title, venue, from and to, solo or group, images, text | `/exhibitions/`, each as a panel with its own URL |
 | What's Color edition | the one Terranova page and two shows | numeral, title, introduction | `/whats-color/<numeral>/` |
 | Answer | — (new) | a person's name and their answer, filed under an edition | the run of names on the home page, the three columns on the edition page |
-| About | the About page | the red card (name, city, year, phone, emails), biography paragraphs with the two studio photographs, the record of shows, the collections, the copyright line | the About overlay on every page |
+| About | the About page | the biography (its first paragraph is the capitals lead), the studio photographs (every Image or Gallery on the page, shown as one row after the lead), the record of shows, the collections, the phone and emails (above the copyright line) | the About overlay on every page |
 | Colour Chart | the Colour Chart page | price, order text; the address the form writes to | `/color-chart/` and the order form |
 | Site settings | — | menu labels, footer, social links | everywhere |
 
@@ -466,7 +466,7 @@ Google keep resolving. A handful of patterns cover everything.
 | `/whats-color-exhibitions/` | `/exhibitions/` | the two What's Color shows live at `/whats-color/i/` and `/whats-color/ii/` |
 | `/colour-chart/` | `/color-chart/` | the spelling changes |
 | `/about/` | `/about/` | opens the About overlay; About gets a real address on the new site |
-| `/contacto/` | `/about/` | the card carries phone and emails |
+| `/contacto/` | `/about/` | About carries the phone and emails |
 | `/carrito/`, `/finalizar-compra/` | `/artwork/` | shop leftovers |
 | `/4824-2/` | `/` | a test page |
 | `/wp-content/uploads/…` | unchanged | the import keeps the year/month folders and filenames of every photograph it brings in, and the rest of the old uploads folder is copied across in Phase 3, so every old image and file link keeps working |

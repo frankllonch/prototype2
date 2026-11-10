@@ -364,8 +364,33 @@ function cv_about(): array {
 	}
 	$id = $page ? $page->ID : 0;
 
-	$text = $page ? cv_render_content( $page, fn( int $image, string $caption ) =>
-		'<figure class="about-figure">' . cv_image( $image, '(max-width: 899px) 92vw, 79vw' ) . '</figure>' ) : '';
+	// Every photograph on the page goes into one row after the opening
+	// paragraph, wherever it stands in the editor — Image blocks or a Gallery,
+	// in their order. The text is the page without them.
+	$images = [];
+	$text   = $page ? cv_render_content( $page, function ( int $image ) use ( &$images ): string {
+		// A picture deleted from the media library leaves its id behind in the
+		// block, and the same picture placed twice is one photograph.
+		if ( 'attachment' === get_post_type( $image ) && cv_image_data( $image ) && ! in_array( $image, $images, true ) ) {
+			$images[] = $image;
+		}
+		return '';
+	} ) : '';
+	// The opening paragraph is the lead, set in capitals: the first paragraph,
+	// whether or not it was given the class in the editor, and wherever it
+	// stands — anything put before it (a heading, say) follows the photographs.
+	$lead = '';
+	$rest = $text;
+	if ( preg_match( '#^(.*?)(<p\b[^>]*>.*?</p>)(.*)$#s', $text, $m ) ) {
+		$m = [ $m[0], $m[2], trim( $m[1] . $m[3] ) ];
+		$lead = preg_replace_callback( '#^<p\b([^>]*)>#', function ( array $tag ): string {
+			if ( preg_match( '#\bclass="([^"]*)"#', $tag[1], $c ) ) {
+				return str_contains( " {$c[1]} ", ' about-lead ' ) ? $tag[0] : str_replace( $c[0], 'class="' . trim( "about-lead {$c[1]}" ) . '"', $tag[0] );
+			}
+			return '<p class="about-lead"' . $tag[1] . '>';
+		}, $m[1] );
+		$rest = trim( $m[2] );
+	}
 
 	$emails      = array_values( array_filter( array_map( 'trim', preg_split( '/\R/', (string) cv_meta( $id, '_cv_emails' ) ) ) ) );
 	$collections = [];
@@ -406,7 +431,9 @@ function cv_about(): array {
 			'phone'  => (string) cv_meta( $id, '_cv_phone' ),
 			'emails' => $emails,
 		],
-		'text'        => $text,
+		'lead'        => $lead,
+		'rest'        => $rest,
+		'images'      => $images,
 		'record'      => array_values( array_filter( $columns, fn( $c ) => count( $c['shows'] ) > 0 ) ),
 		'collections' => $collections,
 		'copyright'   => (string) cv_meta( $id, '_cv_copyright', '© All Rights Reserved' ),

@@ -147,7 +147,7 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 /*
  * The five colour pairs the designer set, held and turned, which the loading
  * screen strobes through (`00-base.css`). About used to blink through them too;
- * it is a red card now, and these stay here for the loader alone. The colours
+ * it no longer does, and these stay here for the loader alone. The colours
  * are registered custom properties so the keyframes interpolate them properly
  * instead of falling back to the discrete behaviour unregistered properties get.
  */
@@ -177,7 +177,8 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
  * Safari before 18.? and Chrome before 129 give a container layout
  * containment, which makes it the containing block of anything fixed inside
  * it. On the panel that took the Close link with it — it scrolled away with
- * the card. The Close link is the sheet's sibling, so it stays put.
+ * the page. The Close link, the cue and the viewer are the sheet's siblings,
+ * so they stay put.
  *
  * Inside a block of type the lengths are in ems of that type instead, so that
  * on a phone, where each size stops shrinking at a floor, the gaps keep their
@@ -197,10 +198,10 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .about-sheet {
   container-type: inline-size;
   --u: calc(100cqw / 1920);
-  /* The frame's margin: 48 at the sides and above the card. */
+  /* The frame's margin: 48 at the sides. */
   --m: max(1.25rem, calc(48 * var(--u)));
-  /* The three sizes on the frame: 45 for the card and the biography, 40 for
-     the collections, 20 for the record, the labels and the copyright. */
+  /* The sizes on the frame: 45 for the lead, 40 for the biography (below),
+     20 for the record, the labels, the contact and the copyright. */
   --about-body: max(1rem, calc(45 * var(--u)));
   --about-small: max(0.6875rem, calc(20 * var(--u)));
   /* Every line on the frame is set at 0, and the site's small type is not. */
@@ -214,9 +215,8 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .about-sheet > * { margin-inline: var(--m); }
 
 /*
- * In the middle of the margin above the card, so it never sits on the red.
- * Outside the sheet, so in window units: the same 48 at 1920, give or take
- * the scrollbar.
+ * In the middle of the frame's margin at the top right. Outside the sheet, so
+ * in window units: the same 48 at 1920, give or take the scrollbar.
  */
 .about-close {
   position: fixed;
@@ -229,179 +229,229 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 }
 .about-close:hover, .about-close:focus-visible { color: var(--ink); }
 
-/* ------------------------------------------------------------- the card */
+/* -------------------------------------------------------------- the text */
 
 /*
- * Red, 1824 by 789, 48 from the top and the sides: the whole width of the
- * column. The type has no inset at all. Her name, city and year stand on the
- * card's left edge and the contact block is ranged to its right edge — the
- * same edges as the text beneath, so the card reads as the column's first
- * block rather than a box with a margin of its own.
+ * From the designer's About of 10 November, at 1920 (figures in frame pixels).
  *
- * All six lines are 45 on 50 in #fafafa: the name at 600, the city and the
- * year at 500, the contact at 400. Name line box 130.575 below the card's top,
- * 84 to the city, the contact's last line box 125.425 above the card's
- * foot; the rest of the 789 falls between the year and the phone. The height
- * is a proportion, not a cap: where the lines need more, on a phone, the card
- * grows to hold them.
+ * The lead keeps the old sheet's capitals: 45 on 50 at 500, ragged, its first
+ * line box 309 down — below the bar on a phone. Then the photographs, 32.5
+ * under it and 241 tall; then the biography, 51.8 under them, at 40 on 40 and
+ * 400, justified, a blank line between paragraphs.
+ *
+ * At rest that is the whole of it. `client/about.ts` adds `.is-staged` to the
+ * panel and the parts below that class turn it into the four-part opening:
+ * the lead held in place while it is written, the photographs driven in from
+ * the side, the rest written as it rises, the record brought in last. Without
+ * the script, with motion reduced, or before it runs, the page simply stands.
  */
-.about-card-stage {
-  --tilt-max: 2deg;
-  --tilt-depth: 2000px;
-  --tilt-lift: 1.005;
-  --tilt-settle: 1000ms;
-  --tilt-follow: 260ms;
-  perspective: var(--tilt-depth);
-  margin-top: var(--m);
-}
-@media (prefers-reduced-motion: reduce) {
-  .about-card-stage { --tilt-max: 0deg; --tilt-lift: 1; }
-}
-/*
- * The card leans a little towards the pointer, as a painting does on its own
- * page (`client/tilt.ts`, with the figures on `.detail-plate` in
- * `05-artwork.css`). Less than half a painting's lean, in a long perspective,
- * with a lift you feel more than see and a faint shadow as it lifts. Settling
- * back takes a full second, so it comes to rest rather than snapping.
- */
-.about-card {
-  /* No standing layer and no 3D context: promoted only while it leans
-     (below), so at rest its type is drawn as type and not as a bitmap. */
-  transition: transform var(--tilt-settle) var(--ease), box-shadow var(--tilt-settle) var(--ease);
-  box-shadow: 0 0 0 rgba(36, 37, 40, 0);
-  display: grid;
-  grid-template-rows: auto auto minmax(1.1111em, 1fr) auto;
-  aspect-ratio: 1824 / 789;
-  box-sizing: border-box;
-  padding: calc(130.575em / 45) 0 calc(125.425em / 45);
-  background: #ed373f;
-  color: #fafafa;
-  font-size: var(--about-body);
-  line-height: calc(50 / 45);
-  letter-spacing: 0;
-}
-/*
- * Still eased while the pointer is on it. The script writes a new angle on every
- * movement and the card follows each one a beat behind, so the pointer never
- * drags it and an unsteady hand reads as a steady one.
- */
-.about-card.is-tilting {
-  transition: transform var(--tilt-follow) var(--ease), box-shadow var(--tilt-settle) var(--ease);
-  box-shadow: 0 1vw 3vw rgba(36, 37, 40, 0.09);
-  will-change: transform;
-}
-.about-card p, .about-card address { margin: 0; font-style: normal; }
-.about-name { font-weight: 600; text-transform: uppercase; }
-.about-card .about-born { margin-top: calc(84em / 45); font-weight: 500; text-transform: uppercase; }
-.about-contact {
-  grid-row: 4;
-  display: grid;
-  justify-items: end;
-  text-align: right;
-  font-weight: 400;
-}
-.about-contact a { color: inherit; }
-.about-contact a:hover, .about-contact a:focus-visible { text-decoration: underline; text-underline-offset: 0.12em; }
+.about-sheet { --about-text-size: max(0.9375rem, calc(40 * var(--u))); }
 
-/* ------------------------------------------------------------- the text */
-
-/*
- * 45 on 50 at 500, the biography's one size and weight. The lead is in
- * capitals, ragged and a shade darker (#1d1d1b); the rest is justified, word
- * spacing only, with its last lines left ragged.
- *
- * The lead's first line box is 150 below the card, the first paragraph 90
- * below the lead, and each paragraph a blank line (50) below the last. The
- * justified measure stops 6 short of the column's right edge, as the frame
- * sets it, so the lines end at 1866 and not 1872.
- *
- * The photographs come exactly where the frame puts them, which is not quite
- * evenly: the first is the full 1824 wide with 49 above it and 61 below, the
- * second 1818, the text's own measure, with 52 above and 62 below.
- */
 .about-text {
-  margin-top: calc(150em / 45);
+  margin-top: max(calc(var(--bar) + 1.5rem), calc(309 * var(--u)));
+  color: var(--ink);
+}
+.about-text p { margin: 0; letter-spacing: 0; }
+.about-lead {
   font-size: var(--about-body);
   line-height: calc(50 / 45);
   font-weight: 500;
-  letter-spacing: 0;
-  color: var(--ink);
+  text-transform: uppercase;
+  text-align: left;
+  color: #1d1d1b;
 }
-.about-text p {
-  margin: 0 calc(6 * var(--u)) 0 0;
+.about-text > p {
+  font-size: var(--about-text-size);
+  line-height: 1;
+  font-weight: 400;
   text-align: justify;
   hyphens: manual;
 }
-.about-text .about-lead { text-align: left; text-transform: uppercase; color: #1d1d1b; }
-.about-text p + p { margin-top: calc(50em / 45); }
-.about-text .about-lead + p { margin-top: calc(90em / 45); }
-.about-figure { margin: calc(49em / 45) 0 calc(61em / 45); }
-.about-figure ~ .about-figure { margin: calc(52em / 45) calc(6 * var(--u)) calc(62em / 45) 0; }
-.about-figure picture, .about-figure img { display: block; width: 100%; height: auto; }
+.about-opening + p { margin-top: calc(51.8em / 40); }
+.about-text > p + p { margin-top: 1em; }
+
+/*
+ * The photographs: one row, 241 tall, each at its own proportion, 24 apart,
+ * centred under the lead — the designer's single photograph sits on the
+ * middle of the page. The row runs to both edges of the screen, so that when
+ * it is driven in it comes from the side of the window rather than from the
+ * margin; at rest, if there are more than fit, it scrolls sideways.
+ */
+.about-reel {
+  --reel-h: max(8.5rem, calc(241 * var(--u)));
+  margin: calc(32.5 * var(--u)) calc(-1 * var(--m)) 0;
+  padding-inline: var(--m);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.about-reel::-webkit-scrollbar { display: none; }
+.about-reel-track {
+  display: flex;
+  gap: max(0.75rem, calc(24 * var(--u)));
+  width: max-content;
+  margin-inline: auto;
+}
+.about-reel-item {
+  display: block;
+  height: var(--reel-h);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.about-reel-item picture, .about-reel-item img { display: block; height: 100%; width: auto; }
+.about-reel-item img { transition: opacity var(--hover) var(--ease); }
+.about-reel-item:hover img, .about-reel-item:focus-visible img { opacity: 0.86; }
+
+/*
+ * The four parts.
+ *
+ * The stage — lead and photographs — is pinned where it stands while the
+ * runway under it (`.about-opening`, made tall by the script) scrolls past:
+ * the first stretch writes the lead, the second drives the row in. Words are
+ * hidden and appear whole, with no fade, as on the start page. The row is
+ * clipped rather than scrolled, and moved by the script.
+ */
+.about.is-staged { overflow-anchor: none; }
+.about.is-staged .about-stage { position: sticky; top: var(--stage-top, 0px); }
+.about.is-staged .about-reel { overflow: clip; padding-inline: 0; }
+.about.is-staged .about-reel-track { margin-inline: 0; will-change: transform; }
+.about.is-staged .about-word { opacity: 0; }
+.about.is-staged .about-word.is-written { opacity: 1; }
+
+/*
+ * The last part comes in rather than being written: each heading, entry and
+ * line rises a little out of a blur as it reaches the screen, in order down
+ * the page and a beat later from column to column.
+ */
+.about.is-staged .about-pop {
+  opacity: 0;
+  filter: blur(10px);
+  transform: translateY(14px);
+  transition:
+    opacity 0.9s var(--ease) var(--pop-delay, 0s),
+    filter 0.9s var(--ease) var(--pop-delay, 0s),
+    transform 0.9s var(--ease) var(--pop-delay, 0s);
+}
+.about.is-staged .about-pop.is-in { opacity: 1; filter: none; transform: none; }
+
+/* The start page's chevron, for About's own scroll: shown from the moment About
+   opens until the end of the panel. */
+.about-cue {
+  position: fixed;
+  left: 50%;
+  bottom: 1.9rem;
+  z-index: 3;
+  width: var(--cue-size);
+  margin-left: calc(var(--cue-size) / -2);
+  color: var(--ink);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.7s var(--ease);
+}
+.about-cue.is-shown { opacity: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  .about-cue svg { animation: scroll-cue-fall 2.4s var(--ease) infinite; }
+}
+@media (max-width: 899px) {
+  .about-cue { bottom: 1.1rem; width: 1.3rem; margin-left: -0.65rem; }
+}
+
+/*
+ * A photograph large over the page, as the book's are on What's Color: a pale
+ * blur behind it, a click anywhere or Escape to put it away, and the plain
+ * pointers the rest of the site uses rather than zoom marks. The exhibitions'
+ * chevrons either side step through the row, and so do the arrow keys and a
+ * swipe. The panel stops scrolling while it is up (`.is-viewing`).
+ */
+.about.is-viewing { overflow: hidden; }
+.about-viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  background: rgb(255 255 255 / 0.42);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  cursor: default;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.about-viewer.is-open { opacity: 1; }
+.about-viewer[hidden] { display: none; }
+.about-viewer-plate { margin: 0; }
+.about-viewer-plate picture { display: block; }
+.about-viewer-plate img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: min(82vw, 1600px);
+  max-height: 84vh;
+}
+.about-viewer-step {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  padding: 1.5rem 1rem;
+  color: var(--ink);
+  cursor: pointer;
+  transition: opacity var(--hover) var(--ease);
+}
+.about-viewer-step.is-prev { left: max(0.5rem, 2.5vw); }
+.about-viewer-step.is-next { right: max(0.5rem, 2.5vw); }
+.about-viewer-step:hover, .about-viewer-step:focus-visible { opacity: 0.45; }
+.about-viewer-step svg { display: block; width: 0.9rem; height: auto; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.about-viewer.is-single .about-viewer-step { display: none; }
 
 /* ----------------------------------------------------------- the record */
 
 /*
- * Four columns of 444 with 16 between them, at 20 throughout: the headings
- * in capitals at 600, then each entry its date in italic, its title at 600,
- * what kind of show at 400 and where at 300. Solo, group, and the art fairs
- * across the last two columns, the fourth without a heading of its own.
- *
- * The entries stand on a grid, not in a stack. Every entry begins on a row
- * 131.08 below the last, the same rows in all four columns, so the dates run
- * level across the page and an entry of three lines simply leaves more air
- * under it than one of five. The heading's row is 132.14.
- *
- * Inside an entry the lines sit as the sheet sets them, a little over 22
- * apart and not quite evenly — 22.48 from the date to the title, 22.62 from the
- * title to the line under it, 23.13 from that to the place — and a line the
- * sheet breaks in two holds at 20. The heading's line box is 95.1 below the
- * biography's last.
+ * Five columns at 20: solo, group, the fairs across two narrower ones, and
+ * the private collections — starting at 48, 443, 838, 1099 and 1494. Each
+ * entry its date in italic, its title at 600, what kind of show at 400 and
+ * where at 300; the entries stacked 65.5 apart, line box to line box. The
+ * headings sit 234.7 under the biography's last line, the first entries 117
+ * under the headings. The fairs break into their second column level with
+ * the end of the solo shows (`firstColumn` in components/layout.ts).
  */
 .about-record {
-  --row: calc(131.08em / 20);
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  column-gap: calc(16 * var(--u));
-  margin-top: calc(95.1em / 20);
+  grid-template-columns:
+    calc(394.8 * var(--u)) calc(394.8 * var(--u)) calc(260.9 * var(--u))
+    calc(394.9 * var(--u)) minmax(0, 1fr);
+  margin-top: calc(234.7em / 20);
   font-size: var(--about-small);
   line-height: 1;
   letter-spacing: 0;
   color: #1d1d1b;
 }
 .about-label {
-  margin: 0 0 calc(112.14em / 20);
+  margin: 0 0 calc(117em / 20);
   font-size: var(--about-small);
   font-weight: 600;
   line-height: 1;
   letter-spacing: 0;
   text-transform: uppercase;
 }
-.about-show-list {
+.about-shows, .about-collections { min-width: 0; padding-right: 1em; }
+.about-shows.is-wide { grid-column: span 2; padding-right: 0; }
+.about-show-columns {
+  display: grid;
+  grid-template-columns: calc(260.9 * var(--u)) minmax(0, 1fr);
+}
+.about-show-columns > .about-show-list { padding-right: 1em; }
+.about-show-list, .about-collection-list {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  grid-auto-rows: var(--row);
+  align-content: start;
+  row-gap: calc(65.5em / 20);
 }
-/*
- * The fairs fill their first column before the second: as many rows as the
- * list says (`--rows`, fifteen on the sheet, level with the end of the solo
- * shows), then the rest from the top of the fourth column.
- */
-.about-shows.is-wide { grid-column: span 2; }
-.about-shows.is-wide .about-show-list {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  grid-template-rows: repeat(var(--rows, 8), var(--row));
-  grid-auto-flow: column;
-  column-gap: calc(16 * var(--u));
-}
-.about-show {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-}
-.about-show > span { display: block; }
+.about-show, .about-collection { display: flex; flex-direction: column; align-items: start; }
+.about-show > span, .about-collection > span { display: block; }
 .about-show-title { margin-top: calc(2.48em / 20); }
 .about-show-title + .about-show-line { margin-top: calc(2.62em / 20); }
 .about-show-line + .about-show-line { margin-top: calc(2.75em / 20); }
@@ -412,37 +462,31 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .about-show-title { font-weight: 600; }
 .about-show-line { font-weight: 400; }
 .about-show-place { font-weight: 300; }
-
-/* ------------------------------------------------------ the collections */
+.about-collection-name { font-weight: 600; text-transform: uppercase; }
+.about-collection-place { margin-top: calc(1em / 20); font-weight: 300; }
 
 /*
- * Who holds the work: a label at 20 like the record's, 180.7 below the
- * record's last row; then each collection its name in capitals at 500 and its
- * place at 300, both 40 on 40, with 16.6 between one collection and the next.
- * The first name's line box is 87.7 below the label's.
+ * How to reach her, centred above the copyright: the record's size, its
+ * three ways in a row, 192 under the record.
  */
-.about-collections { margin-top: calc(180.7em / 20); font-size: var(--about-small); color: var(--ink); }
-.about-collections .about-label { margin-bottom: calc(87.7em / 20); }
-.about-collection-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: calc(16.6em / 40);
-  font-size: 2em;
+.about-contact {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4em 2.4em;
+  margin-top: calc(192em / 20);
+  font-size: var(--about-small);
+  font-style: normal;
   line-height: 1;
-  letter-spacing: 0;
+  font-weight: 400;
+  color: var(--ink);
 }
-.about-collection { display: grid; }
-.about-collection-name { font-weight: 500; text-transform: uppercase; }
-.about-collection-place { font-weight: 300; }
+.about-contact a { color: inherit; }
+.about-contact a:hover, .about-contact a:focus-visible { text-decoration: underline; text-underline-offset: 0.15em; }
 
-/*
- * Her name at 600 and the rest at 400, at 20, centred, 167.3 below the last
- * place. The frame runs on in blank artboard below it; the page stops 96 under.
- */
+/* Her name at 600 and the rest at 400, at 20, centred under the contact. */
 .about-foot {
-  margin-top: calc(167.3em / 20);
+  margin-top: calc(28em / 20);
   padding-bottom: max(2.5rem, calc(96 * var(--u)));
   font-size: var(--about-small);
   line-height: 1;
@@ -453,23 +497,20 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .about-foot b { font-weight: 600; }
 
 /*
- * Narrower than the frame can hold four columns at the record's smallest
- * size, the record goes to two — solo beside group, then the fairs in their
- * own two beneath — and on a phone to one, where justified lines of a few
- * words would open rivers, so the biography is set ragged there instead.
+ * Narrower than the frame can hold five columns at the record's smallest
+ * size, the record goes to two — solo beside group, the fairs in their own
+ * two beneath, then the collections — and on a phone to one, where justified
+ * lines of a few words would open rivers, so the biography is set ragged.
  */
 @media (max-width: 899px) {
-  .about-record { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 3em; }
+  .about-record { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 3.5em; }
+  .about-show-columns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 559px) {
-  .about-text p { text-align: left; }
+  .about-text > p { text-align: left; }
   .about-record { grid-template-columns: minmax(0, 1fr); }
   .about-shows.is-wide { grid-column: auto; }
-  .about-shows.is-wide .about-show-list {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: none;
-    grid-auto-flow: row;
-  }
+  .about-show-columns { grid-template-columns: minmax(0, 1fr); row-gap: calc(65.5em / 20); }
 }
 
 html:not(.js) .about { display: none; }

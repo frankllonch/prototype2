@@ -1,10 +1,10 @@
 import type { ProjectImage } from './types.ts';
 
 /**
- * About, as the designer's sheet sets it: a red card with her name, her city and
- * year and how to reach her; the biography beneath, with two studio photographs
- * set into it; the record of exhibitions in three columns; the private
- * collections; and the line of copyright.
+ * About, as the designer's sheet sets it: the capitals lead, the studio
+ * photographs in a row, the biography, the record of exhibitions and the
+ * private collections in five columns, how to reach her, and the line of
+ * copyright. (The card's name, phone and emails are still kept in ABOUT_CARD.)
  *
  * Typed here rather than read from WordPress. The source About page was one run
  * of nested HTML that had to be cut apart by guesswork to lay out at all, and
@@ -58,20 +58,24 @@ export interface AboutCollection {
 }
 
 /**
- * The two studio photographs, rendered at three widths in `src/assets/about`
+ * The studio photographs, rendered at up to three widths in `src/assets/about`
  * from the originals in `content/raw/about`, and copied into dist by the build.
+ * Every one listed in ABOUT_BLOCKS goes into the row, in order.
  * Shaped as a `ProjectImage` so the same `<picture>` component serves them.
  */
-function photograph(n: number, alt: string): ProjectImage {
-  const widths = [800, 1600, 2692] as const;
-  const variant = (ext: string) => widths.map((width) => ({ width, url: `/about/about-${n}-${width}.${ext}` }));
+function photograph(n: number, alt: string, width = 2692, height = 1830): ProjectImage {
+  // The widths rendered for it: 800 and its own, and 1600 between for the
+  // large originals. Never wider than the photograph is.
+  const widths = [...new Set([800, 1600, width].filter((w) => w <= width).concat(Math.min(800, width)))].sort((x, y) => x - y);
+  const variant = (ext: string) => widths.map((w) => ({ width: w, url: `/about/about-${n}-${w}.${ext}` }));
+  const largest = `/about/about-${n}-${widths[widths.length - 1]}.jpg`;
   return {
     id: `about-${n}`,
-    source: `/about/about-${n}-2692.jpg`,
+    source: largest,
     alt,
-    width: 2692,
-    height: 1830,
-    variants: { avif: variant('avif'), webp: variant('webp'), fallback: `/about/about-${n}-2692.jpg` },
+    width,
+    height,
+    variants: { avif: variant('avif'), webp: variant('webp'), fallback: largest },
   };
 }
 
@@ -106,6 +110,9 @@ export const ABOUT_BLOCKS: readonly AboutBlock[] = [
       'The tireless search for the reason of color and its form has obsessed artists throughout history, from the very creation of pictorial expression. Claudia Valsells knows about this and she aims to portray this into her artwork.',
   },
   { kind: 'figure', image: photograph(2, 'Claudia Valsells painting a large canvas in her studio, pots of colour on the table beside her') },
+  { kind: 'figure', image: photograph(3, 'Claudia Valsells reaching up to paint a canvas propped against the studio wall, among other canvases', 845, 550) },
+  { kind: 'figure', image: photograph(4, 'Claudia Valsells in her studio holding a palette and a brush over pots of paint', 833, 600) },
+  { kind: 'figure', image: photograph(5, 'Claudia Valsells in profile against a red wall stencilled AC 068', 765, 724) },
   {
     kind: 'text',
     text:
@@ -180,13 +187,13 @@ export const ABOUT_SHOWS: readonly AboutShows[] = [
       { when: '2018', title: 'Art Fair', lines: [], places: ['Stockholm'] },
       { when: '2018', title: 'Contemporary Art Fair\nJust LX,', lines: [], places: ['Portugal'] },
       { when: '2018', title: 'Almoneda Antik Passion', lines: [], places: ['Madrid'] },
-      { when: '2019 April', title: 'Almoneda, Ifema feria de Madrid', lines: [], places: ['Palau de Casavells, Madrid.'] },
+      { when: '2019 April', title: 'Almoneda, Ifema\nFeria de Madrid', lines: [], places: ['Palau de Casavells, Madrid.'] },
       { when: '2018', title: 'Art Fair Grand Palais', lines: [], places: ['Paris'] },
       { when: '2018', title: 'Eurantica Art Fair', lines: [], places: ['Brussels'] },
       { when: '2019 April', title: 'Art Paris Grand Palais', lines: [], places: ['París'] },
       { when: '2018', title: 'Art Madrid,', lines: [], places: ['Madrid'] },
       { when: '2017 July', title: 'Uterqüe Art Essays', lines: ['AW\u200a2017'] },
-      { when: '2017 March', title: 'International Art Fair, Art Paris', lines: [], places: ['París'] },
+      { when: '2017 March', title: 'International Art Fair,\nArt Paris', lines: [], places: ['París'] },
       { when: '2017 February', title: 'Art Madrid', lines: [], places: ['Madrid'] },
       { when: '2016 November', title: 'Antica Namur,', lines: [], places: ['Belgium'] },
       { when: '2016 October', title: 'Art Élysées,\nInternational Art Fair,', lines: [], places: ['París'] },
