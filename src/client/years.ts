@@ -29,6 +29,9 @@ export function initYears(): void {
 
   const links = [...rail.querySelectorAll<HTMLAnchorElement>('.year')];
   if (!links.length) return;
+  // The controls stand under the last year, and the stylesheet cannot count
+  // them: a new year added in WordPress moves the controls down a line.
+  document.documentElement.style.setProperty('--years-count', String(links.length));
 
   const grid = document.querySelector<HTMLElement>('[data-grid]');
   const tiles = grid ? [...grid.querySelectorAll<HTMLElement>('.tile')] : [];

@@ -16,6 +16,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 /** The first year whose cut-outs lean towards the pointer; earlier ones lie flat. */
 const CV_TILT_FROM = 2021;
 
+/** How many of the first works are drawn, faintly, behind a painting's page. */
+const CV_GHOST_COUNT = 66;
+
 function cv_plate_stage( array $work ): string {
 	if ( ! $work['image'] ) {
 		return '';
@@ -44,7 +47,7 @@ function cv_plate_stage( array $work ): string {
 	$out = '<div class="detail-stage"><figure class="detail-plate" data-tilt><span class="detail-plate-inner' . ( $plate ? '' : ' is-photo' ) . '">';
 	foreach ( $views as $i => $v ) {
 		$out .= '<span class="detail-view' . ( 0 === $i ? ' is-shown' : '' ) . '" data-view="' . $i . '"' . ( $plate && 0 === $i ? ' data-plate' : '' ) . '>'
-			. cv_image( $v['id'], '(max-width: 900px) 92vw, 46vw', [ 'priority' => 0 === $i, 'alt' => $v['alt'] ] )
+			. cv_image( $v['id'], '(max-width: 900px) 92vw, 54vw', [ 'priority' => 0 === $i, 'alt' => $v['alt'] ] )
 			. '</span>';
 	}
 	$out .= '</span></figure>';
@@ -57,7 +60,7 @@ function cv_plate_stage( array $work ): string {
 				$i,
 				0 === $i ? 'true' : 'false',
 				esc_attr( $v['alt'] ),
-				cv_image( $v['id'], '72px', [ 'priority' => true, 'alt' => '' ] )
+				cv_image( $v['id'], '(max-width: 899px) 5rem, 9vw', [ 'priority' => true, 'alt' => '' ] )
 			);
 		}
 		$out .= '</div>';
@@ -80,7 +83,17 @@ function cv_artwork_detail( WP_Post $post ): string {
 		? '<a href="' . esc_url( get_permalink( $p ) ) . '" rel="' . $rel . '" data-replace>' . $label . '</a>'
 		: '<span></span>';
 
-	$out = '<article class="detail"><a class="detail-back" href="' . esc_url( home_url( '/artwork/' ) ) . '">← Artwork</a>'
+	// The gallery as it stands behind the painting: the same grid, inert, its
+	// pictures loaded lazily. CV_GHOST_COUNT is GHOST_COUNT in src/pages/index.ts.
+	$ghost_items = array_slice( array_values( array_filter( array_map( 'cv_work_item', $works ), fn( $i ) => $i['image'] ) ), 0, CV_GHOST_COUNT );
+	$ghost       = $ghost_items
+		? '<div class="detail-ghost" aria-hidden="true" inert>' . cv_grid( [ 'items' => $ghost_items, 'stack' => true, 'toScale' => true, 'eager' => 0 ] ) . '</div>'
+		: '';
+
+	$gallery = esc_url( home_url( '/artwork/' ) );
+	$out     = '<article class="detail">' . $ghost
+		. '<a class="detail-back detail-section" href="' . $gallery . '">Artwork</a>'
+		. '<a class="detail-back detail-close" href="' . $gallery . '" aria-label="Close, back to the gallery">Close</a>'
 		. cv_plate_stage( $work )
 		. '<div class="detail-caption"><div class="detail-head"><h1 class="detail-title">' . esc_html( $work['title'] ) . '</h1>'
 		. ( $work['materials'] ? '<p class="detail-medium">' . esc_html( $work['materials'] ) . '</p>' : '' )
@@ -92,8 +105,8 @@ function cv_artwork_detail( WP_Post $post ): string {
 		$out .= '<p class="detail-index"><b>' . ( $index + 1 ) . '</b> of ' . count( $works ) . '</p>';
 	}
 	$out .= '</div><nav class="detail-pager" aria-label="Between works">'
-		. $link( $prev, '← Previous', 'prev' )
-		. $link( $next, 'Next →', 'next' )
+		. $link( $prev, 'Previous', 'prev' )
+		. $link( $next, 'Next', 'next' )
 		. '</nav></article>';
 	return $out;
 }

@@ -10,6 +10,8 @@ cv_page( [
 	'title'       => $cv_work['title'],
 	'description' => $cv_text ? wp_trim_words( $cv_text, 40, '…' ) : cv_describe( $cv_work, '' ),
 	'path'        => '/artwork/',
+	// No menu over a painting: its corners say where to go instead.
+	'bodyClass'   => 'is-detail',
 ] );
 get_header();
 echo cv_artwork_detail( $cv_post );

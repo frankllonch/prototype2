@@ -37,10 +37,12 @@ function galleryIsBehind(back: HTMLAnchorElement): boolean {
 }
 
 function backStepsBack(): void {
-  const back = document.querySelector<HTMLAnchorElement>('.detail-back');
-  if (!back || !galleryIsBehind(back)) return;
+  // The page's two corners at the top — the section's name and Close — both
+  // lead back to the gallery.
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('.detail-back')];
+  if (!links.length || !galleryIsBehind(links[0]!)) return;
 
-  back.addEventListener('click', (event) => {
+  for (const back of links) back.addEventListener('click', (event) => {
     if (!isPlainClick(event)) return;
     event.preventDefault();
     /*

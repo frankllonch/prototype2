@@ -54,8 +54,7 @@ html:not(.js) .hero,
  *
  * The amount is `--grid-start`, set with the other knobs in 00-base.css: the
  * pile lets go after SCROLL_SPAN screens (stack.ts), so the first row lands at
- * `--grid-start` minus the scroll past the first screen. It is set so the row
- * comes to rest under the controls at the top right.
+ * `--grid-start` minus the scroll past the first screen.
  *
  * Only where the pile actually runs. `stack.ts` deletes the hero on every path
  * where it does not — reduced motion, or no tiles to pile — and the sibling
@@ -225,100 +224,162 @@ html.js .hero[data-hero]+.grid[data-stack] {
 /* ---------------------------------------------------------------- detail */
 
 /*
- * One screen, never more. The page is the height of the window and nothing in
- * it scrolls: the back link on the first row, the painting and its caption on
- * the second, which takes whatever height is left, and the pager on the last.
- * The painting is then sized to its cell (see .detail-plate), so a tall work
- * shrinks rather than pushing the pager below the fold.
+ * One screen, never more, after the designer's final sheet (ARTWORK DETAIL,
+ * 1920 × 1080). No menu: the page's four corners say where to go — the
+ * section and Close at the top, Previous and Next at the foot. The painting
+ * stands on the left with its other pictures under it, the caption starts
+ * 60% across and runs from the painting's top edge to its bottom edge, and
+ * the gallery shows faintly through the paper behind them.
+ *
+ * THE DETAIL PAGE — the numbers to change are all here.
+ *
+ *   --edge           how far the four corner words stand in from the window's
+ *                    edges: 50 of 1920.
+ *   --plate-top      where the painting's top edge is, down the window: 261
+ *                    of 1080.
+ *   --plate-max      the most height the painting may take: 518 of 1080. A
+ *                    wide work is held by the column's width instead and
+ *                    comes out shorter.
+ *   --caption-x      where the caption starts across the window: 1152 of 1920.
+ *   --stage-gap      the space kept clear between the painting's column and
+ *                    the caption.
+ *   --thumb-h        the height of the small pictures under the painting:
+ *                    126 of 1920 wide.
+ *   --ghost-opacity  how strongly the gallery shows through: 0.05 on the
+ *                    sheet. 0 takes it away.
  */
+.is-detail .top { display: none; }
+
 .detail {
+  --edge: 2.6vw;
+  --plate-top: 24.2vh;
+  --plate-max: 48vh;
+  --caption-x: 60vw;
+  --stage-gap: 4vw;
+  --thumb-h: 6.56vw;
+  --ghost-opacity: 0.05;
+
+  position: relative;
   height: 100dvh;
-  box-sizing: border-box;
   overflow: hidden;
-  display: grid;
-  /* The sheet: the painting in the left two thirds, the text starting two
-     thirds across (618 of 927). The second column is sized so that, with
-     the page's own padding and the gap, it begins exactly there. */
-  grid-template-columns: 1fr calc(33.3% - 0.334 * var(--pad));
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  align-items: center;
-  gap: var(--pad);
-  padding: var(--bar) var(--pad) var(--pad);
 }
+
+/* The gallery behind, as it stands at the top of its grid. Inert in the
+   markup; out of the pointer's way here. */
+.detail-ghost {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  opacity: var(--ghost-opacity);
+  pointer-events: none;
+}
+.detail-ghost .grid { padding-top: 17.8vh; }
+.detail-ghost .tile { transition: none; }
+
+/*
+ * The corners. The page's type size, tracked out (the sheet's ARTWORK runs 218
+ * wide at 40: 0.09 em between letters), set on a line exactly one em tall so
+ * the capitals can be put on the margin: in Switzer the cap sits 0.17 em
+ * below such a line's top and the baseline 0.137 em above its foot.
+ */
+.detail-back,
+.detail-pager a {
+  font-size: var(--type);
+  line-height: 1;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  font-weight: 400;
+  color: var(--ink);
+  transition: color var(--hover) var(--ease);
+}
+.detail-back:hover, .detail-back:focus-visible,
+.detail-pager a:hover, .detail-pager a:focus-visible { color: var(--ink-soft); }
 
 .detail-back {
-  grid-column: 1;
-  grid-row: 1;
-  align-self: start;
-  color: var(--ink-soft);
+  position: absolute;
+  z-index: 2;
+  top: calc(var(--edge) - 0.17em);
 }
+.detail-section { left: var(--edge); }
+.detail-close { right: var(--edge); }
 
-.detail-back:hover, .detail-back:focus-visible {
-  color: var(--ink);
-}
-
-.detail-plate {
-  grid-column: 2;
-  margin: 0;
-  display: grid;
-  place-items: center;
+.detail-pager {
+  position: absolute;
+  z-index: 2;
+  left: var(--edge);
+  right: var(--edge);
+  bottom: calc(var(--edge) - 0.137em * 1);
+  display: flex;
+  justify-content: space-between;
+  /* The em above is the links' own: the nav is set at their size too. */
+  font-size: var(--type);
+  line-height: 1;
 }
 
 /*
- * The picture is bounded by the plate's own box, in container units, because
- * nothing between the plate and the image has a height of its own to measure
- * a percentage against: the inner span hugs the picture so the lean begins at
- * its edge. The plate takes its size from the grid cell it sits in.
+ * The painting's column: from the left margin to the gap before the caption.
+ * The painting is centred in it, its top edge on --plate-top, and the small
+ * pictures follow under it. client/views.ts sizes the painting by its painted
+ * part, not by the cut-out's transparent canvas; until it has, the picture is
+ * held to the same room as a whole.
  */
+.detail-stage {
+  position: absolute;
+  z-index: 1;
+  left: var(--edge);
+  top: var(--plate-top);
+  width: calc(var(--caption-x) - var(--stage-gap) - var(--edge));
+}
+
+.detail-plate {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}
+
 .detail-plate img {
-  max-height: 100cqh;
-  max-width: 100cqw;
+  max-height: var(--plate-max);
+  max-width: calc(var(--caption-x) - var(--stage-gap) - var(--edge));
   width: auto;
   height: auto;
 }
 
 /*
- * The caption, measured off the designer's sheet (927 wide, painting 242
- * tall, caps 13):
+ * The caption, held to the painting's own box. client/views.ts hands it the
+ * box — its top as `--plate-shift` from --plate-top, and its height as
+ * `--plate-height` — and the three groups are spread over it:
  *
- *   title and medium     cap top on the painting's top edge; the medium's
- *                        baseline 31 below the title's, against 24 between
- *                        year and size — so the title carries 7/13 of a cap,
- *                        0.3 em, of extra room under it
- *   year and size        the year's cap top 141 down, 0.583 of the height
- *   87 of 154            baseline on the painting's bottom edge
+ *   title and medium     the title's capitals on the painting's top edge
+ *   year and size        the year's capitals 0.583 of the way down
+ *   87 of 154            the baseline on the painting's bottom edge
  *
- * The column is given the painting's own box by client/views.ts — its top and
- * its height, as `--plate-shift` and `--plate-height` — and the three groups
- * are held to it from there. The small negative margins take off the part of
- * the line box above a cap and below a baseline, so the ink, not the box,
- * sits on the edges: in Switzer (ascent 0.987 em, descent 0.261 em, caps
- * 0.680 em, measured) that is half the leading less 0.317 em above, and half
- * the leading less 0.363 em below, whatever the leading is set to. Without
- * scripting the column takes the cell's height, which is near enough.
+ * The small negative margins take off the part of the line box above a cap
+ * and below a baseline, so the ink, not the box, sits on the edges: in
+ * Switzer (ascent 0.987 em, descent 0.261 em, caps 0.680 em, measured) that
+ * is half the leading less 0.317 em above, and half the leading less 0.363 em
+ * below, whatever the leading is set to. Without scripting the column takes
+ * the most room the painting could have.
  */
 .detail-caption {
   /* THE CAPTION'S LEADING — line height as a multiple of the type size. The
      rest of the page is 1.25 (50 over 40); the caption is set tighter. */
   --caption-lead: 1.1;
-  /* HOW FAR DOWN THE PAINTING THE CAPTION REACHES — the three groups are
-     spread over this share of the painting's height, from its top edge: 1 is
-     the sheet, with the numbering on the bottom edge; smaller gathers the
-     groups up towards the title. */
-  --caption-span: 0.85;
-  /* HOW FAR DOWN IT STARTS — the title's cap top sits this share of the
-     painting's height below its top edge; with the span, 0.15 + 0.85 puts
-     the numbering on the bottom edge. 0 is the sheet. */
-  --caption-drop: 0.3;
-  grid-column: 2;
-  grid-row: 2;
-  align-self: start;
-  position: relative;
+  /* HOW FAR DOWN THE PAINTING THE CAPTION REACHES — the groups are spread
+     over this share of the painting's height. 1 runs top edge to bottom edge. */
+  --caption-span: 1;
+  /* HOW FAR DOWN IT STARTS — the title's capitals sit this share of the
+     painting's height below its top edge. 0 is on the edge. */
+  --caption-drop: 0;
+  position: absolute;
+  z-index: 1;
+  left: var(--caption-x);
+  right: var(--edge);
+  top: var(--plate-top);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   box-sizing: border-box;
-  height: calc(var(--plate-height, 100%) * var(--caption-span));
+  height: calc(var(--plate-height, var(--plate-max)) * var(--caption-span));
   margin-top: calc(var(--plate-shift, 0px) + var(--plate-height, 0px) * var(--caption-drop));
   font-size: var(--type);
   line-height: var(--caption-lead);
@@ -345,34 +406,38 @@ html.js .hero[data-hero]+.grid[data-stack] {
 .detail-caption .detail-index { margin-bottom: calc((0.363 - var(--caption-lead) / 2) * 1em); }
 .detail-index b { font-weight: 600; }
 
-.detail-pager {
-  grid-column: 1 / -1;
-  grid-row: 3;
-  display: flex;
-  justify-content: space-between;
-  color: var(--ink-soft);
-}
-
-.detail-pager a:hover, .detail-pager a:focus-visible {
-  color: var(--ink);
-}
-
+/*
+ * A phone: one column that scrolls if it must. The corners stay corners at
+ * the top; the painting, its pictures, the caption and the way through
+ * follow in order.
+ */
 @media (max-width: 899px) {
   .detail {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto minmax(0, 1fr) auto auto;
+    --edge: var(--pad);
+    --plate-max: 52vh;
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+    padding: calc(var(--edge) + 2.4rem) var(--edge) var(--edge);
+    box-sizing: border-box;
   }
-
-  .detail-back,
-  .detail-plate,
-  .detail-caption {
-    grid-column: 1;
+  .detail-ghost { display: none; }
+  .detail-back { font-size: 1rem; }
+  .detail-stage, .detail-caption, .detail-pager {
+    position: static;
+    width: auto;
+    margin: 0;
+    height: auto;
   }
-  /* Under the painting there is no edge to follow: the groups stack. */
-  .detail-caption { grid-row: 3; height: auto; margin-top: 0; gap: 0.6em; }
+  .detail-plate img { max-width: calc(100vw - 2 * var(--edge)); }
+  .detail-caption { gap: 0.6em; font-size: 1.25rem; }
   .detail-facts { position: static; }
-  .detail-head, .detail-index { margin: 0; }
-  .detail-pager { grid-row: 4; }
+  .detail-head, .detail-caption .detail-index { margin: 0; }
+  .detail-pager, .detail-pager a { font-size: 1rem; }
+  .detail-pager { margin-top: auto; }
 }
 
 /* ------------------------------------------------------------------- feed */
