@@ -227,9 +227,9 @@ html.js .hero[data-hero]+.grid[data-stack] {
  * One screen, never more, after the designer's final sheet (ARTWORK DETAIL,
  * 1920 × 1080). No menu: the page's four corners say where to go — the
  * section and Close at the top, Previous and Next at the foot. The painting
- * stands on the left with its other pictures under it, the caption starts
- * 60% across and runs from the painting's top edge to its bottom edge, and
- * the gallery shows faintly through the paper behind them.
+ * stands on the left with its other pictures under it, and the caption starts
+ * 60% across and runs from the painting's top edge to its bottom edge, all on
+ * plain white paper.
  *
  * THE DETAIL PAGE — the numbers to change are all here.
  *
@@ -245,8 +245,6 @@ html.js .hero[data-hero]+.grid[data-stack] {
  *                    the caption.
  *   --thumb-h        the height of the small pictures under the painting:
  *                    126 of 1920 wide.
- *   --ghost-opacity  how strongly the gallery shows through: 0.05 on the
- *                    sheet. 0 takes it away.
  */
 .is-detail .top { display: none; }
 
@@ -257,24 +255,12 @@ html.js .hero[data-hero]+.grid[data-stack] {
   --caption-x: 60vw;
   --stage-gap: 4vw;
   --thumb-h: 6.56vw;
-  --ghost-opacity: 0.05;
 
   position: relative;
   height: 100dvh;
   overflow: hidden;
 }
 
-/* The gallery behind, as it stands at the top of its grid. Inert in the
-   markup; out of the pointer's way here. */
-.detail-ghost {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  opacity: var(--ghost-opacity);
-  pointer-events: none;
-}
-.detail-ghost .grid { padding-top: 17.8vh; }
-.detail-ghost .tile { transition: none; }
 
 /*
  * The corners. The page's type size, tracked out (the sheet's ARTWORK runs 218
@@ -424,7 +410,6 @@ html.js .hero[data-hero]+.grid[data-stack] {
     padding: calc(var(--edge) + 2.4rem) var(--edge) var(--edge);
     box-sizing: border-box;
   }
-  .detail-ghost { display: none; }
   .detail-back { font-size: 1rem; }
   .detail-stage, .detail-caption, .detail-pager {
     position: static;

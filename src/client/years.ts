@@ -102,6 +102,18 @@ export function initYears(): void {
       event.preventDefault();
 
       if (focused === year) { focus(''); return; }
+
+      /*
+       * The year's paintings start loading now, not when the journey reaches
+       * them. They are lazy, so left alone they would only be asked for as
+       * they came near the screen — at the very end of the trip — and the
+       * page arrived on empty frames that filled in one by one.
+       */
+      const first = tiles.indexOf(target);
+      for (const tile of tiles.slice(Math.max(0, first - 12), first + 40)) {
+        const img = tile.querySelector('img');
+        if (img?.loading === 'lazy') img.loading = 'eager';
+      }
       focus(year);
       /*
        * A jump that starts from the folded pile scrolls down through it, and

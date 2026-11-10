@@ -16,9 +16,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 /** The first year whose cut-outs lean towards the pointer; earlier ones lie flat. */
 const CV_TILT_FROM = 2021;
 
-/** How many of the first works are drawn, faintly, behind a painting's page. */
-const CV_GHOST_COUNT = 66;
-
 function cv_plate_stage( array $work ): string {
 	if ( ! $work['image'] ) {
 		return '';
@@ -83,15 +80,8 @@ function cv_artwork_detail( WP_Post $post ): string {
 		? '<a href="' . esc_url( get_permalink( $p ) ) . '" rel="' . $rel . '" data-replace>' . $label . '</a>'
 		: '<span></span>';
 
-	// The gallery as it stands behind the painting: the same grid, inert, its
-	// pictures loaded lazily. CV_GHOST_COUNT is GHOST_COUNT in src/pages/index.ts.
-	$ghost_items = array_slice( array_values( array_filter( array_map( 'cv_work_item', $works ), fn( $i ) => $i['image'] ) ), 0, CV_GHOST_COUNT );
-	$ghost       = $ghost_items
-		? '<div class="detail-ghost" aria-hidden="true" inert>' . cv_grid( [ 'items' => $ghost_items, 'stack' => true, 'toScale' => true, 'eager' => 0 ] ) . '</div>'
-		: '';
-
 	$gallery = esc_url( home_url( '/artwork/' ) );
-	$out     = '<article class="detail">' . $ghost
+	$out     = '<article class="detail">'
 		. '<a class="detail-back detail-section" href="' . $gallery . '">Artwork</a>'
 		. '<a class="detail-back detail-close" href="' . $gallery . '" aria-label="Close, back to the gallery">Close</a>'
 		. cv_plate_stage( $work )
