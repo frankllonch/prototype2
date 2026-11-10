@@ -77,8 +77,14 @@
 .sheet-title,
 .sheet-lines,
 .sheet-when { margin: 0; font-size: inherit; }
+/*
+ * The designer's five styles and nothing else, here as on the index: the name
+ * is semibold at 45, everything else is 40. It was bold at 40 before, which is
+ * a sixth style the sheets do not contain.
+ */
 .sheet-title {
-  font-weight: 700;
+  font-size: var(--t-45);
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: -0.005em;
 }
@@ -128,17 +134,24 @@
 .sheet-prose .apart { margin-top: calc(var(--s-lead) * 1em); }
 .sheet-prose b { font-weight: 500; }
 /* Bold proper, the editor's B: the client's name where the sheet sets it apart. */
-.sheet-prose strong { font-weight: 700; }
+/* Semibold, which is the heaviest the sheets go. */
+.sheet-prose strong { font-weight: 600; }
 .sheet-prose em { font-style: italic; font-weight: 500; }
 .sheet-prose a { color: inherit; text-decoration: none; }
 .sheet-prose a:hover,
 .sheet-prose a:focus-visible { text-decoration: underline; text-underline-offset: 0.15em; text-decoration-thickness: 1px; }
 /* Credits: in a smaller hand, kept well clear of the text above — three of
    the text's lines and more, which is what the sheets leave. */
+/*
+ * Credits: light rather than small. They were set at 30 against the text's 40,
+ * which is a size the designer's scale does not have — light at 40 is the one
+ * style in it that means the same thing, a line that is there to be read but
+ * not to be read first.
+ */
 .sheet-prose .is-style-note {
   margin-top: 5.2em;
-  font-size: 0.74em;               /* 30 at 1920, against the text's 40 */
-  line-height: 1.25;
+  font-weight: 300;
+  line-height: var(--lead-45);
 }
 .sheet-prose .is-style-cta {
   margin-top: calc(var(--s-lead) * 3em);
