@@ -215,19 +215,38 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .about-sheet > * { margin-inline: var(--m); }
 
 /*
- * In the middle of the frame's margin at the top right. Outside the sheet, so
- * in window units: the same 48 at 1920, give or take the scrollbar.
+ * Close, where and as the detail pages set theirs (`07-sheet.css`): the size
+ * of the text, upright and spaced, its baseline 80 down the 1920 frame and its
+ * last letter at the right margin, 50 in.
+ *
+ * Held to the top of About's own scroll rather than fixed to the window, and
+ * taking no room. Fixed, it moved: while the panel rises in it is transformed,
+ * which makes it the box a fixed child is placed in — so the opening's glide
+ * carried the link up with the text, and it snapped back once the rise was
+ * over. Sticky, it keeps to the panel's scrollport whatever the panel is doing,
+ * and rises in with the page exactly as the detail pages' Close does.
  */
 .about-close {
-  position: fixed;
-  top: calc(max(1.25rem, 2.5vw) / 2);
-  right: max(1.25rem, 2.5vw);
-  transform: translateY(-50%);
+  --f: calc(100vw / 1920);
+  position: sticky;
+  top: calc(var(--f) * 80);
   z-index: 3;
+  display: block;
+  width: fit-content;
+  height: 0;
+  margin: 0 calc(var(--f) * 50 - 0.071em) 0 auto;
+  translate: 0 -0.9em;            /* from its baseline to its box */
+  font-size: var(--type);
   line-height: 1;
-  color: var(--ink-soft);
+  font-weight: 400;
+  letter-spacing: 0.071em;
+  text-transform: uppercase;
+  color: var(--ink);
 }
-.about-close:hover, .about-close:focus-visible { color: var(--ink); }
+.about-close:hover, .about-close:focus-visible { opacity: 0.55; }
+@media (max-width: 899px) {
+  .about-close { top: 1.6rem; translate: none; line-height: var(--lead); margin-right: calc(var(--pad) - 0.071em); }
+}
 
 /* -------------------------------------------------------------- the text */
 
