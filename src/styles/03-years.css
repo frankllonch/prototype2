@@ -9,9 +9,12 @@
  * the class away again and the rail goes with it.
  *
  * Off the designer's final sheet at 1920: the years at the page's size, 50
- * apart, their capitals starting on the first row of paintings; then the
- * controls at 30, 40 apart. The knobs are in 00-base.css, under THE SIDE
- * COLUMN, next to --rail.
+ * apart; then the controls at 30, 40 apart. The knobs are in 00-base.css,
+ * under THE SIDE COLUMN, next to --rail.
+ *
+ * It does not move. The column is drawn where it ends up — as low as
+ * --side-top asks, but never so low that its last control leaves the window —
+ * and simply fades in there.
  */
 :root {
   /* The column's lines. Years at the page's leading (50 over 40), controls at
@@ -24,28 +27,29 @@
   --controls-top: calc(var(--side-top) + var(--years-height) + var(--controls-gap));
   /* Five controls: three sizes, then equal and to scale. */
   --side-height: calc(var(--years-height) + var(--controls-gap) + 5 * var(--type-side) * var(--side-lead));
-  /* How far the column has to rise for its foot to clear the window's, by a margin. */
+  /* How far above --side-top the column has to stand for its foot to clear the
+     window's by a margin. */
   --side-lift: max(0px, calc(var(--side-top) + var(--side-height) + var(--pad) - 100vh));
 }
 
 .years {
   position: fixed;
   left: var(--pad);
-  top: var(--side-top);
+  top: calc(var(--side-top) - var(--side-lift));
   z-index: 30;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   font-size: var(--type);
   line-height: var(--year-lead);
-  /* The capitals, not the line box, start on --side-top: half the leading less
+  /* The capitals, not the line box, start on that line: half the leading less
      the 0.317 em Switzer puts above a capital (see .detail-caption). */
   margin-top: calc((0.317 - var(--year-lead) / 2) * 1em);
   transition: opacity 0.8s var(--ease);
 }
 
 .controls {
-  top: var(--controls-top);
+  top: calc(var(--controls-top) - var(--side-lift));
   margin-top: calc((0.317 - var(--side-lead) / 2) * 1em);
 }
 
@@ -86,17 +90,24 @@
  * themselves after eight seconds — far longer than any pile — and the class,
  * when it comes, cancels it.
  */
+/* Hidden, not merely transparent: a see-through column over the paintings is
+   still drawn — blended, in the controls' case — on every frame of the
+   opening. The visibility waits for the fade out before it goes. */
 html.js .controls,
 html.js .years {
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
+  transition: opacity 0.8s var(--ease), visibility 0s linear 0.8s;
   animation: control-failsafe 0.01s linear 8s forwards;
 }
 
 html.js.stack-settled .controls,
 html.js.stack-settled .years {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
+  transition: opacity 0.8s var(--ease), visibility 0s;
   animation: none;
 }
 
@@ -109,44 +120,7 @@ html.js.stack-running .years {
 }
 
 @keyframes control-failsafe {
-  to { opacity: 1; pointer-events: auto; }
-}
-
-/*
- * Riding up with the paintings. The column is drawn from --side-top, level with
- * the first row, at the moment the opening lets go — 130vh of scroll, the
- * pile's SCROLL_SPAN in stack.ts. From there it climbs with the page, pixel
- * for pixel, for exactly as far as it needs to (--side-lift) and then holds.
- * Driven by the scroll itself, so it moves on the same frame as the grid.
- *
- * Where scroll-driven animation is missing the column simply stands where its
- * foot fits the window.
- */
-@supports (animation-timeline: scroll()) {
-  html.js.stack-settled .years,
-  html.js.stack-settled .controls,
-  html:not(.js) .years,
-  html:not(.js) .controls {
-    animation: side-lift linear both;
-    animation-timeline: scroll(root);
-    animation-range: 130vh calc(130vh + var(--side-lift) + 1px);
-  }
-  /* No opening to wait for — scripting off, reduced motion, or back from a
-     painting, where stack.ts removes the runway: it rises from the top. */
-  html:not(.js) .years,
-  html:not(.js) .controls,
-  html.js.stack-settled:not(:has([data-hero])) .years,
-  html.js.stack-settled:not(:has([data-hero])) .controls {
-    animation-range: 0px calc(var(--side-lift) + 1px);
-  }
-}
-@supports not (animation-timeline: scroll()) {
-  .years { top: calc(var(--side-top) - var(--side-lift)); }
-  .controls { top: calc(var(--controls-top) - var(--side-lift)); }
-}
-@keyframes side-lift {
-  from { translate: 0 0; }
-  to { translate: 0 calc(-1 * var(--side-lift)); }
+  to { opacity: 1; visibility: visible; pointer-events: auto; }
 }
 
 @media (max-width: 899px) {
@@ -166,8 +140,6 @@ html.js.stack-running .years {
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
   }
-  html.js.stack-settled .years, html.js.stack-settled .controls,
-  html:not(.js) .years, html:not(.js) .controls { animation: none; translate: none; }
   .year { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; padding: 2px 0; }
   .year-swatch { display: block; width: 13px; height: 22px; background: var(--c); transition: height 0.4s var(--ease); }
   .year.is-current .year-swatch, .year:hover .year-swatch { height: 34px; }
