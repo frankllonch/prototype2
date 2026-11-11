@@ -8,3 +8,8 @@ wordpress/import/
 wordpress/themes/claudiavalsells/assets/
 wordpress/.diff/
 wordpress/package/
+
+# Local secrets and other sessions' worktrees: never part of the site
+api.env
+*.env
+.claude/worktrees/
