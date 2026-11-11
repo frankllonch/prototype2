@@ -60,9 +60,11 @@ function inkOf(img: HTMLImageElement): Ink {
   } catch {
     return EDGE_TO_EDGE;
   }
-  // Faint enough to keep the soft edge of the cut, not so faint that a stray
-  // pixel of fringe pushes the box out.
-  const SOLID = 12;
+  // The painting's edge is where its feathered cut is half there: that is the
+  // edge the eye sees, so it is the one the caption is centred against and the
+  // gaps are measured from. The faint part of the feather still shows, just
+  // outside the box (05-artwork.css, overflow-clip-margin).
+  const SOLID = 128;
   let l = cw, t = ch, r = -1, b = -1;
   for (let y = 0; y < ch; y++) {
     for (let x = 0; x < cw; x++) {
@@ -106,16 +108,21 @@ export function initViews(): void {
     const views = [...stage.querySelectorAll<HTMLElement>('.detail-view')];
     const thumbs = [...stage.querySelectorAll<HTMLButtonElement>('.detail-thumb')];
     const caption = document.querySelector<HTMLElement>('.detail-caption');
-    const plate = stage.querySelector<HTMLElement>('.detail-plate');
 
     /*
-     * The room the painting has: the stage's width, and the height the
-     * stylesheet gives as --plate-max (any unit — a probe resolves it).
+     * The room the painting has. Across: what the stylesheet gives the painting
+     * and the caption together (--plate-room), less the caption's own width
+     * where it stands beside the painting (--caption-beside) — so a long title
+     * takes its room from the painting rather than pushing the pair off the
+     * page. Down: --plate-max. Both may be in any unit; a probe resolves them.
      */
     const probe = document.createElement('div');
-    probe.style.cssText = 'position:absolute;visibility:hidden;pointer-events:none;width:0;height:var(--plate-max)';
+    probe.style.cssText = 'position:absolute;visibility:hidden;pointer-events:none;width:var(--plate-room);height:var(--plate-max)';
     stage.append(probe);
-    const room = () => ({ w: plate?.clientWidth || stage.clientWidth, h: probe.offsetHeight });
+    const room = () => {
+      const beside = parseFloat(getComputedStyle(stage).getPropertyValue('--caption-beside')) || 0;
+      return { w: probe.offsetWidth - (beside && caption ? caption.offsetWidth : 0), h: probe.offsetHeight };
+    };
 
     const isCut = (i: number) => views[i]?.hasAttribute('data-plate') ?? false;
     const fitView = (i: number) => {
@@ -131,37 +138,20 @@ export function initViews(): void {
       if (!thumb || !img || !img.naturalWidth) return;
       fit(thumb, img, isCut(i) ? inkOf(img) : EDGE_TO_EDGE, Infinity, thumb.clientHeight);
     };
+    /*
+     * Everything else follows from the painting's box without help: the page
+     * is a grid that centres the painting and the caption on one line and the
+     * pair across the page (01-grid.css), so sizing the painting is all there
+     * is to do here.
+     */
     const fitAll = () => {
       views.forEach((view, i) => { if (view.classList.contains('is-shown')) fitView(i); });
       thumbs.forEach((_, i) => fitThumb(i));
-      follow();
     };
-
-    /*
-     * The caption follows the painting's own edges, and only the browser knows
-     * where those came out: the picture is sized to its cell, so its box is
-     * whatever its shape and the window's left it. The column is handed the
-     * box — how far below its cell's top the painting begins, and how tall it
-     * is — and the stylesheet holds the text to it. Read with the shift at
-     * zero, so the cell's own top is what is measured against.
-     */
-    function follow() {
-      // The view, once fitted, is the painting's own box; before that, the
-      // picture's.
-      const shown = stage.querySelector<HTMLElement>('.detail-view.is-shown');
-      const target = shown?.classList.contains('is-fitted') ? shown : shown?.querySelector('img');
-      if (!target || !caption) return;
-      caption.style.setProperty('--plate-shift', '0px');
-      const cell = caption.getBoundingClientRect().top;
-      const box = target.getBoundingClientRect();
-      if (!box.height) return;
-      caption.style.setProperty('--plate-shift', `${box.top - cell}px`);
-      caption.style.setProperty('--plate-height', `${box.height}px`);
-    }
     fitAll();
     window.addEventListener('resize', fitAll);
     // The box may change as the pictures arrive (a lazily measured size, a
-    // font that settles the caption's own cell), so it is read again then.
+    // font that settles the caption's width), so it is read again then.
     for (const img of stage.querySelectorAll('img')) if (!img.complete) img.addEventListener('load', fitAll, { once: true });
     window.addEventListener('load', fitAll);
     void document.fonts.ready.then(fitAll);
@@ -171,7 +161,6 @@ export function initViews(): void {
     const inner = stage.querySelector<HTMLElement>('.detail-plate-inner');
     const swap = (n: number) => {
       views.forEach((view, i) => view.classList.toggle('is-shown', i === n));
-      follow();
       // Only the cut-out leans. Putting a photograph on the plate tells the
       // tilt to stand down, and drops any lean the cut-out was holding.
       if (inner) {

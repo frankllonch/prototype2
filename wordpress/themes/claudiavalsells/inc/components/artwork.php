@@ -16,7 +16,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /** The first year whose cut-outs lean towards the pointer; earlier ones lie flat. */
 const CV_TILT_FROM = 2021;
 
-function cv_plate_stage( array $work ): string {
+/**
+ * The painting, and under it its other pictures and `$under` (the work's place
+ * in the archive) — plateStage() in src/pages/index.ts.
+ */
+function cv_plate_stage( array $work, string $under = '' ): string {
 	if ( ! $work['image'] ) {
 		return '';
 	}
@@ -47,7 +51,7 @@ function cv_plate_stage( array $work ): string {
 			. cv_image( $v['id'], '(max-width: 900px) 92vw, 54vw', [ 'priority' => 0 === $i, 'alt' => $v['alt'] ] )
 			. '</span>';
 	}
-	$out .= '</span></figure>';
+	$out .= '</span></figure><div class="detail-under">';
 	if ( count( $views ) > 1 ) {
 		$out .= '<div class="detail-thumbs" role="group" aria-label="Pictures of this work">';
 		foreach ( $views as $i => $v ) {
@@ -57,17 +61,18 @@ function cv_plate_stage( array $work ): string {
 				$i,
 				0 === $i ? 'true' : 'false',
 				esc_attr( $v['alt'] ),
-				cv_image( $v['id'], '(max-width: 899px) 5rem, 9vw', [ 'priority' => true, 'alt' => '' ] )
+				cv_image( $v['id'], '(max-width: 899px) 5rem, 6vw', [ 'priority' => true, 'alt' => '' ] )
 			);
 		}
 		$out .= '</div>';
 	}
-	return $out . '</div>';
+	return $out . $under . '</div></div>';
 }
 
 /**
- * The page: the plate, the caption, and the way through the collection, with
- * the work's place in it.
+ * The page: the plate with the work's place in the archive under it, the
+ * caption — title and medium, then size and year — and the way through the
+ * collection. The arrangement is the stylesheet's (01-grid.css).
  */
 function cv_artwork_detail( WP_Post $post ): string {
 	$work  = cv_work( $post );
@@ -80,21 +85,22 @@ function cv_artwork_detail( WP_Post $post ): string {
 		? '<a href="' . esc_url( get_permalink( $p ) ) . '" rel="' . $rel . '" data-replace>' . $label . '</a>'
 		: '<span></span>';
 
+	$place = false !== $index
+		? '<p class="detail-index"><b>' . ( $index + 1 ) . '</b> of ' . count( $works ) . '</p>'
+		: '';
+
 	$gallery = esc_url( home_url( '/artwork/' ) );
 	$out     = '<article class="detail">'
 		. '<a class="detail-back detail-section" href="' . $gallery . '">Artwork</a>'
 		. '<a class="detail-back detail-close" href="' . $gallery . '" aria-label="Close, back to the gallery">Close</a>'
-		. cv_plate_stage( $work )
+		. cv_plate_stage( $work, $place )
 		. '<div class="detail-caption"><div class="detail-head"><h1 class="detail-title">' . esc_html( $work['title'] ) . '</h1>'
 		. ( $work['materials'] ? '<p class="detail-medium">' . esc_html( $work['materials'] ) . '</p>' : '' )
 		. '</div><div class="detail-facts">'
+		. ( $work['dimensions'] ? '<p class="detail-size">' . esc_html( $work['dimensions'] ) . '</p>' : '' )
 		. ( $work['year'] ? '<p class="detail-year">' . (int) $work['year'] . '</p>' : '' )
-		. ( $work['dimensions'] ? '<p>' . esc_html( $work['dimensions'] ) . '</p>' : '' )
-		. '</div>';
-	if ( false !== $index ) {
-		$out .= '<p class="detail-index"><b>' . ( $index + 1 ) . '</b> of ' . count( $works ) . '</p>';
-	}
-	$out .= '</div><nav class="detail-pager" aria-label="Between works">'
+		. '</div></div>';
+	$out .= '<nav class="detail-pager" aria-label="Between works">'
 		. $link( $prev, 'Previous', 'prev' )
 		. $link( $next, 'Next', 'next' )
 		. '</nav></article>';

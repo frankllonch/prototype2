@@ -77,17 +77,10 @@
 /* ------------------------------------------------- the other pictures */
 
 /*
- * The small pictures stand under the painting, centred on it: 29 below its
- * bottom edge and 25 apart on the final sheet at 1920. Where the column itself
- * stands is in 01-grid.css, with the rest of the detail page.
+ * The small pictures stand in a row under the painting, centred on it. Their
+ * size, the gaps and where the row stands are with the rest of the detail page
+ * in 01-grid.css (THE DETAIL PAGE).
  */
-.detail-stage {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5vw;
-}
-.detail-stage .detail-plate { align-self: stretch; }
 
 /* Only one picture is ever on the plate. The rest are kept out of layout, not
    merely hidden, so a lazy one does not load until it is asked for and the
@@ -96,7 +89,7 @@
 .detail-view.is-shown { display: block; }
 /* Fitted to the painted part of a cut-out by client/views.ts: the transparent
    canvas round it hangs outside, clipped so it cannot catch the pointer. */
-.detail-view.is-fitted { overflow: clip; overflow-clip-margin: 1px; }
+.detail-view.is-fitted { overflow: clip; overflow-clip-margin: 4px; }
 /* A formatting context of their own, or the picture's negative top margin
    collapses through the frame and lifts the frame with it. */
 .detail-view.is-fitted, .detail-thumb { display: flow-root; }
@@ -106,8 +99,7 @@
 .detail-thumbs {
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
-  gap: 1.3vw;
+  gap: var(--thumb-gap);
 }
 
 /* Small, quiet, and not a plate: no shadow and no lean, so there is no doubt
@@ -129,7 +121,3 @@
 .detail-thumb:not(.is-shown):hover,
 .detail-thumb:not(.is-shown):focus-visible { opacity: 0.7; }
 .detail-thumb:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
-
-@media (max-width: 899px) {
-  .detail-thumb { height: 3.6rem; }
-}
