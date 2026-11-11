@@ -1482,3 +1482,79 @@ html:not(.js) .wc-text-closed {
     transition: none;
   }
 }
+
+/*
+ * The second edition's colour chart, at the foot of its page.
+ *
+ * Measured off her sheet at 1920: twenty bars of 61 across the full 1824,
+ * spread edge to edge; every bar standing on one line, 0.7 of the width below
+ * the top of the names; each name upright, reading down, its capitals to the
+ * right against its bar's edge; and the bars' own heights written on them.
+ * Horizontal measures stay true to the width like the sheet's columns; the
+ * heights scale with the type, as the sheet's air does, so a name and its bar
+ * keep the distance she drew between them.
+ *
+ *   --chart-top   the air above the chart
+ *   --bar-gap     the least room between a name and its bar: the bar gives
+ *                 way rather than run into a long name
+ */
+.wc-chart {
+  --sheet-w: calc(min(100vw, 2160px) - 2 * var(--pad));
+  --sheet-v: calc(var(--sheet-w) * var(--wc-zoom, 1));
+  display: flex;
+  justify-content: space-between;
+  height: calc(var(--sheet-v) * 0.7004);
+  margin-top: calc(var(--sheet-v) * var(--chart-top, 0.0794));
+  font-size: calc(var(--sheet-w) * 0.021930 * var(--wc-zoom, 1));
+}
+.wc-bar {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  width: calc(var(--sheet-w) * 0.03344);
+  color: var(--ink);
+  text-decoration: none;
+  transition: opacity 0.45s ease;
+}
+.wc-bar-name {
+  align-self: flex-end;
+  writing-mode: vertical-rl;
+  /* Every glyph turned with the line, punctuation included: left to the
+     default, an apostrophe stands upright and reads as a stray dash. */
+  text-orientation: sideways;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.wc-bar-fill {
+  flex: 0 1 auto;
+  min-height: 0;
+  height: calc(var(--sheet-v) * var(--bar-h, 0.5));
+  margin-top: auto;
+  background: var(--bar-c, var(--ink));
+}
+/* The room a bar keeps from its name, whatever the name's length. */
+.wc-bar-name {
+  margin-bottom: calc(var(--sheet-v) * var(--bar-gap, 0.012));
+}
+
+/* Pointing at one bar lets the others fall back, as the names do. */
+@media (hover: hover) {
+  .wc-chart:has(a.wc-bar:hover) .wc-bar:not(:hover) {
+    opacity: 0.35;
+  }
+}
+.wc-chart:has(a.wc-bar:focus-visible) .wc-bar:not(:focus-visible) {
+  opacity: 0.35;
+}
+a.wc-bar:focus-visible {
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wc-bar {
+    transition: none;
+  }
+}

@@ -208,7 +208,39 @@ function cv_wc_edition( array $edition ): string {
 		. ( $table ? cv_wc_sheet( $edition, $table ) : cv_wc_edition_list( $edition ) );
 	// The names, not the film: someone at the foot of an edition asking for all
 	// of What's Color? means the roster, so this points past the film.
-	return $out . '<p class="wc-back"><a href="' . esc_url( home_url( '/#whats-color' ) ) . '">All of What&rsquo;s Color?</a></p></div>';
+	return $out . '<p class="wc-back"><a href="' . esc_url( home_url( '/#whats-color' ) ) . '">All of What&rsquo;s Color?</a></p>'
+		. cv_wc_chart( $edition ) . '</div>';
+}
+
+/**
+ * The edition's colour chart, at the very foot of its page — chart() in
+ * whats-color.ts: a bar of each person's colour standing on one line, the name
+ * upright above it, as the sheet places them (read from the theme's copy of
+ * the sheets). A bar leads to that person's answer; someone who never
+ * answered has a bar that is only a bar.
+ */
+function cv_wc_chart( array $edition ): string {
+	$bars = cv_wc_sheet_data()['charts'][ $edition['numeral'] ] ?? null;
+	if ( ! $bars ) {
+		return '';
+	}
+	$people = [];
+	foreach ( ( $edition['roster'] ?: $edition['participants'] ) as $p ) {
+		$people[ cv_wc_key( $p['name'] ) ] = $p;
+	}
+	$out = '<section class="wc-chart" aria-label="Their colours">';
+	foreach ( $bars as $bar ) {
+		$person = $people[ cv_wc_key( $bar['who'] ) ] ?? null;
+		$paint  = is_array( $bar['colour'] )
+			? 'linear-gradient(90deg, ' . $bar['colour'][0] . ' 50%, ' . $bar['colour'][1] . ' 50%)'
+			: $bar['colour'];
+		$style  = '--bar-h: ' . cv_num( $bar['h'] ) . '; --bar-c: ' . $paint;
+		$inner  = '<span class="wc-bar-name">' . esc_html( $bar['label'] ?? $bar['who'] ) . '</span><span class="wc-bar-fill"></span>';
+		$out   .= $person && '' !== $person['id']
+			? '<a class="wc-bar" href="#' . esc_attr( $person['id'] ) . '" style="' . esc_attr( $style ) . '">' . $inner . '</a>'
+			: '<span class="wc-bar" style="' . esc_attr( $style ) . '">' . $inner . '</span>';
+	}
+	return $out . '</section>';
 }
 
 /** Editions without a sheet: the statement as one block, then the answers under it. */
@@ -246,6 +278,7 @@ function cv_wc_sheet_data(): array {
 	return $data;
 }
 
+/** The three composed sheets — the copy also carries the colour charts, set apart from these. */
 function cv_wc_sheets(): array {
 	return array_intersect_key( cv_wc_sheet_data(), [ 'I' => 1, 'II' => 1, 'III' => 1 ] );
 }

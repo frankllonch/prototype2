@@ -5,9 +5,16 @@ import {
   SHEET_I,
   SHEET_II,
   SHEET_III,
+  CHART_II,
+  type ChartBar,
   type Plate,
   type SheetSlot,
 } from '../content/whats-color-sheet.ts';
+
+/** The editions with a colour chart at their foot, by numeral. */
+const CHARTS: Record<string, readonly ChartBar[] | undefined> = {
+  II: CHART_II,
+};
 
 /** The editions the designer composed by hand, by numeral. */
 const SHEETS: Record<string, readonly SheetSlot[] | undefined> = {
@@ -367,7 +374,36 @@ export function whatsColorEdition(edition: Edition): Html {
       does.
     -->
     <p class="wc-back"><a href="${withBase('/#whats-color')}">All of What&rsquo;s Color?</a></p>
+    ${chart(edition)}
   </div>`;
+}
+
+/**
+ * The edition's colour chart, at the very foot of its page: a bar of each
+ * person's colour, standing on one line, the name upright above it. A bar
+ * leads to that person's answer the way their name in the roster does —
+ * travelling down to it and bringing it forward — and someone who never
+ * answered has a bar that is only a bar.
+ */
+function chart(edition: Edition): Html {
+  const bars = CHARTS[edition.numeral];
+  if (!bars) return html``;
+  const people = new Map((edition.roster ?? edition.participants).map((p) => [p.name, p]));
+  return html`<section class="wc-chart" aria-label="Their colours">
+    ${join(
+      bars.map((bar) => {
+        const person = people.get(bar.who);
+        const paint = typeof bar.colour === 'string'
+          ? bar.colour
+          : `linear-gradient(90deg, ${bar.colour[0]} 50%, ${bar.colour[1]} 50%)`;
+        const style = `--bar-h: ${String(bar.h)}; --bar-c: ${paint}`;
+        const inner = html`<span class="wc-bar-name">${bar.label ?? bar.who}</span><span class="wc-bar-fill"></span>`;
+        return person?.id
+          ? html`<a class="wc-bar" href="#${person.id}" style="${style}">${inner}</a>`
+          : html`<span class="wc-bar" style="${style}">${inner}</span>`;
+      }),
+    )}
+  </section>`;
 }
 
 /**

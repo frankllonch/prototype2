@@ -79,11 +79,17 @@ async function main() {
   // site places it (src/content/whats-color-sheet.ts). The placement is
   // layout, owned by the design; the theme reads it from here rather than
   // keeping a copy that drifts every time a sheet is re-traced. Each reel
-  // travels inside its sheet, on the slot that places it.
+  // travels inside its sheet, on the slot that places it; the colour charts
+  // at the editions' feet travel beside the sheets, by numeral.
   const sheets = await import('../src/content/whats-color-sheet.ts');
   await writeFile(
     path.join(ASSETS, 'whats-color-sheets.json'),
-    JSON.stringify({ I: sheets.SHEET_I, II: sheets.SHEET_II, III: sheets.SHEET_III }),
+    JSON.stringify({
+      I: sheets.SHEET_I,
+      II: sheets.SHEET_II,
+      III: sheets.SHEET_III,
+      charts: { II: sheets.CHART_II },
+    }),
   );
 
   console.log(`Theme assets: ${parts.length} stylesheets into site.css, ${files.length} modules, fonts, film, About photographs.`);
