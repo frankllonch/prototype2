@@ -4,9 +4,10 @@
  *
  * The opening view: the note written word by word as the reader scrolls, one
  * run of names per edition, and the three editions' own writing beneath. An
- * edition's own page: its whole roster, then the designer's composed sheet
- * (editions I to III) or, for an edition she has not composed, the statement
- * with the answers in three columns.
+ * edition's own page: its whole roster, then the designer's composed sheet —
+ * a reel of photographs, then the entries in three columns (editions I to
+ * III) — or, for an edition she has not composed, the statement with the
+ * answers in three columns.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -28,15 +29,15 @@ function cv_num( $n ): string {
  *
  * On an edition's own page a name goes straight to that person's answer; on
  * the opening view to the answer on its edition's page, the address carrying
- * the person. A name with no answer has nothing to point at, and on an
- * edition's page stands in the sentence as a name rather than a link.
+ * the person. A name with no answer has nothing to point at, on either view,
+ * and stands in the sentence as a name rather than a link, set like the rest.
  */
 function cv_wc_names( array $participants, ?string $within = null ): string {
 	$out = '<p class="wc-names">';
 	foreach ( $participants as $i => $p ) {
 		$sep   = $i > 0 ? '<span class="wc-sep">, </span>' : '';
 		$paint = sprintf( '--swatch: %s; --swatch-ink: var(--%s)', esc_attr( $p['colour'] ), cv_ink_on( $p['colour'] ) );
-		if ( $within && '' === $p['id'] ) {
+		if ( '' === $p['id'] ) {
 			$out .= $sep . '<span class="wc-name" style="' . $paint . '">' . esc_html( $p['name'] ) . '</span>';
 			continue;
 		}
@@ -57,7 +58,7 @@ function cv_wc_opening( array $editions ): string {
 		$out .= '<section class="wc-group"><div class="wc-rise">'
 			. '<p class="wc-numeral" aria-hidden="true">(' . esc_html( $edition['numeral'] ) . ')</p>'
 			. '<h2 class="sr-only">What&rsquo;s Color? (' . esc_html( $edition['numeral'] ) . ')</h2>'
-			. cv_wc_names( $edition['participants'] )
+			. cv_wc_names( $edition['roster'] ?: $edition['participants'] )
 			. '</div></section>';
 	}
 	return $out . cv_wc_texts( $editions ) . '</div>';
@@ -69,6 +70,10 @@ function cv_wc_opening( array $editions ): string {
  * the question given almost three times a word's share and followed by a held
  * pause, the slices fractions of a travel the stylesheet sets
  * (--wc-write-length must agree with SCREENS).
+ *
+ * A blank line in the text starts a new paragraph; the last of several is the
+ * invitation, set semibold in capitals. The question's words are joined, the
+ * space between them inside the colour, so the band runs unbroken.
  */
 function cv_wc_write_on( string $text ): string {
 	// No note, no section: an empty one would still take its screens of
@@ -76,7 +81,11 @@ function cv_wc_write_on( string $text ): string {
 	if ( '' === trim( $text ) ) {
 		return '';
 	}
-	$words   = preg_split( '/\s+/u', trim( $text ) );
+	$paragraphs = array_map(
+		fn( $p ) => preg_split( '/\s+/u', trim( $p ) ),
+		preg_split( '/\R\s*\R/u', trim( $text ) )
+	);
+	$words   = array_merge( ...$paragraphs );
 	$screens = 2.4;
 	$cover   = $screens + 1;
 	$start   = 1;
@@ -97,38 +106,53 @@ function cv_wc_write_on( string $text ): string {
 	$pause = 14;
 	$total = array_sum( $weights ) + ( $last >= 0 ? $pause : 0 );
 	$at    = 0;
-	$n     = count( $words );
-	$out   = '<section class="wc-write"><div class="wc-write-pin"><p class="wc-lead">';
-	foreach ( $words as $i => $word ) {
-		$from = $start + ( $at / $total ) * ( $end - $start );
-		$at  += $weights[ $i ];
-		if ( $i === $last ) {
-			$at += $pause;
+	$i     = 0;
+	$count = count( $paragraphs );
+	$out   = '<section class="wc-write"><div class="wc-write-pin"><div class="wc-lead-block">';
+	foreach ( $paragraphs as $p => $list ) {
+		$out .= '<p class="wc-lead' . ( $p > 0 && $p === $count - 1 ? ' wc-lead-call' : '' ) . '">';
+		$len  = count( $list );
+		foreach ( $list as $k => $word ) {
+			$n    = $i++;
+			$from = $start + ( $at / $total ) * ( $end - $start );
+			$at  += $weights[ $n ];
+			if ( $n === $last ) {
+				$at += $pause;
+			}
+			$width  = ( $weights[ $n ] / $total ) * ( $end - $start ) * 2.3;
+			$to     = min( $from + $width, $end + 0.04 );
+			$is_end = $k === $len - 1;
+			$joined = $marked( $word ) && ! $is_end && $marked( $list[ $k + 1 ] );
+			// %F, not %f: written the same whatever the server's locale, which in
+			// Spanish or Catalan would put a comma in the number and void the rule.
+			$range = sprintf( 'animation-range: cover %.2F%% cover %.2F%%', $from / $cover * 100, $to / $cover * 100 );
+			if ( $marked( $word ) && preg_match( '/^(.*?)([.,:;]*)$/u', $word, $parts ) ) {
+				$class = 'wc-ask'
+					. ( 0 === $n || ! $marked( $words[ $n - 1 ] ) ? ' wc-ask-start' : '' )
+					. ( $joined ? '' : ' wc-ask-end' );
+				$inner = '<mark class="' . $class . '">' . esc_html( $parts[1] ) . ( $joined ? "\u{00A0}" : '' ) . '</mark>' . esc_html( $parts[2] );
+			} else {
+				$inner = esc_html( $word );
+			}
+			// The last two words of a paragraph held together, so it never ends on
+			// one word; joined words already carry their space inside the colour.
+			$gap  = $is_end || $joined ? '' : ( $k === $len - 2 ? '&nbsp;' : ' ' );
+			$out .= '<span class="wc-word" style="' . $range . '">' . $inner . '</span>' . $gap;
 		}
-		$width = ( $weights[ $i ] / $total ) * ( $end - $start ) * 2.3;
-		$to    = min( $from + $width, $end + 0.04 );
-		// %F, not %f: written the same whatever the server's locale, which in
-		// Spanish or Catalan would put a comma in the number and void the rule.
-		$range = sprintf( 'animation-range: cover %.2F%% cover %.2F%%', $from / $cover * 100, $to / $cover * 100 );
-		if ( $marked( $word ) && preg_match( '/^(.*?)([.,:;]*)$/u', $word, $parts ) ) {
-			$inner = '<mark class="wc-ask">' . esc_html( $parts[1] ) . '</mark>' . esc_html( $parts[2] );
-		} else {
-			$inner = esc_html( $word );
-		}
-		// The last two words held together, so the block never ends on one word.
-		$out .= '<span class="wc-word" style="' . $range . '">' . $inner . '</span>' . ( $i === $n - 2 ? '&nbsp;' : ' ' );
+		$out .= '</p>';
 	}
-	return $out . '</p></div></section>';
+	return $out . '</div></div></section>';
 }
 
 /**
- * The three editions' writing at the foot of the opening view, I to III: a
- * heading line, then the text cut where the start-page sheet cuts it, the rest
- * behind "Read more". Without scripting the whole text stands open.
+ * The three editions' writing at the foot of the opening view, newest first,
+ * III to I, in the order of the rosters above: a heading line, then the text
+ * cut where the start-page sheet cuts it, the rest behind "Read more".
+ * Without scripting the whole text stands open.
  */
 function cv_wc_texts( array $editions ): string {
 	$out = '<section class="wc-texts" aria-label="About the three editions">';
-	foreach ( array_reverse( $editions ) as $edition ) {
+	foreach ( $editions as $edition ) {
 		$o = $edition['opening'];
 		if ( ! $o ) {
 			continue;
@@ -210,8 +234,8 @@ function cv_wc_edition_list( array $edition ): string {
  * so a sheet re-traced on the static site arrives here with the next build.
  *
  * Each slot: who (a participant, by name), say (one of the edition's
- * paragraphs, by position), plate, title, strip, col, drop, lead (the air
- * above it, as a share of the sheet's width), rule.
+ * paragraphs, by position), title, strip (the reel's photographs, in order),
+ * col, drop, lead (the air above it, as a share of the sheet's width), rule.
  */
 function cv_wc_sheet_data(): array {
 	static $data = null;
@@ -226,26 +250,23 @@ function cv_wc_sheets(): array {
 	return array_intersect_key( cv_wc_sheet_data(), [ 'I' => 1, 'II' => 1, 'III' => 1 ] );
 }
 
-/** The photographs of the book, in the order the third edition's sheet runs them. */
-function cv_wc_books(): array {
-	return cv_wc_sheet_data()['books'] ?? [];
-}
-
 /** `--lead: …`, or nothing when the slot carries none. */
 function cv_wc_air( $lead ): string {
 	return null === $lead ? '' : '--lead: ' . cv_num( $lead );
 }
 
 /**
- * The row of photographs of the book. Each is a real link to the photograph,
- * so without scripting a click still shows the picture; with it, the script
- * opens the same picture over the page instead.
+ * An edition's reel: its photographs in one row, all one height, each cell at
+ * its file's shape — or the sheet's, where she frames it a shade tighter. Each
+ * is a real link to the photograph, so without scripting a click still shows
+ * the picture; with it, the script opens the same picture over the page.
  */
-function cv_wc_strip( $lead = null ): string {
+function cv_wc_strip( array $plates, $lead = null ): string {
 	$out = '<div class="wc-strip" style="' . cv_wc_air( $lead ) . '">';
-	foreach ( cv_wc_books() as $book ) {
-		$jpg  = cv_asset( 'img/' . $book['name'] . '.jpg' );
-		$out .= '<a class="wc-book" href="' . esc_url( $jpg ) . '" data-book>'
+	foreach ( $plates as $book ) {
+		$jpg   = cv_asset( 'img/' . $book['name'] . '.jpg' );
+		$shape = isset( $book['cell'] ) ? cv_num( $book['cell'] ) : (int) $book['w'] . ' / ' . (int) $book['h'];
+		$out  .= '<a class="wc-book" href="' . esc_url( $jpg ) . '" style="aspect-ratio: ' . $shape . '" data-book>'
 			. '<picture>'
 			. '<source srcset="' . esc_url( cv_asset( 'img/' . $book['name'] . '.webp' ) ) . '" type="image/webp" />'
 			. '<img src="' . esc_url( $jpg ) . '" alt="' . esc_attr( $book['alt'] ) . '"'
@@ -255,7 +276,7 @@ function cv_wc_strip( $lead = null ): string {
 	return $out . '</div>';
 }
 
-/** Where a clicked photograph of the book opens. Empty and hidden until the script fills it. */
+/** Where a clicked photograph opens. Empty and hidden until the script fills it. */
 function cv_wc_book_view(): string {
 	return '<div class="wc-book-view" data-book-view hidden><figure class="wc-book-plate" data-book-plate></figure></div>';
 }
@@ -302,24 +323,12 @@ function cv_wc_sheet( array $edition, array $table ): string {
 		if ( ! empty( $slot['strip'] ) ) {
 			$band  = null;
 			$strip = true;
-			$out  .= cv_wc_strip( $lead );
+			$out  .= cv_wc_strip( $slot['strip'], $lead );
 			continue;
 		}
 		if ( isset( $slot['say'] ) ) {
 			$band = null;
 			$out .= '<p class="wc-say" style="' . cv_wc_air( $lead ) . '">' . ( $edition['says'][ $slot['say'] ] ?? '' ) . '</p>';
-			continue;
-		}
-		if ( isset( $slot['plate'] ) ) {
-			if ( ! empty( $slot['col'] ) ) {
-				if ( null !== $lead ) {
-					$band = $lead;
-				}
-				$out .= cv_wc_plate( $slot['plate'], $slot, $band );
-			} else {
-				$band = null;
-				$out .= cv_wc_plate( $slot['plate'], $slot, $lead );
-			}
 			continue;
 		}
 		if ( null !== $lead ) {
@@ -362,24 +371,6 @@ function cv_wc_sheet_title( array $edition, $lead = null ): string {
 		. '<strong>What&rsquo;s Color? (' . esc_html( $edition['numeral'] ) . ')</strong>'
 		. ( '' !== $tail ? ' ' . esc_html( $tail ) : '' )
 		. '</p>';
-}
-
-/**
- * A photograph on the sheet: across all three columns, or in one of them
- * where the design sets a pair side by side. The shape it is cropped to rides
- * on the element — always stated, because these load lazily and an `auto`
- * ratio gives a lazy image no height until it arrives.
- */
-function cv_wc_plate( array $p, array $slot, $lead = null ): string {
-	$shape  = '--plate-aspect: ' . cv_num( $p['aspect'] ?? $p['w'] / $p['h'] );
-	$column = ! empty( $slot['col'] ) ? '--col: ' . (int) $slot['col'] . '; --drop: ' . (int) ( $slot['drop'] ?? 0 ) : '';
-	$style  = implode( '; ', array_filter( [ $shape, $column, cv_wc_air( $lead ) ] ) );
-	return '<figure class="wc-plate' . ( ! empty( $slot['col'] ) ? ' wc-plate-col' : '' ) . '" style="' . esc_attr( $style ) . '">'
-		. '<picture>'
-		. '<source srcset="' . esc_url( cv_asset( 'img/' . $p['name'] . '.webp' ) ) . '" type="image/webp" />'
-		. '<img src="' . esc_url( cv_asset( 'img/' . $p['name'] . '.jpg' ) ) . '" alt="' . esc_attr( $p['alt'] ) . '"'
-		. ' width="' . (int) $p['w'] . '" height="' . (int) $p['h'] . '" loading="lazy" decoding="async" />'
-		. '</picture></figure>';
 }
 
 /**
