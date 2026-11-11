@@ -30,7 +30,6 @@ export const ABANDONED = 6000;
  */
 const REVEAL_GUARD = 1600;
 export function initTransitions() {
-    loader();
     const root = document.documentElement;
     /**
      * One departure at a time, held here rather than per click.
@@ -121,34 +120,4 @@ export function initTransitions() {
         window.setTimeout(() => { if (!document.hidden)
             arrive(); }, ABANDONED);
     });
-}
-/**
- * The loading screen goes as soon as the page has loaded — but not before it has
- * been on screen long enough to be seen. A static site on a warm cache loads in
- * a few hundred milliseconds, which would show the colour turning perhaps once
- * and read as a flash of the wrong page rather than as an opening.
- *
- * If this never runs, the stylesheet takes the screen away on a delay anyway.
- */
-const MIN_DWELL = 1600;
-function loader() {
-    const el = document.querySelector('[data-loader]');
-    if (!el)
-        return;
-    // One per session: it belongs to arriving at the site, not to every page of it.
-    // The reading is done by the inline script in the head, which has to decide
-    // before anything is painted.
-    try {
-        sessionStorage.setItem('cv-seen', '1');
-    }
-    catch { /* private mode: shown again, which is harmless */ }
-    const start = performance.now();
-    const done = () => {
-        const waited = performance.now() - start;
-        window.setTimeout(() => el.classList.add('is-done'), Math.max(0, MIN_DWELL - waited));
-    };
-    if (document.readyState === 'complete')
-        done();
-    else
-        window.addEventListener('load', done, { once: true });
 }

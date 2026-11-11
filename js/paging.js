@@ -43,27 +43,30 @@ function galleryIsBehind(back) {
     }
 }
 function backStepsBack() {
-    const back = document.querySelector('.detail-back');
-    if (!back || !galleryIsBehind(back))
+    // The page's two corners at the top — the section's name and Close — both
+    // lead back to the gallery.
+    const links = [...document.querySelectorAll('.detail-back')];
+    if (!links.length || !galleryIsBehind(links[0]))
         return;
-    back.addEventListener('click', (event) => {
-        if (!isPlainClick(event))
-            return;
-        event.preventDefault();
-        /*
-         * Faded on the way out, the same as any other departure. Stepping back is
-         * instant — that is the point of it — and arriving instantly is what made
-         * it feel abrupt beside the fade going in. The veil covers the change and
-         * `pageshow` clears it at the other end, which fires whether the gallery
-         * is rebuilt or resumed from the back/forward cache.
-         */
-        if (reduceMotion.matches) {
-            window.history.back();
-            return;
-        }
-        document.documentElement.classList.add('is-leaving');
-        window.setTimeout(() => window.history.back(), OUT_MS);
-    });
+    for (const back of links)
+        back.addEventListener('click', (event) => {
+            if (!isPlainClick(event))
+                return;
+            event.preventDefault();
+            /*
+             * Faded on the way out, the same as any other departure. Stepping back is
+             * instant — that is the point of it — and arriving instantly is what made
+             * it feel abrupt beside the fade going in. The veil covers the change and
+             * `pageshow` clears it at the other end, which fires whether the gallery
+             * is rebuilt or resumed from the back/forward cache.
+             */
+            if (reduceMotion.matches) {
+                window.history.back();
+                return;
+            }
+            document.documentElement.classList.add('is-leaving');
+            window.setTimeout(() => window.history.back(), OUT_MS);
+        });
 }
 /**
  * The left and right keys walk through the paintings.

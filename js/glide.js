@@ -24,14 +24,53 @@ const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 let journey = 0;
 const abandon = () => {
     journey = 0;
+    window.removeEventListener('wheel', holdMomentum);
 };
-for (const kind of ['wheel', 'touchmove', 'keydown']) {
+for (const kind of ['touchmove', 'keydown']) {
     window.addEventListener(kind, abandon, { passive: true });
+}
+/*
+ * The wheel is read more carefully than a touch or a key, because a trackpad
+ * goes on sending wheel events for a second or so after the fingers lift —
+ * the momentum of the last flick — and a click on a year very often lands in
+ * the middle of that tail. Taken as the reader's hand, it cancelled the
+ * journey the moment it began, and the click seemed to do nothing; let
+ * through, it scrolled against the journey and made it judder.
+ *
+ * So a wheel event is a hand only if it starts something: it follows a pause,
+ * or it pushes harder than the one before it. One in a steady, fading stream
+ * is momentum. Momentum is swallowed while a journey runs — by a listener that
+ * exists only then, since a wheel listener that can cancel slows every scroll
+ * on the page for as long as it is attached.
+ */
+let lastWheel = 0;
+let lastSpeed = 0;
+let fresh = true;
+window.addEventListener('wheel', (event) => {
+    // When the event was made, not when it is handled: the click that starts a
+    // journey keeps the page busy for a moment, and the momentum queued behind
+    // it would otherwise arrive looking like a pause.
+    const now = event.timeStamp;
+    const gap = now - lastWheel;
+    // Measured as speed, not as the size of one event: while the page is busy
+    // the browser merges the queued events into one, twice the push over twice
+    // the time, which by size alone read as a fresh, harder push.
+    const speed = (Math.abs(event.deltaY) + Math.abs(event.deltaX)) / Math.max(16, gap);
+    fresh = gap > 120 || speed > lastSpeed * 1.3 + 0.15;
+    lastWheel = now;
+    lastSpeed = speed;
+    if (journey && fresh)
+        abandon();
+}, { passive: true });
+function holdMomentum(event) {
+    if (journey && !fresh)
+        event.preventDefault();
 }
 /**
  * Take the page to a scroll position, gently. One journey at a time — a new
- * one cancels the last — and any wheel, touch or key from the reader cancels
- * it too, so the page never pulls against a hand. With motion reduced it is a
+ * one cancels the last — and a new wheel, touch or key from the reader cancels
+ * it too, so the page never pulls against a hand (a trackpad's leftover
+ * momentum does not count; see above). With motion reduced it is a
  * jump. `duration` overrides the distance-based timing.
  */
 export function glide(to, duration) {
@@ -48,6 +87,8 @@ export function glide(to, duration) {
     const ms = duration ?? Math.min(MAX_MS, BASE_MS + distance * PER_PX_MS);
     const id = ++journey;
     const t0 = performance.now();
+    window.addEventListener('wheel', holdMomentum, { passive: false });
+    const arrive = () => { journey = 0; window.removeEventListener('wheel', holdMomentum); };
     // Timed by the same clock throughout, never by the frame's own timestamp:
     // one clock cannot disagree with itself, and a frame stamp from another
     // origin would make the first step read as the last and jump to the end.
@@ -59,7 +100,7 @@ export function glide(to, duration) {
         if (t < 1)
             requestAnimationFrame(step);
         else
-            journey = 0;
+            arrive();
     };
     requestAnimationFrame(step);
     // A tab that is not being painted is granted no frames, and a journey begun
@@ -69,7 +110,7 @@ export function glide(to, duration) {
     window.setTimeout(() => {
         if (journey !== id)
             return;
-        journey = 0;
+        arrive();
         window.scrollTo({ top: target, behavior: 'auto' });
     }, ms + 400);
 }

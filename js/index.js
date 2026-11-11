@@ -3,6 +3,7 @@
  * with scripting off — tiles are real links, panels are real anchors.
  */
 import { initTextRoll } from './text-roll.js';
+import { initScramble } from './scramble.js';
 import { initTransitions } from './transitions.js';
 import { initControls } from './controls.js';
 import { initStack } from './stack.js';
@@ -20,13 +21,19 @@ import { initTilt } from './tilt.js';
 import { initPaging } from './paging.js';
 import { initViews } from './views.js';
 import { initScrollCue } from './scroll-cue.js';
+import { initAbout } from './about.js';
 import { initInquiries } from './inquiries.js';
 import { initBook } from './book.js';
 import { initWcFocus } from './focus.js';
 import { initWcTexts } from './texts.js';
 import { initGlide } from './glide.js';
 import { initWrite } from './write.js';
-initTextRoll();
+// One hover or the other, never both: the document says which, and
+// components/layout.ts is where that is decided.
+if (document.documentElement.dataset.hover === 'scramble')
+    initScramble();
+else
+    initTextRoll();
 initTransitions();
 initControls();
 initStack();
@@ -44,6 +51,7 @@ initTilt();
 initPaging();
 initViews();
 initScrollCue();
+initAbout();
 initInquiries();
 initBook();
 initWcFocus();

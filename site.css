@@ -101,18 +101,69 @@
    * phone, above it a ceiling stops it running away on a very wide screen.
    */
   --type: clamp(1rem, 2.0833vw, 3.4rem);
-  --lead: 1.25;                        /* 50 over 40 */
+  --lead: 1.25;
+
+  /*
+   * The designer's scale for the exhibitions and commissioned sheets, and the
+   * whole of it: five styles over two sizes and one leading. 45 and 40 of the
+   * 1920 frame, with 45 over 40 — 1.125 — throughout. Semibold 45 names a
+   * thing; medium 40 in capitals says what and where; light 40 does the same
+   * where there is no event, only a place; regular 40 carries years and prose.
+   */
+  --t-40: var(--type);
+  --t-45: calc(var(--type) * 1.125);
+  --lead-45: 1.125;      /* 45 over 40, the sheets own leading */
   --type-menu: clamp(0.75rem, 1.0417vw, 1.7rem);
-  /* Measured off the mockups, which agree on a fixed margin rather than a
-     proportional one: the left inset is 40px at 1866 wide, 43px at 1368 and
-     47px at 1588 — near-constant while the frames differ by 500px. 2.5rem is
-     40px; the clamp only takes over on screens narrower than the designs. */
-  --pad: clamp(1.25rem, 3.5vw, 2.5rem);
+  /*
+   * The page margin, which the mockups agree is a fixed inset rather than a
+   * proportional one: on the earlier set it measured 40px at 1866 wide, 43 at
+   * 1368 and 47 at 1588 — near-constant while the frames differ by 500px. So
+   * it stays a clamp with a flat ceiling, and only the ceiling has moved.
+   *
+   * 3.125rem is 50, which is the designer's 45pt at the 1728 she now draws at,
+   * and what every one of her final sheets measures: the wordmark's stem lands
+   * at 49–52 on all of them against the 40 this was. The bar and the pages
+   * take the same variable, so they move together and stay flush.
+   */
+  --pad: clamp(1.25rem, 3.5vw, 3.125rem);
   --gap: clamp(1.5rem, 4.5vw, 5rem);
   --bar: 5.5rem;
+  /*
+   * Where the bar's first line sits, and with it everything that lines up on
+   * it — the close control of every overlay.
+   *
+   * 3rem, off the designer's final sheets: she puts the cap of the wordmark 48
+   * below the top of the window on all of them, against the 25.6 this was. One
+   * figure rather than four literals, so the bar and the controls that answer
+   * to it can never drift apart again. `--bar`, the room kept clear below it,
+   * is unchanged: the bar's ink now ends around 64 and still has 24 to spare.
+   */
+  --bar-top: 3rem;
   /* Width kept clear for the year rail: the grid starts at 211 of the sheet's
      1654, with the rail's bars 120 wide in it. */
   --rail: clamp(9rem, 12.76vw, 17rem);
+  /*
+   * THE SIDE COLUMN — the years, in their colours, and the grid's controls
+   * under them, down the left margin (the designer's final sheet, 1920 wide).
+   *
+   *   --side-top      where the first year's capitals start on the window
+   *                   once the opening has ended. It is the first row of
+   *                   paintings: that row lands at --grid-start less the 30vh
+   *                   the pile scrolls beyond one screen (stack.ts, 1.3), so
+   *                   the two start on one line. A number in vh puts it there
+   *                   instead.
+   *   --type-side     the size of the controls — 24, 60, 181, Equal, To
+   *                   scale: 30 of the sheet's 1920. The years are the page's
+   *                   own size, --type.
+   *   --controls-gap  the space between the last year and the first control.
+   *
+   * The column is taller than a short window. It starts level with the first
+   * row and rides up with the paintings as you scroll on, until its last
+   * control is a margin above the foot of the window, then stays.
+   */
+  --side-top: calc(var(--grid-start) - 30vh);
+  --type-side: clamp(0.85rem, 1.5625vw, 2.55rem);
+  --controls-gap: 4.7vw;
   /* The gallery's gutters, off the same sheet: 43 between columns and about
      23 between rows at 1654 — tighter than the page gap, so the paintings fill
      the screen as they do there. */
@@ -132,7 +183,7 @@
    * the moment the pile has unfolded. The pile lets go after SCROLL_SPAN
    * screens of scrolling (stack.ts, 1.3), and the first row lands at
    *   (this − (SCROLL_SPAN − 1) × 100vh)
-   * from the top of the window: 52vh puts it 22vh down, under the controls.
+   * from the top of the window: 52vh puts it 22vh down.
    * Raise it to end lower, lower it to end higher.
    */
   --grid-start: 70vh;
@@ -270,84 +321,6 @@ html.is-revealed .detail { animation-name: none; }
   .feed-column:nth-child(2) { animation-delay: 0.25s; }
 }
 
-/* ---------------------------------------------------------------- loading */
-
-/*
- * The first arrival of a session: the About title, blinking through the palette,
- * while the page loads behind it.
- *
- * It has to be able to clear itself without script. The fade-out is a plain
- * animation on a delay, so a browser that never runs a line of JavaScript still
- * gets the page — the script only brings that moment forward once the load has
- * actually finished. Anything else risks a blank site, which is a far worse
- * failure than a loading screen nobody wanted.
- *
- * `visibility` rather than `display` in the final frame, so it stops taking
- * clicks and leaves the tab order without the animation having to be undone.
- */
-.loader {
-  position: fixed; inset: 0; z-index: 200;
-  display: grid;
-  align-content: center;
-  justify-items: center;
-  text-align: center;
-  gap: 0.1rem;
-  padding: var(--bar) var(--pad);
-  background: var(--blink-bg);
-  color: var(--blink-fg);
-  /*
-   * A strobe: the five pairs in under two seconds, so it flashes rather than
-   * turns.
-   * The opposite of About, which holds each colour for a second and a half.
-   *
-   * Not faster than this on purpose. The keyframes hold and then cut, so the
-   * rate you see is one change per 0.36s — under three a second, which is where
-   * the guidance on flashing stops. Anyone who has asked for less movement gets
-   * no loading screen at all rather than a slower one.
-   */
-  animation:
-    about-blink 1.8s ease-in-out infinite,
-    loader-out 0.75s var(--ease) 2.9s both;
-}
-.loader p {
-  margin: 0;
-  font-size: var(--type);
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: var(--lead);
-}
-/*
- * Once the load is done the script brings that exit forward by naming a
- * different animation in the exit's slot, exactly as `.page-veil` does.
- *
- * Shortening the delay instead does not work, and looked as though it did.
- * Changing `animation-delay` or `animation-duration` retimes an animation but
- * leaves its start time alone, so its local clock still reads the 1.6s or more
- * that has actually elapsed — already past the end of the shortened run. The
- * screen jumped to the last frame in one step rather than fading over it.
- * A new name is a new animation, which starts at its own first frame; the blink
- * keeps its name and its position in the list, so it carries on mid-turn instead
- * of snapping back to peach.
- */
-.loader.is-done {
-  animation-name: about-blink, loader-now;
-  animation-delay: 0s, 0s;
-  animation-duration: 1.8s, 0.55s;
-}
-/* Same frames, two names: one for the delayed fallback, one for the early exit. */
-@keyframes loader-out { to { opacity: 0; visibility: hidden; } }
-@keyframes loader-now { to { opacity: 0; visibility: hidden; } }
-/*
- * Never shown at all: already seen once this session, motion turned down, or no
- * scripting — in the last case nothing would be there to take it away early, and
- * a loading screen in front of a page that has already loaded is only a delay.
- */
-html.loaded .loader,
-html:not(.js) .loader { display: none; }
-@media (prefers-reduced-motion: reduce) {
-  .loader { display: none; }
-}
-
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
 body {
@@ -410,14 +383,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .wordmark, .top-soon { font-weight: 700; }
 
 
-/*
- * The gallery's own controls keep the size they had before the site went to
- * one type size. They are not text on the page: the year rail stands in the
- * margin beside the paintings and the density switch sits under them, and at
- * 40 the rail grew to 156px wide and each year to a 49px line box, which made
- * a column of eleven years taller than the window.
- */
-.years, .year-label { font-size: 11px; line-height: 1.5; }
 
 body.is-locked { overflow: hidden; }
 
@@ -473,7 +438,7 @@ body.is-locked { overflow: hidden; }
   grid-template-columns: 25.53% auto minmax(0, 1fr);
   align-items: baseline;
   gap: 0;
-  padding: 1.6rem var(--pad) 1rem;
+  padding: var(--bar-top) var(--pad) 1rem;
   pointer-events: none;
   mix-blend-mode: difference;
 }
@@ -508,8 +473,30 @@ body.is-locked { overflow: hidden; }
   white-space: nowrap;
   cursor: pointer;
 }
+/*
+ * The bar passes the pointer through; only what you can actually press takes
+ * it. `.top > *` once covered this, but the third of those children is the
+ * nav, which is a column 853px wide holding five short words — so most of it
+ * was an invisible catcher laid over the page. The links take the pointer, the
+ * box they sit in does not.
+ */
 .top > * { pointer-events: auto; }
-.wordmark { letter-spacing: 0.033em; white-space: nowrap; }
+.menu { pointer-events: none; }
+.menu a { pointer-events: auto; }
+
+/*
+ * The wordmark is as wide as the wordmark.
+ *
+ * It sits in a grid column a quarter of the page across, and a grid item fills
+ * its column unless told otherwise — so its box ran 337px for 145px of
+ * lettering, and the roll answered anywhere in the 192px of nothing beside it.
+ * Hovering near the title, not on it, turned it over.
+ */
+.wordmark {
+  justify-self: start;
+  letter-spacing: 0.033em;
+  white-space: nowrap;
+}
 /* Evenly spaced, and the sheet says how far apart: 75px of 1866, four times
    over, to within a pixel each time. */
 .menu { display: flex; justify-content: flex-end; gap: clamp(1rem, 4.019vw, 4.7rem); }
@@ -533,29 +520,31 @@ body.is-locked { overflow: hidden; }
  * rest: over paper, 3 against 27, where it used to be 36 against 150. The step
  * is still there and it is the same one the opening film has always used.
  */
+.top { --bar-ink: rgb(252, 252, 250); }
 .wordmark,
 .menu a:hover, .menu a:focus-visible, .menu a[aria-current='page'],
-.top { --bar-ink: rgb(252, 252, 250); }
 .top-soon:hover, .top-soon:focus-visible, .top-soon[aria-current='page'] { color: var(--bar-ink); }
 
 .menu a, .top-soon { color: rgb(228, 228, 226); transition: color var(--hover) var(--ease); }
 
 /*
- * The grid's controls — the three sizes, and equal against to scale — stand at
- * the top right under the bar, at the page's one type size, and are drawn the
- * way the bar is: as the negative of whatever scrolls under them, so they
- * stay legible when the grid flows beneath. Same colours as the menu — the
- * chosen one bright, the rest a step back — until the script names the chosen
- * one in a colour from the site's list (client/controls.ts).
+ * The grid's controls — the three sizes, and equal against to scale — one to a
+ * line in the left margin under the years (the knobs are with --rail, under
+ * THE SIDE COLUMN), and drawn the way the bar is: as the negative of whatever
+ * is under them. Same colours as the menu — the chosen one bright, the rest a
+ * step back — until the script names the chosen one in a colour from the
+ * site's list (client/controls.ts). Where the column stands, and how it rides
+ * up with the scroll, is in 03-years.css.
  */
 .controls {
-  position: fixed; right: var(--pad); top: var(--bar); z-index: 30;
-  display: flex; align-items: baseline; gap: 2em;
-  font-size: var(--type); line-height: var(--lead);
+  position: fixed; z-index: 30;
+  left: var(--pad);
+  display: flex; flex-direction: column; align-items: flex-start;
+  font-size: var(--type-side); line-height: var(--side-lead);
   mix-blend-mode: difference;
   transition: opacity 0.8s var(--ease);
 }
-.control-group { display: flex; gap: 1em; }
+.control-group { display: flex; flex-direction: column; align-items: flex-start; }
 .control {
   color: rgb(228, 228, 226);
   transition: color var(--hover) var(--ease);
@@ -576,18 +565,35 @@ body.is-locked { overflow: hidden; }
  * Pointer events off: it says where to go, it does not go there, so the film
  * and the tiles under it stay clickable.
  */
+/*
+ * The two knobs for the scroll-down chevron, shared by the page's cue and the
+ * one inside About so they cannot drift apart.
+ *
+ *   --cue-size    how wide the chevron is
+ *   --cue-stroke  how heavy its line is, in the drawing's own units (the
+ *                 chevron is 28 wide, so 2 is a hairline and 5 is bold)
+ */
+:root {
+  --cue-size: 2.8rem;
+  --cue-stroke: 4.5;
+}
+
 .scroll-cue {
   position: fixed;
   left: 50%;
   bottom: 1.9rem;
   /* Under the bar, over the page. */
   z-index: 35;
-  width: 1.6rem;
-  margin-left: -0.8rem;
+  width: var(--cue-size);
+  margin-left: calc(var(--cue-size) / -2);
   pointer-events: none;
   transition: opacity 0.7s var(--ease);
 }
-.scroll-cue svg { display: block; width: 100%; height: auto; }
+/* The stroke is set here rather than on the path so the knob reaches it, and
+   the drawing may spill past its box: a heavy line on a chevron drawn 1.5 from
+   the edge would otherwise lose its top corners. */
+.scroll-cue svg, .about-cue svg { display: block; width: 100%; height: auto; overflow: visible; }
+.scroll-cue path, .about-cue path { stroke-width: var(--cue-stroke); }
 
 /* Taken, and so no longer a cue. `client/scroll-cue.ts` sets this once, on the
    first movement worth the name, and never takes it off. */
@@ -626,7 +632,7 @@ html.is-scrolled .scroll-cue { opacity: 0; }
 
 /* No room to spare, and a phone's own scrollbar already says the page is long. */
 @media (max-width: 899px) {
-  .scroll-cue { bottom: 1.1rem; width: 1.3rem; margin-left: -0.65rem; }
+  .scroll-cue { bottom: 1.1rem; --cue-size: 2rem; }
 }
 
 @media (max-width: 899px) {
@@ -702,8 +708,11 @@ html.is-scrolled .scroll-cue { opacity: 0; }
   padding-bottom: 0.18em; margin-bottom: -0.18em; }
 .roll::before, .roll::after {
   content: attr(data-ch); position: absolute; left: 0; top: 0; color: var(--roll-color, var(--ink));
-  transition: transform 260ms ease-in-out, opacity 260ms ease-in-out;
-  transition-delay: calc(var(--i) * 25ms);
+  transition: transform 350ms ease-in-out, opacity 260ms ease-in-out;
+  /* Each character a step behind the one before it, going and coming back:
+     staggered, the word turns over; in step, it swaps all at once, which
+     reads as the two copies trading places rather than as one roll. */
+  transition-delay: calc(var(--i) * 60ms);
 }
 .roll::after { transform: translateY(100%); opacity: 0; }
 [data-roll]:hover .roll::before { transform: translateY(-100%); opacity: 0; }
@@ -1055,6 +1064,25 @@ html {
   to { transform: translateY(calc(100vh - var(--thumb-h, 0px))); }
 }
 
+/* ---------------------------------------------------------- text scramble */
+
+/*
+ * The churning hover's characters.
+ *
+ * Each keeps the width it measured while the word was still, so whatever
+ * nonsense lands in it cannot push the word wider and shove the rest of the
+ * bar along — every position up there was set against the designer's sheet and
+ * none of it may move. A piece too wide for its box is centred and cut rather
+ * than allowed to spread.
+ */
+.scram {
+  display: inline-block;
+  width: var(--w);
+  overflow: hidden;
+  text-align: center;
+  white-space: pre;
+}
+
 /* ------------------------------------------------------------------ hero */
 
 /* A screen of empty ground under the wordmark. The stack is drawn over it by
@@ -1111,8 +1139,7 @@ html:not(.js) .hero,
  *
  * The amount is `--grid-start`, set with the other knobs in 00-base.css: the
  * pile lets go after SCROLL_SPAN screens (stack.ts), so the first row lands at
- * `--grid-start` minus the scroll past the first screen. It is set so the row
- * comes to rest under the controls at the top right.
+ * `--grid-start` minus the scroll past the first screen.
  *
  * Only where the pile actually runs. `stack.ts` deletes the hero on every path
  * where it does not — reduced motion, or no tiles to pile — and the sibling
@@ -1212,10 +1239,13 @@ html.js .hero[data-hero]+.grid[data-stack] {
   object-fit: contain;
 }
 
-/* While the stack is dispersing, tiles move every frame: no size transitions,
-   and a compositing hint. Cleared once they settle. */
+/* While the stack is dispersing, tiles move every frame: no size transitions.
+   Each is its own layer while it moves (is-layered), and keeps it for a
+   moment after the grid settles — client/stack.ts releases it when idle. */
 .grid.is-stacked .tile {
   transition: none;
+}
+.grid.is-layered .tile {
   will-change: transform;
 }
 
@@ -1279,154 +1309,265 @@ html.js .hero[data-hero]+.grid[data-stack] {
 /* ---------------------------------------------------------------- detail */
 
 /*
- * One screen, never more. The page is the height of the window and nothing in
- * it scrolls: the back link on the first row, the painting and its caption on
- * the second, which takes whatever height is left, and the pager on the last.
- * The painting is then sized to its cell (see .detail-plate), so a tall work
- * shrinks rather than pushing the pager below the fold.
+ * One screen, never more, after the designer's sheet of 11 November (measured
+ * at 2000 × 1125 and given here at 1920 × 1080). No menu: the four corners say
+ * where to go — the section and Close at the top, Previous and Next at the
+ * foot. On plain white paper:
+ *
+ *   - the painting and the caption stand side by side, and the two together
+ *     are centred across the page, whatever the painting's shape;
+ *   - the caption, from the title's capitals to the year's baseline, is
+ *     centred on the painting's middle, and the painting's middle is a fixed
+ *     line down the window;
+ *   - under the painting, centred on it, its other pictures, and under those
+ *     the work's place in the archive.
+ *
+ * THE DETAIL PAGE — the numbers to change are all here.
+ *
+ *   --edge           how far the four corner words stand in from the sides of
+ *                    the window: 48 of 1920.
+ *   --edge-v         and from its top and foot: 50 of 1920.
+ *   --axis           the line the painting and the caption are centred on,
+ *                    down the window: 521 of 1080.
+ *   --plate-max      the most height the painting may take: 519 of 1080. A
+ *                    wide work is held by the room across instead and comes
+ *                    out shorter, still on the same line.
+ *   --text-gap       from the painting's right edge to the caption's column:
+ *                    249 of 1920, which with the first letter's own margin is
+ *                    the sheet's 252 from paint to ink.
+ *   --text-w         the caption's column: 265 of 1920, which is what centres
+ *                    the sheet's painting and caption on the page exactly. A
+ *                    longer title widens it, up to --text-max, and the pair
+ *                    re-centres.
+ *   --caption-rise   how far the caption stands above the painting's exact
+ *                    middle: the sheet sets it a hair high, 2 of 1080.
+ *   --under-gap      from the painting's foot to the small pictures: 25 of 1080.
+ *   --thumb-h        the small pictures' height: 80 of 1080.
+ *   --thumb-gap      between the small pictures: 15 of 1080.
+ *   --index-gap      from the small pictures to the capitals of "87 of 154":
+ *                    43 of 1080.
+ *   --caption-break  the space that parts the title and medium from the size
+ *                    and year, in em of the caption's type.
+ *   --view-spill     the page is set by the cut-out and stays set when another
+ *                    picture of the work is chosen: the caption and the small
+ *                    pictures do not move. A wider picture is centred where the
+ *                    cut-out stands and may reach this share of the gap towards
+ *                    the caption (0.5 is half of it; 0 keeps it within the
+ *                    cut-out's width).
  */
+.is-detail .top { display: none; }
+
 .detail {
+  --edge: 2.5vw;
+  --edge-v: 2.6vw;
+  --axis: 48.2vh;
+  --plate-max: 48.05vh;
+  --text-gap: 12.96vw;
+  --text-w: 13.79vw;
+  --caption-rise: 0.045em;
+  --text-max: 30vw;
+  --under-gap: 2.35vh;
+  --thumb-h: 7.42vh;
+  --thumb-gap: 1.42vh;
+  --index-gap: 3.91vh;
+  --caption-break: 2.36em;
+  --view-spill: 0.5;
+  /* Read by client/views.ts: the width the painting and the caption share,
+     and whether the caption takes its share beside the painting. */
+  --plate-room: calc(100vw - 2 * var(--edge) - var(--text-gap));
+  --caption-beside: 1;
+
+  position: relative;
   height: 100dvh;
-  box-sizing: border-box;
   overflow: hidden;
   display: grid;
-  /* The sheet: the painting in the left two thirds, the text starting two
-     thirds across (618 of 927). The second column is sized so that, with
-     the page's own padding and the gap, it begins exactly there. */
-  grid-template-columns: 1fr calc(33.3% - 0.334 * var(--pad));
-  grid-template-rows: auto minmax(0, 1fr) auto;
+  /* The painting, the gap, the caption — centred across the page as one. */
+  grid-template-columns: auto var(--text-gap) auto;
+  justify-content: center;
+  /* One row whose middle is --axis: anything centred in it is centred there. */
+  grid-template-rows: calc(2 * var(--axis));
   align-items: center;
-  gap: var(--pad);
-  padding: var(--bar) var(--pad) var(--pad);
-}
-
-.detail-back {
-  grid-column: 1;
-  grid-row: 1;
-  align-self: start;
-  color: var(--ink-soft);
-}
-
-.detail-back:hover, .detail-back:focus-visible {
-  color: var(--ink);
-}
-
-.detail-plate {
-  grid-column: 2;
-  margin: 0;
-  display: grid;
-  place-items: center;
 }
 
 /*
- * The picture is bounded by the plate's own box, in container units, because
- * nothing between the plate and the image has a height of its own to measure
- * a percentage against: the inner span hugs the picture so the lean begins at
- * its edge. The plate takes its size from the grid cell it sits in.
+ * The corners. The page's type size, tracked out (the sheet's ARTWORK runs 217
+ * wide at 40: 0.09 em between letters), set on a line exactly one em tall so
+ * the ink can be put where the sheet puts it: capitals 51 from the top, and
+ * baselines 48 from the foot, of 1080. In Switzer the cap sits 0.15 em below
+ * such a line's top and the baseline 0.137 em above its foot; the 0.03 and
+ * 0.05 em beyond those are the sheet's own extra.
+ *
+ * Tracking puts its space after every letter, the last one too, so a word
+ * set against the right margin would stop 0.09 em short of it. The two on
+ * the right take that last space back.
  */
+.detail-back,
+.detail-pager a {
+  font-size: var(--type);
+  line-height: 1;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  font-weight: 400;
+  color: var(--ink);
+  transition: color var(--hover) var(--ease);
+}
+.detail-back:hover, .detail-back:focus-visible,
+.detail-pager a:hover, .detail-pager a:focus-visible { color: var(--ink-soft); }
+
+.detail-back {
+  position: absolute;
+  z-index: 2;
+  top: calc(var(--edge-v) - 0.12em);
+}
+.detail-section { left: var(--edge); }
+.detail-close { right: var(--edge); margin-right: -0.09em; }
+.detail-pager a[rel='next'] { margin-right: -0.09em; }
+
+.detail-pager {
+  position: absolute;
+  z-index: 2;
+  left: var(--edge);
+  right: var(--edge);
+  bottom: calc(var(--edge-v) - 0.187em);
+  display: flex;
+  justify-content: space-between;
+  /* The em above is the links' own: the nav is set at their size too. */
+  font-size: var(--type);
+  line-height: 1;
+}
+
+/*
+ * The painting. Its box is the painted part alone — client/views.ts sizes it
+ * by that, not by the cut-out's transparent canvas — so it is the painting
+ * that is centred on --axis, and the column is exactly as wide as it is.
+ * Until the script has measured, the picture is held to the most room it
+ * could have, whole.
+ */
+.detail-stage {
+  grid-column: 1;
+  grid-row: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.detail-plate {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}
+
 .detail-plate img {
-  max-height: 100cqh;
-  max-width: 100cqw;
+  max-height: var(--plate-max);
+  max-width: calc(var(--plate-room) - var(--text-w));
   width: auto;
   height: auto;
 }
 
-/*
- * The caption, measured off the designer's sheet (927 wide, painting 242
- * tall, caps 13):
- *
- *   title and medium     cap top on the painting's top edge; the medium's
- *                        baseline 31 below the title's, against 24 between
- *                        year and size — so the title carries 7/13 of a cap,
- *                        0.3 em, of extra room under it
- *   year and size        the year's cap top 141 down, 0.583 of the height
- *   87 of 154            baseline on the painting's bottom edge
- *
- * The column is given the painting's own box by client/views.ts — its top and
- * its height, as `--plate-shift` and `--plate-height` — and the three groups
- * are held to it from there. The small negative margins take off the part of
- * the line box above a cap and below a baseline, so the ink, not the box,
- * sits on the edges: in Switzer (ascent 0.987 em, descent 0.261 em, caps
- * 0.680 em, measured) that is half the leading less 0.317 em above, and half
- * the leading less 0.363 em below, whatever the leading is set to. Without
- * scripting the column takes the cell's height, which is near enough.
- */
-.detail-caption {
-  /* THE CAPTION'S LEADING — line height as a multiple of the type size. The
-     rest of the page is 1.25 (50 over 40); the caption is set tighter. */
-  --caption-lead: 1.1;
-  /* HOW FAR DOWN THE PAINTING THE CAPTION REACHES — the three groups are
-     spread over this share of the painting's height, from its top edge: 1 is
-     the sheet, with the numbering on the bottom edge; smaller gathers the
-     groups up towards the title. */
-  --caption-span: 0.85;
-  /* HOW FAR DOWN IT STARTS — the title's cap top sits this share of the
-     painting's height below its top edge; with the span, 0.15 + 0.85 puts
-     the numbering on the bottom edge. 0 is the sheet. */
-  --caption-drop: 0.3;
-  grid-column: 2;
-  grid-row: 2;
-  align-self: start;
-  position: relative;
+/* Under the painting and centred on it, out of the flow so that the painting
+   alone is what stands on the line. */
+.detail-under {
+  position: absolute;
+  top: calc(100% + var(--under-gap));
+  left: 50%;
+  translate: -50% 0;
+  width: max-content;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  box-sizing: border-box;
-  height: calc(var(--plate-height, 100%) * var(--caption-span));
-  margin-top: calc(var(--plate-shift, 0px) + var(--plate-height, 0px) * var(--caption-drop));
+  align-items: center;
+}
+
+/*
+ * The caption. The small negative margins take off the part of the line box
+ * above the first capital and below the last baseline, so it is the ink, not
+ * the box, that is centred on the painting: in Switzer (ascent 0.987 em,
+ * descent 0.261 em, caps 0.680 em, measured) that is half the leading less
+ * 0.317 em above, and half the leading less 0.363 em below.
+ */
+.detail-caption {
+  /* THE CAPTION'S LEADING — 50 over 40 on the sheet, as on the rest of the page. */
+  --caption-lead: 1.25;
+  grid-column: 3;
+  grid-row: 1;
+  position: relative;
+  z-index: 1;
+  min-width: var(--text-w);
+  max-width: var(--text-max);
   font-size: var(--type);
   line-height: var(--caption-lead);
+  margin-top: calc((0.317 - var(--caption-lead) / 2) * 1em);
+  margin-bottom: calc((0.363 - var(--caption-lead) / 2) * 1em);
+  translate: 0 calc(-1 * var(--caption-rise));
 }
 
 .detail-caption p { margin: 0; }
-.detail-head { margin-top: calc((0.317 - var(--caption-lead) / 2) * 1em); }
 .detail-title {
   font-size: var(--type);
   font-weight: 600;
   letter-spacing: 0;
   text-transform: uppercase;
 }
-.detail-caption .detail-medium {
-  text-transform: uppercase;
-  margin-top: 0.37em;
-}
-.detail-facts {
-  position: absolute;
-  left: 0;
-  top: calc(58.3% - (var(--caption-lead) / 2 - 0.317) * 1em);
-}
+/* The medium as it is written, straight under the title. */
+.detail-facts { margin-top: var(--caption-break); }
 .detail-year { font-weight: 600; }
-.detail-caption .detail-index { margin-bottom: calc((0.363 - var(--caption-lead) / 2) * 1em); }
+
+/* "87 of 154", its capitals --index-gap under the small pictures, or under the
+   painting itself when there are none. */
+.detail-index {
+  --index-lead: 1.25;
+  margin: calc(var(--index-gap) - (var(--index-lead) / 2 - 0.317) * 1em) 0 0;
+  font-size: var(--type);
+  line-height: var(--index-lead);
+  white-space: nowrap;
+}
+.detail-index:first-child {
+  margin-top: calc(var(--index-gap) - var(--under-gap) - (var(--index-lead) / 2 - 0.317) * 1em);
+}
 .detail-index b { font-weight: 600; }
 
-.detail-pager {
-  grid-column: 1 / -1;
-  grid-row: 3;
-  display: flex;
-  justify-content: space-between;
-  color: var(--ink-soft);
-}
-
-.detail-pager a:hover, .detail-pager a:focus-visible {
-  color: var(--ink);
-}
-
+/*
+ * A phone: one column that scrolls if it must. The corners stay corners at
+ * the top; the painting, its pictures and its place, the caption and the way
+ * through follow in order.
+ */
 @media (max-width: 899px) {
   .detail {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto minmax(0, 1fr) auto auto;
+    --edge: var(--pad);
+    --edge-v: var(--pad);
+    --plate-max: 52vh;
+    --plate-room: calc(100vw - 2 * var(--edge));
+    --caption-beside: 0;
+    --thumb-h: 3.6rem;
+    --thumb-gap: 0.7rem;
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.6rem;
+    padding: calc(var(--edge) + 2.4rem) var(--edge) var(--edge);
+    box-sizing: border-box;
   }
-
-  .detail-back,
-  .detail-plate,
-  .detail-caption {
-    grid-column: 1;
+  .detail-back { font-size: 1rem; }
+  .detail-stage, .detail-caption, .detail-pager {
+    position: static;
+    margin: 0;
+    translate: none;
+    min-width: 0;
+    max-width: none;
   }
-  /* Under the painting there is no edge to follow: the groups stack. */
-  .detail-caption { grid-row: 3; height: auto; margin-top: 0; gap: 0.6em; }
-  .detail-facts { position: static; }
-  .detail-head, .detail-index { margin: 0; }
-  .detail-pager { grid-row: 4; }
+  .detail-under {
+    position: static;
+    translate: none;
+    width: auto;
+    margin-top: 0.9rem;
+  }
+  .detail-plate img { max-width: var(--plate-room); }
+  .detail-caption, .detail-title { font-size: 1.25rem; }
+  .detail-facts { margin-top: 0.6em; }
+  .detail-index, .detail-index:first-child { font-size: 1rem; margin: 0.7rem 0 0; }
+  .detail-pager, .detail-pager a { font-size: 1rem; }
+  .detail-pager { margin-top: auto; }
 }
 
 /* ------------------------------------------------------------------- feed */
@@ -1682,66 +1823,37 @@ html.js .hero[data-hero]+.grid[data-stack] {
 .exh-list {
   --exh-hover: var(--ink);
   /*
-   * Set off the designer's exhibitions sheet, measured rather than estimated.
-   *
-   * The sheet is a 1598px render of a 1508px-wide frame, so nothing in it can
-   * be read against the commissioned sheet until both are put on one scale.
-   * The menu gives that scale — its ink spans 1794 there and 1508 here, so
-   * 1.1897 — and the wordmark's cap height confirms it independently (12 x
-   * 1.1897 = 14.3, against 14). Scaled up, this list's title cap is 28.6 where
-   * commissioned's is 28: the same size. An earlier pass had this at 0.91,
-   * which came of measuring against the image's width instead of the frame's.
-   *
-   * What does differ is the rhythm, and by a lot. Commissioned is one line
-   * sitting tight on its rule. These are two lines with real air under them:
-   * 226.6px from rule to rule, 40.4 between the baselines, 61.9 from the last
-   * baseline down to the line.
+   * The designer's final sheet, measured: 3648 wide, which is exactly 1.900
+   * times the 1920 frame the rest of the site is set on. The rules begin at
+   * 25.2% and run to the margin, which is the commissioned plate's own column,
+   * and the rows are 188 apart — 99 at the frame — for the two lines each one
+   * carries.
    */
+  /* The year stands in the last twelfth, right-aligned at the margin. */
+  --year-col: 12%;
   /*
-   * Measured off the sheet, which is 1232px wide with its content running
-   * 34..1225 — so 1191 of content, and everything below is that read against
-   * the 1920 frame the rest of the site is set in.
-   *
-   * 83px from rule to rule becomes 129. The two lines sit 25 apart, which is
-   * 39 at the frame and a 0.95 line on 41px type — tighter than the site's
-   * 1.25, because a name and its address are one thing said twice, not two
-   * paragraphs. That leaves 51 for the air, 25 above and 25 below the pair.
+   * 188 from rule to rule on the sheet, which is 99 at the frame. The two
+   * lines sit 40.4 apart there — measured baseline to baseline, title ink at
+   * 736 and location at 812.7 — so each line box is given that and the rest
+   * is the air above and below the pair.
    */
-  --row-top: 1.302vw;
-  --row-bottom: 1.302vw;
-  /*
-   * The sheet right-aligns the months at 81.5% of the content and the year at
-   * the margin, so the year column is what holds the 18.5% between them.
-   */
-  --when-col: 16%;
-  --year-col: 18.5%;
-  /* No cap: the margin governs, as it does in the design. A capped box plus the
-     padding inside it put the rules 77px from the edge at the width the mockup
-     was drawn at, not the 30 it specifies — the cap was centring the box and the
-     padding was then measured from the box, not from the screen. These are short
-     rows, so there is no measure to protect. */
+  --row-top: 0.344vw;    /* 6.6 of the frame's pixels */
+  --row-bottom: 0.448vw;
   margin: 0 auto;
-  /*
-   * The sheet puts the first rule 447px down its 1598 export, 522 at 1866.
-   * Pure vw, because adding a fixed bar height to it meant the offset did not
-   * scale: it was right at 1866 and 13px long at 1598. The bar is a floor
-   * instead, so a narrow window still cannot slide the list under the menu.
-   */
   padding: max(calc(var(--bar) + 1rem), var(--list-top, 16.050vw)) var(--pad) 18vh;
 }
 
 /*
- * The date and year columns are fixed rather than `auto` because each row is
- * its own grid: `auto` would size every row to its own contents and the dates
- * would stagger down the page instead of standing in a column.
- */
-/*
+ * The same plate as the commissioned index, with one line more. A show states
+ * what kind it was and where under its name, which a commission does not.
+ *
  * `.xlist.exh-list`, not `.exh-list`: the commissioned `.xlist .xrow` rule
- * sits further down this file at the same specificity, so the plainer selector
- * loses on source order alone and the row stacks instead of laying out.
+ * sits further down this file at the same specificity, so the plainer
+ * selector loses on source order alone and the row stacks instead of laying
+ * out.
  */
 .xlist.exh-list .xrow {
-  grid-template-columns: minmax(0, 1fr) var(--when-col) var(--year-col);
+  grid-template-columns: minmax(0, 1fr) var(--year-col, 10%);
   align-items: start;
   gap: 0;
 }
@@ -1750,68 +1862,71 @@ html.js .hero[data-hero]+.grid[data-stack] {
   display: grid;
   min-width: 0;
 }
-/* On the lines, not on the block: the shared type rule sets `--lead` on these
-   two directly, and a line-height on their parent never reaches them. */
-.exh-list .exh-title,
-.exh-list .exh-venue { line-height: 0.95; }
-/* The name is said twice: what it was called, then where it was. */
-.exh-venue { font-style: italic; }
 
 /*
- * The months are the one thing on the row set small — half the size, near the
- * bar's — and they stack rather than running along, because 'From December'
- * and 'To January' side by side is what ran into the year on the sheet.
+ * The sheet's type, and only the sheet's type.
+ *
+ * Semibold at 45 for the name, medium at 40 in capitals for the line under
+ * it, regular at 40 for the year. The leading is 45 over 40 throughout, which
+ * is the one figure every style on the sheet shares.
  */
-.exh-when {
-  display: grid;
-  justify-items: end;
-  text-align: right;
-  font-size: var(--type-menu);
-  line-height: 1.25;
-  white-space: nowrap;
+.exh-title {
+  font-size: var(--t-45);
+  font-weight: 600;
+  /* 40.4 over 45: the sheet sets the name and its line tight to each other,
+     not on the 45 leading that the prose takes. */
+  line-height: 0.942;
 }
-
-/* The year leans, and a run that crosses one states both, stacked. */
+.exh-venue {
+  font-size: var(--t-40);
+  font-weight: 500;
+  font-style: normal;
+  text-transform: uppercase;
+  line-height: 1.01;     /* 40.4 over 40 */
+}
+/* What the sheet says about the one show it describes on the list itself. */
+.exh-note {
+  font-size: var(--t-40);
+  font-weight: 400;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: var(--lead-45);
+}
 .exh-year {
   display: grid;
   justify-items: end;
   text-align: right;
-  font-style: italic;
-  line-height: 0.95;
+  font-size: var(--t-40);
+  font-weight: 400;
+  font-style: normal;
+  line-height: var(--lead-45);
   font-variant-numeric: tabular-nums;
 }
 
-/* Held just clear of the dates rather than over them: at 52% the plate landed
-   on top of the date column, which on this list starts further left. */
+/*
+ * A private collection is a place rather than an event: it states no year, and
+ * the sheet sets its line light and in sentence case where every other group
+ * is medium and in capitals.
+ */
+.xgroup[data-group='Private collections'] .exh-venue {
+  font-weight: 300;
+  text-transform: none;
+}
+
+/* Held clear of the year rather than over it. */
 .xlist.exh-list .xrow .exh-plate {
   left: auto;
-  right: calc(var(--when-col) + var(--year-col) + 2rem);
+  right: calc(var(--year-col, 10%) + 2rem);
 }
 
 @media (max-width: 899px) {
   .xlist.exh-list .xrow {
     grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas: 'name year' 'when year';
     gap: 0.3rem 1rem;
   }
-
-  .exh-name {
-    grid-area: name;
-  }
-
-  .exh-when {
-    grid-area: when;
-  }
-
-  .exh-year {
-    grid-area: year;
-    align-self: start;
-  }
-
+  .exh-year { align-self: start; }
   /* No pointer to hover with, and no room to spare. */
-  .exh-plate {
-    display: none;
-  }
+  .exh-plate { display: none; }
 }
 
 /* ---------------------------------------------------------- to-scale grid */
@@ -1961,7 +2076,7 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
  * and nothing that reads as a floating card over the blurred page behind it.
  */
 .panel { background: color-mix(in srgb, var(--paper) 90%, transparent); padding: 0 0 var(--gap); }
-.panel-close { position: fixed; top: 1.6rem; right: var(--pad); z-index: 2; color: var(--ink-soft); }
+.panel-close { position: fixed; top: var(--bar-top); right: var(--pad); z-index: 2; color: var(--ink-soft); }
 .panel-close:hover, .panel-close:focus-visible { color: var(--ink); }
 .reader {
   display: grid;
@@ -2066,24 +2181,6 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 /* ------------------------------------------------------------------ about */
 
 /*
- * The five colour pairs the designer set, held and turned, which the loading
- * screen strobes through (`00-base.css`). About used to blink through them too;
- * it is a red card now, and these stay here for the loader alone. The colours
- * are registered custom properties so the keyframes interpolate them properly
- * instead of falling back to the discrete behaviour unregistered properties get.
- */
-@property --blink-bg { syntax: '<color>'; inherits: true; initial-value: #ed373f; }
-@property --blink-fg { syntax: '<color>'; inherits: true; initial-value: #013787; }
-@keyframes about-blink {
-  0%,   17% { --blink-bg: #ed373f; --blink-fg: #013787; }
-  20%,  37% { --blink-bg: #ffd090; --blink-fg: #013787; }
-  40%,  57% { --blink-bg: #392524; --blink-fg: #e8bc00; }
-  60%,  77% { --blink-bg: #054d9f; --blink-fg: #e6a085; }
-  80%,  97% { --blink-bg: #2c402f; --blink-fg: #f5c041; }
-  100%      { --blink-bg: #ed373f; --blink-fg: #013787; }
-}
-
-/*
  * About opens over whatever page you are on: the page stays there behind it,
  * blurred by the veil and faint through the panel's own ground.
  *
@@ -2098,7 +2195,8 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
  * Safari before 18.? and Chrome before 129 give a container layout
  * containment, which makes it the containing block of anything fixed inside
  * it. On the panel that took the Close link with it — it scrolled away with
- * the card. The Close link is the sheet's sibling, so it stays put.
+ * the page. The Close link, the cue and the viewer are the sheet's siblings,
+ * so they stay put.
  *
  * Inside a block of type the lengths are in ems of that type instead, so that
  * on a phone, where each size stops shrinking at a floor, the gaps keep their
@@ -2118,10 +2216,10 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .about-sheet {
   container-type: inline-size;
   --u: calc(100cqw / 1920);
-  /* The frame's margin: 48 at the sides and above the card. */
+  /* The frame's margin: 48 at the sides. */
   --m: max(1.25rem, calc(48 * var(--u)));
-  /* The three sizes on the frame: 45 for the card and the biography, 40 for
-     the collections, 20 for the record, the labels and the copyright. */
+  /* The sizes on the frame: 45 for the lead, 40 for the biography (below),
+     20 for the record, the labels, the contact and the copyright. */
   --about-body: max(1rem, calc(45 * var(--u)));
   --about-small: max(0.6875rem, calc(20 * var(--u)));
   /* Every line on the frame is set at 0, and the site's small type is not. */
@@ -2135,194 +2233,285 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .about-sheet > * { margin-inline: var(--m); }
 
 /*
- * In the middle of the margin above the card, so it never sits on the red.
- * Outside the sheet, so in window units: the same 48 at 1920, give or take
- * the scrollbar.
+ * Close, where and as the detail pages set theirs (`07-sheet.css`): the size
+ * of the text, upright and spaced, its baseline 80 down the 1920 frame and its
+ * last letter at the right margin, 50 in.
+ *
+ * Drawn as the bar is: the negative of whatever passes under it, so the text
+ * and the photographs scrolling up beneath it never cover it. The source is
+ * the colour that comes out as the ink over paper (255 − the ink's 36, 37, 40),
+ * as on the detail panels' heads.
+ *
+ * Beside the panel rather than in it (components/layout.ts). A blend only sees
+ * what shares its stacking context, and inside the panel that is a ground of
+ * 64% paper, against which the ink comes out a mid grey. Out here it sees the
+ * whole screen. It is also out of reach of the panel's rise and of its scroll,
+ * so it stands still: it fades in and out with the panel instead.
  */
 .about-close {
+  --f: calc(100vw / 1920);
   position: fixed;
-  top: calc(max(1.25rem, 2.5vw) / 2);
-  right: max(1.25rem, 2.5vw);
-  transform: translateY(-50%);
-  z-index: 3;
+  top: calc(var(--f) * 80);
+  right: calc(var(--f) * 50 - 0.071em);
+  z-index: 71;
+  translate: 0 -0.9em;            /* from its baseline to its box */
+  font-size: var(--type);
   line-height: 1;
-  color: var(--ink-soft);
-}
-.about-close:hover, .about-close:focus-visible { color: var(--ink); }
-
-/* ------------------------------------------------------------- the card */
-
-/*
- * Red, 1824 by 789, 48 from the top and the sides: the whole width of the
- * column. The type has no inset at all. Her name, city and year stand on the
- * card's left edge and the contact block is ranged to its right edge — the
- * same edges as the text beneath, so the card reads as the column's first
- * block rather than a box with a margin of its own.
- *
- * All six lines are 45 on 50 in #fafafa: the name at 600, the city and the
- * year at 500, the contact at 400. Name line box 130.575 below the card's top,
- * 84 to the city, the contact's last line box 125.425 above the card's
- * foot; the rest of the 789 falls between the year and the phone. The height
- * is a proportion, not a cap: where the lines need more, on a phone, the card
- * grows to hold them.
- */
-.about-card-stage {
-  --tilt-max: 2deg;
-  --tilt-depth: 2000px;
-  --tilt-lift: 1.005;
-  --tilt-settle: 1000ms;
-  --tilt-follow: 260ms;
-  perspective: var(--tilt-depth);
-  margin-top: var(--m);
-}
-@media (prefers-reduced-motion: reduce) {
-  .about-card-stage { --tilt-max: 0deg; --tilt-lift: 1; }
-}
-/*
- * The card leans a little towards the pointer, as a painting does on its own
- * page (`client/tilt.ts`, with the figures on `.detail-plate` in
- * `05-artwork.css`). Less than half a painting's lean, in a long perspective,
- * with a lift you feel more than see and a faint shadow as it lifts. Settling
- * back takes a full second, so it comes to rest rather than snapping.
- */
-.about-card {
-  /* No standing layer and no 3D context: promoted only while it leans
-     (below), so at rest its type is drawn as type and not as a bitmap. */
-  transition: transform var(--tilt-settle) var(--ease), box-shadow var(--tilt-settle) var(--ease);
-  box-shadow: 0 0 0 rgba(36, 37, 40, 0);
-  display: grid;
-  grid-template-rows: auto auto minmax(1.1111em, 1fr) auto;
-  aspect-ratio: 1824 / 789;
-  box-sizing: border-box;
-  padding: calc(130.575em / 45) 0 calc(125.425em / 45);
-  background: #ed373f;
-  color: #fafafa;
-  font-size: var(--about-body);
-  line-height: calc(50 / 45);
-  letter-spacing: 0;
-}
-/*
- * Still eased while the pointer is on it. The script writes a new angle on every
- * movement and the card follows each one a beat behind, so the pointer never
- * drags it and an unsteady hand reads as a steady one.
- */
-.about-card.is-tilting {
-  transition: transform var(--tilt-follow) var(--ease), box-shadow var(--tilt-settle) var(--ease);
-  box-shadow: 0 1vw 3vw rgba(36, 37, 40, 0.09);
-  will-change: transform;
-}
-.about-card p, .about-card address { margin: 0; font-style: normal; }
-.about-name { font-weight: 600; text-transform: uppercase; }
-.about-card .about-born { margin-top: calc(84em / 45); font-weight: 500; text-transform: uppercase; }
-.about-contact {
-  grid-row: 4;
-  display: grid;
-  justify-items: end;
-  text-align: right;
   font-weight: 400;
+  letter-spacing: 0.071em;
+  text-transform: uppercase;
+  color: rgb(219, 218, 215);
+  mix-blend-mode: difference;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0s linear 0.9s;
 }
-.about-contact a { color: inherit; }
-.about-contact a:hover, .about-contact a:focus-visible { text-decoration: underline; text-underline-offset: 0.12em; }
+.about.is-open ~ .about-close { opacity: 1; visibility: visible; transition-delay: 0s; }
+.about.is-open ~ .about-close:hover,
+.about.is-open ~ .about-close:focus-visible { opacity: 0.55; }
+@media (max-width: 899px) {
+  .about-close { top: 1.6rem; right: calc(var(--pad) - 0.071em); translate: none; line-height: var(--lead); }
+}
 
-/* ------------------------------------------------------------- the text */
+/* -------------------------------------------------------------- the text */
 
 /*
- * 45 on 50 at 500, the biography's one size and weight. The lead is in
- * capitals, ragged and a shade darker (#1d1d1b); the rest is justified, word
- * spacing only, with its last lines left ragged.
+ * From the designer's About of 10 November, at 1920 (figures in frame pixels).
  *
- * The lead's first line box is 150 below the card, the first paragraph 90
- * below the lead, and each paragraph a blank line (50) below the last. The
- * justified measure stops 6 short of the column's right edge, as the frame
- * sets it, so the lines end at 1866 and not 1872.
+ * The lead keeps the old sheet's capitals: 45 on 50 at 500, ragged, its first
+ * line box 309 down — below the bar on a phone. Then the photographs, 32.5
+ * under it and 241 tall; then the biography, 51.8 under them, at 40 on 40 and
+ * 400, justified, a blank line between paragraphs.
  *
- * The photographs come exactly where the frame puts them, which is not quite
- * evenly: the first is the full 1824 wide with 49 above it and 61 below, the
- * second 1818, the text's own measure, with 52 above and 62 below.
+ * At rest that is the whole of it. `client/about.ts` adds `.is-staged` to the
+ * panel and the parts below that class turn it into the four-part opening:
+ * the lead held in place while it is written, the photographs driven in from
+ * the side, the rest written as it rises, the record brought in last. Without
+ * the script, with motion reduced, or before it runs, the page simply stands.
  */
+.about-sheet { --about-text-size: max(0.9375rem, calc(40 * var(--u))); }
+
 .about-text {
-  margin-top: calc(150em / 45);
+  margin-top: max(calc(var(--bar) + 1.5rem), calc(309 * var(--u)));
+  color: var(--ink);
+}
+.about-text p { margin: 0; letter-spacing: 0; }
+.about-lead {
   font-size: var(--about-body);
   line-height: calc(50 / 45);
   font-weight: 500;
-  letter-spacing: 0;
-  color: var(--ink);
+  text-transform: uppercase;
+  text-align: left;
+  color: #1d1d1b;
 }
-.about-text p {
-  margin: 0 calc(6 * var(--u)) 0 0;
+.about-text > p {
+  font-size: var(--about-text-size);
+  line-height: 1;
+  font-weight: 400;
   text-align: justify;
   hyphens: manual;
 }
-.about-text .about-lead { text-align: left; text-transform: uppercase; color: #1d1d1b; }
-.about-text p + p { margin-top: calc(50em / 45); }
-.about-text .about-lead + p { margin-top: calc(90em / 45); }
-.about-figure { margin: calc(49em / 45) 0 calc(61em / 45); }
-.about-figure ~ .about-figure { margin: calc(52em / 45) calc(6 * var(--u)) calc(62em / 45) 0; }
-.about-figure picture, .about-figure img { display: block; width: 100%; height: auto; }
+.about-opening + p { margin-top: calc(51.8em / 40); }
+.about-text > p + p { margin-top: 1em; }
+
+/*
+ * The photographs: one row, 241 tall, each at its own proportion, 24 apart,
+ * centred under the lead — the designer's single photograph sits on the
+ * middle of the page. The row runs to both edges of the screen, so that when
+ * it is driven in it comes from the side of the window rather than from the
+ * margin; at rest, if there are more than fit, it scrolls sideways.
+ */
+.about-reel {
+  --reel-h: max(8.5rem, calc(241 * var(--u)));
+  margin: calc(32.5 * var(--u)) calc(-1 * var(--m)) 0;
+  padding-inline: var(--m);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.about-reel::-webkit-scrollbar { display: none; }
+.about-reel-track {
+  display: flex;
+  gap: max(0.75rem, calc(24 * var(--u)));
+  width: max-content;
+  margin-inline: auto;
+}
+.about-reel-item {
+  display: block;
+  height: var(--reel-h);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.about-reel-item picture, .about-reel-item img { display: block; height: 100%; width: auto; }
+.about-reel-item img { transition: opacity var(--hover) var(--ease); }
+.about-reel-item:hover img, .about-reel-item:focus-visible img { opacity: 0.86; }
+
+/*
+ * The four parts.
+ *
+ * The stage — lead and photographs — is pinned where it stands while the
+ * runway under it (`.about-opening`, made tall by the script) scrolls past:
+ * the first stretch writes the lead, the second drives the row in. Words are
+ * hidden and appear whole, with no fade, as on the start page. The row is
+ * clipped rather than scrolled, and moved by the script.
+ */
+.about.is-staged { overflow-anchor: none; }
+.about.is-staged .about-stage { position: sticky; top: var(--stage-top, 0px); }
+.about.is-staged .about-reel { overflow: clip; padding-inline: 0; }
+.about.is-staged .about-reel-track { margin-inline: 0; will-change: transform; }
+.about.is-staged .about-word { opacity: 0; }
+.about.is-staged .about-word.is-written { opacity: 1; }
+
+/*
+ * The last part comes in rather than being written: each heading, entry and
+ * line rises a little out of a blur as it reaches the screen, in order down
+ * the page and a beat later from column to column.
+ */
+.about.is-staged .about-pop {
+  opacity: 0;
+  filter: blur(10px);
+  transform: translateY(14px);
+  transition:
+    opacity 0.9s var(--ease) var(--pop-delay, 0s),
+    filter 0.9s var(--ease) var(--pop-delay, 0s),
+    transform 0.9s var(--ease) var(--pop-delay, 0s);
+}
+.about.is-staged .about-pop.is-in { opacity: 1; filter: none; transform: none; }
+
+/* The start page's chevron, for About's own scroll: shown from the moment About
+   opens until the end of the panel. Beside the panel and drawn in the
+   negative, like Close, since text and photographs pass under it all the way. */
+.about-cue {
+  position: fixed;
+  left: 50%;
+  bottom: 1.9rem;
+  z-index: 71;
+  width: var(--cue-size);
+  margin-left: calc(var(--cue-size) / -2);
+  color: rgb(219, 218, 215);
+  mix-blend-mode: difference;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.7s var(--ease);
+}
+.about.is-open ~ .about-cue.is-shown { opacity: 1; }
+/* Not while a photograph is up: the panel does not scroll then. */
+.about.is-viewing ~ .about-cue.is-shown { opacity: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .about-cue svg { animation: scroll-cue-fall 2.4s var(--ease) infinite; }
+}
+@media (max-width: 899px) {
+  .about-cue { bottom: 1.1rem; width: 1.3rem; margin-left: -0.65rem; }
+}
+
+/*
+ * A photograph large over the page, as the book's are on What's Color: a pale
+ * blur behind it, a click anywhere or Escape to put it away, and the plain
+ * pointers the rest of the site uses rather than zoom marks. The exhibitions'
+ * chevrons either side (below) step through the row, and so do the arrow keys and a
+ * swipe. The panel stops scrolling while it is up (`.is-viewing`).
+ */
+.about.is-viewing { overflow: hidden; }
+.about-viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  background: rgb(255 255 255 / 0.42);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  cursor: default;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.about-viewer.is-open { opacity: 1; }
+.about-viewer[hidden] { display: none; }
+.about-viewer-plate { margin: 0; }
+.about-viewer-plate picture { display: block; }
+.about-viewer-plate img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: min(82vw, 1600px);
+  max-height: 84vh;
+}
+/*
+ * The chevrons stand beside the panel, like Close, and are drawn the same way:
+ * the negative of what is under them, so the photograph can run beneath them
+ * on a phone. There only while a photograph is up.
+ */
+.about-viewer-step {
+  position: fixed;
+  top: 50%;
+  translate: 0 -50%;
+  z-index: 72;
+  padding: 1.5rem 1rem;
+  color: rgb(219, 218, 215);
+  mix-blend-mode: difference;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+}
+.about.is-viewing ~ .about-viewer-step { opacity: 1; visibility: visible; transition-delay: 0s; }
+.about-viewer-step.is-prev { left: max(0.5rem, 2.5vw); }
+.about-viewer-step.is-next { right: max(0.5rem, 2.5vw); }
+.about.is-viewing ~ .about-viewer-step:hover,
+.about.is-viewing ~ .about-viewer-step:focus-visible { opacity: 0.45; }
+.about-viewer-step svg { display: block; width: 0.9rem; height: auto; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
 
 /* ----------------------------------------------------------- the record */
 
 /*
- * Four columns of 444 with 16 between them, at 20 throughout: the headings
- * in capitals at 600, then each entry its date in italic, its title at 600,
- * what kind of show at 400 and where at 300. Solo, group, and the art fairs
- * across the last two columns, the fourth without a heading of its own.
- *
- * The entries stand on a grid, not in a stack. Every entry begins on a row
- * 131.08 below the last, the same rows in all four columns, so the dates run
- * level across the page and an entry of three lines simply leaves more air
- * under it than one of five. The heading's row is 132.14.
- *
- * Inside an entry the lines sit as the sheet sets them, a little over 22
- * apart and not quite evenly — 22.48 from the date to the title, 22.62 from the
- * title to the line under it, 23.13 from that to the place — and a line the
- * sheet breaks in two holds at 20. The heading's line box is 95.1 below the
- * biography's last.
+ * Five columns at 20: solo, group, the fairs across two narrower ones, and
+ * the private collections — starting at 48, 443, 838, 1099 and 1494. Each
+ * entry its date in italic, its title at 600, what kind of show at 400 and
+ * where at 300; the entries stacked 65.5 apart, line box to line box. The
+ * headings sit 234.7 under the biography's last line, the first entries 117
+ * under the headings. The fairs break into their second column level with
+ * the end of the solo shows (`firstColumn` in components/layout.ts).
  */
 .about-record {
-  --row: calc(131.08em / 20);
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  column-gap: calc(16 * var(--u));
-  margin-top: calc(95.1em / 20);
+  grid-template-columns:
+    calc(394.8 * var(--u)) calc(394.8 * var(--u)) calc(260.9 * var(--u))
+    calc(394.9 * var(--u)) minmax(0, 1fr);
+  margin-top: calc(234.7em / 20);
   font-size: var(--about-small);
   line-height: 1;
   letter-spacing: 0;
   color: #1d1d1b;
 }
 .about-label {
-  margin: 0 0 calc(112.14em / 20);
+  margin: 0 0 calc(117em / 20);
   font-size: var(--about-small);
   font-weight: 600;
   line-height: 1;
   letter-spacing: 0;
   text-transform: uppercase;
 }
-.about-show-list {
+.about-shows, .about-collections { min-width: 0; padding-right: 1em; }
+.about-shows.is-wide { grid-column: span 2; padding-right: 0; }
+.about-show-columns {
+  display: grid;
+  grid-template-columns: calc(260.9 * var(--u)) minmax(0, 1fr);
+}
+.about-show-columns > .about-show-list { padding-right: 1em; }
+.about-show-list, .about-collection-list {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  grid-auto-rows: var(--row);
+  align-content: start;
+  row-gap: calc(65.5em / 20);
 }
-/*
- * The fairs fill their first column before the second: as many rows as the
- * list says (`--rows`, fifteen on the sheet, level with the end of the solo
- * shows), then the rest from the top of the fourth column.
- */
-.about-shows.is-wide { grid-column: span 2; }
-.about-shows.is-wide .about-show-list {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  grid-template-rows: repeat(var(--rows, 8), var(--row));
-  grid-auto-flow: column;
-  column-gap: calc(16 * var(--u));
-}
-.about-show {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-}
-.about-show > span { display: block; }
+.about-show, .about-collection { display: flex; flex-direction: column; align-items: start; }
+.about-show > span, .about-collection > span { display: block; }
 .about-show-title { margin-top: calc(2.48em / 20); }
 .about-show-title + .about-show-line { margin-top: calc(2.62em / 20); }
 .about-show-line + .about-show-line { margin-top: calc(2.75em / 20); }
@@ -2333,37 +2522,31 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .about-show-title { font-weight: 600; }
 .about-show-line { font-weight: 400; }
 .about-show-place { font-weight: 300; }
-
-/* ------------------------------------------------------ the collections */
+.about-collection-name { font-weight: 600; text-transform: uppercase; }
+.about-collection-place { margin-top: calc(1em / 20); font-weight: 300; }
 
 /*
- * Who holds the work: a label at 20 like the record's, 180.7 below the
- * record's last row; then each collection its name in capitals at 500 and its
- * place at 300, both 40 on 40, with 16.6 between one collection and the next.
- * The first name's line box is 87.7 below the label's.
+ * How to reach her, centred above the copyright: the record's size, its
+ * three ways in a row, 192 under the record.
  */
-.about-collections { margin-top: calc(180.7em / 20); font-size: var(--about-small); color: var(--ink); }
-.about-collections .about-label { margin-bottom: calc(87.7em / 20); }
-.about-collection-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: calc(16.6em / 40);
-  font-size: 2em;
+.about-contact {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4em 2.4em;
+  margin-top: calc(192em / 20);
+  font-size: var(--about-small);
+  font-style: normal;
   line-height: 1;
-  letter-spacing: 0;
+  font-weight: 400;
+  color: var(--ink);
 }
-.about-collection { display: grid; }
-.about-collection-name { font-weight: 500; text-transform: uppercase; }
-.about-collection-place { font-weight: 300; }
+.about-contact a { color: inherit; }
+.about-contact a:hover, .about-contact a:focus-visible { text-decoration: underline; text-underline-offset: 0.15em; }
 
-/*
- * Her name at 600 and the rest at 400, at 20, centred, 167.3 below the last
- * place. The frame runs on in blank artboard below it; the page stops 96 under.
- */
+/* Her name at 600 and the rest at 400, at 20, centred under the contact. */
 .about-foot {
-  margin-top: calc(167.3em / 20);
+  margin-top: calc(28em / 20);
   padding-bottom: max(2.5rem, calc(96 * var(--u)));
   font-size: var(--about-small);
   line-height: 1;
@@ -2374,27 +2557,25 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .about-foot b { font-weight: 600; }
 
 /*
- * Narrower than the frame can hold four columns at the record's smallest
- * size, the record goes to two — solo beside group, then the fairs in their
- * own two beneath — and on a phone to one, where justified lines of a few
- * words would open rivers, so the biography is set ragged there instead.
+ * Narrower than the frame can hold five columns at the record's smallest
+ * size, the record goes to two — solo beside group, the fairs in their own
+ * two beneath, then the collections — and on a phone to one, where justified
+ * lines of a few words would open rivers, so the biography is set ragged.
  */
 @media (max-width: 899px) {
-  .about-record { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 3em; }
+  .about-record { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 3.5em; }
+  .about-show-columns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 559px) {
-  .about-text p { text-align: left; }
+  .about-text > p { text-align: left; }
   .about-record { grid-template-columns: minmax(0, 1fr); }
   .about-shows.is-wide { grid-column: auto; }
-  .about-shows.is-wide .about-show-list {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: none;
-    grid-auto-flow: row;
-  }
+  .about-show-columns { grid-template-columns: minmax(0, 1fr); row-gap: calc(65.5em / 20); }
 }
 
 html:not(.js) .about { display: none; }
 html:not(.js) .about:target { display: block; position: static; opacity: 1; visibility: visible; transform: none; }
+html:not(.js) .about:target ~ .about-close { opacity: 1; visibility: visible; }
 
 /* --------------------------------------------------------------- lightbox */
 
@@ -2431,7 +2612,7 @@ html:not(.js) .about:target { display: block; position: static; opacity: 1; visi
 }
 /* The veil is positioned, so anything meant to sit in front must be positioned too. */
 .lightbox-plate, .lightbox-caption, .lightbox-nav { position: relative; z-index: 1; }
-.lightbox-close { position: fixed; top: 1.6rem; right: var(--pad); z-index: 1; color: var(--ink-soft); }
+.lightbox-close { position: fixed; top: var(--bar-top); right: var(--pad); z-index: 1; color: var(--ink-soft); }
 .lightbox-close:hover, .lightbox-close:focus-visible { color: var(--ink); }
 .lightbox-plate { grid-column: 3; display: grid; place-items: center; min-width: 0; min-height: 0; transition: opacity 0.42s var(--ease); }
 .lightbox.is-changing .lightbox-plate, .lightbox.is-changing .lightbox-caption { opacity: 0; }
@@ -2676,72 +2857,78 @@ body:has(.panel.is-open) .top { opacity: 0; pointer-events: none; }
 }
 
 /*
- * The year rail: a column of colour swatches down the left edge, one per year,
- * each in a colour sampled from that year's own paintings (scripts/palette.ts).
- *
- * At rest it is a stack of short bars. The year you are looking at is drawn
- * longer and names itself; hovering any of them draws it longer still. Clicking
- * jumps to that year in the grid.
+ * The year rail: the years down the left margin, each in a colour sampled from
+ * that year's own paintings (scripts/palette.ts), and under them the grid's
+ * controls (00-base.css). Clicking a year travels to it in the grid.
  *
  * It is hidden while the opening pile is still moving — it is drawn hidden and
  * `stack-settled` is set once the grid has come to rest — and fades in once
  * the scroll has unfolded the whole grid. Scrolling back into the pile takes
  * the class away again and the rail goes with it.
  *
- * Sized off the designer's sheet, exported at 1654: bars 120 × 26 on a pitch
- * of 46.5, so each figure is that share of the window's width.
+ * Off the designer's final sheet at 1920: the years at the page's size, 50
+ * apart; then the controls at 30, 40 apart. The knobs are in 00-base.css,
+ * under THE SIDE COLUMN, next to --rail.
+ *
+ * It does not move. The column is drawn where it ends up — as low as
+ * --side-top asks, but never so low that its last control leaves the window —
+ * and simply fades in there.
  */
+:root {
+  /* The column's lines. Years at the page's leading (50 over 40), controls at
+     40 over 30. */
+  --year-lead: 1.25;
+  --side-lead: 1.3333;
+  /* How many years there are: written by client/years.ts, eleven until then. */
+  --years-count: 11;
+  --years-height: calc(var(--years-count) * var(--type) * var(--year-lead));
+  --controls-top: calc(var(--side-top) + var(--years-height) + var(--controls-gap));
+  /* Five controls: three sizes, then equal and to scale. */
+  --side-height: calc(var(--years-height) + var(--controls-gap) + 5 * var(--type-side) * var(--side-lead));
+  /* How far above --side-top the column has to stand for its foot to clear the
+     window's by a margin. */
+  --side-lift: max(0px, calc(var(--side-top) + var(--side-height) + var(--pad) - 100vh));
+}
+
 .years {
   position: fixed;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  left: var(--pad);
+  top: calc(var(--side-top) - var(--side-lift));
   z-index: 30;
   display: flex;
   flex-direction: column;
-  gap: 1.24vw;
+  align-items: flex-start;
+  font-size: var(--type);
+  line-height: var(--year-lead);
+  /* The capitals, not the line box, start on that line: half the leading less
+     the 0.317 em Switzer puts above a capital (see .detail-caption). */
+  margin-top: calc((0.317 - var(--year-lead) / 2) * 1em);
   transition: opacity 0.8s var(--ease);
 }
 
-.year {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  /* The hit area is the whole row, not just the bar. */
-  padding: 0;
+.controls {
+  top: calc(var(--controls-top) - var(--side-lift));
+  margin-top: calc((0.317 - var(--side-lead) / 2) * 1em);
 }
 
-.year-swatch {
+.year {
   display: block;
-  width: 7.26vw;
-  height: 1.57vw;
-  background: var(--c);
-  transition: width 0.9s var(--ease);
+  color: var(--c);
+  transition: opacity var(--hover) var(--ease);
 }
+
+/* The bars are the phone's rail (below); on a wide screen the years are type. */
+.year-swatch { display: none; }
 
 .year-label {
-  color: var(--ink);
-  opacity: 0;
-  transform: translateX(-4px);
-  transition: opacity 0.3s var(--ease), transform 0.4s var(--ease);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
-/* The current year names itself; hovering any year reaches out the same way —
-   one position out, never further. */
-.year.is-current .year-swatch { width: 9.7vw; }
-.year.is-current .year-label { opacity: 1; transform: none; }
-.years:hover .year.is-current:not(:hover) .year-swatch { width: 7.26vw; }
-.years:hover .year.is-current:not(:hover) .year-label { opacity: 0; transform: translateX(-4px); }
-.year:hover .year-swatch, .year:focus-visible .year-swatch { width: 9.7vw; }
-.year:hover .year-label, .year:focus-visible .year-label { opacity: 1; transform: none; }
+/* While a year is in focus the rail says so: the chosen one stays, the rest
+   step back. */
+.years.is-focused .year:not([aria-pressed='true']) { opacity: 0.35; }
 
-/* While a year is in focus the rail says so: the chosen swatch stays out and
-   named, and the rest step back. */
-.years.is-focused .year:not([aria-pressed='true']) .year-swatch { opacity: 0.4; }
-.years.is-focused .year[aria-pressed='true'] .year-swatch { width: 9.7vw; }
-.years.is-focused .year[aria-pressed='true'] .year-label { opacity: 1; transform: none; }
 
 /*
  * Nothing that waits on the opening animation may be reachable, or visible,
@@ -2761,17 +2948,24 @@ body:has(.panel.is-open) .top { opacity: 0; pointer-events: none; }
  * themselves after eight seconds — far longer than any pile — and the class,
  * when it comes, cancels it.
  */
+/* Hidden, not merely transparent: a see-through column over the paintings is
+   still drawn — blended, in the controls' case — on every frame of the
+   opening. The visibility waits for the fade out before it goes. */
 html.js .controls,
 html.js .years {
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
+  transition: opacity 0.8s var(--ease), visibility 0s linear 0.8s;
   animation: control-failsafe 0.01s linear 8s forwards;
 }
 
 html.js.stack-settled .controls,
 html.js.stack-settled .years {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
+  transition: opacity 0.8s var(--ease), visibility 0s;
   animation: none;
 }
 
@@ -2784,30 +2978,36 @@ html.js.stack-running .years {
 }
 
 @keyframes control-failsafe {
-  to { opacity: 1; pointer-events: auto; }
+  to { opacity: 1; visibility: visible; pointer-events: auto; }
 }
 
 @media (max-width: 899px) {
-  /* No room for a rail beside the grid on a phone: it lies along the foot. */
+  /* No room for a column beside the grid on a phone: the years lie along the
+     foot as bars, and the controls stand in one line above them. */
   .years {
     top: auto; bottom: 0; left: 0; right: 0;
-    transform: none;
+    margin-top: 0;
     flex-direction: row;
     justify-content: center;
+    align-items: flex-end;
     gap: 3px;
     padding: 0.6rem var(--pad);
+    font-size: 9px;
+    line-height: 1.2;
     background: color-mix(in srgb, var(--paper) 88%, transparent);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
   }
-  .years { gap: 3px; }
-  .year { flex-direction: column; gap: 0.25rem; padding: 2px 0; }
-  .year-swatch { width: 13px; height: 22px; transition: height 0.4s var(--ease); }
-  .year.is-current .year-swatch, .year:hover .year-swatch { width: 13px; height: 34px; }
-  .year-label { display: none; }
-  .year.is-current .year-label { display: block; opacity: 1; transform: none; font-size: 9px; }
-  /* Clear of the rail along the foot, and centred rather than tucked in a corner. */
-  .controls { top: auto; bottom: 5.4rem; right: auto; left: 0; justify-content: center; width: 100%; }
+  .year { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; padding: 2px 0; }
+  .year-swatch { display: block; width: 13px; height: 22px; background: var(--c); transition: height 0.4s var(--ease); }
+  .year.is-current .year-swatch, .year:hover .year-swatch { height: 34px; }
+  .year-label { display: none; color: var(--ink); }
+  .year.is-current .year-label { display: block; }
+  .controls {
+    top: auto; bottom: 5.4rem; left: 0; margin-top: 0; width: 100%;
+    flex-direction: row; justify-content: center; align-items: baseline; gap: 2em;
+  }
+  .control-group { flex-direction: row; gap: 1em; }
 }
 
 /* ------------------------------------------------------------ what's color */
@@ -3205,7 +3405,25 @@ html.js.stack-running .years {
    * further; 21px would put the type's own top on the film's edge, and more
    * than that would run the words into the picture.
    */
-  --film-lift: 50px;
+  /*
+   * Measured at runtime, with this as the figure to fall back on.
+   *
+   * 50px is right at 1440 and wrong on a wide monitor, because it is a fixed
+   * distance in a bar whose contents are not. The menu is sized in `vw`
+   * (`--type-menu`), so the line it sets grows with the window while the bar's
+   * own 4.2rem and this lift do not — and the line, and the block behind the
+   * current name, slide down the bar until they cross the film's bottom edge
+   * and sit on the white below it. Measured: the block clears the edge by 7px
+   * at 1440, overhangs it by 0.5px at 1920 and by 10.6px at 2560, which is a
+   * pixel and a half for every pixel the type gains.
+   *
+   * Too many coupled parts to express here — the bar's height, the leading,
+   * the rise the block is given, the trim taken off it, each in its own unit
+   * and one of them already measured by a script — so `client/film.ts`
+   * measures where the block actually ends and sets the lift to hold it the
+   * same distance clear at any width. The same arrangement as --bar-rise.
+   */
+  --film-lift: var(--film-lift-measured, 50px);
 
   /*
    * How far the film is taken down beneath the bar, and the one number to
@@ -3570,8 +3788,8 @@ html:has(body.has-film) {
 }
 
 
-/* The standing note is set semibold throughout, the question in it included —
-   semibold, not bold. */
+/* The standing note is set in the regular weight, the question in it
+   included; only the invitation that closes it is semibold. */
 /*
  * Set as the three editions' texts at the foot of the view are: the same size
  * and solid leading, justified across the page's own margins, only heavier.
@@ -3583,7 +3801,7 @@ html:has(body.has-film) {
  */
 .wc-lead {
   font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.0833vw, 2.75rem));
-  font-weight: 600;
+  font-weight: 400;
   line-height: 1;
   text-align: justify;
 }
@@ -3840,35 +4058,20 @@ html:has(body.has-film) {
   text-indent: 2.5em;
 }
 
-/* The work, inset from the sheet's own margins and centred. */
-.wc-sheet-page .wc-plate {
-  grid-column: 1 / -1;
-  margin: calc(var(--sheet-v) * var(--lead, 0.06)) auto 0;
-  width: var(--sheet-plate, 100%);
-}
-.wc-sheet-page .wc-plate img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
 @media (max-width: 899px) {
   /* Three columns of this at a phone's width is a column of single words.
      And a floor under the type: the width-driven scale was drawn for a
      desktop page and all but vanishes at a phone's — the proper phone
      setting of these sheets is still its own piece of work. */
   .wc-sheet-page .wc-sheet { grid-template-columns: minmax(0, 1fr); --sheet: 1.1rem; }
-  .wc-sheet-page .wc-slot,
-  .wc-sheet-page .wc-plate-col {
+  .wc-sheet-page .wc-slot {
     grid-column: 1;
     margin-top: 1.6rem;
   }
   .wc-sheet-page .wc-say,
-  .wc-sheet-page .wc-plate,
   .wc-sheet-page .wc-strip {
     margin-top: 1.6rem;
   }
-  .wc-sheet-page .wc-plate { width: 100%; }
   .wc-sheet-page .wc-slot-rule::after { content: none; }
 }
 
@@ -3890,72 +4093,63 @@ html:has(body.has-film) {
 }
 
 /*
- * A plate set in one column rather than across all three, which is how the
- * second edition sets its pair: two pictures side by side in the outer columns
- * with the middle left empty. It takes a slot's spacing, not a plate's, so the
- * pair sits in the rhythm of the entries around it.
+ * Each sheet opens with its reel, a breath under the roster — the air and the
+ * reel's height measured off her sheets, as a share of the sheet's width:
+ *
+ *   --sheet-top       the air between the roster and the reel
+ *   --sheet-strip-h   the reel's height; every photograph is set to it
  */
-.wc-sheet-page .wc-plate-col {
-  grid-column: var(--col, 1);
-  width: 100%;
-  margin-top: calc(
-    var(--sheet-v) * (var(--lead, 0.05) + var(--drop, 0) * var(--sheet-drop, 0.0732))
-  );
-  margin-bottom: 0;
+.wc-edition-i .wc-sheet {
+  --sheet-top: 0.0705;
+  --sheet-strip-h: 0.1059;
 }
-
-/*
- * Where the design crops a photograph to a band, the shape rides on the figure
- * and the file is covered into it. Left unset the ratio is `auto`, so a plate
- * without one keeps the shape of its file — which is what the first edition's
- * does, and why this can be added without touching it.
- */
-.wc-sheet-page .wc-plate img {
-  aspect-ratio: var(--plate-aspect, auto);
-  object-fit: cover;
-}
-
-/* Her second sheet opens a little higher than her first. */
 .wc-edition-ii .wc-sheet {
-  --sheet-top: 0.177;
+  --sheet-top: 0.0727;
+  --sheet-strip-h: 0.0991;
 }
-
-/*
- * The third edition's sheet: it opens with the photographs of the book rather
- * than with words, sits a touch higher under its roster than the others, and
- * its plate reaches the margins the way the second edition's do.
- */
 .wc-edition-iii .wc-sheet {
-  --sheet-top: 0.0595;
+  --sheet-top: 0.0537;
+  --sheet-strip-h: 0.1;
 }
 
 /*
- * The photographs of the book, in one row: eight of them, two thirds of the
- * sheet wide and centred, each cell a twelfth of a column apart. Measured off
- * the sheet — cells of 7.6% with 0.85% between, 66.9% across — and kept as a
- * grid so the cells stay equal however the pictures are cut.
+ * The reel: one row of photographs, centred, all one height and each whole at
+ * the shape of its file — portraits narrow, landscapes wide, as her sheets
+ * run them. 0.9% of the width between, measured off all three sheets alike.
+ * Height and gap are horizontal measures, true to the width like the
+ * columns; only the air above it scales with the type.
  */
 .wc-sheet-page .wc-strip {
   grid-column: 1 / -1;
-  width: var(--sheet-strip, 66.34%);
-  margin: calc(var(--sheet-v) * var(--lead, 0)) auto 0;
-  display: grid;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
-  column-gap: var(--sheet-strip-gutter, 1.324%);
+  display: flex;
+  justify-content: center;
+  gap: calc(var(--sheet-w) * var(--sheet-strip-gutter, 0.009));
+  height: calc(var(--sheet-w) * var(--sheet-strip-h, 0.1));
+  margin-top: calc(var(--sheet-v) * var(--lead, 0));
 }
 
 /*
- * One photograph of the book. A real link to the picture — the script opens
- * it over the page instead — with a small lift on hover, which is the only
- * thing on the sheet that moves.
+ * One photograph. A real link to the picture — the script opens it over the
+ * page instead — with a small lift on hover, which is the only thing on the
+ * sheet that moves. Each cell carries its file's own shape as an aspect ratio,
+ * so its width follows from the reel's height whether or not the picture has
+ * arrived: a lazy photograph holds its place, and nothing shifts when it lands.
  */
 .wc-book {
   display: block;
+  flex: none;
+  height: 100%;
+}
+.wc-book picture {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 .wc-book img {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   transition: transform 0.35s ease;
 }
 .wc-book:hover img,
@@ -4107,19 +4301,48 @@ html:has(body.has-film) {
 .wc-write {
   margin: 0 0 calc(var(--wc-zoom, 1) * var(--wc-lead-gap, 7vw));
 }
-.wc-write .wc-lead {
-  max-width: var(--wc-lead-measure, 80%);
+/* The note and its invitation as one block: 1516 of the sheet's 1824, centred. */
+.wc-write .wc-lead-block {
+  width: 100%;
+  max-width: var(--wc-lead-measure, 83.1%);
   margin: 0 auto;
 }
+.wc-write .wc-lead {
+  margin: 0;
+}
+/* A blank line, then the invitation, semibold in capitals. */
+.wc-write .wc-lead-call {
+  margin-top: 1em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
 
-/* The question, under a colour from the palette. */
+/*
+ * The question, under a colour from the palette — a band, not a block. An
+ * inline background fills the font's whole height, ascender to descender,
+ * which is 1.23em of Switzer; her sheet draws 0.905em, from 0.1em above the
+ * capitals to 0.125em below the line. So the colour is a gradient sized to
+ * that band and set 0.2em down from the top of the box (Switzer's ascent of
+ * 0.98em, less its capitals of 0.68em, less the 0.1em above them). The band
+ * runs on past the first letter's ink by 0.175em and past the question mark's
+ * by 0.05em, as drawn, overhanging rather than pushing the words apart — the
+ * letters' own side bearings counted in, which is why the figures below are
+ * smaller than those, and why the end of the band stops short of the box.
+ */
 .wc-ask {
-  background: var(--wc-ask, var(--hue-7, #cf303a));
+  --wc-ask-c: var(--wc-ask, var(--hue-7, #cf303a));
+  background: linear-gradient(var(--wc-ask-c), var(--wc-ask-c)) no-repeat 0 0.2em / 100% 0.905em;
   color: var(--paper);
-  padding: 0 0.18em;
-  margin: 0 -0.04em;
+  padding: 0;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
+}
+.wc-ask-start {
+  padding-left: 0.117em;
+  margin-left: -0.117em;
+}
+.wc-ask-end {
+  background-size: calc(100% - 0.033em) 0.905em;
 }
 
 @supports (animation-timeline: view()) {
@@ -4209,9 +4432,9 @@ html:has(body.has-film) {
  * rest down. The sheet justifies the first and sets the other two ragged,
  * which is what the inline alignment carries.
  *
- * Hovering one block steps the other two back — the same answer the
- * introductions used to give — because the whole block is a doorway to its
- * edition, and the heading inside is the real link the script widens.
+ * The whole block is a doorway to its edition — the heading inside is the
+ * real link the script widens — but nothing answers to hovering it: the
+ * other blocks stay as they are.
  */
 .wc-texts {
   margin-top: calc(var(--wc-zoom, 1) * 9.1%);
@@ -4225,11 +4448,13 @@ html:has(body.has-film) {
   text-align: justify;
   cursor: pointer;
 }
+/* Newest first, III to I. Each gap belongs to the pair it stands between —
+   III and II, II and I — as measured, whichever way round they run. */
 .wc-text[data-edition='ii'] {
-  margin-top: calc(var(--wc-zoom, 1) * 10.47%);
-}
-.wc-text[data-edition='iii'] {
   margin-top: calc(var(--wc-zoom, 1) * 7.29%);
+}
+.wc-text[data-edition='i'] {
+  margin-top: calc(var(--wc-zoom, 1) * 10.47%);
 }
 .wc-text p {
   margin: 0;
@@ -4264,21 +4489,84 @@ html:not(.js) .wc-text-closed {
   display: none;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .wc-text {
+    transition: none;
+  }
+}
+
+/*
+ * The second edition's colour chart, at the foot of its page.
+ *
+ * Measured off her sheet at 1920: twenty bars of 61 across the full 1824,
+ * spread edge to edge; every bar standing on one line, 0.7 of the width below
+ * the top of the names; each name upright, reading down, its capitals to the
+ * right against its bar's edge; and the bars' own heights written on them.
+ * Horizontal measures stay true to the width like the sheet's columns; the
+ * heights scale with the type, as the sheet's air does, so a name and its bar
+ * keep the distance she drew between them.
+ *
+ *   --chart-top   the air above the chart
+ *   --bar-gap     the least room between a name and its bar: the bar gives
+ *                 way rather than run into a long name
+ */
+.wc-chart {
+  --sheet-w: calc(min(100vw, 2160px) - 2 * var(--pad));
+  --sheet-v: calc(var(--sheet-w) * var(--wc-zoom, 1));
+  display: flex;
+  justify-content: space-between;
+  height: calc(var(--sheet-v) * 0.7004);
+  margin-top: calc(var(--sheet-v) * var(--chart-top, 0.0794));
+  font-size: calc(var(--sheet-w) * 0.021930 * var(--wc-zoom, 1));
+}
+.wc-bar {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  width: calc(var(--sheet-w) * 0.03344);
+  color: var(--ink);
+  text-decoration: none;
+  transition: opacity 0.45s ease;
+}
+.wc-bar-name {
+  align-self: flex-end;
+  writing-mode: vertical-rl;
+  /* Every glyph turned with the line, punctuation included: left to the
+     default, an apostrophe stands upright and reads as a stray dash. */
+  text-orientation: sideways;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.wc-bar-fill {
+  flex: 0 1 auto;
+  min-height: 0;
+  height: calc(var(--sheet-v) * var(--bar-h, 0.5));
+  margin-top: auto;
+  background: var(--bar-c, var(--ink));
+}
+/* The room a bar keeps from its name, whatever the name's length. */
+.wc-bar-name {
+  margin-bottom: calc(var(--sheet-v) * var(--bar-gap, 0.012));
+}
+
+/* Pointing at one bar lets the others fall back, as the names do. */
 @media (hover: hover) {
-  .wc-texts:hover .wc-text:not(:hover) {
-    filter: blur(5px);
+  .wc-chart:has(a.wc-bar:hover) .wc-bar:not(:hover) {
     opacity: 0.35;
   }
 }
-/* The keyboard's hover: only a visibly focused block holds the others back,
-   so a mouse click's lingering focus means nothing on return. */
-.wc-texts:has(.wc-text :focus-visible) .wc-text:not(:has(:focus-visible)) {
-  filter: blur(5px);
+.wc-chart:has(a.wc-bar:focus-visible) .wc-bar:not(:focus-visible) {
   opacity: 0.35;
+}
+a.wc-bar:focus-visible {
+  outline: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .wc-text {
+  .wc-bar {
     transition: none;
   }
 }
@@ -4362,43 +4650,29 @@ html:not(.js) .wc-text-closed {
 /* ------------------------------------------------- the other pictures */
 
 /*
- * The plate and the row of small pictures under it share one cell of the
- * detail grid, so adding the row moves nothing else — the caption stays on
- * the middle line and the pager stays at the foot. The plate used to claim
- * the grid's second column itself; inside this cell that would open a second
- * column, so the claim is withdrawn here.
+ * The small pictures stand in a row under the painting, centred on it. Their
+ * size, the gaps and where the row stands are with the rest of the detail page
+ * in 01-grid.css (THE DETAIL PAGE).
  */
-.detail-stage {
-  grid-column: 1;
-  grid-row: 2;
-  /* Fills its cell top to bottom, so the plate has a height to be sized by;
-     the row of small pictures takes its own height under it. */
-  align-self: stretch;
-  min-height: 0;
-  display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
-  justify-items: center;
-  gap: 1.1rem;
-}
-.detail-stage .detail-plate {
-  grid-column: auto;
-  justify-self: stretch;
-  min-height: 0;
-  /* Its size comes from the cell, not from the picture, which is sized to it. */
-  container-type: size;
-}
 
 /* Only one picture is ever on the plate. The rest are kept out of layout, not
    merely hidden, so a lazy one does not load until it is asked for and the
    plate's box — which the lean measures — is the box of what is shown. */
 .detail-view { display: none; }
 .detail-view.is-shown { display: block; }
+/* Fitted to the painted part of a cut-out by client/views.ts: the transparent
+   canvas round it hangs outside, clipped so it cannot catch the pointer. */
+.detail-view.is-fitted { overflow: clip; overflow-clip-margin: 4px; }
+/* A formatting context of their own, or the picture's negative top margin
+   collapses through the frame and lifts the frame with it. */
+.detail-view.is-fitted, .detail-thumb { display: flow-root; }
+.detail-view.is-fitted:not(.is-shown) { display: none; }
+.detail-view.is-fitted img { max-width: none; }
 
 .detail-thumbs {
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
-  gap: 0.7rem;
+  gap: var(--thumb-gap);
 }
 
 /* Small, quiet, and not a plate: no shadow and no lean, so there is no doubt
@@ -4408,328 +4682,191 @@ html:not(.js) .wc-text-closed {
   border: 0;
   background: none;
   padding: 0;
-  width: 4.5rem;
+  height: var(--thumb-h);
+  overflow: clip;
   cursor: pointer;
-  opacity: 0.5;
   transition: opacity var(--hover) var(--ease);
 }
-.detail-thumb img { display: block; width: 100%; height: auto; }
-.detail-thumb.is-shown,
-.detail-thumb:hover,
-.detail-thumb:focus-visible { opacity: 1; }
+.detail-thumb img { display: block; height: 100%; width: auto; max-width: none; }
+/* The one already on the plate steps back — it is the one there is no point
+   choosing; the others stand forward as what can be looked at next. */
+.detail-thumb.is-shown { opacity: 0.35; cursor: default; }
+.detail-thumb:not(.is-shown):hover,
+.detail-thumb:not(.is-shown):focus-visible { opacity: 0.7; }
 .detail-thumb:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
-
-@media (max-width: 899px) {
-  .detail-stage { grid-column: 1; }
-  .detail-thumb { width: 3.6rem; }
-}
 
 /*
  * The Colour Chart.
  *
- * One screen, three columns, and only the middle of them is a picture. The
- * figures below are measured off the designer's reference at the 1520 CSS
- * pixels it was drawn at, and written as the fractions that produce them, so
- * the composition holds at other widths rather than only at hers.
+ * A page of type and nothing else: the statement across the full width, the
+ * way to order one under it, the price, her thanks, and the site's line at the
+ * foot. No columns, no stack of colours, no record — the sheet before this one
+ * had all three and this is the simplification.
+ *
+ *
+ * THE DESIGNER'S POINT
+ *
+ * Her sheets are now drawn at 1728 — a laptop's own width — and the sizes on
+ * them are given in points of that frame: 40 for text, 45 for a heading or a
+ * control, 45 of leading on 40 of text. The site's one type size is 40 of a
+ * 1920 frame (`--type`, 2.0833vw), so her point is a tenth larger than the
+ * site's: 40pt comes out at 44.4 where `--type` gives 40.
+ *
+ * Rather than scatter that ratio through the file as 1.111s, it is stated once
+ * as a unit. Everything below is then the sheet's own figure, and the page
+ * still scales with the site rather than against it.
+ *
+ *     --pt  =  --type / 36        (40pt = 1.111 × --type; 45pt = 1.25 ×)
+ *
+ * The page margin is the one figure not taken from the sheet. She sets it at
+ * 45pt, which is 50 against the site's 40, and the bar is set at 40 everywhere
+ * — so following her here would put the first word of the statement ten pixels
+ * to the right of the wordmark above it. The sheet shows them flush, and flush
+ * is the thing to keep; `--pad` is a decision for the whole site, not for this
+ * page.
  */
 
 .chart {
-  /*
-   * Exactly the window, and no more: this page does not scroll. `dvh` rather
-   * than `vh` because on a phone the two differ by the height of the browser's
-   * own chrome, and a page that is a window tall has to agree with the window
-   * it is in as that chrome comes and goes.
-   */
-  height: 100dvh;
-  display: grid;
-  /*
-   * The first column is the bar's first column — 25.53%, the same figure the
-   * top bar uses — so the band stack begins exactly under What's Color?. The
-   * second is the stack itself, at the 171px of the reference. The third takes
-   * what is left.
-   */
-  grid-template-columns: 25.53% clamp(5rem, 11.25vw, 13rem) minmax(0, 1fr);
-  /* The heading, then everything else, which takes the rest of the height. */
-  grid-template-rows: auto minmax(0, 1fr);
-  /*
-   * The foot is a little deeper than the sides. The sheet sets the stack of
-   * colours 51px clear of the bottom of the window against the 40 it keeps at
-   * the edges, and at this size the difference is the whole of what stops the
-   * last band reading as having been cut off by the screen.
-   */
-  padding: calc(var(--bar) + 3rem) var(--pad) calc(var(--pad) + 0.7rem);
+  --pt: calc(var(--type) / 36);
+  /* One line of the statement: 45pt of leading on 40pt of text. */
+  --chart-line: calc(var(--pt) * 45);
+
+  padding: calc(var(--bar) + var(--pt) * 205) var(--pad) calc(var(--pt) * 230);
 }
 
-/*
- * Nothing for the document to scroll, and nothing to leave a scrollbar standing
- * in the margin: the page is the window's height and the reading happens inside
- * it. Only with scripting, because without it the form is a section at the foot
- * of this page and has to be reachable.
- */
-html.js .chart-body { overflow: hidden; }
+/* ----------------------------------------------------------- the statement */
 
-.chart-title {
-  grid-column: 1 / -1;
-  grid-row: 1;
-  margin: 0 0 var(--gap);
-  font-size: var(--type);
-  font-weight: 700;
-  /*
-   * Tighter than the 0.06em the site's other capitals take.
-   *
-   * Those are the bar's, set at half this size, where tracking is what keeps
-   * eleven small letters from closing up. At the page size the same figure runs
-   * COLOR CHART to 241px where the sheet draws it at 213, and a tracked-out
-   * heading reads as a label rather than as the name of the page.
-   */
-  letter-spacing: -0.02em;
+/*
+ * What the chart is, in her own words, across the whole width of the page.
+ *
+ * 40pt medium in capitals, led at 45 — the sheet's "MEDIUM 40 pt MAJUSCULA"
+ * and its "INTERLINEAT 45". One clear line between paragraphs, which at this
+ * leading is one more line box.
+ */
+.chart-statement {
+  font-size: calc(var(--pt) * 40);
+  font-weight: 500;
+  line-height: 1.125;
   text-transform: uppercase;
-  line-height: var(--lead);
+  /* None. Capitals are already wide; a page of them does not need help, and
+     the sheet's line measures to within a third of a pixel of zero. */
+  letter-spacing: 0;
 }
 
-/* ------------------------------------------------------------- the margin */
+.chart-statement p { margin: 0 0 1.125em; }
+.chart-statement p:last-child { margin-bottom: 0; }
+
+/* ------------------------------------------------------------- the ordering */
 
 /*
- * What the chart costs and how to get one. It sits in the left column and stays
- * there: the text beside it can run for pages, and the price is still on the
- * screen at the end of them.
- *
- * The two offsets are the reference's, in the type's own units rather than in
- * pixels, so they move with the type: the price a little under two lines below
- * the top of the stack beside it, the order a little over two lines below that.
+ * The way to get one, and what it costs. 45pt semibold over 40pt, with the
+ * price itself the only thing on the page set heavier than the words around
+ * it — "Cost:" is the sheet's LIGHT, the figure its SEMIBOLD.
  */
-.chart-aside {
-  grid-column: 1;
-  grid-row: 2;
-  align-self: start;
-}
-
-/*
- * The two things the page exists to say are set a quarter larger than the page.
- *
- * Measured, not chosen: on the sheet "Cost: 60,50€" runs 217px and ORDER YOURS
- * with its arrow 315, against the 178 and 256 the site's one type size gives.
- * Both land on 1.25 — which is the site's own leading, and the only figure it
- * steps by. The margins stay keyed to the page's size rather than to this one,
- * so enlarging the price does not also push it down the column.
- */
-.chart-price {
-  margin: calc(var(--type) * 2) 0 0;
-  font-size: calc(var(--type) * var(--lead));
-  line-height: var(--lead);
-  letter-spacing: -0.01em;
-}
-
-.chart-price b { font-weight: 700; }
-
 .chart-order {
   display: inline-flex;
   align-items: center;
-  gap: 0.5em;
-  margin-top: calc(var(--type) * 2);
-  font-size: calc(var(--type) * var(--lead));
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  line-height: var(--lead);
+  gap: 0.55em;
+  margin-top: calc(var(--pt) * 103);
+  font-size: calc(var(--pt) * 45);
+  font-weight: 600;
+  line-height: 1.125;
+  letter-spacing: 0;
   text-transform: uppercase;
   color: var(--ink);
 }
 
 /*
- * The arrow goes where it points. Nothing else on the control moves — this is
- * the site's one gesture for "this opens something", and it reads at a glance
- * without the type shifting under the pointer.
+ * The arrow turns, slowly, all the way over.
+ *
+ * Half a turn and nothing else: no colour change, no movement of the words, no
+ * travel across the page. It is the one piece of movement on a page that has
+ * none, so it is given more than twice the site's usual hover to make it —
+ * long enough that the turn is something you watch rather than something that
+ * has already happened.
+ *
+ * Eased at both ends rather than with the site's `--ease`, which decelerates
+ * into place from a fast start. That is right for something arriving; a thing
+ * turning on its own centre should start as gently as it stops.
+ *
+ * The viewBox is square and the arrow sits in the middle of it, so the turn has
+ * nothing to drift against.
  */
 .chart-arrow {
-  width: 0.72em;
-  height: 0.72em;
+  width: 0.68em;
+  height: 0.68em;
   overflow: visible;
-  transition: transform var(--hover) var(--ease);
+  transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 .chart-order:hover .chart-arrow,
-.chart-order:focus-visible .chart-arrow { transform: translate(0.18em, -0.18em); }
+.chart-order:focus-visible .chart-arrow { transform: rotate(90deg); }
 
 /* The site shows focus the way it shows hover; this one also underlines, since
    a keyboard arriving on a control that opens a form should be unmistakable. */
 .chart-order:focus-visible { text-decoration: underline; text-underline-offset: 0.3em; }
 
-/* ------------------------------------------------------------- the colours */
-
 /*
- * The chart itself: twenty-three bands filling the height of the column in one
- * unbroken stack. Equal shares of whatever height there is, rather than a band
- * height set here — the stack is as tall as the screen allows and the bands
- * divide it, which is how the reference reads at any size.
+ * 45pt, not the 40 the style list gives for LIGHT: measured off the sheet, the
+ * line runs 277 where 40pt would set it at 248. The price is the one fact on
+ * the page a buyer is looking for, and it is set at the size of the control
+ * above it rather than the size of the words above that.
  */
-.chart-bands {
-  grid-column: 2;
-  grid-row: 2;
-  display: grid;
-  grid-auto-rows: minmax(0, 1fr);
-  /* The hovered band steps out past the column, so nothing may clip it. */
-  overflow: visible;
-}
-
-/*
- * Each band paints half a pixel past its own box, in its own colour, so the
- * bands overlap instead of meeting.
- *
- * Twenty-three equal shares of a height that is not a multiple of twenty-three
- * leave every edge on a fraction of a pixel. Two bands meeting there are
- * composited one after the other rather than together — the first lays down
- * 56% of its colour over white, the second 44% over that — and a quarter of the
- * paper survives between them as a hairline. It is faint when the stack is
- * still and obvious the moment one band moves, which is exactly when the stack
- * is being looked at. A shadow rather than a size: it costs no layout, it
- * scales with the band when the band scales, and it cannot push the stack past
- * the foot of the page. A whole pixel rather than the half the seam needs,
- * because half a pixel is half a device pixel on a screen that is not Retina
- * and would cover the hairline only halfway. Each boundary moves by at most a
- * pixel on a band twenty-five deep; the white between them goes entirely.
- */
-.chart-band {
-  display: block;
-  background: var(--band);
-  box-shadow: 0 0 0 1px var(--band);
-  transform-origin: left center;
-  transition: transform var(--hover) var(--ease);
-}
-
-/*
- * The slight hover: the band under the pointer steps out to the right by about
- * one band's height, and nothing else changes. `scaleX` rather than a width, so
- * twenty-three neighbours are not laid out again every frame; on a plain
- * rectangle of one colour the two are indistinguishable.
- *
- * A step into the gap before the text, which is wider than this — so a band
- * reaching out never touches a word.
- */
-.chart-bands:hover .chart-band:hover { transform: scaleX(1.14); }
-
-@media (prefers-reduced-motion: reduce) {
-  .chart-band, .chart-arrow { transition: none; }
-}
-
-/* ---------------------------------------------------------------- the text */
-
-/*
- * The one thing on the page that moves.
- *
- * Uppercase, as the sheet sets it — the chart's text is a statement about
- * colour rather than a page of prose, and the designer gives it the same voice
- * as everything else on the site that is set in capitals.
- */
-.chart-text {
-  grid-column: 3;
-  grid-row: 2;
-  min-height: 0;
-  padding-left: var(--gap);
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  /* Thin, and in the ink's quiet tint: the column has to say it can be
-     scrolled, and a full-dress scrollbar in the middle of this page would be
-     the loudest thing on it. */
-  scrollbar-width: thin;
-  scrollbar-color: var(--ink-soft) transparent;
-}
-
-/*
- * The site shows no focus rings, but a scrolling region is the one place a
- * keyboard genuinely needs to be told where it has landed — the arrow keys do
- * nothing until it is here. A rule down its left edge, in the gap it already
- * has, says so without drawing a box round the text.
- */
-.chart-text:focus-visible {
-  box-shadow: inset 1px 0 0 var(--ink-soft);
-}
-
-.chart-text .prose {
-  font-size: var(--type);
-  line-height: var(--lead);
-  text-transform: uppercase;
-  /*
-   * None, against the 0.01em the site sets on everything else. Measured: the
-   * sheet's "COLOUR HAS ALWAYS BEEN MY INSPIRATION:" runs 664px at this size
-   * and the site's default tracking makes it 673. Capitals are already wide;
-   * a column of them does not need help.
-   */
+.chart-price {
+  margin: calc(var(--pt) * 25) 0 0;
+  font-size: calc(var(--pt) * 45);
+  font-weight: 300;
+  line-height: 1.125;
   letter-spacing: 0;
 }
 
-/* One clear line between paragraphs, which is the reference's rhythm. */
-.chart-text .prose p { margin: 0 0 1.25em; }
+.chart-price b { font-weight: 600; }
 
-/* The source wraps the closing note in italics and bolds its two headings; in
-   capitals at one size neither reads as a difference worth keeping. */
-.chart-text .prose em { font-style: normal; }
-.chart-text .prose strong { font-weight: 700; }
+/* ---------------------------------------------------------------- the close */
+
+/* Her thanks, down the middle: 45pt, the same size as the control above it. */
+.chart-thanks {
+  margin: calc(var(--pt) * 69) 0 0;
+  text-align: center;
+  font-size: calc(var(--pt) * 45);
+  font-weight: 500;
+  line-height: 1.125;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
 
 /*
- * The photographs of the chart, at the foot of the column that scrolls.
- *
- * The composition has given their old column to the colours, and the text ends
- * by crediting all three by number — so they follow the words rather than
- * disappearing. Not uppercase: a caption is a caption.
+ * The site's line, at the foot. Small, centred, and the name set apart from
+ * the notice by weight alone — there is no second size for it to use.
  */
-.chart-plates {
-  display: grid;
-  gap: var(--gap);
-  padding: var(--gap) 0 var(--bar);
+.chart-footer {
+  margin-top: calc(var(--pt) * 136);
+  text-align: center;
+  font-size: calc(var(--pt) * 18);
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: 0;
+  color: var(--ink);
 }
 
-.chart-plate { margin: 0; }
-.chart-plate img { width: 100%; height: auto; }
-.chart-plate figcaption {
-  margin-top: 0.4rem;
-  font-size: var(--type);
-  color: var(--ink-soft);
-}
+.chart-footer b { font-weight: 600; }
 
 /* ------------------------------------------------------------------ narrow */
 
 /*
- * On a phone the three columns are one, and the page scrolls as every other
- * page does: holding the window's height and scrolling a column inside it
- * leaves the text in a slot a few lines deep, which is no way to read.
- *
- * The stack turns on its side and becomes a band across the top — the same
- * twenty-three colours, read left to right.
+ * Nothing to rearrange — the page is one column at every width. Only the room
+ * around it comes in, since the sheet's spacing is drawn for a screen twice as
+ * wide as a phone and leaves half of one empty.
  */
 @media (max-width: 899px) {
   .chart {
-    height: auto;
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: none;
-    gap: var(--gap);
-    padding: calc(var(--bar) + 1.5rem) var(--pad) var(--gap);
+    padding-top: calc(var(--bar) + var(--pt) * 90);
+    padding-bottom: calc(var(--pt) * 110);
   }
 
-  .chart-title { margin-bottom: 0; }
-
-  .chart-aside, .chart-bands, .chart-text {
-    grid-column: 1;
-    grid-row: auto;
-  }
-
-  .chart-bands {
-    grid-auto-rows: none;
-    grid-auto-flow: column;
-    grid-auto-columns: minmax(0, 1fr);
-    height: clamp(3.5rem, 14vw, 6rem);
-  }
-
-  /* Turned on its side, the step out would run off the bottom of the strip. */
-  .chart-bands:hover .chart-band:hover { transform: none; }
-
-  .chart-price { margin-top: 0; }
-
-  .chart-text {
-    padding-left: 0;
-    overflow-y: visible;
-  }
-
-  .chart-plates { padding-bottom: var(--gap); }
+  .chart-order { margin-top: calc(var(--pt) * 60); }
+  .chart-thanks { margin-top: calc(var(--pt) * 48); }
+  .chart-footer { margin-top: calc(var(--pt) * 80); }
 }
 
 /* --------------------------------------------------------------- inquiries */
@@ -4792,7 +4929,7 @@ html:not(.js) .inq-close { display: none; }
 
 .inq-close {
   position: fixed;
-  top: 1.6rem;
+  top: var(--bar-top);
   right: var(--pad);
   z-index: 2;
   font-size: var(--type);
@@ -5008,7 +5145,10 @@ html:not(.js) .inq-close { display: none; }
 }
 
 /* The Close link, as the sheet sets it: the size of the text, upright and
-   spaced, at the right margin on the masthead's line. */
+   spaced, at the right margin on the masthead's line. Drawn as the bar is, as
+   the negative of what is under it: on a phone the text scrolls up beneath it.
+   The source comes out as the ink over the sheet's paper (255 − 36, 37, 40),
+   and the sheet's paper is opaque, so the blend has a true ground to work on. */
 .panel:has(.sheet) .panel-close {
   position: absolute;
   top: calc(var(--f) * 80);
@@ -5019,7 +5159,8 @@ html:not(.js) .inq-close { display: none; }
   font-weight: 400;
   letter-spacing: 0.071em;
   margin-right: -0.071em;          /* the last letter's tracking hangs past the margin */
-  color: var(--ink);
+  color: rgb(219, 218, 215);
+  mix-blend-mode: difference;
   z-index: 3;
 }
 .panel:has(.sheet) .panel-close:hover,
@@ -5052,8 +5193,14 @@ html:not(.js) .inq-close { display: none; }
 .sheet-title,
 .sheet-lines,
 .sheet-when { margin: 0; font-size: inherit; }
+/*
+ * The designer's five styles and nothing else, here as on the index: the name
+ * is semibold at 45, everything else is 40. It was bold at 40 before, which is
+ * a sixth style the sheets do not contain.
+ */
 .sheet-title {
-  font-weight: 700;
+  font-size: var(--t-45);
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: -0.005em;
 }
@@ -5103,17 +5250,24 @@ html:not(.js) .inq-close { display: none; }
 .sheet-prose .apart { margin-top: calc(var(--s-lead) * 1em); }
 .sheet-prose b { font-weight: 500; }
 /* Bold proper, the editor's B: the client's name where the sheet sets it apart. */
-.sheet-prose strong { font-weight: 700; }
+/* Semibold, which is the heaviest the sheets go. */
+.sheet-prose strong { font-weight: 600; }
 .sheet-prose em { font-style: italic; font-weight: 500; }
 .sheet-prose a { color: inherit; text-decoration: none; }
 .sheet-prose a:hover,
 .sheet-prose a:focus-visible { text-decoration: underline; text-underline-offset: 0.15em; text-decoration-thickness: 1px; }
 /* Credits: in a smaller hand, kept well clear of the text above — three of
    the text's lines and more, which is what the sheets leave. */
+/*
+ * Credits: light rather than small. They were set at 30 against the text's 40,
+ * which is a size the designer's scale does not have — light at 40 is the one
+ * style in it that means the same thing, a line that is there to be read but
+ * not to be read first.
+ */
 .sheet-prose .is-style-note {
   margin-top: 5.2em;
-  font-size: 0.74em;               /* 30 at 1920, against the text's 40 */
-  line-height: 1.25;
+  font-weight: 300;
+  line-height: var(--lead-45);
 }
 .sheet-prose .is-style-cta {
   margin-top: calc(var(--s-lead) * 3em);

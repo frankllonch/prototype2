@@ -43,7 +43,8 @@ function sheetFocus() {
         return true;
     };
     document.addEventListener('click', (event) => {
-        const name = event.target.closest('a.wc-name[href^="#"]');
+        // A name in the roster, or a bar of the colour chart at the foot.
+        const name = event.target.closest('a.wc-name[href^="#"], a.wc-bar[href^="#"]');
         if (name) {
             if (focus(decodeURIComponent(name.hash.slice(1))))
                 return;

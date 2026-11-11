@@ -92,10 +92,56 @@ function startFilm() {
  * spent the one retry on a play() that was bound to be refused again.
  */
 const GESTURES = ['pointerdown', 'pointerup', 'click', 'keydown', 'touchend'];
+/**
+ * How far the film's bottom edge sits below the top of the bar.
+ *
+ * The stylesheet cannot work this out. The menu is sized in `vw`, so the line
+ * it sets grows with the window, while the bar's own height is in `rem` and
+ * the lift was a flat 50px — so on a wide monitor the line, and the block
+ * behind the current name, slid down the bar and came to rest on the white
+ * below the film instead of on the picture. Measured: the block cleared the
+ * edge by 7px at 1440, hung 0.5px below it at 1920 and 10.6px below at 2560.
+ *
+ * So the figure is taken from the thing itself. The block's own bottom is
+ * found, and the edge is put `CLEAR` below it — which reproduces at every
+ * width what 1440 already had, since that is where the 7px comes from. The
+ * rest of the opening follows on its own: the sticky margins, the crossing
+ * mark and the clip that draws the edge are all written in terms of the lift,
+ * so moving it moves them together and the two states cannot disagree.
+ *
+ * Written to its own name so the stylesheet keeps `--film-lift` as the knob,
+ * falling back to the hand-set figure when this has not run.
+ */
+const CLEAR = 7;
+function liftToEdge() {
+    const bar = document.querySelector('.top');
+    if (!bar)
+        return;
+    // The painted block where there is one, since that is what was seen sitting
+    // below the picture; any name in the menu otherwise, whose box is its line.
+    const item = bar.querySelector('[aria-current="page"]')
+        ?? bar.querySelector('.menu a');
+    if (!item)
+        return;
+    const measure = () => {
+        const trim = Number.parseFloat(getComputedStyle(bar).getPropertyValue('--bar-trim')) || 0;
+        const end = item.getBoundingClientRect().bottom - trim - bar.getBoundingClientRect().top;
+        // A bar that has not laid out yet should leave the stylesheet's figure
+        // standing rather than pull the edge up over the type.
+        if (end > 0)
+            document.body.style.setProperty('--film-lift-measured', `${(end + CLEAR).toFixed(1)}px`);
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    // The face the type is set in can arrive after the first measurement and
+    // move the line; measured again once it has.
+    void document.fonts?.ready.then(measure);
+}
 export function initFilm() {
     const film = document.querySelector('.wc-film');
     if (!film)
         return;
+    liftToEdge();
     startFilm();
     /*
      * The crossing point, as a mark in the page rather than a number worked out

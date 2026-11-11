@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" style="--hues:11;--hue-0:#18817a;--neg-0:rgb(231, 126, 133);--hue-1:#b25f2a;--neg-1:rgb(77, 160, 213);--hue-2:#0f8557;--neg-2:rgb(240, 122, 168);--hue-3:#1f8440;--neg-3:rgb(224, 123, 191);--hue-4:#087e9c;--neg-4:rgb(247, 129, 99);--hue-5:#936e1f;--neg-5:rgb(108, 145, 224);--hue-6:#cf4230;--neg-6:rgb(48, 189, 207);--hue-7:#cf303a;--neg-7:rgb(48, 207, 197);--hue-8:#747c1d;--neg-8:rgb(139, 131, 226);--hue-9:#092cf6;--neg-9:rgb(246, 211, 9);--hue-10:#cf3c30;--neg-10:rgb(48, 195, 207)">
+<html lang="en" data-hover="roll" style="--hues:11;--hue-0:#18817a;--neg-0:rgb(231, 126, 133);--hue-1:#b25f2a;--neg-1:rgb(77, 160, 213);--hue-2:#0f8557;--neg-2:rgb(240, 122, 168);--hue-3:#1f8440;--neg-3:rgb(224, 123, 191);--hue-4:#087e9c;--neg-4:rgb(247, 129, 99);--hue-5:#936e1f;--neg-5:rgb(108, 145, 224);--hue-6:#cf4230;--neg-6:rgb(48, 189, 207);--hue-7:#cf303a;--neg-7:rgb(48, 207, 197);--hue-8:#747c1d;--neg-8:rgb(139, 131, 226);--hue-9:#092cf6;--neg-9:rgb(246, 211, 9);--hue-10:#cf3c30;--neg-10:rgb(48, 195, 207)">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -23,18 +23,16 @@
 <link rel="modulepreload" href="/prototype2/js/paging.js" />
 <link rel="modulepreload" href="/prototype2/js/views.js" />
 <link rel="modulepreload" href="/prototype2/js/scroll-cue.js" />
+<link rel="modulepreload" href="/prototype2/js/about.js" />
 <link rel="modulepreload" href="/prototype2/js/inquiries.js" />
 <link rel="modulepreload" href="/prototype2/js/book.js" />
 <link rel="modulepreload" href="/prototype2/js/focus.js" />
 <link rel="modulepreload" href="/prototype2/js/hues.js" />
 <link rel="modulepreload" href="/prototype2/js/current.js" />
 <link rel="modulepreload" href="/prototype2/js/scrollbar.js" />
+<link rel="modulepreload" href="/prototype2/js/scramble.js" />
 <link rel="modulepreload" href="/prototype2/js/index.js" />
 <script>document.documentElement.classList.add('js');
-// The loading screen belongs to arriving at the site, not to each page of it.
-// Decided here, before the first paint, so pages after the first never show it
-// even for a frame.
-try { if (sessionStorage.getItem('cv-seen')) document.documentElement.classList.add('loaded') } catch (e) {}
 // Arriving at What's Color by its link, the page is laid out at the top and
 // moved down to the written sentence by script — so it is kept covered until
 // it has been, and no frame is ever painted in the wrong place. The script
@@ -52,9 +50,6 @@ try { var nav = performance.getEntriesByType('navigation')[0];
   } } catch (e) {}</script>
 </head>
 <body class="has-film">
-<div class="loader" data-loader aria-hidden="true">
-    <p>CLAUDIA VALSELLS</p><p>1969</p><p>Alzueta Gallery</p><p>Barcelona, Spain</p><p>© All Rights Reserved</p>
-  </div>
 <div class="page-veil" aria-hidden="true"></div>
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="top">
@@ -67,16 +62,16 @@ try { var nav = performance.getEntriesByType('navigation')[0];
             
             data-roll
           >Color Chart</a><a
-            href="/prototype2/exhibitions/"
-            
-            
-            data-roll
-          >Exhibitions</a><a
             href="/prototype2/commissioned/"
             
             
             data-roll
           >Commissioned</a><a
+            href="/prototype2/exhibitions/"
+            
+            
+            data-roll
+          >Exhibitions</a><a
             href="/prototype2/artwork/"
             
             
@@ -123,174 +118,178 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     -->
     <section class="wc-write">
     <div class="wc-write-pin">
-      <p class="wc-lead">
-        <span
-              class="wc-word"
-              style="animation-range: cover 29.41% cover 30.50%"
-            >I</span> <span
-              class="wc-word"
-              style="animation-range: cover 29.88% cover 30.97%"
-            >assign</span> <span
-              class="wc-word"
-              style="animation-range: cover 30.36% cover 31.45%"
-            >a</span> <span
-              class="wc-word"
-              style="animation-range: cover 30.83% cover 31.92%"
-            >color</span> <span
-              class="wc-word"
-              style="animation-range: cover 31.30% cover 32.39%"
-            >to</span> <span
-              class="wc-word"
-              style="animation-range: cover 31.78% cover 32.86%"
-            >people</span> <span
-              class="wc-word"
-              style="animation-range: cover 32.25% cover 33.34%"
-            >who</span> <span
-              class="wc-word"
-              style="animation-range: cover 32.72% cover 33.81%"
-            >inspire</span> <span
-              class="wc-word"
-              style="animation-range: cover 33.20% cover 34.28%"
-            >me</span> <span
-              class="wc-word"
-              style="animation-range: cover 33.67% cover 34.76%"
-            >—</span> <span
-              class="wc-word"
-              style="animation-range: cover 34.14% cover 35.23%"
-            >philosophers,</span> <span
-              class="wc-word"
-              style="animation-range: cover 34.61% cover 35.70%"
-            >historians,</span> <span
-              class="wc-word"
-              style="animation-range: cover 35.09% cover 36.18%"
-            >thinkers,</span> <span
-              class="wc-word"
-              style="animation-range: cover 35.56% cover 36.65%"
-            >writers,</span> <span
-              class="wc-word"
-              style="animation-range: cover 36.03% cover 37.12%"
-            >architects</span> <span
-              class="wc-word"
-              style="animation-range: cover 36.51% cover 37.59%"
-            >and</span> <span
-              class="wc-word"
-              style="animation-range: cover 36.98% cover 38.07%"
-            >artists</span> <span
-              class="wc-word"
-              style="animation-range: cover 37.45% cover 38.54%"
-            >—</span> <span
-              class="wc-word"
-              style="animation-range: cover 37.93% cover 39.01%"
-            >and</span> <span
-              class="wc-word"
-              style="animation-range: cover 38.40% cover 39.49%"
-            >ask</span> <span
-              class="wc-word"
-              style="animation-range: cover 38.87% cover 39.96%"
-            >each</span> <span
-              class="wc-word"
-              style="animation-range: cover 39.34% cover 40.43%"
-            >of</span> <span
-              class="wc-word"
-              style="animation-range: cover 39.82% cover 40.91%"
-            >them</span> <span
-              class="wc-word"
-              style="animation-range: cover 40.29% cover 41.38%"
-            >a</span> <span
-              class="wc-word"
-              style="animation-range: cover 40.76% cover 41.85%"
-            >simple</span> <span
-              class="wc-word"
-              style="animation-range: cover 41.24% cover 43.41%"
-            >question:</span> <span
-              class="wc-word"
-              style="animation-range: cover 42.18% cover 45.45%"
-            ><mark class="wc-ask">WHAT’S</mark></span> <span
-              class="wc-word"
-              style="animation-range: cover 43.60% cover 46.86%"
-            ><mark class="wc-ask">COLOR?</mark></span> <span
-              class="wc-word"
-              style="animation-range: cover 51.64% cover 52.73%"
-            >It</span> <span
-              class="wc-word"
-              style="animation-range: cover 52.11% cover 53.20%"
-            >has</span> <span
-              class="wc-word"
-              style="animation-range: cover 52.59% cover 53.68%"
-            >run</span> <span
-              class="wc-word"
-              style="animation-range: cover 53.06% cover 54.15%"
-            >three</span> <span
-              class="wc-word"
-              style="animation-range: cover 53.53% cover 54.62%"
-            >times:</span> <span
-              class="wc-word"
-              style="animation-range: cover 54.01% cover 55.09%"
-            >Barcelona</span> <span
-              class="wc-word"
-              style="animation-range: cover 54.48% cover 55.57%"
-            >in</span> <span
-              class="wc-word"
-              style="animation-range: cover 54.95% cover 56.04%"
-            >2020,</span> <span
-              class="wc-word"
-              style="animation-range: cover 55.43% cover 56.51%"
-            >Madrid</span> <span
-              class="wc-word"
-              style="animation-range: cover 55.90% cover 56.99%"
-            >in</span> <span
-              class="wc-word"
-              style="animation-range: cover 56.37% cover 57.46%"
-            >2021,</span> <span
-              class="wc-word"
-              style="animation-range: cover 56.84% cover 57.93%"
-            >and</span> <span
-              class="wc-word"
-              style="animation-range: cover 57.32% cover 58.41%"
-            >Llibreria</span> <span
-              class="wc-word"
-              style="animation-range: cover 57.79% cover 58.88%"
-            >Terranova</span> <span
-              class="wc-word"
-              style="animation-range: cover 58.26% cover 59.35%"
-            >in</span> <span
-              class="wc-word"
-              style="animation-range: cover 58.74% cover 59.82%"
-            >Barcelona</span> <span
-              class="wc-word"
-              style="animation-range: cover 59.21% cover 60.30%"
-            >in</span> <span
-              class="wc-word"
-              style="animation-range: cover 59.68% cover 60.77%"
-            >2024.</span> <span
-              class="wc-word"
-              style="animation-range: cover 60.16% cover 61.24%"
-            >Click</span> <span
-              class="wc-word"
-              style="animation-range: cover 60.63% cover 61.72%"
-            >on</span> <span
-              class="wc-word"
-              style="animation-range: cover 61.10% cover 62.19%"
-            >their</span> <span
-              class="wc-word"
-              style="animation-range: cover 61.57% cover 62.66%"
-            >names</span> <span
-              class="wc-word"
-              style="animation-range: cover 62.05% cover 63.13%"
-            >to</span> <span
-              class="wc-word"
-              style="animation-range: cover 62.52% cover 63.61%"
-            >see</span> <span
-              class="wc-word"
-              style="animation-range: cover 62.99% cover 64.08%"
-            >what</span> <span
-              class="wc-word"
-              style="animation-range: cover 63.47% cover 64.55%"
-            >they</span>&nbsp;<span
-              class="wc-word"
-              style="animation-range: cover 63.94% cover 65.03%"
-            >said.</span> 
-      </p>
+      <div class="wc-lead-block">
+        <p class="wc-lead"><span
+      class="wc-word"
+      style="animation-range: cover 29.41% cover 30.50%"
+    >I</span> <span
+      class="wc-word"
+      style="animation-range: cover 29.88% cover 30.97%"
+    >assign</span> <span
+      class="wc-word"
+      style="animation-range: cover 30.36% cover 31.45%"
+    >a</span> <span
+      class="wc-word"
+      style="animation-range: cover 30.83% cover 31.92%"
+    >color</span> <span
+      class="wc-word"
+      style="animation-range: cover 31.30% cover 32.39%"
+    >to</span> <span
+      class="wc-word"
+      style="animation-range: cover 31.78% cover 32.86%"
+    >people</span> <span
+      class="wc-word"
+      style="animation-range: cover 32.25% cover 33.34%"
+    >who</span> <span
+      class="wc-word"
+      style="animation-range: cover 32.72% cover 33.81%"
+    >inspire</span> <span
+      class="wc-word"
+      style="animation-range: cover 33.20% cover 34.28%"
+    >me</span> <span
+      class="wc-word"
+      style="animation-range: cover 33.67% cover 34.76%"
+    >—</span> <span
+      class="wc-word"
+      style="animation-range: cover 34.14% cover 35.23%"
+    >philosophers,</span> <span
+      class="wc-word"
+      style="animation-range: cover 34.61% cover 35.70%"
+    >historians,</span> <span
+      class="wc-word"
+      style="animation-range: cover 35.09% cover 36.18%"
+    >thinkers,</span> <span
+      class="wc-word"
+      style="animation-range: cover 35.56% cover 36.65%"
+    >writers,</span> <span
+      class="wc-word"
+      style="animation-range: cover 36.03% cover 37.12%"
+    >architects</span> <span
+      class="wc-word"
+      style="animation-range: cover 36.51% cover 37.59%"
+    >and</span> <span
+      class="wc-word"
+      style="animation-range: cover 36.98% cover 38.07%"
+    >artists</span> <span
+      class="wc-word"
+      style="animation-range: cover 37.45% cover 38.54%"
+    >—</span> <span
+      class="wc-word"
+      style="animation-range: cover 37.93% cover 39.01%"
+    >and</span> <span
+      class="wc-word"
+      style="animation-range: cover 38.40% cover 39.49%"
+    >ask</span> <span
+      class="wc-word"
+      style="animation-range: cover 38.87% cover 39.96%"
+    >each</span> <span
+      class="wc-word"
+      style="animation-range: cover 39.34% cover 40.43%"
+    >of</span> <span
+      class="wc-word"
+      style="animation-range: cover 39.82% cover 40.91%"
+    >them</span> <span
+      class="wc-word"
+      style="animation-range: cover 40.29% cover 41.38%"
+    >a</span> <span
+      class="wc-word"
+      style="animation-range: cover 40.76% cover 41.85%"
+    >simple</span> <span
+      class="wc-word"
+      style="animation-range: cover 41.24% cover 43.41%"
+    >question:</span> <span
+      class="wc-word"
+      style="animation-range: cover 42.18% cover 45.45%"
+    ><mark
+          class="wc-ask wc-ask-start"
+        >WHAT’S </mark></span><span
+      class="wc-word"
+      style="animation-range: cover 43.60% cover 46.86%"
+    ><mark
+          class="wc-ask wc-ask-end"
+        >COLOR?</mark></span> <span
+      class="wc-word"
+      style="animation-range: cover 51.64% cover 52.73%"
+    >It</span> <span
+      class="wc-word"
+      style="animation-range: cover 52.11% cover 53.20%"
+    >has</span> <span
+      class="wc-word"
+      style="animation-range: cover 52.59% cover 53.68%"
+    >run</span> <span
+      class="wc-word"
+      style="animation-range: cover 53.06% cover 54.15%"
+    >three</span> <span
+      class="wc-word"
+      style="animation-range: cover 53.53% cover 54.62%"
+    >times:</span> <span
+      class="wc-word"
+      style="animation-range: cover 54.01% cover 55.09%"
+    >Barcelona</span> <span
+      class="wc-word"
+      style="animation-range: cover 54.48% cover 55.57%"
+    >in</span> <span
+      class="wc-word"
+      style="animation-range: cover 54.95% cover 56.04%"
+    >2020,</span> <span
+      class="wc-word"
+      style="animation-range: cover 55.43% cover 56.51%"
+    >Madrid</span> <span
+      class="wc-word"
+      style="animation-range: cover 55.90% cover 56.99%"
+    >in</span> <span
+      class="wc-word"
+      style="animation-range: cover 56.37% cover 57.46%"
+    >2021,</span> <span
+      class="wc-word"
+      style="animation-range: cover 56.84% cover 57.93%"
+    >and</span> <span
+      class="wc-word"
+      style="animation-range: cover 57.32% cover 58.41%"
+    >Llibreria</span> <span
+      class="wc-word"
+      style="animation-range: cover 57.79% cover 58.88%"
+    >Terranova</span> <span
+      class="wc-word"
+      style="animation-range: cover 58.26% cover 59.35%"
+    >in</span> <span
+      class="wc-word"
+      style="animation-range: cover 58.74% cover 59.82%"
+    >Barcelona</span> <span
+      class="wc-word"
+      style="animation-range: cover 59.21% cover 60.30%"
+    >in</span>&nbsp;<span
+      class="wc-word"
+      style="animation-range: cover 59.68% cover 60.77%"
+    >2024.</span></p><p class="wc-lead wc-lead-call"><span
+      class="wc-word"
+      style="animation-range: cover 60.16% cover 61.24%"
+    >Click</span> <span
+      class="wc-word"
+      style="animation-range: cover 60.63% cover 61.72%"
+    >on</span> <span
+      class="wc-word"
+      style="animation-range: cover 61.10% cover 62.19%"
+    >their</span> <span
+      class="wc-word"
+      style="animation-range: cover 61.57% cover 62.66%"
+    >names</span> <span
+      class="wc-word"
+      style="animation-range: cover 62.05% cover 63.13%"
+    >to</span> <span
+      class="wc-word"
+      style="animation-range: cover 62.52% cover 63.61%"
+    >see</span> <span
+      class="wc-word"
+      style="animation-range: cover 62.99% cover 64.08%"
+    >what</span> <span
+      class="wc-word"
+      style="animation-range: cover 63.47% cover 64.55%"
+    >they</span>&nbsp;<span
+      class="wc-word"
+      style="animation-range: cover 63.94% cover 65.03%"
+    >said.</span></p>
+      </div>
     </div>
   </section>
     <section class="wc-group">
@@ -298,7 +297,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
       <p class="wc-numeral" aria-hidden="true">(III)</p>
       <h2 class="sr-only">What&rsquo;s Color? (III)</h2>
       <p class="wc-names">
-    <a class="wc-name" href="/prototype2/whats-color/iii/#wc-alvaro-galmes" style="--swatch: #d1a03a; --swatch-ink: var(--paper)">Álvaro Galmés</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-marta-d-riezu" style="--swatch: #5f8a4f; --swatch-ink: var(--paper)">Marta D. Riezu</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-lucia-boned" style="--swatch: #5f8fb3; --swatch-ink: var(--paper)">Lucia Boned</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-albert-riera-galceran" style="--swatch: #af8385; --swatch-ink: var(--paper)">Albert Riera Galcerán</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-cristina-stolhe" style="--swatch: #1d2a20; --swatch-ink: var(--paper)">Cristina Stolhe</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-jose-quintanar" style="--swatch: #e6c33f; --swatch-ink: var(--ink)">José Quintanar</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-luis-cervero" style="--swatch: #11151f; --swatch-ink: var(--paper)">Luís Cerveró</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-isabel-martinez" style="--swatch: #c4455c; --swatch-ink: var(--paper)">Isabel Martinez</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-marc-gomez-del-moral" style="--swatch: #d6c4a3; --swatch-ink: var(--ink)">Marc Gómez del Moral</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-jose-javier-serrano" style="--swatch: #3fa3b5; --swatch-ink: var(--paper)">Jose Javier Serrano</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-raquel-quevedo" style="--swatch: #c4c4be; --swatch-ink: var(--ink)">Raquel Quevedo</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-arnau-blanch" style="--swatch: #4f6070; --swatch-ink: var(--paper)">Arnau Blanch</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-maria-medem" style="--swatch: #af8385; --swatch-ink: var(--paper)">María Medem</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-ana-cuba" style="--swatch: #e8823a; --swatch-ink: var(--paper)">Ana Cuba</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-belen-gayan" style="--swatch: #2f7a7c; --swatch-ink: var(--paper)">Belén Gayán</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-juan-diego-valera" style="--swatch: #7f9284; --swatch-ink: var(--paper)">Juan Diego Valera</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-julia-ruiz-cabello" style="--swatch: #b8693a; --swatch-ink: var(--paper)">Julia Ruiz Cabello</a>
+    <a class="wc-name" href="/prototype2/whats-color/iii/#wc-alvaro-galmes" style="--swatch: #d1a03a; --swatch-ink: var(--paper)">Álvaro Galmés</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-marta-d-riezu" style="--swatch: #5f8a4f; --swatch-ink: var(--paper)">Marta D. Riezu</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #1e1e1e; --swatch-ink: var(--paper)">María Prats</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #dfcb6c; --swatch-ink: var(--ink)">Carlota Guerrero</span><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-lucia-boned" style="--swatch: #5f8fb3; --swatch-ink: var(--paper)">Lucia Boned</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-albert-riera-galceran" style="--swatch: #af8385; --swatch-ink: var(--paper)">Albert Riera Galcerán</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #2f5ea8; --swatch-ink: var(--paper)">Guillermo Santomà</span><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-cristina-stolhe" style="--swatch: #1d2a20; --swatch-ink: var(--paper)">Cristina Stolhe</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-jose-quintanar" style="--swatch: #e6c33f; --swatch-ink: var(--ink)">José Quintanar</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-luis-cervero" style="--swatch: #11151f; --swatch-ink: var(--paper)">Luís Cerveró</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #e8a08a; --swatch-ink: var(--ink)">Irene Royo</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #2f5ea8; --swatch-ink: var(--paper)">Adrià Cañameras</span><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-isabel-martinez" style="--swatch: #c4455c; --swatch-ink: var(--paper)">Isabel Martinez</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #b5582f; --swatch-ink: var(--paper)">Salva López</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #1f8440; --swatch-ink: var(--paper)">Berta Blanca Ivanow</span><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-marc-gomez-del-moral" style="--swatch: #d6c4a3; --swatch-ink: var(--ink)">Marc Gómez del Moral</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-jose-javier-serrano" style="--swatch: #3fa3b5; --swatch-ink: var(--paper)">Jose Javier Serrano</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-raquel-quevedo" style="--swatch: #c4c4be; --swatch-ink: var(--ink)">Raquel Quevedo</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #a39f98; --swatch-ink: var(--paper)">Xavi Mañosa</span><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-arnau-blanch" style="--swatch: #4f6070; --swatch-ink: var(--paper)">Arnau Blanch</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-maria-medem" style="--swatch: #af8385; --swatch-ink: var(--paper)">María Medem</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-ana-cuba" style="--swatch: #e8823a; --swatch-ink: var(--paper)">Ana Cuba</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-belen-gayan" style="--swatch: #2f7a7c; --swatch-ink: var(--paper)">Belén Gayán</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-juan-diego-valera" style="--swatch: #7f9284; --swatch-ink: var(--paper)">Juan Diego Valera</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-julia-ruiz-cabello" style="--swatch: #b8693a; --swatch-ink: var(--paper)">Julia Ruiz Cabello</a>
   </p>
     </div>
   </section><section class="wc-group">
@@ -306,7 +305,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
       <p class="wc-numeral" aria-hidden="true">(II)</p>
       <h2 class="sr-only">What&rsquo;s Color? (II)</h2>
       <p class="wc-names">
-    <a class="wc-name" href="/prototype2/whats-color/ii/#wc-plantea-estudio" style="--swatch: #cf4230; --swatch-ink: var(--paper)">Plantea Estudio</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-kal-a" style="--swatch: #cf3c30; --swatch-ink: var(--paper)">Kal-a</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-elii" style="--swatch: #092cf6; --swatch-ink: var(--paper)">Elii</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-hanghar" style="--swatch: #cf303a; --swatch-ink: var(--paper)">HANGHAR</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-montse-vicens" style="--swatch: #cf3c30; --swatch-ink: var(--paper)">Montse Vicens</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-isabel-francoy" style="--swatch: #b25f2a; --swatch-ink: var(--paper)">Isabel Francoy</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-tomas-lopez-amat" style="--swatch: #092cf6; --swatch-ink: var(--paper)">Tomás López Amat</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-stefano-colli" style="--swatch: #cf303a; --swatch-ink: var(--paper)">Stefano Colli</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-conticert" style="--swatch: #cf303a; --swatch-ink: var(--paper)">ContiCert</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-un-parell-d-arquitectes" style="--swatch: #18817a; --swatch-ink: var(--paper)">Un parell d’arquitectes</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-isla-arquitectos" style="--swatch: #087e9c; --swatch-ink: var(--paper)">Isla arquitectos</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-auxi-galvez" style="--swatch: #18817a; --swatch-ink: var(--paper)">Auxi Gálvez</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-escobedo-soliz" style="--swatch: #1f8440; --swatch-ink: var(--paper)">Escobedo Soliz</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-antoni-arola" style="--swatch: #1f8440; --swatch-ink: var(--paper)">Antoni Arola</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-barbara-aurell" style="--swatch: #b25f2a; --swatch-ink: var(--paper)">Barbara Aurell</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-laura-castanya" style="--swatch: #1f8440; --swatch-ink: var(--paper)">Laura Castanya</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-marc-morro" style="--swatch: #092cf6; --swatch-ink: var(--paper)">Marc Morro</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-anna-vidal" style="--swatch: #cf3c30; --swatch-ink: var(--paper)">Anna Vidal</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-gema-sach" style="--swatch: #cf3c30; --swatch-ink: var(--paper)">Gema Sach</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-mariona-espinet" style="--swatch: #cf4230; --swatch-ink: var(--paper)">Mariona Espinet</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-isabel-sendra" style="--swatch: #0f8557; --swatch-ink: var(--paper)">Isabel Sendra</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-amoo" style="--swatch: #cf4230; --swatch-ink: var(--paper)">AMOO</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-loca-studio" style="--swatch: #b25f2a; --swatch-ink: var(--paper)">Loca Studio</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-oscar-tusquets" style="--swatch: #087e9c; --swatch-ink: var(--paper)">Oscar Tusquets</a>
+    <a class="wc-name" href="/prototype2/whats-color/ii/#wc-plantea-estudio" style="--swatch: #cf4230; --swatch-ink: var(--paper)">Plantea Estudio</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-kal-a" style="--swatch: #cf3c30; --swatch-ink: var(--paper)">Kal-a</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-elii" style="--swatch: #092cf6; --swatch-ink: var(--paper)">Elii</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-hanghar" style="--swatch: #cf303a; --swatch-ink: var(--paper)">HANGHAR</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #1f8440; --swatch-ink: var(--paper)">Nomos arquitectos</span><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-montse-vicens" style="--swatch: #cf3c30; --swatch-ink: var(--paper)">Montse Vicens</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-isabel-francoy" style="--swatch: #b25f2a; --swatch-ink: var(--paper)">Isabel Francoy</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-tomas-lopez-amat" style="--swatch: #092cf6; --swatch-ink: var(--paper)">Tomás López Amat</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-stefano-colli" style="--swatch: #cf303a; --swatch-ink: var(--paper)">Stefano Colli</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-conticert" style="--swatch: #cf303a; --swatch-ink: var(--paper)">ContiCert</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-un-parell-d-arquitectes" style="--swatch: #18817a; --swatch-ink: var(--paper)">Un parell d’arquitectes</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #18817a; --swatch-ink: var(--paper)">Naso ++</span><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-isla-arquitectos" style="--swatch: #087e9c; --swatch-ink: var(--paper)">Isla arquitectos</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-auxi-galvez" style="--swatch: #18817a; --swatch-ink: var(--paper)">Auxi Gálvez</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-escobedo-soliz" style="--swatch: #1f8440; --swatch-ink: var(--paper)">Escobedo Soliz</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-antoni-arola" style="--swatch: #1f8440; --swatch-ink: var(--paper)">Antoni Arola</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-barbara-aurell" style="--swatch: #b25f2a; --swatch-ink: var(--paper)">Barbara Aurell</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-laura-castanya" style="--swatch: #1f8440; --swatch-ink: var(--paper)">Laura Castanya</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #936e1f; --swatch-ink: var(--paper)">Andrea Batlló y Adrià Escolano</span><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-marc-morro" style="--swatch: #092cf6; --swatch-ink: var(--paper)">Marc Morro</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-anna-vidal" style="--swatch: #cf3c30; --swatch-ink: var(--paper)">Anna Vidal</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-gema-sach" style="--swatch: #cf3c30; --swatch-ink: var(--paper)">Gema Sach</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-mariona-espinet" style="--swatch: #cf4230; --swatch-ink: var(--paper)">Mariona Espinet</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-isabel-sendra" style="--swatch: #0f8557; --swatch-ink: var(--paper)">Isabel Sendra</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-amoo" style="--swatch: #cf4230; --swatch-ink: var(--paper)">AMOO</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-loca-studio" style="--swatch: #b25f2a; --swatch-ink: var(--paper)">Loca Studio</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #0f8557; --swatch-ink: var(--paper)">Paula Arroyo</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #936e1f; --swatch-ink: var(--paper)">Cierto Estudio</span><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-oscar-tusquets" style="--swatch: #087e9c; --swatch-ink: var(--paper)">Oscar Tusquets</a>
   </p>
     </div>
   </section><section class="wc-group">
@@ -314,36 +313,24 @@ try { var nav = performance.getEntriesByType('navigation')[0];
       <p class="wc-numeral" aria-hidden="true">(I)</p>
       <h2 class="sr-only">What&rsquo;s Color? (I)</h2>
       <p class="wc-names">
-    <a class="wc-name" href="/prototype2/whats-color/i/#wc-marina-garces" style="--swatch: #c4706a; --swatch-ink: var(--paper)">Marina Garcés</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-olafur-eliasson" style="--swatch: #e6c33f; --swatch-ink: var(--ink)">Olafur Eliasson</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-li-edelkoort" style="--swatch: #ece5d3; --swatch-ink: var(--ink)">Li Edelkoort</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-rupi-kaur" style="--swatch: #c0aa8b; --swatch-ink: var(--paper)">Rupi Kaur</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-ramon-andres" style="--swatch: #2f4b35; --swatch-ink: var(--paper)">Ramón Andrés</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-victoria-cirlot" style="--swatch: #8e2a33; --swatch-ink: var(--paper)">Victoria Cirlot</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-tortell-poltrona" style="--swatch: #642625; --swatch-ink: var(--paper)">Tortell Poltrona</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-angelica-dass" style="--swatch: #d8c3a0; --swatch-ink: var(--ink)">Angelica Dass</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-jaume-funes" style="--swatch: #2f7a74; --swatch-ink: var(--paper)">Jaume Funes</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-oscar-tusquets" style="--swatch: #2b0803; --swatch-ink: var(--paper)">Oscar Tusquets</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-david-bueno-i-torrens" style="--swatch: #8a9a85; --swatch-ink: var(--paper)">David Bueno i Torrens</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-flavia-company" style="--swatch: #8f8a3c; --swatch-ink: var(--paper)">Flavia Company</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-siri-hustvedt" style="--swatch: #c4581f; --swatch-ink: var(--paper)">Siri Hustvedt</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-henry-giroux" style="--swatch: #c8402e; --swatch-ink: var(--paper)">Henry Giroux</a>
+    <a class="wc-name" href="/prototype2/whats-color/i/#wc-marina-garces" style="--swatch: #c4706a; --swatch-ink: var(--paper)">Marina Garcés</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-olafur-eliasson" style="--swatch: #e6c33f; --swatch-ink: var(--ink)">Olafur Eliasson</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-li-edelkoort" style="--swatch: #ece5d3; --swatch-ink: var(--ink)">Li Edelkoort</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-rupi-kaur" style="--swatch: #c0aa8b; --swatch-ink: var(--paper)">Rupi Kaur</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-ramon-andres" style="--swatch: #2f4b35; --swatch-ink: var(--paper)">Ramón Andrés</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-victoria-cirlot" style="--swatch: #8e2a33; --swatch-ink: var(--paper)">Victoria Cirlot</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-tortell-poltrona" style="--swatch: #642625; --swatch-ink: var(--paper)">Tortell Poltrona</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-angelica-dass" style="--swatch: #d8c3a0; --swatch-ink: var(--ink)">Angelica Dass</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-jaume-funes" style="--swatch: #2f7a74; --swatch-ink: var(--paper)">Jaume Funes</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-oscar-tusquets" style="--swatch: #2b0803; --swatch-ink: var(--paper)">Oscar Tusquets</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-david-bueno-i-torrens" style="--swatch: #8a9a85; --swatch-ink: var(--paper)">David Bueno i Torrens</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-flavia-company" style="--swatch: #8f8a3c; --swatch-ink: var(--paper)">Flavia Company</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-siri-hustvedt" style="--swatch: #c4581f; --swatch-ink: var(--paper)">Siri Hustvedt</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-henry-giroux" style="--swatch: #c8402e; --swatch-ink: var(--paper)">Henry Giroux</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #0f8557; --swatch-ink: var(--paper)">Carolin Emcke</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #183b81; --swatch-ink: var(--paper)">Valeria Luiselli</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #1f3466; --swatch-ink: var(--paper)">David Attenborough</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #b7a3c9; --swatch-ink: var(--paper)">Judy Wajcmann</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #b5562f; --swatch-ink: var(--paper)">Alessandro Baricco</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #e07a2b; --swatch-ink: var(--paper)">Arno Stern</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #087e9c; --swatch-ink: var(--paper)">Fina Birulés</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #5f8a4f; --swatch-ink: var(--paper)">Stefano Mancuso</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #8d8d87; --swatch-ink: var(--paper)">David Le Breton</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #2f7f86; --swatch-ink: var(--paper)">Noah Harari</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #c9dde6; --swatch-ink: var(--ink)">Himali Singh Soin</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #1f4a35; --swatch-ink: var(--paper)">César Bona</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #d6c29c; --swatch-ink: var(--ink)">Kristine McDivitt Tompkins</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #b25f2a; --swatch-ink: var(--paper)">Francesco Tonucci</span>
   </p>
     </div>
   </section>
     <section class="wc-texts" aria-label="About the three editions">
     <div
     class="wc-text"
-    data-edition="i"
-    style="--wc-text-align: justify"
+    data-edition="iii"
+    style="--wc-text-align: left"
   >
-    <div class="wc-text-closed"><p class="wc-text-head"><a href="/prototype2/whats-color/i/">WHAT’S COLOR (I)</a></p><p>
-        Throughout the lockdown I was away from my studio and my art form – painting.
-      </p><p>
-        I found great comfort reading pieces by philosophers, historians, thinkers, writers, and other artists. They helped me better understand humanity and its role in this globalized world.
-      </p><p>
-        During the past months I have invited them to consider and answer the question: ‘What does color mean to you?’
-      </p><p>
-        First of all, to open up a dialogue, to grasp new ways of seeing colors, other perspectives, but also to better understand the world. <button type="button" class="wc-more" aria-expanded="false">
+    <div class="wc-text-closed"><p class="wc-text-head"><a href="/prototype2/whats-color/iii/">WHAT’S COLOR (III)</a></p><p>
+        ‘*WHAT’S COLOR? ‘ is a personal project I started in 2020 where I assign a color to people who inspire and admire me and whom I ask about their personal relationship with color. <button type="button" class="wc-more" aria-expanded="false">
               Read more...
             </button>
       </p></div>
     <div class="wc-text-open">
-      <p class="wc-text-head"><a href="/prototype2/whats-color/i/">WHAT’S COLOR (I)</a></p><p>
-              Throughout the lockdown I was away from my studio and my art form – painting.
-            </p><p>
-              I found great comfort reading pieces by philosophers, historians, thinkers, writers, and other artists. They helped me better understand humanity and its role in this globalized world.
-            </p><p>
-              During the past months I have invited them to consider and answer the question: ‘What does color mean to you?’
-            </p><p>
-              First of all, to open up a dialogue, to grasp new ways of seeing colors, other perspectives, but also to better understand the world. I wanted to think of color in a broader context, outside of the artistic view, and to discover the notion of color as it is thought of by others. <button type="button" class="wc-less">Read less</button>
+      <p class="wc-text-head"><a href="/prototype2/whats-color/iii/">WHAT’S COLOR (III)</a></p><p>
+              ‘*WHAT’S COLOR? ‘ is a personal project I started in 2020 where I assign a color to people who inspire and admire me and whom I ask about their personal relationship with color. I presented this third edition at Llibreria Terranova in Barcelona during April 2024. <button type="button" class="wc-less">Read less</button>
             </p>
     </div>
   </div><div
@@ -375,17 +362,29 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </div>
   </div><div
     class="wc-text"
-    data-edition="iii"
-    style="--wc-text-align: left"
+    data-edition="i"
+    style="--wc-text-align: justify"
   >
-    <div class="wc-text-closed"><p class="wc-text-head"><a href="/prototype2/whats-color/iii/">WHAT’S COLOR (III)</a></p><p>
-        ‘*WHAT’S COLOR? ‘ is a personal project I started in 2020 where I assign a color to people who inspire and admire me and whom I ask about their personal relationship with color. <button type="button" class="wc-more" aria-expanded="false">
+    <div class="wc-text-closed"><p class="wc-text-head"><a href="/prototype2/whats-color/i/">WHAT’S COLOR (I)</a></p><p>
+        Throughout the lockdown I was away from my studio and my art form – painting.
+      </p><p>
+        I found great comfort reading pieces by philosophers, historians, thinkers, writers, and other artists. They helped me better understand humanity and its role in this globalized world.
+      </p><p>
+        During the past months I have invited them to consider and answer the question: ‘What does color mean to you?’
+      </p><p>
+        First of all, to open up a dialogue, to grasp new ways of seeing colors, other perspectives, but also to better understand the world. <button type="button" class="wc-more" aria-expanded="false">
               Read more...
             </button>
       </p></div>
     <div class="wc-text-open">
-      <p class="wc-text-head"><a href="/prototype2/whats-color/iii/">WHAT’S COLOR (III)</a></p><p>
-              ‘*WHAT’S COLOR? ‘ is a personal project I started in 2020 where I assign a color to people who inspire and admire me and whom I ask about their personal relationship with color. I presented this third edition at Llibreria Terranova in Barcelona during April 2024. <button type="button" class="wc-less">Read less</button>
+      <p class="wc-text-head"><a href="/prototype2/whats-color/i/">WHAT’S COLOR (I)</a></p><p>
+              Throughout the lockdown I was away from my studio and my art form – painting.
+            </p><p>
+              I found great comfort reading pieces by philosophers, historians, thinkers, writers, and other artists. They helped me better understand humanity and its role in this globalized world.
+            </p><p>
+              During the past months I have invited them to consider and answer the question: ‘What does color mean to you?’
+            </p><p>
+              First of all, to open up a dialogue, to grasp new ways of seeing colors, other perspectives, but also to better understand the world. I wanted to think of color in a broader context, outside of the artistic view, and to discover the notion of color as it is thought of by others. <button type="button" class="wc-less">Read less</button>
             </p>
     </div>
   </div>
@@ -408,23 +407,17 @@ try { var nav = performance.getEntriesByType('navigation')[0];
 <div class="cursor" data-cursor aria-hidden="true"><span class="cursor-label"></span></div>
 <div class="panel-veil" data-panel-veil></div>
 <section class="about" id="about" data-panel aria-label="About">
-    <a class="about-close" href="#" data-panel-close>Close</a>
     <div class="about-sheet">
-      <div class="about-card-stage" data-tilt>
-      <div class="about-card" data-tilt-inner>
-        <p class="about-name">Claudia Valsells</p>
-        <p class="about-born">Barcelona<br />1969</p>
-        <address class="about-contact">
-          <a href="tel:+34609769186">+34 609 76 91 86</a>
-          <a href="mailto:editorial@alzuetagallery.com">editorial@alzuetagallery.com</a><a href="mailto:claudia@claudiacolor.com">claudia@claudiacolor.com</a>
-        </address>
-      </div>
-      </div>
       <div class="about-text">
-        <p class="about-lead">Claudia is an artist specialized in color. A multidisciplinary creator, she discovered painting through her own instinct for color. Her formation as a mural painter gave her a professional opportunity, and her passion in color her own artistic language.</p><p>Based on her reflections as an artist, her experience in color prediction and mural painting, brings to all her work, with color as a primary tool, an identifiable language.</p><p>She began her artistic career painting and soon realized that she had a natural ability with color. In her own words, ‘All I have done throughout my career has been to cultivate this natural gift. First as a mural painter, then designing color charts and prescribing color and finally as an artist’.</p><figure class="about-figure">
-        <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-1-800.avif 800w, /prototype2/about/about-1-1600.avif 1600w, /prototype2/about/about-1-2692.avif 2692w" sizes="(max-width: 899px) 92vw, 79vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-1-800.webp 800w, /prototype2/about/about-1-1600.webp 1600w, /prototype2/about/about-1-2692.webp 2692w" sizes="(max-width: 899px) 92vw, 79vw" />
+        <div class="about-opening" data-about-opening>
+          <div class="about-stage" data-about-stage>
+            <p class="about-lead">Claudia is an artist specialized in color. A multidisciplinary creator, she discovered painting through her own instinct for color. Her formation as a mural painter gave her a professional opportunity, and her passion in color her own artistic language.</p>
+            <div class="about-reel" data-about-reel>
+    <div class="about-reel-track" data-about-track>
+      <button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-1-800.avif 800w, /prototype2/about/about-1-1600.avif 1600w, /prototype2/about/about-1-2692.avif 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-1-800.webp 800w, /prototype2/about/about-1-1600.webp 1600w, /prototype2/about/about-1-2692.webp 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
       <img
         src="/prototype2/about/about-1-2692.jpg"
         alt="Claudia Valsells, seen from behind, painting fields of colour on a studio wall with a pot of paint in hand"
@@ -435,10 +428,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
-      </figure><p>The tireless search for the reason of color and its form has obsessed artists throughout history, from the very creation of pictorial expression. Claudia Valsells knows about this and she aims to portray this into her artwork.</p><figure class="about-figure">
-        <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-2-800.avif 800w, /prototype2/about/about-2-1600.avif 1600w, /prototype2/about/about-2-2692.avif 2692w" sizes="(max-width: 899px) 92vw, 79vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-2-800.webp 800w, /prototype2/about/about-2-1600.webp 1600w, /prototype2/about/about-2-2692.webp 2692w" sizes="(max-width: 899px) 92vw, 79vw" />
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-2-800.avif 800w, /prototype2/about/about-2-1600.avif 1600w, /prototype2/about/about-2-2692.avif 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-2-800.webp 800w, /prototype2/about/about-2-1600.webp 1600w, /prototype2/about/about-2-2692.webp 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
       <img
         src="/prototype2/about/about-2-2692.jpg"
         alt="Claudia Valsells painting a large canvas in her studio, pots of colour on the table beside her"
@@ -449,293 +442,357 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
-      </figure><p>In her beginnings as a colorist she worked on commissions, for architects, and on projects of different scales advising and prescribing color. Soon she founded her own Studio, under the name of ‘Arts&amp;Claus’, in allegory to the ‘Arts&amp;Craft’ movement where she always found a lot of inspiration. She specialized in mural painting, color applied to architecture, and interior design for 20 years on projects in Spain and abroad. Her role was to convey the value of color and its texture in the decoration of interior spaces working closely with professionals in the fields of art, design, and architecture. It was in this context, working close with architects and designers, that she found out the communication between professionals was based by the painting companies, relegated the work of the colorist to the background due to ignorance or fear clients to make a mistake or be branded as eccentric. It was then when Claudia Valsells created a specific chromatic selection, a COLOUR CHART, with more than 200 references, which have been used as color communication tools by Spain’s best architects.</p><p>Her work has two very defined characteristics: on the one hand her chromatic instinct, a gift of colors and on the other her ability to select, group and interact colors creating a chromatic language of her own.</p>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-3-800.avif 800w, /prototype2/about/about-3-845.avif 845w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-3-800.webp 800w, /prototype2/about/about-3-845.webp 845w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <img
+        src="/prototype2/about/about-3-845.jpg"
+        alt="Claudia Valsells reaching up to paint a canvas propped against the studio wall, among other canvases"
+        width="845"
+        height="550"
+        style="aspect-ratio:845 / 550"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-4-800.avif 800w, /prototype2/about/about-4-833.avif 833w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-4-800.webp 800w, /prototype2/about/about-4-833.webp 833w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <img
+        src="/prototype2/about/about-4-833.jpg"
+        alt="Claudia Valsells in her studio holding a palette and a brush over pots of paint"
+        width="833"
+        height="600"
+        style="aspect-ratio:833 / 600"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-5-765.avif 765w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-5-765.webp 765w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <img
+        src="/prototype2/about/about-5-765.jpg"
+        alt="Claudia Valsells in profile against a red wall stencilled AC 068"
+        width="765"
+        height="724"
+        style="aspect-ratio:765 / 724"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button>
+    </div>
+  </div>
+          </div>
+        </div>
+        <p>Based on her reflections as an artist, her experience in color prediction and mural painting, brings to all her work, with color as a primary tool, an identifiable language.</p><p>She began her artistic career painting and soon realized that she had a natural ability with color. In her own words, ‘All I have done throughout my career has been to cultivate this natural gift. First as a mural painter, then designing color charts and prescribing color and finally as an artist’.</p><p>The tireless search for the reason of color and its form has obsessed artists throughout history, from the very creation of pictorial expression. Claudia Valsells knows about this and she aims to portray this into her artwork.</p><p>In her beginnings as a colorist she worked on commissions, for architects, and on projects of different scales advising and prescribing color. Soon she founded her own Studio, under the name of ‘Arts&amp;Claus’, in allegory to the ‘Arts&amp;Craft’ movement where she always found a lot of inspiration. She specialized in mural painting, color applied to architecture, and interior design for 20 years on projects in Spain and abroad. Her role was to convey the value of color and its texture in the decoration of interior spaces working closely with professionals in the fields of art, design, and architecture. It was in this context, working close with architects and designers, that she found out the communication between professionals was based by the painting companies, relegated the work of the colorist to the background due to ignorance or fear clients to make a mistake or be branded as eccentric. It was then when Claudia Valsells created a specific chromatic selection, a COLOUR CHART, with more than 200 references, which have been used as color communication tools by Spain’s best architects.</p><p>Her work has two very defined characteristics: on the one hand her chromatic instinct, a gift of colors and on the other her ability to select, group and interact colors creating a chromatic language of her own.</p>
       </div>
       <div class="about-record">
         <section class="about-shows">
-              <h3 class="about-label">Solo exhibitions</h3>
-              <ul class="about-show-list">
-                <li class="about-show">
-                      <span class="about-show-when">2026 May - June</span>
-                      <span class="about-show-title">‘Moll de l’os’ peintures 2026</span>
-                      <span class="about-show-line">Alzueta Gallery</span>
-                      
-                    </li><li class="about-show">
-                      <span class="about-show-when">2025 April</span>
-                      <span class="about-show-title">‘Mira’m no deixis de mirar-me’</span>
-                      <span class="about-show-line">Solo show with Alzueta Gallery</span>
-                      <span class="about-show-place">at Palau de Casavells</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2024 July</span>
-                      <span class="about-show-title">Painting as a gift from color</span>
-                      <span class="about-show-line">Solo show</span>
-                      <span class="about-show-place">Gallery_br, Tetbury, UK</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2023 September</span>
-                      <span class="about-show-title">Transitions</span>
-                      <span class="about-show-line">Solo show</span>
-                      <span class="about-show-place">Alzueta Gallery Turó</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2021 December</span>
-                      <span class="about-show-title">Color Dialogues</span>
-                      <span class="about-show-line">Solo exhibition</span>
-                      <span class="about-show-place">Alzueta Gallery Madrid</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2021 December</span>
-                      <span class="about-show-title">What’s color?</span>
-                      <span class="about-show-line">2n edition</span>
-                      <span class="about-show-place">Espacio Pavillion, Madrid,</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2020 December</span>
-                      <span class="about-show-title">What’s color?</span>
-                      <span class="about-show-line">Solo Exhibition</span>
-                      <span class="about-show-place">Alzueta Gallery, Barcelona,</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2020 February</span>
-                      <span class="about-show-title">Aoo&amp;Claudia Valsells<br />Silla8 show</span>
-                      
-                      <span class="about-show-place">Alzueta Gallery, Barcelona</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2019 November</span>
-                      <span class="about-show-title">Almost Perfect</span>
-                      <span class="about-show-line">Solo Exhibition</span>
-                      <span class="about-show-place">Tokyo, Japan</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2019 October</span>
-                      <span class="about-show-title">Art Élysées-Art &amp; Design</span>
-                      <span class="about-show-line">Solo Exhibition</span>
-                      
-                    </li><li class="about-show">
-                      <span class="about-show-when">2018 November</span>
-                      <span class="about-show-title">solo exhibition</span>
-                      
-                      <span class="about-show-place">Palau de Casavells,</span><span class="about-show-place">Girona, Spain</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2017 February</span>
-                      <span class="about-show-title">Color y forma</span>
-                      <span class="about-show-line">solo exhibition<br />Alzueta Gallery</span>
-                      
-                    </li><li class="about-show">
-                      <span class="about-show-when">2007 May</span>
-                      <span class="about-show-title">Solo Exhibition</span>
-                      
-                      <span class="about-show-place">Palau de Casavells,<br />Baix Empordà</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2005 March</span>
-                      <span class="about-show-title">Expresions de mur.<br />Abstract Informalism Paintings.</span>
-                      <span class="about-show-line">Solo exhibition,</span>
-                      <span class="about-show-place">Galeria Miquel Alzueta, Barcelona</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2000 April</span>
-                      <span class="about-show-title">El color no existe, existe la luz<br />The color doesn’t exist, just the light</span>
-                      
-                      
-                    </li>
-              </ul>
-            </section><section class="about-shows">
-              <h3 class="about-label">Group exhibitions</h3>
-              <ul class="about-show-list">
-                <li class="about-show">
-                      <span class="about-show-when">2026 June - July</span>
-                      <span class="about-show-title">‘Shift Towards Coincidence’,</span>
-                      <span class="about-show-line">Group exhibition</span>
-                      <span class="about-show-place">Palau de Casavells</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2026 June - July</span>
-                      <span class="about-show-title">Abstract Paintings</span>
-                      <span class="about-show-line">Group Exhibition</span>
-                      <span class="about-show-place">Scroll Ny, New York</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2025 March</span>
-                      <span class="about-show-title">‘Marco, límite y lugar’,</span>
-                      <span class="about-show-line">Group Exhibition,<br />with Alzueta Gallery</span>
-                      <span class="about-show-place">Madrid</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2024 January</span>
-                      <span class="about-show-title">What abstract art means to me?</span>
-                      <span class="about-show-line">Group exhibition</span>
-                      <span class="about-show-place">Alzueta Gallery, Séneca</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2023 November</span>
-                      <span class="about-show-title">La terre est bleu comme<br />une orange</span>
-                      <span class="about-show-line">Group exhibition</span>
-                      <span class="about-show-place">Alzueta Gallery Madrid.</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2018 November</span>
-                      <span class="about-show-title">T10 at Alzueta Gallery,</span>
-                      
-                      <span class="about-show-place">Barcelona</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2016 December</span>
-                      <span class="about-show-title">Exposición colectiva</span>
-                      
-                      <span class="about-show-place">Galeria Axel Pairon</span>
-                    </li>
-              </ul>
-            </section><section class="about-shows is-wide">
-              <h3 class="about-label">Art fairs</h3>
-              <ul class="about-show-list" style="--rows:15">
-                <li class="about-show">
-                      <span class="about-show-when">2026 February</span>
-                      <span class="about-show-title">Zona Maco CDMX</span>
-                      <span class="about-show-line">with Alzueta Gallery</span>
-                      <span class="about-show-place">Mexico</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2025 October</span>
-                      <span class="about-show-title">Estampa contemporary<br />art fair,</span>
-                      <span class="about-show-line">with Alzueta Gallery</span>
-                      <span class="about-show-place">Madrid</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2024 February</span>
-                      <span class="about-show-title">ZONA MACO</span>
-                      <span class="about-show-line">with Alzueta Gallery</span>
-                      
-                    </li><li class="about-show">
-                      <span class="about-show-when">2024 November</span>
-                      <span class="about-show-title">Luxemburg art week</span>
-                      <span class="about-show-line">with Alzueta Gallery</span>
-                      <span class="about-show-place">Luxemburg</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2023 February</span>
-                      <span class="about-show-title">Contemporary Art Fair</span>
-                      <span class="about-show-line">Art Rotterdam</span>
-                      <span class="about-show-place">Rotterdam</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2021 October</span>
-                      <span class="about-show-title">Estampa Contemporary Art Fair</span>
-                      
-                      <span class="about-show-place">Alzueta Gallery, Madrid</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2021 September</span>
-                      <span class="about-show-title">Art Paris Fair</span>
-                      
-                      <span class="about-show-place">Alzueta Gallery, Paris</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2021 June</span>
-                      <span class="about-show-title">Art Madrid Feria</span>
-                      
-                      <span class="about-show-place">Alzueta Gallery, Madrid</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2019 March</span>
-                      <span class="about-show-title">AFF Art Fair</span>
-                      
-                      <span class="about-show-place">Brussels</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2019 March</span>
-                      <span class="about-show-title">Art Madrid</span>
-                      
-                      <span class="about-show-place">Madrid</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2018</span>
-                      <span class="about-show-title">Art fair</span>
-                      
-                      <span class="about-show-place">Hamburg</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2018</span>
-                      <span class="about-show-title">Art Elysees</span>
-                      
-                      <span class="about-show-place">París</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2018</span>
-                      <span class="about-show-title">Art Fair</span>
-                      
-                      <span class="about-show-place">Stockholm</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2018</span>
-                      <span class="about-show-title">Contemporary Art Fair<br />Just LX,</span>
-                      
-                      <span class="about-show-place">Portugal</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2018</span>
-                      <span class="about-show-title">Almoneda Antik Passion</span>
-                      
-                      <span class="about-show-place">Madrid</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2019 April</span>
-                      <span class="about-show-title">Almoneda, Ifema feria de Madrid</span>
-                      
-                      <span class="about-show-place">Palau de Casavells, Madrid.</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2018</span>
-                      <span class="about-show-title">Art Fair Grand Palais</span>
-                      
-                      <span class="about-show-place">Paris</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2018</span>
-                      <span class="about-show-title">Eurantica Art Fair</span>
-                      
-                      <span class="about-show-place">Brussels</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2019 April</span>
-                      <span class="about-show-title">Art Paris Grand Palais</span>
-                      
-                      <span class="about-show-place">París</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2018</span>
-                      <span class="about-show-title">Art Madrid,</span>
-                      
-                      <span class="about-show-place">Madrid</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2017 July</span>
-                      <span class="about-show-title">Uterqüe Art Essays</span>
-                      <span class="about-show-line">AW 2017</span>
-                      
-                    </li><li class="about-show">
-                      <span class="about-show-when">2017 March</span>
-                      <span class="about-show-title">International Art Fair, Art Paris</span>
-                      
-                      <span class="about-show-place">París</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2017 February</span>
-                      <span class="about-show-title">Art Madrid</span>
-                      
-                      <span class="about-show-place">Madrid</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2016 November</span>
-                      <span class="about-show-title">Antica Namur,</span>
-                      
-                      <span class="about-show-place">Belgium</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2016 October</span>
-                      <span class="about-show-title">Art Élysées,<br />International Art Fair,</span>
-                      
-                      <span class="about-show-place">París</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2016 June</span>
-                      <span class="about-show-title">Scope Basel,</span>
-                      
-                      <span class="about-show-place">Basel art fair</span>
-                    </li>
-              </ul>
-            </section>
-      </div>
-      <section class="about-collections">
-        <h3 class="about-label">Private collections</h3>
-        <ul class="about-collection-list">
-          <li class="about-collection">
-                <span class="about-collection-name">Fundació Vilacases</span>
-                <span class="about-collection-place">Barcelona</span>
-              </li><li class="about-collection">
-                <span class="about-collection-name">Fundació Banc Sabadell</span>
-                <span class="about-collection-place">Barcelona</span>
-              </li><li class="about-collection">
-                <span class="about-collection-name">Collection Hayot</span>
-                <span class="about-collection-place">France</span>
-              </li><li class="about-collection">
-                <span class="about-collection-name">Niederberghaus Collection</span>
-                <span class="about-collection-place">Mexico - US</span>
-              </li><li class="about-collection">
-                <span class="about-collection-name">Collection Richard</span>
-                <span class="about-collection-place">France</span>
-              </li><li class="about-collection">
-                <span class="about-collection-name">Smith Collection</span>
-                <span class="about-collection-place">Wyoming</span>
-              </li>
-        </ul>
-      </section>
-      <p class="about-foot"><b>Claudia Valsells</b> © All Rights Reserved</p>
+      <h3 class="about-label">Solo exhibitions</h3>
+      <ul class="about-show-list"><li class="about-show">
+    <span class="about-show-when">2026 May - June</span>
+    <span class="about-show-title">‘Moll de l’os’ peintures 2026</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    
+  </li><li class="about-show">
+    <span class="about-show-when">2025 April</span>
+    <span class="about-show-title">‘Mira’m no deixis de mirar-me’</span>
+    <span class="about-show-line">Solo show with Alzueta Gallery</span>
+    <span class="about-show-place">at Palau de Casavells</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2024 July</span>
+    <span class="about-show-title">Painting as a gift from color</span>
+    <span class="about-show-line">Solo show</span>
+    <span class="about-show-place">Gallery_br, Tetbury, UK</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2023 September</span>
+    <span class="about-show-title">Transitions</span>
+    <span class="about-show-line">Solo show</span>
+    <span class="about-show-place">Alzueta Gallery Turó</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2021 December</span>
+    <span class="about-show-title">Color Dialogues</span>
+    <span class="about-show-line">Solo exhibition</span>
+    <span class="about-show-place">Alzueta Gallery Madrid</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2021 December</span>
+    <span class="about-show-title">What’s color?</span>
+    <span class="about-show-line">2n edition</span>
+    <span class="about-show-place">Espacio Pavillion, Madrid,</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2020 December</span>
+    <span class="about-show-title">What’s color?</span>
+    <span class="about-show-line">Solo Exhibition</span>
+    <span class="about-show-place">Alzueta Gallery, Barcelona,</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2020 February</span>
+    <span class="about-show-title">Aoo&amp;Claudia Valsells<br />Silla8 show</span>
+    
+    <span class="about-show-place">Alzueta Gallery, Barcelona</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2019 November</span>
+    <span class="about-show-title">Almost Perfect</span>
+    <span class="about-show-line">Solo Exhibition</span>
+    <span class="about-show-place">Tokyo, Japan</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2019 October</span>
+    <span class="about-show-title">Art Élysées-Art &amp; Design</span>
+    <span class="about-show-line">Solo Exhibition</span>
+    
+  </li><li class="about-show">
+    <span class="about-show-when">2018 November</span>
+    <span class="about-show-title">solo exhibition</span>
+    
+    <span class="about-show-place">Palau de Casavells,</span><span class="about-show-place">Girona, Spain</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2017 February</span>
+    <span class="about-show-title">Color y forma</span>
+    <span class="about-show-line">solo exhibition<br />Alzueta Gallery</span>
+    
+  </li><li class="about-show">
+    <span class="about-show-when">2007 May</span>
+    <span class="about-show-title">Solo Exhibition</span>
+    
+    <span class="about-show-place">Palau de Casavells,<br />Baix Empordà</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2005 March</span>
+    <span class="about-show-title">Expresions de mur.<br />Abstract Informalism Paintings.</span>
+    <span class="about-show-line">Solo exhibition,</span>
+    <span class="about-show-place">Galeria Miquel Alzueta, Barcelona</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2000 April</span>
+    <span class="about-show-title">El color no existe, existe la luz<br />The color doesn’t exist, just the light</span>
+    
+    
+  </li></ul>
+    </section><section class="about-shows">
+      <h3 class="about-label">Group exhibitions</h3>
+      <ul class="about-show-list"><li class="about-show">
+    <span class="about-show-when">2026 June - July</span>
+    <span class="about-show-title">‘Shift Towards Coincidence’,</span>
+    <span class="about-show-line">Group exhibition</span>
+    <span class="about-show-place">Palau de Casavells</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2026 June - July</span>
+    <span class="about-show-title">Abstract Paintings</span>
+    <span class="about-show-line">Group Exhibition</span>
+    <span class="about-show-place">Scroll Ny, New York</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2025 March</span>
+    <span class="about-show-title">‘Marco, límite y lugar’,</span>
+    <span class="about-show-line">Group Exhibition,<br />with Alzueta Gallery</span>
+    <span class="about-show-place">Madrid</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2024 January</span>
+    <span class="about-show-title">What abstract art means to me?</span>
+    <span class="about-show-line">Group exhibition</span>
+    <span class="about-show-place">Alzueta Gallery, Séneca</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2023 November</span>
+    <span class="about-show-title">La terre est bleu comme<br />une orange</span>
+    <span class="about-show-line">Group exhibition</span>
+    <span class="about-show-place">Alzueta Gallery Madrid.</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2018 November</span>
+    <span class="about-show-title">T10 at Alzueta Gallery,</span>
+    
+    <span class="about-show-place">Barcelona</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2016 December</span>
+    <span class="about-show-title">Exposición colectiva</span>
+    
+    <span class="about-show-place">Galeria Axel Pairon</span>
+  </li></ul>
+    </section><section class="about-shows is-wide">
+    <h3 class="about-label">Art fairs</h3>
+    <div class="about-show-columns">
+      <ul class="about-show-list"><li class="about-show">
+    <span class="about-show-when">2026 February</span>
+    <span class="about-show-title">Zona Maco CDMX</span>
+    <span class="about-show-line">with Alzueta Gallery</span>
+    <span class="about-show-place">Mexico</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2025 October</span>
+    <span class="about-show-title">Estampa contemporary<br />art fair,</span>
+    <span class="about-show-line">with Alzueta Gallery</span>
+    <span class="about-show-place">Madrid</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2024 February</span>
+    <span class="about-show-title">ZONA MACO</span>
+    <span class="about-show-line">with Alzueta Gallery</span>
+    
+  </li><li class="about-show">
+    <span class="about-show-when">2024 November</span>
+    <span class="about-show-title">Luxemburg art week</span>
+    <span class="about-show-line">with Alzueta Gallery</span>
+    <span class="about-show-place">Luxemburg</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2023 February</span>
+    <span class="about-show-title">Contemporary Art Fair</span>
+    <span class="about-show-line">Art Rotterdam</span>
+    <span class="about-show-place">Rotterdam</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2021 October</span>
+    <span class="about-show-title">Estampa Contemporary Art Fair</span>
+    
+    <span class="about-show-place">Alzueta Gallery, Madrid</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2021 September</span>
+    <span class="about-show-title">Art Paris Fair</span>
+    
+    <span class="about-show-place">Alzueta Gallery, Paris</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2021 June</span>
+    <span class="about-show-title">Art Madrid Feria</span>
+    
+    <span class="about-show-place">Alzueta Gallery, Madrid</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2019 March</span>
+    <span class="about-show-title">AFF Art Fair</span>
+    
+    <span class="about-show-place">Brussels</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2019 March</span>
+    <span class="about-show-title">Art Madrid</span>
+    
+    <span class="about-show-place">Madrid</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">Art fair</span>
+    
+    <span class="about-show-place">Hamburg</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">Art Elysees</span>
+    
+    <span class="about-show-place">París</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">Art Fair</span>
+    
+    <span class="about-show-place">Stockholm</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">Contemporary Art Fair<br />Just LX,</span>
+    
+    <span class="about-show-place">Portugal</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">Almoneda Antik Passion</span>
+    
+    <span class="about-show-place">Madrid</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2019 April</span>
+    <span class="about-show-title">Almoneda, Ifema<br />Feria de Madrid</span>
+    
+    <span class="about-show-place">Palau de Casavells, Madrid.</span>
+  </li></ul>
+      <ul class="about-show-list"><li class="about-show">
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">Art Fair Grand Palais</span>
+    
+    <span class="about-show-place">Paris</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">Eurantica Art Fair</span>
+    
+    <span class="about-show-place">Brussels</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2019 April</span>
+    <span class="about-show-title">Art Paris Grand Palais</span>
+    
+    <span class="about-show-place">París</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">Art Madrid,</span>
+    
+    <span class="about-show-place">Madrid</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2017 July</span>
+    <span class="about-show-title">Uterqüe Art Essays</span>
+    <span class="about-show-line">AW 2017</span>
+    
+  </li><li class="about-show">
+    <span class="about-show-when">2017 March</span>
+    <span class="about-show-title">International Art Fair,<br />Art Paris</span>
+    
+    <span class="about-show-place">París</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2017 February</span>
+    <span class="about-show-title">Art Madrid</span>
+    
+    <span class="about-show-place">Madrid</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2016 November</span>
+    <span class="about-show-title">Antica Namur,</span>
+    
+    <span class="about-show-place">Belgium</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2016 October</span>
+    <span class="about-show-title">Art Élysées,<br />International Art Fair,</span>
+    
+    <span class="about-show-place">París</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2016 June</span>
+    <span class="about-show-title">Scope Basel,</span>
+    
+    <span class="about-show-place">Basel art fair</span>
+  </li></ul>
     </div>
   </section>
+        <section class="about-collections">
+          <h3 class="about-label">Private collections</h3>
+          <ul class="about-collection-list">
+            <li class="about-collection">
+                  <span class="about-collection-name">Fundació Vilacases</span>
+                  <span class="about-collection-place">Barcelona</span>
+                </li><li class="about-collection">
+                  <span class="about-collection-name">Fundació Banc Sabadell</span>
+                  <span class="about-collection-place">Barcelona</span>
+                </li><li class="about-collection">
+                  <span class="about-collection-name">Collection Hayot</span>
+                  <span class="about-collection-place">France</span>
+                </li><li class="about-collection">
+                  <span class="about-collection-name">Niederberghaus Collection</span>
+                  <span class="about-collection-place">Mexico - US</span>
+                </li><li class="about-collection">
+                  <span class="about-collection-name">Collection Richard</span>
+                  <span class="about-collection-place">France</span>
+                </li><li class="about-collection">
+                  <span class="about-collection-name">Smith Collection</span>
+                  <span class="about-collection-place">Wyoming</span>
+                </li>
+          </ul>
+        </section>
+      </div>
+      <address class="about-contact">
+        <a href="tel:+34609769186">+34 609 76 91 86</a>
+        <a href="mailto:editorial@alzuetagallery.com">editorial@alzuetagallery.com</a><a href="mailto:claudia@claudiacolor.com">claudia@claudiacolor.com</a>
+      </address>
+      <p class="about-foot"><b>Claudia Valsells</b> © All Rights Reserved</p>
+    </div>
+    <div class="about-viewer" data-about-viewer hidden>
+    <figure class="about-viewer-plate" data-about-plate></figure>
+    <p class="sr-only" data-about-count data-template="Photograph {n} of {total}" aria-live="polite"></p>
+  </div>
+  </section>
+  <a class="about-close" href="#" data-panel-close="about">Close</a>
+  <div class="about-cue" data-about-cue aria-hidden="true">
+    <svg viewBox="0 0 28 16" focusable="false">
+      <path d="M1.5 1.5 L14 13 L26.5 1.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
+    </svg>
+  </div>
+  <button type="button" class="about-viewer-step is-prev" data-about-step="-1" aria-label="Previous photograph">
+      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="M8 1 1 8l7 7" /></svg>
+    </button>
+    <button type="button" class="about-viewer-step is-next" data-about-step="1" aria-label="Next photograph">
+      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="m1 1 7 7-7 7" /></svg>
+    </button>
 <div class="lightbox" data-lightbox data-available-label="Available" hidden>
     <div class="lightbox-veil" data-lightbox-veil></div>
     <button type="button" class="lightbox-close" data-lightbox-close>Close</button>

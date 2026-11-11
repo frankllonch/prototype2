@@ -28,6 +28,9 @@ export function initYears() {
     const links = [...rail.querySelectorAll('.year')];
     if (!links.length)
         return;
+    // The controls stand under the last year, and the stylesheet cannot count
+    // them: a new year added in WordPress moves the controls down a line.
+    document.documentElement.style.setProperty('--years-count', String(links.length));
     const grid = document.querySelector('[data-grid]');
     const tiles = grid ? [...grid.querySelectorAll('.tile')] : [];
     /*
@@ -100,6 +103,18 @@ export function initYears() {
             if (focused === year) {
                 focus('');
                 return;
+            }
+            /*
+             * The year's paintings start loading now, not when the journey reaches
+             * them. They are lazy, so left alone they would only be asked for as
+             * they came near the screen — at the very end of the trip — and the
+             * page arrived on empty frames that filled in one by one.
+             */
+            const first = tiles.indexOf(target);
+            for (const tile of tiles.slice(Math.max(0, first - 12), first + 40)) {
+                const img = tile.querySelector('img');
+                if (img?.loading === 'lazy')
+                    img.loading = 'eager';
             }
             focus(year);
             /*

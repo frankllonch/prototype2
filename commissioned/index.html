@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" style="--hues:11;--hue-0:#18817a;--neg-0:rgb(231, 126, 133);--hue-1:#b25f2a;--neg-1:rgb(77, 160, 213);--hue-2:#0f8557;--neg-2:rgb(240, 122, 168);--hue-3:#1f8440;--neg-3:rgb(224, 123, 191);--hue-4:#087e9c;--neg-4:rgb(247, 129, 99);--hue-5:#936e1f;--neg-5:rgb(108, 145, 224);--hue-6:#cf4230;--neg-6:rgb(48, 189, 207);--hue-7:#cf303a;--neg-7:rgb(48, 207, 197);--hue-8:#747c1d;--neg-8:rgb(139, 131, 226);--hue-9:#092cf6;--neg-9:rgb(246, 211, 9);--hue-10:#cf3c30;--neg-10:rgb(48, 195, 207)">
+<html lang="en" data-hover="roll" style="--hues:11;--hue-0:#18817a;--neg-0:rgb(231, 126, 133);--hue-1:#b25f2a;--neg-1:rgb(77, 160, 213);--hue-2:#0f8557;--neg-2:rgb(240, 122, 168);--hue-3:#1f8440;--neg-3:rgb(224, 123, 191);--hue-4:#087e9c;--neg-4:rgb(247, 129, 99);--hue-5:#936e1f;--neg-5:rgb(108, 145, 224);--hue-6:#cf4230;--neg-6:rgb(48, 189, 207);--hue-7:#cf303a;--neg-7:rgb(48, 207, 197);--hue-8:#747c1d;--neg-8:rgb(139, 131, 226);--hue-9:#092cf6;--neg-9:rgb(246, 211, 9);--hue-10:#cf3c30;--neg-10:rgb(48, 195, 207)">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -23,18 +23,16 @@
 <link rel="modulepreload" href="/prototype2/js/paging.js" />
 <link rel="modulepreload" href="/prototype2/js/views.js" />
 <link rel="modulepreload" href="/prototype2/js/scroll-cue.js" />
+<link rel="modulepreload" href="/prototype2/js/about.js" />
 <link rel="modulepreload" href="/prototype2/js/inquiries.js" />
 <link rel="modulepreload" href="/prototype2/js/book.js" />
 <link rel="modulepreload" href="/prototype2/js/focus.js" />
 <link rel="modulepreload" href="/prototype2/js/hues.js" />
 <link rel="modulepreload" href="/prototype2/js/current.js" />
 <link rel="modulepreload" href="/prototype2/js/scrollbar.js" />
+<link rel="modulepreload" href="/prototype2/js/scramble.js" />
 <link rel="modulepreload" href="/prototype2/js/index.js" />
 <script>document.documentElement.classList.add('js');
-// The loading screen belongs to arriving at the site, not to each page of it.
-// Decided here, before the first paint, so pages after the first never show it
-// even for a frame.
-try { if (sessionStorage.getItem('cv-seen')) document.documentElement.classList.add('loaded') } catch (e) {}
 // Arriving at What's Color by its link, the page is laid out at the top and
 // moved down to the written sentence by script — so it is kept covered until
 // it has been, and no frame is ever painted in the wrong place. The script
@@ -52,9 +50,6 @@ try { var nav = performance.getEntriesByType('navigation')[0];
   } } catch (e) {}</script>
 </head>
 <body>
-<div class="loader" data-loader aria-hidden="true">
-    <p>CLAUDIA VALSELLS</p><p>1969</p><p>Alzueta Gallery</p><p>Barcelona, Spain</p><p>© All Rights Reserved</p>
-  </div>
 <div class="page-veil" aria-hidden="true"></div>
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="top">
@@ -67,16 +62,16 @@ try { var nav = performance.getEntriesByType('navigation')[0];
             
             data-roll
           >Color Chart</a><a
-            href="/prototype2/exhibitions/"
-            
-            
-            data-roll
-          >Exhibitions</a><a
             href="/prototype2/commissioned/"
             
             aria-current="page"
             data-roll
           >Commissioned</a><a
+            href="/prototype2/exhibitions/"
+            
+            
+            data-roll
+          >Exhibitions</a><a
             href="/prototype2/artwork/"
             
             
@@ -104,10 +99,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
             <span class="xrow-title">Terra Rossa</span>
             <span class="exh-plate" aria-hidden="true">
               <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/6331e7c1e2c4da66-400.avif 400w, /prototype2/media/6331e7c1e2c4da66-800.avif 800w" sizes="(max-width: 899px) 30vw, 13vw" />
-      <source type="image/webp" srcset="/prototype2/media/6331e7c1e2c4da66-400.webp 400w, /prototype2/media/6331e7c1e2c4da66-800.webp 800w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/avif" srcset="/prototype2/media/6331e7c1e2c4da66-400.avif 400w, /prototype2/media/6331e7c1e2c4da66-800.avif 800w, /prototype2/media/6331e7c1e2c4da66-1000.avif 1000w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/webp" srcset="/prototype2/media/6331e7c1e2c4da66-400.webp 400w, /prototype2/media/6331e7c1e2c4da66-800.webp 800w, /prototype2/media/6331e7c1e2c4da66-1000.webp 1000w" sizes="(max-width: 899px) 30vw, 13vw" />
       <img
-        src="/prototype2/media/6331e7c1e2c4da66-800.jpg"
+        src="/prototype2/media/6331e7c1e2c4da66-1000.jpg"
         alt=""
         width="1000"
         height="1333"
@@ -126,10 +121,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
             <span class="xrow-title">Color Chart T Bofill, Taller d’Arquitectura</span>
             <span class="exh-plate" aria-hidden="true">
               <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/f085ab2ad0a05b9f-400.avif 400w, /prototype2/media/f085ab2ad0a05b9f-800.avif 800w" sizes="(max-width: 899px) 30vw, 13vw" />
-      <source type="image/webp" srcset="/prototype2/media/f085ab2ad0a05b9f-400.webp 400w, /prototype2/media/f085ab2ad0a05b9f-800.webp 800w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/avif" srcset="/prototype2/media/f085ab2ad0a05b9f-400.avif 400w, /prototype2/media/f085ab2ad0a05b9f-800.avif 800w, /prototype2/media/f085ab2ad0a05b9f-1000.avif 1000w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/webp" srcset="/prototype2/media/f085ab2ad0a05b9f-400.webp 400w, /prototype2/media/f085ab2ad0a05b9f-800.webp 800w, /prototype2/media/f085ab2ad0a05b9f-1000.webp 1000w" sizes="(max-width: 899px) 30vw, 13vw" />
       <img
-        src="/prototype2/media/f085ab2ad0a05b9f-800.jpg"
+        src="/prototype2/media/f085ab2ad0a05b9f-1000.jpg"
         alt=""
         width="1000"
         height="1333"
@@ -170,10 +165,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
             <span class="xrow-title">Artist Residence</span>
             <span class="exh-plate" aria-hidden="true">
               <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/ce9d27fe823c2912-400.avif 400w" sizes="(max-width: 899px) 30vw, 13vw" />
-      <source type="image/webp" srcset="/prototype2/media/ce9d27fe823c2912-400.webp 400w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/avif" srcset="/prototype2/media/ce9d27fe823c2912-400.avif 400w, /prototype2/media/ce9d27fe823c2912-683.avif 683w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/webp" srcset="/prototype2/media/ce9d27fe823c2912-400.webp 400w, /prototype2/media/ce9d27fe823c2912-683.webp 683w" sizes="(max-width: 899px) 30vw, 13vw" />
       <img
-        src="/prototype2/media/ce9d27fe823c2912-400.jpg"
+        src="/prototype2/media/ce9d27fe823c2912-683.jpg"
         alt=""
         width="683"
         height="1024"
@@ -192,10 +187,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
             <span class="xrow-title">Tones Collection of Nani Marquina</span>
             <span class="exh-plate" aria-hidden="true">
               <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/8ca81c2fd94d686b-400.avif 400w" sizes="(max-width: 899px) 30vw, 13vw" />
-      <source type="image/webp" srcset="/prototype2/media/8ca81c2fd94d686b-400.webp 400w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/avif" srcset="/prototype2/media/8ca81c2fd94d686b-400.avif 400w, /prototype2/media/8ca81c2fd94d686b-683.avif 683w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/webp" srcset="/prototype2/media/8ca81c2fd94d686b-400.webp 400w, /prototype2/media/8ca81c2fd94d686b-683.webp 683w" sizes="(max-width: 899px) 30vw, 13vw" />
       <img
-        src="/prototype2/media/8ca81c2fd94d686b-400.jpg"
+        src="/prototype2/media/8ca81c2fd94d686b-683.jpg"
         alt=""
         width="683"
         height="1024"
@@ -214,10 +209,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
             <span class="xrow-title">Color Atlas for La Muralla Roja</span>
             <span class="exh-plate" aria-hidden="true">
               <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/34b0e9889b103d7c-400.avif 400w" sizes="(max-width: 899px) 30vw, 13vw" />
-      <source type="image/webp" srcset="/prototype2/media/34b0e9889b103d7c-400.webp 400w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/avif" srcset="/prototype2/media/34b0e9889b103d7c-400.avif 400w, /prototype2/media/34b0e9889b103d7c-600.avif 600w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/webp" srcset="/prototype2/media/34b0e9889b103d7c-400.webp 400w, /prototype2/media/34b0e9889b103d7c-600.webp 600w" sizes="(max-width: 899px) 30vw, 13vw" />
       <img
-        src="/prototype2/media/34b0e9889b103d7c-400.jpg"
+        src="/prototype2/media/34b0e9889b103d7c-600.jpg"
         alt=""
         width="600"
         height="800"
@@ -258,10 +253,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
             <span class="xrow-title">Edges Collection</span>
             <span class="exh-plate" aria-hidden="true">
               <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/a4cbef44f968dd42-400.avif 400w, /prototype2/media/a4cbef44f968dd42-800.avif 800w" sizes="(max-width: 899px) 30vw, 13vw" />
-      <source type="image/webp" srcset="/prototype2/media/a4cbef44f968dd42-400.webp 400w, /prototype2/media/a4cbef44f968dd42-800.webp 800w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/avif" srcset="/prototype2/media/a4cbef44f968dd42-400.avif 400w, /prototype2/media/a4cbef44f968dd42-800.avif 800w, /prototype2/media/a4cbef44f968dd42-1000.avif 1000w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/webp" srcset="/prototype2/media/a4cbef44f968dd42-400.webp 400w, /prototype2/media/a4cbef44f968dd42-800.webp 800w, /prototype2/media/a4cbef44f968dd42-1000.webp 1000w" sizes="(max-width: 899px) 30vw, 13vw" />
       <img
-        src="/prototype2/media/a4cbef44f968dd42-800.jpg"
+        src="/prototype2/media/a4cbef44f968dd42-1000.jpg"
         alt=""
         width="1000"
         height="1100"
@@ -280,10 +275,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
             <span class="xrow-title">Uterqüe Arts Essays</span>
             <span class="exh-plate" aria-hidden="true">
               <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/eb575e7e8ebe454b-400.avif 400w, /prototype2/media/eb575e7e8ebe454b-800.avif 800w" sizes="(max-width: 899px) 30vw, 13vw" />
-      <source type="image/webp" srcset="/prototype2/media/eb575e7e8ebe454b-400.webp 400w, /prototype2/media/eb575e7e8ebe454b-800.webp 800w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/avif" srcset="/prototype2/media/eb575e7e8ebe454b-400.avif 400w, /prototype2/media/eb575e7e8ebe454b-800.avif 800w, /prototype2/media/eb575e7e8ebe454b-900.avif 900w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/webp" srcset="/prototype2/media/eb575e7e8ebe454b-400.webp 400w, /prototype2/media/eb575e7e8ebe454b-800.webp 800w, /prototype2/media/eb575e7e8ebe454b-900.webp 900w" sizes="(max-width: 899px) 30vw, 13vw" />
       <img
-        src="/prototype2/media/eb575e7e8ebe454b-800.jpg"
+        src="/prototype2/media/eb575e7e8ebe454b-900.jpg"
         alt=""
         width="900"
         height="508"
@@ -329,10 +324,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
             <span class="xrow-title">Dadà Barcelona</span>
             <span class="exh-plate" aria-hidden="true">
               <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/0a49db3a087f447a-400.avif 400w, /prototype2/media/0a49db3a087f447a-800.avif 800w" sizes="(max-width: 899px) 30vw, 13vw" />
-      <source type="image/webp" srcset="/prototype2/media/0a49db3a087f447a-400.webp 400w, /prototype2/media/0a49db3a087f447a-800.webp 800w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/avif" srcset="/prototype2/media/0a49db3a087f447a-400.avif 400w, /prototype2/media/0a49db3a087f447a-800.avif 800w, /prototype2/media/0a49db3a087f447a-1000.avif 1000w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/webp" srcset="/prototype2/media/0a49db3a087f447a-400.webp 400w, /prototype2/media/0a49db3a087f447a-800.webp 800w, /prototype2/media/0a49db3a087f447a-1000.webp 1000w" sizes="(max-width: 899px) 30vw, 13vw" />
       <img
-        src="/prototype2/media/0a49db3a087f447a-800.jpg"
+        src="/prototype2/media/0a49db3a087f447a-1000.jpg"
         alt=""
         width="1000"
         height="1000"
@@ -351,10 +346,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
             <span class="xrow-title">Dadà Barcelona</span>
             <span class="exh-plate" aria-hidden="true">
               <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/a2a9a7c14fe4794c-400.avif 400w, /prototype2/media/a2a9a7c14fe4794c-800.avif 800w" sizes="(max-width: 899px) 30vw, 13vw" />
-      <source type="image/webp" srcset="/prototype2/media/a2a9a7c14fe4794c-400.webp 400w, /prototype2/media/a2a9a7c14fe4794c-800.webp 800w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/avif" srcset="/prototype2/media/a2a9a7c14fe4794c-400.avif 400w, /prototype2/media/a2a9a7c14fe4794c-800.avif 800w, /prototype2/media/a2a9a7c14fe4794c-1000.avif 1000w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/webp" srcset="/prototype2/media/a2a9a7c14fe4794c-400.webp 400w, /prototype2/media/a2a9a7c14fe4794c-800.webp 800w, /prototype2/media/a2a9a7c14fe4794c-1000.webp 1000w" sizes="(max-width: 899px) 30vw, 13vw" />
       <img
-        src="/prototype2/media/a2a9a7c14fe4794c-800.jpg"
+        src="/prototype2/media/a2a9a7c14fe4794c-1000.jpg"
         alt=""
         width="1000"
         height="668"
@@ -378,10 +373,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
             <span class="xrow-title">Kamanar</span>
             <span class="exh-plate" aria-hidden="true">
               <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/6b987e648d610552-400.avif 400w" sizes="(max-width: 899px) 30vw, 13vw" />
-      <source type="image/webp" srcset="/prototype2/media/6b987e648d610552-400.webp 400w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/avif" srcset="/prototype2/media/6b987e648d610552-400.avif 400w, /prototype2/media/6b987e648d610552-683.avif 683w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/webp" srcset="/prototype2/media/6b987e648d610552-400.webp 400w, /prototype2/media/6b987e648d610552-683.webp 683w" sizes="(max-width: 899px) 30vw, 13vw" />
       <img
-        src="/prototype2/media/6b987e648d610552-400.jpg"
+        src="/prototype2/media/6b987e648d610552-683.jpg"
         alt=""
         width="683"
         height="1024"
@@ -400,10 +395,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
             <span class="xrow-title">Solidary Fulard Design</span>
             <span class="exh-plate" aria-hidden="true">
               <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/a91b44178a1d1c6a-400.avif 400w, /prototype2/media/a91b44178a1d1c6a-800.avif 800w" sizes="(max-width: 899px) 30vw, 13vw" />
-      <source type="image/webp" srcset="/prototype2/media/a91b44178a1d1c6a-400.webp 400w, /prototype2/media/a91b44178a1d1c6a-800.webp 800w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/avif" srcset="/prototype2/media/a91b44178a1d1c6a-400.avif 400w, /prototype2/media/a91b44178a1d1c6a-800.avif 800w, /prototype2/media/a91b44178a1d1c6a-1080.avif 1080w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/webp" srcset="/prototype2/media/a91b44178a1d1c6a-400.webp 400w, /prototype2/media/a91b44178a1d1c6a-800.webp 800w, /prototype2/media/a91b44178a1d1c6a-1080.webp 1080w" sizes="(max-width: 899px) 30vw, 13vw" />
       <img
-        src="/prototype2/media/a91b44178a1d1c6a-800.jpg"
+        src="/prototype2/media/a91b44178a1d1c6a-1080.jpg"
         alt=""
         width="1080"
         height="1620"
@@ -454,10 +449,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
           <div class="sheet-frame">
             <figure class="reader-figure sheet-figure is-current">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/6331e7c1e2c4da66-400.avif 400w, /prototype2/media/6331e7c1e2c4da66-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/6331e7c1e2c4da66-400.webp 400w, /prototype2/media/6331e7c1e2c4da66-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/6331e7c1e2c4da66-400.avif 400w, /prototype2/media/6331e7c1e2c4da66-800.avif 800w, /prototype2/media/6331e7c1e2c4da66-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/6331e7c1e2c4da66-400.webp 400w, /prototype2/media/6331e7c1e2c4da66-800.webp 800w, /prototype2/media/6331e7c1e2c4da66-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/6331e7c1e2c4da66-800.jpg"
+        src="/prototype2/media/6331e7c1e2c4da66-1000.jpg"
         alt=""
         width="1000"
         height="1333"
@@ -468,10 +463,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/d1c1dd258515b23c-400.avif 400w, /prototype2/media/d1c1dd258515b23c-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/d1c1dd258515b23c-400.webp 400w, /prototype2/media/d1c1dd258515b23c-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/d1c1dd258515b23c-400.avif 400w, /prototype2/media/d1c1dd258515b23c-800.avif 800w, /prototype2/media/d1c1dd258515b23c-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/d1c1dd258515b23c-400.webp 400w, /prototype2/media/d1c1dd258515b23c-800.webp 800w, /prototype2/media/d1c1dd258515b23c-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/d1c1dd258515b23c-800.jpg"
+        src="/prototype2/media/d1c1dd258515b23c-1000.jpg"
         alt=""
         width="1000"
         height="1333"
@@ -482,10 +477,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/8ec798532a5378f3-400.avif 400w, /prototype2/media/8ec798532a5378f3-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/8ec798532a5378f3-400.webp 400w, /prototype2/media/8ec798532a5378f3-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/8ec798532a5378f3-400.avif 400w, /prototype2/media/8ec798532a5378f3-800.avif 800w, /prototype2/media/8ec798532a5378f3-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/8ec798532a5378f3-400.webp 400w, /prototype2/media/8ec798532a5378f3-800.webp 800w, /prototype2/media/8ec798532a5378f3-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/8ec798532a5378f3-800.jpg"
+        src="/prototype2/media/8ec798532a5378f3-1000.jpg"
         alt=""
         width="1000"
         height="1333"
@@ -496,10 +491,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/3e848eb0758a7514-400.avif 400w, /prototype2/media/3e848eb0758a7514-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/3e848eb0758a7514-400.webp 400w, /prototype2/media/3e848eb0758a7514-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/3e848eb0758a7514-400.avif 400w, /prototype2/media/3e848eb0758a7514-800.avif 800w, /prototype2/media/3e848eb0758a7514-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/3e848eb0758a7514-400.webp 400w, /prototype2/media/3e848eb0758a7514-800.webp 800w, /prototype2/media/3e848eb0758a7514-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/3e848eb0758a7514-800.jpg"
+        src="/prototype2/media/3e848eb0758a7514-1000.jpg"
         alt=""
         width="1000"
         height="983"
@@ -510,10 +505,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure is-wide">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/1e4ff24686d9108f-400.avif 400w, /prototype2/media/1e4ff24686d9108f-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/1e4ff24686d9108f-400.webp 400w, /prototype2/media/1e4ff24686d9108f-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/1e4ff24686d9108f-400.avif 400w, /prototype2/media/1e4ff24686d9108f-800.avif 800w, /prototype2/media/1e4ff24686d9108f-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/1e4ff24686d9108f-400.webp 400w, /prototype2/media/1e4ff24686d9108f-800.webp 800w, /prototype2/media/1e4ff24686d9108f-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/1e4ff24686d9108f-800.jpg"
+        src="/prototype2/media/1e4ff24686d9108f-1000.jpg"
         alt=""
         width="1000"
         height="750"
@@ -565,10 +560,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
           <div class="sheet-frame">
             <figure class="reader-figure sheet-figure is-current">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/f085ab2ad0a05b9f-400.avif 400w, /prototype2/media/f085ab2ad0a05b9f-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/f085ab2ad0a05b9f-400.webp 400w, /prototype2/media/f085ab2ad0a05b9f-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/f085ab2ad0a05b9f-400.avif 400w, /prototype2/media/f085ab2ad0a05b9f-800.avif 800w, /prototype2/media/f085ab2ad0a05b9f-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/f085ab2ad0a05b9f-400.webp 400w, /prototype2/media/f085ab2ad0a05b9f-800.webp 800w, /prototype2/media/f085ab2ad0a05b9f-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/f085ab2ad0a05b9f-800.jpg"
+        src="/prototype2/media/f085ab2ad0a05b9f-1000.jpg"
         alt=""
         width="1000"
         height="1333"
@@ -579,10 +574,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/50e10a3850436f52-400.avif 400w, /prototype2/media/50e10a3850436f52-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/50e10a3850436f52-400.webp 400w, /prototype2/media/50e10a3850436f52-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/50e10a3850436f52-400.avif 400w, /prototype2/media/50e10a3850436f52-800.avif 800w, /prototype2/media/50e10a3850436f52-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/50e10a3850436f52-400.webp 400w, /prototype2/media/50e10a3850436f52-800.webp 800w, /prototype2/media/50e10a3850436f52-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/50e10a3850436f52-800.jpg"
+        src="/prototype2/media/50e10a3850436f52-1000.jpg"
         alt=""
         width="1000"
         height="1333"
@@ -593,10 +588,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/319fd1b5c3123ede-400.avif 400w, /prototype2/media/319fd1b5c3123ede-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/319fd1b5c3123ede-400.webp 400w, /prototype2/media/319fd1b5c3123ede-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/319fd1b5c3123ede-400.avif 400w, /prototype2/media/319fd1b5c3123ede-800.avif 800w, /prototype2/media/319fd1b5c3123ede-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/319fd1b5c3123ede-400.webp 400w, /prototype2/media/319fd1b5c3123ede-800.webp 800w, /prototype2/media/319fd1b5c3123ede-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/319fd1b5c3123ede-800.jpg"
+        src="/prototype2/media/319fd1b5c3123ede-1000.jpg"
         alt=""
         width="1000"
         height="1333"
@@ -819,10 +814,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
           <div class="sheet-frame">
             <figure class="reader-figure sheet-figure is-current">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/ce9d27fe823c2912-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/ce9d27fe823c2912-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/ce9d27fe823c2912-400.avif 400w, /prototype2/media/ce9d27fe823c2912-683.avif 683w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/ce9d27fe823c2912-400.webp 400w, /prototype2/media/ce9d27fe823c2912-683.webp 683w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/ce9d27fe823c2912-400.jpg"
+        src="/prototype2/media/ce9d27fe823c2912-683.jpg"
         alt=""
         width="683"
         height="1024"
@@ -833,10 +828,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/a2ec09214c4d2186-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/a2ec09214c4d2186-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/a2ec09214c4d2186-400.avif 400w, /prototype2/media/a2ec09214c4d2186-683.avif 683w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/a2ec09214c4d2186-400.webp 400w, /prototype2/media/a2ec09214c4d2186-683.webp 683w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/a2ec09214c4d2186-400.jpg"
+        src="/prototype2/media/a2ec09214c4d2186-683.jpg"
         alt=""
         width="683"
         height="1024"
@@ -847,10 +842,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/90d724b08d0e7510-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/90d724b08d0e7510-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/90d724b08d0e7510-400.avif 400w, /prototype2/media/90d724b08d0e7510-683.avif 683w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/90d724b08d0e7510-400.webp 400w, /prototype2/media/90d724b08d0e7510-683.webp 683w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/90d724b08d0e7510-400.jpg"
+        src="/prototype2/media/90d724b08d0e7510-683.jpg"
         alt=""
         width="683"
         height="1024"
@@ -861,10 +856,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/8dac9cb60b7aaf6b-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/8dac9cb60b7aaf6b-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/8dac9cb60b7aaf6b-400.avif 400w, /prototype2/media/8dac9cb60b7aaf6b-683.avif 683w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/8dac9cb60b7aaf6b-400.webp 400w, /prototype2/media/8dac9cb60b7aaf6b-683.webp 683w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/8dac9cb60b7aaf6b-400.jpg"
+        src="/prototype2/media/8dac9cb60b7aaf6b-683.jpg"
         alt=""
         width="683"
         height="1024"
@@ -875,10 +870,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/800cc15b71fd85cd-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/800cc15b71fd85cd-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/800cc15b71fd85cd-400.avif 400w, /prototype2/media/800cc15b71fd85cd-683.avif 683w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/800cc15b71fd85cd-400.webp 400w, /prototype2/media/800cc15b71fd85cd-683.webp 683w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/800cc15b71fd85cd-400.jpg"
+        src="/prototype2/media/800cc15b71fd85cd-683.jpg"
         alt=""
         width="683"
         height="1024"
@@ -889,10 +884,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/60538712b7b7ea15-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/60538712b7b7ea15-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/60538712b7b7ea15-400.avif 400w, /prototype2/media/60538712b7b7ea15-683.avif 683w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/60538712b7b7ea15-400.webp 400w, /prototype2/media/60538712b7b7ea15-683.webp 683w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/60538712b7b7ea15-400.jpg"
+        src="/prototype2/media/60538712b7b7ea15-683.jpg"
         alt=""
         width="683"
         height="1024"
@@ -945,10 +940,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
           <div class="sheet-frame">
             <figure class="reader-figure sheet-figure is-current">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/8ca81c2fd94d686b-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/8ca81c2fd94d686b-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/8ca81c2fd94d686b-400.avif 400w, /prototype2/media/8ca81c2fd94d686b-683.avif 683w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/8ca81c2fd94d686b-400.webp 400w, /prototype2/media/8ca81c2fd94d686b-683.webp 683w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/8ca81c2fd94d686b-400.jpg"
+        src="/prototype2/media/8ca81c2fd94d686b-683.jpg"
         alt=""
         width="683"
         height="1024"
@@ -959,10 +954,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/5849b8fbdeb41d0c-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/5849b8fbdeb41d0c-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/5849b8fbdeb41d0c-400.avif 400w, /prototype2/media/5849b8fbdeb41d0c-683.avif 683w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/5849b8fbdeb41d0c-400.webp 400w, /prototype2/media/5849b8fbdeb41d0c-683.webp 683w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/5849b8fbdeb41d0c-400.jpg"
+        src="/prototype2/media/5849b8fbdeb41d0c-683.jpg"
         alt=""
         width="683"
         height="1024"
@@ -973,10 +968,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/7b3497b19a945f0c-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/7b3497b19a945f0c-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/7b3497b19a945f0c-400.avif 400w, /prototype2/media/7b3497b19a945f0c-683.avif 683w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/7b3497b19a945f0c-400.webp 400w, /prototype2/media/7b3497b19a945f0c-683.webp 683w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/7b3497b19a945f0c-400.jpg"
+        src="/prototype2/media/7b3497b19a945f0c-683.jpg"
         alt=""
         width="683"
         height="1024"
@@ -987,10 +982,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure is-wide">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/26b9dd6810af488e-400.avif 400w, /prototype2/media/26b9dd6810af488e-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/26b9dd6810af488e-400.webp 400w, /prototype2/media/26b9dd6810af488e-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/26b9dd6810af488e-400.avif 400w, /prototype2/media/26b9dd6810af488e-800.avif 800w, /prototype2/media/26b9dd6810af488e-1024.avif 1024w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/26b9dd6810af488e-400.webp 400w, /prototype2/media/26b9dd6810af488e-800.webp 800w, /prototype2/media/26b9dd6810af488e-1024.webp 1024w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/26b9dd6810af488e-800.jpg"
+        src="/prototype2/media/26b9dd6810af488e-1024.jpg"
         alt=""
         width="1024"
         height="677"
@@ -1001,10 +996,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure is-wide">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/4cd291628f3fe8e5-400.avif 400w, /prototype2/media/4cd291628f3fe8e5-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/4cd291628f3fe8e5-400.webp 400w, /prototype2/media/4cd291628f3fe8e5-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/4cd291628f3fe8e5-400.avif 400w, /prototype2/media/4cd291628f3fe8e5-800.avif 800w, /prototype2/media/4cd291628f3fe8e5-1024.avif 1024w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/4cd291628f3fe8e5-400.webp 400w, /prototype2/media/4cd291628f3fe8e5-800.webp 800w, /prototype2/media/4cd291628f3fe8e5-1024.webp 1024w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/4cd291628f3fe8e5-800.jpg"
+        src="/prototype2/media/4cd291628f3fe8e5-1024.jpg"
         alt=""
         width="1024"
         height="677"
@@ -1015,10 +1010,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure is-wide">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/4c33baed701287ca-400.avif 400w, /prototype2/media/4c33baed701287ca-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/4c33baed701287ca-400.webp 400w, /prototype2/media/4c33baed701287ca-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/4c33baed701287ca-400.avif 400w, /prototype2/media/4c33baed701287ca-800.avif 800w, /prototype2/media/4c33baed701287ca-1024.avif 1024w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/4c33baed701287ca-400.webp 400w, /prototype2/media/4c33baed701287ca-800.webp 800w, /prototype2/media/4c33baed701287ca-1024.webp 1024w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/4c33baed701287ca-800.jpg"
+        src="/prototype2/media/4c33baed701287ca-1024.jpg"
         alt=""
         width="1024"
         height="677"
@@ -1070,10 +1065,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
           <div class="sheet-frame">
             <figure class="reader-figure sheet-figure is-current">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/34b0e9889b103d7c-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/34b0e9889b103d7c-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/34b0e9889b103d7c-400.avif 400w, /prototype2/media/34b0e9889b103d7c-600.avif 600w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/34b0e9889b103d7c-400.webp 400w, /prototype2/media/34b0e9889b103d7c-600.webp 600w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/34b0e9889b103d7c-400.jpg"
+        src="/prototype2/media/34b0e9889b103d7c-600.jpg"
         alt=""
         width="600"
         height="800"
@@ -1084,10 +1079,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/83d8c9e2203b6d40-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/83d8c9e2203b6d40-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/83d8c9e2203b6d40-400.avif 400w, /prototype2/media/83d8c9e2203b6d40-600.avif 600w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/83d8c9e2203b6d40-400.webp 400w, /prototype2/media/83d8c9e2203b6d40-600.webp 600w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/83d8c9e2203b6d40-400.jpg"
+        src="/prototype2/media/83d8c9e2203b6d40-600.jpg"
         alt=""
         width="600"
         height="800"
@@ -1098,10 +1093,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/d685a953c5c5b4b6-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/d685a953c5c5b4b6-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/d685a953c5c5b4b6-400.avif 400w, /prototype2/media/d685a953c5c5b4b6-600.avif 600w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/d685a953c5c5b4b6-400.webp 400w, /prototype2/media/d685a953c5c5b4b6-600.webp 600w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/d685a953c5c5b4b6-400.jpg"
+        src="/prototype2/media/d685a953c5c5b4b6-600.jpg"
         alt=""
         width="600"
         height="800"
@@ -1112,10 +1107,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/2fb1ff2458dd6739-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/2fb1ff2458dd6739-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/2fb1ff2458dd6739-400.avif 400w, /prototype2/media/2fb1ff2458dd6739-600.avif 600w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/2fb1ff2458dd6739-400.webp 400w, /prototype2/media/2fb1ff2458dd6739-600.webp 600w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/2fb1ff2458dd6739-400.jpg"
+        src="/prototype2/media/2fb1ff2458dd6739-600.jpg"
         alt=""
         width="600"
         height="800"
@@ -1126,10 +1121,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/47b5699bbe64b614-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/47b5699bbe64b614-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/47b5699bbe64b614-400.avif 400w, /prototype2/media/47b5699bbe64b614-600.avif 600w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/47b5699bbe64b614-400.webp 400w, /prototype2/media/47b5699bbe64b614-600.webp 600w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/47b5699bbe64b614-400.jpg"
+        src="/prototype2/media/47b5699bbe64b614-600.jpg"
         alt=""
         width="600"
         height="800"
@@ -1140,10 +1135,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/ab6af1c66ad57894-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/ab6af1c66ad57894-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/ab6af1c66ad57894-400.avif 400w, /prototype2/media/ab6af1c66ad57894-600.avif 600w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/ab6af1c66ad57894-400.webp 400w, /prototype2/media/ab6af1c66ad57894-600.webp 600w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/ab6af1c66ad57894-400.jpg"
+        src="/prototype2/media/ab6af1c66ad57894-600.jpg"
         alt=""
         width="600"
         height="800"
@@ -1322,10 +1317,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure is-wide">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/4f7f0f22ef5e7ff2-400.avif 400w, /prototype2/media/4f7f0f22ef5e7ff2-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/4f7f0f22ef5e7ff2-400.webp 400w, /prototype2/media/4f7f0f22ef5e7ff2-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/4f7f0f22ef5e7ff2-400.avif 400w, /prototype2/media/4f7f0f22ef5e7ff2-800.avif 800w, /prototype2/media/4f7f0f22ef5e7ff2-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/4f7f0f22ef5e7ff2-400.webp 400w, /prototype2/media/4f7f0f22ef5e7ff2-800.webp 800w, /prototype2/media/4f7f0f22ef5e7ff2-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/4f7f0f22ef5e7ff2-800.jpg"
+        src="/prototype2/media/4f7f0f22ef5e7ff2-1000.jpg"
         alt="Silla 8 - Claudia Valsells"
         width="1000"
         height="700"
@@ -1336,10 +1331,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure is-wide">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/69180fb7bfaf35cb-400.avif 400w, /prototype2/media/69180fb7bfaf35cb-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/69180fb7bfaf35cb-400.webp 400w, /prototype2/media/69180fb7bfaf35cb-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/69180fb7bfaf35cb-400.avif 400w, /prototype2/media/69180fb7bfaf35cb-800.avif 800w, /prototype2/media/69180fb7bfaf35cb-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/69180fb7bfaf35cb-400.webp 400w, /prototype2/media/69180fb7bfaf35cb-800.webp 800w, /prototype2/media/69180fb7bfaf35cb-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/69180fb7bfaf35cb-800.jpg"
+        src="/prototype2/media/69180fb7bfaf35cb-1000.jpg"
         alt="Silla 8 - Exhibition - Claudia Valsells"
         width="1000"
         height="700"
@@ -1388,10 +1383,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
           <div class="sheet-frame">
             <figure class="reader-figure sheet-figure is-current">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/a4cbef44f968dd42-400.avif 400w, /prototype2/media/a4cbef44f968dd42-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/a4cbef44f968dd42-400.webp 400w, /prototype2/media/a4cbef44f968dd42-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/a4cbef44f968dd42-400.avif 400w, /prototype2/media/a4cbef44f968dd42-800.avif 800w, /prototype2/media/a4cbef44f968dd42-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/a4cbef44f968dd42-400.webp 400w, /prototype2/media/a4cbef44f968dd42-800.webp 800w, /prototype2/media/a4cbef44f968dd42-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/a4cbef44f968dd42-800.jpg"
+        src="/prototype2/media/a4cbef44f968dd42-1000.jpg"
         alt="Claudia Valsells Marquina Project"
         width="1000"
         height="1100"
@@ -1402,10 +1397,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/a87978245ebcfd09-400.avif 400w, /prototype2/media/a87978245ebcfd09-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/a87978245ebcfd09-400.webp 400w, /prototype2/media/a87978245ebcfd09-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/a87978245ebcfd09-400.avif 400w, /prototype2/media/a87978245ebcfd09-800.avif 800w, /prototype2/media/a87978245ebcfd09-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/a87978245ebcfd09-400.webp 400w, /prototype2/media/a87978245ebcfd09-800.webp 800w, /prototype2/media/a87978245ebcfd09-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/a87978245ebcfd09-800.jpg"
+        src="/prototype2/media/a87978245ebcfd09-1000.jpg"
         alt="Claudia Valsells at Marquina Studio"
         width="1000"
         height="1100"
@@ -1416,10 +1411,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/56b7ae4ded1c6c68-400.avif 400w, /prototype2/media/56b7ae4ded1c6c68-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/56b7ae4ded1c6c68-400.webp 400w, /prototype2/media/56b7ae4ded1c6c68-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/56b7ae4ded1c6c68-400.avif 400w, /prototype2/media/56b7ae4ded1c6c68-800.avif 800w, /prototype2/media/56b7ae4ded1c6c68-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/56b7ae4ded1c6c68-400.webp 400w, /prototype2/media/56b7ae4ded1c6c68-800.webp 800w, /prototype2/media/56b7ae4ded1c6c68-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/56b7ae4ded1c6c68-800.jpg"
+        src="/prototype2/media/56b7ae4ded1c6c68-1000.jpg"
         alt="Claudia Valsells searching Colors"
         width="1000"
         height="1100"
@@ -1430,10 +1425,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/b99963774784c78e-400.avif 400w, /prototype2/media/b99963774784c78e-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/b99963774784c78e-400.webp 400w, /prototype2/media/b99963774784c78e-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/b99963774784c78e-400.avif 400w, /prototype2/media/b99963774784c78e-800.avif 800w, /prototype2/media/b99963774784c78e-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/b99963774784c78e-400.webp 400w, /prototype2/media/b99963774784c78e-800.webp 800w, /prototype2/media/b99963774784c78e-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/b99963774784c78e-800.jpg"
+        src="/prototype2/media/b99963774784c78e-1000.jpg"
         alt="Claudia Valsells design"
         width="1000"
         height="1100"
@@ -1444,10 +1439,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/d250ecf381f5fd1c-400.avif 400w, /prototype2/media/d250ecf381f5fd1c-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/d250ecf381f5fd1c-400.webp 400w, /prototype2/media/d250ecf381f5fd1c-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/d250ecf381f5fd1c-400.avif 400w, /prototype2/media/d250ecf381f5fd1c-800.avif 800w, /prototype2/media/d250ecf381f5fd1c-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/d250ecf381f5fd1c-400.webp 400w, /prototype2/media/d250ecf381f5fd1c-800.webp 800w, /prototype2/media/d250ecf381f5fd1c-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/d250ecf381f5fd1c-800.jpg"
+        src="/prototype2/media/d250ecf381f5fd1c-1000.jpg"
         alt="Claudia Valsells Creations"
         width="1000"
         height="1100"
@@ -1458,10 +1453,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/d3d4e904e89cbe49-400.avif 400w, /prototype2/media/d3d4e904e89cbe49-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/d3d4e904e89cbe49-400.webp 400w, /prototype2/media/d3d4e904e89cbe49-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/d3d4e904e89cbe49-400.avif 400w, /prototype2/media/d3d4e904e89cbe49-800.avif 800w, /prototype2/media/d3d4e904e89cbe49-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/d3d4e904e89cbe49-400.webp 400w, /prototype2/media/d3d4e904e89cbe49-800.webp 800w, /prototype2/media/d3d4e904e89cbe49-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/d3d4e904e89cbe49-800.jpg"
+        src="/prototype2/media/d3d4e904e89cbe49-1000.jpg"
         alt="Claudia Valsells Creations"
         width="1000"
         height="1100"
@@ -1486,10 +1481,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure is-wide">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/1b3904e32894dd2b-400.avif 400w, /prototype2/media/1b3904e32894dd2b-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/1b3904e32894dd2b-400.webp 400w, /prototype2/media/1b3904e32894dd2b-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/1b3904e32894dd2b-400.avif 400w, /prototype2/media/1b3904e32894dd2b-800.avif 800w, /prototype2/media/1b3904e32894dd2b-805.avif 805w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/1b3904e32894dd2b-400.webp 400w, /prototype2/media/1b3904e32894dd2b-800.webp 800w, /prototype2/media/1b3904e32894dd2b-805.webp 805w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/1b3904e32894dd2b-800.jpg"
+        src="/prototype2/media/1b3904e32894dd2b-805.jpg"
         alt=""
         width="805"
         height="600"
@@ -1500,10 +1495,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/e7cceeea10806bd7-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/e7cceeea10806bd7-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/e7cceeea10806bd7-400.avif 400w, /prototype2/media/e7cceeea10806bd7-600.avif 600w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/e7cceeea10806bd7-400.webp 400w, /prototype2/media/e7cceeea10806bd7-600.webp 600w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/e7cceeea10806bd7-400.jpg"
+        src="/prototype2/media/e7cceeea10806bd7-600.jpg"
         alt=""
         width="600"
         height="800"
@@ -1514,10 +1509,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/86f04afbcc86e0c9-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/86f04afbcc86e0c9-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/86f04afbcc86e0c9-400.avif 400w, /prototype2/media/86f04afbcc86e0c9-600.avif 600w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/86f04afbcc86e0c9-400.webp 400w, /prototype2/media/86f04afbcc86e0c9-600.webp 600w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/86f04afbcc86e0c9-400.jpg"
+        src="/prototype2/media/86f04afbcc86e0c9-600.jpg"
         alt=""
         width="600"
         height="800"
@@ -1528,10 +1523,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/9739b7e88a7d2297-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/9739b7e88a7d2297-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/9739b7e88a7d2297-400.avif 400w, /prototype2/media/9739b7e88a7d2297-600.avif 600w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/9739b7e88a7d2297-400.webp 400w, /prototype2/media/9739b7e88a7d2297-600.webp 600w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/9739b7e88a7d2297-400.jpg"
+        src="/prototype2/media/9739b7e88a7d2297-600.jpg"
         alt=""
         width="600"
         height="800"
@@ -1583,10 +1578,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
           <div class="sheet-frame">
             <figure class="reader-figure sheet-figure is-wide is-current">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/eb575e7e8ebe454b-400.avif 400w, /prototype2/media/eb575e7e8ebe454b-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/eb575e7e8ebe454b-400.webp 400w, /prototype2/media/eb575e7e8ebe454b-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/eb575e7e8ebe454b-400.avif 400w, /prototype2/media/eb575e7e8ebe454b-800.avif 800w, /prototype2/media/eb575e7e8ebe454b-900.avif 900w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/eb575e7e8ebe454b-400.webp 400w, /prototype2/media/eb575e7e8ebe454b-800.webp 800w, /prototype2/media/eb575e7e8ebe454b-900.webp 900w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/eb575e7e8ebe454b-800.jpg"
+        src="/prototype2/media/eb575e7e8ebe454b-900.jpg"
         alt=""
         width="900"
         height="508"
@@ -1597,10 +1592,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure is-wide">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/17fe0f870a3d0602-400.avif 400w, /prototype2/media/17fe0f870a3d0602-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/17fe0f870a3d0602-400.webp 400w, /prototype2/media/17fe0f870a3d0602-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/17fe0f870a3d0602-400.avif 400w, /prototype2/media/17fe0f870a3d0602-800.avif 800w, /prototype2/media/17fe0f870a3d0602-900.avif 900w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/17fe0f870a3d0602-400.webp 400w, /prototype2/media/17fe0f870a3d0602-800.webp 800w, /prototype2/media/17fe0f870a3d0602-900.webp 900w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/17fe0f870a3d0602-800.jpg"
+        src="/prototype2/media/17fe0f870a3d0602-900.jpg"
         alt=""
         width="900"
         height="509"
@@ -1611,10 +1606,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure is-wide">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/d0fa19fa8071c30e-400.avif 400w, /prototype2/media/d0fa19fa8071c30e-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/d0fa19fa8071c30e-400.webp 400w, /prototype2/media/d0fa19fa8071c30e-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/d0fa19fa8071c30e-400.avif 400w, /prototype2/media/d0fa19fa8071c30e-800.avif 800w, /prototype2/media/d0fa19fa8071c30e-900.avif 900w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/d0fa19fa8071c30e-400.webp 400w, /prototype2/media/d0fa19fa8071c30e-800.webp 800w, /prototype2/media/d0fa19fa8071c30e-900.webp 900w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/d0fa19fa8071c30e-800.jpg"
+        src="/prototype2/media/d0fa19fa8071c30e-900.jpg"
         alt=""
         width="900"
         height="509"
@@ -1625,10 +1620,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/a265d7fad12e33b1-400.avif 400w, /prototype2/media/a265d7fad12e33b1-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/a265d7fad12e33b1-400.webp 400w, /prototype2/media/a265d7fad12e33b1-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/a265d7fad12e33b1-400.avif 400w, /prototype2/media/a265d7fad12e33b1-800.avif 800w, /prototype2/media/a265d7fad12e33b1-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/a265d7fad12e33b1-400.webp 400w, /prototype2/media/a265d7fad12e33b1-800.webp 800w, /prototype2/media/a265d7fad12e33b1-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/a265d7fad12e33b1-800.jpg"
+        src="/prototype2/media/a265d7fad12e33b1-1000.jpg"
         alt=""
         width="1000"
         height="1100"
@@ -1639,10 +1634,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/b85a5ba1d63f2364-400.avif 400w, /prototype2/media/b85a5ba1d63f2364-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/b85a5ba1d63f2364-400.webp 400w, /prototype2/media/b85a5ba1d63f2364-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/b85a5ba1d63f2364-400.avif 400w, /prototype2/media/b85a5ba1d63f2364-800.avif 800w, /prototype2/media/b85a5ba1d63f2364-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/b85a5ba1d63f2364-400.webp 400w, /prototype2/media/b85a5ba1d63f2364-800.webp 800w, /prototype2/media/b85a5ba1d63f2364-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/b85a5ba1d63f2364-800.jpg"
+        src="/prototype2/media/b85a5ba1d63f2364-1000.jpg"
         alt=""
         width="1000"
         height="1100"
@@ -1653,10 +1648,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/8599b084b27dbd01-400.avif 400w, /prototype2/media/8599b084b27dbd01-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/8599b084b27dbd01-400.webp 400w, /prototype2/media/8599b084b27dbd01-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/8599b084b27dbd01-400.avif 400w, /prototype2/media/8599b084b27dbd01-800.avif 800w, /prototype2/media/8599b084b27dbd01-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/8599b084b27dbd01-400.webp 400w, /prototype2/media/8599b084b27dbd01-800.webp 800w, /prototype2/media/8599b084b27dbd01-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/8599b084b27dbd01-800.jpg"
+        src="/prototype2/media/8599b084b27dbd01-1000.jpg"
         alt=""
         width="1000"
         height="1100"
@@ -1667,10 +1662,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/0ec39f0f124b162c-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/0ec39f0f124b162c-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/0ec39f0f124b162c-400.avif 400w, /prototype2/media/0ec39f0f124b162c-600.avif 600w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/0ec39f0f124b162c-400.webp 400w, /prototype2/media/0ec39f0f124b162c-600.webp 600w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/0ec39f0f124b162c-400.jpg"
+        src="/prototype2/media/0ec39f0f124b162c-600.jpg"
         alt=""
         width="600"
         height="900"
@@ -1681,10 +1676,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/91415c562c0daeda-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/91415c562c0daeda-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/91415c562c0daeda-400.avif 400w, /prototype2/media/91415c562c0daeda-600.avif 600w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/91415c562c0daeda-400.webp 400w, /prototype2/media/91415c562c0daeda-600.webp 600w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/91415c562c0daeda-400.jpg"
+        src="/prototype2/media/91415c562c0daeda-600.jpg"
         alt=""
         width="600"
         height="900"
@@ -1695,10 +1690,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/4215361d27dc77f8-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/4215361d27dc77f8-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/4215361d27dc77f8-400.avif 400w, /prototype2/media/4215361d27dc77f8-600.avif 600w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/4215361d27dc77f8-400.webp 400w, /prototype2/media/4215361d27dc77f8-600.webp 600w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/4215361d27dc77f8-400.jpg"
+        src="/prototype2/media/4215361d27dc77f8-600.jpg"
         alt=""
         width="600"
         height="900"
@@ -1923,10 +1918,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
           <div class="sheet-frame">
             <figure class="reader-figure sheet-figure is-current">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/0a49db3a087f447a-400.avif 400w, /prototype2/media/0a49db3a087f447a-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/0a49db3a087f447a-400.webp 400w, /prototype2/media/0a49db3a087f447a-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/0a49db3a087f447a-400.avif 400w, /prototype2/media/0a49db3a087f447a-800.avif 800w, /prototype2/media/0a49db3a087f447a-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/0a49db3a087f447a-400.webp 400w, /prototype2/media/0a49db3a087f447a-800.webp 800w, /prototype2/media/0a49db3a087f447a-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/0a49db3a087f447a-800.jpg"
+        src="/prototype2/media/0a49db3a087f447a-1000.jpg"
         alt=""
         width="1000"
         height="1000"
@@ -1937,10 +1932,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/e5a8fb243d8b1a1b-400.avif 400w, /prototype2/media/e5a8fb243d8b1a1b-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/e5a8fb243d8b1a1b-400.webp 400w, /prototype2/media/e5a8fb243d8b1a1b-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/e5a8fb243d8b1a1b-400.avif 400w, /prototype2/media/e5a8fb243d8b1a1b-800.avif 800w, /prototype2/media/e5a8fb243d8b1a1b-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/e5a8fb243d8b1a1b-400.webp 400w, /prototype2/media/e5a8fb243d8b1a1b-800.webp 800w, /prototype2/media/e5a8fb243d8b1a1b-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/e5a8fb243d8b1a1b-800.jpg"
+        src="/prototype2/media/e5a8fb243d8b1a1b-1000.jpg"
         alt=""
         width="1000"
         height="1000"
@@ -1951,10 +1946,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/539da9c284708035-400.avif 400w, /prototype2/media/539da9c284708035-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/539da9c284708035-400.webp 400w, /prototype2/media/539da9c284708035-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/539da9c284708035-400.avif 400w, /prototype2/media/539da9c284708035-800.avif 800w, /prototype2/media/539da9c284708035-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/539da9c284708035-400.webp 400w, /prototype2/media/539da9c284708035-800.webp 800w, /prototype2/media/539da9c284708035-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/539da9c284708035-800.jpg"
+        src="/prototype2/media/539da9c284708035-1000.jpg"
         alt=""
         width="1000"
         height="1000"
@@ -1965,10 +1960,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/76f40ce93f4301c7-400.avif 400w, /prototype2/media/76f40ce93f4301c7-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/76f40ce93f4301c7-400.webp 400w, /prototype2/media/76f40ce93f4301c7-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/76f40ce93f4301c7-400.avif 400w, /prototype2/media/76f40ce93f4301c7-800.avif 800w, /prototype2/media/76f40ce93f4301c7-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/76f40ce93f4301c7-400.webp 400w, /prototype2/media/76f40ce93f4301c7-800.webp 800w, /prototype2/media/76f40ce93f4301c7-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/76f40ce93f4301c7-800.jpg"
+        src="/prototype2/media/76f40ce93f4301c7-1000.jpg"
         alt=""
         width="1000"
         height="1000"
@@ -1979,10 +1974,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/4f66e382136502dc-400.avif 400w, /prototype2/media/4f66e382136502dc-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/4f66e382136502dc-400.webp 400w, /prototype2/media/4f66e382136502dc-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/4f66e382136502dc-400.avif 400w, /prototype2/media/4f66e382136502dc-800.avif 800w, /prototype2/media/4f66e382136502dc-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/4f66e382136502dc-400.webp 400w, /prototype2/media/4f66e382136502dc-800.webp 800w, /prototype2/media/4f66e382136502dc-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/4f66e382136502dc-800.jpg"
+        src="/prototype2/media/4f66e382136502dc-1000.jpg"
         alt=""
         width="1000"
         height="1000"
@@ -1993,10 +1988,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/e1164242f298e9bd-400.avif 400w, /prototype2/media/e1164242f298e9bd-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/e1164242f298e9bd-400.webp 400w, /prototype2/media/e1164242f298e9bd-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/e1164242f298e9bd-400.avif 400w, /prototype2/media/e1164242f298e9bd-800.avif 800w, /prototype2/media/e1164242f298e9bd-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/e1164242f298e9bd-400.webp 400w, /prototype2/media/e1164242f298e9bd-800.webp 800w, /prototype2/media/e1164242f298e9bd-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/e1164242f298e9bd-800.jpg"
+        src="/prototype2/media/e1164242f298e9bd-1000.jpg"
         alt=""
         width="1000"
         height="1000"
@@ -2007,10 +2002,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/fe126fc058504b0f-400.avif 400w, /prototype2/media/fe126fc058504b0f-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/fe126fc058504b0f-400.webp 400w, /prototype2/media/fe126fc058504b0f-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/fe126fc058504b0f-400.avif 400w, /prototype2/media/fe126fc058504b0f-800.avif 800w, /prototype2/media/fe126fc058504b0f-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/fe126fc058504b0f-400.webp 400w, /prototype2/media/fe126fc058504b0f-800.webp 800w, /prototype2/media/fe126fc058504b0f-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/fe126fc058504b0f-800.jpg"
+        src="/prototype2/media/fe126fc058504b0f-1000.jpg"
         alt=""
         width="1000"
         height="1000"
@@ -2021,10 +2016,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/8ae8e4391e2f5951-400.avif 400w, /prototype2/media/8ae8e4391e2f5951-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/8ae8e4391e2f5951-400.webp 400w, /prototype2/media/8ae8e4391e2f5951-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/8ae8e4391e2f5951-400.avif 400w, /prototype2/media/8ae8e4391e2f5951-800.avif 800w, /prototype2/media/8ae8e4391e2f5951-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/8ae8e4391e2f5951-400.webp 400w, /prototype2/media/8ae8e4391e2f5951-800.webp 800w, /prototype2/media/8ae8e4391e2f5951-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/8ae8e4391e2f5951-800.jpg"
+        src="/prototype2/media/8ae8e4391e2f5951-1000.jpg"
         alt=""
         width="1000"
         height="1000"
@@ -2035,10 +2030,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/5d10e748ccb1c87c-400.avif 400w, /prototype2/media/5d10e748ccb1c87c-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/5d10e748ccb1c87c-400.webp 400w, /prototype2/media/5d10e748ccb1c87c-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/5d10e748ccb1c87c-400.avif 400w, /prototype2/media/5d10e748ccb1c87c-800.avif 800w, /prototype2/media/5d10e748ccb1c87c-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/5d10e748ccb1c87c-400.webp 400w, /prototype2/media/5d10e748ccb1c87c-800.webp 800w, /prototype2/media/5d10e748ccb1c87c-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/5d10e748ccb1c87c-800.jpg"
+        src="/prototype2/media/5d10e748ccb1c87c-1000.jpg"
         alt=""
         width="1000"
         height="1000"
@@ -2089,10 +2084,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
           <div class="sheet-frame">
             <figure class="reader-figure sheet-figure is-wide is-current">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/a2a9a7c14fe4794c-400.avif 400w, /prototype2/media/a2a9a7c14fe4794c-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/a2a9a7c14fe4794c-400.webp 400w, /prototype2/media/a2a9a7c14fe4794c-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/a2a9a7c14fe4794c-400.avif 400w, /prototype2/media/a2a9a7c14fe4794c-800.avif 800w, /prototype2/media/a2a9a7c14fe4794c-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/a2a9a7c14fe4794c-400.webp 400w, /prototype2/media/a2a9a7c14fe4794c-800.webp 800w, /prototype2/media/a2a9a7c14fe4794c-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/a2a9a7c14fe4794c-800.jpg"
+        src="/prototype2/media/a2a9a7c14fe4794c-1000.jpg"
         alt=""
         width="1000"
         height="668"
@@ -2103,10 +2098,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure is-wide">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/1626b31021c7dd29-400.avif 400w, /prototype2/media/1626b31021c7dd29-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/1626b31021c7dd29-400.webp 400w, /prototype2/media/1626b31021c7dd29-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/1626b31021c7dd29-400.avif 400w, /prototype2/media/1626b31021c7dd29-800.avif 800w, /prototype2/media/1626b31021c7dd29-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/1626b31021c7dd29-400.webp 400w, /prototype2/media/1626b31021c7dd29-800.webp 800w, /prototype2/media/1626b31021c7dd29-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/1626b31021c7dd29-800.jpg"
+        src="/prototype2/media/1626b31021c7dd29-1000.jpg"
         alt=""
         width="1000"
         height="668"
@@ -2117,10 +2112,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure is-wide">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/b47e2dd886318d9f-400.avif 400w, /prototype2/media/b47e2dd886318d9f-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/b47e2dd886318d9f-400.webp 400w, /prototype2/media/b47e2dd886318d9f-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/b47e2dd886318d9f-400.avif 400w, /prototype2/media/b47e2dd886318d9f-800.avif 800w, /prototype2/media/b47e2dd886318d9f-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/b47e2dd886318d9f-400.webp 400w, /prototype2/media/b47e2dd886318d9f-800.webp 800w, /prototype2/media/b47e2dd886318d9f-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/b47e2dd886318d9f-800.jpg"
+        src="/prototype2/media/b47e2dd886318d9f-1000.jpg"
         alt=""
         width="1000"
         height="668"
@@ -2131,10 +2126,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure is-wide">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/f7bd3a3afd21970b-400.avif 400w, /prototype2/media/f7bd3a3afd21970b-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/f7bd3a3afd21970b-400.webp 400w, /prototype2/media/f7bd3a3afd21970b-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/f7bd3a3afd21970b-400.avif 400w, /prototype2/media/f7bd3a3afd21970b-800.avif 800w, /prototype2/media/f7bd3a3afd21970b-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/f7bd3a3afd21970b-400.webp 400w, /prototype2/media/f7bd3a3afd21970b-800.webp 800w, /prototype2/media/f7bd3a3afd21970b-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/f7bd3a3afd21970b-800.jpg"
+        src="/prototype2/media/f7bd3a3afd21970b-1000.jpg"
         alt=""
         width="1000"
         height="668"
@@ -2145,10 +2140,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure is-wide">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/b7cebd3a0ed3fa84-400.avif 400w, /prototype2/media/b7cebd3a0ed3fa84-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/b7cebd3a0ed3fa84-400.webp 400w, /prototype2/media/b7cebd3a0ed3fa84-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/b7cebd3a0ed3fa84-400.avif 400w, /prototype2/media/b7cebd3a0ed3fa84-800.avif 800w, /prototype2/media/b7cebd3a0ed3fa84-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/b7cebd3a0ed3fa84-400.webp 400w, /prototype2/media/b7cebd3a0ed3fa84-800.webp 800w, /prototype2/media/b7cebd3a0ed3fa84-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/b7cebd3a0ed3fa84-800.jpg"
+        src="/prototype2/media/b7cebd3a0ed3fa84-1000.jpg"
         alt=""
         width="1000"
         height="668"
@@ -2159,10 +2154,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure is-wide">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/ccf668d3ce220c31-400.avif 400w, /prototype2/media/ccf668d3ce220c31-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/ccf668d3ce220c31-400.webp 400w, /prototype2/media/ccf668d3ce220c31-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/ccf668d3ce220c31-400.avif 400w, /prototype2/media/ccf668d3ce220c31-800.avif 800w, /prototype2/media/ccf668d3ce220c31-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/ccf668d3ce220c31-400.webp 400w, /prototype2/media/ccf668d3ce220c31-800.webp 800w, /prototype2/media/ccf668d3ce220c31-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/ccf668d3ce220c31-800.jpg"
+        src="/prototype2/media/ccf668d3ce220c31-1000.jpg"
         alt=""
         width="1000"
         height="667"
@@ -2215,10 +2210,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
           <div class="sheet-frame">
             <figure class="reader-figure sheet-figure is-current">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/6b987e648d610552-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/6b987e648d610552-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/6b987e648d610552-400.avif 400w, /prototype2/media/6b987e648d610552-683.avif 683w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/6b987e648d610552-400.webp 400w, /prototype2/media/6b987e648d610552-683.webp 683w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/6b987e648d610552-400.jpg"
+        src="/prototype2/media/6b987e648d610552-683.jpg"
         alt=""
         width="683"
         height="1024"
@@ -2229,10 +2224,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/c7f5df2ab8130aea-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/c7f5df2ab8130aea-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/c7f5df2ab8130aea-400.avif 400w, /prototype2/media/c7f5df2ab8130aea-683.avif 683w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/c7f5df2ab8130aea-400.webp 400w, /prototype2/media/c7f5df2ab8130aea-683.webp 683w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/c7f5df2ab8130aea-400.jpg"
+        src="/prototype2/media/c7f5df2ab8130aea-683.jpg"
         alt=""
         width="683"
         height="1024"
@@ -2243,10 +2238,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/c96abcccab51bdfd-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/c96abcccab51bdfd-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/c96abcccab51bdfd-400.avif 400w, /prototype2/media/c96abcccab51bdfd-683.avif 683w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/c96abcccab51bdfd-400.webp 400w, /prototype2/media/c96abcccab51bdfd-683.webp 683w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/c96abcccab51bdfd-400.jpg"
+        src="/prototype2/media/c96abcccab51bdfd-683.jpg"
         alt=""
         width="683"
         height="1024"
@@ -2257,10 +2252,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/4765fea56056fd0d-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/4765fea56056fd0d-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/4765fea56056fd0d-400.avif 400w, /prototype2/media/4765fea56056fd0d-683.avif 683w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/4765fea56056fd0d-400.webp 400w, /prototype2/media/4765fea56056fd0d-683.webp 683w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/4765fea56056fd0d-400.jpg"
+        src="/prototype2/media/4765fea56056fd0d-683.jpg"
         alt=""
         width="683"
         height="1024"
@@ -2310,10 +2305,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
           <div class="sheet-frame">
             <figure class="reader-figure sheet-figure is-current">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/a91b44178a1d1c6a-400.avif 400w, /prototype2/media/a91b44178a1d1c6a-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/a91b44178a1d1c6a-400.webp 400w, /prototype2/media/a91b44178a1d1c6a-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/a91b44178a1d1c6a-400.avif 400w, /prototype2/media/a91b44178a1d1c6a-800.avif 800w, /prototype2/media/a91b44178a1d1c6a-1080.avif 1080w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/a91b44178a1d1c6a-400.webp 400w, /prototype2/media/a91b44178a1d1c6a-800.webp 800w, /prototype2/media/a91b44178a1d1c6a-1080.webp 1080w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/a91b44178a1d1c6a-800.jpg"
+        src="/prototype2/media/a91b44178a1d1c6a-1080.jpg"
         alt=""
         width="1080"
         height="1620"
@@ -2324,10 +2319,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/94d79b14fdc298ce-400.avif 400w, /prototype2/media/94d79b14fdc298ce-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/94d79b14fdc298ce-400.webp 400w, /prototype2/media/94d79b14fdc298ce-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/94d79b14fdc298ce-400.avif 400w, /prototype2/media/94d79b14fdc298ce-800.avif 800w, /prototype2/media/94d79b14fdc298ce-1066.avif 1066w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/94d79b14fdc298ce-400.webp 400w, /prototype2/media/94d79b14fdc298ce-800.webp 800w, /prototype2/media/94d79b14fdc298ce-1066.webp 1066w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/94d79b14fdc298ce-800.jpg"
+        src="/prototype2/media/94d79b14fdc298ce-1066.jpg"
         alt=""
         width="1066"
         height="1600"
@@ -2338,10 +2333,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/9823737902a60d23-400.avif 400w, /prototype2/media/9823737902a60d23-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/9823737902a60d23-400.webp 400w, /prototype2/media/9823737902a60d23-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/9823737902a60d23-400.avif 400w, /prototype2/media/9823737902a60d23-800.avif 800w, /prototype2/media/9823737902a60d23-1066.avif 1066w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/9823737902a60d23-400.webp 400w, /prototype2/media/9823737902a60d23-800.webp 800w, /prototype2/media/9823737902a60d23-1066.webp 1066w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/9823737902a60d23-800.jpg"
+        src="/prototype2/media/9823737902a60d23-1066.jpg"
         alt=""
         width="1066"
         height="1600"
@@ -2352,10 +2347,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/43566dfe91c6398b-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/43566dfe91c6398b-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/43566dfe91c6398b-400.avif 400w, /prototype2/media/43566dfe91c6398b-683.avif 683w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/43566dfe91c6398b-400.webp 400w, /prototype2/media/43566dfe91c6398b-683.webp 683w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/43566dfe91c6398b-400.jpg"
+        src="/prototype2/media/43566dfe91c6398b-683.jpg"
         alt=""
         width="683"
         height="1024"
@@ -2366,10 +2361,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/b7dcae748f1caaf9-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/b7dcae748f1caaf9-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/b7dcae748f1caaf9-400.avif 400w, /prototype2/media/b7dcae748f1caaf9-683.avif 683w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/b7dcae748f1caaf9-400.webp 400w, /prototype2/media/b7dcae748f1caaf9-683.webp 683w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/b7dcae748f1caaf9-400.jpg"
+        src="/prototype2/media/b7dcae748f1caaf9-683.jpg"
         alt=""
         width="683"
         height="1024"
@@ -2380,10 +2375,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/454afdb9dff8709e-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/454afdb9dff8709e-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/454afdb9dff8709e-400.avif 400w, /prototype2/media/454afdb9dff8709e-683.avif 683w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/454afdb9dff8709e-400.webp 400w, /prototype2/media/454afdb9dff8709e-683.webp 683w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/454afdb9dff8709e-400.jpg"
+        src="/prototype2/media/454afdb9dff8709e-683.jpg"
         alt=""
         width="683"
         height="1024"
@@ -2394,10 +2389,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/406693fb77b75eb6-400.avif 400w, /prototype2/media/406693fb77b75eb6-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/406693fb77b75eb6-400.webp 400w, /prototype2/media/406693fb77b75eb6-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/406693fb77b75eb6-400.avif 400w, /prototype2/media/406693fb77b75eb6-800.avif 800w, /prototype2/media/406693fb77b75eb6-1500.avif 1500w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/406693fb77b75eb6-400.webp 400w, /prototype2/media/406693fb77b75eb6-800.webp 800w, /prototype2/media/406693fb77b75eb6-1500.webp 1500w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/406693fb77b75eb6-800.jpg"
+        src="/prototype2/media/406693fb77b75eb6-1500.jpg"
         alt=""
         width="1500"
         height="1909"
@@ -2408,10 +2403,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/28c604a32ac15fff-400.avif 400w, /prototype2/media/28c604a32ac15fff-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/28c604a32ac15fff-400.webp 400w, /prototype2/media/28c604a32ac15fff-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/28c604a32ac15fff-400.avif 400w, /prototype2/media/28c604a32ac15fff-800.avif 800w, /prototype2/media/28c604a32ac15fff-1500.avif 1500w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/28c604a32ac15fff-400.webp 400w, /prototype2/media/28c604a32ac15fff-800.webp 800w, /prototype2/media/28c604a32ac15fff-1500.webp 1500w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/28c604a32ac15fff-800.jpg"
+        src="/prototype2/media/28c604a32ac15fff-1500.jpg"
         alt=""
         width="1500"
         height="1909"
@@ -2422,10 +2417,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/2bb38bdcb69fb331-400.avif 400w, /prototype2/media/2bb38bdcb69fb331-800.avif 800w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/2bb38bdcb69fb331-400.webp 400w, /prototype2/media/2bb38bdcb69fb331-800.webp 800w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/2bb38bdcb69fb331-400.avif 400w, /prototype2/media/2bb38bdcb69fb331-800.avif 800w, /prototype2/media/2bb38bdcb69fb331-1500.avif 1500w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/2bb38bdcb69fb331-400.webp 400w, /prototype2/media/2bb38bdcb69fb331-800.webp 800w, /prototype2/media/2bb38bdcb69fb331-1500.webp 1500w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/2bb38bdcb69fb331-800.jpg"
+        src="/prototype2/media/2bb38bdcb69fb331-1500.jpg"
         alt=""
         width="1500"
         height="1909"
@@ -2466,23 +2461,17 @@ try { var nav = performance.getEntriesByType('navigation')[0];
 <div class="cursor" data-cursor aria-hidden="true"><span class="cursor-label"></span></div>
 <div class="panel-veil" data-panel-veil></div>
 <section class="about" id="about" data-panel aria-label="About">
-    <a class="about-close" href="#" data-panel-close>Close</a>
     <div class="about-sheet">
-      <div class="about-card-stage" data-tilt>
-      <div class="about-card" data-tilt-inner>
-        <p class="about-name">Claudia Valsells</p>
-        <p class="about-born">Barcelona<br />1969</p>
-        <address class="about-contact">
-          <a href="tel:+34609769186">+34 609 76 91 86</a>
-          <a href="mailto:editorial@alzuetagallery.com">editorial@alzuetagallery.com</a><a href="mailto:claudia@claudiacolor.com">claudia@claudiacolor.com</a>
-        </address>
-      </div>
-      </div>
       <div class="about-text">
-        <p class="about-lead">Claudia is an artist specialized in color. A multidisciplinary creator, she discovered painting through her own instinct for color. Her formation as a mural painter gave her a professional opportunity, and her passion in color her own artistic language.</p><p>Based on her reflections as an artist, her experience in color prediction and mural painting, brings to all her work, with color as a primary tool, an identifiable language.</p><p>She began her artistic career painting and soon realized that she had a natural ability with color. In her own words, ‘All I have done throughout my career has been to cultivate this natural gift. First as a mural painter, then designing color charts and prescribing color and finally as an artist’.</p><figure class="about-figure">
-        <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-1-800.avif 800w, /prototype2/about/about-1-1600.avif 1600w, /prototype2/about/about-1-2692.avif 2692w" sizes="(max-width: 899px) 92vw, 79vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-1-800.webp 800w, /prototype2/about/about-1-1600.webp 1600w, /prototype2/about/about-1-2692.webp 2692w" sizes="(max-width: 899px) 92vw, 79vw" />
+        <div class="about-opening" data-about-opening>
+          <div class="about-stage" data-about-stage>
+            <p class="about-lead">Claudia is an artist specialized in color. A multidisciplinary creator, she discovered painting through her own instinct for color. Her formation as a mural painter gave her a professional opportunity, and her passion in color her own artistic language.</p>
+            <div class="about-reel" data-about-reel>
+    <div class="about-reel-track" data-about-track>
+      <button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-1-800.avif 800w, /prototype2/about/about-1-1600.avif 1600w, /prototype2/about/about-1-2692.avif 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-1-800.webp 800w, /prototype2/about/about-1-1600.webp 1600w, /prototype2/about/about-1-2692.webp 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
       <img
         src="/prototype2/about/about-1-2692.jpg"
         alt="Claudia Valsells, seen from behind, painting fields of colour on a studio wall with a pot of paint in hand"
@@ -2493,10 +2482,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
-      </figure><p>The tireless search for the reason of color and its form has obsessed artists throughout history, from the very creation of pictorial expression. Claudia Valsells knows about this and she aims to portray this into her artwork.</p><figure class="about-figure">
-        <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-2-800.avif 800w, /prototype2/about/about-2-1600.avif 1600w, /prototype2/about/about-2-2692.avif 2692w" sizes="(max-width: 899px) 92vw, 79vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-2-800.webp 800w, /prototype2/about/about-2-1600.webp 1600w, /prototype2/about/about-2-2692.webp 2692w" sizes="(max-width: 899px) 92vw, 79vw" />
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-2-800.avif 800w, /prototype2/about/about-2-1600.avif 1600w, /prototype2/about/about-2-2692.avif 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-2-800.webp 800w, /prototype2/about/about-2-1600.webp 1600w, /prototype2/about/about-2-2692.webp 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
       <img
         src="/prototype2/about/about-2-2692.jpg"
         alt="Claudia Valsells painting a large canvas in her studio, pots of colour on the table beside her"
@@ -2507,293 +2496,357 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
-      </figure><p>In her beginnings as a colorist she worked on commissions, for architects, and on projects of different scales advising and prescribing color. Soon she founded her own Studio, under the name of ‘Arts&amp;Claus’, in allegory to the ‘Arts&amp;Craft’ movement where she always found a lot of inspiration. She specialized in mural painting, color applied to architecture, and interior design for 20 years on projects in Spain and abroad. Her role was to convey the value of color and its texture in the decoration of interior spaces working closely with professionals in the fields of art, design, and architecture. It was in this context, working close with architects and designers, that she found out the communication between professionals was based by the painting companies, relegated the work of the colorist to the background due to ignorance or fear clients to make a mistake or be branded as eccentric. It was then when Claudia Valsells created a specific chromatic selection, a COLOUR CHART, with more than 200 references, which have been used as color communication tools by Spain’s best architects.</p><p>Her work has two very defined characteristics: on the one hand her chromatic instinct, a gift of colors and on the other her ability to select, group and interact colors creating a chromatic language of her own.</p>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-3-800.avif 800w, /prototype2/about/about-3-845.avif 845w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-3-800.webp 800w, /prototype2/about/about-3-845.webp 845w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <img
+        src="/prototype2/about/about-3-845.jpg"
+        alt="Claudia Valsells reaching up to paint a canvas propped against the studio wall, among other canvases"
+        width="845"
+        height="550"
+        style="aspect-ratio:845 / 550"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-4-800.avif 800w, /prototype2/about/about-4-833.avif 833w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-4-800.webp 800w, /prototype2/about/about-4-833.webp 833w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <img
+        src="/prototype2/about/about-4-833.jpg"
+        alt="Claudia Valsells in her studio holding a palette and a brush over pots of paint"
+        width="833"
+        height="600"
+        style="aspect-ratio:833 / 600"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-5-765.avif 765w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-5-765.webp 765w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <img
+        src="/prototype2/about/about-5-765.jpg"
+        alt="Claudia Valsells in profile against a red wall stencilled AC 068"
+        width="765"
+        height="724"
+        style="aspect-ratio:765 / 724"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button>
+    </div>
+  </div>
+          </div>
+        </div>
+        <p>Based on her reflections as an artist, her experience in color prediction and mural painting, brings to all her work, with color as a primary tool, an identifiable language.</p><p>She began her artistic career painting and soon realized that she had a natural ability with color. In her own words, ‘All I have done throughout my career has been to cultivate this natural gift. First as a mural painter, then designing color charts and prescribing color and finally as an artist’.</p><p>The tireless search for the reason of color and its form has obsessed artists throughout history, from the very creation of pictorial expression. Claudia Valsells knows about this and she aims to portray this into her artwork.</p><p>In her beginnings as a colorist she worked on commissions, for architects, and on projects of different scales advising and prescribing color. Soon she founded her own Studio, under the name of ‘Arts&amp;Claus’, in allegory to the ‘Arts&amp;Craft’ movement where she always found a lot of inspiration. She specialized in mural painting, color applied to architecture, and interior design for 20 years on projects in Spain and abroad. Her role was to convey the value of color and its texture in the decoration of interior spaces working closely with professionals in the fields of art, design, and architecture. It was in this context, working close with architects and designers, that she found out the communication between professionals was based by the painting companies, relegated the work of the colorist to the background due to ignorance or fear clients to make a mistake or be branded as eccentric. It was then when Claudia Valsells created a specific chromatic selection, a COLOUR CHART, with more than 200 references, which have been used as color communication tools by Spain’s best architects.</p><p>Her work has two very defined characteristics: on the one hand her chromatic instinct, a gift of colors and on the other her ability to select, group and interact colors creating a chromatic language of her own.</p>
       </div>
       <div class="about-record">
         <section class="about-shows">
-              <h3 class="about-label">Solo exhibitions</h3>
-              <ul class="about-show-list">
-                <li class="about-show">
-                      <span class="about-show-when">2026 May - June</span>
-                      <span class="about-show-title">‘Moll de l’os’ peintures 2026</span>
-                      <span class="about-show-line">Alzueta Gallery</span>
-                      
-                    </li><li class="about-show">
-                      <span class="about-show-when">2025 April</span>
-                      <span class="about-show-title">‘Mira’m no deixis de mirar-me’</span>
-                      <span class="about-show-line">Solo show with Alzueta Gallery</span>
-                      <span class="about-show-place">at Palau de Casavells</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2024 July</span>
-                      <span class="about-show-title">Painting as a gift from color</span>
-                      <span class="about-show-line">Solo show</span>
-                      <span class="about-show-place">Gallery_br, Tetbury, UK</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2023 September</span>
-                      <span class="about-show-title">Transitions</span>
-                      <span class="about-show-line">Solo show</span>
-                      <span class="about-show-place">Alzueta Gallery Turó</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2021 December</span>
-                      <span class="about-show-title">Color Dialogues</span>
-                      <span class="about-show-line">Solo exhibition</span>
-                      <span class="about-show-place">Alzueta Gallery Madrid</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2021 December</span>
-                      <span class="about-show-title">What’s color?</span>
-                      <span class="about-show-line">2n edition</span>
-                      <span class="about-show-place">Espacio Pavillion, Madrid,</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2020 December</span>
-                      <span class="about-show-title">What’s color?</span>
-                      <span class="about-show-line">Solo Exhibition</span>
-                      <span class="about-show-place">Alzueta Gallery, Barcelona,</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2020 February</span>
-                      <span class="about-show-title">Aoo&amp;Claudia Valsells<br />Silla8 show</span>
-                      
-                      <span class="about-show-place">Alzueta Gallery, Barcelona</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2019 November</span>
-                      <span class="about-show-title">Almost Perfect</span>
-                      <span class="about-show-line">Solo Exhibition</span>
-                      <span class="about-show-place">Tokyo, Japan</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2019 October</span>
-                      <span class="about-show-title">Art Élysées-Art &amp; Design</span>
-                      <span class="about-show-line">Solo Exhibition</span>
-                      
-                    </li><li class="about-show">
-                      <span class="about-show-when">2018 November</span>
-                      <span class="about-show-title">solo exhibition</span>
-                      
-                      <span class="about-show-place">Palau de Casavells,</span><span class="about-show-place">Girona, Spain</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2017 February</span>
-                      <span class="about-show-title">Color y forma</span>
-                      <span class="about-show-line">solo exhibition<br />Alzueta Gallery</span>
-                      
-                    </li><li class="about-show">
-                      <span class="about-show-when">2007 May</span>
-                      <span class="about-show-title">Solo Exhibition</span>
-                      
-                      <span class="about-show-place">Palau de Casavells,<br />Baix Empordà</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2005 March</span>
-                      <span class="about-show-title">Expresions de mur.<br />Abstract Informalism Paintings.</span>
-                      <span class="about-show-line">Solo exhibition,</span>
-                      <span class="about-show-place">Galeria Miquel Alzueta, Barcelona</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2000 April</span>
-                      <span class="about-show-title">El color no existe, existe la luz<br />The color doesn’t exist, just the light</span>
-                      
-                      
-                    </li>
-              </ul>
-            </section><section class="about-shows">
-              <h3 class="about-label">Group exhibitions</h3>
-              <ul class="about-show-list">
-                <li class="about-show">
-                      <span class="about-show-when">2026 June - July</span>
-                      <span class="about-show-title">‘Shift Towards Coincidence’,</span>
-                      <span class="about-show-line">Group exhibition</span>
-                      <span class="about-show-place">Palau de Casavells</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2026 June - July</span>
-                      <span class="about-show-title">Abstract Paintings</span>
-                      <span class="about-show-line">Group Exhibition</span>
-                      <span class="about-show-place">Scroll Ny, New York</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2025 March</span>
-                      <span class="about-show-title">‘Marco, límite y lugar’,</span>
-                      <span class="about-show-line">Group Exhibition,<br />with Alzueta Gallery</span>
-                      <span class="about-show-place">Madrid</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2024 January</span>
-                      <span class="about-show-title">What abstract art means to me?</span>
-                      <span class="about-show-line">Group exhibition</span>
-                      <span class="about-show-place">Alzueta Gallery, Séneca</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2023 November</span>
-                      <span class="about-show-title">La terre est bleu comme<br />une orange</span>
-                      <span class="about-show-line">Group exhibition</span>
-                      <span class="about-show-place">Alzueta Gallery Madrid.</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2018 November</span>
-                      <span class="about-show-title">T10 at Alzueta Gallery,</span>
-                      
-                      <span class="about-show-place">Barcelona</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2016 December</span>
-                      <span class="about-show-title">Exposición colectiva</span>
-                      
-                      <span class="about-show-place">Galeria Axel Pairon</span>
-                    </li>
-              </ul>
-            </section><section class="about-shows is-wide">
-              <h3 class="about-label">Art fairs</h3>
-              <ul class="about-show-list" style="--rows:15">
-                <li class="about-show">
-                      <span class="about-show-when">2026 February</span>
-                      <span class="about-show-title">Zona Maco CDMX</span>
-                      <span class="about-show-line">with Alzueta Gallery</span>
-                      <span class="about-show-place">Mexico</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2025 October</span>
-                      <span class="about-show-title">Estampa contemporary<br />art fair,</span>
-                      <span class="about-show-line">with Alzueta Gallery</span>
-                      <span class="about-show-place">Madrid</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2024 February</span>
-                      <span class="about-show-title">ZONA MACO</span>
-                      <span class="about-show-line">with Alzueta Gallery</span>
-                      
-                    </li><li class="about-show">
-                      <span class="about-show-when">2024 November</span>
-                      <span class="about-show-title">Luxemburg art week</span>
-                      <span class="about-show-line">with Alzueta Gallery</span>
-                      <span class="about-show-place">Luxemburg</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2023 February</span>
-                      <span class="about-show-title">Contemporary Art Fair</span>
-                      <span class="about-show-line">Art Rotterdam</span>
-                      <span class="about-show-place">Rotterdam</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2021 October</span>
-                      <span class="about-show-title">Estampa Contemporary Art Fair</span>
-                      
-                      <span class="about-show-place">Alzueta Gallery, Madrid</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2021 September</span>
-                      <span class="about-show-title">Art Paris Fair</span>
-                      
-                      <span class="about-show-place">Alzueta Gallery, Paris</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2021 June</span>
-                      <span class="about-show-title">Art Madrid Feria</span>
-                      
-                      <span class="about-show-place">Alzueta Gallery, Madrid</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2019 March</span>
-                      <span class="about-show-title">AFF Art Fair</span>
-                      
-                      <span class="about-show-place">Brussels</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2019 March</span>
-                      <span class="about-show-title">Art Madrid</span>
-                      
-                      <span class="about-show-place">Madrid</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2018</span>
-                      <span class="about-show-title">Art fair</span>
-                      
-                      <span class="about-show-place">Hamburg</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2018</span>
-                      <span class="about-show-title">Art Elysees</span>
-                      
-                      <span class="about-show-place">París</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2018</span>
-                      <span class="about-show-title">Art Fair</span>
-                      
-                      <span class="about-show-place">Stockholm</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2018</span>
-                      <span class="about-show-title">Contemporary Art Fair<br />Just LX,</span>
-                      
-                      <span class="about-show-place">Portugal</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2018</span>
-                      <span class="about-show-title">Almoneda Antik Passion</span>
-                      
-                      <span class="about-show-place">Madrid</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2019 April</span>
-                      <span class="about-show-title">Almoneda, Ifema feria de Madrid</span>
-                      
-                      <span class="about-show-place">Palau de Casavells, Madrid.</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2018</span>
-                      <span class="about-show-title">Art Fair Grand Palais</span>
-                      
-                      <span class="about-show-place">Paris</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2018</span>
-                      <span class="about-show-title">Eurantica Art Fair</span>
-                      
-                      <span class="about-show-place">Brussels</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2019 April</span>
-                      <span class="about-show-title">Art Paris Grand Palais</span>
-                      
-                      <span class="about-show-place">París</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2018</span>
-                      <span class="about-show-title">Art Madrid,</span>
-                      
-                      <span class="about-show-place">Madrid</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2017 July</span>
-                      <span class="about-show-title">Uterqüe Art Essays</span>
-                      <span class="about-show-line">AW 2017</span>
-                      
-                    </li><li class="about-show">
-                      <span class="about-show-when">2017 March</span>
-                      <span class="about-show-title">International Art Fair, Art Paris</span>
-                      
-                      <span class="about-show-place">París</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2017 February</span>
-                      <span class="about-show-title">Art Madrid</span>
-                      
-                      <span class="about-show-place">Madrid</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2016 November</span>
-                      <span class="about-show-title">Antica Namur,</span>
-                      
-                      <span class="about-show-place">Belgium</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2016 October</span>
-                      <span class="about-show-title">Art Élysées,<br />International Art Fair,</span>
-                      
-                      <span class="about-show-place">París</span>
-                    </li><li class="about-show">
-                      <span class="about-show-when">2016 June</span>
-                      <span class="about-show-title">Scope Basel,</span>
-                      
-                      <span class="about-show-place">Basel art fair</span>
-                    </li>
-              </ul>
-            </section>
-      </div>
-      <section class="about-collections">
-        <h3 class="about-label">Private collections</h3>
-        <ul class="about-collection-list">
-          <li class="about-collection">
-                <span class="about-collection-name">Fundació Vilacases</span>
-                <span class="about-collection-place">Barcelona</span>
-              </li><li class="about-collection">
-                <span class="about-collection-name">Fundació Banc Sabadell</span>
-                <span class="about-collection-place">Barcelona</span>
-              </li><li class="about-collection">
-                <span class="about-collection-name">Collection Hayot</span>
-                <span class="about-collection-place">France</span>
-              </li><li class="about-collection">
-                <span class="about-collection-name">Niederberghaus Collection</span>
-                <span class="about-collection-place">Mexico - US</span>
-              </li><li class="about-collection">
-                <span class="about-collection-name">Collection Richard</span>
-                <span class="about-collection-place">France</span>
-              </li><li class="about-collection">
-                <span class="about-collection-name">Smith Collection</span>
-                <span class="about-collection-place">Wyoming</span>
-              </li>
-        </ul>
-      </section>
-      <p class="about-foot"><b>Claudia Valsells</b> © All Rights Reserved</p>
+      <h3 class="about-label">Solo exhibitions</h3>
+      <ul class="about-show-list"><li class="about-show">
+    <span class="about-show-when">2026 May - June</span>
+    <span class="about-show-title">‘Moll de l’os’ peintures 2026</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    
+  </li><li class="about-show">
+    <span class="about-show-when">2025 April</span>
+    <span class="about-show-title">‘Mira’m no deixis de mirar-me’</span>
+    <span class="about-show-line">Solo show with Alzueta Gallery</span>
+    <span class="about-show-place">at Palau de Casavells</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2024 July</span>
+    <span class="about-show-title">Painting as a gift from color</span>
+    <span class="about-show-line">Solo show</span>
+    <span class="about-show-place">Gallery_br, Tetbury, UK</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2023 September</span>
+    <span class="about-show-title">Transitions</span>
+    <span class="about-show-line">Solo show</span>
+    <span class="about-show-place">Alzueta Gallery Turó</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2021 December</span>
+    <span class="about-show-title">Color Dialogues</span>
+    <span class="about-show-line">Solo exhibition</span>
+    <span class="about-show-place">Alzueta Gallery Madrid</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2021 December</span>
+    <span class="about-show-title">What’s color?</span>
+    <span class="about-show-line">2n edition</span>
+    <span class="about-show-place">Espacio Pavillion, Madrid,</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2020 December</span>
+    <span class="about-show-title">What’s color?</span>
+    <span class="about-show-line">Solo Exhibition</span>
+    <span class="about-show-place">Alzueta Gallery, Barcelona,</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2020 February</span>
+    <span class="about-show-title">Aoo&amp;Claudia Valsells<br />Silla8 show</span>
+    
+    <span class="about-show-place">Alzueta Gallery, Barcelona</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2019 November</span>
+    <span class="about-show-title">Almost Perfect</span>
+    <span class="about-show-line">Solo Exhibition</span>
+    <span class="about-show-place">Tokyo, Japan</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2019 October</span>
+    <span class="about-show-title">Art Élysées-Art &amp; Design</span>
+    <span class="about-show-line">Solo Exhibition</span>
+    
+  </li><li class="about-show">
+    <span class="about-show-when">2018 November</span>
+    <span class="about-show-title">solo exhibition</span>
+    
+    <span class="about-show-place">Palau de Casavells,</span><span class="about-show-place">Girona, Spain</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2017 February</span>
+    <span class="about-show-title">Color y forma</span>
+    <span class="about-show-line">solo exhibition<br />Alzueta Gallery</span>
+    
+  </li><li class="about-show">
+    <span class="about-show-when">2007 May</span>
+    <span class="about-show-title">Solo Exhibition</span>
+    
+    <span class="about-show-place">Palau de Casavells,<br />Baix Empordà</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2005 March</span>
+    <span class="about-show-title">Expresions de mur.<br />Abstract Informalism Paintings.</span>
+    <span class="about-show-line">Solo exhibition,</span>
+    <span class="about-show-place">Galeria Miquel Alzueta, Barcelona</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2000 April</span>
+    <span class="about-show-title">El color no existe, existe la luz<br />The color doesn’t exist, just the light</span>
+    
+    
+  </li></ul>
+    </section><section class="about-shows">
+      <h3 class="about-label">Group exhibitions</h3>
+      <ul class="about-show-list"><li class="about-show">
+    <span class="about-show-when">2026 June - July</span>
+    <span class="about-show-title">‘Shift Towards Coincidence’,</span>
+    <span class="about-show-line">Group exhibition</span>
+    <span class="about-show-place">Palau de Casavells</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2026 June - July</span>
+    <span class="about-show-title">Abstract Paintings</span>
+    <span class="about-show-line">Group Exhibition</span>
+    <span class="about-show-place">Scroll Ny, New York</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2025 March</span>
+    <span class="about-show-title">‘Marco, límite y lugar’,</span>
+    <span class="about-show-line">Group Exhibition,<br />with Alzueta Gallery</span>
+    <span class="about-show-place">Madrid</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2024 January</span>
+    <span class="about-show-title">What abstract art means to me?</span>
+    <span class="about-show-line">Group exhibition</span>
+    <span class="about-show-place">Alzueta Gallery, Séneca</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2023 November</span>
+    <span class="about-show-title">La terre est bleu comme<br />une orange</span>
+    <span class="about-show-line">Group exhibition</span>
+    <span class="about-show-place">Alzueta Gallery Madrid.</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2018 November</span>
+    <span class="about-show-title">T10 at Alzueta Gallery,</span>
+    
+    <span class="about-show-place">Barcelona</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2016 December</span>
+    <span class="about-show-title">Exposición colectiva</span>
+    
+    <span class="about-show-place">Galeria Axel Pairon</span>
+  </li></ul>
+    </section><section class="about-shows is-wide">
+    <h3 class="about-label">Art fairs</h3>
+    <div class="about-show-columns">
+      <ul class="about-show-list"><li class="about-show">
+    <span class="about-show-when">2026 February</span>
+    <span class="about-show-title">Zona Maco CDMX</span>
+    <span class="about-show-line">with Alzueta Gallery</span>
+    <span class="about-show-place">Mexico</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2025 October</span>
+    <span class="about-show-title">Estampa contemporary<br />art fair,</span>
+    <span class="about-show-line">with Alzueta Gallery</span>
+    <span class="about-show-place">Madrid</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2024 February</span>
+    <span class="about-show-title">ZONA MACO</span>
+    <span class="about-show-line">with Alzueta Gallery</span>
+    
+  </li><li class="about-show">
+    <span class="about-show-when">2024 November</span>
+    <span class="about-show-title">Luxemburg art week</span>
+    <span class="about-show-line">with Alzueta Gallery</span>
+    <span class="about-show-place">Luxemburg</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2023 February</span>
+    <span class="about-show-title">Contemporary Art Fair</span>
+    <span class="about-show-line">Art Rotterdam</span>
+    <span class="about-show-place">Rotterdam</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2021 October</span>
+    <span class="about-show-title">Estampa Contemporary Art Fair</span>
+    
+    <span class="about-show-place">Alzueta Gallery, Madrid</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2021 September</span>
+    <span class="about-show-title">Art Paris Fair</span>
+    
+    <span class="about-show-place">Alzueta Gallery, Paris</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2021 June</span>
+    <span class="about-show-title">Art Madrid Feria</span>
+    
+    <span class="about-show-place">Alzueta Gallery, Madrid</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2019 March</span>
+    <span class="about-show-title">AFF Art Fair</span>
+    
+    <span class="about-show-place">Brussels</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2019 March</span>
+    <span class="about-show-title">Art Madrid</span>
+    
+    <span class="about-show-place">Madrid</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">Art fair</span>
+    
+    <span class="about-show-place">Hamburg</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">Art Elysees</span>
+    
+    <span class="about-show-place">París</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">Art Fair</span>
+    
+    <span class="about-show-place">Stockholm</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">Contemporary Art Fair<br />Just LX,</span>
+    
+    <span class="about-show-place">Portugal</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">Almoneda Antik Passion</span>
+    
+    <span class="about-show-place">Madrid</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2019 April</span>
+    <span class="about-show-title">Almoneda, Ifema<br />Feria de Madrid</span>
+    
+    <span class="about-show-place">Palau de Casavells, Madrid.</span>
+  </li></ul>
+      <ul class="about-show-list"><li class="about-show">
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">Art Fair Grand Palais</span>
+    
+    <span class="about-show-place">Paris</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">Eurantica Art Fair</span>
+    
+    <span class="about-show-place">Brussels</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2019 April</span>
+    <span class="about-show-title">Art Paris Grand Palais</span>
+    
+    <span class="about-show-place">París</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">Art Madrid,</span>
+    
+    <span class="about-show-place">Madrid</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2017 July</span>
+    <span class="about-show-title">Uterqüe Art Essays</span>
+    <span class="about-show-line">AW 2017</span>
+    
+  </li><li class="about-show">
+    <span class="about-show-when">2017 March</span>
+    <span class="about-show-title">International Art Fair,<br />Art Paris</span>
+    
+    <span class="about-show-place">París</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2017 February</span>
+    <span class="about-show-title">Art Madrid</span>
+    
+    <span class="about-show-place">Madrid</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2016 November</span>
+    <span class="about-show-title">Antica Namur,</span>
+    
+    <span class="about-show-place">Belgium</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2016 October</span>
+    <span class="about-show-title">Art Élysées,<br />International Art Fair,</span>
+    
+    <span class="about-show-place">París</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2016 June</span>
+    <span class="about-show-title">Scope Basel,</span>
+    
+    <span class="about-show-place">Basel art fair</span>
+  </li></ul>
     </div>
   </section>
+        <section class="about-collections">
+          <h3 class="about-label">Private collections</h3>
+          <ul class="about-collection-list">
+            <li class="about-collection">
+                  <span class="about-collection-name">Fundació Vilacases</span>
+                  <span class="about-collection-place">Barcelona</span>
+                </li><li class="about-collection">
+                  <span class="about-collection-name">Fundació Banc Sabadell</span>
+                  <span class="about-collection-place">Barcelona</span>
+                </li><li class="about-collection">
+                  <span class="about-collection-name">Collection Hayot</span>
+                  <span class="about-collection-place">France</span>
+                </li><li class="about-collection">
+                  <span class="about-collection-name">Niederberghaus Collection</span>
+                  <span class="about-collection-place">Mexico - US</span>
+                </li><li class="about-collection">
+                  <span class="about-collection-name">Collection Richard</span>
+                  <span class="about-collection-place">France</span>
+                </li><li class="about-collection">
+                  <span class="about-collection-name">Smith Collection</span>
+                  <span class="about-collection-place">Wyoming</span>
+                </li>
+          </ul>
+        </section>
+      </div>
+      <address class="about-contact">
+        <a href="tel:+34609769186">+34 609 76 91 86</a>
+        <a href="mailto:editorial@alzuetagallery.com">editorial@alzuetagallery.com</a><a href="mailto:claudia@claudiacolor.com">claudia@claudiacolor.com</a>
+      </address>
+      <p class="about-foot"><b>Claudia Valsells</b> © All Rights Reserved</p>
+    </div>
+    <div class="about-viewer" data-about-viewer hidden>
+    <figure class="about-viewer-plate" data-about-plate></figure>
+    <p class="sr-only" data-about-count data-template="Photograph {n} of {total}" aria-live="polite"></p>
+  </div>
+  </section>
+  <a class="about-close" href="#" data-panel-close="about">Close</a>
+  <div class="about-cue" data-about-cue aria-hidden="true">
+    <svg viewBox="0 0 28 16" focusable="false">
+      <path d="M1.5 1.5 L14 13 L26.5 1.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
+    </svg>
+  </div>
+  <button type="button" class="about-viewer-step is-prev" data-about-step="-1" aria-label="Previous photograph">
+      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="M8 1 1 8l7 7" /></svg>
+    </button>
+    <button type="button" class="about-viewer-step is-next" data-about-step="1" aria-label="Next photograph">
+      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="m1 1 7 7-7 7" /></svg>
+    </button>
 <div class="lightbox" data-lightbox data-available-label="Available" hidden>
     <div class="lightbox-veil" data-lightbox-veil></div>
     <button type="button" class="lightbox-close" data-lightbox-close>Close</button>

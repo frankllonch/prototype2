@@ -74,6 +74,14 @@ const OFFSETS = [
     [0.055, 0.015], [-0.055, -0.05], [0.01, -0.075], [-0.015, 0.075], [0.045, -0.035],
     [-0.04, 0.03], [0.03, 0.04],
 ];
+/*
+ * WebKit — Safari, and every browser on iOS. The repaint below is a WebKit
+ * fix only: in Chrome it forced every painting to be decoded and drawn again
+ * the moment the pile began to gather, which was most of the stutter on the
+ * way back up.
+ */
+const webkit = /AppleWebKit/.test(navigator.userAgent) && !/Chrome|Chromium|Edg\//.test(navigator.userAgent)
+    || /CriOS|FxiOS|EdgiOS/.test(navigator.userAgent);
 export function initStack() {
     const grid = document.querySelector('[data-stack]');
     const hero = document.querySelector('[data-hero]');
@@ -127,11 +135,42 @@ export function initStack() {
     let shown = 0;
     /** When the last frame was drawn, so the follow can be applied by time. */
     let drawnAt = 0;
+    /** Whether the tiles carry their pile order; it never changes mid-motion. */
+    let ordered = false;
+    /** The pending release of the tiles' layers once the grid has come to rest. */
+    let unlayer = 0;
+    /** Whether the grid may have changed shape since the targets were taken. */
+    let stale = true;
     const clearTransforms = () => {
         for (const tile of tiles) {
             tile.style.transform = '';
             tile.style.zIndex = '';
         }
+        ordered = false;
+    };
+    /*
+     * Each painting is drawn on a layer of its own while it moves, so the move
+     * is the compositor's work and nothing is repainted. Taking all 181 layers
+     * away again means repainting the whole grid in one frame — which, done the
+     * moment the pile let go, was the hitch at the end of the unfold. So the
+     * layers stay until the grid has been still for a moment and the browser is
+     * idle, where the repaint is never seen.
+     */
+    const layer = () => {
+        window.clearTimeout(unlayer);
+        unlayer = 0;
+        grid.classList.add('is-layered');
+    };
+    const releaseLayers = () => {
+        window.clearTimeout(unlayer);
+        unlayer = window.setTimeout(() => {
+            const go = () => { if (settled)
+                grid.classList.remove('is-layered'); };
+            if ('requestIdleCallback' in window)
+                requestIdleCallback(go, { timeout: 1500 });
+            else
+                go();
+        }, 700);
     };
     const measure = () => {
         if (disabled)
@@ -155,6 +194,7 @@ export function initStack() {
             };
         });
         measured = live.length > 0 && live.every((tile) => tile.getBoundingClientRect().height > 0);
+        stale = !measured;
     };
     /*
      * In-and-out: gentle leaving the heap, gentle arriving in the grid. The
@@ -206,6 +246,8 @@ export function initStack() {
                 clearTransforms();
                 reveal();
             }
+            // Still scrolling in the settled grid pushes the release on.
+            releaseLayers();
             return;
         }
         // Coming back out of the settled state. The grid may have changed shape
@@ -215,7 +257,10 @@ export function initStack() {
         // density change.
         if (settled) {
             settled = false;
-            measure();
+            // Only when something changed: measuring forces a layout of the whole
+            // grid in the very frame the pile starts to move.
+            if (stale)
+                measure();
             hide();
             /*
              * Safari, and only Safari, leaves the settled grid painted behind the
@@ -229,11 +274,14 @@ export function initStack() {
              * which is the erasing it skipped. Found and checked in Safari 26.3
              * over repeated unfolds, mid-motion.
              */
-            grid.style.visibility = 'hidden';
-            void grid.offsetHeight;
-            grid.style.visibility = '';
+            if (webkit) {
+                grid.style.visibility = 'hidden';
+                void grid.offsetHeight;
+                grid.style.visibility = '';
+            }
         }
         grid.classList.add('is-stacked');
+        layer();
         const e = ease(p);
         const cx = window.innerWidth / 2;
         const cy = window.scrollY + h * 0.54;
@@ -242,9 +290,13 @@ export function initStack() {
             const dx = (cx + t.ox - t.tx) * (1 - e);
             const dy = (cy + t.oy - t.ty) * (1 - e);
             const s = t.s + (1 - t.s) * e;
-            tile.style.transform = `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px) scale(${s.toFixed(4)})`;
-            tile.style.zIndex = String(live.length - i);
+            tile.style.transform = `translate3d(${dx.toFixed(1)}px, ${dy.toFixed(1)}px, 0) scale(${s.toFixed(4)})`;
+            // The order is written once per gathering, not every frame: rewriting
+            // 181 z-indexes per frame was a style recalculation for nothing.
+            if (!ordered)
+                tile.style.zIndex = String(live.length - i);
         });
+        ordered = true;
     };
     /** The pile cannot be drawn: stop trying, and leave the grid usable. */
     function giveUp() {
@@ -253,14 +305,24 @@ export function initStack() {
         disabled = true;
         settled = true;
         clearTransforms();
-        grid.classList.remove('is-stacked');
+        grid.classList.remove('is-stacked', 'is-layered');
         window.clearTimeout(watchdog);
         reveal();
     }
     const schedule = () => { if (!frame && !disabled)
         frame = requestAnimationFrame(render); };
-    const relayout = () => { if (disabled)
-        return; measure(); schedule(); };
+    const relayout = () => {
+        if (disabled)
+            return;
+        // Settled, the targets are only marked out of date and re-taken when the
+        // pile next gathers — measuring would wipe nothing, but would cost a layout.
+        if (settled) {
+            stale = true;
+            return;
+        }
+        measure();
+        schedule();
+    };
     /**
      * Density changes animate the tiles' size, so the layout is not final for
      * half a second. Measure now for a first approximation and again once the
