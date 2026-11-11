@@ -263,6 +263,12 @@ html.js .hero[data-hero]+.grid[data-stack] {
  *                    43 of 1080.
  *   --caption-break  the space that parts the title and medium from the size
  *                    and year, in em of the caption's type.
+ *   --view-spill     the page is set by the cut-out and stays set when another
+ *                    picture of the work is chosen: the caption and the small
+ *                    pictures do not move. A wider picture is centred where the
+ *                    cut-out stands and may reach this share of the gap towards
+ *                    the caption (0.5 is half of it; 0 keeps it within the
+ *                    cut-out's width).
  */
 .is-detail .top { display: none; }
 
@@ -280,6 +286,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
   --thumb-gap: 1.42vh;
   --index-gap: 3.91vh;
   --caption-break: 2.36em;
+  --view-spill: 0.5;
   /* Read by client/views.ts: the width the painting and the caption share,
      and whether the caption takes its share beside the painting. */
   --plate-room: calc(100vw - 2 * var(--edge) - var(--text-gap));

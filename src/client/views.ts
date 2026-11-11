@@ -87,9 +87,9 @@ function inkOf(img: HTMLImageElement): Ink {
  * and taking no room, so everything laid out against the frame is laid out
  * against the painting.
  */
-function fit(frame: HTMLElement, img: HTMLImageElement, ink: Ink, maxW: number, maxH: number): boolean {
+function fit(frame: HTMLElement, img: HTMLImageElement, ink: Ink, maxW: number, maxH: number): number {
   const nw = img.naturalWidth, nh = img.naturalHeight;
-  if (!nw || !nh || !maxH) return false;
+  if (!nw || !nh || !maxH) return 0;
   const iw = (ink.r - ink.l) * nw, ih = (ink.b - ink.t) * nh;
   const s = Math.min(maxW / iw, maxH / ih);
   const W = nw * s, H = nh * s;
@@ -100,7 +100,7 @@ function fit(frame: HTMLElement, img: HTMLImageElement, ink: Ink, maxW: number, 
   frame.style.width = `${(ink.r - ink.l) * W}px`;
   frame.style.height = `${(ink.b - ink.t) * H}px`;
   frame.classList.add('is-fitted');
-  return true;
+  return (ink.r - ink.l) * W;
 }
 
 export function initViews(): void {
@@ -125,12 +125,40 @@ export function initViews(): void {
     };
 
     const isCut = (i: number) => views[i]?.hasAttribute('data-plate') ?? false;
+    const plate = stage.querySelector<HTMLElement>('.detail-plate');
+
+    /*
+     * The page is set by the first picture — the cut-out — and stays set. The
+     * plate keeps the first picture's width whichever picture is on it, so the
+     * caption beside it and the small pictures under it never move: another
+     * view is centred where the cut-out stands, and may be wider than it, out
+     * into the margin on the left and part of the way across the gap to the
+     * caption on the right (as far on both sides, so it stays centred).
+     */
+    let anchor = 0;
     const fitView = (i: number) => {
       const view = views[i];
       const img = view?.querySelector('img');
       if (!view || !img || !img.naturalWidth) return;
       const { w, h } = room();
-      fit(view, img, isCut(i) ? inkOf(img) : EDGE_TO_EDGE, w, h);
+      if (i === 0 || !anchor || !plate) {
+        fit(view, img, isCut(i) ? inkOf(img) : EDGE_TO_EDGE, w, h);
+        return;
+      }
+      let maxW = w, maxH = h;
+      const beside = parseFloat(getComputedStyle(stage).getPropertyValue('--caption-beside')) || 0;
+      if (beside && caption) {
+        const spill = parseFloat(getComputedStyle(stage).getPropertyValue('--view-spill')) || 0;
+        const box = plate.getBoundingClientRect();
+        const gap = caption.getBoundingClientRect().left - box.right;
+        const edge = (innerWidth - probe.offsetWidth - gap) / 2;
+        maxW = anchor + 2 * Math.max(0, Math.min(box.left - edge, gap * spill));
+      } else {
+        // Stacked (a phone): the caption is under the picture, so it is the
+        // height that is held, and another view fits the cut-out's height.
+        maxH = parseFloat(views[0]!.style.height) || h;
+      }
+      fit(view, img, isCut(i) ? inkOf(img) : EDGE_TO_EDGE, maxW, maxH);
     };
     const fitThumb = (i: number) => {
       const thumb = thumbs[i];
@@ -145,7 +173,18 @@ export function initViews(): void {
      * is to do here.
      */
     const fitAll = () => {
-      views.forEach((view, i) => { if (view.classList.contains('is-shown')) fitView(i); });
+      const first = views[0]?.querySelector('img');
+      if (first?.naturalWidth && plate) {
+        const { w, h } = room();
+        anchor = fit(views[0]!, first, isCut(0) ? inkOf(first) : EDGE_TO_EDGE, w, h);
+        if (anchor) {
+          const beside = parseFloat(getComputedStyle(stage).getPropertyValue('--caption-beside')) || 0;
+          plate.style.width = `${anchor}px`;
+          plate.style.height = beside ? '' : views[0]!.style.height;
+          plate.style.alignItems = 'center';
+        }
+      }
+      views.forEach((view, i) => { if (i > 0 && view.classList.contains('is-shown')) fitView(i); });
       thumbs.forEach((_, i) => fitThumb(i));
     };
     fitAll();
