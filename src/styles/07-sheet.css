@@ -112,8 +112,9 @@
 }
 .sheet-when {
   margin-top: calc(var(--f) * 1);
-  font-style: italic;
-  font-weight: 400;
+  /* Light, upright: the second line of the masthead in the designer's key. */
+  font-weight: 300;
+  font-style: normal;
   text-transform: uppercase;
   font-variant-numeric: tabular-nums;
 }
@@ -159,6 +160,17 @@
 }
 /* Some sheets leave a second empty line before a change of voice. */
 .sheet-prose .apart { margin-top: calc(var(--s-lead) * 1em); }
+/*
+ * The sheet decides the distribution, not the pasted markup.
+ *
+ * Transitions arrived from a word processor with sixty-five <i> tags wrapping
+ * every fragment of it, so the whole page — lede and body alike — came out
+ * italic. Moll de l'Os, which was typed cleanly, has none. <i> is
+ * presentational and means nothing here, so it is neutralised; <em> is left
+ * alone, because the sheets do use it and the commissioned mastheads set a
+ * curator's name in it.
+ */
+.sheet-prose i { font-style: normal; font-weight: inherit; }
 .sheet-prose b { font-weight: 500; }
 /* Bold proper, the editor's B: the client's name where the sheet sets it apart. */
 /* Semibold, which is the heaviest the sheets go. */
