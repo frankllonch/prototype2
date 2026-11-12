@@ -25,7 +25,13 @@
 .sheet {
   position: relative;
   display: grid;
-  grid-template-columns: calc(var(--f) * 960) minmax(0, 1fr);
+  /*
+   * The reading column. 960 of the sheet's pixels was its measured width; a
+   * tenth off that is 864, which is what this is. Change this one figure to
+   * change how wide the text runs on every detail — exhibitions and
+   * commissioned both, since they are one sheet.
+   */
+  grid-template-columns: calc(var(--f) * 864) minmax(0, 1fr);
   grid-template-rows: auto minmax(0, 1fr);
   height: 100vh;
   height: 100dvh;
@@ -92,16 +98,23 @@
   text-transform: uppercase;
   letter-spacing: -0.005em;
 }
-/* Cased as each sheet sets it — some are capitals, a few are not. */
+/*
+ * Always capitals, on every detail — exhibitions and commissioned alike. The
+ * sheets were cased one at a time before, some capitals and a few not, which
+ * made the masthead read as several different things depending on which show
+ * you had opened.
+ */
 .sheet-lines {
   margin-top: calc(var(--f) * 43);
   font-weight: 500;
+  text-transform: uppercase;
   line-height: 1;
 }
 .sheet-when {
   margin-top: calc(var(--f) * 1);
   font-style: italic;
   font-weight: 400;
+  text-transform: uppercase;
   font-variant-numeric: tabular-nums;
 }
 
@@ -129,6 +142,16 @@
 }
 /* A paragraph's gap is one empty line, as the sheets have it. */
 .sheet-prose p { margin: 0 0 calc(var(--s-lead) * 1em); }
+/*
+ * The opening paragraph is the lede, and the sheets set it apart from the
+ * text that follows: capitals and medium, against the regular that carries
+ * the rest. `first-of-type` rather than `first-child` because the prose can
+ * open with something that is not a paragraph.
+ */
+.sheet-prose > p:first-of-type {
+  font-weight: 500;
+  text-transform: uppercase;
+}
 .sheet-prose p:last-child { margin-bottom: 0; }
 .sheet-prose .is-style-lead {
   font-weight: 500;
