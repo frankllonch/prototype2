@@ -794,7 +794,13 @@ html.js .hero[data-hero]+.grid[data-stack] {
 }
 .exh-venue {
   font-size: var(--t-40);
-  font-weight: 500;
+  /*
+   * Light, not medium. Measured off the sheet the location's stems run 3.50
+   * against the title's 6.23 — a bit over half — which is the light cut of the
+   * scale rather than the medium one. Switzer is variable from 100 to 900, so
+   * this is the face thinning rather than a fallback standing in for it.
+   */
+  font-weight: 300;
   font-style: normal;
   text-transform: uppercase;
   line-height: 1.01;     /* 40.4 over 40 */
