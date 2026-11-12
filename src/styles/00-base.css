@@ -375,13 +375,12 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 /*
  * The two names in the bar are set heavier than the pages are.
  *
- * Measured off the sheet rather than guessed: at the bar's size the stems of
- * the wordmark and of the section's name run 2.47 and 2.46 against 1.67 to
- * 1.92 for the five page links — about 1.4 times, which is the step from this
- * 500 to 700. They are what the site is called and what you are looking at;
- * the pages are where you can go next, and they are not shouting.
+ * Semibold for the two names, regular for the five pages, by instruction: they
+ * are what the site is called and what you are looking at; the pages are where
+ * you can go next, and they are not shouting.
  */
-.wordmark, .top-soon { font-weight: 700; }
+.wordmark, .top-soon { font-weight: 600; }
+.menu a { font-weight: 400; }
 
 
 
@@ -456,7 +455,9 @@ body.is-locked { overflow: hidden; }
  */
 /* The bar is the one part of the site set smaller: 20 of the designer’s
    1920-frame pixels, against 40 everywhere else. */
-.wordmark, .top-soon, .menu { font-size: var(--type-menu); }
+/* 20 of the 1920 frame, tracked at 10% — the whole bar at one size and one
+   spacing; only the weight tells the names from the pages. */
+.wordmark, .top-soon, .menu { font-size: var(--type-menu); letter-spacing: 0.1em; }
 /*
  * A heading for a section that does not exist yet. It is a button and not a
  * link because there is nowhere to go: a link to nothing is a broken link, and
@@ -495,7 +496,6 @@ body.is-locked { overflow: hidden; }
  */
 .wordmark {
   justify-self: start;
-  letter-spacing: 0.033em;
   white-space: nowrap;
 }
 /* Evenly spaced, and the sheet says how far apart: 75px of 1866, four times
