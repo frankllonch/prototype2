@@ -120,25 +120,26 @@
    * 1368 and 47 at 1588 — near-constant while the frames differ by 500px. So
    * it stays a clamp with a flat ceiling, and only the ceiling has moved.
    *
-   * 3.125rem is 50, which is the designer's 45pt at the 1728 she now draws at,
-   * and what every one of her final sheets measures: the wordmark's stem lands
-   * at 49–52 on all of them against the 40 this was. The bar and the pages
-   * take the same variable, so they move together and stay flush.
+   * 3rem is 48, by instruction. It was 50 off the designer's final sheets (the
+   * wordmark's stem landed at 49–52 on them) and 40 before that. The bar and
+   * the pages take the same variable, so they move together and stay flush.
    */
-  --pad: clamp(1.25rem, 3.5vw, 3.125rem);
+  --pad: clamp(1.25rem, 3.5vw, 3rem);
   --gap: clamp(1.5rem, 4.5vw, 5rem);
   --bar: 5.5rem;
   /*
    * Where the bar's first line sits, and with it everything that lines up on
    * it — the close control of every overlay.
    *
-   * 3rem, off the designer's final sheets: she puts the cap of the wordmark 48
-   * below the top of the window on all of them, against the 25.6 this was. One
-   * figure rather than four literals, so the bar and the controls that answer
-   * to it can never drift apart again. `--bar`, the room kept clear below it,
-   * is unchanged: the bar's ink now ends around 64 and still has 24 to spare.
+   * 1.6rem, which is where it always sat. For a day it was 3rem, after the
+   * designer's final sheets put the wordmark's cap 48 below the top of the
+   * window; that was taken back by instruction. One figure rather than four
+   * literals, so the bar and the controls that answer to it can never drift
+   * apart again.
    */
-  --bar-top: 3rem;
+  --bar-top: 1.6rem;
+  /* The menu's own inset below its line, the same 48 as its sides. */
+  --bar-bottom: 3rem;
   /* Width kept clear for the year rail: the grid starts at 211 of the sheet's
      1654, with the rail's bars 120 wide in it. */
   --rail: clamp(9rem, 12.76vw, 17rem);
@@ -438,7 +439,7 @@ body.is-locked { overflow: hidden; }
   grid-template-columns: 25.53% auto minmax(0, 1fr);
   align-items: baseline;
   gap: 0;
-  padding: var(--bar-top) var(--pad) 1rem;
+  padding: var(--bar-top) var(--pad) var(--bar-bottom);
   pointer-events: none;
   mix-blend-mode: difference;
 }
