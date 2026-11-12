@@ -8,12 +8,14 @@ import { reduceMotion } from './env.ts';
  *    page's chevron asks for more from the moment it opens until the end. The lead holds its place throughout,
  *    and is written by the scroll, not by a clock: scrolling back up unwrites
  *    it, and down again writes it again.
- * 2. Still held, the row of photographs is driven in from the side of the
- *    screen and comes to rest under the lead — centred if it fits, with the
- *    last photograph at the right margin if it does not.
+ * 2. Still held, the reel of photographs is driven in from the right and comes
+ *    to rest under the lead, from the left margin, as the designer's sheet
+ *    sets it.
  * 3. The hold lets go and the biography is written as it rises: a word appears
  *    when its place on the page reaches the writing line, so the writing keeps
- *    pace with the reader rather than with a clock.
+ *    pace with the reader rather than with a clock. The reel moves on round
+ *    its loop as the page goes up — slowly at first — and back as it comes
+ *    down. The chevrons in the margins, a drag or a swipe move it by hand.
  * 4. The record, the collections and the contact come in out of a blur as they
  *    reach the screen, in order down the page.
  *
@@ -24,7 +26,8 @@ import { reduceMotion } from './env.ts';
  * All of it is an enhancement of a page that already stands: the words are
  * split into spans here, the hold is a runway made here, and `.is-staged`,
  * which hides anything, is only set here. With motion reduced, the page is
- * left as it is; the photographs still open large.
+ * left as it is; the reel still steps round by hand, without gliding, and the
+ * photographs still open large.
  *
  * Word by word, and appearing whole, as on the start page — there the writing
  * is in CSS on a timeline fixed at build; here it is measured, because what it
@@ -48,6 +51,14 @@ const LEAD_MAX = 1.6;
 /** Scroll for the photographs' run: at least this much of a screen, else one to one. */
 const REEL_MIN = 0.7;
 
+/**
+ * Past its place the reel goes on with the scroll, this much sideways for
+ * each pixel up or down — reaching that pace over the first quarter screen,
+ * so it stands in place before it starts moving.
+ */
+const REEL_DRIFT = 0.8;
+const REEL_DRIFT_EASE = 0.25;
+
 /** Where on the screen the biography is written: this far down. */
 const WRITE_LINE = 0.8;
 
@@ -57,16 +68,24 @@ const POP_STAGGER_MS = 260;
 export function initAbout(): void {
   const about = document.getElementById('about');
   if (!about) return;
+  const loop = initReel(about);
   initViewer(about);
-  if (reduceMotion.matches) return;
+  if (reduceMotion.matches) {
+    // The reel stands in its place and moves only by hand.
+    if (loop) {
+      const still = () => { if (about.classList.contains('is-open') && loop.measure()) loop.scrolled(0, 0); };
+      about.addEventListener('panelopen', () => { loop.reset(); still(); });
+      window.addEventListener('resize', () => requestAnimationFrame(still));
+      if (about.classList.contains('is-open')) still();
+    }
+    return;
+  }
 
   const sheet = about.querySelector<HTMLElement>('.about-sheet');
   const opening = about.querySelector<HTMLElement>('[data-about-opening]');
   const stage = about.querySelector<HTMLElement>('[data-about-stage]');
   const leadEl = about.querySelector<HTMLElement>('.about-lead');
   if (!sheet || !opening || !stage || !leadEl) return;
-  const reel = about.querySelector<HTMLElement>('[data-about-reel]');
-  const track = about.querySelector<HTMLElement>('[data-about-track]');
   const cue = document.querySelector<HTMLElement>('[data-about-cue]');
 
   const lead = splitWords(leadEl);
@@ -84,7 +103,6 @@ export function initAbout(): void {
   let reelFrom = 0;
   let reelRun = 1;
   let reelStart = 0;
-  let reelRest = 0;
   let marks: number[] = [];
 
   // What has been shown.
@@ -131,14 +149,10 @@ export function initAbout(): void {
 
     leadRun = height * Math.min(LEAD_MAX, Math.max(LEAD_MIN, lead.length * LEAD_PER_WORD));
 
-    if (reel && track) {
-      const reelWidth = reel.clientWidth;
-      // The text's margin, read off the laid-out page (--m is a formula).
-      const margin = Math.max(0, leadEl.getBoundingClientRect().left - reel.getBoundingClientRect().left);
-      const trackWidth = track.scrollWidth;
-      reelStart = reelWidth;
-      reelRest = trackWidth <= reelWidth - 2 * margin ? (reelWidth - trackWidth) / 2 : reelWidth - margin - trackWidth;
-      reelRun = Math.max(height * REEL_MIN, reelStart - reelRest);
+    if (loop?.measure()) {
+      // In from just out of sight at the right of the measure.
+      reelStart = loop.span + loop.gap;
+      reelRun = Math.max(height * REEL_MIN, reelStart);
     } else {
       reelRun = 0;
     }
@@ -177,10 +191,15 @@ export function initAbout(): void {
     if (end) {
       for (const el of pops) if (!el.classList.contains('is-in')) { el.classList.add('is-in'); pops$?.unobserve(el); }
     }
-    if (track && reelRun) {
+    if (loop && reelRun) {
       const p = Math.min(1, Math.max(0, (y - reelFrom) / reelRun));
       const eased = 1 - (1 - p) * (1 - p);
-      track.style.transform = `translate3d(${reelStart + (reelRest - reelStart) * eased}px, 0, 0)`;
+      // Past its place, carried along: from standing to its full pace over
+      // the first stretch, so the pace never jumps.
+      const past = Math.max(0, y - reelFrom - reelRun);
+      const ease = Math.max(1, about.clientHeight * REEL_DRIFT_EASE);
+      const along = past < ease ? (past * past) / (2 * ease) : past - ease / 2;
+      loop.scrolled(reelStart * (1 - eased), along * REEL_DRIFT);
     }
     // The count of marks at or above this scroll: they only ever rise.
     let lo = 0;
@@ -236,6 +255,7 @@ export function initAbout(): void {
     endGlide();
     glided = false;
     cue?.classList.add('is-shown');
+    loop?.reset();
     setLead(0);
     setBody(0);
     // The photographs are lazy, and off to the side they would only be asked
@@ -283,6 +303,253 @@ export function initAbout(): void {
   // Served open — a #about arrival, or WordPress's /about/ — the panel was
   // raised before this ran, and its `panelopen` has already gone by.
   if (about.classList.contains('is-open')) start();
+}
+
+/** The reel, as About's scroll drives it. */
+interface Loop {
+  /** The width the reel is seen through, and the gap between photographs. */
+  readonly span: number;
+  readonly gap: number;
+  /** Reads the reel again; false while there is nothing to read (About shut). */
+  measure(): boolean;
+  /** Back to the sheet's order, the first photograph at the left margin. */
+  reset(): void;
+  /**
+   * Where the scroll has the reel: `entry`, how far right of its place the
+   * whole reel stands; `along`, how far round the loop it has carried it.
+   */
+  scrolled(entry: number, along: number): void;
+}
+
+/** How quickly a step or a fling settles: the time for two thirds of the way. */
+const REEL_SETTLE_MS = 150;
+/** A press becomes a drag once it has moved this far sideways. */
+const REEL_DRAG_PX = 6;
+/** A drag let go carries on for as long as this at the speed it was going. */
+const REEL_FLING_MS = 240;
+
+/**
+ * The reel of photographs as a loop: the photographs stand in a row from the
+ * left of the measure, and whatever does not fit waits to their right and
+ * comes round again after the last. Each is placed on its own, so the row
+ * never has an end to run into.
+ *
+ * Moved by About's scroll (`scrolled`), and by hand: the chevrons bring the
+ * next or the previous photograph to the left margin, and a drag, a swipe or a
+ * sideways scroll pull it along. Tabbing to a photograph out of sight brings it
+ * into view. Only a loop if the photographs overrun the measure; and if there
+ * are too few to fill it twice over, they are repeated (hidden from assistive
+ * technology and the tab order) so that one never shows in two places.
+ */
+function initReel(about: HTMLElement): Loop | null {
+  const reel = about.querySelector<HTMLElement>('[data-about-reel]');
+  const track = reel?.querySelector<HTMLElement>('[data-about-track]');
+  if (!reel || !track) return null;
+  const originals = [...track.querySelectorAll<HTMLElement>('.about-reel-item')];
+  if (originals.length < 2) return null;
+  const steps = [...reel.querySelectorAll<HTMLButtonElement>('[data-about-reel-step]')];
+
+  type Slot = { el: HTMLElement; at: number; width: number };
+  let slots: Slot[] = [];
+  let span = 0;
+  let gap = 0;
+  let length = 0;
+  let before = 0;
+  let looped = false;
+
+  let entry = 0;
+  let along = 0;
+  let hand = 0;
+  let handTo = 0;
+  let frame = 0;
+  let last = 0;
+
+  // Where a photograph stands in the window at a given distance round the
+  // loop. While the reel is coming in nothing stands left of the first, so it
+  // arrives from empty; at rest one may stand partly out at the left.
+  const wrap = (x: number, from: number) => from + ((((x - from) % length) + length) % length);
+  const xAt = (slot: Slot, offset: number) => (looped ? wrap(slot.at - offset, entry > 0.5 ? 0 : -before) : slot.at);
+
+  const place = () => {
+    const offset = along + hand;
+    for (const slot of slots) {
+      slot.el.style.transform = `translate3d(${(xAt(slot, offset) + entry).toFixed(2)}px, 0, 0)`;
+    }
+    reel.classList.toggle('is-placed', entry < 0.5);
+  };
+
+  const tick = (now: number) => {
+    frame = 0;
+    const dt = Math.min(64, now - last);
+    last = now;
+    hand = reduceMotion.matches ? handTo : hand + (handTo - hand) * (1 - Math.exp(-dt / REEL_SETTLE_MS));
+    if (Math.abs(handTo - hand) < 0.25) hand = handTo;
+    place();
+    if (hand !== handTo) frame = requestAnimationFrame(tick);
+  };
+  const settle = () => {
+    if (frame) return;
+    last = performance.now();
+    frame = requestAnimationFrame(tick);
+  };
+
+  /** The next photograph, or the previous, to the left margin. */
+  const step = (by: number) => {
+    if (!looped) return;
+    const offset = along + handTo;
+    const xs = slots.map((slot) => xAt(slot, offset));
+    const to = by > 0 ? Math.min(...xs.filter((x) => x > 1)) : Math.max(...xs.filter((x) => x < -1));
+    if (Number.isFinite(to)) handTo += to;
+    settle();
+  };
+
+  const measure = () => {
+    reel.classList.add('is-looped');
+    span = track.clientWidth;
+    if (!span) return false;
+    gap = Number.parseFloat(getComputedStyle(track).columnGap) || 0;
+    const widths = originals.map((el) => el.getBoundingClientRect().width);
+    const total = widths.reduce((sum, w) => sum + w + gap, 0);
+    const widest = Math.max(...widths);
+    const wasLength = length;
+    looped = total - gap > span + 1;
+    before = widest + gap;
+    // Enough of a loop that what leaves on one side is gone before it comes
+    // back on the other.
+    const copies = looped ? Math.max(1, Math.ceil((span + before) / total)) : 1;
+    for (const clone of track.querySelectorAll('[data-clone]')) clone.remove();
+    slots = [];
+    for (let c = 0; c < copies; c++) {
+      let at = c * total;
+      originals.forEach((original, i) => {
+        let el = original;
+        if (c > 0) {
+          el = original.cloneNode(true) as HTMLElement;
+          el.dataset.clone = '';
+          el.setAttribute('aria-hidden', 'true');
+          el.tabIndex = -1;
+          el.addEventListener('click', () => original.click());
+          track.append(el);
+        }
+        slots.push({ el, at, width: widths[i]! });
+        at += widths[i]! + gap;
+      });
+    }
+    length = total * copies;
+    // Kept the same share of the way round when the reel changes size.
+    if (wasLength && length && looped) {
+      hand *= length / wasLength;
+      handTo *= length / wasLength;
+    }
+    if (!looped) hand = handTo = 0;
+    for (const button of steps) button.hidden = !looped;
+    place();
+    return true;
+  };
+
+  for (const button of steps) button.addEventListener('click', () => step(Number(button.dataset.aboutReelStep)));
+  reel.addEventListener('keydown', (event) => {
+    if (!looped || event.metaKey || event.ctrlKey || event.altKey) return;
+    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+    if (about.classList.contains('is-viewing')) return;
+    event.preventDefault();
+    step(event.key === 'ArrowRight' ? 1 : -1);
+  });
+
+  // Tabbed to out of sight: brought in to the left margin.
+  track.addEventListener('focusin', (event) => {
+    const el = (event.target as HTMLElement).closest<HTMLElement>('.about-reel-item');
+    if (!looped || !el?.matches(':focus-visible')) return;
+    const slot = slots.find((s) => s.el === el);
+    if (!slot) return;
+    const x = xAt(slot, along + handTo);
+    if (x < 0 || x + slot.width > span) {
+      handTo += x;
+      settle();
+    }
+  });
+
+  // A sideways scroll — a trackpad's, or shift and the wheel — runs the reel.
+  track.addEventListener(
+    'wheel',
+    (event) => {
+      if (!looped) return;
+      const dx = event.shiftKey && !event.deltaX ? event.deltaY : event.deltaX;
+      if (!dx || Math.abs(dx) < Math.abs(event.shiftKey ? 0 : event.deltaY)) return;
+      event.preventDefault();
+      handTo += dx * (event.deltaMode === 1 ? 16 : 1);
+      hand = handTo;
+      place();
+    },
+    { passive: false },
+  );
+
+  // Dragged, or swiped: the reel follows the finger, and a fling carries on.
+  type Press = { id: number; x: number; y: number; from: number; moved: boolean; lastX: number; lastT: number; speed: number };
+  let press: Press | null = null;
+  let draggedAt = -Infinity;
+  track.addEventListener('pointerdown', (event) => {
+    if (!looped || event.button !== 0) return;
+    press = { id: event.pointerId, x: event.clientX, y: event.clientY, from: handTo, moved: false, lastX: event.clientX, lastT: event.timeStamp, speed: 0 };
+  });
+  track.addEventListener('pointermove', (event) => {
+    if (!press || event.pointerId !== press.id) return;
+    const dx = event.clientX - press.x;
+    const dy = event.clientY - press.y;
+    if (!press.moved) {
+      if (Math.abs(dy) > REEL_DRAG_PX && Math.abs(dy) > Math.abs(dx)) { press = null; return; }
+      if (Math.abs(dx) < REEL_DRAG_PX) return;
+      press.moved = true;
+      track.setPointerCapture(event.pointerId);
+      reel.classList.add('is-dragging');
+    }
+    const dt = Math.max(1, event.timeStamp - press.lastT);
+    press.speed = 0.7 * ((press.lastX - event.clientX) / dt) + 0.3 * press.speed;
+    press.lastX = event.clientX;
+    press.lastT = event.timeStamp;
+    hand = handTo = press.from - dx;
+    place();
+  });
+  const release = (event: PointerEvent) => {
+    if (!press || event.pointerId !== press.id) return;
+    if (press.moved) {
+      draggedAt = event.timeStamp;
+      reel.classList.remove('is-dragging');
+      // Still moving when let go: carried on the way it was going.
+      if (event.timeStamp - press.lastT < 80) handTo += press.speed * REEL_FLING_MS;
+      settle();
+    }
+    press = null;
+  };
+  track.addEventListener('pointerup', release);
+  track.addEventListener('pointercancel', release);
+  // The click that ends a drag opens nothing.
+  track.addEventListener(
+    'click',
+    (event) => {
+      if (event.timeStamp - draggedAt > 400) return;
+      draggedAt = -Infinity;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    },
+    { capture: true },
+  );
+
+  return {
+    get span() { return span; },
+    get gap() { return gap; },
+    measure,
+    reset() {
+      cancelAnimationFrame(frame);
+      frame = 0;
+      hand = handTo = 0;
+    },
+    scrolled(e: number, a: number) {
+      entry = Math.max(0, e);
+      along = looped ? a : 0;
+      place();
+    },
+  };
 }
 
 /**
@@ -349,7 +616,7 @@ function splitWords(root: HTMLElement): HTMLElement[] {
 function initViewer(about: HTMLElement): void {
   const viewer = about.querySelector<HTMLElement>('[data-about-viewer]');
   const plate = viewer?.querySelector<HTMLElement>('[data-about-plate]');
-  const items = [...about.querySelectorAll<HTMLButtonElement>('.about-reel-item')];
+  const items = [...about.querySelectorAll<HTMLButtonElement>('.about-reel-item:not([data-clone])')];
   if (!viewer || !plate || !items.length) return;
   const count = viewer.querySelector<HTMLElement>('[data-about-count]');
   // The chevrons stand beside the panel (components/layout.ts), and are only

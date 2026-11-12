@@ -58,15 +58,18 @@ export interface AboutCollection {
 }
 
 /**
- * The studio photographs, rendered at up to three widths in `src/assets/about`
+ * The studio photographs, rendered at up to four widths in `src/assets/about`
  * from the originals in `content/raw/about`, and copied into dist by the build.
- * Every one listed in ABOUT_BLOCKS goes into the row, in order.
+ * Every one listed in ABOUT_BLOCKS goes into the reel, in order — the first
+ * eight as the designer's sheet of 12 November lays them out under the lead,
+ * the rest after them round the loop. `width` and `height` are the largest
+ * rendering's: portraits stop at 1600 wide, the film's landscapes at 2692.
  * Shaped as a `ProjectImage` so the same `<picture>` component serves them.
  */
-function photograph(n: number, alt: string, width = 2692, height = 1830): ProjectImage {
-  // The widths rendered for it: 800 and its own, and 1600 between for the
-  // large originals. Never wider than the photograph is.
-  const widths = [...new Set([800, 1600, width].filter((w) => w <= width).concat(Math.min(800, width)))].sort((x, y) => x - y);
+function photograph(n: number, alt: string, width: number, height: number): ProjectImage {
+  // 400 for the reel, 800 and 1600 for the photograph opened large, and its
+  // own width above that. Never wider than the photograph is.
+  const widths = [...new Set([400, 800, 1600, width].filter((w) => w <= width))].sort((x, y) => x - y);
   const variant = (ext: string) => widths.map((w) => ({ width: w, url: `/about/about-${n}-${w}.${ext}` }));
   const largest = `/about/about-${n}-${widths[widths.length - 1]}.jpg`;
   return {
@@ -78,6 +81,9 @@ function photograph(n: number, alt: string, width = 2692, height = 1830): Projec
     variants: { avif: variant('avif'), webp: variant('webp'), fallback: largest },
   };
 }
+
+/** A film portrait, served up to 1600 wide. */
+const portrait = (n: number, alt: string) => photograph(n, alt, 1600, 2354);
 
 export const ABOUT_CARD: AboutCard = {
   name: 'Claudia Valsells',
@@ -93,6 +99,26 @@ export const ABOUT_BLOCKS: readonly AboutBlock[] = [
     text:
       'Claudia is an artist specialized in color. A multidisciplinary creator, she discovered painting through her own instinct for color. Her formation as a mural painter gave her a professional opportunity, and her passion in color her own artistic language.',
   },
+  // The reel, in order. The first eight are the sheet's row; the rest follow
+  // round the loop, reached by the arrows, by dragging, or by scrolling on.
+  { kind: 'figure', image: portrait(1, 'Colour charts pinned to the studio wall above jars of brushes and a broad, paint-spattered brush') },
+  { kind: 'figure', image: portrait(2, 'Claudia Valsells in her studio among canvases and pots of paint, seen from above') },
+  { kind: 'figure', image: portrait(3, 'Claudia Valsells on a step, reaching up to paint the studio wall, a pot of paint in her hand') },
+  { kind: 'figure', image: photograph(4, 'Claudia Valsells, seen from behind, painting fields of colour on a studio wall with a pot of paint in hand', 2692, 1830) },
+  { kind: 'figure', image: portrait(5, 'Claudia Valsells standing between two large canvases propped against the studio wall') },
+  { kind: 'figure', image: portrait(6, 'Pots of paint and brushes on a trestle in front of a painted canvas') },
+  { kind: 'figure', image: portrait(7, 'A hand holding up a pink board with a red square over a pot of paint') },
+  { kind: 'figure', image: photograph(8, 'Claudia Valsells painting a large canvas in her studio, pots of colour on the table beside her', 2327, 1830) },
+  { kind: 'figure', image: portrait(9, 'Small paintings and patches of colour on a white studio wall') },
+  { kind: 'figure', image: portrait(10, 'A hand painting with a round brush on a canvas of green, pink and blue') },
+  { kind: 'figure', image: photograph(11, 'Claudia Valsells unrolling a sheet of paper in front of her canvases', 2692, 1830) },
+  { kind: 'figure', image: portrait(12, 'Claudia Valsells on a stepladder, putting up small paintings on the studio wall') },
+  { kind: 'figure', image: portrait(13, 'A hand setting a small painting on the studio wall beside an easel') },
+  { kind: 'figure', image: photograph(14, 'Claudia Valsells at work at the end of her long studio, canvases laid out on the table', 2692, 1795) },
+  { kind: 'figure', image: photograph(15, 'A hand painting a deep red canvas with a fine brush', 1600, 2133) },
+  { kind: 'figure', image: photograph(16, 'Claudia Valsells reaching up to paint a canvas propped against the studio wall, among other canvases', 845, 550) },
+  { kind: 'figure', image: photograph(17, 'Claudia Valsells in profile against a red wall stencilled AC 068', 765, 724) },
+  { kind: 'figure', image: photograph(18, 'Claudia Valsells in her studio holding a palette and a brush over pots of paint', 833, 600) },
   {
     kind: 'text',
     text:
@@ -103,16 +129,11 @@ export const ABOUT_BLOCKS: readonly AboutBlock[] = [
     text:
       'She began her artistic career painting and soon realized that she had a natural ability with color. In her own words, ‘All I have done throughout my career has been to cultivate this natural gift. First as a mural painter, then designing color charts and prescribing color and finally as an artist’.',
   },
-  { kind: 'figure', image: photograph(1, 'Claudia Valsells, seen from behind, painting fields of colour on a studio wall with a pot of paint in hand') },
   {
     kind: 'text',
     text:
       'The tireless search for the reason of color and its form has obsessed artists throughout history, from the very creation of pictorial expression. Claudia Valsells knows about this and she aims to portray this into her artwork.',
   },
-  { kind: 'figure', image: photograph(2, 'Claudia Valsells painting a large canvas in her studio, pots of colour on the table beside her') },
-  { kind: 'figure', image: photograph(3, 'Claudia Valsells reaching up to paint a canvas propped against the studio wall, among other canvases', 845, 550) },
-  { kind: 'figure', image: photograph(4, 'Claudia Valsells in her studio holding a palette and a brush over pots of paint', 833, 600) },
-  { kind: 'figure', image: photograph(5, 'Claudia Valsells in profile against a red wall stencilled AC 068', 765, 724) },
   {
     kind: 'text',
     text:

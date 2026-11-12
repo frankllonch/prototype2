@@ -90,8 +90,9 @@ function topBar(path: string): Html {
 /**
  * About opens over whatever page you are on, which stays faintly visible and
  * blurred behind it, and tells itself in four parts as you scroll
- * (`client/about.ts`): the capitals lead writes itself, the photographs slide
- * in from the side, the rest of the biography writes itself as it rises, and
+ * (`client/about.ts`): the capitals lead writes itself, the reel of
+ * photographs slides in and stops where the designer's sheet sets it, then
+ * moves on with the scroll as the rest of the biography writes itself, and
  * the record, the collections and how to reach her come in last.
  *
  * Close and the chevron stand beside the panel rather than in it, so that they
@@ -149,10 +150,14 @@ function aboutOverlay(): Html {
 }
 
 /**
- * The photographs in a row, each a button that opens it large
+ * The photographs in a reel, each a button that opens it large
  * (`client/about.ts`). Buttons rather than links: there is nowhere to go, and
  * a link to the file would be followed by the page transitions and differ
  * between the static site and WordPress for no reason.
+ *
+ * The script turns the row into a loop that the scroll moves on and the two
+ * chevrons step through; without it the row scrolls sideways and the chevrons
+ * stay hidden. The chevrons stand in the margins, clear of the photographs.
  */
 function aboutReel(images: readonly ProjectImage[]): Html {
   return html`<div class="about-reel" data-about-reel>
@@ -160,12 +165,33 @@ function aboutReel(images: readonly ProjectImage[]): Html {
       ${join(
         images.map(
           (image) => html`<button type="button" class="about-reel-item">
-            ${responsiveImage({ image, sizes: '(max-width: 899px) 45vw, 20vw' })}
+            ${responsiveImage({ image, sizes: reelSizes(image) })}
           </button>`,
         ),
       )}
     </div>
+    ${images.length > 1 ? aboutReelSteps() : ''}
   </div>`;
+}
+
+/**
+ * How wide a photograph stands in the reel: 210 frame pixels tall, so 10.94vw
+ * of height above 1097px wide and 7.5rem below it, times its own proportion.
+ * `cv_about_reel_sizes` in the WordPress theme says the same.
+ */
+function reelSizes(image: ProjectImage): string {
+  const ratio = image.width / image.height;
+  return `(max-width: 1097px) ${Math.round(120 * ratio)}px, ${(10.9375 * ratio).toFixed(1)}vw`;
+}
+
+/** The reel's own chevrons: back round the loop, and on. */
+function aboutReelSteps(): Html {
+  return html`<button type="button" class="about-reel-step is-prev" data-about-reel-step="-1" aria-label="Earlier photographs" hidden>
+      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="M8 1 1 8l7 7" /></svg>
+    </button>
+    <button type="button" class="about-reel-step is-next" data-about-reel-step="1" aria-label="More photographs" hidden>
+      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="m1 1 7 7-7 7" /></svg>
+    </button>`;
 }
 
 /** The start page's chevron, for About's own scroll. */

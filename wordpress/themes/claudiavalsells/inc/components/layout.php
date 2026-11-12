@@ -58,9 +58,10 @@ function cv_top_bar(): string {
 /**
  * About opens over whatever page you are on, which stays faintly visible and
  * blurred behind it, and tells itself in four parts as you scroll (the theme's
- * client/about.js): the capitals lead writes itself, the photographs slide in
- * from the side, the rest of the biography writes itself as it rises, and the
- * record, the collections and how to reach her come in last.
+ * client/about.js): the capitals lead writes itself, the reel of photographs
+ * slides in and stops where the designer's sheet sets it, then moves on with
+ * the scroll as the rest of the biography writes itself, and the record, the
+ * collections and how to reach her come in last.
  *
  * The markup is the page at rest and matches the static site's byte for byte
  * (`aboutOverlay` in src/components/layout.ts): the opening paragraph, then
@@ -79,9 +80,18 @@ function cv_about_overlay( bool $open = false ): string {
 	if ( $a['images'] ) {
 		$out .= '<div class="about-reel" data-about-reel><div class="about-reel-track" data-about-track>';
 		foreach ( $a['images'] as $image ) {
-			$out .= '<button type="button" class="about-reel-item">' . cv_image( $image, '(max-width: 899px) 45vw, 20vw' ) . '</button>';
+			$out .= '<button type="button" class="about-reel-item">' . cv_image( $image, cv_about_reel_sizes( $image ) ) . '</button>';
 		}
-		$out .= '</div></div>';
+		$out .= '</div>';
+		// The reel's own chevrons, back round the loop and on: shown by the
+		// script once the photographs overrun the measure.
+		if ( count( $a['images'] ) > 1 ) {
+			$out .= '<button type="button" class="about-reel-step is-prev" data-about-reel-step="-1" aria-label="Earlier photographs" hidden>'
+				. '<svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="M8 1 1 8l7 7" /></svg></button>'
+				. '<button type="button" class="about-reel-step is-next" data-about-reel-step="1" aria-label="More photographs" hidden>'
+				. '<svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="m1 1 7 7-7 7" /></svg></button>';
+		}
+		$out .= '</div>';
 	}
 	$out .= '</div></div>' . $a['rest'] . '</div>'
 		. '<div class="about-record">';
@@ -154,6 +164,17 @@ function cv_about_overlay( bool $open = false ): string {
 				. '<button type="button" class="about-viewer-step is-next" data-about-step="1" aria-label="Next photograph">'
 				. '<svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="m1 1 7 7-7 7" /></svg></button>'
 			: '' );
+}
+
+/**
+ * How wide a photograph stands in the reel, for its `sizes`: 210 frame pixels
+ * tall, so 10.94vw of height above 1097px wide and 7.5rem below it, times its
+ * own proportion. `reelSizes` in src/components/layout.ts says the same.
+ */
+function cv_about_reel_sizes( int $id ): string {
+	$d     = cv_image_data( $id );
+	$ratio = $d && $d['height'] ? $d['width'] / $d['height'] : 1;
+	return sprintf( '(max-width: 1097px) %dpx, %svw', (int) round( 120 * $ratio ), number_format( 10.9375 * $ratio, 1, '.', '' ) );
 }
 
 function cv_about_show_list( array $shows ): string {
