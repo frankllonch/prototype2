@@ -5,6 +5,7 @@ import { responsiveImage } from '../components/image.ts';
 import { panels, panelShell, type PanelItem } from '../components/panels.ts';
 import { exhibitionList } from '../components/exhibitions.ts';
 import { SHOWS, placeOf } from '../content/exhibitions-list.ts';
+import { splitOpening } from '../content/shows.ts';
 import { platesBody } from '../components/plates.ts';
 import { commissionedList } from '../components/commissioned.ts';
 import { sheetBody } from '../components/sheet.ts';
@@ -160,7 +161,7 @@ export function exhibitionsPage(items: readonly Exhibition[]): Html {
     if (!images.length) return [];
 
     const prose = derived
-      ? derived.rows.flatMap((r) => r.columns).map((c) => (c.kind === 'text' ? c.html : '')).join('')
+      ? splitOpening(derived.rows.flatMap((r) => r.columns).map((c) => (c.kind === 'text' ? c.html : '')).join(''))
       : '';
 
     if (!prose.trim()) {

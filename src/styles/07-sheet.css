@@ -31,7 +31,7 @@
    * change how wide the text runs on every detail — exhibitions and
    * commissioned both, since they are one sheet.
    */
-  grid-template-columns: calc(var(--f) * 864) minmax(0, 1fr);
+  grid-template-columns: calc(var(--f) * 800) minmax(0, 1fr);
   grid-template-rows: auto minmax(0, 1fr);
   height: 100vh;
   height: 100dvh;
@@ -558,3 +558,11 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
   .plates-prev { left: 0; }
   .plates-next { right: 0; }
 }
+
+/*
+ * A show that opens on its own name and a translation of it: the sheet sets
+ * those apart and leaves an empty line under them before the text begins.
+ * A block inside the lede rather than a paragraph of its own, so the whole
+ * opening stays the lede and keeps its capitals (`content/shows.ts`).
+ */
+.sheet-prose .lede-open { display: block; margin-bottom: calc(var(--s-lead) * 1em); }

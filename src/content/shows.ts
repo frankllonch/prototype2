@@ -56,3 +56,43 @@ export function venueFor(slug: string, venue: string | undefined): string | unde
   const cut = clauses.slice(0, keep).join(',').trim();
   return venue.startsWith(cut) ? cut : venue;
 }
+
+/**
+ * Breaks the opening paragraph after a title and its translation.
+ *
+ * Mira'm opens on its own name and then an English gloss of it, and only then
+ * says what the show is: the source runs all three together in one paragraph,
+ * so the page read as an unbroken wall where the sheet sets the name apart and
+ * leaves an empty line under it.
+ *
+ * The split is found rather than written: the paragraph has to open on a
+ * quotation mark and carry a bracketed gloss near the front, and the break
+ * goes after the closing bracket. Nothing is reworded and nothing is moved —
+ * one paragraph becomes two at a point the source already marks.
+ *
+ * A paragraph that does not have that shape is returned untouched, so this
+ * costs nothing on the shows that open plainly.
+ */
+export function splitOpening(html: string): string {
+  const first = /^(\s*<p>)([\s\S]*?)(<\/p>)/.exec(html);
+  if (!first) return html;
+
+  const body = first[2]!;
+  // Only an opening that is a quoted name: the gloss belongs to a title, and
+  // a bracket anywhere else in a paragraph is an aside, not a heading.
+  if (!/^\s*(<[^>]+>\s*)*[“"']/.test(body)) return html;
+
+  const close = body.indexOf(']');
+  if (close < 0 || close > 220) return html;
+
+  const head = body.slice(0, close + 1);
+  const rest = body.slice(close + 1).replace(/^[\s,;:]+/, '');
+  if (!rest) return html;
+
+  // One paragraph still, not two: on the sheet the whole opening is the lede —
+  // the name, the gloss and what follows are all set in the same capitals —
+  // and a second paragraph would fall out of that and be set as body text.
+  // The break is a block inside it instead, which leaves the empty line
+  // without changing what the paragraph is.
+  return `${first[1]}<span class="lede-open">${head}</span>${rest}${first[3]}${html.slice(first[0].length)}`;
+}
