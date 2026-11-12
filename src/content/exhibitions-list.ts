@@ -73,7 +73,6 @@ export const SHOWS: readonly Show[] = [
   { group: 'Group shows', title: 'Marco, Límite y Lugar', venue: 'Group exhibition, Alzueta Gallery Madrid', from: 'March', year: 2025, slug: 'marco-limite-y-lugar' },
   { group: 'Group shows', title: 'What abstract art means to me?', venue: 'Group exhibition, Alzueta Gallery Séneca', from: 'January', year: 2024, slug: 'what-abstract-art-means-to-me' },
   { group: 'Group shows', title: 'La terre est bleu comme un organge', venue: 'Group exhibition, Alzueta Gallery, Madrid', from: 'November', year: 2023, slug: 'la-terre-est-bleu' },
-  { group: 'Group shows', title: 'Galeria Axel Pairon', venue: 'Group exhibition', from: 'December', year: 2016 },
 
   // ----------------------------------------------------------- art fairs
   { group: 'Art fairs', title: 'Zona Maco CDMX', venue: 'With Alzueta Gallery, Mexico', from: 'February', year: 2026 },
