@@ -11,11 +11,11 @@
 .wc {
   /*
    * How large the whole of What's Color? renders, type and breathing alike:
-   * 1 is the size everything on these pages was first traced at, and the
-   * client asked for it a quarter smaller. The sheet compositions' own
-   * internal ratios ride on the width and do not move with it.
+   * 1 is the size the sheets are drawn at — every text 40 at 1920 — which
+   * is where the client wants it. The sheet compositions' own internal
+   * ratios ride on the width and do not move with it.
    */
-  --wc-zoom: 0.75;
+  --wc-zoom: 1;
   /* Past this the type hits its clamp ceiling while a percentage measure keeps
      widening, which would run the justified columns out to a hundred
      characters. Freezing the container keeps every proportion on this page. */
@@ -44,11 +44,11 @@
    * scales to 27.4 of our 1786, and 40px gives 27.2), on 49px of leading:
    * 43/1565 restated, which is 1.227 against the font.
    */
-  max-width: var(--wc-measure, 84%);
+  max-width: var(--wc-measure, 68.5%);
   margin: 0 auto;
   text-align: center;
   text-wrap: balance;
-  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.1436vw, 2.75rem));
+  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.0833vw, 2.75rem));
   font-weight: 500;
   line-height: var(--wc-leading, 1.227);
   letter-spacing: 0;
@@ -249,7 +249,7 @@
 .wc-answer-name {
   grid-column: 1;
   margin: 0;
-  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.1436vw, 2.9rem));
+  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.0833vw, 2.9rem));
   font-weight: 500;
   /* 32px of leading on a 22px cap in the sheet, for the names that wrap. */
   line-height: 0.974;
@@ -279,7 +279,7 @@
 }
 .wc-answer-role,
 .wc-answer-code {
-  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.1436vw, 2.75rem));
+  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.0833vw, 2.75rem));
   font-weight: 500;
   line-height: 1.1;
   letter-spacing: 0;
@@ -297,7 +297,7 @@
 .wc-answer-text {
   grid-column: 1 / -1;
   margin-top: var(--wc-answer-text-gap, 1.6vw);
-  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.1436vw, 2.75rem));
+  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.0833vw, 2.75rem));
   /* The page's own leading now, not the near-solid setting the small type had:
      at this size solid lines close up into a block. */
   line-height: var(--wc-leading, 1.227);
@@ -317,7 +317,7 @@
 .wc-back {
   margin: calc(var(--wc-zoom, 1) * var(--wc-answers-gap, 7vw)) 0 0;
   text-align: center;
-  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.1436vw, 2.75rem));
+  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.0833vw, 2.75rem));
   font-weight: 500;
   letter-spacing: 0;
   text-transform: uppercase;
@@ -663,7 +663,7 @@ html:has(body.has-film) {
  */
 .wc-lead {
   margin: 0 0 calc(var(--wc-zoom, 1) * var(--wc-lead-gap, 7vw));
-  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.1436vw, 2.75rem));
+  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.0833vw, 2.75rem));
   line-height: var(--wc-leading, 1.227);
   letter-spacing: 0;
   text-align: justify;
@@ -689,7 +689,7 @@ html:has(body.has-film) {
   grid-column: 1 / -1;
   margin-top: var(--wc-answer-text-gap, 1.6vw);
   margin-bottom: 0;
-  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.1436vw, 2.75rem));
+  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.0833vw, 2.75rem));
   line-height: var(--wc-leading, 1.227);
   letter-spacing: 0;
   color: var(--ink-soft);
@@ -767,7 +767,7 @@ html:has(body.has-film) {
  */
 .wc-title {
   margin: 0 0 var(--wc-title-gap, 1.227em);
-  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.1436vw, 2.75rem));
+  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.0833vw, 2.75rem));
   font-weight: 700;
   line-height: var(--wc-leading, 1.227);
   letter-spacing: 0;
@@ -776,8 +776,9 @@ html:has(body.has-film) {
 }
 
 
-/* The standing note is set in the regular weight, the question in it
-   included; only the invitation that closes it is semibold. */
+/* The standing note is set medium, the question in it included; only the
+   invitation that closes it is semibold. All of it at 40, as every text on
+   these pages is at the 1920 the sheets are drawn at. */
 /*
  * Set as the three editions' texts at the foot of the view are: the same size
  * and solid leading, justified across the page's own margins, only heavier.
@@ -789,7 +790,7 @@ html:has(body.has-film) {
  */
 .wc-lead {
   font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.0833vw, 2.75rem));
-  font-weight: 400;
+  font-weight: 500;
   line-height: 1;
   text-align: justify;
 }
