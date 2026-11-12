@@ -85,7 +85,14 @@ export function splitOpening(html: string): string {
   const close = body.indexOf(']');
   if (close < 0 || close > 220) return html;
 
-  const head = body.slice(0, close + 1);
+  // The brackets did the job of setting the translation apart; the break now
+  // does it, and her sheet shows the gloss without them. The quotation marks
+  // inside are the source's own and stay.
+  //
+  // The opening bracket is optional because the source has lost it — what is
+  // in the dataset today is a closing bracket with nothing to close. Requiring
+  // the pair left that stray mark on the page, so either form is accepted.
+  const head = body.slice(0, close + 1).replace(/\[?([^[\]]*)\]\s*$/, '$1');
   const rest = body.slice(close + 1).replace(/^[\s,;:]+/, '');
   if (!rest) return html;
 
