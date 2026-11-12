@@ -269,6 +269,9 @@ html.js .hero[data-hero]+.grid[data-stack] {
  *                    cut-out stands and may reach this share of the gap towards
  *                    the caption (0.5 is half of it; 0 keeps it within the
  *                    cut-out's width).
+ *   --nav-dim        how faint ARTWORK, CLOSE, PREVIOUS and NEXT stand at rest,
+ *                    0 to 1 (0 invisible, 1 full black). On hover they turn
+ *                    full black.
  */
 .is-detail .top { display: none; }
 
@@ -287,6 +290,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
   --index-gap: 3.91vh;
   --caption-break: 2.36em;
   --view-spill: 0.5;
+  --nav-dim: 0.15;
   /* Read by client/views.ts: the width the painting and the caption share,
      and whether the caption takes its share beside the painting. */
   --plate-room: calc(100vw - 2 * var(--edge) - var(--text-gap));
@@ -323,11 +327,12 @@ html.js .hero[data-hero]+.grid[data-stack] {
   letter-spacing: 0.09em;
   text-transform: uppercase;
   font-weight: 400;
-  color: var(--ink);
-  transition: color var(--hover) var(--ease);
+  color: #000;
+  opacity: var(--nav-dim);
+  transition: opacity var(--hover) var(--ease);
 }
 .detail-back:hover, .detail-back:focus-visible,
-.detail-pager a:hover, .detail-pager a:focus-visible { color: var(--ink-soft); }
+.detail-pager a:hover, .detail-pager a:focus-visible { opacity: 1; }
 
 .detail-back {
   position: absolute;
