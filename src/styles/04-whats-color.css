@@ -185,7 +185,8 @@
 .wc-numeral {
   margin: 0 0 calc(var(--wc-zoom, 1) * var(--wc-numeral-gap, 2.4vw));
   text-align: center;
-  font-size: calc(var(--wc-zoom, 1) * clamp(0.9rem, 1.5184vw, 2.05rem));
+  /* 40 at 1920, like every other text on these pages. */
+  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.0833vw, 2.75rem));
   font-weight: 500;
   letter-spacing: 0;
 }
@@ -719,8 +720,7 @@ html:has(body.has-film) {
 }
 
 .wc-edition-i .wc-answer-role,
-.wc-edition-i .wc-answer-code,
-.wc-edition-i .wc-back {
+.wc-edition-i .wc-answer-code {
   font-size: calc(var(--wc-zoom, 1) * clamp(0.66rem, 1.104vw, 1.5rem));
 }
 
@@ -911,23 +911,6 @@ html:has(body.has-film) {
 }
 
 /*
- * The one hairline on her second sheet: up the right edge of Elii's column,
- * the height of the entry, a gutter's width out.
- */
-.wc-sheet-page .wc-slot-rule {
-  position: relative;
-}
-.wc-sheet-page .wc-slot-rule::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: calc(var(--sheet-w) * -0.0088);
-  width: 1px;
-  background: var(--ink);
-}
-
-/*
  * Her words stand further from the entries under them than from each other.
  *
  * Carried on the paragraph rather than on the entry below it, which is where
@@ -1061,7 +1044,6 @@ html:has(body.has-film) {
   .wc-sheet-page .wc-strip {
     margin-top: 1.6rem;
   }
-  .wc-sheet-page .wc-slot-rule::after { content: none; }
 }
 
 /*
@@ -1109,6 +1091,9 @@ html:has(body.has-film) {
  * columns; only the air above it scales with the type.
  */
 .wc-sheet-page .wc-strip {
+  /* A line of 40 more under the reel than the sheets draw, before the
+     writing and the answers begin (--sheet-after-reel). */
+  margin-bottom: calc(var(--sheet-v) * var(--sheet-after-reel, 0.0219));
   grid-column: 1 / -1;
   display: flex;
   justify-content: center;
@@ -1353,8 +1338,11 @@ html:has(body.has-film) {
        * centre, the names climb the lower half of the view, stop a breath
        * beneath it — the knob is the breath — and only then does the pin let
        * go, so the sentence travels up sitting right on top of them.
+       * --wc-write-air is the room left between them when they meet, in the
+       * type's own terms: 6.77vw leaves the sheet's 157 at 1920, about four
+       * lines of the note, from the invitation's ink to the first numeral's.
        */
-      margin-bottom: calc(var(--wc-write-meet, 12vh) - 50vh);
+      margin-bottom: calc(var(--wc-write-meet, 12vh) + var(--wc-write-air, 6.77vw) - 50vh);
       view-timeline: --wc-write block;
     }
     .wc-write-pin {

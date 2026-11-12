@@ -498,7 +498,7 @@ function sheet(edition: Edition, table: readonly SheetSlot[]): Html {
         if (slot.lead !== undefined) band = slot.lead;
         if (!person) return html``;
         return html`<div
-          class="wc-slot${slot.rule ? ' wc-slot-rule' : ''}"
+          class="wc-slot"
           style="--col: ${String(slot.col ?? 1)}; --drop: ${String(slot.drop ?? 0)}; ${air(band)}"
         >${sheetEntry(person)}</div>`;
       }),

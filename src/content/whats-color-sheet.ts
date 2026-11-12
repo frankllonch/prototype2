@@ -57,8 +57,6 @@ export interface SheetSlot {
    * Left off everywhere only on rows the designer never drew.
    */
   readonly lead?: number;
-  /** A hairline up the right edge of this slot's column, drawn once on her second sheet. */
-  readonly rule?: boolean;
 }
 
 /**
@@ -150,7 +148,7 @@ export const SHEET_II: readonly SheetSlot[] = [
 
   { say: 1, lead: 0.0833 },
 
-  { who: 'Elii', col: 1, lead: 0.1299, rule: true },
+  { who: 'Elii', col: 1, lead: 0.1299 },
   { who: 'Isabel Francoy', col: 3 },
 
   { say: 2, lead: 0.0696 },

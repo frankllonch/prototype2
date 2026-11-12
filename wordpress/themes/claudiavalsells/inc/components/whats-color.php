@@ -373,21 +373,21 @@ function cv_wc_sheet( array $edition, array $table ): string {
 			continue;
 		}
 		$placed[ $key ] = true;
-		$out           .= cv_wc_slot( $person, (int) ( $slot['col'] ?? 1 ), (int) ( $slot['drop'] ?? 0 ), $band, ! empty( $slot['rule'] ) );
+		$out           .= cv_wc_slot( $person, (int) ( $slot['col'] ?? 1 ), (int) ( $slot['drop'] ?? 0 ), $band );
 	}
 	$col = 0;
 	foreach ( $edition['participants'] as $p ) {
 		if ( isset( $placed[ cv_wc_key( $p['name'] ) ] ) ) {
 			continue;
 		}
-		$out .= cv_wc_slot( $p, 1 + ( $col++ % 3 ), 0, null, false );
+		$out .= cv_wc_slot( $p, 1 + ( $col++ % 3 ), 0, null );
 	}
 	return $out . '</div>' . ( $strip ? cv_wc_book_view() : '' );
 }
 
 /** One placed entry: the column it sits in, how far it is dropped and the air above its band ride on the slot. */
-function cv_wc_slot( array $person, int $col, int $drop, $band, bool $rule ): string {
-	return '<div class="wc-slot' . ( $rule ? ' wc-slot-rule' : '' ) . '" style="--col: ' . $col . '; --drop: ' . $drop . '; ' . cv_wc_air( $band ) . '">'
+function cv_wc_slot( array $person, int $col, int $drop, $band ): string {
+	return '<div class="wc-slot" style="--col: ' . $col . '; --drop: ' . $drop . '; ' . cv_wc_air( $band ) . '">'
 		. cv_wc_cell( $person ) . '</div>';
 }
 
