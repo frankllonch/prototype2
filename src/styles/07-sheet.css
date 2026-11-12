@@ -189,7 +189,12 @@
  */
 .sheet-prose .is-style-note {
   margin-top: 5.2em;
-  font-weight: 300;
+  /*
+   * Regular, like the text above it. These were set at 30 against the text's
+   * 40 once, and light when that size was taken out; regular is what they
+   * actually are. The name inside keeps the medium its own markup asks for,
+   * so the line reads 'Photography by' plain and the credit a shade stronger.
+   */
   line-height: var(--lead-45);
 }
 .sheet-prose .is-style-cta {
