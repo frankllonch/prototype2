@@ -1,7 +1,7 @@
 import { html, join, type Html } from './html.ts';
 import { responsiveImage } from './image.ts';
 import type { ProjectImage } from '../content/types.ts';
-import { SHOW_GROUPS, type Show, type ShowGroup } from '../content/exhibitions-list.ts';
+import { SHOW_GROUPS, placeOf, type Show, type ShowGroup } from '../content/exhibitions-list.ts';
 
 /**
  * The exhibitions index, after the designer's layout: one line per show — what it
@@ -54,10 +54,12 @@ function group(name: ShowGroup, shows: readonly Show[], covers: ReadonlyMap<stri
  * column was never announced.
  */
 function row(s: Show, cover?: ProjectImage): Html {
+  // The group above already says what kind of show it was.
+  const place = placeOf(s.venue);
   const inner = html`<span class="exh-name">
       <span class="exh-title">${s.title}</span>
       ${s.note ? html`<span class="exh-note">${s.note}</span>` : ''}
-      ${s.venue ? html`<span class="exh-venue">${s.venue}</span>` : ''}
+      ${place ? html`<span class="exh-venue">${place}</span>` : ''}
     </span>
     <span class="exh-plate" aria-hidden="true">
       ${cover ? responsiveImage({ image: cover, sizes: '(max-width: 899px) 30vw, 13vw', alt: '' }) : ''}

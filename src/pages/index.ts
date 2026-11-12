@@ -4,7 +4,7 @@ import { grid, gridControls, type GridItem } from '../components/gallery.ts';
 import { responsiveImage } from '../components/image.ts';
 import { panels, panelShell, type PanelItem } from '../components/panels.ts';
 import { exhibitionList } from '../components/exhibitions.ts';
-import { SHOWS } from '../content/exhibitions-list.ts';
+import { SHOWS, placeOf } from '../content/exhibitions-list.ts';
 import { platesBody } from '../components/plates.ts';
 import { commissionedList } from '../components/commissioned.ts';
 import { sheetBody } from '../components/sheet.ts';
@@ -173,7 +173,7 @@ export function exhibitionsPage(items: readonly Exhibition[]): Html {
     ].filter(Boolean).join(' ');
     return [panelShell('exhibition', show.slug, sheetBody({
       title: show.title,
-      lines: show.venue ? [show.venue] : [],
+      lines: placeOf(show.venue) ? [placeOf(show.venue)!] : [],
       when,
       body: raw(prose),
       images,

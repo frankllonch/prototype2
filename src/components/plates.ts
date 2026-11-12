@@ -1,7 +1,7 @@
 import { html, join, raw, type Html } from './html.ts';
 import { responsiveImage } from './image.ts';
 import type { ProjectImage } from '../content/types.ts';
-import type { Show } from '../content/exhibitions-list.ts';
+import { placeOf, type Show } from '../content/exhibitions-list.ts';
 
 /**
  * The second sheet: a show that is photographs and nothing else.
@@ -27,6 +27,8 @@ import type { Show } from '../content/exhibitions-list.ts';
  * arrows and the arrow keys come from there, as on every other detail.
  */
 export function platesBody(show: Show, images: readonly ProjectImage[]): Html {
+  // As on the index: the kind of show is the group, not the location.
+  const place = placeOf(show.venue);
   const when = [
     show.from && show.to ? `From ${show.from} to ${show.to}` : show.from ?? '',
     String(show.year),
@@ -35,7 +37,7 @@ export function platesBody(show: Show, images: readonly ProjectImage[]): Html {
   return html`<div class="plates" data-reader>
     <header class="plates-head">
       <h2 class="sheet-title">${show.title}</h2>
-      ${show.venue ? html`<p class="sheet-lines">${show.venue}</p>` : ''}
+      ${place ? html`<p class="sheet-lines">${place}</p>` : ''}
       <p class="sheet-when">${when}</p>
     </header>
 

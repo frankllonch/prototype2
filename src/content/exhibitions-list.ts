@@ -41,7 +41,7 @@ export interface Show {
 
 export const SHOWS: readonly Show[] = [
   // ---------------------------------------------------------- solo shows
-  { group: 'Solo shows', title: 'Moll de l’Ós', venue: 'Solo show, 8 rue des Beaux-Arts, Paris', from: 'May 27', to: 'June 26', year: 2026, slug: 'moll-de-l-os' },
+  { group: 'Solo shows', title: 'Moll de l’Ós', venue: '8 rue des Beaux-Arts, Paris', from: 'May 27', to: 'June 26', year: 2026, slug: 'moll-de-l-os' },
   { group: 'Solo shows', title: 'Transitions', venue: 'Solo show, Alzueta Gallery, Barcelona', from: 'September', year: 2025, slug: 'transitions' },
   { group: 'Solo shows', title: 'Mira’m no deixis de mirar-me', venue: 'Solo show, Palau de Casavells', from: 'April', to: 'June', year: 2025, slug: 'mira-m-no-deixis-de-mirar-me' },
   { group: 'Solo shows', title: 'Painting as a gift of color', venue: 'Solo show at Gallery_BR, Tetbury, UK', from: 'May', year: 2024, slug: 'painting-as-a-gift-of-color' },
@@ -111,3 +111,25 @@ export const SHOWS: readonly Show[] = [
   { group: 'Private collections', title: 'Collection Richard', venue: 'France' },
   { group: 'Private collections', title: 'Smith Collection', venue: 'Wyoming' },
 ];
+
+/**
+ * The place a show was, with the kind of show taken off the front.
+ *
+ * The sheet writes the location as "Solo show, Alzueta Gallery, Barcelona" —
+ * but the group it sits under already says "Solo shows", so the page states it
+ * twice, once as the divider and once under every title. This drops the
+ * opening phrase and leaves the place.
+ *
+ * Taken off at render rather than edited out of the records above, so what is
+ * stored stays the sheet's own wording and the rule is visible in one place.
+ * A location that is only the kind of show — Galeria Axel Pairon's "Group
+ * exhibition" — is left with nothing, and the row renders no line at all.
+ *
+ * `solow` is in the pattern because the sheet spells it that way once, and a
+ * typo should not be the reason a line keeps its prefix.
+ */
+export function placeOf(venue: string | undefined): string | undefined {
+  if (!venue) return venue;
+  const place = venue.replace(/^\s*(solo|solow|group)\s*(show|exhibition)s?\b[\s,]*(at\s+)?/i, '').trim();
+  return place || undefined;
+}
