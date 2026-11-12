@@ -305,11 +305,10 @@
   letter-spacing: 0;
   /* Justified, as the sheet sets them — its right edges hold to within two
      pixels over ten separate blocks while the word spacing visibly varies.
-     Hyphenated, or a column this narrow opens rivers; the prefix is for Safari
-     before 17, which otherwise drops hyphenation and gets the rivers. */
+     Never hyphenated: a word is not cut, at the cost of looser spacing. */
   text-align: justify;
-  -webkit-hyphens: auto;
-  hyphens: auto;
+  -webkit-hyphens: none;
+  hyphens: none;
 }
 .wc-answer-text > * { margin: 0; }
 /* A second paragraph is indented rather than spaced, as the sheet indents it. */
@@ -1018,8 +1017,9 @@ html:has(body.has-film) {
   line-height: var(--sheet-answer-lead, 1);
   letter-spacing: 0;
   text-align: justify;
-  -webkit-hyphens: auto;
-  hyphens: auto;
+  /* No word in an answer is ever cut: the client's rule. */
+  -webkit-hyphens: none;
+  hyphens: none;
 }
 .wc-sheet-page .wc-cell-text > * { margin: 0; }
 /* Paragraphs run on, marked by an indent rather than by air — which is how
@@ -1546,4 +1546,9 @@ a.wc-bar:focus-visible {
   .wc-bar {
     transition: none;
   }
+}
+
+/* The project's name inside her writing, set semibold rather than bold. */
+.wc-sheet-page .wc-say-ask {
+  font-weight: 600;
 }

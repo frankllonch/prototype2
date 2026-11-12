@@ -467,7 +467,16 @@ function build(): readonly Edition[] {
       says: [
         ...paragraphs(column)
           .slice(1, 2)
-          .map((p) => p.replace(/^<p\b[^>]*>/i, '').replace(/<\/p>$/i, '').trim()),
+          .map((p) => p.replace(/^<p\b[^>]*>/i, '').replace(/<\/p>$/i, '').trim())
+          // The project's name, as the source sets it: in italics, with a
+          // stray asterisk and its closing quote bold on its own. Set upright
+          // and semibold as one phrase instead, the words as written.
+          .map((p) =>
+            p.replace(
+              /(?:<\/?(?:em|strong)>)*‘\*?(WHAT.S COLOR\?)\s*(?:<\/?(?:em|strong)>)*‘(?:<\/?(?:em|strong)>)*/,
+              '<strong class="wc-say-ask">‘$1‘</strong>',
+            ),
+          ),
         ...SAYS_III_SHEET,
       ],
       opening: (() => {
