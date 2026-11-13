@@ -71,7 +71,7 @@ const CLIENT_MODULES = [
 function topBar(path: string): Html {
   return html`<header class="top">
     <a class="wordmark" href="${withBase('/')}" data-roll>CLAUDIA VALSELLS</a>
-    <a class="top-soon" href="${withBase('/#whats-color')}" ${path === '/' ? raw('aria-current="page"') : ''} data-roll>What&rsquo;s Color?</a>
+    <a class="top-soon" href="${withBase('/#whats-color')}" ${path === '/' || path.startsWith('/whats-color/') ? raw('aria-current="page"') : ''} data-roll>What&rsquo;s Color?</a>
     <nav class="menu" aria-label="Primary">
       ${join(
         MENU.map(

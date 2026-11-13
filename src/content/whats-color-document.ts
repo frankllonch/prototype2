@@ -91,32 +91,33 @@ export const EDITION_I: readonly DocumentEntry[] = [
  * (TERCERA ENTREGA, November 2026) marks them in red as wrong on the web and
  * gives the right one: Albert Riera Galcerán AC216 (the document's AC16),
  * Cristina Stolhe AC239 (AC39), Irene Royo AC228 (AC23), Ana Cuba AC380 (AC80)
- * and Julia Ruiz Cabello AC074 (AC075). Hers are the ones written here.
+ * and Julia Ruiz Cabello AC074 (AC075). Hers are the ones written here, and
+ * so are her colour names, where her sheet words one differently.
  */
 export const EDITION_III: readonly DocumentEntry[] = [
   { name: 'Álvaro Galmés', role: 'Arquitecto, escritor y artista plástico', code: 'AC065', colourName: 'Ocre amarillo' },
   { name: 'Marta D. Riezu', role: 'Escritora', code: 'AC263', colourName: 'Verde', aka: ['Marta D.Riezu'] },
   { name: 'María Prats', role: 'Artista', code: 'AC142', colourName: 'Negre' },
   { name: 'Carlota Guerrero', role: 'Fotógrafa y artista', code: 'AC001', colourName: 'Vainilla' },
-  { name: 'Lucia Boned', role: 'Librera', code: 'AC033', colourName: 'Azul celeste oscuro' },
+  { name: 'Lucia Boned', role: 'Librera', code: 'AC033', colourName: 'Azul oscuro' },
   { name: 'Albert Riera Galcerán', role: 'Artista', code: 'AC216', colourName: 'Rosa intens' },
   { name: 'Guillermo Santomà', role: 'Arquitecto y artista', code: 'AC034', colourName: 'Azul' },
   { name: 'Cristina Stolhe', role: 'Fotógrafa', code: 'AC239', colourName: 'Verde oscuro casi negro' },
   { name: 'José Quintanar', role: 'Artista y editor', code: 'AC267', colourName: 'Amarillo' },
-  { name: 'Luís Cerveró', role: 'Realizador y librero', code: 'AC250', colourName: 'Azul profundo' },
+  { name: 'Luís Cerveró', role: 'Realizador y librero', code: 'AC250', colourName: 'Deep blue' },
   { name: 'Irene Royo', role: 'Fotógrafa y pintora', code: 'AC228', colourName: 'Rosa salmón' },
   { name: 'Adrià Cañameras', role: 'Fotógrafo', code: 'AC233', colourName: 'Azul' },
   { name: 'Isabel Martinez', alias: 'isabelitavirtual', role: 'Directora creativa', code: 'AC193', colourName: 'Fresa' },
   { name: 'Salva López', role: 'Fotógrafo', code: 'AC258', colourName: 'Terracota' },
   { name: 'Berta Blanca Ivanow', role: 'Realitzadora audiovisual i escultora', code: 'AC223' },
-  { name: 'Marc Gómez del Moral', role: 'Director de fotografía', code: 'AC320', colourName: 'Arena' },
+  { name: 'Marc Gómez del Moral', role: 'Director de fotografía', code: 'AC320', colourName: 'Sand' },
   { name: 'Jose Javier Serrano', alias: 'Yosigo', role: 'Fotógrafo', code: 'AC259', colourName: 'Azul piscina' },
-  { name: 'Raquel Quevedo', role: 'Diseñadora y artista', code: 'AC299', colourName: 'Gris perla' },
+  { name: 'Raquel Quevedo', role: 'Diseñadora y artista', code: 'AC299', colourName: 'Pearl gray' },
   { name: 'Xavi Mañosa', role: 'Ceramista', code: 'AC125', colourName: 'Gris pols' },
   { name: 'Arnau Blanch', role: 'Fotógrafo', code: 'AC037', colourName: 'Azul plomo' },
   { name: 'María Medem', role: 'Ilustradora y dibujante de cómic', code: 'AC016', colourName: 'Lila magenta', aka: ['Maria Medem'] },
   { name: 'Ana Cuba', role: 'Fotógrafa', code: 'AC380', colourName: 'Mandarina' },
   { name: 'Belén Gayán', role: 'Productora ejecutiva', code: 'AC049', colourName: 'Blau casi verd', aka: ['Belen Gayán'] },
-  { name: 'Juan Diego Valera', role: 'Fotógrafo', code: 'AC096', colourName: 'Verde gris' },
+  { name: 'Juan Diego Valera', role: 'Fotógrafo', code: 'AC096', colourName: 'Verde' },
   { name: 'Julia Ruiz Cabello', role: 'Arquitecta', code: 'AC074', colourName: 'Ocre rojizo' },
 ];

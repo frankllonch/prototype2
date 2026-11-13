@@ -9,10 +9,6 @@
  * guessed right on the designer's sheet (WHATS COLOR COLORS), so theirs is
  * the fill of the designer's bar, read from the drawing itself: `designer`.
  *
- * Keyed by name, not by edition: Oscar Tusquets answered twice, and the
- * colour Claudia gave him on the first edition's sheet is his in both, over
- * the designer's bar for him in the second.
- *
  * Two values are not the sheet's letter for letter. María Prats is printed
  * #000000F4 — black at 96% — which on the white page is #0a0a0a, the colour
  * of her swatch; Carlota Guerrero's #F7E9B200 carries a stray alpha of zero
@@ -87,7 +83,6 @@ export const FINAL_COLOURS: readonly FinalColour[] = [
   { edition: 'II', name: 'AMOO', hex: '#592222', from: 'designer' },
   { edition: 'II', name: 'Loca Studio', hex: '#eb7373', from: 'client' },
   { edition: 'II', name: 'Paula Arroyo', hex: '#fab75f', from: 'client' },
-  { edition: 'II', name: 'Oscar Tusquets', hex: '#b9593f', from: 'client' },
   // III — all of it is on Claudia's sheet
   { edition: 'III', name: 'Álvaro Galmés', hex: '#ebad02', from: 'client' },
   { edition: 'III', name: 'Marta D. Riezu', hex: '#82ad7b', from: 'client' },

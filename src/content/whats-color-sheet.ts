@@ -170,8 +170,8 @@ export const SHEET_II: readonly SheetSlot[] = [
 
   { say: 4, lead: 0.0702 },
 
-  { who: 'Oscar Tusquets', col: 1, lead: 0.049 },
-  { who: 'Gema Sach', col: 2 },
+  // Oscar Tusquets stood first in this row; Claudia keeps him to edition I.
+  { who: 'Gema Sach', col: 2, lead: 0.049 },
   { who: 'Barbara Aurell', col: 3, drop: 2 },
 
   // Her sheet sets Anna beside that row, three drop-steps below its top — the
@@ -301,7 +301,6 @@ export interface ChartBar {
  */
 export const CHART_II: readonly ChartBar[] = [
   { who: 'Gema Sach', h: 0.5255 },
-  { who: 'Oscar Tusquets', h: 0.4241 },
   { who: 'Marc Morro', h: 0.4953 },
   { who: 'Andrea Batlló y Adrià Escolano', h: 0.2892 },
   { who: 'Escobedo Soliz', h: 0.4953 },

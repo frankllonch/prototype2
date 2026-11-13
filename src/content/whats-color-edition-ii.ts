@@ -173,16 +173,4 @@ Así que como arquitectos decimos sí, totalmente sí al color, a espacios lleno
   {
     name: 'Cierto Estudio',
   },
-  /*
-   * Not in Claudia's answers document for this edition, but on both of the
-   * other records of it: the old site thanks him among the participants, and
-   * the designer's sheet places him in the last band with the same line he
-   * gave the first edition. The line is his — word for word the answer the
-   * first edition's source carries — so it is written here once rather than
-   * read across editions at build time.
-   */
-  {
-    name: 'Oscar Tusquets',
-    answer: '“En Arquitectura, la posibilidad de huir osadamente de la dictadura contemporánea del blanco ¡Viva Barragán!”.',
-  },
 ];
