@@ -301,14 +301,21 @@
  */
 .wc-answer-code,
 .wc-sheet-page .wc-cell-code {
-  padding: 0 0.2em;
-  margin-inline: -0.2em;
-  /* Set off the box's middle, not its top. A code is a grid item, so it is a
-     block as tall as its own line-height rather than the font's full height,
-     and the question's 0.2em from the top landed low and ran off the foot.
-     The band sits 0.0375em below the middle, as it does on the question. */
-  background: linear-gradient(var(--swatch, var(--ink)), var(--swatch, var(--ink))) no-repeat 0 calc(50% + 0.0375em) / 100% 0.905em;
+  /* The type is knocked out of the band below, in paper or ink. */
   color: var(--swatch-ink, var(--paper));
+}
+/*
+ * The band is on a span inside the code, not on the code itself. The code is
+ * a grid item, which makes it a block: a long one — AC239 VERDE OSCURO CASI
+ * NEGRO — wrapped to two lines under one band laid across both. Inline, the
+ * band breaks with the line and each line gets its own, as the names' do.
+ * Measured from the top of the type: 0.1725em down puts it where it sat,
+ * centred on the capitals.
+ */
+.wc-code-band {
+  padding: 0 0.2em;
+  margin: 0 -0.2em;
+  background: linear-gradient(var(--swatch, var(--ink)), var(--swatch, var(--ink))) no-repeat 0 0.1725em / 100% 0.905em;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
 }
