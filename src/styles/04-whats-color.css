@@ -1454,6 +1454,10 @@ html:has(body.has-film) {
   color: inherit;
   cursor: pointer;
 }
+/* A tab of space between the cut text and Read more (--wc-more-tab). */
+.wc-more {
+  margin-left: var(--wc-more-tab, 2em);
+}
 
 /* Which half shows: cut with scripting, whole without, and never both. */
 html.js .wc-text:not(.is-open) .wc-text-open {
