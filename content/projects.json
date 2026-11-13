@@ -17059,6 +17059,86 @@
         }
       ],
       "metadata": {}
+    },
+    {
+      "slug": "chart-photographs",
+      "kind": "page",
+      "title": "The colour chart in use",
+      "sourceUrl": "file:content/raw/local/chart",
+      "rows": [],
+      "cover": {
+        "id": "372fb344c1f2e244",
+        "source": "local/chart/01.png",
+        "alt": "Claudia Valsells’ artist colour chart in use",
+        "width": 638,
+        "height": 631
+      },
+      "images": [
+        {
+          "id": "372fb344c1f2e244",
+          "source": "local/chart/01.png",
+          "alt": "Claudia Valsells’ artist colour chart in use",
+          "width": 638,
+          "height": 631
+        },
+        {
+          "id": "b48aef56cb053b83",
+          "source": "local/chart/02.webp",
+          "alt": "Claudia Valsells’ artist colour chart in use",
+          "width": 591,
+          "height": 788
+        },
+        {
+          "id": "9c3370caf20fb57d",
+          "source": "local/chart/03.webp",
+          "alt": "Claudia Valsells’ artist colour chart in use",
+          "width": 597,
+          "height": 796
+        },
+        {
+          "id": "6035b446ac06c295",
+          "source": "local/chart/04.png",
+          "alt": "Claudia Valsells’ artist colour chart in use",
+          "width": 638,
+          "height": 510
+        },
+        {
+          "id": "dea4fedb8ce88727",
+          "source": "local/chart/05.webp",
+          "alt": "Claudia Valsells’ artist colour chart in use",
+          "width": 637,
+          "height": 796
+        },
+        {
+          "id": "44964273ffd3710b",
+          "source": "local/chart/06.webp",
+          "alt": "Claudia Valsells’ artist colour chart in use",
+          "width": 597,
+          "height": 796
+        },
+        {
+          "id": "8a431570bf012cb5",
+          "source": "local/chart/07.webp",
+          "alt": "Claudia Valsells’ artist colour chart in use",
+          "width": 637,
+          "height": 796
+        },
+        {
+          "id": "dab2e9ebc96aec45",
+          "source": "local/chart/08.webp",
+          "alt": "Claudia Valsells’ artist colour chart in use",
+          "width": 597,
+          "height": 796
+        },
+        {
+          "id": "f7a48149496fee9f",
+          "source": "local/chart/09.webp",
+          "alt": "Claudia Valsells’ artist colour chart in use",
+          "width": 638,
+          "height": 796
+        }
+      ],
+      "metadata": {}
     }
   ]
 }

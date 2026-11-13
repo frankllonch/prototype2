@@ -29,6 +29,25 @@ export function initScrollCue(): void {
 
   let threshold = () => window.innerHeight * 0.1;
 
+  /*
+   * The Colour Chart's whole page is written by the document's own scroll, so
+   * the question the cue asks is answered only when the sentence stands: the
+   * share of the scroll the words are spread over, which the page states.
+   * It is also the moment before the line at the foot arrives, so the cue is
+   * gone by the time anything else wants the bottom of the screen.
+   */
+  const chart = document.querySelector<HTMLElement>('[data-chart-written]');
+  if (chart) {
+    const written = Number.parseFloat(chart.dataset.chartWritten ?? '');
+    if (Number.isFinite(written) && written > 0) {
+      threshold = () =>
+        Math.max(
+          (document.documentElement.scrollHeight - window.innerHeight) * written,
+          window.innerHeight * 0.1,
+        );
+    }
+  }
+
   const write = document.querySelector<HTMLElement>('.wc-write');
   const writing =
     write &&

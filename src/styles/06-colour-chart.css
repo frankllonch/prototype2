@@ -34,8 +34,42 @@
   /* One line of the statement: 45pt of leading on 40pt of text. */
   --chart-line: calc(var(--pt) * 45);
 
-  padding: calc(var(--bar) + var(--pt) * 205) var(--pad) calc(var(--pt) * 230);
+  /*
+   * Where the statement's first line sits.
+   *
+   * 60pt below the bar, against the sheet's 205. The sheet draws a page you
+   * scroll through; this one has to stand whole on a screen, so the air
+   * between its parts is what gives. The type is hers to the point — only the
+   * room around it has been taken in, and the same is true of every figure
+   * below.
+   */
+  --chart-top: calc(var(--bar) + var(--pt) * 40);
+
 }
+
+/*
+ * The whole page, on one screen, stuck to the top of the view.
+ *
+ * Everything the sheet sets is in here, and it does not move: the run behind
+ * it (`.chart-runway`) is what the reader scrolls, and this stays put being
+ * written. A column rather than a stack of margins, so the line at the foot
+ * can be pushed to the foot of the screen and the room left over goes there
+ * rather than being spent on a figure chosen in advance.
+ *
+ * `min-height`, not `height`: on a short window the content is taller than a
+ * screen and has to be allowed to be. The stage then releases near the end of
+ * the run and the last of the page scrolls up, which is the ordinary thing a
+ * page does when it does not fit.
+ */
+.chart-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: var(--chart-top) var(--pad) calc(var(--pt) * 10);
+}
+
+/* The line at the foot goes to the foot. */
+.chart-footer { margin-top: auto; }
 
 /* ----------------------------------------------------------- the statement */
 
@@ -59,6 +93,79 @@
 .chart-statement p { margin: 0 0 1.125em; }
 .chart-statement p:last-child { margin-bottom: 0; }
 
+/* --------------------------------------------------------- the writing */
+
+/*
+ * The statement is written by the scroll, and the scroll is the page's own.
+ *
+ * The page holds still (`.chart-page`, above) and a run of empty height
+ * behind it is what the reader travels: each word has a slice of that run,
+ * worked out where the words are, at build, and riding on the elements as
+ * `animation-range` (`components/colour-chart.ts`). The last word lands on
+ * the last pixel, so when the sentence stands the page will not go on — there
+ * is nothing after it to go to.
+ *
+ * Scrolling back unwrites it, which is not a feature added here but what a
+ * scroll timeline is: the words are at a position, not partway through a
+ * performance, so the page is as readable backwards as forwards.
+ *
+ * One knob: --chart-run, how much scroll the writing takes. More is slower.
+ * It is only the run's height — the slices are fractions of whatever it is —
+ * so it can be tuned here alone without moving a word's turn.
+ *
+ * Everything below asks the engine first. Without scroll-run animations, or
+ * with motion reduced, no word is ever hidden, the run is not there at all
+ * and the page is the static one the sheet draws.
+ */
+.chart-runway { display: none; }
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .chart-page { position: sticky; top: 0; }
+
+    .chart-runway {
+      display: block;
+      height: var(--chart-run, 300vh);
+    }
+
+    .chart-word {
+      opacity: 0;
+      /* Each word arrives whole, the moment its turn comes: no fade, so there
+         is never a half-written word ahead of the reader. */
+      animation: chart-word-in steps(1, jump-start) both;
+      animation-timeline: scroll(root block);
+      /* Each word's own animation-range rides on the element. */
+    }
+
+    /*
+     * And the four under the sentence come in rather than being written:
+     * each rises a little out of a blur over its own slice of the same run,
+     * the way the last part of About arrives. Written word by word they would
+     * read as more of the statement; arriving whole, they are what the page
+     * is for — where to get one, what it costs, her thanks, the line at the
+     * foot.
+     *
+     * Eased, not stepped, because the point of this one is the arrival.
+     */
+    .chart-in {
+      opacity: 0;
+      filter: blur(10px);
+      transform: translateY(14px);
+      animation: chart-in var(--ease) both;
+      animation-timeline: scroll(root block);
+      /* Each one's own animation-range rides on the element. */
+    }
+  }
+}
+
+@keyframes chart-word-in {
+  to { opacity: 1; }
+}
+
+@keyframes chart-in {
+  to { opacity: 1; filter: none; transform: none; }
+}
+
 /* ------------------------------------------------------------- the ordering */
 
 /*
@@ -70,7 +177,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.55em;
-  margin-top: calc(var(--pt) * 103);
+  margin-top: calc(var(--pt) * 24);
   font-size: calc(var(--pt) * 45);
   font-weight: 600;
   line-height: 1.125;
@@ -102,8 +209,24 @@
   transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-.chart-order:hover .chart-arrow,
-.chart-order:focus-visible .chart-arrow { transform: rotate(90deg); }
+/*
+ * Only where there is a pointer to hover with, and only on hover.
+ *
+ * A tap on a touch screen leaves `:hover` standing on what was tapped until
+ * something else is tapped, so on a phone the arrow turned once and stayed
+ * turned — pointing down for the life of the page. `(hover: hover) and
+ * (pointer: fine)` is the test the site already uses for the pointer label,
+ * and it keeps the whole gesture to the machines that can actually make it.
+ *
+ * `:focus-visible` is not in here either, and that is the other half of the
+ * same complaint. Closing the form puts focus back on the control it was
+ * opened from; after a key that counts as a visible focus, so the arrow was
+ * left turned by a form the reader had finished with. Focus is shown by the
+ * underline below, which does not pretend to be a gesture.
+ */
+@media (hover: hover) and (pointer: fine) {
+  .chart-order:hover .chart-arrow { transform: rotate(90deg); }
+}
 
 /* The site shows focus the way it shows hover; this one also underlines, since
    a keyboard arriving on a control that opens a form should be unmistakable. */
@@ -116,7 +239,7 @@
  * above it rather than the size of the words above that.
  */
 .chart-price {
-  margin: calc(var(--pt) * 25) 0 0;
+  margin: calc(var(--pt) * 18) 0 0;
   font-size: calc(var(--pt) * 45);
   font-weight: 300;
   line-height: 1.125;
@@ -128,8 +251,16 @@
 /* ---------------------------------------------------------------- the close */
 
 /* Her thanks, down the middle: 45pt, the same size as the control above it. */
+/*
+ * Her thanks, down the middle — and lifted clear of the line at the foot.
+ *
+ * --chart-thanks-lift is that lift, a tenth of the screen, and the room for
+ * it comes out of the gaps above rather than out of the page's height: this
+ * page stands on one screen and that is not negotiable. The figures above are
+ * what paid for it.
+ */
 .chart-thanks {
-  margin: calc(var(--pt) * 69) 0 0;
+  margin: calc(var(--pt) * 18) 0 var(--chart-thanks-lift, 10vh);
   text-align: center;
   font-size: calc(var(--pt) * 45);
   font-weight: 500;
@@ -143,7 +274,6 @@
  * the notice by weight alone — there is no second size for it to use.
  */
 .chart-footer {
-  margin-top: calc(var(--pt) * 136);
   text-align: center;
   font-size: calc(var(--pt) * 18);
   font-weight: 400;
@@ -163,9 +293,16 @@
  */
 @media (max-width: 899px) {
   .chart {
-    padding-top: calc(var(--bar) + var(--pt) * 90);
-    padding-bottom: calc(var(--pt) * 110);
+    /*
+     * The knob, not the padding. Setting `padding-top` here would also set it
+     * on the writing stage, which hands its top offset to the pin and takes
+     * none itself — the sentence would then be pushed down twice and open a
+     * third of the way down a phone.
+     */
+    --chart-top: calc(var(--bar) + var(--pt) * 40);
   }
+
+  .chart-page { padding-bottom: calc(var(--pt) * 20); }
 
   .chart-order { margin-top: calc(var(--pt) * 60); }
   .chart-thanks { margin-top: calc(var(--pt) * 48); }

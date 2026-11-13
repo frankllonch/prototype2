@@ -63,7 +63,7 @@ const HOVER: 'roll' | 'scramble' = 'roll';
 const CLIENT_MODULES = [
   'env', 'text-roll', 'transitions', 'controls', 'stack', 'years', 'hover-list', 'panels',
   'figures', 'lightbox', 'cursor', 'film', 'tilt', 'paging', 'views',
-  'scroll-cue', 'about', 'inquiries', 'book', 'focus', 'hues', 'current', 'scrollbar', 'scramble', 'index',
+  'scroll-cue', 'about', 'inquiries', 'chart', 'book', 'focus', 'hues', 'current', 'scrollbar', 'scramble', 'index',
 ] as const;
 
 /** The loading screen's five lines, set in blue on peach. */

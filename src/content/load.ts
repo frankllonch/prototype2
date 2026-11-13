@@ -95,6 +95,8 @@ const longform = (slug: string) => by('page').find((p) => p.slug === slug);
 
 export const exhibitions: readonly Exhibition[] = splitExhibitions(longform('whats-color-exhibitions'));
 export const colourChart: Project | undefined = longform('colour-chart');
+/* The chart out in the world, sent rather than published: `add-chart-photos.ts`. */
+export const chartPhotographs: Project | undefined = longform('chart-photographs');
 
 
 /**

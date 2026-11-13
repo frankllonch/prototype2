@@ -18,7 +18,8 @@
  * `cost` paragraph, so the figure still has exactly one source. When she raises
  * it, the margin and the foot both follow.
  */
-import { colourChart } from './load.ts';
+import { chartPhotographs, colourChart } from './load.ts';
+import type { ProjectImage } from './types.ts';
 
 /**
  * The chart's colours, measured off the designer's reference at the 1520 it was
@@ -129,6 +130,26 @@ export const price: string | undefined = (() => {
   return line?.match(/[\d][\d.,]*\s*€/)?.[0].replace(/\s+/g, '');
 })();
 
+/**
+ * "Color", not "colour".
+ *
+ * WordPress holds the text in British spelling throughout and the page sets it
+ * American, which is how the chart itself is lettered and how the sheet reads
+ * — COLOR CHART in the bar, on the heading, and in the statement.
+ *
+ * It is done here, on the way out of the source, rather than at the moment of
+ * rendering, so the site and the WordPress bundle say the same thing. The cost
+ * is that an import carries the spelling back into WordPress, where Claudia
+ * will find it changed; the alternative was the static site and her own site
+ * disagreeing over a word, which is worse.
+ *
+ * The case is kept, so "Colour" opens a sentence and "colour" does not, which
+ * matters to nothing on screen — the statement is set in capitals — but keeps
+ * the text readable where it is read, in the editor and in the markup.
+ */
+const spelled = (markup: string): string =>
+  markup.replace(/Colour/g, 'Color').replace(/colour/g, 'color');
+
 /** The designer's line breaks, put in. Markup in the paragraph vetoes them. */
 function broken(markup: string): string {
   if (markup.includes('<')) return markup;
@@ -186,7 +207,7 @@ const divided = (() => {
 })();
 
 /** The three opening paragraphs, set in the designer's lines. */
-export const statement: readonly string[] = divided.statement.map(broken);
+export const statement: readonly string[] = divided.statement.map((p) => spelled(broken(p)));
 
 /** Features, the technical notes, and About a colour chart. */
 export const sections: readonly ChartSection[] = divided.sections.map((s) => ({
@@ -194,3 +215,15 @@ export const sections: readonly ChartSection[] = divided.sections.map((s) => ({
   kind: s.kind,
   blocks: joined(s.items),
 }));
+
+/**
+ * The chart out in the world.
+ *
+ * Not the three photographs the WordPress page carries — those are of the
+ * object, and the sheet has no room for them. These were sent to Claudia by
+ * the people using it: fanned on a shelf, on a workbench, in a hand, open on
+ * a restaurant table. They hang off "Thanks to everyone!", which is who they
+ * are of, and they are registered by `scripts/add-chart-photos.ts` from the
+ * folder that is their only record.
+ */
+export const photographs: readonly ProjectImage[] = chartPhotographs?.images ?? [];

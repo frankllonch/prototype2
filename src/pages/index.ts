@@ -13,7 +13,7 @@ import { SHEETS } from '../content/commissioned-sheets.ts';
 import { groupCommissioned } from '../content/groups.ts';
 import { yearRail } from '../components/years.ts';
 import { whatsColorOpening, whatsColorEdition, whatsColorFilm } from '../components/whats-color.ts';
-import { colourChart, inquiries } from '../components/colour-chart.ts';
+import { chartPhotographs, colourChart, inquiries } from '../components/colour-chart.ts';
 import { EDITIONS, allParticipants, type Edition } from '../content/whats-color.ts';
 import { isPlate, showPhotos, type YearColour } from '../content/load.ts';
 import { describeImage } from '../content/describe.ts';
@@ -259,8 +259,16 @@ export function colourChartPage(): Html {
     path: '/color-chart/',
     description:
       'Claudia Valsells\u2019 artist colour chart for architects and designers \u2014 a fan deck of 142 colours in real paint.',
+    /*
+     * The page opens blank and is written by the scroll, so nothing on the
+     * first view says that scrolling is what happens next — the same reason
+     * the film and the pile have the chevron. It stands until the sentence
+     * does (`client/scroll-cue.ts`), which is also before the line at the
+     * foot arrives, so the two never share the bottom of the screen.
+     */
+    cue: 'ink',
     children: colourChart(),
-    overlays: inquiries(),
+    overlays: html`${chartPhotographs()}${inquiries()}`,
   });
 }
 

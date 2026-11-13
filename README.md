@@ -74,8 +74,74 @@ tenth larger. Rather than scatter 1.111 through the stylesheet, it is stated
 once as a unit — `--pt: calc(var(--type) / 36)` — and every figure below it is
 hers.
 
-The arrow beside **Order yours** turns a slow half-circle on hover: 1.2s, eased
-at both ends, and the only movement on the page.
+The page stands whole on one screen and does not move: everything the sheet
+sets is in a block stuck to the top of the view, with the line at the foot
+pushed to the foot, and behind it runs a strip of empty height whose only job
+is to be scrolled through. Each of the eighty-eight words has a slice of that
+run, so the statement is typed by the reader's own hand, and the last word
+lands on the last pixel — when the sentence stands there is nothing left to
+scroll to. Scrolling back unwrites it, which is not a feature but what a
+scroll timeline is: the words are at a position, not partway through a
+performance.
+
+Four fifths of the run writes the sentence; the last fifth brings in what is
+under it — the way to order one, the price, the thanks and the line at the foot
+— each rising a little out of a blur over its own slice, the way the last part
+of About arrives. They are not typed: written word by word they would read as
+more of the statement.
+
+On arrival the page travels the first paragraph's worth of slices itself —
+"Color has always been my inspiration: a source of knowledge, a way of life!",
+the question and its answer — over 1.2s, and stops there with the chevron
+still asking for the rest (`client/chart.ts`). The length is counted off the
+paragraph rather than stated, so it goes on stopping at the end of it however
+the text is rewritten. It is the same scroll, so the reader can take it
+straight back up and unwrite them; a clock would have written them once and
+for good.
+
+The chevron holds until the sentence stands — the share of the scroll the
+words are spread over, which the page states as `data-chart-written` and
+`client/scroll-cue.ts` reads. That is also the moment before the line at the
+foot begins to arrive, so the two never share the bottom of the screen.
+At rest the page is blank: the words start a slice in rather than at the top of
+the document, because a stepped animation jumps at the start of its range and a
+first word ranged from nought is a word that is simply always there.
+
+The page sets "color" where WordPress holds "colour" — the chart's own spelling,
+normalised in `content/colour-chart.ts` rather than asked of Claudia.
+
+The slices are worked out at build in `components/colour-chart.ts`; `--chart-run`
+in the stylesheet is how much scroll the writing takes, and can be tuned on its
+own, since a slice is a fraction of the run whatever its height. The sheet's
+spacing has been taken in to make one screen of it — her type to the point, the
+air between it rather less. Without scroll-run animations, or with motion
+reduced, there is no run at all, no word is hidden, and the page is the static
+one the sheet draws.
+
+**Thanks to everyone!** opens the photographs people have sent of the chart in
+use — fanned on a shelf, on a workbench, in a hand, open on a restaurant table.
+They are the same sheet an exhibition that is photographs and nothing else
+gets (`components/plates.ts`): the masthead top left, one picture in the middle
+of the frame, an arrow either side, raised and put away by `client/panels.ts`
+and stepped through by `client/figures.ts`. No new mechanism, which is why it
+reads the same as every other detail on the site.
+
+They were sent rather than published, so there is no URL to fetch them from and
+the files are the record. Drop pictures into `content/raw/local/chart` and run:
+
+```bash
+npm run add-chart-photos && npm run images && npm run build
+```
+
+Like everything under `content/raw`, those files are not in git — so, as with
+the paintings, the machine that holds them is the machine that can publish.
+
+The arrow beside **Order yours** turns slowly on hover: 1.2s, eased at both
+ends, and only where `(hover: hover) and (pointer: fine)` holds. A tap leaves
+`:hover` standing on a touch screen, so on a phone it turned once and stayed
+turned; it is off `:focus-visible` too, since closing the order form puts focus
+back on the control and left the arrow turned by a form the reader had
+finished with.
 
 **Order yours** opens the inquiry form over the page. A static host cannot send
 mail, so the form posts to a small handler deployed separately —

@@ -33,12 +33,32 @@ export function platesBody(show: Show, images: readonly ProjectImage[]): Html {
     show.from && show.to ? `From ${show.from} to ${show.to}` : show.from ?? '',
     String(show.year),
   ].filter(Boolean).join(' ');
+  return plates({ title: show.title, place, when }, images);
+}
 
+/**
+ * The same sheet, told its masthead instead of working it out from a show.
+ *
+ * Not everything that is photographs and nothing else is an exhibition: the
+ * colour chart's own are of the thing in use, with no venue and no dates, and
+ * they are read exactly the way a show's are — one in the middle of the frame,
+ * an arrow either side. Everything below the masthead was already indifferent
+ * to what it was showing; this is only the two lines above it saying so.
+ */
+export interface PlatesHead {
+  readonly title: string;
+  /** Where it was, or who it is of. Left out when there is nothing to say. */
+  readonly place?: string;
+  /** When. Likewise. */
+  readonly when?: string;
+}
+
+export function plates({ title, place, when }: PlatesHead, images: readonly ProjectImage[]): Html {
   return html`<div class="plates" data-reader>
     <header class="plates-head">
-      <h2 class="sheet-title">${show.title}</h2>
+      <h2 class="sheet-title">${title}</h2>
       ${place ? html`<p class="sheet-lines">${place}</p>` : ''}
-      <p class="sheet-when">${when}</p>
+      ${when ? html`<p class="sheet-when">${when}</p>` : ''}
     </header>
 
     <div class="plates-stage" data-figures>
