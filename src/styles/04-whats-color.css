@@ -77,12 +77,14 @@
   border-radius: 0;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
-  background-color: transparent;
-  transition: background-color var(--hover) var(--ease), color var(--hover) var(--ease);
+  /* The same thin band as the question in the opening note, not the line's
+     whole height: 0.905em of colour, 0.2em down from the top of the box. */
+  background: linear-gradient(var(--wc-band), var(--wc-band)) no-repeat 0 0.2em / 100% 0.905em;
+  transition: --wc-band var(--hover) var(--ease), color var(--hover) var(--ease);
 }
 @media (hover: hover) {
   .wc-name:hover {
-    background-color: var(--swatch, var(--ink));
+    --wc-band: var(--swatch, var(--ink));
     /* Knocked out in whichever of paper or ink the swatch can carry. The
        palette runs to a near-white off-white, and white on that is not faint,
        it is absent. */
@@ -90,9 +92,15 @@
   }
 }
 .wc-name:focus-visible {
-  background-color: var(--swatch, var(--ink));
+  --wc-band: var(--swatch, var(--ink));
   color: var(--swatch-ink, var(--paper));
   outline: none;
+}
+/* Registered so the band fades in rather than snapping. */
+@property --wc-band {
+  syntax: '<color>';
+  inherits: false;
+  initial-value: transparent;
 }
 
 /* The comma between two names belongs to neither, so it stays out of both
@@ -287,13 +295,19 @@
   text-transform: uppercase;
 }
 /*
- * The one place on the site where the colour is the type rather than behind
- * it, as the sheet has it: it sets AC 002 RED BROWN in a red brown, sampled
- * at #8c4b3a. Darkened first where it has to be — a third of this palette
- * falls under 3:1 against white set literally, and NATURAL OFF WHITE vanishes
- * — with the hue kept and only the lightness moved.
+ * The colour reference wears its colour as the names and the question do: the
+ * same thin band behind it, the type knocked out in paper or ink, whichever
+ * the colour can carry.
  */
-.wc-answer-code { color: var(--swatch, var(--ink)); }
+.wc-answer-code,
+.wc-sheet-page .wc-cell-code {
+  padding: 0 0.2em;
+  margin-inline: -0.2em;
+  background: linear-gradient(var(--swatch, var(--ink)), var(--swatch, var(--ink))) no-repeat 0 0.2em / 100% 0.905em;
+  color: var(--swatch-ink, var(--paper));
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
 
 .wc-answer-text {
   grid-column: 1 / -1;

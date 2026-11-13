@@ -186,7 +186,7 @@ function cv_wc_answer( array $p ): string {
 		. '</h2><p class="wc-answer-meta">'
 		. ( $p['role'] ? '<span class="wc-answer-role">' . esc_html( $p['role'] ) . '</span>' : '' );
 	if ( $p['code'] ) {
-		$out .= '<span class="wc-answer-code" style="--swatch: ' . esc_attr( cv_readable( $p['colour'] ) ) . '">'
+		$out .= '<span class="wc-answer-code" style="' . sprintf( '--swatch: %s; --swatch-ink: var(--%s)', esc_attr( $p['colour'] ), cv_ink_on( $p['colour'] ) ) . '">'
 			. esc_html( $p['code'] . ( $p['colourName'] ? ' ' . $p['colourName'] : '' ) ) . '</span>';
 	}
 	$out .= '</p>';
@@ -419,7 +419,7 @@ function cv_wc_cell( array $p ): string {
 		. '</h2><p class="wc-cell-meta">'
 		. ( $role ? '<span class="wc-cell-role">' . esc_html( $role ) . '</span>' : '' )
 		. ( $also ? '<span class="wc-cell-role wc-cell-also">' . esc_html( $also ) . '</span>' : '' )
-		. ( $p['code'] ? '<span class="wc-cell-code">' . esc_html( $p['code'] . ( $p['colourName'] ? ' ' . $p['colourName'] : '' ) ) . '</span>' : '' )
+		. ( $p['code'] ? '<span class="wc-cell-code" style="' . sprintf( '--swatch: %s; --swatch-ink: var(--%s)', esc_attr( $p['colour'] ), cv_ink_on( $p['colour'] ) ) . '">' . esc_html( $p['code'] . ( $p['colourName'] ? ' ' . $p['colourName'] : '' ) ) . '</span>' : '' )
 		. '</p>'
 		. ( $p['answer'] ? '<div class="wc-cell-text">' . $p['answer'] . '</div>' : '' )
 		. '</article>';

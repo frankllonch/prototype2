@@ -1,5 +1,5 @@
 import { html, join, raw, type Html } from './html.ts';
-import { LEAD, swatchFor, readable, inkOn, type Edition, type Participant } from '../content/whats-color.ts';
+import { LEAD, swatchFor, inkOn, type Edition, type Participant } from '../content/whats-color.ts';
 import { withBase } from '../content/paths.ts';
 import {
   SHEET_I,
@@ -331,7 +331,7 @@ function answer(p: Participant, index: number): Html {
     <p class="wc-answer-meta">
       ${p.role ? html`<span class="wc-answer-role">${p.role}</span>` : ''}
       ${p.code
-        ? html`<span class="wc-answer-code" style="--swatch: ${readable(swatch)}">
+        ? html`<span class="wc-answer-code" style="--swatch: ${swatch}; --swatch-ink: var(--${inkOn(swatch)})">
             ${p.code}${p.colourName ? ` ${p.colourName}` : ''}
           </span>`
         : ''}
@@ -587,7 +587,7 @@ function sheetEntry(p: Participant): Html {
       ${role ? html`<span class="wc-cell-role">${role}</span>` : ''}
       ${translated ? html`<span class="wc-cell-role wc-cell-also">${translated}</span>` : ''}
       ${p.code
-        ? html`<span class="wc-cell-code">${p.code}${p.colourName ? ` ${p.colourName}` : ''}</span>`
+        ? html`<span class="wc-cell-code" style="--swatch: ${swatchFor(p)}; --swatch-ink: var(--${inkOn(swatchFor(p))})">${p.code}${p.colourName ? ` ${p.colourName}` : ''}</span>`
         : ''}
     </p>
     ${p.answer
