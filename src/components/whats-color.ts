@@ -58,10 +58,10 @@ export function whatsColorNames(
       participants.map((p, i) => {
         const sep = i > 0 ? raw('<span class="wc-sep">, </span>') : '';
         const paint = `--swatch: ${swatchFor(p)}; --swatch-ink: var(--${inkOn(swatchFor(p))})`;
-        // A name with no answer has no entry to point at, on either view, so
-        // it stands in the sentence as a name rather than as a link — set
-        // exactly like the others, as the sheets set every name alike.
-        if (!p.id) {
+        // A name with no answer has no entry to point at. On its edition's own
+        // page it stands in the sentence as a name rather than a link; on the
+        // opening view it still leads into that edition, to its top.
+        if (within && !p.id) {
           return html`${sep}<span class="wc-name" style="${paint}">${p.name}</span>`;
         }
         return html`${sep}<a class="wc-name" href="${target(p)}" style="${paint}">${p.name}</a>`;

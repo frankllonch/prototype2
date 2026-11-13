@@ -29,15 +29,16 @@ function cv_num( $n ): string {
  *
  * On an edition's own page a name goes straight to that person's answer; on
  * the opening view to the answer on its edition's page, the address carrying
- * the person. A name with no answer has nothing to point at, on either view,
- * and stands in the sentence as a name rather than a link, set like the rest.
+ * the person. A name with no answer has nothing to point at: on its edition's
+ * page it stands as a name rather than a link; on the opening view it leads
+ * into that edition, to its top.
  */
 function cv_wc_names( array $participants, ?string $within = null ): string {
 	$out = '<p class="wc-names">';
 	foreach ( $participants as $i => $p ) {
 		$sep   = $i > 0 ? '<span class="wc-sep">, </span>' : '';
 		$paint = sprintf( '--swatch: %s; --swatch-ink: var(--%s)', esc_attr( $p['colour'] ), cv_ink_on( $p['colour'] ) );
-		if ( '' === $p['id'] ) {
+		if ( $within && '' === $p['id'] ) {
 			$out .= $sep . '<span class="wc-name" style="' . $paint . '">' . esc_html( $p['name'] ) . '</span>';
 			continue;
 		}
