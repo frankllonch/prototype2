@@ -391,10 +391,7 @@ function chart(edition: Edition): Html {
     ${join(
       bars.map((bar) => {
         const person = people.get(bar.who);
-        const paint = typeof bar.colour === 'string'
-          ? bar.colour
-          : `linear-gradient(90deg, ${bar.colour[0]} 50%, ${bar.colour[1]} 50%)`;
-        const style = `--bar-h: ${String(bar.h)}; --bar-c: ${paint}`;
+        const style = `--bar-h: ${String(bar.h)}; --bar-c: ${person ? swatchFor(person) : 'var(--ink)'}`;
         const inner = html`<span class="wc-bar-name">${bar.label ?? bar.who}</span><span class="wc-bar-fill"></span>`;
         return person?.id
           ? html`<a class="wc-bar" href="#${person.id}" style="${style}">${inner}</a>`

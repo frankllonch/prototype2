@@ -232,10 +232,7 @@ function cv_wc_chart( array $edition ): string {
 	$out = '<section class="wc-chart" aria-label="Their colours">';
 	foreach ( $bars as $bar ) {
 		$person = $people[ cv_wc_key( $bar['who'] ) ] ?? null;
-		$paint  = is_array( $bar['colour'] )
-			? 'linear-gradient(90deg, ' . $bar['colour'][0] . ' 50%, ' . $bar['colour'][1] . ' 50%)'
-			: $bar['colour'];
-		$style  = '--bar-h: ' . cv_num( $bar['h'] ) . '; --bar-c: ' . $paint;
+		$style  = '--bar-h: ' . cv_num( $bar['h'] ) . '; --bar-c: ' . ( $person ? $person['colour'] : 'var(--ink)' );
 		$inner  = '<span class="wc-bar-name">' . esc_html( $bar['label'] ?? $bar['who'] ) . '</span><span class="wc-bar-fill"></span>';
 		$out   .= $person && '' !== $person['id']
 			? '<a class="wc-bar" href="#' . esc_attr( $person['id'] ) . '" style="' . esc_attr( $style ) . '">' . $inner . '</a>'

@@ -379,6 +379,7 @@ final class CVC_Importer {
 				'_cv_alias'       => $p['alias'],
 				'_cv_code'        => $p['code'],
 				'_cv_colour_name' => $p['colourName'],
+				'_cv_swatch'      => $p['swatch'] ?? '',
 				'_cv_in_images'   => $p['inImages'] ? '1' : '',
 			] );
 			if ( $pid ) {

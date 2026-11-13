@@ -26,7 +26,7 @@ import { works, commissioned, exhibitions, colourChart, yearColours, isPlate, sh
 import { groupCommissioned } from '../src/content/groups.ts';
 import { SHEETS } from '../src/content/commissioned-sheets.ts';
 import { SHOWS } from '../src/content/exhibitions-list.ts';
-import { EDITIONS_ALL, LEAD } from '../src/content/whats-color.ts';
+import { EDITIONS_ALL, LEAD, finalColourFor } from '../src/content/whats-color.ts';
 import { ABOUT_BLOCKS, ABOUT_CARD, ABOUT_COLLECTIONS, ABOUT_COPYRIGHT, ABOUT_SHOWS } from '../src/content/about.ts';
 import { BANDS, price, sections, statement } from '../src/content/colour-chart.ts';
 import { displayTitle } from '../src/content/title.ts';
@@ -483,6 +483,10 @@ function exportEditions() {
       alias: p.alias ?? '',
       code: p.code ?? '',
       colourName: p.colourName ?? '',
+      // The colour Claudia signed off, written into the entry's own field so
+      // she sees it there and can change it; empty for someone she has not
+      // given one, whose colour the theme then works out.
+      swatch: finalColourFor(p.name) ?? '',
       answer: p.answer ?? '',
       inImages: Boolean(p.inImages),
       order: i + 1,

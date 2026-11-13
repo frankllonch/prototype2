@@ -2,6 +2,7 @@ import { exhibitions, commissioned } from './load.ts';
 import { EDITION_I, EDITION_III, type DocumentEntry } from './whats-color-document.ts';
 import { EDITION_II } from './whats-color-edition-ii.ts';
 import { SAYS_III_SHEET } from './whats-color-sheet.ts';
+import { FINAL_COLOURS } from './whats-color-colours.ts';
 import { hues } from './palette.ts';
 
 /**
@@ -712,7 +713,18 @@ export function readable(hex: string, ratio = 4.5): string {
   return '#242528';
 }
 
+/**
+ * The colour Claudia signed off for this person, where she has (see
+ * `whats-color-colours.ts`). It comes before everything below, which is now
+ * only what a newcomer to the roster gets until she names theirs.
+ */
+export function finalColourFor(name: string): string | undefined {
+  return FINAL.get(idFor(name));
+}
+
 export function swatchFor(p: Participant): string {
+  const final = finalColourFor(p.name);
+  if (final) return final;
   const painted = PAINTED[codeKey(p.code)];
   if (painted) return painted;
   const named = p.colourName ? NAMED[colourKey(p.colourName)] : undefined;
@@ -724,6 +736,8 @@ export function swatchFor(p: Participant): string {
 export const idFor = (name: string) =>
   `wc-${name.toLocaleLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`;
+
+const FINAL: ReadonlyMap<string, string> = new Map(FINAL_COLOURS.map((c) => [idFor(c.name), c.hex]));
 
 const built = build();
 

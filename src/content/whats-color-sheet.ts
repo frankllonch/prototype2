@@ -279,8 +279,6 @@ export interface ChartBar {
   readonly who: string;
   /** What the bar says, where the sheet names them otherwise. Left off, the name. */
   readonly label?: string;
-  /** The bar's colour, or the two halves of a bar she split down the middle. */
-  readonly colour: string | readonly [string, string];
   /** The bar's height, as a share of the sheet's width. */
   readonly h: number;
 }
@@ -291,33 +289,35 @@ export interface ChartBar {
  * with the name set upright above it. Each bar's height is her own choice,
  * not something that follows from the name — the space between a name and
  * its bar runs from 46 to 162 of her 1824 — so the heights are written here,
- * measured off the sheet like everything else, and so are the colours,
- * sampled from the middle of each bar. Isabel Sendra's bar is two colours,
- * split down its length, as drawn.
+ * measured off the sheet like everything else. The colours are not: a bar is
+ * painted in its person's own colour, the one Claudia signed off
+ * (`whats-color-colours.ts`), so the chart, the names and the answers cannot
+ * disagree — and the sheet's colours, which were the designer's first guess,
+ * are gone, Isabel Sendra's two-colour bar with them.
  *
  * The labels are the site's own names, so a bar says what the entry it leads
- * to says; two keep the sheet's shorter word, the studio rather than the
- * person, because the full name would run into her bar.
+ * to says; Nomos keeps the sheet's shorter word. Montse Vicens was INTSIGHT on
+ * the sheet, and Claudia asked for her own name in its place.
  */
 export const CHART_II: readonly ChartBar[] = [
-  { who: 'Gema Sach', colour: '#b18d87', h: 0.5255 },
-  { who: 'Oscar Tusquets', colour: '#a4402c', h: 0.4241 },
-  { who: 'Marc Morro', colour: '#854531', h: 0.4953 },
-  { who: 'Andrea Batlló y Adrià Escolano', colour: '#b18d87', h: 0.2892 },
-  { who: 'Escobedo Soliz', colour: '#345571', h: 0.4953 },
-  { who: 'Montse Vicens', label: 'Intsight', colour: '#e1a586', h: 0.5694 },
-  { who: 'Nomos arquitectos', label: 'Nomos', colour: '#391f19', h: 0.5907 },
-  { who: 'Kal-a', colour: '#4d4f5a', h: 0.6187 },
-  { who: 'AMOO', colour: '#4f2727', h: 0.6061 },
-  { who: 'Isabel Sendra', colour: ['#c2b67a', '#ceb3ac'], h: 0.5085 },
-  { who: 'Laura Castanya', colour: '#c69244', h: 0.4937 },
-  { who: 'Antoni Arola', colour: '#925222', h: 0.52 },
-  { who: 'Isla arquitectos', colour: '#9b675a', h: 0.4449 },
-  { who: 'Un parell d’arquitectes', colour: '#8899a3', h: 0.3999 },
-  { who: 'Isabel Francoy', colour: '#495a71', h: 0.497 },
-  { who: 'Tomás López Amat', colour: '#3c2325', h: 0.4531 },
-  { who: 'ContiCert', colour: '#67342c', h: 0.548 },
-  { who: 'Elii', colour: '#ac7f33', h: 0.634 },
-  { who: 'Stefano Colli', colour: '#1c272d', h: 0.5134 },
-  { who: 'Plantea Estudio', colour: '#7e4d3e', h: 0.497 },
+  { who: 'Gema Sach', h: 0.5255 },
+  { who: 'Oscar Tusquets', h: 0.4241 },
+  { who: 'Marc Morro', h: 0.4953 },
+  { who: 'Andrea Batlló y Adrià Escolano', h: 0.2892 },
+  { who: 'Escobedo Soliz', h: 0.4953 },
+  { who: 'Montse Vicens', h: 0.5694 },
+  { who: 'Nomos arquitectos', label: 'Nomos', h: 0.5907 },
+  { who: 'Kal-a', h: 0.6187 },
+  { who: 'AMOO', h: 0.6061 },
+  { who: 'Isabel Sendra', h: 0.5085 },
+  { who: 'Laura Castanya', h: 0.4937 },
+  { who: 'Antoni Arola', h: 0.52 },
+  { who: 'Isla arquitectos', h: 0.4449 },
+  { who: 'Un parell d’arquitectes', h: 0.3999 },
+  { who: 'Isabel Francoy', h: 0.497 },
+  { who: 'Tomás López Amat', h: 0.4531 },
+  { who: 'ContiCert', h: 0.548 },
+  { who: 'Elii', h: 0.634 },
+  { who: 'Stefano Colli', h: 0.5134 },
+  { who: 'Plantea Estudio', h: 0.497 },
 ];

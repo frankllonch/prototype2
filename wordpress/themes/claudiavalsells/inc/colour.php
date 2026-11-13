@@ -119,10 +119,101 @@ function cv_readable( string $hex, float $ratio = 4.5 ): string {
 }
 
 /**
+ * The colour Claudia signed off for each person — FINAL_COLOURS in
+ * src/content/whats-color-colours.ts, keyed by cv_id_for() of the name. The
+ * import writes the same value into each entry's own colour field, which is
+ * where she sees and changes it; this table is what an entry falls back to
+ * when that field is empty, so a cleared field returns to her colour rather
+ * than to a guess from the reference or the name.
+ */
+const CV_SWATCH_FINAL = [
+	'wc-marina-garces'                  => '#b15f60',
+	'wc-olafur-eliasson'                => '#fbc644',
+	'wc-li-edelkoort'                   => '#f1d7ae',
+	'wc-rupi-kaur'                      => '#efc7ab',
+	'wc-ramon-andres'                   => '#164f41',
+	'wc-victoria-cirlot'                => '#8d252f',
+	'wc-tortell-poltrona'               => '#e83a41',
+	'wc-angelica-dass'                  => '#da7f2e',
+	'wc-jaume-funes'                    => '#5aba9f',
+	'wc-oscar-tusquets'                 => '#b9593f',
+	'wc-david-bueno-i-torrens'          => '#cdddcb',
+	'wc-flavia-company'                 => '#fbbe41',
+	'wc-siri-hustvedt'                  => '#e19645',
+	'wc-henry-giroux'                   => '#eb5d41',
+	'wc-carolin-emcke'                  => '#a8a594',
+	'wc-valeria-luiselli'               => '#244e9d',
+	'wc-david-attenborough'             => '#006780',
+	'wc-judy-wajcmann'                  => '#6d69a4',
+	'wc-alessandro-baricco'             => '#d59a2b',
+	'wc-arno-stern'                     => '#ec692b',
+	'wc-fina-birules'                   => '#85709d',
+	'wc-stefano-mancuso'                => '#5c7e52',
+	'wc-david-le-breton'                => '#a9a2a1',
+	'wc-noah-harari'                    => '#a1d2cb',
+	'wc-himali-singh-soin'              => '#9abad6',
+	'wc-cesar-bona'                     => '#056e59',
+	'wc-kristine-mcdivitt-tompkins'     => '#b9975b',
+	'wc-francesco-tonucci'              => '#008abd',
+	'wc-plantea-estudio'                => '#8d4c3b',
+	'wc-kal-a'                          => '#4b4e5a',
+	'wc-elii'                           => '#134270',
+	'wc-hanghar'                        => '#a8a691',
+	'wc-nomos-arquitectos'              => '#3e1912',
+	'wc-montse-vicens'                  => '#fff0db',
+	'wc-isabel-francoy'                 => '#bf7d19',
+	'wc-tomas-lopez-amat'               => '#411e1f',
+	'wc-stefano-colli'                  => '#779fbf',
+	'wc-conticert'                      => '#763027',
+	'wc-un-parell-d-arquitectes'        => '#829ba4',
+	'wc-naso'                           => '#ab9789',
+	'wc-isla-arquitectos'               => '#ac6758',
+	'wc-auxi-galvez'                    => '#7a6e7d',
+	'wc-escobedo-soliz'                 => '#155472',
+	'wc-antoni-arola'                   => '#a55117',
+	'wc-barbara-aurell'                 => '#e05f09',
+	'wc-laura-castanya'                 => '#d7943b',
+	'wc-andrea-batllo-y-adria-escolano' => '#be8e88',
+	'wc-marc-morro'                     => '#97432c',
+	'wc-anna-vidal'                     => '#2250b3',
+	'wc-gema-sach'                      => '#be8e88',
+	'wc-mariona-espinet'                => '#87222c',
+	'wc-isabel-sendra'                  => '#c29a97',
+	'wc-amoo'                           => '#592222',
+	'wc-loca-studio'                    => '#eb7373',
+	'wc-paula-arroyo'                   => '#fab75f',
+	'wc-alvaro-galmes'                  => '#ebad02',
+	'wc-marta-d-riezu'                  => '#82ad7b',
+	'wc-maria-prats'                    => '#0a0a0a',
+	'wc-carlota-guerrero'               => '#f7e9b2',
+	'wc-lucia-boned'                    => '#16396e',
+	'wc-albert-riera-galceran'          => '#ff85a9',
+	'wc-guillermo-santoma'              => '#2b6db6',
+	'wc-cristina-stolhe'                => '#023831',
+	'wc-jose-quintanar'                 => '#ffe270',
+	'wc-luis-cervero'                   => '#00034d',
+	'wc-irene-royo'                     => '#f2b391',
+	'wc-adria-canameras'                => '#86a7b8',
+	'wc-isabel-martinez'                => '#f23d67',
+	'wc-salva-lopez'                    => '#b84300',
+	'wc-berta-blanca-ivanow'            => '#d4916a',
+	'wc-marc-gomez-del-moral'           => '#edd3b2',
+	'wc-jose-javier-serrano'            => '#00a3cc',
+	'wc-raquel-quevedo'                 => '#daded7',
+	'wc-xavi-manosa'                    => '#d2cecd',
+	'wc-arnau-blanch'                   => '#779fbf',
+	'wc-maria-medem'                    => '#85497b',
+	'wc-ana-cuba'                       => '#ffb08f',
+	'wc-belen-gayan'                    => '#00899e',
+	'wc-juan-diego-valera'              => '#cdddcb',
+	'wc-julia-ruiz-cabello'             => '#c24700',
+];
+
+/**
  * The colour behind a participant's name, when it is hovered — the colour the
  * entry says. A port of swatchFor() in src/content/whats-color.ts, with one
  * step ahead of it: a hex typed into the answer in WordPress wins. After that
- * the paint photographed in the book, by code; then a value per colour name;
+ * the colour Claudia signed off, by name; then the paint photographed in the book, by code; then a value per colour name;
  * and for nobody-named-a-colour, the site's palette, at random but the same
  * every time for the same person. The tables are the static site's, kept in
  * step by hand: a change there is a change here.
@@ -192,6 +283,10 @@ const CV_SWATCH_NAMED = [
 function cv_swatch_for( array $participant ): string {
 	if ( ! empty( $participant['swatch'] ) && preg_match( '/^#[0-9a-f]{6}$/i', $participant['swatch'] ) ) {
 		return strtolower( $participant['swatch'] );
+	}
+	$final = CV_SWATCH_FINAL[ cv_id_for( (string) ( $participant['name'] ?? '' ) ) ] ?? '';
+	if ( '' !== $final ) {
+		return $final;
 	}
 	if ( ! empty( $participant['code'] ) && preg_match( '/\bAC\s*0*(\d{1,3})\b/i', $participant['code'], $m ) ) {
 		$key = 'AC' . str_pad( $m[1], 3, '0', STR_PAD_LEFT );

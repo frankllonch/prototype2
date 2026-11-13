@@ -1515,8 +1515,8 @@ html:not(.js) .wc-text-closed {
  * keep the distance she drew between them.
  *
  *   --chart-top   the air above the chart
- *   --bar-gap     the least room between a name and its bar: the bar gives
- *                 way rather than run into a long name
+ *   --bar-gap     the room between a name and its bar; a name too long for
+ *                 its room rises above the chart, the bar keeps its height
  */
 .wc-chart {
   --sheet-w: calc(min(100vw, 2160px) - 2 * var(--pad));
@@ -1531,6 +1531,7 @@ html:not(.js) .wc-text-closed {
   flex: none;
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
   width: calc(var(--sheet-w) * 0.03344);
   color: var(--ink);
   text-decoration: none;
@@ -1548,9 +1549,11 @@ html:not(.js) .wc-text-closed {
   text-transform: uppercase;
   white-space: nowrap;
 }
+/* A bar keeps its height whatever stands on it: a name too long for the room
+   above its bar (Montse Vicens, where the sheet wrote INTSIGHT) rises past the
+   chart's top into the margin rather than pressing the bar shorter. */
 .wc-bar-fill {
-  flex: 0 1 auto;
-  min-height: 0;
+  flex: none;
   height: calc(var(--sheet-v) * var(--bar-h, 0.5));
   margin-top: auto;
   background: var(--bar-c, var(--ink));
