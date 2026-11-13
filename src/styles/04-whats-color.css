@@ -336,8 +336,7 @@
   hyphens: none;
 }
 .wc-answer-text > * { margin: 0; }
-/* A second paragraph is indented rather than spaced, as the sheet indents it. */
-.wc-answer-text > * + * { text-indent: var(--wc-indent, 1.98%); }
+/* A second paragraph starts on a new line, neither indented nor spaced. */
 
 .wc-back {
   margin: calc(var(--wc-zoom, 1) * var(--wc-answers-gap, 7vw)) 0 0;
@@ -1047,13 +1046,8 @@ html:has(body.has-film) {
   hyphens: none;
 }
 .wc-sheet-page .wc-cell-text > * { margin: 0; }
-/* Paragraphs run on, marked by an indent rather than by air — which is how
-   the sheets set them, and why a blank line here would read as a gap in the
-   voice rather than as a new thought. */
-.wc-sheet-page .wc-cell-text > * + * {
-  margin-top: 0;
-  text-indent: 2.5em;
-}
+/* Paragraphs run on: a new one starts on a new line, with no indent and no
+   air above it. */
 
 @media (max-width: 899px) {
   /* Three columns of this at a phone's width is a column of single words.
