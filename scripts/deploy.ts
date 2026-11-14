@@ -65,7 +65,9 @@ async function main() {
   console.log(`Building for ${url}`);
   execFileSync('npm', ['run', 'build'], {
     cwd: ROOT,
-    env: { ...process.env, BASE_PATH: base },
+    // DIST_DIR cleared: a deploy always builds the dist/ it then publishes,
+    // whatever a preview left set in the shell.
+    env: { ...process.env, BASE_PATH: base, DIST_DIR: '' },
     stdio: 'inherit',
   });
 

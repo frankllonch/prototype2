@@ -171,6 +171,9 @@
 .detail-ghost { display: none; }
 
 @media (max-width: 899px) {
+  /* The whole page answers a touch (client/paging.ts), and iOS would flash
+     its grey over all of it. */
+  .detail { -webkit-tap-highlight-color: transparent; }
   .detail {
     --work-top: calc(188 * var(--p));
     --work-type: calc(20 * var(--p));
@@ -271,9 +274,13 @@
   }
   .detail-index:first-child { margin-top: calc(var(--work-count) - var(--under-gap)); }
 
-  /* Out of sight, not out of the page. */
-  .detail-back,
-  .detail-pager {
+  /*
+   * Out of sight, not out of the page — and only once the script that closes
+   * on a touch of the ground and pages on a swipe is there to stand in for
+   * them. Without it they are the page's only way out, so they stay.
+   */
+  html.js .detail-back,
+  html.js .detail-pager {
     position: absolute;
     top: 0; left: 0; right: auto; bottom: auto;
     width: 1px; height: 1px;
@@ -281,6 +288,19 @@
     overflow: hidden;
     clip-path: inset(50%);
     white-space: nowrap;
+  }
+  /* A keyboard still reaches them, and the one it is on shows itself at the
+     top left, on the line the three bars keep elsewhere. */
+  html.js .detail-pager:focus-within { width: auto; height: auto; margin: 0; overflow: visible; clip-path: none; }
+  html.js .detail-back:focus-visible,
+  html.js .detail-pager a:focus-visible {
+    position: fixed; z-index: 2;
+    top: calc(20 * var(--p)); left: calc(20 * var(--p));
+    width: auto; height: auto;
+    margin: 0;
+    overflow: visible;
+    clip-path: none;
+    opacity: 1;
   }
 }
 
@@ -328,7 +348,7 @@
   }
   .years {
     --years-pad: calc(12 * var(--p));
-    --swatch-w: calc(13 * var(--p));
+    --swatch-w: calc(21 * var(--p));      /* with the gap, 24 to press: 13 was too easy to miss by a year */
     --swatch-h: calc(22 * var(--p));
     --swatch-now: calc(34 * var(--p));
     --swatch-gap: calc(3 * var(--p));
@@ -381,6 +401,7 @@
     margin-top: 0;
     padding: var(--years-pad) var(--phone-pad) calc(var(--years-pad) + env(safe-area-inset-bottom, 0px));
     flex-direction: row;
+    justify-content: center;
     justify-content: safe center;
     align-items: stretch;
     /* More years than fit run off to the side; client/years.ts keeps the
@@ -390,6 +411,7 @@
     scrollbar-width: none;
     font-size: var(--year-type);
     line-height: var(--year-line);
+    background: rgb(255 255 255 / 0.88);
     background: color-mix(in srgb, var(--paper) 88%, transparent);
     backdrop-filter: blur(calc(6 * var(--p)));
     -webkit-backdrop-filter: blur(calc(6 * var(--p)));

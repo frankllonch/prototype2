@@ -1728,6 +1728,7 @@ a.wc-bar:focus-visible {
     --wc-ed-role-min: 0px;
     --wc-ed-role-answer: calc(23 * var(--p));
     --wc-ed-answer-min: 0px;
+    --wc-ed-answer-para: var(--wc-ed-small-lead);   /* between an answer's paragraphs: one line */
     --wc-ed-answer-code: calc(20 * var(--p));
     /* The band of colour behind a colour's name: 1 draws it, 0 sets the
        name plain, in the ink, as the phone sheets have it. */
@@ -1867,7 +1868,12 @@ a.wc-bar:focus-visible {
     min-height: var(--wc-ed-role-min);
     font-weight: 300;
   }
-  /* The answer: centred, ragged both sides, its paragraphs run on. */
+  /* The answer: centred, ragged both sides, a line of air between its
+     paragraphs as the sheets set them (--wc-ed-answer-para; 0 runs them on). */
+  .wc-sheet-page .wc-cell-text > * + * { margin-top: var(--wc-ed-answer-para); }
+  /* The large photograph closes on a touch anywhere (client/book.ts); no
+     grey flash from iOS over the whole of it. */
+  .wc-book-view { -webkit-tap-highlight-color: transparent; }
   .wc-sheet-page .wc-cell-text {
     order: 1;
     width: 100%;
