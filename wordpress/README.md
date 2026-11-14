@@ -104,8 +104,8 @@ Plugins → Add New.
 | Exhibitions | Every show and fair. One with text or photographs opens as a page; one without is a line in the list. "In the record as" decides which About column lists it |
 | What's Color? | The editions: each entry's text is Claudia's paragraphs in the order the page sets them between the people. Under it, Answers: one person per entry, filed under an edition |
 | Pages → About | The card (city, year, phone, emails), the biography with its photographs, the collections |
-| Pages → Color Chart | The text, the price, the bands |
-| Settings → Site texts | The description, the What's Color? note, the opening screen's lines, and where the order form sends |
+| Pages → Color Chart | The text, the price, and the photographs "Thanks to everyone!" opens (every picture on the page, in order). The bands field is kept but no longer drawn |
+| Settings → Site texts | The description, the What's Color? note, and where the order form sends. The opening screen's lines are still there but the site no longer has an opening screen, so they change nothing |
 
 Order of things: works newest year first; exhibitions and commissioned work in
 the order they were listed, with anything new on top. An entry saved without
@@ -135,10 +135,13 @@ description, canonical, the tags search engines and link previews read, the
 preloads — reported apart from the body. A page that differs means a PHP
 component has not been brought along with its TypeScript one.
 
-Two things follow on their own with `wp:assets`: the list of client modules
-the theme preloads (read off `src/client/index.ts`), and where everything
+Three things follow on their own with `wp:assets`: the list of client modules
+the theme preloads (read off `src/client/index.ts`), where everything
 sits on What's Color's three sheets (`src/content/whats-color-sheet.ts`,
-written to `assets/whats-color-sheets.json`). A re-traced sheet needs no PHP.
+written to `assets/whats-color-sheets.json`), and the one line break the
+phone's commissioned list sets by design (`BREAK_AFTER` in
+`src/content/groups.ts`, written to `assets/index-breaks.json`). A re-traced
+sheet needs no PHP.
 
 When the dataset changes (new photographs, a renamed show), `wp:export` and
 `wp:import` again. The importer moves to the bin any entry it made earlier

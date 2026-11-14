@@ -73,6 +73,12 @@ function cv_plate_stage( array $work, string $under = '' ): string {
  * The page: the plate with the work's place in the archive under it, the
  * caption — title and medium, then size and year — and the way through the
  * collection. The arrangement is the stylesheet's (01-grid.css).
+ *
+ * The ghost is for the phone alone, whose sheet shows the gallery faintly
+ * behind the open work: the paintings that stand round this one there, drawn
+ * again as a ground with nothing in it to read or to touch (05-artwork.css,
+ * THE WORK ON A PHONE). They are lazy and out of the layout on a wide screen,
+ * so nothing is fetched for them there.
  */
 function cv_artwork_detail( WP_Post $post ): string {
 	$work  = cv_work( $post );
@@ -89,8 +95,14 @@ function cv_artwork_detail( WP_Post $post ): string {
 		? '<p class="detail-index"><b>' . ( $index + 1 ) . '</b> of ' . count( $works ) . '</p>'
 		: '';
 
+	$ghost = '';
+	foreach ( cv_work_around( $post ) as $cover ) {
+		$ghost .= cv_image( $cover, '43vw', [ 'alt' => '' ] );
+	}
+
 	$gallery = esc_url( home_url( '/artwork/' ) );
 	$out     = '<article class="detail">'
+		. ( $ghost ? '<div class="detail-ghost" aria-hidden="true">' . $ghost . '</div>' : '' )
 		. '<a class="detail-back detail-section" href="' . $gallery . '">Artwork</a>'
 		. '<a class="detail-back detail-close" href="' . $gallery . '" aria-label="Close, back to the gallery">Close</a>'
 		. cv_plate_stage( $work, $place )
@@ -105,6 +117,35 @@ function cv_artwork_detail( WP_Post $post ): string {
 		. $link( $next, 'Next', 'next' )
 		. '</nav></article>';
 	return $out;
+}
+
+/**
+ * The covers of the twelve paintings round a work on the phone gallery's two
+ * columns — its own row, the two rows above and the three below, or the
+ * nearest twelve at either end. The gallery's own list and order (every work
+ * with a cover, as archive-artwork.php prints them); none for a work that has
+ * no cover and so is not on that wall. The same rule as src/build.ts.
+ *
+ * @return int[] Attachment ids.
+ */
+function cv_work_around( WP_Post $post, int $count = 12 ): array {
+	$wall = [];
+	$at   = -1;
+	foreach ( cv_works() as $p ) {
+		$cover = (int) get_post_thumbnail_id( $p );
+		if ( ! $cover ) {
+			continue;
+		}
+		if ( $p->ID === $post->ID ) {
+			$at = count( $wall );
+		}
+		$wall[] = $cover;
+	}
+	if ( $at < 0 ) {
+		return [];
+	}
+	$from = max( 0, min( intdiv( $at, 2 ) * 2 - 4, count( $wall ) - $count ) );
+	return array_slice( $wall, $from, $count );
 }
 
 /** A work as a grid item. */

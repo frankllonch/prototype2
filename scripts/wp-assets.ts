@@ -5,8 +5,10 @@
  *
  * One stylesheet from the numbered parts under src/styles, with the font paths
  * made relative to it; one JavaScript module per client file, exactly as
- * src/build.ts makes them; and the fonts, the film and the two studio
- * photographs copied beside them. Everything lands in the theme's assets folder,
+ * src/build.ts makes them; the fonts, the film and the two studio photographs
+ * copied beside them; and the two pieces of layout the theme reads as data
+ * (What's Color's sheet placements, the commissioned index's one hand-set line
+ * break). Everything lands in the theme's assets folder,
  * which is build output and not committed — the theme is packaged after this has
  * run.
  *
@@ -91,6 +93,20 @@ async function main() {
       charts: { II: sheets.CHART_II },
     }),
   );
+
+  // The one line break the phone's commissioned index sets by hand, as the
+  // words of the name it comes after, by the project's slug (BREAK_AFTER in
+  // src/content/groups.ts, read here the way the static page reads it: off
+  // the grouped projects). Layout again, so it travels the same way and no
+  // editor has a field to fill; the theme checks the name it has still opens
+  // with those words before it breaks it (cv_index_title() in lists.php).
+  const { commissioned } = await import('../src/content/load.ts');
+  const { groupCommissioned } = await import('../src/content/groups.ts');
+  const breaks: Record<string, string> = {};
+  for (const group of groupCommissioned(commissioned)) {
+    for (const item of group.items) if (item.breakAfter) breaks[item.slug] = item.breakAfter;
+  }
+  await writeFile(path.join(ASSETS, 'index-breaks.json'), JSON.stringify(breaks));
 
   console.log(`Theme assets: ${parts.length} stylesheets into site.css, ${files.length} modules, fonts, film, About photographs.`);
 }

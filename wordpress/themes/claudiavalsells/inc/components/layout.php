@@ -2,42 +2,42 @@
 /**
  * The chrome every page shares — src/components/layout.ts.
  *
- * The loading screen, the bar, the About overlay, the lightbox and the scroll
- * cue. header.php and footer.php print these around `main`.
+ * The bar, the About overlay, the lightbox and the scroll cue. header.php and
+ * footer.php print these around `main`.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-/** Order and wording of the menu, after the designer's mockup. */
+/**
+ * Order and wording of the menu, after the designer's mockup — `MENU` in
+ * src/components/layout.ts.
+ *
+ * `phone` is where the item stands on the phone's menu screen, which lists the
+ * pages the other way about: About first, Color Chart last. Only the drawing
+ * order changes there (the stylesheet's `order`); the document keeps this one.
+ */
 function cv_menu(): array {
 	return [
-		[ 'label' => 'Color Chart', 'path' => '/color-chart/' ],
-		[ 'label' => 'Exhibitions', 'path' => '/exhibitions/' ],
-		[ 'label' => 'Commissioned', 'path' => '/commissioned/' ],
-		[ 'label' => 'Artwork', 'path' => '/artwork/' ],
-		[ 'label' => 'About', 'path' => '/about/', 'panel' => 'about' ],
+		[ 'label' => 'Color Chart', 'path' => '/color-chart/', 'phone' => 5 ],
+		[ 'label' => 'Commissioned', 'path' => '/commissioned/', 'phone' => 3 ],
+		[ 'label' => 'Exhibitions', 'path' => '/exhibitions/', 'phone' => 4 ],
+		[ 'label' => 'Artwork', 'path' => '/artwork/', 'phone' => 2 ],
+		[ 'label' => 'About', 'path' => '/about/', 'panel' => 'about', 'phone' => 1 ],
 	];
 }
 
 /**
- * The opening screen, shown once a session while the site loads: five lines,
- * throbbing through the palette. Rendered on every page but hidden by the head
- * script on all but the first.
+ * The button is the phone's whole bar: three bars at the top right, drawn by
+ * the stylesheet, which raise the header below as a screen of its own (the
+ * theme's client/menu.js). Above 899px it is not displayed. It stands before
+ * the header so that it is reached first and the menu's links follow it.
  */
-function cv_loading_screen(): string {
-	$lines = array_filter( array_map( 'trim', preg_split( '/\R/', (string) cv_option( 'cv_loader_lines', "CLAUDIA VALSELLS\n1969\nAlzueta Gallery\nBarcelona, Spain\n© All Rights Reserved" ) ) ) );
-	$out   = '<div class="loader" data-loader aria-hidden="true">';
-	foreach ( $lines as $line ) {
-		$out .= '<p>' . esc_html( $line ) . '</p>';
-	}
-	return $out . '</div>';
-}
-
 function cv_top_bar(): string {
 	$path = cv_page()['path'];
-	$out  = '<header class="top">'
+	$out  = '<button type="button" class="menu-toggle" data-menu-toggle aria-label="Menu" aria-expanded="false" aria-controls="site-menu"></button>'
+		. '<header class="top" id="site-menu">'
 		// Decoded before it is uppercased, since the site's name arrives already
 		// escaped and an entity's letters must not be touched; escaped once after.
 		. '<a class="wordmark" href="' . esc_url( home_url( '/' ) ) . '" data-roll>' . esc_html( mb_strtoupper( wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) ) ) . '</a>'
@@ -45,10 +45,11 @@ function cv_top_bar(): string {
 		. '<nav class="menu" aria-label="Primary">';
 	foreach ( cv_menu() as $item ) {
 		$out .= sprintf(
-			'<a href="%s"%s%s data-roll>%s</a>',
+			'<a href="%s"%s%s style="--menu-phone: %d" data-roll>%s</a>',
 			esc_url( home_url( $item['path'] ) ),
 			isset( $item['panel'] ) ? ' data-panel-open="' . esc_attr( $item['panel'] ) . '"' : '',
 			$item['path'] === $path ? ' aria-current="page"' : '',
+			(int) $item['phone'],
 			esc_html( $item['label'] )
 		);
 	}

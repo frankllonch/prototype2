@@ -1,8 +1,8 @@
 <?php
 /**
- * Exhibitions: a list rather than a gallery. The name and place at the left,
- * the run of dates and the year at the right, a rule between each — and the
- * photograph only when you reach for a row.
+ * Exhibitions: a list rather than a gallery, in the sheet's four groups. The
+ * name and place at the left, the year at the right, a rule between each —
+ * and the photograph only when you reach for a row.
  *
  * Also the body of each exhibition's own address (single-exhibition.php),
  * which is this page with that show's panel already open.
@@ -27,6 +27,17 @@ if ( $cv_open && ! in_array( $cv_open, array_map( fn( $s ) => "exhibition-{$s['s
 // it, and its Close link's for a reader without scripting.
 $cv_root = $cv_open ? home_url( '/exhibitions/' ) : '';
 
+// A detail as the static page sets it (exhibitionsPage in src/pages/index.ts).
+// Its masthead states the place alone, as the list's rows do: the kind of show
+// that opens an entry's "Where" ("Solo show, …") is the group's name, and is
+// taken off here (placeOf). And a text that opens on the show's own name and a
+// bracketed translation of it has that opening set apart (splitOpening). The
+// list below is given the entries as they are: the phone's rows show the kind.
+$cv_panels = array_map(
+	fn( $s ) => array_merge( $s, [ 'venue' => cv_show_place( $s['venue'] ), 'text' => cv_show_opening( $s['text'] ) ] ),
+	$cv_panels
+);
+
 cv_page( [
 	'title'       => $cv_title,
 	'description' => $cv_desc,
@@ -37,5 +48,7 @@ cv_page( [
 ] );
 get_header();
 echo '<h1 class="sr-only">Exhibitions</h1>';
-echo cv_exhibition_list( $cv_shows );
+// The private collections close the list. WordPress keeps them on the About
+// page (its "Private collections" field), so they are typed once.
+echo cv_exhibition_list( $cv_shows, cv_about()['collections'] );
 get_footer();

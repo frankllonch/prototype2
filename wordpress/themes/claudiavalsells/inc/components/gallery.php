@@ -48,7 +48,7 @@ function cv_tile( array $item, int $index, bool $priority, ?string $panels = nul
 		! empty( $item['available'] ) ? 'true' : 'false',
 		$index,
 		esc_attr( $name . ( $year ? ", $year" : '' ) ),
-		cv_image( $item['image'], '(max-width: 599px) 40vw, 260px', [ 'priority' => $priority, 'class' => 'tile-image', 'alt' => $item['alt'] ?? null ] )
+		cv_image( $item['image'], '(max-width: 899px) 43vw, 260px', [ 'priority' => $priority, 'class' => 'tile-image', 'alt' => $item['alt'] ?? null ] )
 	);
 }
 

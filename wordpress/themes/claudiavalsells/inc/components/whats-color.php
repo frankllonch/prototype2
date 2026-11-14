@@ -209,8 +209,13 @@ function cv_wc_edition( array $edition ): string {
 		. ( $table ? cv_wc_sheet( $edition, $table ) : cv_wc_edition_list( $edition ) );
 	// The names, not the film: someone at the foot of an edition asking for all
 	// of What's Color? means the roster, so this points past the film.
-	return $out . '<p class="wc-back"><a href="' . esc_url( home_url( '/#whats-color' ) ) . '">All of What&rsquo;s Color?</a></p>'
-		. cv_wc_chart( $edition ) . '</div>';
+	$out .= '<p class="wc-back"><a href="' . esc_url( home_url( '/#whats-color' ) ) . '">All of What&rsquo;s Color?</a></p>'
+		. cv_wc_chart( $edition );
+	// The line the phone sheets close an edition on. Shown on a phone only,
+	// where the link above is not; the words are About's own (its name and its
+	// copyright line, as cv_about_overlay() prints them in .about-foot).
+	$about = cv_about();
+	return $out . '<p class="wc-foot"><b>' . esc_html( $about['card']['name'] ) . '</b> ' . esc_html( $about['copyright'] ) . '</p></div>';
 }
 
 /**
@@ -434,12 +439,16 @@ function cv_wc_split_role( string $role ): array {
 	return false === $at ? [ $role, '' ] : [ substr( $role, 0, $at ), substr( $role, $at + 3 ) ];
 }
 
-/** The opening film: the documentation of edition I, full screen, with the bar across the middle of it. */
+/**
+ * The opening film: the documentation of edition I, full screen, with the bar
+ * across the middle of it. The `media` on its source keeps a phone, whose start
+ * page has no film, from fetching it.
+ */
 function cv_wc_film(): string {
 	$poster = cv_asset( 'video/whats-color-poster.jpg' );
 	return '<section class="wc-film" style="--film-poster: url(\'' . esc_url( $poster ) . '\')" aria-label="What’s Color? (I), Alzueta Gallery, December 2020">'
 		. '<video class="wc-film-video" autoplay muted loop playsinline preload="auto" poster="' . esc_url( $poster ) . '">'
-		. '<source src="' . esc_url( cv_asset( 'video/whats-color.mp4' ) ) . '" type="video/mp4" />'
+		. '<source src="' . esc_url( cv_asset( 'video/whats-color.mp4' ) ) . '" type="video/mp4" media="(min-width: 900px)" />'
 		. '</video></section>';
 }
 

@@ -22,7 +22,14 @@ function cv_show_when( array $show ): string {
 	return trim( $run . ' ' . ( $show['year'] ? (string) $show['year'] : '' ) );
 }
 
-/** `$show`: an exhibition as cv_exhibition() reads it. */
+/**
+ * `$show`: an exhibition as cv_exhibition() reads it.
+ *
+ * A landscape is marked `is-wide`, by the same test the other sheet makes
+ * (cv_sheet_wide() in sheet.php). Nothing on a desktop reads it: there every
+ * photograph is fitted to the one box. On a phone the photographs stand in a
+ * column, and a landscape takes its width where a portrait is set narrower.
+ */
 function cv_plates_body( array $show ): string {
 	$images = $show['images'];
 	$out    = '<div class="plates" data-reader>'
@@ -33,7 +40,7 @@ function cv_plates_body( array $show ): string {
 		. '</header>'
 		. '<div class="plates-stage" data-figures><div class="plates-frame">';
 	foreach ( $images as $i => $image ) {
-		$out .= '<figure class="reader-figure plates-figure' . ( 0 === $i ? ' is-current' : '' ) . '">'
+		$out .= '<figure class="reader-figure plates-figure' . ( cv_sheet_wide( $image['id'] ) ? ' is-wide' : '' ) . ( 0 === $i ? ' is-current' : '' ) . '">'
 			. cv_image( $image['id'], '(max-width: 899px) 92vw, 57vw', [ 'priority' => 0 === $i ] )
 			. '</figure>';
 	}

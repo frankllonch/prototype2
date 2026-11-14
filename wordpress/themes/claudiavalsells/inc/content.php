@@ -210,6 +210,44 @@ function cv_exhibition( WP_Post $p ): array {
 	];
 }
 
+/**
+ * A show's text with its opening paragraph broken after a title and its
+ * translation — splitOpening() in src/content/shows.ts.
+ *
+ * Mira'm opens on its own name and then an English gloss of it, and only then
+ * says what the show is, all in one paragraph; the sheet sets the name apart
+ * and leaves an empty line under it. The split is found rather than written:
+ * the paragraph has to open on a quotation mark and carry a bracketed gloss
+ * near the front, and the break goes after the closing bracket, which goes
+ * (with its opening one, where the text still has it). Nothing is reworded,
+ * and the entry in the editor stays as it was typed.
+ *
+ * One paragraph still, with the opening as a block inside it. A text that
+ * does not have that shape is returned untouched — and so is one already
+ * split, which has no bracket left to find.
+ */
+function cv_show_opening( string $html ): string {
+	if ( ! preg_match( '#^(\s*<p>)(.*?)(</p>)#su', $html, $first ) ) {
+		return $html;
+	}
+	$body = $first[2];
+	// Only an opening that is a quoted name: a bracket anywhere else in a
+	// paragraph is an aside, not a heading.
+	if ( ! preg_match( '/^\s*(<[^>]+>\s*)*[“"\']/u', $body ) ) {
+		return $html;
+	}
+	$close = mb_strpos( $body, ']' );
+	if ( false === $close || $close > 220 ) {
+		return $html;
+	}
+	$head = (string) preg_replace( '/\[?([^\[\]]*)\]\s*$/u', '$1', mb_substr( $body, 0, $close + 1 ), 1 );
+	$rest = (string) preg_replace( '/^[\s,;:]+/u', '', mb_substr( $body, $close + 1 ) );
+	if ( '' === $rest ) {
+		return $html;
+	}
+	return $first[1] . '<span class="lede-open">' . $head . '</span>' . $rest . $first[3] . substr( $html, strlen( $first[0] ) );
+}
+
 /** A commissioned project, for the list row and the panel. */
 function cv_project( WP_Post $p ): array {
 	static $cache = [];
@@ -449,10 +487,30 @@ const CV_BANDS = [
 	'#d69a2a', '#ec692b', '#85709d', '#5c7e52', '#a9a2a1',
 ];
 
-/** The Colour Chart page: its price, its bands, its text and its photographs. */
+/**
+ * The Colour Chart page as the designer's sheet sets it — the reading
+ * src/content/colour-chart.ts makes of its source, made here of the page.
+ *
+ * The statement is the page's own paragraphs, which is what Claudia edits; the
+ * price is the page's Price field; the photographs behind "Thanks to
+ * everyone!" are every picture on the page — Image blocks or a Gallery,
+ * wherever they stand — and none of them is drawn in the text.
+ *
+ * The paragraphs are read by the static site's rules, so the page as the old
+ * site had it, pasted back whole, still comes out as the sheet: the date
+ * range, the byline and the picture credits are withheld; `cost …` and `make
+ * your order at: …` are said elsewhere (the price, the form) and her address
+ * stays out of the markup; and the statement ends at the first heading —
+ * Features, Technical characteristics, About a colour chart — whether it was
+ * typed as a paragraph or as a Heading block. Matched on how a paragraph
+ * opens, not on its whole text: a comma moved costs the page nothing.
+ *
+ * `bands` is the chart's colours, still kept on the page (The bands); the
+ * sheet no longer sets them, so nothing draws them today.
+ */
 function cv_chart( ?WP_Post $page = null ): array {
-	$page = $page ?: get_page_by_path( 'color-chart' );
-	$id   = $page ? $page->ID : 0;
+	$page  = $page ?: get_page_by_path( 'color-chart' );
+	$id    = $page ? $page->ID : 0;
 	$parts = $page ? cv_content_parts( $page ) : [ 'text' => '', 'images' => [] ];
 
 	$bands = [];
@@ -462,10 +520,64 @@ function cv_chart( ?WP_Post $page = null ): array {
 			$bands[] = $line;
 		}
 	}
+
+	$plain  = fn( string $markup ): string => trim( (string) preg_replace( '/[\s\p{Z}]+/u', ' ', html_entity_decode( (string) preg_replace( '/<[^>]+>/', ' ', $markup ), ENT_QUOTES | ENT_HTML5, 'UTF-8' ) ) );
+	$opens  = function ( string $text, array $patterns ): bool {
+		foreach ( $patterns as $pattern ) {
+			if ( preg_match( $pattern, $text ) ) {
+				return true;
+			}
+		}
+		return false;
+	};
+	$moved    = [ '/^cost\b/i', '/^make your order\b/i' ];
+	$withheld = [ '#^\d{4}\s*/\s*\d{4}$#', '/^artist colou?r chart\b/i', '/^images:/i', '/^\#\d/' ];
+	$headings = [ '/^features\b/i', '/^technical characteristics\b/i', '/^about a colou?r chart\b/i' ];
+
+	// The price as she wrote it in the text, "60,50€", comma and all, wherever
+	// its `cost` paragraph stands: the figure the page falls back on when the
+	// Price field is empty.
+	$cost = '';
+	preg_match_all( '#<p\b[^>]*>(.*?)</p>#s', $parts['text'], $found );
+	foreach ( $found[1] as $paragraph ) {
+		$text = $plain( $paragraph );
+		if ( preg_match( '/^cost\b/i', $text ) ) {
+			$cost = preg_match( '/\d[\d.,]*\s*€/u', $text, $figure ) ? (string) preg_replace( '/\s+/u', '', $figure[0] ) : '';
+			break;
+		}
+	}
+
+	// The statement: what stands before the first Heading block, paragraph by
+	// paragraph, until one of them is a heading.
+	$statement = [];
+	preg_match_all( '#<p\b[^>]*>(.*?)</p>#s', (string) preg_split( '/<h[1-6]\b/i', $parts['text'], 2 )[0], $found );
+	foreach ( $found[1] as $paragraph ) {
+		$paragraph = trim( $paragraph );
+		$text      = $plain( $paragraph );
+		if ( '' === $text || $opens( $text, $moved ) || $opens( $text, $withheld ) ) {
+			continue;
+		}
+		if ( $opens( $text, $headings ) ) {
+			break;
+		}
+		// The designer's one line break, after the colon: "a source of
+		// knowledge, a way of life!" is the answer to it and belongs under it.
+		// Markup in the paragraph vetoes the break — one she put in herself
+		// included, so it is never there twice.
+		if ( ! str_contains( $paragraph, '<' ) ) {
+			$paragraph = (string) preg_replace( '/\s+(?=a source of knowledge)/i', '<br />', $paragraph, 1 );
+		}
+		// "Color", not "colour": the page is set American, as the chart itself
+		// is lettered, however the text was typed. The case is kept.
+		$statement[] = str_replace( [ 'Colour', 'colour' ], [ 'Color', 'color' ], $paragraph );
+	}
+
 	return [
-		'price'       => (string) cv_meta( $id, '_cv_price' ),
+		'statement'   => $statement,
+		'price'       => (string) cv_meta( $id, '_cv_price' ) ?: $cost,
 		'bands'       => $bands ?: CV_BANDS,
-		'prose'       => $parts['text'],
-		'photographs' => $parts['images'],
+		// Only pictures the library can still draw: one deleted since, or never
+		// measured, is not a photograph to open a sheet on.
+		'photographs' => array_values( array_filter( $parts['images'], fn( array $image ): bool => null !== cv_image_data( $image['id'] ) ) ),
 	];
 }

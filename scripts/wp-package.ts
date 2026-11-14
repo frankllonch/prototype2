@@ -49,7 +49,7 @@ function zip(cwd: string, out: string, entry: string, store = false): void {
 if (!skipAssets) {
   execFileSync(process.execPath, ['--experimental-strip-types', path.join(ROOT, 'scripts', 'wp-assets.ts')], { stdio: 'inherit' });
 }
-for (const need of ['site.css', 'version.txt', 'js/index.js', 'modules.json', 'whats-color-sheets.json']) {
+for (const need of ['site.css', 'version.txt', 'js/index.js', 'modules.json', 'whats-color-sheets.json', 'index-breaks.json']) {
   if (!existsSync(path.join(THEME, 'assets', need))) {
     throw new Error(`The theme's assets are missing ${need} — run npm run wp:assets (or drop --skip-assets).`);
   }

@@ -28,7 +28,7 @@ import { SHEETS } from '../src/content/commissioned-sheets.ts';
 import { SHOWS } from '../src/content/exhibitions-list.ts';
 import { EDITIONS_ALL, LEAD, finalColourFor } from '../src/content/whats-color.ts';
 import { ABOUT_BLOCKS, ABOUT_CARD, ABOUT_COLLECTIONS, ABOUT_COPYRIGHT, ABOUT_SHOWS } from '../src/content/about.ts';
-import { BANDS, price, sections, statement } from '../src/content/colour-chart.ts';
+import { BANDS, photographs, price, sections, statement } from '../src/content/colour-chart.ts';
 import { displayTitle } from '../src/content/title.ts';
 import { describeImage } from '../src/content/describe.ts';
 import type { Project, ProjectImage, Row } from '../src/content/types.ts';
@@ -401,6 +401,10 @@ function kindOf(title: string, venue: string | undefined, year: number): 'solo' 
 async function exportExhibitions() {
   const out = [];
   for (const [i, show] of SHOWS.entries()) {
+    // The private collections are not shows: they have no year, which an
+    // entry cannot be saved without, and WordPress already holds them — on
+    // the About page, where the theme reads them for this list as well.
+    if (show.group === 'Private collections') continue;
     const derived = show.slug ? exhibitions.find((e) => e.slug === show.slug) : undefined;
     const alt = (image: ProjectImage) => image.alt || `${show.title}${show.venue ? `, ${show.venue}` : ''} — installation view`;
     const blocks = derived ? await rowBlocks(derived.rows, alt) : [];
@@ -532,17 +536,25 @@ async function exportAbout() {
  * this will take those sections off the WordPress page as well, which is the
  * simplification arriving there too.
  *
- * The three photographs are not on the sheet and their credits went with them,
- * so there are none to export.
+ * The three photographs of the object are not on the sheet and their credits
+ * went with them. The ones that do travel are the chart out in the world —
+ * the photographs behind "Thanks to everyone!" — which the import sets on the
+ * page as pictures after the text, where the theme collects them into that
+ * panel in this order.
  */
 async function exportChart() {
   const body = statement.map((block) => `<p>${block}</p>`).join('');
+  const inUse: ImageRef[] = [];
+  for (const image of photographs) {
+    const ref = await exportImage(image, image.alt ?? '');
+    if (ref) inUse.push(ref);
+  }
 
   return {
     price: price ?? '',
     bands: BANDS,
     prose: textBlocks(body),
-    photographs: [],
+    photographs: inUse,
     /*
      * The statement again on its own, and the record the page no longer sets.
      * The theme renders `post_content` today and so gets `prose`; these are
