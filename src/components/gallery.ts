@@ -99,7 +99,7 @@ function tile(
     aria-label="${name}${item.year ? `, ${item.year}` : ''}"
   >${responsiveImage({
     image: item.image,
-    sizes: '(max-width: 599px) 40vw, 260px',
+    sizes: '(max-width: 899px) 43vw, 260px',
     priority,
     className: 'tile-image',
   })}</a>`;

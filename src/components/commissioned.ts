@@ -1,6 +1,6 @@
 import { html, join, type Html } from './html.ts';
 import { responsiveImage } from './image.ts';
-import type { ProjectGroup } from '../content/groups.ts';
+import type { GroupedProject, ProjectGroup } from '../content/groups.ts';
 
 /**
  * The commissioned index, after the designer's layout: the kind of work named
@@ -30,7 +30,7 @@ function group(section: ProjectGroup): Html {
             href="#commissioned-${item.slug}"
             data-panel-open="commissioned-${item.slug}"
           >
-            <span class="xrow-title">${item.title}</span>
+            <span class="xrow-title">${title(item)}</span>
             <span class="exh-plate" aria-hidden="true">
               ${item.project.cover
                 ? responsiveImage({ image: item.project.cover, sizes: '(max-width: 899px) 30vw, 13vw', alt: '' })
@@ -42,4 +42,16 @@ function group(section: ProjectGroup): Html {
       )}
     </div>
   </section>`;
+}
+
+/**
+ * A project's name, with the one break the phone sheet sets by hand offered
+ * where it is recorded (`BREAK_AFTER` in content/groups.ts).
+ *
+ * The space before the `<br>` stays: from 900px up the break is not displayed
+ * (`.xrow-br`), and the name must read there exactly as it does without it.
+ */
+function title(item: GroupedProject): Html {
+  if (!item.breakAfter) return html`${item.title}`;
+  return html`${item.breakAfter} <br class="xrow-br">${item.title.slice(item.breakAfter.length + 1)}`;
 }

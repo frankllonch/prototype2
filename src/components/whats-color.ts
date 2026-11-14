@@ -1,6 +1,7 @@
 import { html, join, raw, type Html } from './html.ts';
 import { LEAD, swatchFor, inkOn, type Edition, type Participant } from '../content/whats-color.ts';
 import { withBase } from '../content/paths.ts';
+import { ABOUT_CARD, ABOUT_COPYRIGHT } from '../content/about.ts';
 import {
   SHEET_I,
   SHEET_II,
@@ -373,6 +374,11 @@ export function whatsColorEdition(edition: Edition): Html {
     -->
     <p class="wc-back"><a href="${withBase('/#whats-color')}">All of What&rsquo;s Color?</a></p>
     ${chart(edition)}
+    <!--
+      The line the phone sheets close an edition on. Shown on a phone only,
+      where the link above is not; the words are About's own.
+    -->
+    <p class="wc-foot"><b>${ABOUT_CARD.name}</b> ${ABOUT_COPYRIGHT}</p>
   </div>`;
 }
 
@@ -431,7 +437,7 @@ export function whatsColorFilm(): Html {
       preload="auto"
       poster="${poster}"
     >
-      <source src="${withBase('/video/whats-color.mp4')}" type="video/mp4" />
+      <source src="${withBase('/video/whats-color.mp4')}" type="video/mp4" media="(min-width: 900px)" />
     </video>
   </section>`;
 }
@@ -549,7 +555,7 @@ function bookView(): Html {
 
 /**
  * The edition's own title, where its sheet carries one: the project and the
- * numeral set bold, and whatever the source title says after that beside it in
+ * numeral set semibold, and whatever the source title says after that beside it in
  * the ordinary weight. Split rather than retyped, so the words stay the ones
  * WordPress holds.
  *

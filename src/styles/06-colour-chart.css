@@ -116,11 +116,15 @@
  * Everything below asks the engine first. Without scroll-run animations, or
  * with motion reduced, no word is ever hidden, the run is not there at all
  * and the page is the static one the sheet draws.
+ *
+ * And from 900 wide up only. The phone sheet is a page taller than a phone,
+ * which cannot be pinned to one screen, so there it is the static page too
+ * (the phone block below; `client/chart.ts` makes the same test).
  */
 .chart-runway { display: none; }
 
 @supports (animation-timeline: scroll()) {
-  @media (prefers-reduced-motion: no-preference) {
+  @media (prefers-reduced-motion: no-preference) and (min-width: 900px) {
     .chart-page { position: sticky; top: 0; }
 
     .chart-runway {
@@ -209,6 +213,10 @@
   transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
+/* The phone sheet draws an arrow of its own — longer arms, a heavier line —
+   and it stands in for this one below 900 (the phone block below). */
+.chart-arrow-phone { display: none; }
+
 /*
  * Only where there is a pointer to hover with, and only on hover.
  *
@@ -284,29 +292,100 @@
 
 .chart-footer b { font-weight: 600; }
 
-/* ------------------------------------------------------------------ narrow */
+/* ------------------------------------------------------------------- phone */
 
 /*
- * Nothing to rearrange — the page is one column at every width. Only the room
- * around it comes in, since the sheet's spacing is drawn for a screen twice as
- * wide as a phone and leaves half of one empty.
+ * The phone sheet ("COLOR CHART PHONE", 375 wide).
+ *
+ * A page you scroll, not a page that is written. At the sheet's sizes it is
+ * 1080 tall, and Order yours and the thanks cannot be held on one pinned
+ * screen, so below 900 there is no pin, no run behind it, no cue and no line
+ * at the foot: every word stands and the document scrolls the ordinary way.
+ * (The query on the writing, above, is what leaves the words standing.)
+ *
+ * Every figure is the sheet's, in units of its frame (`--p`, 09-phone.css).
+ * The ones to change by hand are the list at the top; the side margin is the
+ * phone's own (`--phone-pad`, 20).
+ *
+ * Everything is set solid — 20 on 20, 30 on 30 — so each gap below is the
+ * whole distance from one line box to the next. It is also why the first
+ * figure ends in a half: a line box 20 tall carries its baseline 17.5 down,
+ * and the sheet's first baseline is at 123.
  */
 @media (max-width: 899px) {
   .chart {
-    /*
-     * The knob, not the padding. Setting `padding-top` here would also set it
-     * on the writing stage, which hands its top offset to the pin and takes
-     * none itself — the sentence would then be pushed down twice and open a
-     * third of the way down a phone.
-     */
-    --chart-top: calc(var(--bar) + var(--pt) * 40);
+    --chart-phone-top: calc(105.5 * var(--p));        /* top of the page to the statement */
+    --chart-phone-text: calc(20 * var(--p));          /* the statement's size, and its leading */
+    --chart-phone-para: calc(20 * var(--p));          /* between its paragraphs: one empty line */
+    --chart-phone-large: calc(30 * var(--p));         /* Order yours, the cost, the thanks */
+    --chart-phone-order-gap: calc(89 * var(--p));     /* statement to Order yours */
+    --chart-phone-arrow-gap: calc(20 * var(--p));     /* Order yours to its arrow */
+    --chart-phone-arrow-w: calc(22.5 * var(--p));     /* the arrow, 22.5 by 22 */
+    --chart-phone-arrow-h: calc(22 * var(--p));
+    --chart-phone-cost-gap: calc(16 * var(--p));      /* Order yours to the cost */
+    --chart-phone-thanks-gap: calc(154 * var(--p));   /* the cost to the thanks */
+    --chart-phone-rule: calc(1.5 * var(--p));         /* the line under the thanks: how thick */
+    --chart-phone-rule-drop: calc(3.75 * var(--p));   /* and how far under the baseline */
+    --chart-phone-foot: calc(185.5 * var(--p));       /* under the thanks to the end of the page */
   }
 
-  .chart-page { padding-bottom: calc(var(--pt) * 20); }
+  .chart-page {
+    position: static;
+    min-height: 0;
+    padding: var(--chart-phone-top) var(--phone-pad) var(--chart-phone-foot);
+  }
 
-  .chart-order { margin-top: calc(var(--pt) * 60); }
-  .chart-thanks { margin-top: calc(var(--pt) * 48); }
-  .chart-footer { margin-top: calc(var(--pt) * 80); }
+  /* Medium, capitals and no tracking come from the rule above. */
+  .chart-statement { font-size: var(--chart-phone-text); line-height: 1; }
+  .chart-statement p { margin-bottom: var(--chart-phone-para); }
+
+  .chart-order {
+    /* The link is its words and its arrow, not the whole row beside them. */
+    align-self: flex-start;
+    /* The arrow stands on the baseline: a drawing's baseline is its foot. */
+    align-items: baseline;
+    gap: var(--chart-phone-arrow-gap);
+    margin-top: var(--chart-phone-order-gap);
+    font-size: var(--chart-phone-large);
+    line-height: 1;
+  }
+  .chart-arrow { display: none; }
+  .chart-arrow-phone {
+    display: block;
+    flex: none;
+    width: var(--chart-phone-arrow-w);
+    height: var(--chart-phone-arrow-h);
+    overflow: visible;
+  }
+
+  /* "Cost:" is regular on this sheet, where the desktop's is light. */
+  .chart-price {
+    margin-top: var(--chart-phone-cost-gap);
+    font-size: var(--chart-phone-large);
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  /* From the left edge like everything else, and regular. */
+  .chart-thanks {
+    margin: var(--chart-phone-thanks-gap) 0 0;
+    text-align: left;
+    font-size: var(--chart-phone-large);
+    font-weight: 400;
+    line-height: 1;
+  }
+  /* Underlined where it opens the photographs: there is no hover on a phone
+     to say that it does. Straight through the descenders, as the sheet's is. */
+  .chart-thanks a {
+    text-decoration: underline;
+    text-decoration-thickness: var(--chart-phone-rule);
+    text-underline-offset: var(--chart-phone-rule-drop);
+    text-decoration-skip-ink: none;
+  }
+
+  .chart-footer { display: none; }
+  /* Nothing is written by the scroll here, so there is nothing to cue. */
+  .chart-body .scroll-cue { display: none; }
 }
 
 /* --------------------------------------------------------------- inquiries */
@@ -406,7 +485,7 @@ html:not(.js) .inq-close { display: none; }
   grid-column: 1 / -1;
   margin: 0 0 0.6em;
   font-size: var(--type);
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.02em;
   text-transform: uppercase;
   line-height: var(--lead);
@@ -486,7 +565,7 @@ html:not(.js) .inq-close { display: none; }
 
 .inq-button {
   font-size: var(--type);
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.02em;
   text-transform: uppercase;
   line-height: var(--lead);
@@ -537,15 +616,61 @@ html:not(.js) .inq-close { display: none; }
  * grid does not fall back to that column — it conjures a second one, and the
  * form came out in two ragged columns with the fields alternating between them.
  */
+/*
+ * On a phone it is set on the page's own scale, so that it reads as the same
+ * page: the phone's margin, the title where the statement begins, the two
+ * controls at the size and weight of Order yours, labels and fields at the
+ * statement's 20 (which also keeps a field above the 16px under which iOS
+ * zooms in on it). There is no sheet for this one; the figures are the Colour
+ * Chart's phone sheet carried over, in the same unit (`--p`, 09-phone.css).
+ */
 @media (max-width: 899px) {
-  .inq { align-content: start; padding-left: var(--pad); padding-right: var(--pad); }
-  .inq-form { grid-template-columns: minmax(0, 1fr); row-gap: 1.4rem; }
+  .inq {
+    --inq-phone-top: calc(105.5 * var(--p));      /* top of the screen to Inquiries */
+    --inq-phone-foot: calc(40 * var(--p));        /* under Send */
+    --inq-phone-text: calc(20 * var(--p));        /* labels, fields, the line of news */
+    --inq-phone-large: calc(30 * var(--p));       /* Inquiries and Send */
+    --inq-phone-row: calc(20 * var(--p));         /* between one field and the next */
+    --inq-phone-field-top: calc(10 * var(--p));   /* a label to what is typed under it */
+    --inq-phone-field-foot: calc(5 * var(--p));   /* what is typed to its rule */
+    --inq-phone-news: calc(10 * var(--p));        /* the line of news to Send */
+    /* A field, top to rule: what is typed, the room either side of it, the rule. */
+    --inq-phone-field: calc(var(--inq-phone-text) + var(--inq-phone-field-top) + var(--inq-phone-field-foot) + 1px);
+
+    align-content: start;
+    padding: var(--inq-phone-top) var(--phone-pad) var(--inq-phone-foot);
+  }
+  .inq-form { grid-template-columns: minmax(0, 1fr); row-gap: var(--inq-phone-row); }
+  .inq-title {
+    margin: 0 0 var(--inq-phone-row);
+    font-size: var(--inq-phone-large);
+    line-height: 1;
+    letter-spacing: 0;
+  }
   .inq-field { display: block; }
-  .inq-label { display: block; margin-bottom: 0.2em; }
+  .inq-label { display: block; margin: 0; font-size: var(--inq-phone-text); line-height: 1; letter-spacing: 0; }
+  .inq-input {
+    /* Stated, because a one-line field will not be set solid: a browser
+       holds its line at the face's own leading whatever is asked for, and
+       the four of them came out 7 taller than the message under them. */
+    height: var(--inq-phone-field);
+    font-size: var(--inq-phone-text);
+    line-height: 1;
+    letter-spacing: 0;
+    padding: var(--inq-phone-field-top) 0 var(--inq-phone-field-foot);
+  }
+  /* The doubled rule takes its second pixel out of the room above it, as it
+     does on the desktop, so the field does not change height under a thumb. */
+  .inq-input:focus-visible { padding-bottom: calc(var(--inq-phone-field-foot) - 1px); }
+  /* The message starts as one line like the rest and grows from there
+     (`client/inquiries.ts` writes its height as it is typed in). */
+  .inq-area { height: auto; min-height: var(--inq-phone-field); }
   .inq-message .inq-label, .inq-message .inq-input { margin-top: 0; }
   .inq-check, .inq-send { grid-column: 1; }
 
-  /* The line of news takes a line; the button keeps its corner under it. */
-  .inq-send { flex-wrap: wrap; justify-content: flex-end; gap: 0.6rem; }
-  .inq-status { flex: 1 0 100%; }
+  /* The line of news takes a line; Send stands under it, at the left edge
+     with everything else. */
+  .inq-send { flex-wrap: wrap; justify-content: flex-start; gap: var(--inq-phone-news); margin-top: var(--inq-phone-row); }
+  .inq-status { flex: 1 0 100%; font-size: var(--inq-phone-text); line-height: 1; letter-spacing: 0; }
+  .inq-button { font-size: var(--inq-phone-large); line-height: 1; letter-spacing: 0; }
 }

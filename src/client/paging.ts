@@ -1,4 +1,4 @@
-import { isPlainClick, reduceMotion } from './env.ts';
+import { isPlainClick, phone, reduceMotion } from './env.ts';
 import { OUT_MS } from './transitions.ts';
 
 /**
@@ -74,6 +74,7 @@ export function initPaging(): void {
 
   const prev = document.querySelector<HTMLAnchorElement>('a[rel="prev"]');
   const next = document.querySelector<HTMLAnchorElement>('a[rel="next"]');
+  touchPaging(prev, next);
   if (!prev && !next) return;
 
   document.addEventListener('keydown', (event) => {
@@ -96,13 +97,78 @@ export function initPaging(): void {
     if (!link) return;
     event.preventDefault();
 
-    /*
-     * Clicked rather than followed, so the page's own departure — the fade
-     * that holds the navigation — runs exactly as it does for the arrows on
-     * the page. Going straight to the address would skip it.
-     */
-    if (!reduceMotion.matches) link.click();
-    else if (link.hasAttribute('data-replace')) window.location.replace(link.href);
-    else window.location.assign(link.href);
+    follow(link);
   });
+}
+
+/*
+ * Clicked rather than followed, so the page's own departure — the fade that
+ * holds the navigation — runs exactly as it does for the arrows on the page.
+ * Going straight to the address would skip it.
+ */
+function follow(link: HTMLAnchorElement): void {
+  if (!reduceMotion.matches) link.click();
+  else if (link.hasAttribute('data-replace')) window.location.replace(link.href);
+  else window.location.assign(link.href);
+}
+
+/*
+ * THE SWIPE — how far a finger has to travel across the painting's page to
+ * turn it, in CSS pixels, and how much more across than down the movement
+ * has to be (1.5 is about 34 degrees off level). EDGE keeps clear of the
+ * strip at each side of the screen where the phone's own back and forward
+ * gestures begin.
+ */
+const SWIPE = 48;
+const SWIPE_LEVEL = 1.5;
+const EDGE = 24;
+
+/**
+ * A painting's page on a phone, where nothing but the painting is drawn.
+ *
+ * The four corner links are still in the page, out of sight (05-artwork.css),
+ * and the hand reaches them another way: a touch on the empty ground is
+ * Close, and a swipe across is Previous or Next. Both click the link itself,
+ * so closing steps back to the gallery where that is what Close does, and a
+ * turn of the page replaces this one in the history, exactly as on a desktop.
+ * The phone's own Back needs nothing from here.
+ */
+function touchPaging(prev: HTMLAnchorElement | null, next: HTMLAnchorElement | null): void {
+  const page = document.querySelector<HTMLElement>('.detail');
+  const close = document.querySelector<HTMLAnchorElement>('.detail-close');
+  if (!page) return;
+
+  page.addEventListener('click', (event) => {
+    if (!phone.matches || !close || !isPlainClick(event)) return;
+    // The painting, its small pictures and the words are not the ground:
+    // a touch there is looking, choosing a picture or selecting text.
+    const target = event.target as Element | null;
+    if (target?.closest('a, button, .detail-plate, .detail-under, .detail-caption')) return;
+    follow(close);
+  });
+
+  let startX = 0, startY = 0, tracking = false;
+  page.addEventListener('touchstart', (event) => {
+    const touch = event.touches[0]!;
+    // One finger, away from the edges, on a page at its own size: two are a
+    // pinch, the edges are the phone's own, and across a page that has been
+    // zoomed into a finger is only moving the picture about.
+    tracking = phone.matches && event.touches.length === 1
+      && touch.clientX > EDGE && touch.clientX < window.innerWidth - EDGE
+      && (window.visualViewport?.scale ?? 1) < 1.05;
+    startX = touch.clientX;
+    startY = touch.clientY;
+  }, { passive: true });
+  page.addEventListener('touchend', (event) => {
+    if (!tracking) return;
+    tracking = false;
+    const touch = event.changedTouches[0]!;
+    const dx = touch.clientX - startX;
+    const dy = touch.clientY - startY;
+    if (Math.abs(dx) < SWIPE || Math.abs(dx) < SWIPE_LEVEL * Math.abs(dy)) return;
+    // The page follows the finger: pulled to the left, the next one comes.
+    const link = dx < 0 ? next : prev;
+    if (link) follow(link);
+  }, { passive: true });
+  page.addEventListener('touchcancel', () => { tracking = false; }, { passive: true });
 }

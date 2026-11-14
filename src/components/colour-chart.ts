@@ -177,6 +177,16 @@ export function colourChart(): Html {
       <svg class="chart-arrow" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
         <path d="M2.4 9.6 9.4 2.6M4.3 2.6h5.1v5.1" fill="none" stroke="currentColor" stroke-width="1.2" />
       </svg>
+      <!--
+        And the phone sheet's arrow, which is not the one above made smaller:
+        its arms run the full size of its box and its line is 3 of a box 22.5
+        by 22, drawn here in the sheet's own units from the top left of the
+        ink. The stylesheet shows one or the other (06-colour-chart.css); this
+        one does not turn, there being no hover on a phone to turn it.
+      -->
+      <svg class="chart-arrow-phone" viewBox="0 0 22.5 22" aria-hidden="true" focusable="false">
+        <path d="M1.5 1.5H21V22M1.2 20.97 20.6 1.57" fill="none" stroke="currentColor" stroke-width="3" />
+      </svg>
     </a>
 
     ${price ? html`<p class="chart-price chart-in" style="${arriving(1)}">Cost: <b>${price}</b></p>` : ''}

@@ -1,3 +1,5 @@
+import { phone } from './env.ts';
+
 /**
  * Hover text roll, after the links on landonorris.com.
  *
@@ -11,6 +13,13 @@
  * them; the transition, its timing and its stagger live in the stylesheet.
  */
 export function initTextRoll(): void {
+  /*
+   * Not on a phone. There is no hover there to roll on, and the wrapping is
+   * not free: a letter in a span of its own no longer kerns against its
+   * neighbours, which at the 40 the phone's menu is set in moves VALSELLS and
+   * WHAT'S by three and four pixels off the designer's sheet.
+   */
+  if (phone.matches) return;
   const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' });
 
   for (const root of document.querySelectorAll<HTMLElement>('[data-roll]')) {

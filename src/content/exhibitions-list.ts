@@ -111,6 +111,9 @@ export const SHOWS: readonly Show[] = [
   { group: 'Private collections', title: 'Smith Collection', venue: 'Wyoming' },
 ];
 
+/** The opening phrase of a location: the kind of show, its comma if it has one, and an "at" if one follows. */
+const KIND = /^\s*((?:solo|solow|group)\s*(?:show|exhibition)s?\b,?)[\s,]*(at\s+)?/i;
+
 /**
  * The place a show was, with the kind of show taken off the front.
  *
@@ -129,6 +132,51 @@ export const SHOWS: readonly Show[] = [
  */
 export function placeOf(venue: string | undefined): string | undefined {
   if (!venue) return venue;
-  const place = venue.replace(/^\s*(solo|solow|group)\s*(show|exhibition)s?\b[\s,]*(at\s+)?/i, '').trim();
+  const place = venue.replace(KIND, '').trim();
   return place || undefined;
+}
+
+/**
+ * What `placeOf` takes off, for the one layout that shows it.
+ *
+ * The phone sheet runs the solo and the group shows together as one list with
+ * no heading over either, so there each row says what kind it was on a line of
+ * its own above the place — and keeps the "at" where the record has one
+ * ("Solo show at Gallery_BR" reads SOLO SHOW / AT GALLERY_BR…).
+ *
+ * The record's own words, comma or none, never a phrase made up from the
+ * group: a location that opens with no kind (8 rue des Beaux-Arts) gets no
+ * such line.
+ */
+export function kindOf(venue: string | undefined): { readonly kind: string; readonly at: boolean } | undefined {
+  const lead = venue ? KIND.exec(venue) : null;
+  return lead ? { kind: lead[1]!, at: Boolean(lead[2]) } : undefined;
+}
+
+/** The groups the phone sheet runs together, in the order they take within a year. */
+export const PHONE_MERGED: readonly ShowGroup[] = ['Solo shows', 'Group shows'];
+
+/**
+ * Where each show stands on the phone, counted from 1.
+ *
+ * The phone sheet is one list where the desktop's is four groups: the solo and
+ * the group shows together, latest year first, a solo show before a group show
+ * of the same year, and otherwise in the order they are written above. The
+ * other groups follow whole, in the sheet's order, each still under its name.
+ *
+ * The markup stays grouped — it is the desktop's, and the one a reader of the
+ * source gets — and each row carries its place as `--phone-order`, which only
+ * the phone rules read (01-grid.css).
+ */
+export function phoneOrder(shows: readonly Show[]): ReadonlyMap<Show, number> {
+  const merged = (s: Show) => PHONE_MERGED.indexOf(s.group);
+  const run = shows
+    .filter((s) => merged(s) >= 0)
+    .map((show, index) => ({ show, index }))
+    .sort((a, b) => (b.show.year ?? 0) - (a.show.year ?? 0) || merged(a.show) - merged(b.show) || a.index - b.index)
+    .map((entry) => entry.show);
+  const rest = SHOW_GROUPS
+    .filter((name) => !PHONE_MERGED.includes(name))
+    .flatMap((name) => shows.filter((s) => s.group === name));
+  return new Map([...run, ...rest].map((show, i) => [show, i + 1]));
 }

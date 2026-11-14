@@ -698,7 +698,7 @@ html:not(.js) .about:target ~ .about-close { opacity: 1; visibility: visible; }
 .reader-stated .reader-title,
 [data-panel] .reader-title {
   font-size: var(--type);
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.01em;
   line-height: var(--lead);

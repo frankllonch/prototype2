@@ -82,6 +82,20 @@ const NAMES: Readonly<Record<string, string>> = {
 };
 
 /**
+ * Where the phone sheet turns a name onto its second line by hand.
+ *
+ * Every other two-line name on that sheet breaks where a 335-wide column
+ * breaks it anyway. This one does not: left alone it reads COLOR PALETTE
+ * SANTA & / COLE, and the designer set COLOR PALETTE / SANTA & COLE. So the
+ * break is written down, as the part of the name it comes after — never a
+ * second spelling of the name, and dropped if the name no longer begins that
+ * way (`breakOf`). The desktop sets these names on one line and ignores it.
+ */
+const BREAK_AFTER: Readonly<Record<string, string>> = {
+  'santa-cole-color-palette-2023': 'Color Palette',
+};
+
+/**
  * The run of each project as the designer's index states it, spacing and all —
  * "2016-2020" closed up, "2017 - 2026" and "2023 - Currently" spaced. Three of
  * these say something the source does not (Silla 8 is 2020 rather than
@@ -109,6 +123,8 @@ const WHEN: Readonly<Record<string, string>> = {
 export interface GroupedProject {
   readonly slug: string;
   readonly title: string;
+  /** The opening words the phone breaks the title after, where the sheet does (`BREAK_AFTER`). */
+  readonly breakAfter?: string;
   readonly when: string;
   readonly project: Project;
 }
@@ -151,6 +167,12 @@ function nameOf(project: Project): string {
     .trim();
 }
 
+/** The recorded break for a project, only while its title still opens with those words and goes on. */
+function breakOf(slug: string, title: string): string | undefined {
+  const lead = BREAK_AFTER[slug];
+  return lead && title.startsWith(`${lead} `) && title.length > lead.length + 1 ? lead : undefined;
+}
+
 export function groupCommissioned(projects: readonly Project[]): readonly ProjectGroup[] {
   const placed = new Map<string, string>();
   for (const group of GROUPS) for (const slug of group.slugs) placed.set(slug, group.name);
@@ -161,9 +183,12 @@ export function groupCommissioned(projects: readonly Project[]): readonly Projec
   for (const project of projects) {
     if (WHATS_COLOR.has(project.slug)) continue;
     const name = placed.get(project.slug) ?? fallback;
+    const title = nameOf(project);
+    const breakAfter = breakOf(project.slug, title);
     buckets.get(name)!.push({
       slug: project.slug,
-      title: nameOf(project),
+      title,
+      ...(breakAfter ? { breakAfter } : {}),
       when: WHEN[project.slug] ?? whenOf(project),
       project,
     });

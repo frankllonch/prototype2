@@ -29,6 +29,7 @@ import { initWcFocus } from './focus.ts';
 import { initWcTexts } from './texts.ts';
 import { initGlide } from './glide.ts';
 import { initWrite } from './write.ts';
+import { initMenu } from './menu.ts';
 
 // One hover or the other, never both: the document says which, and
 // components/layout.ts is where that is decided.
@@ -39,6 +40,8 @@ initControls();
 initStack();
 initYears();
 initHoverList();
+// Before the panels: the menu gets out of About's way on the click that opens it.
+initMenu();
 initPanels();
 initFigures();
 initSheets();

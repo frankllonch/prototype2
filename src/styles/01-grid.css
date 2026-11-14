@@ -30,13 +30,6 @@ html:not(.js) .hero,
   padding: 0 var(--pad) 62vh var(--rail);
 }
 
-@media (max-width: 899px) {
-  .grid {
-    padding-left: var(--pad);
-    padding-bottom: 58vh;
-  }
-}
-
 /* The justified grid sets its own padding; excluded here so this more
    specific selector does not quietly win over it. */
 .grid:not([data-stack]):not(.grid-justified) {
@@ -168,11 +161,8 @@ html.js .hero[data-hero]+.grid[data-stack] {
   pointer-events: none;
 }
 
-@media (max-width: 599px) {
-  .grid:not(.grid-justified) {
-    --unit: 120px !important;
-  }
-}
+/* On a phone the gallery is two plain columns: 05-artwork.css, THE GALLERY ON
+   A PHONE. */
 
 /*
  * A handful of items rather than 154, and no size for the reader to choose:
@@ -444,51 +434,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
 }
 .detail-index b { font-weight: 600; }
 
-/*
- * A phone: one column that scrolls if it must. The corners stay corners at
- * the top; the painting, its pictures and its place, the caption and the way
- * through follow in order.
- */
-@media (max-width: 899px) {
-  .detail {
-    --edge: var(--pad);
-    --edge-v: var(--pad);
-    --plate-max: 52vh;
-    --plate-room: calc(100vw - 2 * var(--edge));
-    --caption-beside: 0;
-    --thumb-h: 3.6rem;
-    --thumb-gap: 0.7rem;
-    height: auto;
-    min-height: 100dvh;
-    overflow: visible;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 1.6rem;
-    padding: calc(var(--edge) + 2.4rem) var(--edge) var(--edge);
-    box-sizing: border-box;
-  }
-  .detail-back { font-size: 1rem; }
-  .detail-stage, .detail-caption, .detail-pager {
-    position: static;
-    margin: 0;
-    translate: none;
-    min-width: 0;
-    max-width: none;
-  }
-  .detail-under {
-    position: static;
-    translate: none;
-    width: auto;
-    margin-top: 0.9rem;
-  }
-  .detail-plate img { max-width: var(--plate-room); }
-  .detail-caption, .detail-title { font-size: 1.25rem; }
-  .detail-facts { margin-top: 0.6em; }
-  .detail-index, .detail-index:first-child { font-size: 1rem; margin: 0.7rem 0 0; }
-  .detail-pager, .detail-pager a { font-size: 1rem; }
-  .detail-pager { margin-top: auto; }
-}
+/* A phone has a sheet of its own: 05-artwork.css, THE WORK ON A PHONE. */
 
 /* ------------------------------------------------------------------- feed */
 
@@ -810,6 +756,12 @@ html.js .hero[data-hero]+.grid[data-stack] {
   text-transform: uppercase;
   line-height: 1.01;     /* 40.4 over 40 */
 }
+/* The kind of show, and the "at" after it: the group's name already says the
+   first on this layout, so both are in the row for the phone alone (below). */
+.exh-kind,
+.exh-at {
+  display: none;
+}
 /* What the sheet says about the one show it describes on the list itself. */
 .exh-note {
   font-size: var(--t-40);
@@ -845,14 +797,111 @@ html.js .hero[data-hero]+.grid[data-stack] {
   right: calc(var(--year-col, 10%) + 2rem);
 }
 
+/*
+ * The phone sheet: 375 wide, and every figure below is so many of `--p`, one
+ * unit of that frame (09-phone.css).
+ *
+ * It is a different list made of the same rows. One size for every word, 16
+ * on a line of 16. The solo and the group shows run together, latest first,
+ * with no heading over them, so each row says what kind it was on a line of
+ * its own between the name and the place. The year leans, at the right margin
+ * on the name's first line. A row is 10, its lines, 7, and the rule.
+ *
+ * The order is not the markup's: each row carries its place as
+ * `--phone-order` (components/exhibitions.ts), and the groups dissolve
+ * (`display: contents`) so the rows of all four are one column to be ordered.
+ * Art fairs and Private collections come after the shows, each under its own
+ * name, which is set as a row of the list with air above it.
+ *
+ * The figures to change by hand are the first block.
+ */
 @media (max-width: 899px) {
-  .xlist.exh-list .xrow {
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 0.3rem 1rem;
+  .xlist.exh-list {
+    --exh-top: calc(97 * var(--p));          /* top of the page → the first row; its name starts 10 lower, at 107 */
+    --exh-foot: calc(106 * var(--p));        /* under the last rule */
+    --exh-size: calc(16 * var(--p));         /* the type: name, kind, place, year, group name */
+    --exh-line: calc(16 * var(--p));         /* its line, baseline to baseline */
+    --row-top: calc(10 * var(--p));          /* rule → the first line of a row */
+    --row-bottom: calc(7 * var(--p));        /* the last line → the rule under it */
+    --exh-title-col: calc(214 * var(--p));   /* how far a name runs before it turns */
+    --exh-group-gap: calc(40 * var(--p));    /* above ART FAIRS and PRIVATE COLLECTIONS */
+
+    display: flex;
+    flex-direction: column;
+    padding: var(--exh-top) var(--phone-pad) var(--exh-foot);
   }
-  .exh-year { align-self: start; }
-  /* No pointer to hover with, and no room to spare. */
-  .exh-plate { display: none; }
+
+  .exh-list .xgroup,
+  .exh-list .xrows {
+    display: contents;
+  }
+
+  /* name | year. The year takes the width of its four figures (36.88), the
+     name what is left; a private collection has no year and takes it all. */
+  .xlist.exh-list .xrow {
+    order: var(--phone-order, 0);
+    grid-template-columns: minmax(0, 1fr) auto;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .exh-list :is(.xgroup-name, .exh-title, .exh-kind, .exh-venue, .exh-note, .exh-year) {
+    display: block;
+    font-size: var(--exh-size);
+    line-height: var(--exh-line);
+    letter-spacing: 0;
+  }
+
+  /* `pretty`, not the plain wrap: it is what lifts a lone last word, as the
+     sheet does by hand in PAINTING AS A GIFT / OF COLOR. */
+  .exh-list .exh-title {
+    max-width: var(--exh-title-col);
+    text-wrap: pretty;
+  }
+
+  /* Light and upright like the place under it; a private collection's place
+     keeps its sentence case, by the rule above. */
+  .exh-list .exh-kind {
+    font-weight: 300;
+    font-style: normal;
+    text-transform: uppercase;
+  }
+
+  .exh-list .exh-at {
+    display: inline;
+  }
+
+  .exh-list .exh-year {
+    font-style: italic;
+  }
+
+  /* A run across two years stacks them, the second level with the kind. */
+  .exh-list .exh-year span {
+    display: block;
+  }
+
+  /* A group's name, as a row: the name's own semibold, the row's padding and
+     its rule, placed just ahead of the group's first row. */
+  .exh-list .xgroup-name {
+    order: var(--phone-order, 0);
+    margin: var(--exh-group-gap) 0 0;
+    padding: var(--row-top) 0 var(--row-bottom);
+    border-bottom: 1px solid var(--ink);
+  }
+
+  /* The solo and the group shows are not together under their names any
+     more, so those two are kept for a reader and taken from the eye
+     (`.sr-only`, in 00-base.css, spelt out). */
+  .exh-list .xgroup[data-phone='merged'] .xgroup-name {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
 }
 
 /* ---------------------------------------------------------- to-scale grid */
@@ -945,16 +994,9 @@ html.js .hero[data-hero]+.grid[data-stack] {
   grid-template-columns: minmax(0, 1fr) auto;
 }
 
+/* On the phone each index lays its groups out for itself — the exhibitions
+   above, the commissioned work in 07-sheet.css. This much they share. */
 @media (max-width: 899px) {
-  .xgroup {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-  }
-
-  .xgroup-name {
-    margin-bottom: 0.25rem;
-  }
-
   /* No pointer to hover with, and no room beside the row for a picture. */
   .xrow .exh-plate {
     display: none;

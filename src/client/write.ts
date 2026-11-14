@@ -1,4 +1,4 @@
-import { reduceMotion } from './env.ts';
+import { phone, reduceMotion } from './env.ts';
 
 /**
  * Matches `writeOn()` in components/whats-color.ts: the words' slots end at
@@ -13,13 +13,15 @@ const WRITTEN = 0.885;
 /**
  * The scroll offset at which the note stands fully written and the names have
  * yet to rise — the scene a link into the page should open on. Null when
- * there is no scene: no write section on this page, no scroll-run animations
- * in this engine, or motion reduced, in all of which the note is an ordinary
- * paragraph and the top of the roster is the place to land.
+ * there is no scene: no write section on this page, a phone (where the note
+ * is never written by the scroll: 04-whats-color.css keeps the stage to 900
+ * and up), no scroll-run animations in this engine, or motion reduced, in all
+ * of which the note is an ordinary paragraph and the top of the page's own
+ * section is the place to land.
  */
 export function writtenPoint(): number | null {
   const section = document.querySelector<HTMLElement>('.wc-write');
-  if (!section) return null;
+  if (!section || phone.matches) return null;
   if (!CSS.supports('animation-timeline: view()') || reduceMotion.matches) return null;
   const top = section.getBoundingClientRect().top + window.scrollY;
   return top + (section.offsetHeight - window.innerHeight) * WRITTEN;

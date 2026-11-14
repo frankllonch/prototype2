@@ -265,8 +265,13 @@ export function colourChartPage(): Html {
      * the film and the pile have the chevron. It stands until the sentence
      * does (`client/scroll-cue.ts`), which is also before the line at the
      * foot arrives, so the two never share the bottom of the screen.
+     *
+     * Not on a phone, where the page is not written but simply stands: the
+     * stylesheet takes the cue away there, and the body's class is how it
+     * knows this page from the others that have one (06-colour-chart.css).
      */
     cue: 'ink',
+    bodyClass: 'chart-body',
     children: colourChart(),
     overlays: html`${chartPhotographs()}${inquiries()}`,
   });
@@ -344,9 +349,16 @@ function plateStage(work: Project, name: string, under: Html = html``): Html {
  * and under the painting its other pictures and the work's place in the
  * archive. The arrangement itself is in the stylesheet (01-grid.css, THE
  * DETAIL PAGE); client/views.ts only sizes the painting by its painted part.
+ *
+ * `around` is for the phone alone, whose sheet shows the gallery faintly
+ * behind the open work: the paintings that stand round this one there, drawn
+ * again as a ground with nothing in it to read or to touch (05-artwork.css,
+ * THE WORK ON A PHONE). They are lazy and out of the layout on a wide screen,
+ * so nothing is fetched for them there.
  */
 export function artworkDetailPage(
   work: Project, previous?: Project, next?: Project, place?: { index: number; total: number },
+  around: readonly Project[] = [],
 ): Html {
   const name = displayTitle(work.title, 'work');
   const { year, dimensions, materials } = work.metadata;
@@ -360,6 +372,10 @@ export function artworkDetailPage(
     // No menu over a painting: its corners say where to go instead.
     bodyClass: 'is-detail',
     children: html`<article class="detail">
+      ${around.length
+        ? html`<div class="detail-ghost" aria-hidden="true">${join(around.map((w) =>
+            w.cover ? responsiveImage({ image: w.cover, sizes: '43vw', alt: '' }) : html``))}</div>`
+        : ''}
       <a class="detail-back detail-section" href="${withBase('/artwork/')}">Artwork</a>
       <a class="detail-back detail-close" href="${withBase('/artwork/')}" aria-label="Close, back to the gallery">Close</a>
       ${plateStage(work, name, place ? html`<p class="detail-index"><b>${String(place.index)}</b> of ${String(place.total)}</p>` : html``)}

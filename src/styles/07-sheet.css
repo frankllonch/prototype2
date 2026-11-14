@@ -335,10 +335,10 @@
   translate: 0 -80%;
 }
 
-/* ------------------------------------------------------------------- phone */
+/* ------------------------------------------------------- without scripting */
 
-/* Phones held sideways are below. Without scripting, at any width, the sheet
-   is a plain page: the masthead, the text, then every photograph. */
+/* At any width the sheet is then a plain page: the masthead, the text, then
+   every photograph. The phone's own sheet is at the foot of this file. */
 html:not(.js) .panel:has(.sheet) { position: relative; overflow: visible; }
 html:not(.js) .sheet { display: block; height: auto; }
 html:not(.js) .sheet-text { overflow: visible; padding-bottom: var(--gap); -webkit-mask-image: none; mask-image: none; }
@@ -346,61 +346,6 @@ html:not(.js) .sheet-stage { position: static; width: auto; margin: 0 var(--s-pa
 html:not(.js) .sheet-figure { margin-bottom: var(--gap); }
 html:not(.js) .sheet-more,
 html:not(.js) .sheet-step { display: none; }
-
-/*
- * Too narrow for two columns. The masthead and the photograph stand at the
- * top and the text scrolls beneath them — still the only thing that moves.
- */
-@media (max-width: 899px) {
-  .panel:has(.sheet) {
-    --s-pad: var(--pad);
-    --s-lead: 1.2;
-  }
-  .sheet {
-    display: flex;
-    flex-direction: column;
-  }
-  .panel:has(.sheet) .panel-close { top: 1.6rem; translate: none; line-height: var(--lead); }
-  .sheet-head,
-  .sheet.is-wide-text .sheet-head {
-    display: block;
-    min-height: 0;
-    padding: 1.6rem calc(var(--s-pad) + 5rem) 0 var(--s-pad);
-  }
-  .sheet-lines { margin-top: 0.6rem; }
-  .sheet-when, .sheet.is-wide-text .sheet-when { margin: 0.3rem 0 0; }
-  .sheet.is-wide-text .sheet-title { min-width: 0; padding: 0; }
-  .sheet-stage {
-    position: relative;
-    order: 2;
-    left: auto; top: auto; bottom: auto; width: auto;
-    flex: none;
-    height: 36vh;
-    margin: 1.2rem calc(var(--s-pad) + 1.6rem) 0;
-  }
-  .sheet-prev { left: -1.9rem; }
-  .sheet-next { right: -1.9rem; }
-  .sheet-step { padding: 1rem 0.5rem; }
-  .sheet-text,
-  .sheet.is-wide-text .sheet-text {
-    order: 3;
-    flex: 1;
-    min-height: 0;
-    padding: 1.4rem var(--s-pad) 4rem;
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 1.4rem);
-            mask-image: linear-gradient(to bottom, transparent 0, #000 1.4rem);
-  }
-  .sheet-more,
-  .sheet.is-wide-text .sheet-more {
-    position: absolute;
-    margin: 0;
-    right: var(--s-pad);
-    top: 4.2rem;
-    translate: none;
-    width: 26px;
-    height: 26px;
-  }
-}
 
 /* ------------------------------------------------------------ the index */
 
@@ -426,24 +371,62 @@ html:not(.js) .sheet-step { display: none; }
 .com-list .xgroup:nth-child(2) { margin-bottom: clamp(2.5rem, 7.656vw, 11rem); }
 
 /*
- * A phone held sideways, or any window too short for the photograph above the
- * text: the photograph goes beside the text instead, so the text keeps the
- * height it needs and is still the only thing that moves.
+ * The same index on the phone sheet: 375 wide, every figure so many of `--p`,
+ * one unit of that frame (09-phone.css).
+ *
+ * The kind of work over its projects instead of beside them, large: a 30
+ * heading, the names at 25 on a line of 25 in the regular weight, a rule
+ * under each. No years — the sheet draws none. Names turn where the 335
+ * column turns them, but for the one break set by hand (`.xrow-br`).
+ *
+ * It has to come after the two group margins above: the same weight of
+ * selector, so the later rule is the one that holds.
+ *
+ * The figures to change by hand are the first block.
  */
-@media (max-width: 899px) and (max-height: 520px) {
-  html.js .sheet {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 38%;
-    grid-template-rows: auto minmax(0, 1fr);
+@media (max-width: 899px) {
+  .xlist.com-list {
+    --com-top: calc(106 * var(--p));         /* top of the page → the first heading's line; its baseline lands at 131 */
+    --com-foot: calc(106 * var(--p));        /* under the last rule */
+    --com-head: calc(30 * var(--p));         /* COMMISSIONED, EDUCATION, SOLIDARY, on a line of the same */
+    --com-head-gap: calc(13 * var(--p));     /* a heading → its first row: baseline to baseline 49 */
+    --com-size: calc(25 * var(--p));         /* a project's name, on a line of the same */
+    --row-top: calc(10 * var(--p));          /* rule → name: the baseline 31 under the rule above */
+    --row-bottom: calc(8 * var(--p));        /* name → rule: the rule 12 under the baseline */
+    --com-group-gap: calc(85 * var(--p));    /* the last rule of a group → the next heading */
+
+    padding: var(--com-top) var(--phone-pad) var(--com-foot);
   }
-  html.js .sheet-head { grid-area: 1 / 1; padding-top: 1rem; }
-  html.js .sheet-text { grid-area: 2 / 1; }
-  html.js .sheet-stage {
-    grid-area: 1 / 2 / 3 / 3;
-    height: auto;
-    /* Clear of Close and the round button above it. */
-    margin: 6.4rem calc(var(--s-pad) + 1.6rem) 1rem 0.6rem;
+
+  .xlist.com-list .xgroup {
+    display: block;
+    margin-bottom: var(--com-group-gap);
   }
+  .xlist.com-list .xgroup:last-child { margin-bottom: 0; }
+
+  .com-list .xgroup-name {
+    margin: 0 0 var(--com-head-gap);
+    padding: 0;
+    font-size: var(--com-head);
+  }
+
+  /* No year column: the name has the row to itself. */
+  .com-list .xrow {
+    display: block;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .com-list .xrow-title {
+    display: block;
+    font-size: var(--com-size);
+    font-weight: 400;
+  }
+  .com-list .xrow-when { display: none; }
+}
+
+/* The one break the phone sheet sets by hand inside a name
+   (components/commissioned.ts). Wider than the phone the name runs on. */
+@media (min-width: 900px) {
+  .xrow-br { display: none; }
 }
 
 /* ------------------------------------------ the second sheet: photographs */
@@ -549,21 +532,6 @@ html:not(.js) .sheet-step { display: none; }
 html:not(.js) .plates-step { display: none; }
 html:not(.js) .plates-figure { position: static; opacity: 1; }
 
-@media (max-width: 899px) {
-  .panel:has(.plates) { overflow: auto; }
-  .plates { height: auto; padding: calc(var(--bar) * 0.6) var(--pad) var(--gap); }
-  .plates-head { position: static; width: auto; }
-  .plates-stage {
-    position: static;
-    translate: none;
-    width: 100%;
-    height: 58vh;
-    margin-top: 1.4rem;
-  }
-  .plates-prev { left: 0; }
-  .plates-next { right: 0; }
-}
-
 /*
  * A show that opens on its own name and a translation of it: the sheet sets
  * those apart and leaves an empty line under them before the text begins.
@@ -571,3 +539,267 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
  * opening stays the lede and keeps its capitals (`content/shows.ts`).
  */
 .sheet-prose .lede-open { display: block; margin-bottom: calc(var(--s-lead) * 1em); }
+
+/* ------------------------------------------------------------------- phone */
+
+/*
+ * The phone's sheets, off the designer's 375 frames. Every figure is so many
+ * of `--p`, one unit of that frame (09-phone.css).
+ *
+ * A detail is a page here: the panel scrolls, top to bottom, and nothing
+ * inside it does. For a photograph to stand inside the text, the text's box
+ * and the photographs' box are dissolved (`display: contents`), which makes
+ * every paragraph and every photograph an item of the sheet's one column, and
+ * `order` puts each where the frames draw it. The source keeps its own order
+ * — masthead, text, photographs — which is the order it is read out in.
+ *
+ * Two scales, as drawn, told apart by the panel's id:
+ *
+ *   exhibition-…    Moll de l’Ós: the name at 25, everything else at 20, from
+ *                   157 down; the first photograph after the lede.
+ *   commissioned-…  Terra Rossa: 30 throughout and the credits at 20, from
+ *                   107 down; the credits come up under the year, and the
+ *                   first photograph follows the second block of the text.
+ *
+ * A show that is photographs and nothing else — and the colour chart's own —
+ * is set in the exhibitions' type, its pictures straight under the masthead.
+ *
+ * A photograph keeps its own proportions. A landscape takes the column; any
+ * other stands 261 wide in the middle of it. The first goes where the frame
+ * has it and the rest follow the text, in their order: there are no arrows on
+ * the phone, and nothing is kept behind a gesture that is not drawn.
+ *
+ * Nor is there a Close, or the round button. The three bars stay on top
+ * (09-phone.css) and the ways out are the phone's own Back (client/panels.ts),
+ * the section's name in the menu, and Escape. Close is still in the page, for
+ * a keyboard and for a screen reader, out of sight until a key reaches it.
+ *
+ * The figures to change by hand are the three blocks that follow: one for
+ * each kind of sheet.
+ */
+@media (max-width: 899px) {
+  /* Exhibitions that have a text. */
+  .panel:has(> .sheet) {
+    --sh-top: calc(157 * var(--p));          /* top of the page → the name's line */
+    --sh-foot: calc(80 * var(--p));          /* under the last block */
+    --sh-name: calc(25 * var(--p));          /* the name, on a line of the same */
+    --sh-type: calc(20 * var(--p));          /* place, dates, lede and text, on a line of the same */
+    --sh-note: calc(20 * var(--p));          /* credits, likewise */
+    --sh-measure: none;                      /* where the lines under the name turn: the column */
+    --sh-lines-top: calc(14 * var(--p));     /* name → place */
+    --sh-when-top: 0px;                      /* place → dates: the next line */
+    --sh-text-top: calc(49 * var(--p));      /* dates → lede */
+    --sh-para: calc(20 * var(--p));          /* paragraph → paragraph: one empty line */
+    --sh-caps: calc(33 * var(--p));          /* plain text → a paragraph in capitals, or back */
+    --sh-pic-tall: calc(261 * var(--p));     /* a portrait or a square: 57 clear either side */
+    --sh-pic-top: calc(22 * var(--p));       /* lede → the first photograph */
+    --sh-pic-bottom: calc(18 * var(--p));    /* the first photograph → text */
+    --sh-pics-top: calc(40 * var(--p));      /* end of the text → the other photographs */
+    --sh-pics-gap: calc(20 * var(--p));      /* photograph → photograph */
+  }
+  /* Commissioned work. */
+  .panel[id^='commissioned-'] {
+    --sh-top: calc(107 * var(--p));
+    --sh-foot: calc(119 * var(--p));
+    --sh-name: calc(30 * var(--p));
+    --sh-type: calc(30 * var(--p));
+    --sh-note: calc(20 * var(--p));
+    --sh-measure: calc(261 * var(--p));      /* the lines under the name turn at the photograph's width */
+    --sh-lines-top: calc(60 * var(--p));
+    --sh-when-top: calc(29 * var(--p));      /* lines → year */
+    --sh-note-top: calc(60 * var(--p));      /* year → credits */
+    --sh-text-top: calc(55 * var(--p));      /* credits → text */
+    --sh-text-bare: calc(60 * var(--p));     /* year → text, on a sheet with no credits */
+    --sh-para: calc(30 * var(--p));
+    --sh-apart: calc(60 * var(--p));         /* a change of voice: two empty lines */
+    --sh-cta: calc(90 * var(--p));           /* the closing call: three */
+    --sh-pic-top: calc(117 * var(--p));      /* text → the first photograph */
+    --sh-pic-bottom: calc(106 * var(--p));   /* the first photograph → text */
+    --sh-pics-top: calc(117 * var(--p));     /* end of the text → the other photographs */
+    --sh-pics-gap: calc(30 * var(--p));
+  }
+  /* Photographs only. */
+  .panel:has(> .plates) {
+    --sh-top: calc(157 * var(--p));
+    --sh-foot: calc(80 * var(--p));
+    --sh-name: calc(25 * var(--p));
+    --sh-type: calc(20 * var(--p));
+    --sh-measure: none;
+    --sh-lines-top: calc(17 * var(--p));     /* name → place */
+    --sh-when-top: calc(32 * var(--p));      /* place → dates, set apart on this sheet */
+    --sh-pic-tall: calc(261 * var(--p));
+    --sh-pic-top: calc(64 * var(--p));       /* dates → the first photograph */
+    --sh-pics-gap: calc(20 * var(--p));
+  }
+
+  /* ---- the page ---- */
+
+  .panel:has(> .sheet),
+  .panel:has(> .plates) {
+    overflow: hidden auto;
+    overscroll-behavior: contain;
+    /* The body's 0.01em is not in the phone frames, and turns their lines early. */
+    letter-spacing: 0;
+  }
+  .panel > .sheet,
+  .panel > .plates {
+    height: auto;
+    padding: var(--sh-top) var(--phone-pad) var(--sh-foot);
+    font-size: var(--sh-type);
+    line-height: var(--sh-type);
+  }
+  .panel > .sheet { display: flex; flex-direction: column; }
+
+  /* ---- masthead ---- */
+
+  .panel > .sheet .sheet-head,
+  .panel > .plates .plates-head {
+    display: block;
+    position: static;
+    width: auto;
+    min-height: 0;
+    padding: 0;
+    font-size: inherit;
+    line-height: inherit;
+  }
+  .panel > :is(.sheet, .plates) .sheet-title {
+    min-width: 0;
+    padding: 0;
+    font-size: var(--sh-name);
+    line-height: var(--sh-name);
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+  .panel > :is(.sheet, .plates) .sheet-lines {
+    max-width: var(--sh-measure);
+    margin: var(--sh-lines-top) 0 0;
+    font-weight: 500;
+    line-height: inherit;
+  }
+  /* Regular italic, as both phone frames draw the dates. */
+  .panel > :is(.sheet, .plates) .sheet-when {
+    margin: var(--sh-when-top) 0 0;
+    font-weight: 400;
+    font-style: italic;
+    font-variant-numeric: normal;
+  }
+  /* Nothing to say between the name and the dates: the dates take that gap. */
+  .panel > .sheet .sheet-title + .sheet-when { margin-top: var(--sh-lines-top); }
+
+  /* ---- text and photographs, one column ---- */
+
+  .panel > .sheet :is(.sheet-text, .sheet-prose, .sheet-stage, .sheet-frame) { display: contents; }
+  .panel > .sheet .sheet-prose { font-size: inherit; line-height: inherit; }
+  .panel > .sheet .sheet-prose > * { margin: var(--sh-para) 0 0; }
+  /* Pasted text that arrived in boxes of its own keeps the same empty line. */
+  .panel > .sheet .sheet-prose > * p { margin: 0 0 var(--sh-para); }
+  .panel > .sheet .sheet-prose > * p:last-child { margin-bottom: 0; }
+  .panel > .sheet .sheet-prose .lede-open { margin-bottom: var(--sh-para); }
+  .panel > .sheet .sheet-prose > .is-style-note { font-size: var(--sh-note); line-height: var(--sh-note); }
+  /* Anything set into the text — a film — keeps to the column. */
+  .panel > .sheet .sheet-prose :is(video, iframe, img) { max-width: 100%; }
+
+  .panel > .sheet .sheet-figure,
+  .panel > .plates .plates-figure {
+    display: block;
+    position: static;
+    inset: auto;
+    margin: var(--sh-pics-gap) 0 0;
+    padding: 0;
+    opacity: 1;
+    pointer-events: auto;
+    transition: none;
+  }
+  .panel > .sheet .sheet-figure img,
+  .panel > .plates .plates-figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: none;
+    max-height: none;
+    object-fit: fill;
+  }
+  .panel > .sheet .sheet-figure:not(.is-wide) img,
+  .panel > .plates .plates-figure:not(.is-wide) img { width: var(--sh-pic-tall); margin: 0 auto; }
+
+  .panel > .sheet :is(.sheet-more, .sheet-step),
+  .panel > .plates .plates-step { display: none; }
+
+  /* ---- exhibitions: lede, photograph, text, the other photographs ---- */
+
+  .panel[id^='exhibition-'] .sheet-prose > * { order: 3; }
+  .panel[id^='exhibition-'] .sheet-figure { order: 4; }
+  /* Capitals anywhere in the text stand clear of the plain text either side. */
+  .panel[id^='exhibition-'] .sheet-prose > .is-style-lead,
+  .panel[id^='exhibition-'] .sheet-prose > .is-style-lead + * { margin-top: var(--sh-caps); }
+  .panel[id^='exhibition-'] .sheet-prose > p:first-child { order: 1; margin-top: var(--sh-text-top); }
+  .panel[id^='exhibition-'] .sheet-prose > p:first-child + * { margin-top: var(--sh-caps); }
+  .panel[id^='exhibition-'] .sheet:has(.sheet-figure) .sheet-prose > p:first-child + * { margin-top: 0; }
+  .panel[id^='exhibition-'] .sheet-figure:first-child { order: 2; margin: var(--sh-pic-top) 0 var(--sh-pic-bottom); }
+  .panel[id^='exhibition-'] .sheet-figure:nth-child(2) { margin-top: var(--sh-pics-top); }
+  /* A text that does not open on a paragraph has no lede to go first: the
+     photograph leads, under the dates, and the whole text follows it. */
+  .panel[id^='exhibition-'] .sheet-prose > :first-child:not(p) { margin-top: 0; }
+  .panel[id^='exhibition-'] .sheet:not(:has(.sheet-figure)) .sheet-prose > :first-child:not(p),
+  .panel[id^='exhibition-'] .sheet:has(.sheet-prose > :first-child:not(p)) .sheet-figure:first-child { margin-top: var(--sh-text-top); }
+
+  /* ---- commissioned: credits, two blocks of text, photograph, the rest ---- */
+
+  .panel[id^='commissioned-'] .sheet-prose > * { order: 4; }
+  .panel[id^='commissioned-'] .sheet-figure { order: 5; }
+  .panel[id^='commissioned-'] .sheet-prose > .apart { margin-top: var(--sh-apart); }
+  .panel[id^='commissioned-'] .sheet-prose > .is-style-cta { margin-top: var(--sh-cta); }
+  /* The credits are last in the source and second on the phone sheet. A name
+     goes under its label, and the line break after it then stands as the
+     empty line between one credit and the next. */
+  .panel[id^='commissioned-'] .sheet-prose > .is-style-note { order: 1; margin-top: var(--sh-note-top); }
+  .panel[id^='commissioned-'] .sheet-prose > .is-style-note :is(b, strong) { display: block; }
+  .panel[id^='commissioned-'] .sheet-prose > :nth-child(-n + 2 of :not(.is-style-note)) { order: 2; }
+  .panel[id^='commissioned-'] .sheet-prose > :nth-child(1 of :not(.is-style-note)) { margin-top: var(--sh-text-top); }
+  .panel[id^='commissioned-'] .sheet-prose:not(:has(> .is-style-note)) > :first-child { margin-top: var(--sh-text-bare); }
+  .panel[id^='commissioned-'] .sheet-figure:first-child { order: 3; margin-top: var(--sh-pic-top); }
+  .panel[id^='commissioned-'] .sheet:has(.sheet-figure) .sheet-prose > :nth-child(3 of :not(.is-style-note)) { margin-top: var(--sh-pic-bottom); }
+  /* The other photographs stand off the text as the first does; with no text
+     between them and the first, they simply follow it. */
+  .panel[id^='commissioned-'] .sheet:has(.sheet-prose > :nth-child(3 of :not(.is-style-note))) .sheet-figure:nth-child(2) { margin-top: var(--sh-pics-top); }
+
+  /* ---- photographs only ---- */
+
+  .panel > .plates .plates-stage {
+    position: static;
+    translate: none;
+    width: auto;
+    height: auto;
+    margin: var(--sh-pic-top) 0 0;
+  }
+  .panel > .plates .plates-frame { height: auto; }
+  .panel > .plates .plates-figure:first-child { margin-top: 0; }
+
+  /* ---- Close ---- */
+
+  /* Shown only to a keyboard: top left, on the line of the three bars, which
+     keep the right. Drawn as they are, as the negative of what passes under. */
+  .panel:has(> .sheet, > .plates) > .panel-close {
+    position: fixed;
+    top: calc(20 * var(--p));
+    left: var(--phone-pad);
+    right: auto;
+    margin: 0;
+    translate: none;
+    font-size: calc(20 * var(--p));
+    line-height: calc(20 * var(--p));
+    font-weight: 400;
+    letter-spacing: 0;
+    color: rgb(219, 218, 215);
+    mix-blend-mode: difference;
+  }
+  /* It is only ever seen with the focus on it, so that is not its dimmed state. */
+  .panel:has(> .sheet, > .plates) > .panel-close:focus-visible { opacity: 1; }
+  .panel:has(> .sheet, > .plates) > .panel-close:not(:focus-visible) {
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}

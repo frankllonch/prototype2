@@ -1,7 +1,7 @@
-import { html, join, type Html } from './html.ts';
+import { html, join, raw, type Html } from './html.ts';
 import { responsiveImage } from './image.ts';
 import type { ProjectImage } from '../content/types.ts';
-import { SHOW_GROUPS, placeOf, type Show, type ShowGroup } from '../content/exhibitions-list.ts';
+import { PHONE_MERGED, SHOW_GROUPS, kindOf, phoneOrder, placeOf, type Show, type ShowGroup } from '../content/exhibitions-list.ts';
 
 /**
  * The exhibitions index, after the designer's layout: one line per show — what it
@@ -15,11 +15,18 @@ import { SHOW_GROUPS, placeOf, type Show, type ShowGroup } from '../content/exhi
  * (`content/sections.ts`), never retyped, so a correction at the source carries
  * through. A show whose dates could not be read simply shows none; a wrong date
  * on a gallery's page is worse than an absent one.
+ *
+ * The phone sheet is a different list from the same rows: the solo and the
+ * group shows as one run by year, with no heading over them. Nothing is
+ * rendered twice for it. Every row and every heading that still shows carries
+ * its place in that list as `--phone-order` (`phoneOrder`), and the phone
+ * rules lay the rows out by it; the desktop never reads it.
  */
 export function exhibitionList(shows: readonly Show[], covers: ReadonlyMap<string, ProjectImage>): Html {
+  const order = phoneOrder(shows);
   return html`<div class="xlist exh-list">
     <h2 class="sr-only">Exhibitions</h2>
-    ${join(SHOW_GROUPS.map((name) => group(name, shows.filter((s) => s.group === name), covers)))}
+    ${join(SHOW_GROUPS.map((name) => group(name, shows.filter((s) => s.group === name), covers, order)))}
   </div>`;
 }
 
@@ -27,13 +34,24 @@ export function exhibitionList(shows: readonly Show[], covers: ReadonlyMap<strin
  * A group of the sheet's four, named once at the left with its shows beside
  * it — the same plate the commissioned index uses. A group with nothing in it
  * renders nothing rather than an empty heading.
+ *
+ * On the phone a merged group (`data-phone="merged"`) loses its heading to the
+ * eye, since its rows no longer stand together; the others keep theirs, placed
+ * just ahead of their first row.
  */
-function group(name: ShowGroup, shows: readonly Show[], covers: ReadonlyMap<string, ProjectImage>): Html {
+function group(
+  name: ShowGroup,
+  shows: readonly Show[],
+  covers: ReadonlyMap<string, ProjectImage>,
+  order: ReadonlyMap<Show, number>,
+): Html {
   if (!shows.length) return html``;
-  return html`<section class="xgroup" data-group="${name}">
-    <h2 class="xgroup-name">${name}</h2>
+  const merged = PHONE_MERGED.includes(name);
+  const first = Math.min(...shows.map((s) => order.get(s) ?? 0));
+  return html`<section class="xgroup" data-group="${name}"${merged ? raw(' data-phone="merged"') : ''}>
+    <h2 class="xgroup-name"${merged ? '' : raw(` style="--phone-order:${first}"`)}>${name}</h2>
     <div class="xrows">
-      ${join(shows.map((s) => row(s, s.slug ? covers.get(s.slug) : undefined)))}
+      ${join(shows.map((s) => row(s, order.get(s) ?? 0, s.slug ? covers.get(s.slug) : undefined)))}
     </div>
   </section>`;
 }
@@ -53,13 +71,17 @@ function group(name: ShowGroup, shows: readonly Show[], covers: ReadonlyMap<stri
  * label replaces the whole subtree, so what a sighted reader sees in its own
  * column was never announced.
  */
-function row(s: Show, cover?: ProjectImage): Html {
-  // The group above already says what kind of show it was.
+function row(s: Show, order: number, cover?: ProjectImage): Html {
+  // The group above already says what kind of show it was — on the desktop.
+  // The phone has no group above, so the kind (and the "at" after it) is in
+  // the row for the phone rules to show and everything wider to leave hidden.
   const place = placeOf(s.venue);
+  const lead = kindOf(s.venue);
   const inner = html`<span class="exh-name">
       <span class="exh-title">${s.title}</span>
       ${s.note ? html`<span class="exh-note">${s.note}</span>` : ''}
-      ${place ? html`<span class="exh-venue">${place}</span>` : ''}
+      ${lead ? html`<span class="exh-kind">${lead.kind}</span>` : ''}
+      ${place ? html`<span class="exh-venue">${lead?.at ? html`<span class="exh-at">at </span>` : ''}${place}</span>` : ''}
     </span>
     <span class="exh-plate" aria-hidden="true">
       ${cover ? responsiveImage({ image: cover, sizes: '(max-width: 899px) 30vw, 13vw', alt: '' }) : ''}
@@ -70,6 +92,6 @@ function row(s: Show, cover?: ProjectImage): Html {
     </span>`;
 
   return s.slug
-    ? html`<a class="xrow hrow" href="#exhibition-${s.slug}" data-panel-open="exhibition-${s.slug}">${inner}</a>`
-    : html`<div class="xrow hrow">${inner}</div>`;
+    ? html`<a class="xrow hrow" href="#exhibition-${s.slug}" data-panel-open="exhibition-${s.slug}" style="--phone-order:${order}">${inner}</a>`
+    : html`<div class="xrow hrow" style="--phone-order:${order}">${inner}</div>`;
 }

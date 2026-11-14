@@ -1,4 +1,4 @@
-import { reduceMotion } from './env.ts';
+import { phone, reduceMotion } from './env.ts';
 
 /**
  * The other hover: the letters under the pointer churn, and the rest of the
@@ -52,6 +52,9 @@ const RADIUS = 30;
 const EDGE = 0.55;
 
 export function initScramble(): void {
+  // Not on a phone, for the roll's reasons (client/text-roll.ts): nothing
+  // hovers there, and a letter boxed on its own stops kerning.
+  if (phone.matches) return;
   const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' });
 
   for (const root of document.querySelectorAll<HTMLElement>('[data-roll]')) {

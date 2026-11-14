@@ -30,6 +30,12 @@ export interface SheetProps {
  * folds into one line across the top and the photograph is put away until the
  * button is pressed again.
  *
+ * On a phone the same markup is a page that scrolls from top to bottom, with
+ * no button and no arrows: the stylesheet takes the text's and the
+ * photographs' boxes apart and puts each paragraph and picture where the
+ * phone sheets draw it (the foot of 07-sheet.css). Nothing here changes for
+ * that; the order below stays the order it is read out in.
+ *
  * The markup reuses `data-reader`, `data-figures`, `.reader-figure`,
  * `data-figure-step` and `data-expand`, which is what `client/figures.ts`
  * already drives — the arrows, the arrow keys and the widening all come from

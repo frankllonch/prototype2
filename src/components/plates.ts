@@ -1,5 +1,6 @@
 import { html, join, raw, type Html } from './html.ts';
 import { responsiveImage } from './image.ts';
+import { wide } from './sheet.ts';
 import type { ProjectImage } from '../content/types.ts';
 import { placeOf, type Show } from '../content/exhibitions-list.ts';
 
@@ -25,6 +26,11 @@ import { placeOf, type Show } from '../content/exhibitions-list.ts';
  * The markup reuses `data-reader`, `data-figures`, `.reader-figure` and
  * `data-figure-step`, which `client/figures.ts` already drives — so the
  * arrows and the arrow keys come from there, as on every other detail.
+ *
+ * A landscape is marked `is-wide`, by the same test the other sheet makes.
+ * Nothing on a desktop reads it: there every photograph is fitted to the one
+ * box. On a phone the photographs stand in a column, and a landscape takes
+ * its width where a portrait is set narrower (07-sheet.css).
  */
 export function platesBody(show: Show, images: readonly ProjectImage[]): Html {
   // As on the index: the kind of show is the group, not the location.
@@ -65,7 +71,7 @@ export function plates({ title, place, when }: PlatesHead, images: readonly Proj
       <div class="plates-frame">
         ${join(
           images.map(
-            (image, i) => html`<figure class="reader-figure plates-figure${i === 0 ? ' is-current' : ''}">
+            (image, i) => html`<figure class="reader-figure plates-figure${wide(image) ? ' is-wide' : ''}${i === 0 ? ' is-current' : ''}">
               ${responsiveImage({ image, sizes: '(max-width: 899px) 92vw, 57vw', priority: i === 0 })}
             </figure>`,
           ),

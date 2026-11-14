@@ -1,0 +1,158 @@
+/*
+ * The phone: the unit everything on it is measured in, and its bar.
+ *
+ * Last of the numbered parts on purpose. The bar's desktop rules are spread
+ * over the base sheet and What's Color's, some of them heavier than they look
+ * (the film's three states, the block of colour on the current page), and a
+ * phone rule that came before any of them would lose to it on order alone.
+ *
+ * The designer's phone sheets are 375 wide, and every figure in the phone
+ * rules across the site is a measurement off those sheets, written as so many
+ * of `--p`: one unit of that frame. On a 375 phone it is one pixel, on a wider
+ * phone the whole sheet grows with the screen, as the desktop's does with its
+ * 1920 — up to `--phone-frame-max`, past which it stops growing so that a
+ * phone on its side or a small tablet is not set in 90px type.
+ *
+ * The phone layout is everything below 900px wide: `(max-width: 899px)` here
+ * and in each page's own sheet, `phone` in client/env.ts for the scripts.
+ */
+.menu-toggle { display: none; }
+
+@media (max-width: 899px) {
+  :root {
+    --phone-frame-max: 480px;
+    --p: calc(min(100vw, var(--phone-frame-max)) / 375);
+    /* The page margin of the phone sheets: 20 either side, content 335 wide. */
+    --phone-pad: calc(20 * var(--p));
+    /* What a page with no sheet of its own clears at the top: the three bars
+       end 37 down, and 20 under them. Every drawn page sets its own. */
+    --bar: calc(57 * var(--p));
+  }
+
+  /*
+   * About is not on the phone unit. Its phone layout was approved as it stood,
+   * measured from the old two-line bar and the desktop's own clamps, so the
+   * figures it reads off the root are held here at what they were. Nothing
+   * else on the phone depends on them any more.
+   */
+  .about { --bar: 8rem; }
+  .about-close { --pad: clamp(1.25rem, 3.5vw, 3rem); --type: clamp(1rem, 2.0833vw, 3.4rem); --lead: 1.25; }
+  .about-cue { --cue-stroke: 4.5; }
+
+  /* ------------------------------------------------ the hamburger */
+  .menu-toggle {
+    display: block;
+    position: fixed; z-index: 96;
+    top: calc(20 * var(--p)); right: calc(20 * var(--p));
+    width: calc(27 * var(--p)); height: calc(17 * var(--p));
+    /* three bars 27 x 3 at 0 / 7 / 14 */
+    background:
+      linear-gradient(currentColor, currentColor) 0 0 / 100% calc(3 * var(--p)) no-repeat,
+      linear-gradient(currentColor, currentColor) 0 calc(7 * var(--p)) / 100% calc(3 * var(--p)) no-repeat,
+      linear-gradient(currentColor, currentColor) 0 calc(14 * var(--p)) / 100% calc(3 * var(--p)) no-repeat;
+    /* The negative of what is under it, as the desktop bar is: 255 less the
+       ink (36, 37, 40), so that over paper it comes out as the ink itself. */
+    color: rgb(219, 218, 215);
+    mix-blend-mode: difference;
+    -webkit-tap-highlight-color: transparent;
+    transition: opacity 0.35s var(--ease), visibility 0s;
+  }
+  /* 44 x 44 to press, without moving the bars */
+  .menu-toggle::before { content: ''; position: absolute; inset: calc(-13.5 * var(--p)) calc(-8.5 * var(--p)); }
+  /* The overlays that keep a Close of their own in this corner. */
+  body:has(.about.is-open) .menu-toggle,
+  body:has(.lightbox.is-open) .menu-toggle,
+  body:has(.inq.is-open) .menu-toggle,
+  body:has(.wc-book-view.is-open) .menu-toggle { opacity: 0; visibility: hidden; transition: opacity 0.35s var(--ease), visibility 0s linear 0.35s; }
+  html:not(.js) .menu-toggle { display: none; }
+
+  /* ------------------------------------- the bar is the menu screen */
+  .top {
+    --bar-ink: var(--ink);
+    inset: 0; z-index: 95;
+    display: block;
+    justify-items: start;                /* Chromium honours this on blocks too */
+    gap: 0;
+    padding: calc(21 * var(--p)) calc(20 * var(--p)) calc(40 * var(--p));
+    background: var(--paper);
+    mix-blend-mode: normal;
+    overflow: hidden auto; overscroll-behavior: contain;
+    pointer-events: auto;
+    visibility: hidden; opacity: 0;
+    transition: opacity 0.35s var(--ease), visibility 0s linear 0.35s;
+  }
+  /* The start page's own first screen stands under About and the panels;
+     raised by the hamburger it stands over everything. */
+  html.is-start .top { z-index: 50; }
+  html.is-menu-open .top, html.is-start .top { visibility: visible; opacity: 1; transition-delay: 0s; }
+  html.is-menu-open body, html.is-start body { overflow: hidden; }
+  html.is-menu-open .scroll-thumb, html.is-start .scroll-thumb { visibility: hidden; }
+  /* Leaving for another page: the words go, the paper stays for the next page's own fade. */
+  html.is-leaving:not(.is-menu-held) .top > * { opacity: 0; transition: opacity 0.3s var(--ease); }
+
+  /* Rules elsewhere that take the bar away outright. */
+/* A work on its own page is drawn with no bar at all on the phone sheet
+     either: it is put away by touching the ground around it (client/paging.ts). */
+  .is-detail .menu-toggle { display: none; }
+  html.is-menu-open body:has(.panel.is-open) .top { opacity: 1; pointer-events: auto; }   /* 02-overlays.css:730 */
+
+  /* The film's three-phase bar stands down: only what those rules set. */
+  body.has-film .top,
+  body.has-film.is-film-past .top,
+  html.wc-arriving body.has-film .top {
+    position: fixed; top: 0; height: auto; margin-top: 0;
+    padding-bottom: calc(40 * var(--p));
+  }
+  body.has-film main, body.has-film.is-film-past main { margin-top: 0; }
+  .wc-film { display: none; }
+
+  /* Without scripting the menu is the head of every page, in the flow. */
+  html:not(.js) .top,
+  html:not(.js) body.has-film .top { position: static; visibility: visible; opacity: 1; overflow: visible; }
+
+  /* ------------------------------------------------------ the words */
+  .wordmark, .top-soon, .menu a {
+    display: block;
+    font-size: calc(40 * var(--p));
+    line-height: calc(40 * var(--p));
+    letter-spacing: 0.1em;
+  }
+  /* One colour for every state: nothing on the sheet is dimmed. */
+  .top :is(.wordmark, .top-soon, .menu a):is(*, :hover, :focus-visible, [aria-current='page']) { color: var(--ink); --roll-color: var(--ink); }
+  /* The two names break after their first word because the column is 335 wide. */
+  .wordmark, .top-soon { width: calc(335 * var(--p)); white-space: normal; }
+  .wordmark { margin-bottom: calc(179 * var(--p)); }
+  .menu {
+    display: flex; flex-flow: column nowrap; align-items: flex-start; justify-content: flex-start;
+    gap: calc(27 * var(--p));
+    margin-top: calc(103 * var(--p));
+  }
+  .menu a { white-space: nowrap; order: var(--menu-phone, 0); }
+
+  /* ------------------------------- no block of colour on the phone */
+  .top [aria-current='page']:is(a, button),
+  .has-film:not(.is-film-past) .top [aria-current='page']:is(a, button),
+  html.wc-arriving body.has-film .top [aria-current='page']:is(a, button) { position: static; padding: 0; margin: 0; }
+  .top [aria-current='page']:is(a, button)::before,
+  html.wc-arriving body.has-film .top [aria-current='page']:is(a, button)::before { display: none; }
+  body.has-film .top .top-face { display: contents; clip-path: none; animation: none; }
+  body.has-film .top .top-echo { display: none; }
+}
+
+@media (max-width: 899px) and (prefers-reduced-motion: reduce) {
+  .top, .menu-toggle { transition: none; }
+}
+
+/*
+ * A screen shorter than the sheet. The menu is drawn 771 tall to the foot of
+ * its last word, which no phone shows at once, so below 811 of height the
+ * shortfall comes out of the two large gaps — under the wordmark and under
+ * What's Color? — in the proportion they stand in, and never below 40. From
+ * 811 up it is the sheet exactly. Take this block out to have the sheet's
+ * gaps at any height, and the menu scroll.
+ */
+@media (max-width: 899px) {
+  .top { --menu-short: max(0px, calc(811 * var(--p) - 100svh)); }
+  .wordmark { margin-bottom: max(calc(40 * var(--p)), calc(179 * var(--p) - 0.635 * var(--menu-short))); }
+  .menu { margin-top: max(calc(40 * var(--p)), calc(103 * var(--p) - 0.365 * var(--menu-short))); }
+}

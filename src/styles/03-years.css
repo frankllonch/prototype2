@@ -59,7 +59,8 @@
   transition: opacity var(--hover) var(--ease);
 }
 
-/* The bars are the phone's rail (below); on a wide screen the years are type. */
+/* The bars are the phone's rail (05-artwork.css); on a wide screen the years
+   are type. */
 .year-swatch { display: none; }
 
 .year-label {
@@ -123,31 +124,6 @@ html.js.stack-running .years {
   to { opacity: 1; visibility: visible; pointer-events: auto; }
 }
 
-@media (max-width: 899px) {
-  /* No room for a column beside the grid on a phone: the years lie along the
-     foot as bars, and the controls stand in one line above them. */
-  .years {
-    top: auto; bottom: 0; left: 0; right: 0;
-    margin-top: 0;
-    flex-direction: row;
-    justify-content: center;
-    align-items: flex-end;
-    gap: 3px;
-    padding: 0.6rem var(--pad);
-    font-size: 9px;
-    line-height: 1.2;
-    background: color-mix(in srgb, var(--paper) 88%, transparent);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-  }
-  .year { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; padding: 2px 0; }
-  .year-swatch { display: block; width: 13px; height: 22px; background: var(--c); transition: height 0.4s var(--ease); }
-  .year.is-current .year-swatch, .year:hover .year-swatch { height: 34px; }
-  .year-label { display: none; color: var(--ink); }
-  .year.is-current .year-label { display: block; }
-  .controls {
-    top: auto; bottom: 5.4rem; left: 0; margin-top: 0; width: 100%;
-    flex-direction: row; justify-content: center; align-items: baseline; gap: 2em;
-  }
-  .control-group { flex-direction: row; gap: 1em; }
-}
+/* On a phone the years are a bar of their colours along the foot of the
+   screen and the controls are not offered: 05-artwork.css, THE GALLERY ON A
+   PHONE. */

@@ -1,3 +1,5 @@
+import { phone } from './env.ts';
+
 /**
  * The sheet holds still and only its text moves (`components/sheet.ts`).
  *
@@ -9,6 +11,10 @@
  * The arrows, the arrow keys and the widening are `client/figures.ts`, which
  * every detail shares; this only keeps the text where it should start: at the
  * top whenever the sheet opens or the text takes the screen or gives it back.
+ *
+ * On a phone the sheet is a page and the panel is what scrolls: the text has
+ * no box of its own there (07-sheet.css), so the wheel is left alone and the
+ * keys move the panel.
  */
 export function initSheets(): void {
   const still = matchMedia('(prefers-reduced-motion: reduce)');
@@ -18,11 +24,13 @@ export function initSheets(): void {
     if (!panel || !text) continue;
 
     const top = () => { text.scrollTop = 0; };
+    /** What moves: the text in its column, or on a phone the whole page. */
+    const scroller = () => (phone.matches ? panel : text);
     panel.addEventListener('panelopen', top);
     for (const button of sheet.querySelectorAll('[data-expand]')) button.addEventListener('click', top);
 
     panel.addEventListener('wheel', (event) => {
-      if (text.contains(event.target as Node)) return;
+      if (phone.matches || text.contains(event.target as Node)) return;
       // A pinch on a trackpad arrives as a wheel with Ctrl held, as does
       // Ctrl and the wheel: both are the browser's zoom, and stay its. A
       // sideways swipe is its way back a page.
@@ -50,7 +58,7 @@ export function initSheets(): void {
       if (!panel.classList.contains('is-open')) return;
       if (event.metaKey || event.ctrlKey || event.altKey) return;
       const target = event.target as HTMLElement | null;
-      if (target && text.contains(target)) return;
+      if (target && !phone.matches && text.contains(target)) return;
       if (target?.closest('input, textarea, select, [contenteditable]')) return;
       // Space on a button presses it; on a link — Close, which has the focus
       // when the sheet opens — it does nothing, so there it scrolls.
@@ -58,13 +66,14 @@ export function initSheets(): void {
       const step = steps[event.key];
       if (!step) return;
       event.preventDefault();
-      const by = step(text.clientHeight) * (event.shiftKey && event.key === ' ' ? -1 : 1);
-      if (by === Infinity) text.scrollTop = text.scrollHeight;
-      else if (by === -Infinity) text.scrollTop = 0;
+      const moved = scroller();
+      const by = step(moved.clientHeight) * (event.shiftKey && event.key === ' ' ? -1 : 1);
+      if (by === Infinity) moved.scrollTop = moved.scrollHeight;
+      else if (by === -Infinity) moved.scrollTop = 0;
       // A held arrow repeats faster than a smooth scroll finishes, and each new
       // one would cut the last one short; lines move at once, pages glide —
       // unless the reader has asked for less motion.
-      else text.scrollBy({ top: by, behavior: Math.abs(by) > 48 && !still.matches ? 'smooth' : 'auto' });
+      else moved.scrollBy({ top: by, behavior: Math.abs(by) > 48 && !still.matches ? 'smooth' : 'auto' });
     });
   }
 }

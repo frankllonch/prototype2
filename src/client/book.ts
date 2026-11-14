@@ -89,6 +89,11 @@ export function initBook(): void {
     { capture: true },
   );
 
+  // A phone's Safari sends a tap's click on to the document only when the
+  // thing tapped answers clicks itself, which a plain veil does not; with a
+  // listener of its own the open view does, and the tap that closes it arrives.
+  view.addEventListener('click', close);
+
   document.addEventListener('keydown', (event) => {
     if (view.hidden) return;
     if (event.key === 'Escape') close();

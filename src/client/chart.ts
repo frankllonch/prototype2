@@ -1,4 +1,4 @@
-import { reduceMotion } from './env.ts';
+import { phone, reduceMotion } from './env.ts';
 import { glide } from './glide.ts';
 
 /**
@@ -39,8 +39,12 @@ export function initChart(): void {
   if (!chart) return;
 
   // No run to travel: the page is the static one the stylesheet falls back to,
-  // and every word is already standing.
-  if (reduceMotion.matches || !CSS.supports('animation-timeline: scroll()')) return;
+  // and every word is already standing. On a phone it always is — the sheet
+  // there is a page taller than the screen, and travelling a share of *that*
+  // would be scrolling the reader down a page they have not begun.
+  const written = () =>
+    !phone.matches && !reduceMotion.matches && CSS.supports('animation-timeline: scroll()');
+  if (!written()) return;
 
   const reveal = Number.parseFloat(chart.dataset.chartReveal ?? '');
   if (!Number.isFinite(reveal) || reveal <= 0) return;
@@ -59,7 +63,9 @@ export function initChart(): void {
    * the page has stopped changing shape.
    */
   const start = () => {
-    if (window.scrollY > 2) return;
+    // Asked again: this runs after `load`, and a window can have been made
+    // narrow, or a phone turned, in between.
+    if (!written() || window.scrollY > 2) return;
     const max = document.documentElement.scrollHeight - window.innerHeight;
     if (max <= 0) return;
     glide(max * reveal, TRAVEL_MS);

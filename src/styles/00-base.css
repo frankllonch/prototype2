@@ -636,11 +636,7 @@ html.is-scrolled .scroll-cue { opacity: 0; }
   .scroll-cue { bottom: 1.1rem; --cue-size: 2rem; }
 }
 
-@media (max-width: 899px) {
-  .top { grid-template-columns: 1fr; justify-items: center; gap: 0.7rem; padding: 1.2rem var(--pad) 0.9rem; }
-  .menu { flex-wrap: wrap; justify-content: center; gap: 0.35rem 1.1rem; }
-  :root { --bar: 8rem; }
-}
+/* The phone's bar is three bars and a screen of its own: 09-phone.css. */
 
 /* ------------------------------------------------------------- cursor */
 

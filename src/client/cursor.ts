@@ -1,4 +1,4 @@
-import { finePointer, reduceMotion } from './env.ts';
+import { finePointer, phone, reduceMotion } from './env.ts';
 
 /**
  * Over a painting the pointer *becomes* its name — title and year, read from
@@ -12,7 +12,9 @@ import { finePointer, reduceMotion } from './env.ts';
 export function initCursor(): void {
   const cursor = document.querySelector<HTMLElement>('[data-cursor]');
   const label = cursor?.querySelector<HTMLElement>('.cursor-label');
-  if (!cursor || !label || !finePointer.matches) return;
+  // Not below 900px either: the phone's gallery answers no pointer, even
+  // where a narrow window happens to have one.
+  if (!cursor || !label || !finePointer.matches || phone.matches) return;
 
   // Only now is it safe to take the arrow away over a tile: without this class
   // a browser that never runs the script would leave people with no pointer.

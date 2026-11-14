@@ -1,3 +1,5 @@
+import { phone } from './env.ts';
+
 /**
  * The scroll hint goes once it has been taken.
  *
@@ -14,7 +16,8 @@
  * pulled-up margin included, measured once and again on resize rather than on
  * every scroll. When the sentence is already folded flat (a link arrival, no
  * scroll-run animations, motion reduced), the page is short again and the
- * ordinary threshold is the right one.
+ * ordinary threshold is the right one. A phone has no written sentence at
+ * all, and no cue on that page either (04-whats-color.css).
  *
  * The class goes on the root rather than on the cue, so the stylesheet
  * decides what to do with it, and so a page that restores mid-document never
@@ -51,6 +54,7 @@ export function initScrollCue(): void {
   const write = document.querySelector<HTMLElement>('.wc-write');
   const writing =
     write &&
+    !phone.matches &&
     CSS.supports('animation-timeline: view()') &&
     !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (writing && write) {

@@ -40,12 +40,17 @@ interface LayoutProps {
 }
 
 /** Order and wording of the menu, after the designer's mockup. */
+/*
+ * `phone` is where the item stands on the phone's menu screen, which lists the
+ * pages the other way about: About first, Color Chart last. Only the drawing
+ * order changes there (the stylesheet's `order`); the document keeps this one.
+ */
 const MENU = [
-  { label: 'Color Chart', href: '/color-chart/' },
-  { label: 'Commissioned', href: '/commissioned/' },
-  { label: 'Exhibitions', href: '/exhibitions/' },
-  { label: 'Artwork', href: '/artwork/' },
-  { label: 'About', href: '/#about', panel: 'about' },
+  { label: 'Color Chart', href: '/color-chart/', phone: 5 },
+  { label: 'Commissioned', href: '/commissioned/', phone: 3 },
+  { label: 'Exhibitions', href: '/exhibitions/', phone: 4 },
+  { label: 'Artwork', href: '/artwork/', phone: 2 },
+  { label: 'About', href: '/#about', panel: 'about', phone: 1 },
 ] as const;
 
 /** Client modules, in boot order. Preloaded so the first interaction is instant. */
@@ -63,13 +68,20 @@ const HOVER: 'roll' | 'scramble' = 'roll';
 const CLIENT_MODULES = [
   'env', 'text-roll', 'transitions', 'controls', 'stack', 'years', 'hover-list', 'panels',
   'figures', 'lightbox', 'cursor', 'film', 'tilt', 'paging', 'views',
-  'scroll-cue', 'about', 'inquiries', 'chart', 'book', 'focus', 'hues', 'current', 'scrollbar', 'scramble', 'index',
+  'scroll-cue', 'about', 'inquiries', 'chart', 'book', 'focus', 'hues', 'current', 'scrollbar', 'scramble', 'menu', 'index',
 ] as const;
 
 /** The loading screen's five lines, set in blue on peach. */
 
+/*
+ * The button is the phone's whole bar: three bars at the top right, drawn by
+ * the stylesheet, which raise the header below as a screen of its own
+ * (`client/menu.ts`). Above 899px it is not displayed. It stands before the
+ * header so that it is reached first and the menu's links follow it.
+ */
 function topBar(path: string): Html {
-  return html`<header class="top">
+  return html`<button type="button" class="menu-toggle" data-menu-toggle aria-label="Menu" aria-expanded="false" aria-controls="site-menu"></button>
+  <header class="top" id="site-menu">
     <a class="wordmark" href="${withBase('/')}" data-roll>CLAUDIA VALSELLS</a>
     <a class="top-soon" href="${withBase('/#whats-color')}" ${path === '/' || path.startsWith('/whats-color/') ? raw('aria-current="page"') : ''} data-roll>What&rsquo;s Color?</a>
     <nav class="menu" aria-label="Primary">
@@ -79,6 +91,7 @@ function topBar(path: string): Html {
             href="${withBase(item.href)}"
             ${'panel' in item ? raw(`data-panel-open="${item.panel}"`) : ''}
             ${item.href === path ? raw('aria-current="page"') : ''}
+            style="--menu-phone: ${item.phone}"
             data-roll
           >${item.label}</a>`,
         ),
@@ -304,7 +317,7 @@ export function layout({ title, description, path, rail, controls, overlays, cue
   const fullTitle = title === 'Claudia Valsells' ? title : `${title} — Claudia Valsells`;
   const modules = CLIENT_MODULES.map((m) => withBase(`/js/${m}.js`));
   return raw(`<!doctype html>
-<html lang="en" data-hover="${HOVER}" style="${hueVars()}">
+<html lang="en" data-hover="${HOVER}"${bodyClass === 'has-film' ? ' data-start' : ''} style="${hueVars()}">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -324,11 +337,19 @@ ${modules.map((m) => `<link rel="modulepreload" href="${m}" />`).join('\n')}
 try { var nav = performance.getEntriesByType('navigation')[0];
   if (location.hash === '#whats-color' && (!nav || nav.type === 'navigate')
     && CSS.supports('animation-timeline: view()')
-    && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    && !matchMedia('(prefers-reduced-motion: reduce)').matches
+    && !matchMedia('(max-width: 899px)').matches) {
     document.documentElement.classList.add('wc-arriving', 'wc-swatch-drop');
     setTimeout(function () { document.documentElement.classList.remove('wc-arriving') }, 1500);
     setTimeout(function () { document.documentElement.classList.remove('wc-swatch-drop') }, 700);
-  } } catch (e) {}</script>
+  } } catch (e) {}
+// On a phone the start page opens on the menu, where the film is on a desktop
+// (client/menu.ts): decided here, before the first paint, so the page under
+// it is never seen.
+try { if (document.documentElement.hasAttribute('data-start')
+  && matchMedia('(max-width: 899px)').matches
+  && (location.hash === '' || location.hash === '#about'))
+  document.documentElement.classList.add('is-start') } catch (e) {}</script>
 </head>
 <body${bodyClass ? ' class="' + bodyClass + '"' : ''}>
 <div class="page-veil" aria-hidden="true"></div>

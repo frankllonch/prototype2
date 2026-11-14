@@ -121,3 +121,307 @@
 .detail-thumb:not(.is-shown):hover,
 .detail-thumb:not(.is-shown):focus-visible { opacity: 0.7; }
 .detail-thumb:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+
+/* ---------------------------------------------- one work, on a phone */
+
+/*
+ * THE WORK ON A PHONE — the numbers to change are all here.
+ *
+ * Off the designer's phone sheet, 375 wide: every figure is so many of `--p`
+ * (09-phone.css). One centred column and nothing else on the paper — the
+ * title and the medium, the size and the year, then the painting, its small
+ * pictures and its place in the archive.
+ *
+ * No bar and no corners are drawn. ARTWORK, CLOSE, PREVIOUS and NEXT stay in
+ * the page for a keyboard or a screen reader, out of sight; a touch on the
+ * empty ground closes, and a swipe across goes to the work either side
+ * (client/paging.ts).
+ *
+ *   --work-top     from the top of the screen to the title's line: 188.
+ *   --work-type    the size of every line, the counter's too: 20,
+ *   --work-lead    on lines of 25.
+ *   --work-pair    between the two lines of a pair — title and medium, size
+ *                  and year: 8.
+ *   --work-break   between the two pairs: 51.
+ *   --work-plate   from the year's line to the painting: 56.5.
+ *   --edge         how far the painting stands in from each side: 32.85,
+ *                  which leaves it 309 wide and the cut-out's own file the
+ *                  full 375, as it lies on the sheet. The sheet's painting
+ *                  measures 308 by 260; a cut-out's edge is soft, and the eye
+ *                  puts it a fraction inside the cut these figures are
+ *                  counted from. client/views.ts brings the result to whole
+ *                  pixels of the screen, so a hundredth here may do nothing
+ *                  and the next one move the painting by a pixel.
+ *   --plate-max    the most height the painting may take. An upright work
+ *                  needs about 380 to keep that full width; anything taller
+ *                  is held to this and comes out narrower.
+ *   --under-gap    from the painting's foot to the small pictures: 45.5
+ *                  from the cut, which is the sheet's 46.5 to the eye.
+ *   --thumb-h      the small pictures' height: 39.5.
+ *   --thumb-gap    between the small pictures: 7.5.
+ *   --work-count   from the small pictures to the line of "38 of 181": 48.5.
+ *                  With no small pictures it stands that far under the
+ *                  painting instead.
+ *   --work-foot    the paper left under the counter: 60.
+ *   --work-ghost   how strongly the gallery shows behind the work, 0 to 1:
+ *                  0.05, a twentieth, on the sheet. 0 leaves the paper bare.
+ */
+
+/* The gallery behind an open work is the phone's alone. */
+.detail-ghost { display: none; }
+
+@media (max-width: 899px) {
+  .detail {
+    --work-top: calc(188 * var(--p));
+    --work-type: calc(20 * var(--p));
+    --work-lead: calc(25 * var(--p));
+    --work-pair: calc(8 * var(--p));
+    --work-break: calc(51 * var(--p));
+    --work-plate: calc(56.5 * var(--p));
+    --edge: calc(32.85 * var(--p));
+    --plate-max: calc(384 * var(--p));
+    --under-gap: calc(45.5 * var(--p));
+    --thumb-h: calc(39.5 * var(--p));
+    --thumb-gap: calc(7.5 * var(--p));
+    --work-count: calc(48.5 * var(--p));
+    --work-foot: calc(60 * var(--p));
+    --work-ghost: 0.05;
+    /* Read by client/views.ts: the sheet's own width less the two margins,
+       and no caption beside the painting to share it with. */
+    --plate-room: calc(375 * var(--p) - 2 * var(--edge));
+    --caption-beside: 0;
+
+    isolation: isolate;                  /* the gallery behind stays behind */
+    display: flex;
+    flex-direction: column;
+    /* From the top, not about the middle of a tall screen as the desktop's
+       one row is: the sheet's 188 is from the top edge. */
+    justify-content: flex-start;
+    align-items: center;
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+    padding: var(--work-top) 0 var(--work-foot);
+    font-size: var(--work-type);
+    line-height: var(--work-lead);
+    letter-spacing: 0;
+  }
+
+  /*
+   * The gallery, faintly, behind the work: the dozen paintings round this
+   * one, in the two columns the phone's gallery stands in (its figures, the
+   * --wall-* further down, are shared). The sheet's own ghost is a piece of
+   * the desktop gallery pasted in, so only its strength is a measurement.
+   * Nothing in it is read out or answers a touch: a touch goes through to
+   * the ground, which closes.
+   */
+  .detail-ghost {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--wall-row) var(--wall-gutter);
+    align-content: start;
+    align-items: center;
+    padding: var(--wall-top) var(--wall-pad) 0;
+    overflow: hidden;
+    opacity: var(--work-ghost);
+    pointer-events: none;
+  }
+  .detail-ghost img { display: block; width: 100%; height: auto; }
+
+  /* The caption comes first on the sheet; in the page it follows the painting. */
+  .detail-caption {
+    order: 1;
+    position: static;
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    margin: 0;
+    padding: 0 var(--phone-pad);
+    translate: none;
+    text-align: center;
+    font-size: inherit;
+    line-height: inherit;
+  }
+  .detail-title { font-size: inherit; }
+  .detail-title + .detail-medium,
+  .detail-size + .detail-year { margin-top: var(--work-pair); }
+  .detail-facts { margin-top: var(--work-break); }
+
+  .detail-stage { order: 2; position: static; margin-top: var(--work-plate); }
+  /* Centred in the column whichever is wider, the painting or what is under it. */
+  .detail-plate { margin-inline: auto; }
+  /* Until the script has measured: the whole picture, within the margins. */
+  .detail-plate img { max-width: var(--plate-room); }
+  .detail-under { position: static; width: auto; margin-top: var(--under-gap); translate: none; }
+  /* More small pictures than the sheet is wide go on to a second row. */
+  .detail-thumbs { flex-wrap: wrap; max-width: calc(375 * var(--p) - 2 * var(--thumb-gap)); }
+  /* All at full strength on the sheet: nothing marks the one on the plate,
+     and a touch leaves no hover behind on another. */
+  .detail-thumb.is-shown,
+  .detail-thumb:not(.is-shown):hover,
+  .detail-thumb:not(.is-shown):focus-visible { opacity: 1; }
+  .detail-index,
+  .detail-index:first-child {
+    margin: var(--work-count) 0 0;
+    font-size: inherit;
+    line-height: inherit;
+  }
+  .detail-index:first-child { margin-top: calc(var(--work-count) - var(--under-gap)); }
+
+  /* Out of sight, not out of the page. */
+  .detail-back,
+  .detail-pager {
+    position: absolute;
+    top: 0; left: 0; right: auto; bottom: auto;
+    width: 1px; height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* ------------------------------------------- the gallery, on a phone */
+
+/*
+ * THE GALLERY ON A PHONE — the numbers to change are all here.
+ *
+ * No sheet was drawn for it. Two columns of paintings, each a column wide at
+ * its own shape, and the years along the foot of the screen. No pile to open
+ * it (client/stack.ts stands down below 900px), no sizes to choose, nothing
+ * that answers a pointer. In so many of `--p`, as the rest of the phone is.
+ *
+ *   --wall-top      from the top of the screen to the first row: 96, which
+ *                   puts the first painting's edge about 108 down, clear of
+ *                   the three bars.
+ *   --wall-pad      the margin either side: the phone's 20.
+ *   --wall-gutter   between the two columns: 15.
+ *   --wall-row      between one row and the next: 10. A cut-out carries its
+ *                   own paper round the painting, so the paintings stand
+ *                   further apart than this.
+ *   --wall-foot     the paper under the last row, so the years do not cover
+ *                   it: 120.
+ *
+ * The years, as the bars they already were on a phone:
+ *
+ *   --years-pad     above and below the bars: 12.
+ *   --swatch-w      a bar's width: 13.
+ *   --swatch-h      its height: 22,
+ *   --swatch-now    and the height of the year on screen: 34.
+ *   --swatch-gap    between one bar and the next: 3.
+ *   --year-type     the year written under its bar: 9,
+ *   --year-line     on a line of 11,
+ *   --year-gap      and 4 under the bar.
+ */
+@media (max-width: 899px) {
+  /* The ghost of the gallery behind an open work stands on the same grid. */
+  .grid[data-stack],
+  .detail-ghost {
+    --wall-top: calc(96 * var(--p));
+    --wall-pad: var(--phone-pad);
+    --wall-gutter: calc(15 * var(--p));
+    --wall-row: calc(10 * var(--p));
+    --wall-foot: calc(120 * var(--p));
+  }
+  .years {
+    --years-pad: calc(12 * var(--p));
+    --swatch-w: calc(13 * var(--p));
+    --swatch-h: calc(22 * var(--p));
+    --swatch-now: calc(34 * var(--p));
+    --swatch-gap: calc(3 * var(--p));
+    --year-type: calc(9 * var(--p));
+    --year-line: calc(11 * var(--p));
+    --year-gap: calc(4 * var(--p));
+  }
+
+  /* The runway the pile unfolds over: gone before the script takes it out. */
+  .hero[data-hero] { display: none; }
+
+  .grid[data-stack],
+  html.js .hero[data-hero] + .grid[data-stack] {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--wall-row) var(--wall-gutter);
+    /* A pair of different shapes stands on one middle line, as on the wall. */
+    align-items: center;
+    padding: var(--wall-top) var(--wall-pad) calc(var(--wall-foot) + env(safe-area-inset-bottom, 0px));
+  }
+  .grid[data-stack]::after { content: none; }
+  /* Every painting a column wide, whatever size it was drawn at to scale. */
+  .grid[data-stack] .tile {
+    --k: 1;
+    flex: none;
+    width: auto;
+    height: auto;
+    aspect-ratio: var(--a);
+  }
+  /* A touch leaves its hover behind: the painting just touched stays sharp. */
+  .grid[data-stack] .tile:hover img,
+  .grid[data-stack] .tile:focus-visible img { filter: none; opacity: 1; }
+
+  /* Sizes and scale mean nothing in two fixed columns, and the chevron
+     announced the pile. */
+  .controls { display: none; }
+  .years ~ .scroll-cue { display: none; }
+
+  /*
+   * The years: a bar of their colours fixed to the foot of the screen, the
+   * one on screen taller and named. Each year is a column the full height of
+   * the bar, so the finger has more than 13 by 22 to find. Nothing to wait
+   * for on a phone, so it is there from the first paint.
+   */
+  .years,
+  html.js .years {
+    top: auto; bottom: 0; left: 0; right: 0;
+    box-sizing: border-box;
+    height: calc(2 * var(--years-pad) + var(--swatch-now) + var(--year-gap) + var(--year-line) + env(safe-area-inset-bottom, 0px));
+    margin-top: 0;
+    padding: var(--years-pad) var(--phone-pad) calc(var(--years-pad) + env(safe-area-inset-bottom, 0px));
+    flex-direction: row;
+    justify-content: safe center;
+    align-items: stretch;
+    /* More years than fit run off to the side; client/years.ts keeps the
+       one on screen in view. */
+    overflow: auto hidden;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    font-size: var(--year-type);
+    line-height: var(--year-line);
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(calc(6 * var(--p)));
+    -webkit-backdrop-filter: blur(calc(6 * var(--p)));
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    animation: none;
+    transition: none;
+  }
+  .years::-webkit-scrollbar { display: none; }
+  .year {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 calc(var(--swatch-gap) / 2);
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* The bar stands on the foot of its column until its year is the one on
+     screen; then the name takes the foot and the bar stands on the name. */
+  .year-swatch {
+    display: block;
+    width: var(--swatch-w);
+    height: var(--swatch-h);
+    margin-top: auto;
+    background: var(--c);
+    transition: height 0.4s var(--ease);
+  }
+  .year.is-current .year-swatch { height: var(--swatch-now); }
+  .year-label { display: none; margin-top: var(--year-gap); color: var(--ink); }
+  .year.is-current .year-label { display: block; }
+}
+@media (max-width: 899px) and (hover: hover) {
+  .year:hover .year-swatch { height: var(--swatch-now); }
+}

@@ -1,4 +1,4 @@
-import { isPlainClick, reduceMotion } from './env.ts';
+import { isPlainClick, phone, reduceMotion } from './env.ts';
 import { glide } from './glide.ts';
 import { writtenPoint } from './write.ts';
 
@@ -56,6 +56,19 @@ function startFilm(): void {
   // Withheld entirely for reduced motion, where the stylesheet hides it and the
   // poster is the picture.
   if (!video || reduceMotion.matches) return;
+
+  /*
+   * Not on a phone, where the start page opens on the menu and the film is not
+   * shown at all. Hiding it is not enough to keep it from being fetched — a
+   * video set to autoplay loads inside a `display: none` section all the same —
+   * so its one source carries `media="(min-width: 900px)"` and a phone makes no
+   * request for it. Nothing is asked to play here; and if the window is later
+   * made wide enough to show the film, the source is read again and it starts.
+   */
+  if (phone.matches) {
+    phone.addEventListener('change', () => { if (!phone.matches) { video.load(); startFilm(); } }, { once: true });
+    return;
+  }
 
   video.muted = true;
   video.playsInline = true;
@@ -196,6 +209,10 @@ export function initFilm(): void {
   let cleared: boolean | null = null;
 
   const measure = () => {
+    // On a phone the film is not displayed, so there is nothing to cross: its
+    // boxes all measure nothing, and a line read off them would be wherever
+    // the page happened to stand. The bar is past it and it is gone, always.
+    if (phone.matches) { crossing = -1; gone = -1; return; }
     const top = window.scrollY;
     crossing = mark.getBoundingClientRect().top + top;
     gone = film.getBoundingClientRect().bottom + top;
@@ -226,6 +243,7 @@ export function initFilm(): void {
     measure();
     update();
   });
+  phone.addEventListener('change', () => { measure(); update(); });
 
   samePageLinks();
 }
@@ -256,6 +274,9 @@ function samePageLinks(): void {
       // A modified click means "open this elsewhere", and a link to another page
       // is left to be a link.
       if (!isPlainClick(event) || link.pathname !== window.location.pathname) return;
+      // On a phone these two are the menu's (client/menu.ts): the wordmark
+      // leads to the start screen and the name to the page under it.
+      if (phone.matches) return;
       event.preventDefault();
       window.history.replaceState(null, '', href);
       glide(to());
