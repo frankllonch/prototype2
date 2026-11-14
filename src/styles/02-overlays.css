@@ -28,6 +28,20 @@
   -webkit-overflow-scrolling: touch;
 }
 .panel.is-open, .about.is-open { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+/*
+ * A panel that is closing still fills the screen for the length of its fade,
+ * and took every tap meant for the page coming back under it: on a phone, the
+ * next row tapped after Back opened nothing for most of a second. The taps go
+ * with the opacity, as on the veil above. What is inside is named as well, and
+ * above its own rules, because a sheet's current photograph asks for its taps
+ * back by name (07-sheet.css). Only where the script is in charge: without it
+ * a panel is never `is-open` and stands in the page. On the phone only, where
+ * Back is how a sheet is left; the desktop keeps its fade as it was.
+ */
+@media (max-width: 899px) {
+  html.js .panel:not(.is-open), html.js .panel:not(.is-open) *,
+  html.js .about:not(.is-open), html.js .about:not(.is-open) * { pointer-events: none !important; }
+}
 /* Without scripting the panels are plain anchor targets, so they must be visible. */
 html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transform: none; }
 
