@@ -19,7 +19,10 @@ import {
 } from './pages/index.ts';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
-const DIST = path.join(ROOT, 'dist');
+// DIST_DIR sends the build somewhere else, for trying a change without
+// disturbing the dist/ a preview is being served from. The rendered images are
+// not rebuilt, so point a `media` link in that folder at dist/media.
+const DIST = process.env.DIST_DIR ? path.resolve(process.env.DIST_DIR) : path.join(ROOT, 'dist');
 const CLIENT = path.join(ROOT, 'src', 'client');
 
 let pagesWritten = 0;
@@ -91,8 +94,16 @@ async function main() {
   await writePage('commissioned', commissionedPage(commissioned));
   if (colourChart) await writePage('color-chart', colourChartPage());
 
+  // Behind an open work the phone shows the gallery, faintly: the twelve
+  // paintings round it on the gallery's two columns — its own row, the two
+  // rows above and the three below, or the nearest twelve at either end.
+  const wall = works.filter((w) => w.cover);
+  const AROUND = 12;
   for (const [i, work] of works.entries()) {
-    await writePage(`artwork/${work.slug}`, artworkDetailPage(work, works[i - 1], works[i + 1], { index: i + 1, total: works.length }));
+    const at = wall.indexOf(work);
+    const from = Math.max(0, Math.min(Math.floor(at / 2) * 2 - 4, wall.length - AROUND));
+    const around = at < 0 ? [] : wall.slice(from, from + AROUND);
+    await writePage(`artwork/${work.slug}`, artworkDetailPage(work, works[i - 1], works[i + 1], { index: i + 1, total: works.length }, around));
   }
 
   const wc = EDITIONS.map((e) => `${e.numeral}:${e.participants.length}`).join(' ');

@@ -4,7 +4,8 @@ import { stat } from 'node:fs/promises';
 import http from 'node:http';
 import path from 'node:path';
 
-const DIST = path.resolve(import.meta.dirname, '..', 'dist');
+// DIST_DIR serves another build folder (see src/build.ts).
+const DIST = process.env.DIST_DIR ? path.resolve(process.env.DIST_DIR) : path.resolve(import.meta.dirname, '..', 'dist');
 const PORT = Number(process.env.PORT ?? 4321);
 
 const TYPES: Record<string, string> = {
