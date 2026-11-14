@@ -25,12 +25,14 @@
 <link rel="modulepreload" href="/prototype2/js/scroll-cue.js" />
 <link rel="modulepreload" href="/prototype2/js/about.js" />
 <link rel="modulepreload" href="/prototype2/js/inquiries.js" />
+<link rel="modulepreload" href="/prototype2/js/chart.js" />
 <link rel="modulepreload" href="/prototype2/js/book.js" />
 <link rel="modulepreload" href="/prototype2/js/focus.js" />
 <link rel="modulepreload" href="/prototype2/js/hues.js" />
 <link rel="modulepreload" href="/prototype2/js/current.js" />
 <link rel="modulepreload" href="/prototype2/js/scrollbar.js" />
 <link rel="modulepreload" href="/prototype2/js/scramble.js" />
+<link rel="modulepreload" href="/prototype2/js/menu.js" />
 <link rel="modulepreload" href="/prototype2/js/index.js" />
 <script>document.documentElement.classList.add('js');
 // Arriving at What's Color by its link, the page is laid out at the top and
@@ -43,16 +45,33 @@
 try { var nav = performance.getEntriesByType('navigation')[0];
   if (location.hash === '#whats-color' && (!nav || nav.type === 'navigate')
     && CSS.supports('animation-timeline: view()')
-    && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    && !matchMedia('(prefers-reduced-motion: reduce)').matches
+    && !matchMedia('(max-width: 899px)').matches) {
     document.documentElement.classList.add('wc-arriving', 'wc-swatch-drop');
     setTimeout(function () { document.documentElement.classList.remove('wc-arriving') }, 1500);
     setTimeout(function () { document.documentElement.classList.remove('wc-swatch-drop') }, 700);
-  } } catch (e) {}</script>
+  } } catch (e) {}
+// On a phone the start page opens on the menu, where the film is on a desktop
+// (client/menu.ts): decided here, before the first paint, so the page under
+// it is never seen.
+try { if (document.documentElement.hasAttribute('data-start')
+  && matchMedia('(max-width: 899px)').matches
+  && (location.hash === '' || location.hash === '#about'))
+  document.documentElement.classList.add('is-start') } catch (e) {}
+// From here on the stylesheet keeps the phone's menu out of sight, and only
+// client/menu.ts can raise it. If that has not said it is there after four
+// seconds — the scripts never arrived, or one of them fell over on the way —
+// the page goes back to what it is without them: the menu at its head, in
+// the flow, and no start screen held over it. Scripts that arrive later than
+// that take the page back (client/index.ts).
+setTimeout(function () { var root = document.documentElement;
+  if (!root.hasAttribute('data-menu')) root.classList.remove('js', 'is-start') }, 4000);</script>
 </head>
-<body>
+<body class="chart-body">
 <div class="page-veil" aria-hidden="true"></div>
 <a class="skip-link" href="#main">Skip to content</a>
-<header class="top">
+<button type="button" class="menu-toggle" data-menu-toggle aria-label="Menu" aria-expanded="false" aria-controls="site-menu"></button>
+  <header class="top" id="site-menu">
     <a class="wordmark" href="/prototype2/" data-roll>CLAUDIA VALSELLS</a>
     <a class="top-soon" href="/prototype2/#whats-color"  data-roll>What&rsquo;s Color?</a>
     <nav class="menu" aria-label="Primary">
@@ -60,32 +79,38 @@ try { var nav = performance.getEntriesByType('navigation')[0];
             href="/prototype2/color-chart/"
             
             aria-current="page"
+            style="--menu-phone: 5"
             data-roll
           >Color Chart</a><a
             href="/prototype2/commissioned/"
             
             
+            style="--menu-phone: 3"
             data-roll
           >Commissioned</a><a
             href="/prototype2/exhibitions/"
             
             
+            style="--menu-phone: 4"
             data-roll
           >Exhibitions</a><a
             href="/prototype2/artwork/"
             
             
+            style="--menu-phone: 2"
             data-roll
           >Artwork</a><a
             href="/prototype2/#about"
             data-panel-open="about"
             
+            style="--menu-phone: 1"
             data-roll
           >About</a>
     </nav>
   </header>
 
-<main id="main"><div class="chart">
+<main id="main"><div class="chart" data-chart-reveal="0.1303" data-chart-written="0.8">
+  <div class="chart-page">
     <!--
       The bar names the page, so the heading would be the same words twice. It
       is here for the document's structure and for anything reading the page
@@ -94,8 +119,272 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <h1 class="sr-only">Color Chart</h1>
 
     <div class="chart-statement">
-      <p>Colour has always been my inspiration:<br />a source of knowledge, a way of life!</p><p>Because of my devotion to colour, 20 years ago, as a colorist specializing in interior design and architecture, I selected, gathered, and synthesized the colors I considered fundamental for these fields and made a colour chart for their reference.</p><p>Few years ago, I decided to update that colour chart and want to share it, this time, as a colour artist, because I believe it all to be fruit of my artistic and personal research.</p>
-    </div>
+    <p><span
+      class="chart-word"
+      style="animation-range: 0.90% 1.80%"
+    >Color</span> <span
+      class="chart-word"
+      style="animation-range: 1.80% 2.70%"
+    >has</span> <span
+      class="chart-word"
+      style="animation-range: 2.70% 3.60%"
+    >always</span> <span
+      class="chart-word"
+      style="animation-range: 3.60% 4.49%"
+    >been</span> <span
+      class="chart-word"
+      style="animation-range: 4.49% 5.39%"
+    >my</span> <span
+      class="chart-word"
+      style="animation-range: 5.39% 6.29%"
+    >inspiration:</span><br /><span
+      class="chart-word"
+      style="animation-range: 6.29% 7.19%"
+    >a</span> <span
+      class="chart-word"
+      style="animation-range: 7.19% 8.09%"
+    >source</span> <span
+      class="chart-word"
+      style="animation-range: 8.09% 8.99%"
+    >of</span> <span
+      class="chart-word"
+      style="animation-range: 8.99% 9.89%"
+    >knowledge,</span> <span
+      class="chart-word"
+      style="animation-range: 9.89% 10.79%"
+    >a</span> <span
+      class="chart-word"
+      style="animation-range: 10.79% 11.69%"
+    >way</span> <span
+      class="chart-word"
+      style="animation-range: 11.69% 12.58%"
+    >of</span> <span
+      class="chart-word"
+      style="animation-range: 12.58% 13.48%"
+    >life!</span></p><p><span
+      class="chart-word"
+      style="animation-range: 13.48% 14.38%"
+    >Because</span> <span
+      class="chart-word"
+      style="animation-range: 14.38% 15.28%"
+    >of</span> <span
+      class="chart-word"
+      style="animation-range: 15.28% 16.18%"
+    >my</span> <span
+      class="chart-word"
+      style="animation-range: 16.18% 17.08%"
+    >devotion</span> <span
+      class="chart-word"
+      style="animation-range: 17.08% 17.98%"
+    >to</span> <span
+      class="chart-word"
+      style="animation-range: 17.98% 18.88%"
+    >color,</span> <span
+      class="chart-word"
+      style="animation-range: 18.88% 19.78%"
+    >20</span> <span
+      class="chart-word"
+      style="animation-range: 19.78% 20.67%"
+    >years</span> <span
+      class="chart-word"
+      style="animation-range: 20.67% 21.57%"
+    >ago,</span> <span
+      class="chart-word"
+      style="animation-range: 21.57% 22.47%"
+    >as</span> <span
+      class="chart-word"
+      style="animation-range: 22.47% 23.37%"
+    >a</span> <span
+      class="chart-word"
+      style="animation-range: 23.37% 24.27%"
+    >colorist</span> <span
+      class="chart-word"
+      style="animation-range: 24.27% 25.17%"
+    >specializing</span> <span
+      class="chart-word"
+      style="animation-range: 25.17% 26.07%"
+    >in</span> <span
+      class="chart-word"
+      style="animation-range: 26.07% 26.97%"
+    >interior</span> <span
+      class="chart-word"
+      style="animation-range: 26.97% 27.87%"
+    >design</span> <span
+      class="chart-word"
+      style="animation-range: 27.87% 28.76%"
+    >and</span> <span
+      class="chart-word"
+      style="animation-range: 28.76% 29.66%"
+    >architecture,</span> <span
+      class="chart-word"
+      style="animation-range: 29.66% 30.56%"
+    >I</span> <span
+      class="chart-word"
+      style="animation-range: 30.56% 31.46%"
+    >selected,</span> <span
+      class="chart-word"
+      style="animation-range: 31.46% 32.36%"
+    >gathered,</span> <span
+      class="chart-word"
+      style="animation-range: 32.36% 33.26%"
+    >and</span> <span
+      class="chart-word"
+      style="animation-range: 33.26% 34.16%"
+    >synthesized</span> <span
+      class="chart-word"
+      style="animation-range: 34.16% 35.06%"
+    >the</span> <span
+      class="chart-word"
+      style="animation-range: 35.06% 35.96%"
+    >colors</span> <span
+      class="chart-word"
+      style="animation-range: 35.96% 36.85%"
+    >I</span> <span
+      class="chart-word"
+      style="animation-range: 36.85% 37.75%"
+    >considered</span> <span
+      class="chart-word"
+      style="animation-range: 37.75% 38.65%"
+    >fundamental</span> <span
+      class="chart-word"
+      style="animation-range: 38.65% 39.55%"
+    >for</span> <span
+      class="chart-word"
+      style="animation-range: 39.55% 40.45%"
+    >these</span> <span
+      class="chart-word"
+      style="animation-range: 40.45% 41.35%"
+    >fields</span> <span
+      class="chart-word"
+      style="animation-range: 41.35% 42.25%"
+    >and</span> <span
+      class="chart-word"
+      style="animation-range: 42.25% 43.15%"
+    >made</span> <span
+      class="chart-word"
+      style="animation-range: 43.15% 44.04%"
+    >a</span> <span
+      class="chart-word"
+      style="animation-range: 44.04% 44.94%"
+    >color</span> <span
+      class="chart-word"
+      style="animation-range: 44.94% 45.84%"
+    >chart</span> <span
+      class="chart-word"
+      style="animation-range: 45.84% 46.74%"
+    >for</span> <span
+      class="chart-word"
+      style="animation-range: 46.74% 47.64%"
+    >their</span> <span
+      class="chart-word"
+      style="animation-range: 47.64% 48.54%"
+    >reference.</span></p><p><span
+      class="chart-word"
+      style="animation-range: 48.54% 49.44%"
+    >Few</span> <span
+      class="chart-word"
+      style="animation-range: 49.44% 50.34%"
+    >years</span> <span
+      class="chart-word"
+      style="animation-range: 50.34% 51.24%"
+    >ago,</span> <span
+      class="chart-word"
+      style="animation-range: 51.24% 52.13%"
+    >I</span> <span
+      class="chart-word"
+      style="animation-range: 52.13% 53.03%"
+    >decided</span> <span
+      class="chart-word"
+      style="animation-range: 53.03% 53.93%"
+    >to</span> <span
+      class="chart-word"
+      style="animation-range: 53.93% 54.83%"
+    >update</span> <span
+      class="chart-word"
+      style="animation-range: 54.83% 55.73%"
+    >that</span> <span
+      class="chart-word"
+      style="animation-range: 55.73% 56.63%"
+    >color</span> <span
+      class="chart-word"
+      style="animation-range: 56.63% 57.53%"
+    >chart</span> <span
+      class="chart-word"
+      style="animation-range: 57.53% 58.43%"
+    >and</span> <span
+      class="chart-word"
+      style="animation-range: 58.43% 59.33%"
+    >want</span> <span
+      class="chart-word"
+      style="animation-range: 59.33% 60.22%"
+    >to</span> <span
+      class="chart-word"
+      style="animation-range: 60.22% 61.12%"
+    >share</span> <span
+      class="chart-word"
+      style="animation-range: 61.12% 62.02%"
+    >it,</span> <span
+      class="chart-word"
+      style="animation-range: 62.02% 62.92%"
+    >this</span> <span
+      class="chart-word"
+      style="animation-range: 62.92% 63.82%"
+    >time,</span> <span
+      class="chart-word"
+      style="animation-range: 63.82% 64.72%"
+    >as</span> <span
+      class="chart-word"
+      style="animation-range: 64.72% 65.62%"
+    >a</span> <span
+      class="chart-word"
+      style="animation-range: 65.62% 66.52%"
+    >color</span> <span
+      class="chart-word"
+      style="animation-range: 66.52% 67.42%"
+    >artist,</span> <span
+      class="chart-word"
+      style="animation-range: 67.42% 68.31%"
+    >because</span> <span
+      class="chart-word"
+      style="animation-range: 68.31% 69.21%"
+    >I</span> <span
+      class="chart-word"
+      style="animation-range: 69.21% 70.11%"
+    >believe</span> <span
+      class="chart-word"
+      style="animation-range: 70.11% 71.01%"
+    >it</span> <span
+      class="chart-word"
+      style="animation-range: 71.01% 71.91%"
+    >all</span> <span
+      class="chart-word"
+      style="animation-range: 71.91% 72.81%"
+    >to</span> <span
+      class="chart-word"
+      style="animation-range: 72.81% 73.71%"
+    >be</span> <span
+      class="chart-word"
+      style="animation-range: 73.71% 74.61%"
+    >fruit</span> <span
+      class="chart-word"
+      style="animation-range: 74.61% 75.51%"
+    >of</span> <span
+      class="chart-word"
+      style="animation-range: 75.51% 76.40%"
+    >my</span> <span
+      class="chart-word"
+      style="animation-range: 76.40% 77.30%"
+    >artistic</span> <span
+      class="chart-word"
+      style="animation-range: 77.30% 78.20%"
+    >and</span> <span
+      class="chart-word"
+      style="animation-range: 78.20% 79.10%"
+    >personal</span> <span
+      class="chart-word"
+      style="animation-range: 79.10% 80.00%"
+    >research.</span></p>
+  </div>
 
     <!--
       An anchor rather than a button, and to a real section further down the
@@ -105,7 +394,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
       exhibition are plain anchors too — so nothing here is reachable only by
       way of a script.
     -->
-    <a class="chart-order" href="#inquiries" data-inquiries-open>
+    <a class="chart-order chart-in" style="animation-range: 80.00% 88.00%" href="#inquiries" data-inquiries-open>
       Order yours
       <!--
         The arrow is drawn rather than typed. An upward-right arrow is a
@@ -121,11 +410,27 @@ try { var nav = performance.getEntriesByType('navigation')[0];
       <svg class="chart-arrow" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
         <path d="M2.4 9.6 9.4 2.6M4.3 2.6h5.1v5.1" fill="none" stroke="currentColor" stroke-width="1.2" />
       </svg>
+      <!--
+        And the phone sheet's arrow, which is not the one above made smaller:
+        its arms run the full size of its box and its line is 3 of a box 22.5
+        by 22, drawn here in the sheet's own units from the top left of the
+        ink. The stylesheet shows one or the other (06-colour-chart.css); this
+        one does not turn, there being no hover on a phone to turn it.
+      -->
+      <svg class="chart-arrow-phone" viewBox="0 0 22.5 22" aria-hidden="true" focusable="false">
+        <path d="M1.5 1.5H21V22M1.2 20.97 20.6 1.57" fill="none" stroke="currentColor" stroke-width="3" />
+      </svg>
     </a>
 
-    <p class="chart-price">Cost: <b>60,50€</b></p>
+    <p class="chart-price chart-in" style="animation-range: 84.00% 92.00%">Cost: <b>60,50€</b></p>
 
-    <p class="chart-thanks">Thanks to everyone!</p>
+    <!--
+      Her thanks, and a way of seeing who they are to: the photographs people
+      have sent her of the chart in use. An anchor to a real panel, as About
+      and every exhibition are, so without scripting it walks to them instead
+      of opening them over the page.
+    -->
+    <p class="chart-thanks chart-in" style="animation-range: 88.00% 96.00%"><a href="#chart-photographs" data-panel-open="chart-photographs">Thanks to everyone!</a></p>
 
     <!--
       The site's own line, not the chart's: the same one stands at the foot of
@@ -133,9 +438,170 @@ try { var nav = performance.getEntriesByType('navigation')[0];
       this is the only page of the new set that is built; when the others land
       it belongs in the layout, once, for all of them.
     -->
-    <footer class="chart-footer"><b>Claudia Valsells</b> &copy; All Rights Reserved</footer>
-  </div></main>
-<section class="inq" id="inquiries" data-inquiries aria-labelledby="inq-title">
+    <footer class="chart-footer chart-in" style="animation-range: 92.00% 100.00%"><b>Claudia Valsells</b> &copy; All Rights Reserved</footer>
+  </div>
+
+  <!--
+    And the run the writing is divided over: a strip of nothing behind the
+    page, there to be scrolled through. It carries no text and nothing can be
+    done with it, so it is out of the reading order entirely; it is in the
+    markup rather than made by script because the page has to be able to be
+    read by the scroll on its first paint, before anything has run.
+  -->
+  <div class="chart-runway" aria-hidden="true"></div>
+</div></main>
+<div class="panels">
+    <article class="panel" id="chart-photographs" data-panel>
+    <a class="panel-close" href="#" data-panel-close>Close</a>
+    <div class="plates" data-reader>
+    <header class="plates-head">
+      <h2 class="sheet-title">Thanks to everyone!</h2>
+      
+      
+    </header>
+
+    <div class="plates-stage" data-figures>
+      <div class="plates-frame">
+        <figure class="reader-figure plates-figure is-current">
+              <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/372fb344c1f2e244-400.avif 400w, /prototype2/media/372fb344c1f2e244-638.avif 638w" sizes="(max-width: 899px) 92vw, 57vw" />
+      <source type="image/webp" srcset="/prototype2/media/372fb344c1f2e244-400.webp 400w, /prototype2/media/372fb344c1f2e244-638.webp 638w" sizes="(max-width: 899px) 92vw, 57vw" />
+      <img
+        src="/prototype2/media/372fb344c1f2e244-638.jpg"
+        alt="Claudia Valsells’ artist colour chart in use"
+        width="638"
+        height="631"
+        style="aspect-ratio:638 / 631"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </picture>
+            </figure><figure class="reader-figure plates-figure">
+              <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/b48aef56cb053b83-400.avif 400w, /prototype2/media/b48aef56cb053b83-591.avif 591w" sizes="(max-width: 899px) 92vw, 57vw" />
+      <source type="image/webp" srcset="/prototype2/media/b48aef56cb053b83-400.webp 400w, /prototype2/media/b48aef56cb053b83-591.webp 591w" sizes="(max-width: 899px) 92vw, 57vw" />
+      <img
+        src="/prototype2/media/b48aef56cb053b83-591.jpg"
+        alt="Claudia Valsells’ artist colour chart in use"
+        width="591"
+        height="788"
+        style="aspect-ratio:591 / 788"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+            </figure><figure class="reader-figure plates-figure">
+              <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/9c3370caf20fb57d-400.avif 400w, /prototype2/media/9c3370caf20fb57d-597.avif 597w" sizes="(max-width: 899px) 92vw, 57vw" />
+      <source type="image/webp" srcset="/prototype2/media/9c3370caf20fb57d-400.webp 400w, /prototype2/media/9c3370caf20fb57d-597.webp 597w" sizes="(max-width: 899px) 92vw, 57vw" />
+      <img
+        src="/prototype2/media/9c3370caf20fb57d-597.jpg"
+        alt="Claudia Valsells’ artist colour chart in use"
+        width="597"
+        height="796"
+        style="aspect-ratio:597 / 796"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+            </figure><figure class="reader-figure plates-figure is-wide">
+              <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/6035b446ac06c295-400.avif 400w, /prototype2/media/6035b446ac06c295-638.avif 638w" sizes="(max-width: 899px) 92vw, 57vw" />
+      <source type="image/webp" srcset="/prototype2/media/6035b446ac06c295-400.webp 400w, /prototype2/media/6035b446ac06c295-638.webp 638w" sizes="(max-width: 899px) 92vw, 57vw" />
+      <img
+        src="/prototype2/media/6035b446ac06c295-638.jpg"
+        alt="Claudia Valsells’ artist colour chart in use"
+        width="638"
+        height="510"
+        style="aspect-ratio:638 / 510"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+            </figure><figure class="reader-figure plates-figure">
+              <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/dea4fedb8ce88727-400.avif 400w, /prototype2/media/dea4fedb8ce88727-637.avif 637w" sizes="(max-width: 899px) 92vw, 57vw" />
+      <source type="image/webp" srcset="/prototype2/media/dea4fedb8ce88727-400.webp 400w, /prototype2/media/dea4fedb8ce88727-637.webp 637w" sizes="(max-width: 899px) 92vw, 57vw" />
+      <img
+        src="/prototype2/media/dea4fedb8ce88727-637.jpg"
+        alt="Claudia Valsells’ artist colour chart in use"
+        width="637"
+        height="796"
+        style="aspect-ratio:637 / 796"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+            </figure><figure class="reader-figure plates-figure">
+              <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/44964273ffd3710b-400.avif 400w, /prototype2/media/44964273ffd3710b-597.avif 597w" sizes="(max-width: 899px) 92vw, 57vw" />
+      <source type="image/webp" srcset="/prototype2/media/44964273ffd3710b-400.webp 400w, /prototype2/media/44964273ffd3710b-597.webp 597w" sizes="(max-width: 899px) 92vw, 57vw" />
+      <img
+        src="/prototype2/media/44964273ffd3710b-597.jpg"
+        alt="Claudia Valsells’ artist colour chart in use"
+        width="597"
+        height="796"
+        style="aspect-ratio:597 / 796"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+            </figure><figure class="reader-figure plates-figure">
+              <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/8a431570bf012cb5-400.avif 400w, /prototype2/media/8a431570bf012cb5-637.avif 637w" sizes="(max-width: 899px) 92vw, 57vw" />
+      <source type="image/webp" srcset="/prototype2/media/8a431570bf012cb5-400.webp 400w, /prototype2/media/8a431570bf012cb5-637.webp 637w" sizes="(max-width: 899px) 92vw, 57vw" />
+      <img
+        src="/prototype2/media/8a431570bf012cb5-637.jpg"
+        alt="Claudia Valsells’ artist colour chart in use"
+        width="637"
+        height="796"
+        style="aspect-ratio:637 / 796"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+            </figure><figure class="reader-figure plates-figure">
+              <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/dab2e9ebc96aec45-400.avif 400w, /prototype2/media/dab2e9ebc96aec45-597.avif 597w" sizes="(max-width: 899px) 92vw, 57vw" />
+      <source type="image/webp" srcset="/prototype2/media/dab2e9ebc96aec45-400.webp 400w, /prototype2/media/dab2e9ebc96aec45-597.webp 597w" sizes="(max-width: 899px) 92vw, 57vw" />
+      <img
+        src="/prototype2/media/dab2e9ebc96aec45-597.jpg"
+        alt="Claudia Valsells’ artist colour chart in use"
+        width="597"
+        height="796"
+        style="aspect-ratio:597 / 796"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+            </figure><figure class="reader-figure plates-figure">
+              <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/f7a48149496fee9f-400.avif 400w, /prototype2/media/f7a48149496fee9f-638.avif 638w" sizes="(max-width: 899px) 92vw, 57vw" />
+      <source type="image/webp" srcset="/prototype2/media/f7a48149496fee9f-400.webp 400w, /prototype2/media/f7a48149496fee9f-638.webp 638w" sizes="(max-width: 899px) 92vw, 57vw" />
+      <img
+        src="/prototype2/media/f7a48149496fee9f-638.jpg"
+        alt="Claudia Valsells’ artist colour chart in use"
+        width="638"
+        height="796"
+        style="aspect-ratio:638 / 796"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+            </figure>
+      </div>
+    </div>
+
+    <button type="button" class="plates-step plates-prev" data-figure-step="-1" aria-label="Previous photograph">
+          <svg viewBox="0 0 9 16" aria-hidden="true"><path d="M8 1 1 8l7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button type="button" class="plates-step plates-next" data-figure-step="1" aria-label="Next photograph">
+          <svg viewBox="0 0 9 16" aria-hidden="true"><path d="m1 1 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <p class="sr-only" data-figure-count data-template="Photograph {n} of {total}" aria-live="polite"></p>
+  </div>
+  </article>
+  </div><section class="inq" id="inquiries" data-inquiries aria-labelledby="inq-title">
     <a class="inq-close" href="#" data-inquiries-close>Close</a>
 
     <form
@@ -211,7 +677,17 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </form>
   </section>
 
-
+<div class="scroll-cue scroll-cue-ink" data-scroll-cue aria-hidden="true">
+    <svg viewBox="0 0 28 16" focusable="false">
+      <path
+        d="M1.5 1.5 L14 13 L26.5 1.5"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="square"
+      />
+    </svg>
+  </div>
 <div class="cursor" data-cursor aria-hidden="true"><span class="cursor-label"></span></div>
 <div class="panel-veil" data-panel-veil></div>
 <section class="about" id="about" data-panel aria-label="About">
@@ -224,10 +700,52 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <div class="about-reel-track" data-about-track>
       <button type="button" class="about-reel-item">
             <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-1-800.avif 800w, /prototype2/about/about-1-1600.avif 1600w, /prototype2/about/about-1-2692.avif 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-1-800.webp 800w, /prototype2/about/about-1-1600.webp 1600w, /prototype2/about/about-1-2692.webp 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/avif" srcset="/prototype2/about/about-1-400.avif 400w, /prototype2/about/about-1-800.avif 800w, /prototype2/about/about-1-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-1-400.webp 400w, /prototype2/about/about-1-800.webp 800w, /prototype2/about/about-1-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
       <img
-        src="/prototype2/about/about-1-2692.jpg"
+        src="/prototype2/about/about-1-1600.jpg"
+        alt="Colour charts pinned to the studio wall above jars of brushes and a broad, paint-spattered brush"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-2-400.avif 400w, /prototype2/about/about-2-800.avif 800w, /prototype2/about/about-2-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-2-400.webp 400w, /prototype2/about/about-2-800.webp 800w, /prototype2/about/about-2-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-2-1600.jpg"
+        alt="Claudia Valsells in her studio among canvases and pots of paint, seen from above"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-3-400.avif 400w, /prototype2/about/about-3-800.avif 800w, /prototype2/about/about-3-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-3-400.webp 400w, /prototype2/about/about-3-800.webp 800w, /prototype2/about/about-3-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-3-1600.jpg"
+        alt="Claudia Valsells on a step, reaching up to paint the studio wall, a pot of paint in her hand"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-4-400.avif 400w, /prototype2/about/about-4-800.avif 800w, /prototype2/about/about-4-1600.avif 1600w, /prototype2/about/about-4-2692.avif 2692w" sizes="(max-width: 1097px) 177px, 16.1vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-4-400.webp 400w, /prototype2/about/about-4-800.webp 800w, /prototype2/about/about-4-1600.webp 1600w, /prototype2/about/about-4-2692.webp 2692w" sizes="(max-width: 1097px) 177px, 16.1vw" />
+      <img
+        src="/prototype2/about/about-4-2692.jpg"
         alt="Claudia Valsells, seen from behind, painting fields of colour on a studio wall with a pot of paint in hand"
         width="2692"
         height="1830"
@@ -238,11 +756,95 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
           </button><button type="button" class="about-reel-item">
             <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-2-800.avif 800w, /prototype2/about/about-2-1600.avif 1600w, /prototype2/about/about-2-2692.avif 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-2-800.webp 800w, /prototype2/about/about-2-1600.webp 1600w, /prototype2/about/about-2-2692.webp 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/avif" srcset="/prototype2/about/about-5-400.avif 400w, /prototype2/about/about-5-800.avif 800w, /prototype2/about/about-5-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-5-400.webp 400w, /prototype2/about/about-5-800.webp 800w, /prototype2/about/about-5-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
       <img
-        src="/prototype2/about/about-2-2692.jpg"
+        src="/prototype2/about/about-5-1600.jpg"
+        alt="Claudia Valsells standing between two large canvases propped against the studio wall"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-6-400.avif 400w, /prototype2/about/about-6-800.avif 800w, /prototype2/about/about-6-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-6-400.webp 400w, /prototype2/about/about-6-800.webp 800w, /prototype2/about/about-6-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-6-1600.jpg"
+        alt="Pots of paint and brushes on a trestle in front of a painted canvas"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-7-400.avif 400w, /prototype2/about/about-7-800.avif 800w, /prototype2/about/about-7-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-7-400.webp 400w, /prototype2/about/about-7-800.webp 800w, /prototype2/about/about-7-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-7-1600.jpg"
+        alt="A hand holding up a pink board with a red square over a pot of paint"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-8-400.avif 400w, /prototype2/about/about-8-800.avif 800w, /prototype2/about/about-8-1600.avif 1600w, /prototype2/about/about-8-2327.avif 2327w" sizes="(max-width: 1097px) 153px, 13.9vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-8-400.webp 400w, /prototype2/about/about-8-800.webp 800w, /prototype2/about/about-8-1600.webp 1600w, /prototype2/about/about-8-2327.webp 2327w" sizes="(max-width: 1097px) 153px, 13.9vw" />
+      <img
+        src="/prototype2/about/about-8-2327.jpg"
         alt="Claudia Valsells painting a large canvas in her studio, pots of colour on the table beside her"
+        width="2327"
+        height="1830"
+        style="aspect-ratio:2327 / 1830"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-9-400.avif 400w, /prototype2/about/about-9-800.avif 800w, /prototype2/about/about-9-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-9-400.webp 400w, /prototype2/about/about-9-800.webp 800w, /prototype2/about/about-9-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-9-1600.jpg"
+        alt="Small paintings and patches of colour on a white studio wall"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-10-400.avif 400w, /prototype2/about/about-10-800.avif 800w, /prototype2/about/about-10-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-10-400.webp 400w, /prototype2/about/about-10-800.webp 800w, /prototype2/about/about-10-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-10-1600.jpg"
+        alt="A hand painting with a round brush on a canvas of green, pink and blue"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-11-400.avif 400w, /prototype2/about/about-11-800.avif 800w, /prototype2/about/about-11-1600.avif 1600w, /prototype2/about/about-11-2692.avif 2692w" sizes="(max-width: 1097px) 177px, 16.1vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-11-400.webp 400w, /prototype2/about/about-11-800.webp 800w, /prototype2/about/about-11-1600.webp 1600w, /prototype2/about/about-11-2692.webp 2692w" sizes="(max-width: 1097px) 177px, 16.1vw" />
+      <img
+        src="/prototype2/about/about-11-2692.jpg"
+        alt="Claudia Valsells unrolling a sheet of paper in front of her canvases"
         width="2692"
         height="1830"
         style="aspect-ratio:2692 / 1830"
@@ -252,10 +854,66 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
           </button><button type="button" class="about-reel-item">
             <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-3-800.avif 800w, /prototype2/about/about-3-845.avif 845w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-3-800.webp 800w, /prototype2/about/about-3-845.webp 845w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/avif" srcset="/prototype2/about/about-12-400.avif 400w, /prototype2/about/about-12-800.avif 800w, /prototype2/about/about-12-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-12-400.webp 400w, /prototype2/about/about-12-800.webp 800w, /prototype2/about/about-12-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
       <img
-        src="/prototype2/about/about-3-845.jpg"
+        src="/prototype2/about/about-12-1600.jpg"
+        alt="Claudia Valsells on a stepladder, putting up small paintings on the studio wall"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-13-400.avif 400w, /prototype2/about/about-13-800.avif 800w, /prototype2/about/about-13-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-13-400.webp 400w, /prototype2/about/about-13-800.webp 800w, /prototype2/about/about-13-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-13-1600.jpg"
+        alt="A hand setting a small painting on the studio wall beside an easel"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-14-400.avif 400w, /prototype2/about/about-14-800.avif 800w, /prototype2/about/about-14-1600.avif 1600w, /prototype2/about/about-14-2692.avif 2692w" sizes="(max-width: 1097px) 180px, 16.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-14-400.webp 400w, /prototype2/about/about-14-800.webp 800w, /prototype2/about/about-14-1600.webp 1600w, /prototype2/about/about-14-2692.webp 2692w" sizes="(max-width: 1097px) 180px, 16.4vw" />
+      <img
+        src="/prototype2/about/about-14-2692.jpg"
+        alt="Claudia Valsells at work at the end of her long studio, canvases laid out on the table"
+        width="2692"
+        height="1795"
+        style="aspect-ratio:2692 / 1795"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-15-400.avif 400w, /prototype2/about/about-15-800.avif 800w, /prototype2/about/about-15-1600.avif 1600w" sizes="(max-width: 1097px) 90px, 8.2vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-15-400.webp 400w, /prototype2/about/about-15-800.webp 800w, /prototype2/about/about-15-1600.webp 1600w" sizes="(max-width: 1097px) 90px, 8.2vw" />
+      <img
+        src="/prototype2/about/about-15-1600.jpg"
+        alt="A hand painting a deep red canvas with a fine brush"
+        width="1600"
+        height="2133"
+        style="aspect-ratio:1600 / 2133"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-16-400.avif 400w, /prototype2/about/about-16-800.avif 800w, /prototype2/about/about-16-845.avif 845w" sizes="(max-width: 1097px) 184px, 16.8vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-16-400.webp 400w, /prototype2/about/about-16-800.webp 800w, /prototype2/about/about-16-845.webp 845w" sizes="(max-width: 1097px) 184px, 16.8vw" />
+      <img
+        src="/prototype2/about/about-16-845.jpg"
         alt="Claudia Valsells reaching up to paint a canvas propped against the studio wall, among other canvases"
         width="845"
         height="550"
@@ -266,24 +924,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
           </button><button type="button" class="about-reel-item">
             <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-4-800.avif 800w, /prototype2/about/about-4-833.avif 833w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-4-800.webp 800w, /prototype2/about/about-4-833.webp 833w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/avif" srcset="/prototype2/about/about-17-400.avif 400w, /prototype2/about/about-17-765.avif 765w" sizes="(max-width: 1097px) 127px, 11.6vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-17-400.webp 400w, /prototype2/about/about-17-765.webp 765w" sizes="(max-width: 1097px) 127px, 11.6vw" />
       <img
-        src="/prototype2/about/about-4-833.jpg"
-        alt="Claudia Valsells in her studio holding a palette and a brush over pots of paint"
-        width="833"
-        height="600"
-        style="aspect-ratio:833 / 600"
-        loading="lazy"
-        decoding="async"
-      />
-    </picture>
-          </button><button type="button" class="about-reel-item">
-            <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-5-765.avif 765w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-5-765.webp 765w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <img
-        src="/prototype2/about/about-5-765.jpg"
+        src="/prototype2/about/about-17-765.jpg"
         alt="Claudia Valsells in profile against a red wall stencilled AC 068"
         width="765"
         height="724"
@@ -292,8 +936,28 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-18-400.avif 400w, /prototype2/about/about-18-800.avif 800w, /prototype2/about/about-18-833.avif 833w" sizes="(max-width: 1097px) 167px, 15.2vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-18-400.webp 400w, /prototype2/about/about-18-800.webp 800w, /prototype2/about/about-18-833.webp 833w" sizes="(max-width: 1097px) 167px, 15.2vw" />
+      <img
+        src="/prototype2/about/about-18-833.jpg"
+        alt="Claudia Valsells in her studio holding a palette and a brush over pots of paint"
+        width="833"
+        height="600"
+        style="aspect-ratio:833 / 600"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
           </button>
     </div>
+    <button type="button" class="about-reel-step is-prev" data-about-reel-step="-1" aria-label="Earlier photographs" hidden>
+      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="M8 1 1 8l7 7" /></svg>
+    </button>
+    <button type="button" class="about-reel-step is-next" data-about-reel-step="1" aria-label="More photographs" hidden>
+      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="m1 1 7 7-7 7" /></svg>
+    </button>
   </div>
           </div>
         </div>

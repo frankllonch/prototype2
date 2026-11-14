@@ -1,4 +1,4 @@
-import { reduceMotion } from './env.js';
+import { phone, reduceMotion } from './env.js';
 /**
  * The other hover: the letters under the pointer churn, and the rest of the
  * word stays as it is.
@@ -46,6 +46,10 @@ const RADIUS = 30;
  */
 const EDGE = 0.55;
 export function initScramble() {
+    // Not on a phone, for the roll's reasons (client/text-roll.ts): nothing
+    // hovers there, and a letter boxed on its own stops kerning.
+    if (phone.matches)
+        return;
     const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' });
     for (const root of document.querySelectorAll('[data-roll]')) {
         const text = root.textContent ?? '';
@@ -97,7 +101,9 @@ function wire(root, cells) {
         });
     };
     const run = () => {
-        if (reduceMotion.matches)
+        // Nor on a page that loaded wide and is below 900px now: the boxes are
+        // still in the words there (09-phone.css lets them flow as plain text).
+        if (reduceMotion.matches || phone.matches)
             return;
         if (frame)
             return;

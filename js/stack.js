@@ -1,4 +1,4 @@
-import { reduceMotion } from './env.js';
+import { phone, reduceMotion } from './env.js';
 /**
  * The opening: every painting gathered into one pile in the middle of the
  * screen, dispersing into the grid as you scroll — and gathering back into it
@@ -92,7 +92,10 @@ export function initStack() {
         return;
     }
     const tiles = [...grid.querySelectorAll('.tile')];
-    if (!tiles.length || reduceMotion.matches) {
+    // Nor on a phone: the gallery there is two plain columns, there from the
+    // start (05-artwork.css). The hero goes as it does for reduced motion — the
+    // year rail reads its absence as "no pile to stay clear of".
+    if (!tiles.length || reduceMotion.matches || phone.matches) {
         hero.remove();
         reveal();
         return;
@@ -341,6 +344,15 @@ export function initStack() {
     grid.addEventListener('gridchange', relayoutAfterResize);
     window.addEventListener('load', relayout);
     void document.fonts.ready.then(relayout);
+    // A tablet turned upright, or a window drawn in below 900px: the gallery
+    // becomes the phone's two columns, which have no pile. It is given up for
+    // good, hero and all, as if the page had been opened that narrow.
+    phone.addEventListener('change', () => {
+        if (!phone.matches || disabled)
+            return;
+        giveUp();
+        hero.remove();
+    });
     relayout();
 }
 /**

@@ -25,12 +25,14 @@
 <link rel="modulepreload" href="/prototype2/js/scroll-cue.js" />
 <link rel="modulepreload" href="/prototype2/js/about.js" />
 <link rel="modulepreload" href="/prototype2/js/inquiries.js" />
+<link rel="modulepreload" href="/prototype2/js/chart.js" />
 <link rel="modulepreload" href="/prototype2/js/book.js" />
 <link rel="modulepreload" href="/prototype2/js/focus.js" />
 <link rel="modulepreload" href="/prototype2/js/hues.js" />
 <link rel="modulepreload" href="/prototype2/js/current.js" />
 <link rel="modulepreload" href="/prototype2/js/scrollbar.js" />
 <link rel="modulepreload" href="/prototype2/js/scramble.js" />
+<link rel="modulepreload" href="/prototype2/js/menu.js" />
 <link rel="modulepreload" href="/prototype2/js/index.js" />
 <script>document.documentElement.classList.add('js');
 // Arriving at What's Color by its link, the page is laid out at the top and
@@ -43,16 +45,33 @@
 try { var nav = performance.getEntriesByType('navigation')[0];
   if (location.hash === '#whats-color' && (!nav || nav.type === 'navigate')
     && CSS.supports('animation-timeline: view()')
-    && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    && !matchMedia('(prefers-reduced-motion: reduce)').matches
+    && !matchMedia('(max-width: 899px)').matches) {
     document.documentElement.classList.add('wc-arriving', 'wc-swatch-drop');
     setTimeout(function () { document.documentElement.classList.remove('wc-arriving') }, 1500);
     setTimeout(function () { document.documentElement.classList.remove('wc-swatch-drop') }, 700);
-  } } catch (e) {}</script>
+  } } catch (e) {}
+// On a phone the start page opens on the menu, where the film is on a desktop
+// (client/menu.ts): decided here, before the first paint, so the page under
+// it is never seen.
+try { if (document.documentElement.hasAttribute('data-start')
+  && matchMedia('(max-width: 899px)').matches
+  && (location.hash === '' || location.hash === '#about'))
+  document.documentElement.classList.add('is-start') } catch (e) {}
+// From here on the stylesheet keeps the phone's menu out of sight, and only
+// client/menu.ts can raise it. If that has not said it is there after four
+// seconds — the scripts never arrived, or one of them fell over on the way —
+// the page goes back to what it is without them: the menu at its head, in
+// the flow, and no start screen held over it. Scripts that arrive later than
+// that take the page back (client/index.ts).
+setTimeout(function () { var root = document.documentElement;
+  if (!root.hasAttribute('data-menu')) root.classList.remove('js', 'is-start') }, 4000);</script>
 </head>
 <body>
 <div class="page-veil" aria-hidden="true"></div>
 <a class="skip-link" href="#main">Skip to content</a>
-<header class="top">
+<button type="button" class="menu-toggle" data-menu-toggle aria-label="Menu" aria-expanded="false" aria-controls="site-menu"></button>
+  <header class="top" id="site-menu">
     <a class="wordmark" href="/prototype2/" data-roll>CLAUDIA VALSELLS</a>
     <a class="top-soon" href="/prototype2/#whats-color"  data-roll>What&rsquo;s Color?</a>
     <nav class="menu" aria-label="Primary">
@@ -60,26 +79,31 @@ try { var nav = performance.getEntriesByType('navigation')[0];
             href="/prototype2/color-chart/"
             
             
+            style="--menu-phone: 5"
             data-roll
           >Color Chart</a><a
             href="/prototype2/commissioned/"
             
             
+            style="--menu-phone: 3"
             data-roll
           >Commissioned</a><a
             href="/prototype2/exhibitions/"
             
             aria-current="page"
+            style="--menu-phone: 4"
             data-roll
           >Exhibitions</a><a
             href="/prototype2/artwork/"
             
             
+            style="--menu-phone: 2"
             data-roll
           >Artwork</a><a
             href="/prototype2/#about"
             data-panel-open="about"
             
+            style="--menu-phone: 1"
             data-roll
           >About</a>
     </nav>
@@ -89,13 +113,14 @@ try { var nav = performance.getEntriesByType('navigation')[0];
       <h1 class="sr-only">Exhibitions</h1>
       <div class="xlist exh-list">
     <h2 class="sr-only">Exhibitions</h2>
-    <section class="xgroup" data-group="Solo shows">
+    <section class="xgroup" data-group="Solo shows" data-phone="merged">
     <h2 class="xgroup-name">Solo shows</h2>
     <div class="xrows">
-      <a class="xrow hrow" href="#exhibition-moll-de-l-os" data-panel-open="exhibition-moll-de-l-os"><span class="exh-name">
+      <a class="xrow hrow" href="#exhibition-moll-de-l-os" data-panel-open="exhibition-moll-de-l-os" style="--phone-order:1"><span class="exh-name">
       <span class="exh-title">Moll de l’Ós</span>
       
-      <span class="exh-venue">Solo show, 8 rue des Beaux-Arts, Paris</span>
+      
+      <span class="exh-venue">8 rue des Beaux-Arts, Paris</span>
     </span>
     <span class="exh-plate" aria-hidden="true">
       <picture class="">
@@ -115,10 +140,11 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2026</span>
       
-    </span></a><a class="xrow hrow" href="#exhibition-transitions" data-panel-open="exhibition-transitions"><span class="exh-name">
+    </span></a><a class="xrow hrow" href="#exhibition-transitions" data-panel-open="exhibition-transitions" style="--phone-order:4"><span class="exh-name">
       <span class="exh-title">Transitions</span>
       
-      <span class="exh-venue">Solo show, Alzueta Gallery, Barcelona</span>
+      <span class="exh-kind">Solo show,</span>
+      <span class="exh-venue">Alzueta Gallery, Barcelona</span>
     </span>
     <span class="exh-plate" aria-hidden="true">
       <picture class="">
@@ -138,10 +164,11 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2025</span>
       
-    </span></a><a class="xrow hrow" href="#exhibition-mira-m-no-deixis-de-mirar-me" data-panel-open="exhibition-mira-m-no-deixis-de-mirar-me"><span class="exh-name">
+    </span></a><a class="xrow hrow" href="#exhibition-mira-m-no-deixis-de-mirar-me" data-panel-open="exhibition-mira-m-no-deixis-de-mirar-me" style="--phone-order:5"><span class="exh-name">
       <span class="exh-title">Mira’m no deixis de mirar-me</span>
       
-      <span class="exh-venue">Solo show, Palau de Casavells</span>
+      <span class="exh-kind">Solo show,</span>
+      <span class="exh-venue">Palau de Casavells</span>
     </span>
     <span class="exh-plate" aria-hidden="true">
       <picture class="">
@@ -161,10 +188,11 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2025</span>
       
-    </span></a><a class="xrow hrow" href="#exhibition-painting-as-a-gift-of-color" data-panel-open="exhibition-painting-as-a-gift-of-color"><span class="exh-name">
+    </span></a><a class="xrow hrow" href="#exhibition-painting-as-a-gift-of-color" data-panel-open="exhibition-painting-as-a-gift-of-color" style="--phone-order:7"><span class="exh-name">
       <span class="exh-title">Painting as a gift of color</span>
       
-      <span class="exh-venue">Solo show at Gallery_BR, Tetbury, UK</span>
+      <span class="exh-kind">Solo show</span>
+      <span class="exh-venue"><span class="exh-at">at </span>Gallery_BR, Tetbury, UK</span>
     </span>
     <span class="exh-plate" aria-hidden="true">
       <picture class="">
@@ -184,10 +212,11 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2024</span>
       
-    </span></a><div class="xrow hrow"><span class="exh-name">
+    </span></a><div class="xrow hrow" style="--phone-order:9"><span class="exh-name">
       <span class="exh-title">Color glossary</span>
       
-      <span class="exh-venue">Solow show, Alzueta Gallery, Madrid</span>
+      <span class="exh-kind">Solow show,</span>
+      <span class="exh-venue">Alzueta Gallery, Madrid</span>
     </span>
     <span class="exh-plate" aria-hidden="true">
       
@@ -195,10 +224,11 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2023</span>
       
-    </span></div><a class="xrow hrow" href="#exhibition-color-dialogues" data-panel-open="exhibition-color-dialogues"><span class="exh-name">
+    </span></div><a class="xrow hrow" href="#exhibition-color-dialogues" data-panel-open="exhibition-color-dialogues" style="--phone-order:11"><span class="exh-name">
       <span class="exh-title">Color dialogues</span>
       
-      <span class="exh-venue">Solo show, Alzueta Gallery, Madrid</span>
+      <span class="exh-kind">Solo show,</span>
+      <span class="exh-venue">Alzueta Gallery, Madrid</span>
     </span>
     <span class="exh-plate" aria-hidden="true">
       <picture class="">
@@ -218,10 +248,11 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2022</span>
       <span>2021</span>
-    </span></a><a class="xrow hrow" href="#exhibition-what-s-color-ii-for-architects-and-designers" data-panel-open="exhibition-what-s-color-ii-for-architects-and-designers"><span class="exh-name">
+    </span></a><a class="xrow hrow" href="#exhibition-what-s-color-ii-for-architects-and-designers" data-panel-open="exhibition-what-s-color-ii-for-architects-and-designers" style="--phone-order:12"><span class="exh-name">
       <span class="exh-title">What’s color (II)</span>
       
-      <span class="exh-venue">Solo show, Espacio Pavilon, Madrid</span>
+      <span class="exh-kind">Solo show,</span>
+      <span class="exh-venue">Espacio Pavilon, Madrid</span>
     </span>
     <span class="exh-plate" aria-hidden="true">
       <picture class="">
@@ -241,10 +272,11 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2021</span>
       
-    </span></a><a class="xrow hrow" href="#exhibition-what-s-color-i" data-panel-open="exhibition-what-s-color-i"><span class="exh-name">
+    </span></a><a class="xrow hrow" href="#exhibition-what-s-color-i" data-panel-open="exhibition-what-s-color-i" style="--phone-order:13"><span class="exh-name">
       <span class="exh-title">What’s color (I)</span>
       
-      <span class="exh-venue">Solo show, Alzueta Gallery, Barcelona</span>
+      <span class="exh-kind">Solo show,</span>
+      <span class="exh-venue">Alzueta Gallery, Barcelona</span>
     </span>
     <span class="exh-plate" aria-hidden="true">
       <picture class="">
@@ -264,10 +296,11 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2020</span>
       
-    </span></a><div class="xrow hrow"><span class="exh-name">
+    </span></a><div class="xrow hrow" style="--phone-order:14"><span class="exh-name">
       <span class="exh-title">Aoo&amp;Claudia Valsells ‘Silla8’ show</span>
       
-      <span class="exh-venue">Solo show, Alzueta Gallery, Barcelona</span>
+      <span class="exh-kind">Solo show,</span>
+      <span class="exh-venue">Alzueta Gallery, Barcelona</span>
     </span>
     <span class="exh-plate" aria-hidden="true">
       
@@ -275,10 +308,11 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2020</span>
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:15"><span class="exh-name">
       <span class="exh-title">Almost perfect,</span>
       
-      <span class="exh-venue">Solo exhibition, Tokyo, Japan</span>
+      <span class="exh-kind">Solo exhibition,</span>
+      <span class="exh-venue">Tokyo, Japan</span>
     </span>
     <span class="exh-plate" aria-hidden="true">
       
@@ -286,10 +320,11 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2019</span>
       
-    </span></div><a class="xrow hrow" href="#exhibition-t10" data-panel-open="exhibition-t10"><span class="exh-name">
+    </span></div><a class="xrow hrow" href="#exhibition-t10" data-panel-open="exhibition-t10" style="--phone-order:16"><span class="exh-name">
       <span class="exh-title">T10</span>
       
-      <span class="exh-venue">Solo show, at Alzueta Gallery, Barcelona</span>
+      <span class="exh-kind">Solo show,</span>
+      <span class="exh-venue"><span class="exh-at">at </span>Alzueta Gallery, Barcelona</span>
     </span>
     <span class="exh-plate" aria-hidden="true">
       <picture class="">
@@ -309,8 +344,9 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2018</span>
       
-    </span></a><div class="xrow hrow"><span class="exh-name">
+    </span></a><div class="xrow hrow" style="--phone-order:17"><span class="exh-name">
       <span class="exh-title">Solo exhibition</span>
+      
       
       <span class="exh-venue">Palau de Casavells, Barcelona</span>
     </span>
@@ -320,10 +356,11 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2018</span>
       
-    </span></div><a class="xrow hrow" href="#exhibition-color-y-forma" data-panel-open="exhibition-color-y-forma"><span class="exh-name">
+    </span></div><a class="xrow hrow" href="#exhibition-color-y-forma" data-panel-open="exhibition-color-y-forma" style="--phone-order:18"><span class="exh-name">
       <span class="exh-title">Color y forma</span>
       
-      <span class="exh-venue">Solo exhibition, Alzueta Gallery, Barcelona</span>
+      <span class="exh-kind">Solo exhibition,</span>
+      <span class="exh-venue">Alzueta Gallery, Barcelona</span>
     </span>
     <span class="exh-plate" aria-hidden="true">
       <picture class="">
@@ -343,10 +380,11 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2017</span>
       
-    </span></a><a class="xrow hrow" href="#exhibition-galeria-axel-pairon" data-panel-open="exhibition-galeria-axel-pairon"><span class="exh-name">
+    </span></a><a class="xrow hrow" href="#exhibition-galeria-axel-pairon" data-panel-open="exhibition-galeria-axel-pairon" style="--phone-order:19"><span class="exh-name">
       <span class="exh-title">Galeria Axel Pairon</span>
       
-      <span class="exh-venue">Group exhibition</span>
+      <span class="exh-kind">Group exhibition</span>
+      
     </span>
     <span class="exh-plate" aria-hidden="true">
       <picture class="">
@@ -366,8 +404,9 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2016</span>
       
-    </span></a><div class="xrow hrow"><span class="exh-name">
+    </span></a><div class="xrow hrow" style="--phone-order:20"><span class="exh-name">
       <span class="exh-title">Solo exhibition</span>
+      
       
       <span class="exh-venue">Palau de Casavells,</span>
     </span>
@@ -377,10 +416,11 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2007</span>
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:21"><span class="exh-name">
       <span class="exh-title">‘Expresions de mur’ abstract in formalism paintings</span>
       
-      <span class="exh-venue">Solo exhibition, Galeria Miquel Alzueta, Barcelona</span>
+      <span class="exh-kind">Solo exhibition,</span>
+      <span class="exh-venue">Galeria Miquel Alzueta, Barcelona</span>
     </span>
     <span class="exh-plate" aria-hidden="true">
       
@@ -388,10 +428,11 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2005</span>
       
-    </span></div><a class="xrow hrow" href="#exhibition-el-color-no-existe" data-panel-open="exhibition-el-color-no-existe"><span class="exh-name">
+    </span></div><a class="xrow hrow" href="#exhibition-el-color-no-existe" data-panel-open="exhibition-el-color-no-existe" style="--phone-order:22"><span class="exh-name">
       <span class="exh-title">‘El color no existe, existe la luz’ / ‘The color doesn’t exist, just the light’</span>
       <span class="exh-note">Individual exhibition where the interaction of the public with the installation was essential. I tried to demonstrate through personal experimentation that color only exists if there is light.</span>
-      <span class="exh-venue">Solo exhibition, Sala Vinçon, Barcelona</span>
+      <span class="exh-kind">Solo exhibition,</span>
+      <span class="exh-venue">Sala Vinçon, Barcelona</span>
     </span>
     <span class="exh-plate" aria-hidden="true">
       <picture class="">
@@ -413,13 +454,14 @@ try { var nav = performance.getEntriesByType('navigation')[0];
       
     </span></a>
     </div>
-  </section><section class="xgroup" data-group="Group shows">
+  </section><section class="xgroup" data-group="Group shows" data-phone="merged">
     <h2 class="xgroup-name">Group shows</h2>
     <div class="xrows">
-      <a class="xrow hrow" href="#exhibition-shift-towards-coincidence" data-panel-open="exhibition-shift-towards-coincidence"><span class="exh-name">
+      <a class="xrow hrow" href="#exhibition-shift-towards-coincidence" data-panel-open="exhibition-shift-towards-coincidence" style="--phone-order:2"><span class="exh-name">
       <span class="exh-title">‘Shift towards coincidence’</span>
       
-      <span class="exh-venue">Group show, Palau de Casavells</span>
+      <span class="exh-kind">Group show,</span>
+      <span class="exh-venue">Palau de Casavells</span>
     </span>
     <span class="exh-plate" aria-hidden="true">
       <picture class="">
@@ -439,10 +481,11 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2026</span>
       
-    </span></a><a class="xrow hrow" href="#exhibition-abstract-paintings" data-panel-open="exhibition-abstract-paintings"><span class="exh-name">
+    </span></a><a class="xrow hrow" href="#exhibition-abstract-paintings" data-panel-open="exhibition-abstract-paintings" style="--phone-order:3"><span class="exh-name">
       <span class="exh-title">‘Abstract paintings’</span>
       
-      <span class="exh-venue">Group exhibition, Scroll New York</span>
+      <span class="exh-kind">Group exhibition,</span>
+      <span class="exh-venue">Scroll New York</span>
     </span>
     <span class="exh-plate" aria-hidden="true">
       <picture class="">
@@ -462,10 +505,11 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2026</span>
       
-    </span></a><a class="xrow hrow" href="#exhibition-marco-limite-y-lugar" data-panel-open="exhibition-marco-limite-y-lugar"><span class="exh-name">
+    </span></a><a class="xrow hrow" href="#exhibition-marco-limite-y-lugar" data-panel-open="exhibition-marco-limite-y-lugar" style="--phone-order:6"><span class="exh-name">
       <span class="exh-title">Marco, Límite y Lugar</span>
       
-      <span class="exh-venue">Group exhibition, Alzueta Gallery Madrid</span>
+      <span class="exh-kind">Group exhibition,</span>
+      <span class="exh-venue">Alzueta Gallery Madrid</span>
     </span>
     <span class="exh-plate" aria-hidden="true">
       <picture class="">
@@ -485,10 +529,11 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2025</span>
       
-    </span></a><a class="xrow hrow" href="#exhibition-what-abstract-art-means-to-me" data-panel-open="exhibition-what-abstract-art-means-to-me"><span class="exh-name">
+    </span></a><a class="xrow hrow" href="#exhibition-what-abstract-art-means-to-me" data-panel-open="exhibition-what-abstract-art-means-to-me" style="--phone-order:8"><span class="exh-name">
       <span class="exh-title">What abstract art means to me?</span>
       
-      <span class="exh-venue">Group exhibition, Alzueta Gallery Séneca</span>
+      <span class="exh-kind">Group exhibition,</span>
+      <span class="exh-venue">Alzueta Gallery Séneca</span>
     </span>
     <span class="exh-plate" aria-hidden="true">
       <picture class="">
@@ -508,10 +553,11 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2024</span>
       
-    </span></a><a class="xrow hrow" href="#exhibition-la-terre-est-bleu" data-panel-open="exhibition-la-terre-est-bleu"><span class="exh-name">
+    </span></a><a class="xrow hrow" href="#exhibition-la-terre-est-bleu" data-panel-open="exhibition-la-terre-est-bleu" style="--phone-order:10"><span class="exh-name">
       <span class="exh-title">La terre est bleu comme un organge</span>
       
-      <span class="exh-venue">Group exhibition, Alzueta Gallery, Madrid</span>
+      <span class="exh-kind">Group exhibition,</span>
+      <span class="exh-venue">Alzueta Gallery, Madrid</span>
     </span>
     <span class="exh-plate" aria-hidden="true">
       <picture class="">
@@ -531,24 +577,14 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2023</span>
       
-    </span></a><div class="xrow hrow"><span class="exh-name">
-      <span class="exh-title">Galeria Axel Pairon</span>
-      
-      <span class="exh-venue">Group exhibition</span>
-    </span>
-    <span class="exh-plate" aria-hidden="true">
-      
-    </span>
-    <span class="exh-year">
-      <span>2016</span>
-      
-    </span></div>
+    </span></a>
     </div>
   </section><section class="xgroup" data-group="Art fairs">
-    <h2 class="xgroup-name">Art fairs</h2>
+    <h2 class="xgroup-name" style="--phone-order:23">Art fairs</h2>
     <div class="xrows">
-      <div class="xrow hrow"><span class="exh-name">
+      <div class="xrow hrow" style="--phone-order:23"><span class="exh-name">
       <span class="exh-title">Zona Maco CDMX</span>
+      
       
       <span class="exh-venue">With Alzueta Gallery, Mexico</span>
     </span>
@@ -558,8 +594,9 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2026</span>
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:24"><span class="exh-name">
       <span class="exh-title">Estampa contemporary art fair</span>
+      
       
       <span class="exh-venue">With Alzueta Gallery, Madrid</span>
     </span>
@@ -569,8 +606,9 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2025</span>
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:25"><span class="exh-name">
       <span class="exh-title">Zona Maco</span>
+      
       
       <span class="exh-venue">With Alzueta Gallery, Madrid</span>
     </span>
@@ -580,8 +618,9 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2024</span>
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:26"><span class="exh-name">
       <span class="exh-title">Luxemburg art week</span>
+      
       
       <span class="exh-venue">With Alzueta Gallery</span>
     </span>
@@ -591,8 +630,9 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2024</span>
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:27"><span class="exh-name">
       <span class="exh-title">Contemporary art fair</span>
+      
       
       <span class="exh-venue">Art Rotterdam</span>
     </span>
@@ -602,8 +642,9 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2023</span>
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:28"><span class="exh-name">
       <span class="exh-title">Estampa contemporary art fair</span>
+      
       
       <span class="exh-venue">Alzueta Gallery, Madrid</span>
     </span>
@@ -613,8 +654,9 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2021</span>
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:29"><span class="exh-name">
       <span class="exh-title">Art Paris fair</span>
+      
       
       <span class="exh-venue">Alzueta Gallery, Paris</span>
     </span>
@@ -624,8 +666,9 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2021</span>
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:30"><span class="exh-name">
       <span class="exh-title">Art Madrid feria</span>
+      
       
       <span class="exh-venue">Alzueta Gallery, Madrid</span>
     </span>
@@ -635,8 +678,9 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2021</span>
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:31"><span class="exh-name">
       <span class="exh-title">Art Élysées-Art &amp; Design</span>
+      
       
       <span class="exh-venue">Paris</span>
     </span>
@@ -646,8 +690,9 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2019</span>
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:32"><span class="exh-name">
       <span class="exh-title">AFF art fair</span>
+      
       
       <span class="exh-venue">Brussels</span>
     </span>
@@ -657,8 +702,9 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2019</span>
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:33"><span class="exh-name">
       <span class="exh-title">Almoneda, Ifema feria de Madrid</span>
+      
       
       <span class="exh-venue">Palau de Casavells, Madrid</span>
     </span>
@@ -668,8 +714,9 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2019</span>
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:34"><span class="exh-name">
       <span class="exh-title">Art Madrid</span>
+      
       
       <span class="exh-venue">Madrid</span>
     </span>
@@ -679,8 +726,9 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2019</span>
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:35"><span class="exh-name">
       <span class="exh-title">Art Paris Grand Palais,</span>
+      
       
       <span class="exh-venue">Paris</span>
     </span>
@@ -690,8 +738,9 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2019</span>
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:36"><span class="exh-name">
       <span class="exh-title">Eurantica art fair,</span>
+      
       
       <span class="exh-venue">Brussels</span>
     </span>
@@ -701,8 +750,9 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2018</span>
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:37"><span class="exh-name">
       <span class="exh-title">Art Madrid</span>
+      
       
       <span class="exh-venue">Madrid</span>
     </span>
@@ -712,8 +762,9 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2018</span>
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:38"><span class="exh-name">
       <span class="exh-title">Art fair Hamburg,</span>
+      
       
       <span class="exh-venue">Hamburg</span>
     </span>
@@ -723,8 +774,9 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2018</span>
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:39"><span class="exh-name">
       <span class="exh-title">Art Elysées,</span>
+      
       
       <span class="exh-venue">Paris</span>
     </span>
@@ -734,8 +786,9 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2018</span>
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:40"><span class="exh-name">
       <span class="exh-title">Art fair Stockholm</span>
+      
       
       <span class="exh-venue">Stockholm, Sweeden</span>
     </span>
@@ -745,8 +798,9 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2018</span>
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:41"><span class="exh-name">
       <span class="exh-title">Contemporary art fair Just LX</span>
+      
       
       <span class="exh-venue">Portugal</span>
     </span>
@@ -756,9 +810,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2018</span>
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:42"><span class="exh-name">
       <span class="exh-title">Almoneda Antik Passion,</span>
       
+      
       <span class="exh-venue">Madrid</span>
     </span>
     <span class="exh-plate" aria-hidden="true">
@@ -767,9 +822,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2018</span>
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:43"><span class="exh-name">
       <span class="exh-title">Art fair Grand Palais</span>
       
+      
       <span class="exh-venue">Paris</span>
     </span>
     <span class="exh-plate" aria-hidden="true">
@@ -778,8 +834,9 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2018</span>
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:44"><span class="exh-name">
       <span class="exh-title">Art Madrid</span>
+      
       
       <span class="exh-venue">Madrid</span>
     </span>
@@ -789,8 +846,9 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2017</span>
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:45"><span class="exh-name">
       <span class="exh-title">Art Paris, international art fair</span>
+      
       
       <span class="exh-venue">Paris</span>
     </span>
@@ -800,8 +858,9 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2017</span>
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:46"><span class="exh-name">
       <span class="exh-title">Antica Namur</span>
+      
       
       <span class="exh-venue">Belgium</span>
     </span>
@@ -811,8 +870,9 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2016</span>
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:47"><span class="exh-name">
       <span class="exh-title">Art Elysées</span>
+      
       
       <span class="exh-venue">International art fair, Paris</span>
     </span>
@@ -822,8 +882,9 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       <span>2016</span>
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:48"><span class="exh-name">
       <span class="exh-title">Scope Basel, Basel art gair</span>
+      
       
       
     </span>
@@ -836,11 +897,12 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </span></div>
     </div>
   </section><section class="xgroup" data-group="Private collections">
-    <h2 class="xgroup-name">Private collections</h2>
+    <h2 class="xgroup-name" style="--phone-order:49">Private collections</h2>
     <div class="xrows">
-      <div class="xrow hrow"><span class="exh-name">
+      <div class="xrow hrow" style="--phone-order:49"><span class="exh-name">
       <span class="exh-title">Fundació Vilacases</span>
       
+      
       <span class="exh-venue">Barcelona</span>
     </span>
     <span class="exh-plate" aria-hidden="true">
@@ -849,9 +911,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:50"><span class="exh-name">
       <span class="exh-title">Fundació Banc Sabadell</span>
       
+      
       <span class="exh-venue">Barcelona</span>
     </span>
     <span class="exh-plate" aria-hidden="true">
@@ -860,8 +923,9 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:51"><span class="exh-name">
       <span class="exh-title">Collection Hayot</span>
+      
       
       <span class="exh-venue">France</span>
     </span>
@@ -871,8 +935,9 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:52"><span class="exh-name">
       <span class="exh-title">Niederberghaus Collection</span>
+      
       
       <span class="exh-venue">Mexico - US</span>
     </span>
@@ -882,8 +947,9 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:53"><span class="exh-name">
       <span class="exh-title">Collection Richard</span>
+      
       
       <span class="exh-venue">France</span>
     </span>
@@ -893,8 +959,9 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <span class="exh-year">
       
       
-    </span></div><div class="xrow hrow"><span class="exh-name">
+    </span></div><div class="xrow hrow" style="--phone-order:54"><span class="exh-name">
       <span class="exh-title">Smith Collection</span>
+      
       
       <span class="exh-venue">Wyoming</span>
     </span>
@@ -914,7 +981,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <div class="sheet" data-reader data-sheet>
     <header class="sheet-head">
       <h2 class="sheet-title">Moll de l’Ós</h2>
-      <p class="sheet-lines">Solo show, 8 rue des Beaux-Arts, Paris</p>
+      <p class="sheet-lines">8 rue des Beaux-Arts, Paris</p>
       <p class="sheet-when">From May 27 to June 26 2026</p>
     </header>
 
@@ -1090,7 +1157,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <div class="sheet" data-reader data-sheet>
     <header class="sheet-head">
       <h2 class="sheet-title">Transitions</h2>
-      <p class="sheet-lines">Solo show, Alzueta Gallery, Barcelona</p>
+      <p class="sheet-lines">Alzueta Gallery, Barcelona</p>
       <p class="sheet-when">September 2025</p>
     </header>
 
@@ -1210,12 +1277,12 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <div class="sheet" data-reader data-sheet>
     <header class="sheet-head">
       <h2 class="sheet-title">Mira’m no deixis de mirar-me</h2>
-      <p class="sheet-lines">Solo show, Palau de Casavells</p>
+      <p class="sheet-lines">Palau de Casavells</p>
       <p class="sheet-when">From April to June 2025</p>
     </header>
 
     <div class="sheet-text" data-sheet-text tabindex="-1">
-      <div class="sheet-prose"> <p><i>“Mira’m, no deixis de mirar-me” </i>[“Look at Me, Don’t Stop Looking at Me”] invites us to explore the work and career of Claudia Valsells, where color is both a physical substance and an intangible emotion. Throughout a life devoted to researching and experimenting with color and the creation of her own palette, the artist has created a language to channel her experience and perception of the world. In her work, color goes beyond aesthetics to become a meaningful, almost linguistic, element.</p> <p>For the artist, materializing a color is a complex process in three acts: first, she envisions it; then, she creates it through a unique combination of pigments; and finally, she applies it to the canvas, where it engages in dialogue with other colors. Valsells builds on technical knowledge but also surrenders to intuition, finding in painting a space of refuge and communication—both with herself and with the viewer. Each piece, each chromatic interaction, emerges from a delicate interplay of prior knowledge, instinct, and the artist’s lived experience.</p> <p>The exhibition brings together, for the first time, the series <i>What’s Color?</i>, <i>Color Dialogues</i>, <i>The Joy of Painting</i>, <i>Transitions</i>, and her most recent work, <i>Mapa</i>, in which Valsells explores chromatic juxtaposition with a newfound maturity. This collection of works showcases the evolution of her practice while highlighting the importance of the viewer’s gaze in art. The title, “<i>Mira’m, no deixis de mirar-me”</i>, refers, on one hand, to the act of exposing oneself to public recognition and, on the other, to the essential need to open up to others, not only in the artistic context but in all aspects of life.</p> <p>The concepts of the eye and the gaze have often been understood as symbols of otherness. In this sense, Sartre asserted that it is through the gaze of others that we recognize ourselves. This dimension of the other is what constitutes and defines us, allowing us to exist as subjects. According to the French philosopher, it is also what humanizes us and, therefore, enables communication. Daily experiences and interactions with others shape multiple identities: we are not made of a single piece.</p> <p>Valsells’ work becomes a space for connection, where the viewer and the artwork meet through the experience of color. In this exchange, the work finds meaning, and we, as viewers, also uncover something about ourselves. “<i>Mira’m, no deixis de mirar-me”</i> is an open invitation to this silent dialogue, where color becomes a language, speaking to us about who we are, about others, and about the artist’s own journey.</p></div>
+      <div class="sheet-prose"> <p><span class="lede-open"><i>“Mira’m, no deixis de mirar-me” </i>“Look at Me, Don’t Stop Looking at Me”</span>invites us to explore the work and career of Claudia Valsells, where color is both a physical substance and an intangible emotion. Throughout a life devoted to researching and experimenting with color and the creation of her own palette, the artist has created a language to channel her experience and perception of the world. In her work, color goes beyond aesthetics to become a meaningful, almost linguistic, element.</p> <p>For the artist, materializing a color is a complex process in three acts: first, she envisions it; then, she creates it through a unique combination of pigments; and finally, she applies it to the canvas, where it engages in dialogue with other colors. Valsells builds on technical knowledge but also surrenders to intuition, finding in painting a space of refuge and communication—both with herself and with the viewer. Each piece, each chromatic interaction, emerges from a delicate interplay of prior knowledge, instinct, and the artist’s lived experience.</p> <p>The exhibition brings together, for the first time, the series <i>What’s Color?</i>, <i>Color Dialogues</i>, <i>The Joy of Painting</i>, <i>Transitions</i>, and her most recent work, <i>Mapa</i>, in which Valsells explores chromatic juxtaposition with a newfound maturity. This collection of works showcases the evolution of her practice while highlighting the importance of the viewer’s gaze in art. The title, “<i>Mira’m, no deixis de mirar-me”</i>, refers, on one hand, to the act of exposing oneself to public recognition and, on the other, to the essential need to open up to others, not only in the artistic context but in all aspects of life.</p> <p>The concepts of the eye and the gaze have often been understood as symbols of otherness. In this sense, Sartre asserted that it is through the gaze of others that we recognize ourselves. This dimension of the other is what constitutes and defines us, allowing us to exist as subjects. According to the French philosopher, it is also what humanizes us and, therefore, enables communication. Daily experiences and interactions with others shape multiple identities: we are not made of a single piece.</p> <p>Valsells’ work becomes a space for connection, where the viewer and the artwork meet through the experience of color. In this exchange, the work finds meaning, and we, as viewers, also uncover something about ourselves. “<i>Mira’m, no deixis de mirar-me”</i> is an open invitation to this silent dialogue, where color becomes a language, speaking to us about who we are, about others, and about the artist’s own journey.</p></div>
     </div>
 
     <button
@@ -1358,13 +1425,13 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <div class="plates" data-reader>
     <header class="plates-head">
       <h2 class="sheet-title">Painting as a gift of color</h2>
-      <p class="sheet-lines">Solo show at Gallery_BR, Tetbury, UK</p>
+      <p class="sheet-lines">Gallery_BR, Tetbury, UK</p>
       <p class="sheet-when">May 2024</p>
     </header>
 
     <div class="plates-stage" data-figures>
       <div class="plates-frame">
-        <figure class="reader-figure plates-figure is-current">
+        <figure class="reader-figure plates-figure is-wide is-current">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/b747c788581f9631-400.avif 400w, /prototype2/media/b747c788581f9631-800.avif 800w, /prototype2/media/b747c788581f9631-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/b747c788581f9631-400.webp 400w, /prototype2/media/b747c788581f9631-800.webp 800w, /prototype2/media/b747c788581f9631-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -1378,7 +1445,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         fetchpriority="high"
       />
     </picture>
-            </figure><figure class="reader-figure plates-figure">
+            </figure><figure class="reader-figure plates-figure is-wide">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/43fa910981fd4f26-400.avif 400w, /prototype2/media/43fa910981fd4f26-800.avif 800w, /prototype2/media/43fa910981fd4f26-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/43fa910981fd4f26-400.webp 400w, /prototype2/media/43fa910981fd4f26-800.webp 800w, /prototype2/media/43fa910981fd4f26-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -1392,7 +1459,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
-            </figure><figure class="reader-figure plates-figure">
+            </figure><figure class="reader-figure plates-figure is-wide">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/7df13797b19b6412-400.avif 400w, /prototype2/media/7df13797b19b6412-800.avif 800w, /prototype2/media/7df13797b19b6412-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/7df13797b19b6412-400.webp 400w, /prototype2/media/7df13797b19b6412-800.webp 800w, /prototype2/media/7df13797b19b6412-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -1406,7 +1473,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
-            </figure><figure class="reader-figure plates-figure">
+            </figure><figure class="reader-figure plates-figure is-wide">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/a94f237ae11c27c1-400.avif 400w, /prototype2/media/a94f237ae11c27c1-800.avif 800w, /prototype2/media/a94f237ae11c27c1-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/a94f237ae11c27c1-400.webp 400w, /prototype2/media/a94f237ae11c27c1-800.webp 800w, /prototype2/media/a94f237ae11c27c1-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -1420,7 +1487,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
-            </figure><figure class="reader-figure plates-figure">
+            </figure><figure class="reader-figure plates-figure is-wide">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/fc3dbaccbbaff1a2-400.avif 400w, /prototype2/media/fc3dbaccbbaff1a2-800.avif 800w, /prototype2/media/fc3dbaccbbaff1a2-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/fc3dbaccbbaff1a2-400.webp 400w, /prototype2/media/fc3dbaccbbaff1a2-800.webp 800w, /prototype2/media/fc3dbaccbbaff1a2-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -1434,7 +1501,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
-            </figure><figure class="reader-figure plates-figure">
+            </figure><figure class="reader-figure plates-figure is-wide">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/dc4513c48e3b36e5-400.avif 400w, /prototype2/media/dc4513c48e3b36e5-800.avif 800w, /prototype2/media/dc4513c48e3b36e5-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/dc4513c48e3b36e5-400.webp 400w, /prototype2/media/dc4513c48e3b36e5-800.webp 800w, /prototype2/media/dc4513c48e3b36e5-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -1448,7 +1515,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
-            </figure><figure class="reader-figure plates-figure">
+            </figure><figure class="reader-figure plates-figure is-wide">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/27f7b6b1545db9a4-400.avif 400w, /prototype2/media/27f7b6b1545db9a4-800.avif 800w, /prototype2/media/27f7b6b1545db9a4-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/27f7b6b1545db9a4-400.webp 400w, /prototype2/media/27f7b6b1545db9a4-800.webp 800w, /prototype2/media/27f7b6b1545db9a4-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -1462,7 +1529,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
-            </figure><figure class="reader-figure plates-figure">
+            </figure><figure class="reader-figure plates-figure is-wide">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/7987860e3ba16871-400.avif 400w, /prototype2/media/7987860e3ba16871-800.avif 800w, /prototype2/media/7987860e3ba16871-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/7987860e3ba16871-400.webp 400w, /prototype2/media/7987860e3ba16871-800.webp 800w, /prototype2/media/7987860e3ba16871-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -1476,7 +1543,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
-            </figure><figure class="reader-figure plates-figure">
+            </figure><figure class="reader-figure plates-figure is-wide">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/d72544e21cc07073-400.avif 400w, /prototype2/media/d72544e21cc07073-800.avif 800w, /prototype2/media/d72544e21cc07073-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/d72544e21cc07073-400.webp 400w, /prototype2/media/d72544e21cc07073-800.webp 800w, /prototype2/media/d72544e21cc07073-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -1490,7 +1557,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
-            </figure><figure class="reader-figure plates-figure">
+            </figure><figure class="reader-figure plates-figure is-wide">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/d78ac1d8ece7bd7e-400.avif 400w, /prototype2/media/d78ac1d8ece7bd7e-800.avif 800w, /prototype2/media/d78ac1d8ece7bd7e-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/d78ac1d8ece7bd7e-400.webp 400w, /prototype2/media/d78ac1d8ece7bd7e-800.webp 800w, /prototype2/media/d78ac1d8ece7bd7e-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -1504,7 +1571,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
-            </figure><figure class="reader-figure plates-figure">
+            </figure><figure class="reader-figure plates-figure is-wide">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/43a309d29cf95e1f-400.avif 400w, /prototype2/media/43a309d29cf95e1f-800.avif 800w, /prototype2/media/43a309d29cf95e1f-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/43a309d29cf95e1f-400.webp 400w, /prototype2/media/43a309d29cf95e1f-800.webp 800w, /prototype2/media/43a309d29cf95e1f-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -1518,7 +1585,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
-            </figure><figure class="reader-figure plates-figure">
+            </figure><figure class="reader-figure plates-figure is-wide">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/affa224cf596a164-400.avif 400w, /prototype2/media/affa224cf596a164-800.avif 800w, /prototype2/media/affa224cf596a164-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/affa224cf596a164-400.webp 400w, /prototype2/media/affa224cf596a164-800.webp 800w, /prototype2/media/affa224cf596a164-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -1532,7 +1599,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
-            </figure><figure class="reader-figure plates-figure">
+            </figure><figure class="reader-figure plates-figure is-wide">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/3c8f00983263b540-400.avif 400w, /prototype2/media/3c8f00983263b540-800.avif 800w, /prototype2/media/3c8f00983263b540-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/3c8f00983263b540-400.webp 400w, /prototype2/media/3c8f00983263b540-800.webp 800w, /prototype2/media/3c8f00983263b540-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -1563,7 +1630,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <div class="sheet" data-reader data-sheet>
     <header class="sheet-head">
       <h2 class="sheet-title">Color dialogues</h2>
-      <p class="sheet-lines">Solo show, Alzueta Gallery, Madrid</p>
+      <p class="sheet-lines">Alzueta Gallery, Madrid</p>
       <p class="sheet-when">From December to January 2022</p>
     </header>
 
@@ -1697,7 +1764,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <div class="sheet" data-reader data-sheet>
     <header class="sheet-head">
       <h2 class="sheet-title">What’s color (II)</h2>
-      <p class="sheet-lines">Solo show, Espacio Pavilon, Madrid</p>
+      <p class="sheet-lines">Espacio Pavilon, Madrid</p>
       <p class="sheet-when">December 2021</p>
     </header>
 
@@ -1845,7 +1912,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <div class="sheet" data-reader data-sheet>
     <header class="sheet-head">
       <h2 class="sheet-title">What’s color (I)</h2>
-      <p class="sheet-lines">Solo show, Alzueta Gallery, Barcelona</p>
+      <p class="sheet-lines">Alzueta Gallery, Barcelona</p>
       <p class="sheet-when">December 2020</p>
     </header>
 
@@ -1909,7 +1976,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <div class="plates" data-reader>
     <header class="plates-head">
       <h2 class="sheet-title">T10</h2>
-      <p class="sheet-lines">Solo show, at Alzueta Gallery, Barcelona</p>
+      <p class="sheet-lines">Alzueta Gallery, Barcelona</p>
       <p class="sheet-when">November 2018</p>
     </header>
 
@@ -1971,7 +2038,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
-            </figure><figure class="reader-figure plates-figure">
+            </figure><figure class="reader-figure plates-figure is-wide">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/14e0978ff5e5ac64-400.avif 400w, /prototype2/media/14e0978ff5e5ac64-800.avif 800w, /prototype2/media/14e0978ff5e5ac64-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/14e0978ff5e5ac64-400.webp 400w, /prototype2/media/14e0978ff5e5ac64-800.webp 800w, /prototype2/media/14e0978ff5e5ac64-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -2002,7 +2069,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <div class="plates" data-reader>
     <header class="plates-head">
       <h2 class="sheet-title">Color y forma</h2>
-      <p class="sheet-lines">Solo exhibition, Alzueta Gallery, Barcelona</p>
+      <p class="sheet-lines">Alzueta Gallery, Barcelona</p>
       <p class="sheet-when">February 2017</p>
     </header>
 
@@ -2050,7 +2117,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
-            </figure><figure class="reader-figure plates-figure">
+            </figure><figure class="reader-figure plates-figure is-wide">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/c728ba8dddd03f91-400.avif 400w, /prototype2/media/c728ba8dddd03f91-800.avif 800w, /prototype2/media/c728ba8dddd03f91-865.avif 865w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/c728ba8dddd03f91-400.webp 400w, /prototype2/media/c728ba8dddd03f91-800.webp 800w, /prototype2/media/c728ba8dddd03f91-865.webp 865w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -2081,7 +2148,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <div class="plates" data-reader>
     <header class="plates-head">
       <h2 class="sheet-title">Galeria Axel Pairon</h2>
-      <p class="sheet-lines">Group exhibition</p>
+      
       <p class="sheet-when">December 2016</p>
     </header>
 
@@ -2132,13 +2199,13 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <div class="plates" data-reader>
     <header class="plates-head">
       <h2 class="sheet-title">‘El color no existe, existe la luz’ / ‘The color doesn’t exist, just the light’</h2>
-      <p class="sheet-lines">Solo exhibition, Sala Vinçon, Barcelona</p>
+      <p class="sheet-lines">Sala Vinçon, Barcelona</p>
       <p class="sheet-when">April 2000</p>
     </header>
 
     <div class="plates-stage" data-figures>
       <div class="plates-frame">
-        <figure class="reader-figure plates-figure is-current">
+        <figure class="reader-figure plates-figure is-wide is-current">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/67ccaefc7923a990-400.avif 400w, /prototype2/media/67ccaefc7923a990-800.avif 800w, /prototype2/media/67ccaefc7923a990-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/67ccaefc7923a990-400.webp 400w, /prototype2/media/67ccaefc7923a990-800.webp 800w, /prototype2/media/67ccaefc7923a990-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -2152,7 +2219,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         fetchpriority="high"
       />
     </picture>
-            </figure><figure class="reader-figure plates-figure">
+            </figure><figure class="reader-figure plates-figure is-wide">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/73c862cca2a3b1db-400.avif 400w, /prototype2/media/73c862cca2a3b1db-800.avif 800w, /prototype2/media/73c862cca2a3b1db-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/73c862cca2a3b1db-400.webp 400w, /prototype2/media/73c862cca2a3b1db-800.webp 800w, /prototype2/media/73c862cca2a3b1db-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -2180,7 +2247,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
-            </figure><figure class="reader-figure plates-figure">
+            </figure><figure class="reader-figure plates-figure is-wide">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/1d0ad99ec66e6f81-400.avif 400w, /prototype2/media/1d0ad99ec66e6f81-800.avif 800w, /prototype2/media/1d0ad99ec66e6f81-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/1d0ad99ec66e6f81-400.webp 400w, /prototype2/media/1d0ad99ec66e6f81-800.webp 800w, /prototype2/media/1d0ad99ec66e6f81-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -2211,7 +2278,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <div class="plates" data-reader>
     <header class="plates-head">
       <h2 class="sheet-title">‘Shift towards coincidence’</h2>
-      <p class="sheet-lines">Group show, Palau de Casavells</p>
+      <p class="sheet-lines">Palau de Casavells</p>
       <p class="sheet-when">From June to July 2026</p>
     </header>
 
@@ -2231,7 +2298,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         fetchpriority="high"
       />
     </picture>
-            </figure><figure class="reader-figure plates-figure">
+            </figure><figure class="reader-figure plates-figure is-wide">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/a6d25ea5ef538092-400.avif 400w, /prototype2/media/a6d25ea5ef538092-800.avif 800w, /prototype2/media/a6d25ea5ef538092-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/a6d25ea5ef538092-400.webp 400w, /prototype2/media/a6d25ea5ef538092-800.webp 800w, /prototype2/media/a6d25ea5ef538092-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -2273,7 +2340,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
-            </figure><figure class="reader-figure plates-figure">
+            </figure><figure class="reader-figure plates-figure is-wide">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/89cb6cafaf2c8571-400.avif 400w, /prototype2/media/89cb6cafaf2c8571-800.avif 800w, /prototype2/media/89cb6cafaf2c8571-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/89cb6cafaf2c8571-400.webp 400w, /prototype2/media/89cb6cafaf2c8571-800.webp 800w, /prototype2/media/89cb6cafaf2c8571-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -2318,13 +2385,13 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <div class="plates" data-reader>
     <header class="plates-head">
       <h2 class="sheet-title">‘Abstract paintings’</h2>
-      <p class="sheet-lines">Group exhibition, Scroll New York</p>
+      <p class="sheet-lines">Scroll New York</p>
       <p class="sheet-when">June 2026</p>
     </header>
 
     <div class="plates-stage" data-figures>
       <div class="plates-frame">
-        <figure class="reader-figure plates-figure is-current">
+        <figure class="reader-figure plates-figure is-wide is-current">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/d5381f063600c5e0-400.avif 400w, /prototype2/media/d5381f063600c5e0-800.avif 800w, /prototype2/media/d5381f063600c5e0-1170.avif 1170w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/d5381f063600c5e0-400.webp 400w, /prototype2/media/d5381f063600c5e0-800.webp 800w, /prototype2/media/d5381f063600c5e0-1170.webp 1170w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -2383,13 +2450,13 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <div class="plates" data-reader>
     <header class="plates-head">
       <h2 class="sheet-title">Marco, Límite y Lugar</h2>
-      <p class="sheet-lines">Group exhibition, Alzueta Gallery Madrid</p>
+      <p class="sheet-lines">Alzueta Gallery Madrid</p>
       <p class="sheet-when">March 2025</p>
     </header>
 
     <div class="plates-stage" data-figures>
       <div class="plates-frame">
-        <figure class="reader-figure plates-figure is-current">
+        <figure class="reader-figure plates-figure is-wide is-current">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/0ca4501d9ee02c96-400.avif 400w, /prototype2/media/0ca4501d9ee02c96-800.avif 800w, /prototype2/media/0ca4501d9ee02c96-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/0ca4501d9ee02c96-400.webp 400w, /prototype2/media/0ca4501d9ee02c96-800.webp 800w, /prototype2/media/0ca4501d9ee02c96-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -2403,7 +2470,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         fetchpriority="high"
       />
     </picture>
-            </figure><figure class="reader-figure plates-figure">
+            </figure><figure class="reader-figure plates-figure is-wide">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/a375d2b4392f5ca4-400.avif 400w, /prototype2/media/a375d2b4392f5ca4-800.avif 800w, /prototype2/media/a375d2b4392f5ca4-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/a375d2b4392f5ca4-400.webp 400w, /prototype2/media/a375d2b4392f5ca4-800.webp 800w, /prototype2/media/a375d2b4392f5ca4-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -2417,7 +2484,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
-            </figure><figure class="reader-figure plates-figure">
+            </figure><figure class="reader-figure plates-figure is-wide">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/962cef1a5e6b639b-400.avif 400w, /prototype2/media/962cef1a5e6b639b-800.avif 800w, /prototype2/media/962cef1a5e6b639b-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/962cef1a5e6b639b-400.webp 400w, /prototype2/media/962cef1a5e6b639b-800.webp 800w, /prototype2/media/962cef1a5e6b639b-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -2445,7 +2512,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
-            </figure><figure class="reader-figure plates-figure">
+            </figure><figure class="reader-figure plates-figure is-wide">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/e1ecd6f30b77dac3-400.avif 400w, /prototype2/media/e1ecd6f30b77dac3-800.avif 800w, /prototype2/media/e1ecd6f30b77dac3-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/e1ecd6f30b77dac3-400.webp 400w, /prototype2/media/e1ecd6f30b77dac3-800.webp 800w, /prototype2/media/e1ecd6f30b77dac3-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -2459,7 +2526,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
-            </figure><figure class="reader-figure plates-figure">
+            </figure><figure class="reader-figure plates-figure is-wide">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/5b84408f70c401fe-400.avif 400w, /prototype2/media/5b84408f70c401fe-800.avif 800w, /prototype2/media/5b84408f70c401fe-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/5b84408f70c401fe-400.webp 400w, /prototype2/media/5b84408f70c401fe-800.webp 800w, /prototype2/media/5b84408f70c401fe-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -2490,13 +2557,13 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <div class="plates" data-reader>
     <header class="plates-head">
       <h2 class="sheet-title">What abstract art means to me?</h2>
-      <p class="sheet-lines">Group exhibition, Alzueta Gallery Séneca</p>
+      <p class="sheet-lines">Alzueta Gallery Séneca</p>
       <p class="sheet-when">January 2024</p>
     </header>
 
     <div class="plates-stage" data-figures>
       <div class="plates-frame">
-        <figure class="reader-figure plates-figure is-current">
+        <figure class="reader-figure plates-figure is-wide is-current">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/d4ceb466982a3a0f-400.avif 400w, /prototype2/media/d4ceb466982a3a0f-800.avif 800w, /prototype2/media/d4ceb466982a3a0f-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/d4ceb466982a3a0f-400.webp 400w, /prototype2/media/d4ceb466982a3a0f-800.webp 800w, /prototype2/media/d4ceb466982a3a0f-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -2569,7 +2636,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <div class="plates" data-reader>
     <header class="plates-head">
       <h2 class="sheet-title">La terre est bleu comme un organge</h2>
-      <p class="sheet-lines">Group exhibition, Alzueta Gallery, Madrid</p>
+      <p class="sheet-lines">Alzueta Gallery, Madrid</p>
       <p class="sheet-when">November 2023</p>
     </header>
 
@@ -2603,7 +2670,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
-            </figure><figure class="reader-figure plates-figure">
+            </figure><figure class="reader-figure plates-figure is-wide">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/8097c5a891927198-400.avif 400w, /prototype2/media/8097c5a891927198-800.avif 800w, /prototype2/media/8097c5a891927198-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/8097c5a891927198-400.webp 400w, /prototype2/media/8097c5a891927198-800.webp 800w, /prototype2/media/8097c5a891927198-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -2617,7 +2684,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
-            </figure><figure class="reader-figure plates-figure">
+            </figure><figure class="reader-figure plates-figure is-wide">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/dbf1f3ea4e2c9c61-400.avif 400w, /prototype2/media/dbf1f3ea4e2c9c61-800.avif 800w, /prototype2/media/dbf1f3ea4e2c9c61-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/dbf1f3ea4e2c9c61-400.webp 400w, /prototype2/media/dbf1f3ea4e2c9c61-800.webp 800w, /prototype2/media/dbf1f3ea4e2c9c61-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -2631,7 +2698,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
-            </figure><figure class="reader-figure plates-figure">
+            </figure><figure class="reader-figure plates-figure is-wide">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/b45dcc169d83844b-400.avif 400w, /prototype2/media/b45dcc169d83844b-800.avif 800w, /prototype2/media/b45dcc169d83844b-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/b45dcc169d83844b-400.webp 400w, /prototype2/media/b45dcc169d83844b-800.webp 800w, /prototype2/media/b45dcc169d83844b-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -2659,7 +2726,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
-            </figure><figure class="reader-figure plates-figure">
+            </figure><figure class="reader-figure plates-figure is-wide">
               <picture class="">
       <source type="image/avif" srcset="/prototype2/media/1fdacc99883e20d0-400.avif 400w, /prototype2/media/1fdacc99883e20d0-800.avif 800w, /prototype2/media/1fdacc99883e20d0-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
       <source type="image/webp" srcset="/prototype2/media/1fdacc99883e20d0-400.webp 400w, /prototype2/media/1fdacc99883e20d0-800.webp 800w, /prototype2/media/1fdacc99883e20d0-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 57vw" />
@@ -2714,10 +2781,52 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <div class="about-reel-track" data-about-track>
       <button type="button" class="about-reel-item">
             <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-1-800.avif 800w, /prototype2/about/about-1-1600.avif 1600w, /prototype2/about/about-1-2692.avif 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-1-800.webp 800w, /prototype2/about/about-1-1600.webp 1600w, /prototype2/about/about-1-2692.webp 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/avif" srcset="/prototype2/about/about-1-400.avif 400w, /prototype2/about/about-1-800.avif 800w, /prototype2/about/about-1-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-1-400.webp 400w, /prototype2/about/about-1-800.webp 800w, /prototype2/about/about-1-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
       <img
-        src="/prototype2/about/about-1-2692.jpg"
+        src="/prototype2/about/about-1-1600.jpg"
+        alt="Colour charts pinned to the studio wall above jars of brushes and a broad, paint-spattered brush"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-2-400.avif 400w, /prototype2/about/about-2-800.avif 800w, /prototype2/about/about-2-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-2-400.webp 400w, /prototype2/about/about-2-800.webp 800w, /prototype2/about/about-2-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-2-1600.jpg"
+        alt="Claudia Valsells in her studio among canvases and pots of paint, seen from above"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-3-400.avif 400w, /prototype2/about/about-3-800.avif 800w, /prototype2/about/about-3-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-3-400.webp 400w, /prototype2/about/about-3-800.webp 800w, /prototype2/about/about-3-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-3-1600.jpg"
+        alt="Claudia Valsells on a step, reaching up to paint the studio wall, a pot of paint in her hand"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-4-400.avif 400w, /prototype2/about/about-4-800.avif 800w, /prototype2/about/about-4-1600.avif 1600w, /prototype2/about/about-4-2692.avif 2692w" sizes="(max-width: 1097px) 177px, 16.1vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-4-400.webp 400w, /prototype2/about/about-4-800.webp 800w, /prototype2/about/about-4-1600.webp 1600w, /prototype2/about/about-4-2692.webp 2692w" sizes="(max-width: 1097px) 177px, 16.1vw" />
+      <img
+        src="/prototype2/about/about-4-2692.jpg"
         alt="Claudia Valsells, seen from behind, painting fields of colour on a studio wall with a pot of paint in hand"
         width="2692"
         height="1830"
@@ -2728,11 +2837,95 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
           </button><button type="button" class="about-reel-item">
             <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-2-800.avif 800w, /prototype2/about/about-2-1600.avif 1600w, /prototype2/about/about-2-2692.avif 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-2-800.webp 800w, /prototype2/about/about-2-1600.webp 1600w, /prototype2/about/about-2-2692.webp 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/avif" srcset="/prototype2/about/about-5-400.avif 400w, /prototype2/about/about-5-800.avif 800w, /prototype2/about/about-5-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-5-400.webp 400w, /prototype2/about/about-5-800.webp 800w, /prototype2/about/about-5-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
       <img
-        src="/prototype2/about/about-2-2692.jpg"
+        src="/prototype2/about/about-5-1600.jpg"
+        alt="Claudia Valsells standing between two large canvases propped against the studio wall"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-6-400.avif 400w, /prototype2/about/about-6-800.avif 800w, /prototype2/about/about-6-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-6-400.webp 400w, /prototype2/about/about-6-800.webp 800w, /prototype2/about/about-6-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-6-1600.jpg"
+        alt="Pots of paint and brushes on a trestle in front of a painted canvas"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-7-400.avif 400w, /prototype2/about/about-7-800.avif 800w, /prototype2/about/about-7-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-7-400.webp 400w, /prototype2/about/about-7-800.webp 800w, /prototype2/about/about-7-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-7-1600.jpg"
+        alt="A hand holding up a pink board with a red square over a pot of paint"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-8-400.avif 400w, /prototype2/about/about-8-800.avif 800w, /prototype2/about/about-8-1600.avif 1600w, /prototype2/about/about-8-2327.avif 2327w" sizes="(max-width: 1097px) 153px, 13.9vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-8-400.webp 400w, /prototype2/about/about-8-800.webp 800w, /prototype2/about/about-8-1600.webp 1600w, /prototype2/about/about-8-2327.webp 2327w" sizes="(max-width: 1097px) 153px, 13.9vw" />
+      <img
+        src="/prototype2/about/about-8-2327.jpg"
         alt="Claudia Valsells painting a large canvas in her studio, pots of colour on the table beside her"
+        width="2327"
+        height="1830"
+        style="aspect-ratio:2327 / 1830"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-9-400.avif 400w, /prototype2/about/about-9-800.avif 800w, /prototype2/about/about-9-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-9-400.webp 400w, /prototype2/about/about-9-800.webp 800w, /prototype2/about/about-9-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-9-1600.jpg"
+        alt="Small paintings and patches of colour on a white studio wall"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-10-400.avif 400w, /prototype2/about/about-10-800.avif 800w, /prototype2/about/about-10-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-10-400.webp 400w, /prototype2/about/about-10-800.webp 800w, /prototype2/about/about-10-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-10-1600.jpg"
+        alt="A hand painting with a round brush on a canvas of green, pink and blue"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-11-400.avif 400w, /prototype2/about/about-11-800.avif 800w, /prototype2/about/about-11-1600.avif 1600w, /prototype2/about/about-11-2692.avif 2692w" sizes="(max-width: 1097px) 177px, 16.1vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-11-400.webp 400w, /prototype2/about/about-11-800.webp 800w, /prototype2/about/about-11-1600.webp 1600w, /prototype2/about/about-11-2692.webp 2692w" sizes="(max-width: 1097px) 177px, 16.1vw" />
+      <img
+        src="/prototype2/about/about-11-2692.jpg"
+        alt="Claudia Valsells unrolling a sheet of paper in front of her canvases"
         width="2692"
         height="1830"
         style="aspect-ratio:2692 / 1830"
@@ -2742,10 +2935,66 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
           </button><button type="button" class="about-reel-item">
             <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-3-800.avif 800w, /prototype2/about/about-3-845.avif 845w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-3-800.webp 800w, /prototype2/about/about-3-845.webp 845w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/avif" srcset="/prototype2/about/about-12-400.avif 400w, /prototype2/about/about-12-800.avif 800w, /prototype2/about/about-12-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-12-400.webp 400w, /prototype2/about/about-12-800.webp 800w, /prototype2/about/about-12-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
       <img
-        src="/prototype2/about/about-3-845.jpg"
+        src="/prototype2/about/about-12-1600.jpg"
+        alt="Claudia Valsells on a stepladder, putting up small paintings on the studio wall"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-13-400.avif 400w, /prototype2/about/about-13-800.avif 800w, /prototype2/about/about-13-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-13-400.webp 400w, /prototype2/about/about-13-800.webp 800w, /prototype2/about/about-13-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-13-1600.jpg"
+        alt="A hand setting a small painting on the studio wall beside an easel"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-14-400.avif 400w, /prototype2/about/about-14-800.avif 800w, /prototype2/about/about-14-1600.avif 1600w, /prototype2/about/about-14-2692.avif 2692w" sizes="(max-width: 1097px) 180px, 16.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-14-400.webp 400w, /prototype2/about/about-14-800.webp 800w, /prototype2/about/about-14-1600.webp 1600w, /prototype2/about/about-14-2692.webp 2692w" sizes="(max-width: 1097px) 180px, 16.4vw" />
+      <img
+        src="/prototype2/about/about-14-2692.jpg"
+        alt="Claudia Valsells at work at the end of her long studio, canvases laid out on the table"
+        width="2692"
+        height="1795"
+        style="aspect-ratio:2692 / 1795"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-15-400.avif 400w, /prototype2/about/about-15-800.avif 800w, /prototype2/about/about-15-1600.avif 1600w" sizes="(max-width: 1097px) 90px, 8.2vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-15-400.webp 400w, /prototype2/about/about-15-800.webp 800w, /prototype2/about/about-15-1600.webp 1600w" sizes="(max-width: 1097px) 90px, 8.2vw" />
+      <img
+        src="/prototype2/about/about-15-1600.jpg"
+        alt="A hand painting a deep red canvas with a fine brush"
+        width="1600"
+        height="2133"
+        style="aspect-ratio:1600 / 2133"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-16-400.avif 400w, /prototype2/about/about-16-800.avif 800w, /prototype2/about/about-16-845.avif 845w" sizes="(max-width: 1097px) 184px, 16.8vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-16-400.webp 400w, /prototype2/about/about-16-800.webp 800w, /prototype2/about/about-16-845.webp 845w" sizes="(max-width: 1097px) 184px, 16.8vw" />
+      <img
+        src="/prototype2/about/about-16-845.jpg"
         alt="Claudia Valsells reaching up to paint a canvas propped against the studio wall, among other canvases"
         width="845"
         height="550"
@@ -2756,24 +3005,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
           </button><button type="button" class="about-reel-item">
             <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-4-800.avif 800w, /prototype2/about/about-4-833.avif 833w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-4-800.webp 800w, /prototype2/about/about-4-833.webp 833w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/avif" srcset="/prototype2/about/about-17-400.avif 400w, /prototype2/about/about-17-765.avif 765w" sizes="(max-width: 1097px) 127px, 11.6vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-17-400.webp 400w, /prototype2/about/about-17-765.webp 765w" sizes="(max-width: 1097px) 127px, 11.6vw" />
       <img
-        src="/prototype2/about/about-4-833.jpg"
-        alt="Claudia Valsells in her studio holding a palette and a brush over pots of paint"
-        width="833"
-        height="600"
-        style="aspect-ratio:833 / 600"
-        loading="lazy"
-        decoding="async"
-      />
-    </picture>
-          </button><button type="button" class="about-reel-item">
-            <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-5-765.avif 765w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-5-765.webp 765w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <img
-        src="/prototype2/about/about-5-765.jpg"
+        src="/prototype2/about/about-17-765.jpg"
         alt="Claudia Valsells in profile against a red wall stencilled AC 068"
         width="765"
         height="724"
@@ -2782,8 +3017,28 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-18-400.avif 400w, /prototype2/about/about-18-800.avif 800w, /prototype2/about/about-18-833.avif 833w" sizes="(max-width: 1097px) 167px, 15.2vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-18-400.webp 400w, /prototype2/about/about-18-800.webp 800w, /prototype2/about/about-18-833.webp 833w" sizes="(max-width: 1097px) 167px, 15.2vw" />
+      <img
+        src="/prototype2/about/about-18-833.jpg"
+        alt="Claudia Valsells in her studio holding a palette and a brush over pots of paint"
+        width="833"
+        height="600"
+        style="aspect-ratio:833 / 600"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
           </button>
     </div>
+    <button type="button" class="about-reel-step is-prev" data-about-reel-step="-1" aria-label="Earlier photographs" hidden>
+      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="M8 1 1 8l7 7" /></svg>
+    </button>
+    <button type="button" class="about-reel-step is-next" data-about-reel-step="1" aria-label="More photographs" hidden>
+      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="m1 1 7 7-7 7" /></svg>
+    </button>
   </div>
           </div>
         </div>

@@ -20,7 +20,24 @@ function wire(list) {
         // `pointerenter` rather than `pointerover`: the latter fires again for every
         // child the pointer crosses, so the colour would churn as it passed over the
         // title and then the photograph.
-        row.addEventListener('pointerenter', () => colour(row));
-        row.addEventListener('focus', () => colour(row));
+        //
+        // Not for a finger. A touch enters the row it lands on and focuses the
+        // link it taps, and neither is a reach towards the row. The colour is only
+        // ever shown to a pointer that hovers and to a keyboard (the stylesheet's
+        // `(hover: hover)` and `:focus-visible`), so a touch draws none — and the
+        // focus that comes back to the row when its sheet closes draws none either,
+        // unless a keyboard is what brought it.
+        let finger = false;
+        row.addEventListener('pointerdown', (event) => {
+            finger = event.pointerType === 'touch';
+        });
+        row.addEventListener('pointerenter', (event) => {
+            if (event.pointerType !== 'touch')
+                colour(row);
+        });
+        row.addEventListener('focus', () => {
+            if (!finger || row.matches(':focus-visible'))
+                colour(row);
+        });
     }
 }

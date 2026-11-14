@@ -25,12 +25,14 @@
 <link rel="modulepreload" href="/prototype2/js/scroll-cue.js" />
 <link rel="modulepreload" href="/prototype2/js/about.js" />
 <link rel="modulepreload" href="/prototype2/js/inquiries.js" />
+<link rel="modulepreload" href="/prototype2/js/chart.js" />
 <link rel="modulepreload" href="/prototype2/js/book.js" />
 <link rel="modulepreload" href="/prototype2/js/focus.js" />
 <link rel="modulepreload" href="/prototype2/js/hues.js" />
 <link rel="modulepreload" href="/prototype2/js/current.js" />
 <link rel="modulepreload" href="/prototype2/js/scrollbar.js" />
 <link rel="modulepreload" href="/prototype2/js/scramble.js" />
+<link rel="modulepreload" href="/prototype2/js/menu.js" />
 <link rel="modulepreload" href="/prototype2/js/index.js" />
 <script>document.documentElement.classList.add('js');
 // Arriving at What's Color by its link, the page is laid out at the top and
@@ -43,16 +45,33 @@
 try { var nav = performance.getEntriesByType('navigation')[0];
   if (location.hash === '#whats-color' && (!nav || nav.type === 'navigate')
     && CSS.supports('animation-timeline: view()')
-    && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    && !matchMedia('(prefers-reduced-motion: reduce)').matches
+    && !matchMedia('(max-width: 899px)').matches) {
     document.documentElement.classList.add('wc-arriving', 'wc-swatch-drop');
     setTimeout(function () { document.documentElement.classList.remove('wc-arriving') }, 1500);
     setTimeout(function () { document.documentElement.classList.remove('wc-swatch-drop') }, 700);
-  } } catch (e) {}</script>
+  } } catch (e) {}
+// On a phone the start page opens on the menu, where the film is on a desktop
+// (client/menu.ts): decided here, before the first paint, so the page under
+// it is never seen.
+try { if (document.documentElement.hasAttribute('data-start')
+  && matchMedia('(max-width: 899px)').matches
+  && (location.hash === '' || location.hash === '#about'))
+  document.documentElement.classList.add('is-start') } catch (e) {}
+// From here on the stylesheet keeps the phone's menu out of sight, and only
+// client/menu.ts can raise it. If that has not said it is there after four
+// seconds — the scripts never arrived, or one of them fell over on the way —
+// the page goes back to what it is without them: the menu at its head, in
+// the flow, and no start screen held over it. Scripts that arrive later than
+// that take the page back (client/index.ts).
+setTimeout(function () { var root = document.documentElement;
+  if (!root.hasAttribute('data-menu')) root.classList.remove('js', 'is-start') }, 4000);</script>
 </head>
 <body class="is-detail">
 <div class="page-veil" aria-hidden="true"></div>
 <a class="skip-link" href="#main">Skip to content</a>
-<header class="top">
+<button type="button" class="menu-toggle" data-menu-toggle aria-label="Menu" aria-expanded="false" aria-controls="site-menu"></button>
+  <header class="top" id="site-menu">
     <a class="wordmark" href="/prototype2/" data-roll>CLAUDIA VALSELLS</a>
     <a class="top-soon" href="/prototype2/#whats-color"  data-roll>What&rsquo;s Color?</a>
     <nav class="menu" aria-label="Primary">
@@ -60,32 +79,182 @@ try { var nav = performance.getEntriesByType('navigation')[0];
             href="/prototype2/color-chart/"
             
             
+            style="--menu-phone: 5"
             data-roll
           >Color Chart</a><a
             href="/prototype2/commissioned/"
             
             
+            style="--menu-phone: 3"
             data-roll
           >Commissioned</a><a
             href="/prototype2/exhibitions/"
             
             
+            style="--menu-phone: 4"
             data-roll
           >Exhibitions</a><a
             href="/prototype2/artwork/"
             
             aria-current="page"
+            style="--menu-phone: 2"
             data-roll
           >Artwork</a><a
             href="/prototype2/#about"
             data-panel-open="about"
             
+            style="--menu-phone: 1"
             data-roll
           >About</a>
     </nav>
   </header>
 
 <main id="main"><article class="detail">
+      <div class="detail-ghost" aria-hidden="true"><picture class="">
+      <source type="image/avif" srcset="/prototype2/media/0cb35503e6789d8cc8ee099f9-400.avif 400w, /prototype2/media/0cb35503e6789d8cc8ee099f9-800.avif 800w, /prototype2/media/0cb35503e6789d8cc8ee099f9-1252.avif 1252w" sizes="43vw" />
+      <source type="image/webp" srcset="/prototype2/media/0cb35503e6789d8cc8ee099f9-400.webp 400w, /prototype2/media/0cb35503e6789d8cc8ee099f9-800.webp 800w, /prototype2/media/0cb35503e6789d8cc8ee099f9-1252.webp 1252w" sizes="43vw" />
+      <img
+        src="/prototype2/media/0cb35503e6789d8cc8ee099f9-1252.jpg"
+        alt=""
+        width="1252"
+        height="1490"
+        style="aspect-ratio:1252 / 1490"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture><picture class="">
+      <source type="image/avif" srcset="/prototype2/media/a517913f143c4532c104b643d-400.avif 400w, /prototype2/media/a517913f143c4532c104b643d-800.avif 800w, /prototype2/media/a517913f143c4532c104b643d-1206.avif 1206w" sizes="43vw" />
+      <source type="image/webp" srcset="/prototype2/media/a517913f143c4532c104b643d-400.webp 400w, /prototype2/media/a517913f143c4532c104b643d-800.webp 800w, /prototype2/media/a517913f143c4532c104b643d-1206.webp 1206w" sizes="43vw" />
+      <img
+        src="/prototype2/media/a517913f143c4532c104b643d-1206.jpg"
+        alt=""
+        width="1206"
+        height="1435"
+        style="aspect-ratio:1206 / 1435"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture><picture class="">
+      <source type="image/avif" srcset="/prototype2/media/03951fbb306015adc1a229932-400.avif 400w, /prototype2/media/03951fbb306015adc1a229932-800.avif 800w, /prototype2/media/03951fbb306015adc1a229932-968.avif 968w" sizes="43vw" />
+      <source type="image/webp" srcset="/prototype2/media/03951fbb306015adc1a229932-400.webp 400w, /prototype2/media/03951fbb306015adc1a229932-800.webp 800w, /prototype2/media/03951fbb306015adc1a229932-968.webp 968w" sizes="43vw" />
+      <img
+        src="/prototype2/media/03951fbb306015adc1a229932-968.jpg"
+        alt=""
+        width="968"
+        height="1152"
+        style="aspect-ratio:968 / 1152"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture><picture class="">
+      <source type="image/avif" srcset="/prototype2/media/538b312eb6fd6862c21e9941c-400.avif 400w, /prototype2/media/538b312eb6fd6862c21e9941c-800.avif 800w, /prototype2/media/538b312eb6fd6862c21e9941c-1193.avif 1193w" sizes="43vw" />
+      <source type="image/webp" srcset="/prototype2/media/538b312eb6fd6862c21e9941c-400.webp 400w, /prototype2/media/538b312eb6fd6862c21e9941c-800.webp 800w, /prototype2/media/538b312eb6fd6862c21e9941c-1193.webp 1193w" sizes="43vw" />
+      <img
+        src="/prototype2/media/538b312eb6fd6862c21e9941c-1193.jpg"
+        alt=""
+        width="1193"
+        height="1420"
+        style="aspect-ratio:1193 / 1420"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture><picture class="">
+      <source type="image/avif" srcset="/prototype2/media/afe549a39e46e804-400.avif 400w, /prototype2/media/afe549a39e46e804-800.avif 800w, /prototype2/media/afe549a39e46e804-1600.avif 1600w" sizes="43vw" />
+      <source type="image/webp" srcset="/prototype2/media/afe549a39e46e804-400.webp 400w, /prototype2/media/afe549a39e46e804-800.webp 800w, /prototype2/media/afe549a39e46e804-1600.webp 1600w" sizes="43vw" />
+      <img
+        src="/prototype2/media/afe549a39e46e804-1600.jpg"
+        alt=""
+        width="1600"
+        height="2400"
+        style="aspect-ratio:1600 / 2400"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture><picture class="">
+      <source type="image/avif" srcset="/prototype2/media/f3fd68b6ae4a390fc6b575a82-400.avif 400w, /prototype2/media/f3fd68b6ae4a390fc6b575a82-683.avif 683w" sizes="43vw" />
+      <source type="image/webp" srcset="/prototype2/media/f3fd68b6ae4a390fc6b575a82-400.webp 400w, /prototype2/media/f3fd68b6ae4a390fc6b575a82-683.webp 683w" sizes="43vw" />
+      <img
+        src="/prototype2/media/f3fd68b6ae4a390fc6b575a82-683.jpg"
+        alt=""
+        width="683"
+        height="813"
+        style="aspect-ratio:683 / 813"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture><picture class="">
+      <source type="image/avif" srcset="/prototype2/media/fcd0540a1c8fd8a8cfb6a1b8c-400.avif 400w, /prototype2/media/fcd0540a1c8fd8a8cfb6a1b8c-683.avif 683w" sizes="43vw" />
+      <source type="image/webp" srcset="/prototype2/media/fcd0540a1c8fd8a8cfb6a1b8c-400.webp 400w, /prototype2/media/fcd0540a1c8fd8a8cfb6a1b8c-683.webp 683w" sizes="43vw" />
+      <img
+        src="/prototype2/media/fcd0540a1c8fd8a8cfb6a1b8c-683.jpg"
+        alt=""
+        width="683"
+        height="813"
+        style="aspect-ratio:683 / 813"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture><picture class="">
+      <source type="image/avif" srcset="/prototype2/media/4a2d92501f32ca1ac82850e4a-400.avif 400w, /prototype2/media/4a2d92501f32ca1ac82850e4a-800.avif 800w, /prototype2/media/4a2d92501f32ca1ac82850e4a-1450.avif 1450w" sizes="43vw" />
+      <source type="image/webp" srcset="/prototype2/media/4a2d92501f32ca1ac82850e4a-400.webp 400w, /prototype2/media/4a2d92501f32ca1ac82850e4a-800.webp 800w, /prototype2/media/4a2d92501f32ca1ac82850e4a-1450.webp 1450w" sizes="43vw" />
+      <img
+        src="/prototype2/media/4a2d92501f32ca1ac82850e4a-1450.jpg"
+        alt=""
+        width="1450"
+        height="1727"
+        style="aspect-ratio:1450 / 1727"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture><picture class="">
+      <source type="image/avif" srcset="/prototype2/media/9090a52648a45a76c092b5f9c-400.avif 400w, /prototype2/media/9090a52648a45a76c092b5f9c-800.avif 800w, /prototype2/media/9090a52648a45a76c092b5f9c-1387.avif 1387w" sizes="43vw" />
+      <source type="image/webp" srcset="/prototype2/media/9090a52648a45a76c092b5f9c-400.webp 400w, /prototype2/media/9090a52648a45a76c092b5f9c-800.webp 800w, /prototype2/media/9090a52648a45a76c092b5f9c-1387.webp 1387w" sizes="43vw" />
+      <img
+        src="/prototype2/media/9090a52648a45a76c092b5f9c-1387.jpg"
+        alt=""
+        width="1387"
+        height="1651"
+        style="aspect-ratio:1387 / 1651"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture><picture class="">
+      <source type="image/avif" srcset="/prototype2/media/2bc92910b70b25a1c29dfea4e-400.avif 400w, /prototype2/media/2bc92910b70b25a1c29dfea4e-683.avif 683w" sizes="43vw" />
+      <source type="image/webp" srcset="/prototype2/media/2bc92910b70b25a1c29dfea4e-400.webp 400w, /prototype2/media/2bc92910b70b25a1c29dfea4e-683.webp 683w" sizes="43vw" />
+      <img
+        src="/prototype2/media/2bc92910b70b25a1c29dfea4e-683.jpg"
+        alt=""
+        width="683"
+        height="813"
+        style="aspect-ratio:683 / 813"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture><picture class="">
+      <source type="image/avif" srcset="/prototype2/media/bd88dd994155fb53cdf696e80-400.avif 400w, /prototype2/media/bd88dd994155fb53cdf696e80-800.avif 800w, /prototype2/media/bd88dd994155fb53cdf696e80-978.avif 978w" sizes="43vw" />
+      <source type="image/webp" srcset="/prototype2/media/bd88dd994155fb53cdf696e80-400.webp 400w, /prototype2/media/bd88dd994155fb53cdf696e80-800.webp 800w, /prototype2/media/bd88dd994155fb53cdf696e80-978.webp 978w" sizes="43vw" />
+      <img
+        src="/prototype2/media/bd88dd994155fb53cdf696e80-978.jpg"
+        alt=""
+        width="978"
+        height="1164"
+        style="aspect-ratio:978 / 1164"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture><picture class="">
+      <source type="image/avif" srcset="/prototype2/media/1b142d1c7d633d61c722e6132-400.avif 400w, /prototype2/media/1b142d1c7d633d61c722e6132-800.avif 800w, /prototype2/media/1b142d1c7d633d61c722e6132-1052.avif 1052w" sizes="43vw" />
+      <source type="image/webp" srcset="/prototype2/media/1b142d1c7d633d61c722e6132-400.webp 400w, /prototype2/media/1b142d1c7d633d61c722e6132-800.webp 800w, /prototype2/media/1b142d1c7d633d61c722e6132-1052.webp 1052w" sizes="43vw" />
+      <img
+        src="/prototype2/media/1b142d1c7d633d61c722e6132-1052.jpg"
+        alt=""
+        width="1052"
+        height="1252"
+        style="aspect-ratio:1052 / 1252"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture></div>
       <a class="detail-back detail-section" href="/prototype2/artwork/">Artwork</a>
       <a class="detail-back detail-close" href="/prototype2/artwork/" aria-label="Close, back to the gallery">Close</a>
       <div class="detail-stage">
@@ -259,10 +428,52 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <div class="about-reel-track" data-about-track>
       <button type="button" class="about-reel-item">
             <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-1-800.avif 800w, /prototype2/about/about-1-1600.avif 1600w, /prototype2/about/about-1-2692.avif 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-1-800.webp 800w, /prototype2/about/about-1-1600.webp 1600w, /prototype2/about/about-1-2692.webp 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/avif" srcset="/prototype2/about/about-1-400.avif 400w, /prototype2/about/about-1-800.avif 800w, /prototype2/about/about-1-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-1-400.webp 400w, /prototype2/about/about-1-800.webp 800w, /prototype2/about/about-1-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
       <img
-        src="/prototype2/about/about-1-2692.jpg"
+        src="/prototype2/about/about-1-1600.jpg"
+        alt="Colour charts pinned to the studio wall above jars of brushes and a broad, paint-spattered brush"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-2-400.avif 400w, /prototype2/about/about-2-800.avif 800w, /prototype2/about/about-2-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-2-400.webp 400w, /prototype2/about/about-2-800.webp 800w, /prototype2/about/about-2-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-2-1600.jpg"
+        alt="Claudia Valsells in her studio among canvases and pots of paint, seen from above"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-3-400.avif 400w, /prototype2/about/about-3-800.avif 800w, /prototype2/about/about-3-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-3-400.webp 400w, /prototype2/about/about-3-800.webp 800w, /prototype2/about/about-3-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-3-1600.jpg"
+        alt="Claudia Valsells on a step, reaching up to paint the studio wall, a pot of paint in her hand"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-4-400.avif 400w, /prototype2/about/about-4-800.avif 800w, /prototype2/about/about-4-1600.avif 1600w, /prototype2/about/about-4-2692.avif 2692w" sizes="(max-width: 1097px) 177px, 16.1vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-4-400.webp 400w, /prototype2/about/about-4-800.webp 800w, /prototype2/about/about-4-1600.webp 1600w, /prototype2/about/about-4-2692.webp 2692w" sizes="(max-width: 1097px) 177px, 16.1vw" />
+      <img
+        src="/prototype2/about/about-4-2692.jpg"
         alt="Claudia Valsells, seen from behind, painting fields of colour on a studio wall with a pot of paint in hand"
         width="2692"
         height="1830"
@@ -273,11 +484,95 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
           </button><button type="button" class="about-reel-item">
             <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-2-800.avif 800w, /prototype2/about/about-2-1600.avif 1600w, /prototype2/about/about-2-2692.avif 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-2-800.webp 800w, /prototype2/about/about-2-1600.webp 1600w, /prototype2/about/about-2-2692.webp 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/avif" srcset="/prototype2/about/about-5-400.avif 400w, /prototype2/about/about-5-800.avif 800w, /prototype2/about/about-5-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-5-400.webp 400w, /prototype2/about/about-5-800.webp 800w, /prototype2/about/about-5-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
       <img
-        src="/prototype2/about/about-2-2692.jpg"
+        src="/prototype2/about/about-5-1600.jpg"
+        alt="Claudia Valsells standing between two large canvases propped against the studio wall"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-6-400.avif 400w, /prototype2/about/about-6-800.avif 800w, /prototype2/about/about-6-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-6-400.webp 400w, /prototype2/about/about-6-800.webp 800w, /prototype2/about/about-6-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-6-1600.jpg"
+        alt="Pots of paint and brushes on a trestle in front of a painted canvas"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-7-400.avif 400w, /prototype2/about/about-7-800.avif 800w, /prototype2/about/about-7-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-7-400.webp 400w, /prototype2/about/about-7-800.webp 800w, /prototype2/about/about-7-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-7-1600.jpg"
+        alt="A hand holding up a pink board with a red square over a pot of paint"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-8-400.avif 400w, /prototype2/about/about-8-800.avif 800w, /prototype2/about/about-8-1600.avif 1600w, /prototype2/about/about-8-2327.avif 2327w" sizes="(max-width: 1097px) 153px, 13.9vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-8-400.webp 400w, /prototype2/about/about-8-800.webp 800w, /prototype2/about/about-8-1600.webp 1600w, /prototype2/about/about-8-2327.webp 2327w" sizes="(max-width: 1097px) 153px, 13.9vw" />
+      <img
+        src="/prototype2/about/about-8-2327.jpg"
         alt="Claudia Valsells painting a large canvas in her studio, pots of colour on the table beside her"
+        width="2327"
+        height="1830"
+        style="aspect-ratio:2327 / 1830"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-9-400.avif 400w, /prototype2/about/about-9-800.avif 800w, /prototype2/about/about-9-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-9-400.webp 400w, /prototype2/about/about-9-800.webp 800w, /prototype2/about/about-9-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-9-1600.jpg"
+        alt="Small paintings and patches of colour on a white studio wall"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-10-400.avif 400w, /prototype2/about/about-10-800.avif 800w, /prototype2/about/about-10-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-10-400.webp 400w, /prototype2/about/about-10-800.webp 800w, /prototype2/about/about-10-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-10-1600.jpg"
+        alt="A hand painting with a round brush on a canvas of green, pink and blue"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-11-400.avif 400w, /prototype2/about/about-11-800.avif 800w, /prototype2/about/about-11-1600.avif 1600w, /prototype2/about/about-11-2692.avif 2692w" sizes="(max-width: 1097px) 177px, 16.1vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-11-400.webp 400w, /prototype2/about/about-11-800.webp 800w, /prototype2/about/about-11-1600.webp 1600w, /prototype2/about/about-11-2692.webp 2692w" sizes="(max-width: 1097px) 177px, 16.1vw" />
+      <img
+        src="/prototype2/about/about-11-2692.jpg"
+        alt="Claudia Valsells unrolling a sheet of paper in front of her canvases"
         width="2692"
         height="1830"
         style="aspect-ratio:2692 / 1830"
@@ -287,10 +582,66 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
           </button><button type="button" class="about-reel-item">
             <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-3-800.avif 800w, /prototype2/about/about-3-845.avif 845w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-3-800.webp 800w, /prototype2/about/about-3-845.webp 845w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/avif" srcset="/prototype2/about/about-12-400.avif 400w, /prototype2/about/about-12-800.avif 800w, /prototype2/about/about-12-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-12-400.webp 400w, /prototype2/about/about-12-800.webp 800w, /prototype2/about/about-12-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
       <img
-        src="/prototype2/about/about-3-845.jpg"
+        src="/prototype2/about/about-12-1600.jpg"
+        alt="Claudia Valsells on a stepladder, putting up small paintings on the studio wall"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-13-400.avif 400w, /prototype2/about/about-13-800.avif 800w, /prototype2/about/about-13-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-13-400.webp 400w, /prototype2/about/about-13-800.webp 800w, /prototype2/about/about-13-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-13-1600.jpg"
+        alt="A hand setting a small painting on the studio wall beside an easel"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-14-400.avif 400w, /prototype2/about/about-14-800.avif 800w, /prototype2/about/about-14-1600.avif 1600w, /prototype2/about/about-14-2692.avif 2692w" sizes="(max-width: 1097px) 180px, 16.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-14-400.webp 400w, /prototype2/about/about-14-800.webp 800w, /prototype2/about/about-14-1600.webp 1600w, /prototype2/about/about-14-2692.webp 2692w" sizes="(max-width: 1097px) 180px, 16.4vw" />
+      <img
+        src="/prototype2/about/about-14-2692.jpg"
+        alt="Claudia Valsells at work at the end of her long studio, canvases laid out on the table"
+        width="2692"
+        height="1795"
+        style="aspect-ratio:2692 / 1795"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-15-400.avif 400w, /prototype2/about/about-15-800.avif 800w, /prototype2/about/about-15-1600.avif 1600w" sizes="(max-width: 1097px) 90px, 8.2vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-15-400.webp 400w, /prototype2/about/about-15-800.webp 800w, /prototype2/about/about-15-1600.webp 1600w" sizes="(max-width: 1097px) 90px, 8.2vw" />
+      <img
+        src="/prototype2/about/about-15-1600.jpg"
+        alt="A hand painting a deep red canvas with a fine brush"
+        width="1600"
+        height="2133"
+        style="aspect-ratio:1600 / 2133"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-16-400.avif 400w, /prototype2/about/about-16-800.avif 800w, /prototype2/about/about-16-845.avif 845w" sizes="(max-width: 1097px) 184px, 16.8vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-16-400.webp 400w, /prototype2/about/about-16-800.webp 800w, /prototype2/about/about-16-845.webp 845w" sizes="(max-width: 1097px) 184px, 16.8vw" />
+      <img
+        src="/prototype2/about/about-16-845.jpg"
         alt="Claudia Valsells reaching up to paint a canvas propped against the studio wall, among other canvases"
         width="845"
         height="550"
@@ -301,24 +652,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
           </button><button type="button" class="about-reel-item">
             <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-4-800.avif 800w, /prototype2/about/about-4-833.avif 833w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-4-800.webp 800w, /prototype2/about/about-4-833.webp 833w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/avif" srcset="/prototype2/about/about-17-400.avif 400w, /prototype2/about/about-17-765.avif 765w" sizes="(max-width: 1097px) 127px, 11.6vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-17-400.webp 400w, /prototype2/about/about-17-765.webp 765w" sizes="(max-width: 1097px) 127px, 11.6vw" />
       <img
-        src="/prototype2/about/about-4-833.jpg"
-        alt="Claudia Valsells in her studio holding a palette and a brush over pots of paint"
-        width="833"
-        height="600"
-        style="aspect-ratio:833 / 600"
-        loading="lazy"
-        decoding="async"
-      />
-    </picture>
-          </button><button type="button" class="about-reel-item">
-            <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-5-765.avif 765w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-5-765.webp 765w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <img
-        src="/prototype2/about/about-5-765.jpg"
+        src="/prototype2/about/about-17-765.jpg"
         alt="Claudia Valsells in profile against a red wall stencilled AC 068"
         width="765"
         height="724"
@@ -327,8 +664,28 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-18-400.avif 400w, /prototype2/about/about-18-800.avif 800w, /prototype2/about/about-18-833.avif 833w" sizes="(max-width: 1097px) 167px, 15.2vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-18-400.webp 400w, /prototype2/about/about-18-800.webp 800w, /prototype2/about/about-18-833.webp 833w" sizes="(max-width: 1097px) 167px, 15.2vw" />
+      <img
+        src="/prototype2/about/about-18-833.jpg"
+        alt="Claudia Valsells in her studio holding a palette and a brush over pots of paint"
+        width="833"
+        height="600"
+        style="aspect-ratio:833 / 600"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
           </button>
     </div>
+    <button type="button" class="about-reel-step is-prev" data-about-reel-step="-1" aria-label="Earlier photographs" hidden>
+      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="M8 1 1 8l7 7" /></svg>
+    </button>
+    <button type="button" class="about-reel-step is-next" data-about-reel-step="1" aria-label="More photographs" hidden>
+      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="m1 1 7 7-7 7" /></svg>
+    </button>
   </div>
           </div>
         </div>

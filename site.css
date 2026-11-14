@@ -120,25 +120,26 @@
    * 1368 and 47 at 1588 — near-constant while the frames differ by 500px. So
    * it stays a clamp with a flat ceiling, and only the ceiling has moved.
    *
-   * 3.125rem is 50, which is the designer's 45pt at the 1728 she now draws at,
-   * and what every one of her final sheets measures: the wordmark's stem lands
-   * at 49–52 on all of them against the 40 this was. The bar and the pages
-   * take the same variable, so they move together and stay flush.
+   * 3rem is 48, by instruction. It was 50 off the designer's final sheets (the
+   * wordmark's stem landed at 49–52 on them) and 40 before that. The bar and
+   * the pages take the same variable, so they move together and stay flush.
    */
-  --pad: clamp(1.25rem, 3.5vw, 3.125rem);
+  --pad: clamp(1.25rem, 3.5vw, 3rem);
   --gap: clamp(1.5rem, 4.5vw, 5rem);
   --bar: 5.5rem;
   /*
    * Where the bar's first line sits, and with it everything that lines up on
    * it — the close control of every overlay.
    *
-   * 3rem, off the designer's final sheets: she puts the cap of the wordmark 48
-   * below the top of the window on all of them, against the 25.6 this was. One
-   * figure rather than four literals, so the bar and the controls that answer
-   * to it can never drift apart again. `--bar`, the room kept clear below it,
-   * is unchanged: the bar's ink now ends around 64 and still has 24 to spare.
+   * 1.6rem, which is where it always sat. For a day it was 3rem, after the
+   * designer's final sheets put the wordmark's cap 48 below the top of the
+   * window; that was taken back by instruction. One figure rather than four
+   * literals, so the bar and the controls that answer to it can never drift
+   * apart again.
    */
-  --bar-top: 3rem;
+  --bar-top: 1.6rem;
+  /* The menu's own inset below its line, the same 48 as its sides. */
+  --bar-bottom: 3rem;
   /* Width kept clear for the year rail: the grid starts at 211 of the sheet's
      1654, with the rail's bars 120 wide in it. */
   --rail: clamp(9rem, 12.76vw, 17rem);
@@ -374,13 +375,12 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 /*
  * The two names in the bar are set heavier than the pages are.
  *
- * Measured off the sheet rather than guessed: at the bar's size the stems of
- * the wordmark and of the section's name run 2.47 and 2.46 against 1.67 to
- * 1.92 for the five page links — about 1.4 times, which is the step from this
- * 500 to 700. They are what the site is called and what you are looking at;
- * the pages are where you can go next, and they are not shouting.
+ * Semibold for the two names, regular for the five pages, by instruction: they
+ * are what the site is called and what you are looking at; the pages are where
+ * you can go next, and they are not shouting.
  */
-.wordmark, .top-soon { font-weight: 700; }
+.wordmark, .top-soon { font-weight: 600; }
+.menu a { font-weight: 400; }
 
 
 
@@ -438,7 +438,7 @@ body.is-locked { overflow: hidden; }
   grid-template-columns: 25.53% auto minmax(0, 1fr);
   align-items: baseline;
   gap: 0;
-  padding: var(--bar-top) var(--pad) 1rem;
+  padding: var(--bar-top) var(--pad) var(--bar-bottom);
   pointer-events: none;
   mix-blend-mode: difference;
 }
@@ -455,7 +455,9 @@ body.is-locked { overflow: hidden; }
  */
 /* The bar is the one part of the site set smaller: 20 of the designer’s
    1920-frame pixels, against 40 everywhere else. */
-.wordmark, .top-soon, .menu { font-size: var(--type-menu); }
+/* 20 of the 1920 frame, tracked at 10% — the whole bar at one size and one
+   spacing; only the weight tells the names from the pages. */
+.wordmark, .top-soon, .menu { font-size: var(--type-menu); letter-spacing: 0.1em; }
 /*
  * A heading for a section that does not exist yet. It is a button and not a
  * link because there is nowhere to go: a link to nothing is a broken link, and
@@ -494,7 +496,6 @@ body.is-locked { overflow: hidden; }
  */
 .wordmark {
   justify-self: start;
-  letter-spacing: 0.033em;
   white-space: nowrap;
 }
 /* Evenly spaced, and the sheet says how far apart: 75px of 1866, four times
@@ -635,11 +636,7 @@ html.is-scrolled .scroll-cue { opacity: 0; }
   .scroll-cue { bottom: 1.1rem; --cue-size: 2rem; }
 }
 
-@media (max-width: 899px) {
-  .top { grid-template-columns: 1fr; justify-items: center; gap: 0.7rem; padding: 1.2rem var(--pad) 0.9rem; }
-  .menu { flex-wrap: wrap; justify-content: center; gap: 0.35rem 1.1rem; }
-  :root { --bar: 8rem; }
-}
+/* The phone's bar is three bars and a screen of its own: 09-phone.css. */
 
 /* ------------------------------------------------------------- cursor */
 
@@ -1115,13 +1112,6 @@ html:not(.js) .hero,
   padding: 0 var(--pad) 62vh var(--rail);
 }
 
-@media (max-width: 899px) {
-  .grid {
-    padding-left: var(--pad);
-    padding-bottom: 58vh;
-  }
-}
-
 /* The justified grid sets its own padding; excluded here so this more
    specific selector does not quietly win over it. */
 .grid:not([data-stack]):not(.grid-justified) {
@@ -1253,11 +1243,8 @@ html.js .hero[data-hero]+.grid[data-stack] {
   pointer-events: none;
 }
 
-@media (max-width: 599px) {
-  .grid:not(.grid-justified) {
-    --unit: 120px !important;
-  }
-}
+/* On a phone the gallery is two plain columns: 05-artwork.css, THE GALLERY ON
+   A PHONE. */
 
 /*
  * A handful of items rather than 154, and no size for the reader to choose:
@@ -1354,6 +1341,9 @@ html.js .hero[data-hero]+.grid[data-stack] {
  *                    cut-out stands and may reach this share of the gap towards
  *                    the caption (0.5 is half of it; 0 keeps it within the
  *                    cut-out's width).
+ *   --nav-dim        how faint ARTWORK, CLOSE, PREVIOUS and NEXT stand at rest,
+ *                    0 to 1 (0 invisible, 1 full black). On hover they turn
+ *                    full black.
  */
 .is-detail .top { display: none; }
 
@@ -1372,6 +1362,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
   --index-gap: 3.91vh;
   --caption-break: 2.36em;
   --view-spill: 0.5;
+  --nav-dim: 0.15;
   /* Read by client/views.ts: the width the painting and the caption share,
      and whether the caption takes its share beside the painting. */
   --plate-room: calc(100vw - 2 * var(--edge) - var(--text-gap));
@@ -1408,11 +1399,12 @@ html.js .hero[data-hero]+.grid[data-stack] {
   letter-spacing: 0.09em;
   text-transform: uppercase;
   font-weight: 400;
-  color: var(--ink);
-  transition: color var(--hover) var(--ease);
+  color: #000;
+  opacity: var(--nav-dim);
+  transition: opacity var(--hover) var(--ease);
 }
 .detail-back:hover, .detail-back:focus-visible,
-.detail-pager a:hover, .detail-pager a:focus-visible { color: var(--ink-soft); }
+.detail-pager a:hover, .detail-pager a:focus-visible { opacity: 1; }
 
 .detail-back {
   position: absolute;
@@ -1524,51 +1516,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
 }
 .detail-index b { font-weight: 600; }
 
-/*
- * A phone: one column that scrolls if it must. The corners stay corners at
- * the top; the painting, its pictures and its place, the caption and the way
- * through follow in order.
- */
-@media (max-width: 899px) {
-  .detail {
-    --edge: var(--pad);
-    --edge-v: var(--pad);
-    --plate-max: 52vh;
-    --plate-room: calc(100vw - 2 * var(--edge));
-    --caption-beside: 0;
-    --thumb-h: 3.6rem;
-    --thumb-gap: 0.7rem;
-    height: auto;
-    min-height: 100dvh;
-    overflow: visible;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 1.6rem;
-    padding: calc(var(--edge) + 2.4rem) var(--edge) var(--edge);
-    box-sizing: border-box;
-  }
-  .detail-back { font-size: 1rem; }
-  .detail-stage, .detail-caption, .detail-pager {
-    position: static;
-    margin: 0;
-    translate: none;
-    min-width: 0;
-    max-width: none;
-  }
-  .detail-under {
-    position: static;
-    translate: none;
-    width: auto;
-    margin-top: 0.9rem;
-  }
-  .detail-plate img { max-width: var(--plate-room); }
-  .detail-caption, .detail-title { font-size: 1.25rem; }
-  .detail-facts { margin-top: 0.6em; }
-  .detail-index, .detail-index:first-child { font-size: 1rem; margin: 0.7rem 0 0; }
-  .detail-pager, .detail-pager a { font-size: 1rem; }
-  .detail-pager { margin-top: auto; }
-}
+/* A phone has a sheet of its own: 05-artwork.css, THE WORK ON A PHONE. */
 
 /* ------------------------------------------------------------------- feed */
 
@@ -1879,10 +1827,22 @@ html.js .hero[data-hero]+.grid[data-stack] {
 }
 .exh-venue {
   font-size: var(--t-40);
-  font-weight: 500;
+  /*
+   * Light, not medium. Measured off the sheet the location's stems run 3.50
+   * against the title's 6.23 — a bit over half — which is the light cut of the
+   * scale rather than the medium one. Switzer is variable from 100 to 900, so
+   * this is the face thinning rather than a fallback standing in for it.
+   */
+  font-weight: 300;
   font-style: normal;
   text-transform: uppercase;
   line-height: 1.01;     /* 40.4 over 40 */
+}
+/* The kind of show, and the "at" after it: the group's name already says the
+   first on this layout, so both are in the row for the phone alone (below). */
+.exh-kind,
+.exh-at {
+  display: none;
 }
 /* What the sheet says about the one show it describes on the list itself. */
 .exh-note {
@@ -1919,14 +1879,111 @@ html.js .hero[data-hero]+.grid[data-stack] {
   right: calc(var(--year-col, 10%) + 2rem);
 }
 
+/*
+ * The phone sheet: 375 wide, and every figure below is so many of `--p`, one
+ * unit of that frame (09-phone.css).
+ *
+ * It is a different list made of the same rows. One size for every word, 16
+ * on a line of 16. The solo and the group shows run together, latest first,
+ * with no heading over them, so each row says what kind it was on a line of
+ * its own between the name and the place. The year leans, at the right margin
+ * on the name's first line. A row is 10, its lines, 7, and the rule.
+ *
+ * The order is not the markup's: each row carries its place as
+ * `--phone-order` (components/exhibitions.ts), and the groups dissolve
+ * (`display: contents`) so the rows of all four are one column to be ordered.
+ * Art fairs and Private collections come after the shows, each under its own
+ * name, which is set as a row of the list with air above it.
+ *
+ * The figures to change by hand are the first block.
+ */
 @media (max-width: 899px) {
-  .xlist.exh-list .xrow {
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 0.3rem 1rem;
+  .xlist.exh-list {
+    --exh-top: calc(97 * var(--p));          /* top of the page → the first row; its name starts 10 lower, at 107 */
+    --exh-foot: calc(106 * var(--p));        /* under the last rule */
+    --exh-size: calc(16 * var(--p));         /* the type: name, kind, place, year, group name */
+    --exh-line: calc(16 * var(--p));         /* its line, baseline to baseline */
+    --row-top: calc(10 * var(--p));          /* rule → the first line of a row */
+    --row-bottom: calc(7 * var(--p));        /* the last line → the rule under it */
+    --exh-title-col: calc(214 * var(--p));   /* how far a name runs before it turns */
+    --exh-group-gap: calc(40 * var(--p));    /* above ART FAIRS and PRIVATE COLLECTIONS */
+
+    display: flex;
+    flex-direction: column;
+    padding: var(--exh-top) var(--phone-pad) var(--exh-foot);
   }
-  .exh-year { align-self: start; }
-  /* No pointer to hover with, and no room to spare. */
-  .exh-plate { display: none; }
+
+  .exh-list .xgroup,
+  .exh-list .xrows {
+    display: contents;
+  }
+
+  /* name | year. The year takes the width of its four figures (36.88), the
+     name what is left; a private collection has no year and takes it all. */
+  .xlist.exh-list .xrow {
+    order: var(--phone-order, 0);
+    grid-template-columns: minmax(0, 1fr) auto;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .exh-list :is(.xgroup-name, .exh-title, .exh-kind, .exh-venue, .exh-note, .exh-year) {
+    display: block;
+    font-size: var(--exh-size);
+    line-height: var(--exh-line);
+    letter-spacing: 0;
+  }
+
+  /* `pretty`, not the plain wrap: it is what lifts a lone last word, as the
+     sheet does by hand in PAINTING AS A GIFT / OF COLOR. */
+  .exh-list .exh-title {
+    max-width: var(--exh-title-col);
+    text-wrap: pretty;
+  }
+
+  /* Light and upright like the place under it; a private collection's place
+     keeps its sentence case, by the rule above. */
+  .exh-list .exh-kind {
+    font-weight: 300;
+    font-style: normal;
+    text-transform: uppercase;
+  }
+
+  .exh-list .exh-at {
+    display: inline;
+  }
+
+  .exh-list .exh-year {
+    font-style: italic;
+  }
+
+  /* A run across two years stacks them, the second level with the kind. */
+  .exh-list .exh-year span {
+    display: block;
+  }
+
+  /* A group's name, as a row: the name's own semibold, the row's padding and
+     its rule, placed just ahead of the group's first row. */
+  .exh-list .xgroup-name {
+    order: var(--phone-order, 0);
+    margin: var(--exh-group-gap) 0 0;
+    padding: var(--row-top) 0 var(--row-bottom);
+    border-bottom: 1px solid var(--ink);
+  }
+
+  /* The solo and the group shows are not together under their names any
+     more, so those two are kept for a reader and taken from the eye
+     (`.sr-only`, in 00-base.css, spelt out). */
+  .exh-list .xgroup[data-phone='merged'] .xgroup-name {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
 }
 
 /* ---------------------------------------------------------- to-scale grid */
@@ -2019,16 +2076,9 @@ html.js .hero[data-hero]+.grid[data-stack] {
   grid-template-columns: minmax(0, 1fr) auto;
 }
 
+/* On the phone each index lays its groups out for itself — the exhibitions
+   above, the commissioned work in 07-sheet.css. This much they share. */
 @media (max-width: 899px) {
-  .xgroup {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-  }
-
-  .xgroup-name {
-    margin-bottom: 0.25rem;
-  }
-
   /* No pointer to hover with, and no room beside the row for a picture. */
   .xrow .exh-plate {
     display: none;
@@ -2064,6 +2114,20 @@ html.js .hero[data-hero]+.grid[data-stack] {
   -webkit-overflow-scrolling: touch;
 }
 .panel.is-open, .about.is-open { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+/*
+ * A panel that is closing still fills the screen for the length of its fade,
+ * and took every tap meant for the page coming back under it: on a phone, the
+ * next row tapped after Back opened nothing for most of a second. The taps go
+ * with the opacity, as on the veil above. What is inside is named as well, and
+ * above its own rules, because a sheet's current photograph asks for its taps
+ * back by name (07-sheet.css). Only where the script is in charge: without it
+ * a panel is never `is-open` and stands in the page. On the phone only, where
+ * Back is how a sheet is left; the desktop keeps its fade as it was.
+ */
+@media (max-width: 899px) {
+  html.js .panel:not(.is-open), html.js .panel:not(.is-open) *,
+  html.js .about:not(.is-open), html.js .about:not(.is-open) * { pointer-events: none !important; }
+}
 /* Without scripting the panels are plain anchor targets, so they must be visible. */
 html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transform: none; }
 
@@ -2278,11 +2342,12 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 /* -------------------------------------------------------------- the text */
 
 /*
- * From the designer's About of 10 November, at 1920 (figures in frame pixels).
+ * From the designer's About of 10 and 12 November, at 1920 (figures in frame
+ * pixels).
  *
  * The lead keeps the old sheet's capitals: 45 on 50 at 500, ragged, its first
- * line box 309 down — below the bar on a phone. Then the photographs, 32.5
- * under it and 241 tall; then the biography, 51.8 under them, at 40 on 40 and
+ * line box 309 down — below the bar on a phone. Then the photographs, 46
+ * under it and 210 tall; then the biography, 70.5 under them, at 40 on 40 and
  * 400, justified, a blank line between paragraphs.
  *
  * At rest that is the whole of it. `client/about.ts` adds `.is-staged` to the
@@ -2313,20 +2378,26 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   text-align: justify;
   hyphens: manual;
 }
-.about-opening + p { margin-top: calc(51.8em / 40); }
+.about-opening + p { margin-top: calc(70.5em / 40); }
 .about-text > p + p { margin-top: 1em; }
 
 /*
- * The photographs: one row, 241 tall, each at its own proportion, 24 apart,
- * centred under the lead — the designer's single photograph sits on the
- * middle of the page. The row runs to both edges of the screen, so that when
- * it is driven in it comes from the side of the window rather than from the
- * margin; at rest, if there are more than fit, it scrolls sideways.
+ * The photographs: a reel 210 tall, each at its own proportion, 53 apart,
+ * from the left margin, 46 under the lead — the designer's sheet of
+ * 12 November, where the first eight fill the measure. On a phone it stops
+ * shrinking at 7.5rem and the gaps keep their proportion to it.
+ *
+ * Without the script it is a row that scrolls sideways. With it
+ * (`.is-looped`, `client/about.ts`) the row becomes a loop seen through the
+ * text's measure: each photograph placed by the script, the ones that do not
+ * fit waiting round the loop, reached by the chevrons in the margins, by
+ * dragging, or by scrolling on, which carries the reel along.
  */
 .about-reel {
-  --reel-h: max(8.5rem, calc(241 * var(--u)));
-  margin: calc(32.5 * var(--u)) calc(-1 * var(--m)) 0;
-  padding-inline: var(--m);
+  --reel-h: max(7.5rem, calc(210 * var(--u)));
+  --reel-gap: calc(var(--reel-h) * 53 / 210);
+  position: relative;
+  margin-top: calc(46 * var(--u));
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scrollbar-width: none;
@@ -2334,9 +2405,8 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .about-reel::-webkit-scrollbar { display: none; }
 .about-reel-track {
   display: flex;
-  gap: max(0.75rem, calc(24 * var(--u)));
+  gap: var(--reel-gap);
   width: max-content;
-  margin-inline: auto;
 }
 .about-reel-item {
   display: block;
@@ -2350,19 +2420,80 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .about-reel-item img { transition: opacity var(--hover) var(--ease); }
 .about-reel-item:hover img, .about-reel-item:focus-visible img { opacity: 0.86; }
 
+.about-reel.is-looped { overflow: visible; }
+.about-reel.is-looped .about-reel-track {
+  position: relative;
+  display: block;
+  width: auto;
+  height: var(--reel-h);
+  overflow: clip;
+  /* Sideways is the reel's; up and down is still the page's. */
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.about-reel.is-looped .about-reel-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform;
+}
+.about-reel.is-looped .about-reel-item img { -webkit-user-drag: none; }
+.about-reel.is-dragging .about-reel-item { cursor: grabbing; }
+
+/*
+ * The chevrons: one in each margin, level with the middle of the reel, faint
+ * until the pointer is on them. They wait for the reel to come to rest.
+ */
+.about-reel-step {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: calc(var(--m) + 0.75rem);
+  height: max(3rem, 50%);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #000;
+  cursor: pointer;
+  translate: 0 -50%;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.5s var(--ease),
+    visibility 0s linear 0.5s;
+}
+.about-reel-step[hidden] { display: none; }
+.about-reel-step.is-prev { left: calc(-1 * var(--m)); justify-items: start; padding-left: calc(var(--m) / 2 - var(--chev-w) / 2); }
+.about-reel-step.is-next { right: calc(-1 * var(--m)); justify-items: end; padding-right: calc(var(--m) / 2 - var(--chev-w) / 2); }
+.about-reel { --chev-w: clamp(0.4375rem, calc(var(--m) * 0.3), 0.875rem); }
+.about-reel.is-placed .about-reel-step { opacity: var(--reel-dim, 0.3); visibility: visible; transition-delay: 0s; }
+.about-reel.is-placed .about-reel-step:hover,
+.about-reel.is-placed .about-reel-step:focus-visible { opacity: 1; }
+.about-reel-step svg {
+  display: block;
+  width: var(--chev-w);
+  height: auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  overflow: visible;
+}
+
 /*
  * The four parts.
  *
  * The stage — lead and photographs — is pinned where it stands while the
  * runway under it (`.about-opening`, made tall by the script) scrolls past:
- * the first stretch writes the lead, the second drives the row in. Words are
- * hidden and appear whole, with no fade, as on the start page. The row is
- * clipped rather than scrolled, and moved by the script.
+ * the first stretch writes the lead, the second drives the reel in. Words are
+ * hidden and appear whole, with no fade, as on the start page.
  */
 .about.is-staged { overflow-anchor: none; }
 .about.is-staged .about-stage { position: sticky; top: var(--stage-top, 0px); }
-.about.is-staged .about-reel { overflow: clip; padding-inline: 0; }
-.about.is-staged .about-reel-track { margin-inline: 0; will-change: transform; }
 .about.is-staged .about-word { opacity: 0; }
 .about.is-staged .about-word.is-written { opacity: 1; }
 
@@ -2667,7 +2798,7 @@ html:not(.js) .about:target ~ .about-close { opacity: 1; visibility: visible; }
 .reader-stated .reader-title,
 [data-panel] .reader-title {
   font-size: var(--type);
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.01em;
   line-height: var(--lead);
@@ -2917,7 +3048,8 @@ body:has(.panel.is-open) .top { opacity: 0; pointer-events: none; }
   transition: opacity var(--hover) var(--ease);
 }
 
-/* The bars are the phone's rail (below); on a wide screen the years are type. */
+/* The bars are the phone's rail (05-artwork.css); on a wide screen the years
+   are type. */
 .year-swatch { display: none; }
 
 .year-label {
@@ -2981,34 +3113,9 @@ html.js.stack-running .years {
   to { opacity: 1; visibility: visible; pointer-events: auto; }
 }
 
-@media (max-width: 899px) {
-  /* No room for a column beside the grid on a phone: the years lie along the
-     foot as bars, and the controls stand in one line above them. */
-  .years {
-    top: auto; bottom: 0; left: 0; right: 0;
-    margin-top: 0;
-    flex-direction: row;
-    justify-content: center;
-    align-items: flex-end;
-    gap: 3px;
-    padding: 0.6rem var(--pad);
-    font-size: 9px;
-    line-height: 1.2;
-    background: color-mix(in srgb, var(--paper) 88%, transparent);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-  }
-  .year { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; padding: 2px 0; }
-  .year-swatch { display: block; width: 13px; height: 22px; background: var(--c); transition: height 0.4s var(--ease); }
-  .year.is-current .year-swatch, .year:hover .year-swatch { height: 34px; }
-  .year-label { display: none; color: var(--ink); }
-  .year.is-current .year-label { display: block; }
-  .controls {
-    top: auto; bottom: 5.4rem; left: 0; margin-top: 0; width: 100%;
-    flex-direction: row; justify-content: center; align-items: baseline; gap: 2em;
-  }
-  .control-group { flex-direction: row; gap: 1em; }
-}
+/* On a phone the years are a bar of their colours along the foot of the
+   screen and the controls are not offered: 05-artwork.css, THE GALLERY ON A
+   PHONE. */
 
 /* ------------------------------------------------------------ what's color */
 
@@ -3023,11 +3130,11 @@ html.js.stack-running .years {
 .wc {
   /*
    * How large the whole of What's Color? renders, type and breathing alike:
-   * 1 is the size everything on these pages was first traced at, and the
-   * client asked for it a quarter smaller. The sheet compositions' own
-   * internal ratios ride on the width and do not move with it.
+   * 1 is the size the sheets are drawn at — every text 40 at 1920 — which
+   * is where the client wants it. The sheet compositions' own internal
+   * ratios ride on the width and do not move with it.
    */
-  --wc-zoom: 0.75;
+  --wc-zoom: 1;
   /* Past this the type hits its clamp ceiling while a percentage measure keeps
      widening, which would run the justified columns out to a hundred
      characters. Freezing the container keeps every proportion on this page. */
@@ -3056,11 +3163,11 @@ html.js.stack-running .years {
    * scales to 27.4 of our 1786, and 40px gives 27.2), on 49px of leading:
    * 43/1565 restated, which is 1.227 against the font.
    */
-  max-width: var(--wc-measure, 84%);
+  max-width: var(--wc-measure, 68.5%);
   margin: 0 auto;
   text-align: center;
   text-wrap: balance;
-  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.1436vw, 2.75rem));
+  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.0833vw, 2.75rem));
   font-weight: 500;
   line-height: var(--wc-leading, 1.227);
   letter-spacing: 0;
@@ -3089,12 +3196,14 @@ html.js.stack-running .years {
   border-radius: 0;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
-  background-color: transparent;
-  transition: background-color var(--hover) var(--ease), color var(--hover) var(--ease);
+  /* The same thin band as the question in the opening note, not the line's
+     whole height: 0.905em of colour, 0.2em down from the top of the box. */
+  background: linear-gradient(var(--wc-band), var(--wc-band)) no-repeat 0 0.2em / 100% 0.905em;
+  transition: --wc-band var(--hover) var(--ease), color var(--hover) var(--ease);
 }
 @media (hover: hover) {
   .wc-name:hover {
-    background-color: var(--swatch, var(--ink));
+    --wc-band: var(--swatch, var(--ink));
     /* Knocked out in whichever of paper or ink the swatch can carry. The
        palette runs to a near-white off-white, and white on that is not faint,
        it is absent. */
@@ -3102,9 +3211,15 @@ html.js.stack-running .years {
   }
 }
 .wc-name:focus-visible {
-  background-color: var(--swatch, var(--ink));
+  --wc-band: var(--swatch, var(--ink));
   color: var(--swatch-ink, var(--paper));
   outline: none;
+}
+/* Registered so the band fades in rather than snapping. */
+@property --wc-band {
+  syntax: '<color>';
+  inherits: false;
+  initial-value: transparent;
 }
 
 /* The comma between two names belongs to neither, so it stays out of both
@@ -3173,14 +3288,6 @@ html.js.stack-running .years {
 .wc-intro-text > * { margin: 0 0 0.9em; }
 .wc-intro-text > :last-child { margin-bottom: 0; }
 
-@media (max-width: 899px) {
-  .wc { padding-top: calc(var(--bar) + 6vh); }
-  .wc-names { max-width: none; line-height: 1.18; }
-  .wc-intros { grid-template-columns: 1fr; gap: 2.5rem; margin-top: 3rem; }
-  /* No pointer, so nothing is ever dimmed and every column reads at full strength. */
-  .wc-intros:hover .wc-intro { opacity: 1; }
-}
-
 /* ------------------------------------------------- what's color, one edition */
 
 /*
@@ -3197,7 +3304,8 @@ html.js.stack-running .years {
 .wc-numeral {
   margin: 0 0 calc(var(--wc-zoom, 1) * var(--wc-numeral-gap, 2.4vw));
   text-align: center;
-  font-size: calc(var(--wc-zoom, 1) * clamp(0.9rem, 1.5184vw, 2.05rem));
+  /* 40 at 1920, like every other text on these pages. */
+  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.0833vw, 2.75rem));
   font-weight: 500;
   letter-spacing: 0;
 }
@@ -3261,7 +3369,7 @@ html.js.stack-running .years {
 .wc-answer-name {
   grid-column: 1;
   margin: 0;
-  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.1436vw, 2.9rem));
+  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.0833vw, 2.9rem));
   font-weight: 500;
   /* 32px of leading on a 22px cap in the sheet, for the names that wrap. */
   line-height: 0.974;
@@ -3291,45 +3399,60 @@ html.js.stack-running .years {
 }
 .wc-answer-role,
 .wc-answer-code {
-  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.1436vw, 2.75rem));
+  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.0833vw, 2.75rem));
   font-weight: 500;
   line-height: 1.1;
   letter-spacing: 0;
   text-transform: uppercase;
 }
 /*
- * The one place on the site where the colour is the type rather than behind
- * it, as the sheet has it: it sets AC 002 RED BROWN in a red brown, sampled
- * at #8c4b3a. Darkened first where it has to be — a third of this palette
- * falls under 3:1 against white set literally, and NATURAL OFF WHITE vanishes
- * — with the hue kept and only the lightness moved.
+ * The colour reference wears its colour as the names and the question do: the
+ * same thin band behind it, the type knocked out in paper or ink, whichever
+ * the colour can carry.
  */
-.wc-answer-code { color: var(--swatch, var(--ink)); }
+.wc-answer-code,
+.wc-sheet-page .wc-cell-code {
+  /* The type is knocked out of the band below, in paper or ink. */
+  color: var(--swatch-ink, var(--paper));
+}
+/*
+ * The band is on a span inside the code, not on the code itself. The code is
+ * a grid item, which makes it a block: a long one — AC239 VERDE OSCURO CASI
+ * NEGRO — wrapped to two lines under one band laid across both. Inline, the
+ * band breaks with the line and each line gets its own, as the names' do.
+ * Measured from the top of the type: 0.1725em down puts it where it sat,
+ * centred on the capitals.
+ */
+.wc-code-band {
+  padding: 0 0.2em;
+  margin: 0 -0.2em;
+  background: linear-gradient(var(--swatch, var(--ink)), var(--swatch, var(--ink))) no-repeat 0 0.1725em / 100% 0.905em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
 
 .wc-answer-text {
   grid-column: 1 / -1;
   margin-top: var(--wc-answer-text-gap, 1.6vw);
-  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.1436vw, 2.75rem));
+  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.0833vw, 2.75rem));
   /* The page's own leading now, not the near-solid setting the small type had:
      at this size solid lines close up into a block. */
   line-height: var(--wc-leading, 1.227);
   letter-spacing: 0;
   /* Justified, as the sheet sets them — its right edges hold to within two
      pixels over ten separate blocks while the word spacing visibly varies.
-     Hyphenated, or a column this narrow opens rivers; the prefix is for Safari
-     before 17, which otherwise drops hyphenation and gets the rivers. */
+     Never hyphenated: a word is not cut, at the cost of looser spacing. */
   text-align: justify;
-  -webkit-hyphens: auto;
-  hyphens: auto;
+  -webkit-hyphens: none;
+  hyphens: none;
 }
 .wc-answer-text > * { margin: 0; }
-/* A second paragraph is indented rather than spaced, as the sheet indents it. */
-.wc-answer-text > * + * { text-indent: var(--wc-indent, 1.98%); }
+/* A second paragraph starts on a new line, neither indented nor spaced. */
 
 .wc-back {
   margin: calc(var(--wc-zoom, 1) * var(--wc-answers-gap, 7vw)) 0 0;
   text-align: center;
-  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.1436vw, 2.75rem));
+  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.0833vw, 2.75rem));
   font-weight: 500;
   letter-spacing: 0;
   text-transform: uppercase;
@@ -3505,16 +3628,15 @@ html.js.stack-running .years {
  * The scroll cue belongs to the film, not to the screen.
  *
  * It is fixed at the foot of the viewport by default, which is the film's own
- * foot while the film is a full screen tall. On a phone it is 70vh, and a cue
- * pinned to the bottom of the window then sat below the picture on white — a
- * negative drawn against nothing, pointing down from the wrong edge. Measured
- * off the film's height instead, it stays on the film's bottom edge at every
- * size; where the film is the whole screen the two are the same number.
+ * foot while the film is a full screen tall. Were the film ever made shorter,
+ * a cue pinned to the bottom of the window would sit below the picture on
+ * white — a negative drawn against nothing, pointing down from the wrong
+ * edge. Measured off the film's height instead, it stays on the film's bottom
+ * edge at every size; where the film is the whole screen the two are the same
+ * number. (A phone has neither film nor cue: the phone rules at the foot of
+ * this sheet.)
  */
 .has-film .scroll-cue { bottom: calc(100vh - var(--film-h) + 1.9rem); }
-@media (max-width: 899px) {
-  .has-film .scroll-cue { bottom: calc(100vh - var(--film-h) + 1.1rem); }
-}
 
 .wc-film {
   position: relative;
@@ -3608,12 +3730,6 @@ html.js.stack-running .years {
   .wc-film-video { display: none; }
 }
 
-@media (max-width: 899px) {
-  /* A half-screen of film is enough on a phone; a full one is a wall. Set on
-     the one variable, so the bar and the swap follow it. */
-  .has-film { --film-h: 70vh; }
-}
-
 /*
  * With scripting off the bar is simply the bar: fixed at the top, as on every
  * other page. The three-phase motion is an enhancement and is written as one —
@@ -3675,7 +3791,7 @@ html:has(body.has-film) {
  */
 .wc-lead {
   margin: 0 0 calc(var(--wc-zoom, 1) * var(--wc-lead-gap, 7vw));
-  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.1436vw, 2.75rem));
+  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.0833vw, 2.75rem));
   line-height: var(--wc-leading, 1.227);
   letter-spacing: 0;
   text-align: justify;
@@ -3688,12 +3804,6 @@ html:has(body.has-film) {
    wanted here — the block reads as a paragraph, not as a plate. */
 .wc-lead:last-child { margin-bottom: 0; }
 
-@media (max-width: 899px) {
-  /* Justification needs words per line to spend; at a phone's measure it
-     spends them on gaps instead. */
-  .wc-lead { text-align: left; }
-}
-
 /* Four of the second edition answered with pictures. Said plainly rather than
    left as a name with nothing under it, which would read as a missing answer
    rather than as the answer it was. */
@@ -3701,7 +3811,7 @@ html:has(body.has-film) {
   grid-column: 1 / -1;
   margin-top: var(--wc-answer-text-gap, 1.6vw);
   margin-bottom: 0;
-  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.1436vw, 2.75rem));
+  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.0833vw, 2.75rem));
   line-height: var(--wc-leading, 1.227);
   letter-spacing: 0;
   color: var(--ink-soft);
@@ -3731,8 +3841,7 @@ html:has(body.has-film) {
 }
 
 .wc-edition-i .wc-answer-role,
-.wc-edition-i .wc-answer-code,
-.wc-edition-i .wc-back {
+.wc-edition-i .wc-answer-code {
   font-size: calc(var(--wc-zoom, 1) * clamp(0.66rem, 1.104vw, 1.5rem));
 }
 
@@ -3779,8 +3888,8 @@ html:has(body.has-film) {
  */
 .wc-title {
   margin: 0 0 var(--wc-title-gap, 1.227em);
-  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.1436vw, 2.75rem));
-  font-weight: 700;
+  font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.0833vw, 2.75rem));
+  font-weight: 600;
   line-height: var(--wc-leading, 1.227);
   letter-spacing: 0;
   text-transform: uppercase;
@@ -3788,8 +3897,9 @@ html:has(body.has-film) {
 }
 
 
-/* The standing note is set in the regular weight, the question in it
-   included; only the invitation that closes it is semibold. */
+/* The standing note is set medium, the question in it included; only the
+   invitation that closes it is semibold. All of it at 40, as every text on
+   these pages is at the 1920 the sheets are drawn at. */
 /*
  * Set as the three editions' texts at the foot of the view are: the same size
  * and solid leading, justified across the page's own margins, only heavier.
@@ -3801,7 +3911,7 @@ html:has(body.has-film) {
  */
 .wc-lead {
   font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.0833vw, 2.75rem));
-  font-weight: 400;
+  font-weight: 500;
   line-height: 1;
   text-align: justify;
 }
@@ -3922,23 +4032,6 @@ html:has(body.has-film) {
 }
 
 /*
- * The one hairline on her second sheet: up the right edge of Elii's column,
- * the height of the entry, a gutter's width out.
- */
-.wc-sheet-page .wc-slot-rule {
-  position: relative;
-}
-.wc-sheet-page .wc-slot-rule::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: calc(var(--sheet-w) * -0.0088);
-  width: 1px;
-  background: var(--ink);
-}
-
-/*
  * Her words stand further from the entries under them than from each other.
  *
  * Carried on the paragraph rather than on the entry below it, which is where
@@ -4046,38 +4139,20 @@ html:has(body.has-film) {
   line-height: var(--sheet-answer-lead, 1);
   letter-spacing: 0;
   text-align: justify;
-  -webkit-hyphens: auto;
-  hyphens: auto;
+  /* No word in an answer is ever cut: the client's rule. */
+  -webkit-hyphens: none;
+  hyphens: none;
 }
 .wc-sheet-page .wc-cell-text > * { margin: 0; }
-/* Paragraphs run on, marked by an indent rather than by air — which is how
-   the sheets set them, and why a blank line here would read as a gap in the
-   voice rather than as a new thought. */
-.wc-sheet-page .wc-cell-text > * + * {
-  margin-top: 0;
-  text-indent: 2.5em;
-}
+/* Paragraphs run on: a new one starts on a new line, with no indent and no
+   air above it. */
 
-@media (max-width: 899px) {
-  /* Three columns of this at a phone's width is a column of single words.
-     And a floor under the type: the width-driven scale was drawn for a
-     desktop page and all but vanishes at a phone's — the proper phone
-     setting of these sheets is still its own piece of work. */
-  .wc-sheet-page .wc-sheet { grid-template-columns: minmax(0, 1fr); --sheet: 1.1rem; }
-  .wc-sheet-page .wc-slot {
-    grid-column: 1;
-    margin-top: 1.6rem;
-  }
-  .wc-sheet-page .wc-say,
-  .wc-sheet-page .wc-strip {
-    margin-top: 1.6rem;
-  }
-  .wc-sheet-page .wc-slot-rule::after { content: none; }
-}
+/* On a phone the sheet is one column, set by its own rules at the foot of
+   this file. */
 
 /*
  * The second edition's sheet opens with its own title — the project and the
- * numeral bold, who it was for beside them — set at the weight of the writing
+ * numeral semibold, who it was for beside them — set at the weight of the writing
  * rather than of a heading, because on her sheet it reads as the first line of
  * the text and not as a masthead.
  */
@@ -4089,7 +4164,7 @@ html:has(body.has-film) {
   text-align: left;
 }
 .wc-sheet-page .wc-sheet-title strong {
-  font-weight: 700;
+  font-weight: 600;
 }
 
 /*
@@ -4120,6 +4195,9 @@ html:has(body.has-film) {
  * columns; only the air above it scales with the type.
  */
 .wc-sheet-page .wc-strip {
+  /* A line of 40 more under the reel than the sheets draw, before the
+     writing and the answers begin (--sheet-after-reel). */
+  margin-bottom: calc(var(--sheet-v) * var(--sheet-after-reel, 0.0219));
   grid-column: 1 / -1;
   display: flex;
   justify-content: center;
@@ -4345,8 +4423,11 @@ html:has(body.has-film) {
   background-size: calc(100% - 0.033em) 0.905em;
 }
 
+/* From 900 up only: on a phone the note is not written by the scroll, it is
+   an ordinary paragraph at the head of the page (the phone rules at the foot
+   of this sheet), and so are the names under it. */
 @supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
+  @media (prefers-reduced-motion: no-preference) and (min-width: 900px) {
     .wc-write {
       height: var(--wc-write-length, 370vh);
       /*
@@ -4364,8 +4445,11 @@ html:has(body.has-film) {
        * centre, the names climb the lower half of the view, stop a breath
        * beneath it — the knob is the breath — and only then does the pin let
        * go, so the sentence travels up sitting right on top of them.
+       * --wc-write-air is the room left between them when they meet, in the
+       * type's own terms: 6.77vw leaves the sheet's 157 at 1920, about four
+       * lines of the note, from the invitation's ink to the first numeral's.
        */
-      margin-bottom: calc(var(--wc-write-meet, 12vh) - 50vh);
+      margin-bottom: calc(var(--wc-write-meet, 12vh) + var(--wc-write-air, 6.77vw) - 50vh);
       view-timeline: --wc-write block;
     }
     .wc-write-pin {
@@ -4408,7 +4492,7 @@ html:has(body.has-film) {
  * are simply there, which is what every other fallback here does too.
  */
 @supports (animation-timeline: view()) and (timeline-scope: --wc-write) {
-  @media (prefers-reduced-motion: no-preference) {
+  @media (prefers-reduced-motion: no-preference) and (min-width: 900px) {
     #whats-color {
       timeline-scope: --wc-write;
     }
@@ -4477,6 +4561,12 @@ html:has(body.has-film) {
   color: inherit;
   cursor: pointer;
 }
+/* Read more on a line of its own, a blank line under the cut text
+   (--wc-more-gap, one line of the text). */
+.wc-more {
+  display: block;
+  margin-top: var(--wc-more-gap, 1em);
+}
 
 /* Which half shows: cut with scripting, whole without, and never both. */
 html.js .wc-text:not(.is-open) .wc-text-open {
@@ -4507,8 +4597,8 @@ html:not(.js) .wc-text-closed {
  * keep the distance she drew between them.
  *
  *   --chart-top   the air above the chart
- *   --bar-gap     the least room between a name and its bar: the bar gives
- *                 way rather than run into a long name
+ *   --bar-gap     the room between a name and its bar; a name too long for
+ *                 its room rises above the chart, the bar keeps its height
  */
 .wc-chart {
   --sheet-w: calc(min(100vw, 2160px) - 2 * var(--pad));
@@ -4523,6 +4613,7 @@ html:not(.js) .wc-text-closed {
   flex: none;
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
   width: calc(var(--sheet-w) * 0.03344);
   color: var(--ink);
   text-decoration: none;
@@ -4540,9 +4631,11 @@ html:not(.js) .wc-text-closed {
   text-transform: uppercase;
   white-space: nowrap;
 }
+/* A bar keeps its height whatever stands on it: a name too long for the room
+   above its bar (Montse Vicens, where the sheet wrote INTSIGHT) rises past the
+   chart's top into the margin rather than pressing the bar shorter. */
 .wc-bar-fill {
-  flex: 0 1 auto;
-  min-height: 0;
+  flex: none;
   height: calc(var(--sheet-v) * var(--bar-h, 0.5));
   margin-top: auto;
   background: var(--bar-c, var(--ink));
@@ -4569,6 +4662,392 @@ a.wc-bar:focus-visible {
   .wc-bar {
     transition: none;
   }
+}
+
+/* The project's name inside her writing, set semibold rather than bold. */
+.wc-sheet-page .wc-say-ask {
+  font-weight: 600;
+}
+
+/* ------------------------------------------- the phone: the opening view */
+
+/*
+ * What's Color? on a phone, off the designer's 375 sheets. Every figure is a
+ * measurement from them in units of that frame (`--p`, 09-phone.css), and the
+ * ones to tune by hand are the first rule's.
+ *
+ * There is no film here, no cue and no writing by the scroll (the stage above
+ * is the desktop's alone): past the menu the page opens on the note, set as
+ * an ordinary paragraph, and the three rosters and the three texts follow it
+ * down one column, 20 in from either edge.
+ *
+ * This block and the editions' after it stay at the foot of the sheet: this
+ * one has to come after the rule that sets `.wc-lead` justified a second time.
+ */
+@media (max-width: 899px) {
+  .wc {
+    /* The note at the head and the three texts at the foot: size, leading. */
+    --wc-phone-text: calc(20 * var(--p));
+    --wc-phone-text-lead: calc(20 * var(--p));
+    /* The numerals and the names: size, leading. */
+    --wc-phone-names: calc(30 * var(--p));
+    --wc-phone-names-lead: calc(30 * var(--p));
+    /* From the top of the screen to the note's first line; under the last
+       'Read more' to the foot of the page. */
+    --wc-phone-top: calc(108 * var(--p));
+    --wc-phone-foot: calc(110 * var(--p));
+    /* The note's width (the column itself is 335), and the air under it. */
+    --wc-phone-note-measure: calc(323 * var(--p));
+    --wc-phone-note-gap: calc(58 * var(--p));
+    /* A blank line: above the note's invitation, above 'Read more'. */
+    --wc-phone-line: calc(20 * var(--p));
+    /* A numeral to its names; those names to the next numeral. */
+    --wc-phone-numeral-gap: calc(29 * var(--p));
+    --wc-phone-group-gap: calc(29 * var(--p));
+    /* The last names to the first text; a text's heading to its first line;
+       one text's 'Read more' to the next text's heading. */
+    --wc-phone-texts-top: calc(110 * var(--p));
+    --wc-phone-head-gap: calc(40 * var(--p));
+    --wc-phone-text-gap: calc(98 * var(--p));
+  }
+
+  /* With no film there is nothing for the cue to point down from, and no
+     edge for a pull to peel away from: the page may be pulled to reload. */
+  .has-film .scroll-cue { display: none; }
+  html:has(body.has-film) { overscroll-behavior-y: auto; }
+
+  /* The page's own box — by its id, which is what outweighs the film's
+     `padding-top: 0` on this page. */
+  #whats-color { padding: var(--wc-phone-top) var(--phone-pad) var(--wc-phone-foot); }
+
+  /* ---- the note: ranged left, ragged, no word cut */
+  .wc-write { margin: 0 0 var(--wc-phone-note-gap); }
+  .wc-write .wc-lead-block { max-width: var(--wc-phone-note-measure); margin: 0; }
+  .wc-write .wc-lead {
+    font-size: var(--wc-phone-text);
+    line-height: var(--wc-phone-text-lead);
+    text-align: left;
+    -webkit-hyphens: manual;
+    hyphens: manual;
+  }
+  .wc-write .wc-lead + .wc-lead { margin-top: var(--wc-phone-line); }
+
+  /*
+   * ---- the numerals and the names
+   * Set the same on an edition's own page, so neither rule is tied to the
+   * opening view. The names break where the line is full, as the sheet's do,
+   * and are not balanced: balancing re-breaks every line of a block this long.
+   */
+  .wc-numeral {
+    margin-bottom: var(--wc-phone-numeral-gap);
+    font-size: var(--wc-phone-names);
+    line-height: var(--wc-phone-names-lead);
+  }
+  .wc-names {
+    max-width: none;
+    font-size: var(--wc-phone-names);
+    line-height: var(--wc-phone-names-lead);
+    text-wrap: wrap;
+  }
+  .wc-group + .wc-group { margin-top: var(--wc-phone-group-gap); }
+
+  /* ---- the three texts: ranged left, with no tracking */
+  .wc-texts { margin-top: var(--wc-phone-texts-top); }
+  .wc-text {
+    font-size: var(--wc-phone-text);
+    line-height: var(--wc-phone-text-lead);
+    letter-spacing: 0;
+    text-align: left;
+  }
+  /* One gap between any two, whichever pair it is. */
+  .wc-text[data-edition] { margin-top: 0; }
+  .wc-text + .wc-text { margin-top: var(--wc-phone-text-gap); }
+  .wc-text .wc-text-head { margin-bottom: var(--wc-phone-head-gap); }
+  /* 'Read more' and 'Read less' alike: a line of their own, semibold. */
+  .wc-more,
+  .wc-less {
+    display: block;
+    position: relative;
+    margin-top: var(--wc-phone-line);
+    font-weight: 600;
+    letter-spacing: 0;
+    text-align: left;
+  }
+  /* 44 high to press without moving the words: a touch anywhere else on a
+     text leaves for its edition, so a near miss here must not count as one. */
+  .wc-more::before,
+  .wc-less::before {
+    content: '';
+    position: absolute;
+    inset: calc(-12 * var(--p)) calc(-20 * var(--p));
+  }
+}
+
+/* -------------------------------------- the phone: an edition's own page */
+
+/*
+ * The three editions on a phone, off the designer's 375 sheets: (I) and (III)
+ * drawn whole, (II) only as far as its names, so it takes (III)'s figures.
+ * The type is one system across the three; the air between things was placed
+ * by hand on each sheet, which is why the first two rules are all knobs — the
+ * figures of (II) and (III), then (I)'s where its sheet differs. The numeral's
+ * and the names' size, and the gap between them, are the opening view's knobs
+ * above (`--wc-phone-names`, `--wc-phone-numeral-gap`).
+ *
+ * The sheet's three columns become one, read in the order of the markup, and
+ * nothing of the desktop's placement (`--col`, `--drop`, `--lead`) is used.
+ * An entry is centred and reads name, what they do, answer, colour — the
+ * colour after the answer, by `order`, the markup as it was.
+ */
+
+/* The closing line belongs to the phone sheets alone. */
+.wc-foot { display: none; }
+
+@media (max-width: 899px) {
+  .wc-edition {
+    /* Her words: size, leading. */
+    --wc-ed-say: calc(20 * var(--p));
+    --wc-ed-say-lead: calc(20 * var(--p));
+    /* A person's name above their answer: size, leading. */
+    --wc-ed-name: calc(20 * var(--p));
+    --wc-ed-name-lead: calc(20 * var(--p));
+    /* What they do, their answer and their colour: size, leading. */
+    --wc-ed-small: calc(14 * var(--p));
+    --wc-ed-small-lead: calc(14 * var(--p));
+    /* The closing line: size, leading. */
+    --wc-ed-foot-size: calc(8 * var(--p));
+    --wc-ed-foot-lead: calc(10 * var(--p));
+
+    /* From the top of the screen to the numeral. */
+    --wc-phone-top: calc(107 * var(--p));
+    /* The names to the photograph; the photograph's height and width (auto:
+       the shape of each file); how far it stands off the centre of the page;
+       the photograph to her first words. */
+    --wc-ed-reel-top: calc(24 * var(--p));
+    --wc-ed-reel-h: calc(189 * var(--p));
+    --wc-ed-reel-w: auto;
+    --wc-ed-reel-shift: 0px;
+    --wc-ed-reel-after: calc(22 * var(--p));
+    /* Her words: one paragraph to the next; down to the first entry of the
+       page, and to an entry further on; from an entry down to her words. */
+    --wc-ed-say-para: calc(20 * var(--p));
+    --wc-ed-first-entry: calc(60 * var(--p));
+    --wc-ed-say-entry: calc(60 * var(--p));
+    --wc-ed-entry-say: calc(46 * var(--p));
+    /* One entry to the next. */
+    --wc-ed-entry-gap: calc(70 * var(--p));
+    /* Inside an entry. The widest a name or a role runs before it breaks,
+       and how it breaks (balance: into lines of a length; wrap: where the
+       line is full). */
+    --wc-ed-measure: calc(230 * var(--p));
+    --wc-ed-wrap: balance;
+    /* Name to role; the least room a lone role and an answer are given
+       (0: only their own lines); role to answer; answer to colour. */
+    --wc-ed-name-role: calc(21 * var(--p));
+    --wc-ed-role-min: 0px;
+    --wc-ed-role-answer: calc(23 * var(--p));
+    --wc-ed-answer-min: 0px;
+    --wc-ed-answer-para: var(--wc-ed-small-lead);   /* between an answer's paragraphs: one line */
+    --wc-ed-answer-code: calc(20 * var(--p));
+    /* The band of colour behind a colour's name: 1 draws it, 0 sets the
+       name plain, in the ink, as the phone sheets have it. */
+    --wc-ed-band: 1;
+    /* The last entry to the colour chart of (II); the last of the page to
+       the closing line; under that line to the foot of the page. */
+    --wc-ed-chart-top: calc(70 * var(--p));
+    --wc-ed-foot-top: calc(127 * var(--p));
+    --wc-ed-foot: calc(98 * var(--p));
+  }
+  /* (III)'s photograph is drawn 142 wide, half a unit left of centre. */
+  .wc-edition-iii {
+    --wc-ed-reel-w: calc(142 * var(--p));
+    --wc-ed-reel-shift: calc(-0.5 * var(--p));
+  }
+  /* (I): more air throughout, names and roles across the whole column, and
+     two lines' room kept for a role and for an answer however short. */
+  .wc-edition-i {
+    --wc-phone-top: calc(108 * var(--p));
+    --wc-phone-numeral-gap: calc(33 * var(--p));
+    --wc-ed-reel-top: calc(57 * var(--p));
+    --wc-ed-reel-h: calc(193 * var(--p));
+    --wc-ed-reel-w: calc(289 * var(--p));
+    --wc-ed-reel-after: calc(78 * var(--p));
+    --wc-ed-say-para: calc(40 * var(--p));
+    --wc-ed-first-entry: calc(78 * var(--p));
+    --wc-ed-say-entry: calc(66 * var(--p));
+    --wc-ed-entry-say: calc(66 * var(--p));
+    --wc-ed-entry-gap: calc(65 * var(--p));
+    --wc-ed-measure: none;
+    --wc-ed-wrap: wrap;
+    --wc-ed-name-role: calc(23 * var(--p));
+    --wc-ed-role-min: calc(28 * var(--p));
+    --wc-ed-role-answer: calc(14 * var(--p));
+    --wc-ed-answer-min: calc(28 * var(--p));
+    --wc-ed-answer-code: calc(19 * var(--p));
+  }
+
+  /* ---- the page */
+  .wc-edition { padding: var(--wc-phone-top) var(--phone-pad) var(--wc-ed-foot); }
+  /* The roster takes the whole column, not the sheet's narrower measure. */
+  .wc-sheet-page .wc-names { max-width: none; }
+  /* (I) sets one name to a line: the comma stays with its name and the line
+     ends after it. The other two run on. */
+  .wc-edition-i .wc-names .wc-sep::after { content: '\A'; white-space: pre; }
+  /* A name travelled to stops where the numeral stands, clear of the bars. */
+  .wc-sheet-page .wc-cell { scroll-margin-top: var(--wc-phone-top); }
+  .wc-edition .wc-back { display: none; }
+
+  .wc-sheet-page .wc-sheet {
+    display: block;
+    margin-top: var(--wc-ed-reel-top);
+  }
+
+  /*
+   * ---- the reel
+   * One photograph at rest, where the sheet draws it; the others are a swipe
+   * to the side. Each is a screen-wide step of the strip with its picture in
+   * the middle, so only one is ever in view and the strip stops on it. The
+   * step itself takes no touch — only the picture opens.
+   */
+  .wc-sheet-page .wc-strip {
+    justify-content: flex-start;
+    gap: 0;
+    height: var(--wc-ed-reel-h);
+    margin: 0 calc(-1 * var(--phone-pad));
+    overflow: auto hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .wc-sheet-page .wc-strip::-webkit-scrollbar { display: none; }
+  .wc-sheet-page .wc-book {
+    width: 100%;
+    scroll-snap-align: center;
+    pointer-events: none;
+  }
+  /* The shape is the link's own, written on it; the picture borrows it where
+     no width is given. */
+  .wc-sheet-page .wc-book picture {
+    position: relative;
+    left: var(--wc-ed-reel-shift);
+    width: var(--wc-ed-reel-w);
+    aspect-ratio: inherit;
+    margin: 0 auto;
+    pointer-events: auto;
+  }
+  /* No lift: with no pointer to leave, it would stay lifted after a touch. */
+  .wc-sheet-page .wc-book:hover img,
+  .wc-sheet-page .wc-book:focus-visible img { transform: none; }
+
+  /* ---- her words: ranged left and ragged, on all three */
+  .wc-sheet-page .wc-say {
+    margin-top: var(--wc-ed-entry-say);
+    font-size: var(--wc-ed-say);
+    line-height: var(--wc-ed-say-lead);
+    text-align: left;
+  }
+  .wc-sheet-page .wc-strip + .wc-say { margin-top: var(--wc-ed-reel-after); }
+  .wc-sheet-page .wc-say + .wc-say { margin-top: var(--wc-ed-say-para); }
+
+  /* ---- an entry */
+  .wc-sheet-page .wc-slot { margin-top: var(--wc-ed-entry-gap); }
+  .wc-sheet-page .wc-say + .wc-slot { margin-top: var(--wc-ed-say-entry); }
+  .wc-sheet-page .wc-slot:not(.wc-slot ~ .wc-slot) { margin-top: var(--wc-ed-first-entry); }
+
+  .wc-sheet-page .wc-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .wc-sheet-page .wc-cell-name {
+    max-width: var(--wc-ed-measure);
+    font-size: var(--wc-ed-name);
+    line-height: var(--wc-ed-name-lead);
+    text-wrap: var(--wc-ed-wrap);
+  }
+  /* The other name someone goes by: a second line, set as the first. */
+  .wc-sheet-page .wc-cell-alias { display: block; font-weight: inherit; text-transform: inherit; }
+  .wc-sheet-page .wc-cell-alias::before { content: none; }
+  /* The role and the colour stand in the entry's own column, each a line of
+     it, so that the colour can be put after the answer. */
+  .wc-sheet-page .wc-cell-meta { display: contents; text-align: center; }
+  /* What they do: regular, with the same in the other language under it,
+     light and italic. Where there is no other language the role is light. */
+  .wc-sheet-page .wc-cell-role {
+    max-width: var(--wc-ed-measure);
+    margin-top: var(--wc-ed-name-role);
+    font-size: var(--wc-ed-small);
+    line-height: var(--wc-ed-small-lead);
+    font-weight: 400;
+    text-wrap: var(--wc-ed-wrap);
+  }
+  .wc-sheet-page .wc-cell-also { margin-top: 0; font-weight: 300; }
+  .wc-sheet-page .wc-cell-meta:not(:has(.wc-cell-also)) .wc-cell-role {
+    min-height: var(--wc-ed-role-min);
+    font-weight: 300;
+  }
+  /* The answer: centred, ragged both sides, a line of air between its
+     paragraphs as the sheets set them (--wc-ed-answer-para; 0 runs them on). */
+  .wc-sheet-page .wc-cell-text > * + * { margin-top: var(--wc-ed-answer-para); }
+  /* The large photograph closes on a touch anywhere (client/book.ts); no
+     grey flash from iOS over the whole of it. */
+  .wc-book-view { -webkit-tap-highlight-color: transparent; }
+  .wc-sheet-page .wc-cell-text {
+    order: 1;
+    width: 100%;
+    min-height: var(--wc-ed-answer-min);
+    margin-top: var(--wc-ed-role-answer);
+    font-size: var(--wc-ed-small);
+    line-height: var(--wc-ed-small-lead);
+    text-align: center;
+  }
+  /* With no role given (all of (II)) the answer stands where a role would. */
+  .wc-sheet-page .wc-cell-meta:not(:has(.wc-cell-role)) + .wc-cell-text { margin-top: var(--wc-ed-name-role); }
+  /* The colour, last. */
+  .wc-sheet-page .wc-cell-code {
+    order: 2;
+    margin-top: var(--wc-ed-answer-code);
+    font-size: var(--wc-ed-small);
+    line-height: var(--wc-ed-small-lead);
+  }
+  /* Its band and the type knocked out of it go to plain ink together as
+     `--wc-ed-band` goes from 1 to 0. Asked of the engine first: one that
+     cannot mix the two colours keeps the band whatever the knob says, rather
+     than lose the band and leave paper-coloured type on paper. */
+  @supports (color: color-mix(in srgb, red, blue)) {
+    .wc-sheet-page .wc-cell-code {
+      color: color-mix(in srgb, var(--swatch-ink, var(--paper)) calc(var(--wc-ed-band) * 100%), var(--ink));
+    }
+    .wc-sheet-page .wc-code-band { background-size: calc(var(--wc-ed-band) * 100%) 0.905em; }
+  }
+
+  /* ---- (II)'s colour chart: the 375 sheet's column, centred past it */
+  .wc-edition .wc-chart {
+    --sheet-w: calc(335 * var(--p));
+    max-width: var(--sheet-w);
+    margin: var(--wc-ed-chart-top) auto 0;
+  }
+
+  /* ---- the closing line */
+  .wc-foot {
+    display: block;
+    margin: var(--wc-ed-foot-top) 0 0;
+    font-size: var(--wc-ed-foot-size);
+    line-height: var(--wc-ed-foot-lead);
+    font-weight: 400;
+    letter-spacing: 0;
+    text-align: center;
+    color: var(--ink);
+    transition: filter 0.45s ease, opacity 0.45s ease;
+  }
+  .wc-foot b { font-weight: 600; }
+  /* It falls back with the rest of the page behind a chosen answer. */
+  .wc-sheet-page.wc-focus .wc-foot { filter: blur(5px); opacity: 0.35; }
+}
+
+@media (max-width: 899px) and (prefers-reduced-motion: reduce) {
+  .wc-foot { transition: none; }
 }
 
 /* --------------------------------------------- the lean on a single work */
@@ -4695,6 +5174,332 @@ a.wc-bar:focus-visible {
 .detail-thumb:not(.is-shown):focus-visible { opacity: 0.7; }
 .detail-thumb:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
 
+/* ---------------------------------------------- one work, on a phone */
+
+/*
+ * THE WORK ON A PHONE — the numbers to change are all here.
+ *
+ * Off the designer's phone sheet, 375 wide: every figure is so many of `--p`
+ * (09-phone.css). One centred column and nothing else on the paper — the
+ * title and the medium, the size and the year, then the painting, its small
+ * pictures and its place in the archive.
+ *
+ * No bar and no corners are drawn. ARTWORK, CLOSE, PREVIOUS and NEXT stay in
+ * the page for a keyboard or a screen reader, out of sight; a touch on the
+ * empty ground closes, and a swipe across goes to the work either side
+ * (client/paging.ts).
+ *
+ *   --work-top     from the top of the screen to the title's line: 188.
+ *   --work-type    the size of every line, the counter's too: 20,
+ *   --work-lead    on lines of 25.
+ *   --work-pair    between the two lines of a pair — title and medium, size
+ *                  and year: 8.
+ *   --work-break   between the two pairs: 51.
+ *   --work-plate   from the year's line to the painting: 56.5.
+ *   --edge         how far the painting stands in from each side: 32.85,
+ *                  which leaves it 309 wide and the cut-out's own file the
+ *                  full 375, as it lies on the sheet. The sheet's painting
+ *                  measures 308 by 260; a cut-out's edge is soft, and the eye
+ *                  puts it a fraction inside the cut these figures are
+ *                  counted from. client/views.ts brings the result to whole
+ *                  pixels of the screen, so a hundredth here may do nothing
+ *                  and the next one move the painting by a pixel.
+ *   --plate-max    the most height the painting may take. An upright work
+ *                  needs about 380 to keep that full width; anything taller
+ *                  is held to this and comes out narrower.
+ *   --under-gap    from the painting's foot to the small pictures: 45.5
+ *                  from the cut, which is the sheet's 46.5 to the eye.
+ *   --thumb-h      the small pictures' height: 39.5.
+ *   --thumb-gap    between the small pictures: 7.5.
+ *   --work-count   from the small pictures to the line of "38 of 181": 48.5.
+ *                  With no small pictures it stands that far under the
+ *                  painting instead.
+ *   --work-foot    the paper left under the counter: 60.
+ *   --work-ghost   how strongly the gallery shows behind the work, 0 to 1:
+ *                  0.05, a twentieth, on the sheet. 0 leaves the paper bare.
+ */
+
+/* The gallery behind an open work is the phone's alone. */
+.detail-ghost { display: none; }
+
+@media (max-width: 899px) {
+  /* The whole page answers a touch (client/paging.ts), and iOS would flash
+     its grey over all of it. */
+  .detail { -webkit-tap-highlight-color: transparent; }
+  .detail {
+    --work-top: calc(188 * var(--p));
+    --work-type: calc(20 * var(--p));
+    --work-lead: calc(25 * var(--p));
+    --work-pair: calc(8 * var(--p));
+    --work-break: calc(51 * var(--p));
+    --work-plate: calc(56.5 * var(--p));
+    --edge: calc(32.85 * var(--p));
+    --plate-max: calc(384 * var(--p));
+    --under-gap: calc(45.5 * var(--p));
+    --thumb-h: calc(39.5 * var(--p));
+    --thumb-gap: calc(7.5 * var(--p));
+    --work-count: calc(48.5 * var(--p));
+    --work-foot: calc(60 * var(--p));
+    --work-ghost: 0.05;
+    /* Read by client/views.ts: the sheet's own width less the two margins,
+       and no caption beside the painting to share it with. */
+    --plate-room: calc(375 * var(--p) - 2 * var(--edge));
+    --caption-beside: 0;
+
+    isolation: isolate;                  /* the gallery behind stays behind */
+    display: flex;
+    flex-direction: column;
+    /* From the top, not about the middle of a tall screen as the desktop's
+       one row is: the sheet's 188 is from the top edge. */
+    justify-content: flex-start;
+    align-items: center;
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+    padding: var(--work-top) 0 var(--work-foot);
+    font-size: var(--work-type);
+    line-height: var(--work-lead);
+    letter-spacing: 0;
+  }
+
+  /*
+   * The gallery, faintly, behind the work: the dozen paintings round this
+   * one, in the two columns the phone's gallery stands in (its figures, the
+   * --wall-* further down, are shared). The sheet's own ghost is a piece of
+   * the desktop gallery pasted in, so only its strength is a measurement.
+   * Nothing in it is read out or answers a touch: a touch goes through to
+   * the ground, which closes.
+   */
+  .detail-ghost {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--wall-row) var(--wall-gutter);
+    align-content: start;
+    align-items: center;
+    padding: var(--wall-top) var(--wall-pad) 0;
+    overflow: hidden;
+    opacity: var(--work-ghost);
+    pointer-events: none;
+  }
+  .detail-ghost img { display: block; width: 100%; height: auto; }
+
+  /* The caption comes first on the sheet; in the page it follows the painting. */
+  .detail-caption {
+    order: 1;
+    position: static;
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    margin: 0;
+    padding: 0 var(--phone-pad);
+    translate: none;
+    text-align: center;
+    font-size: inherit;
+    line-height: inherit;
+  }
+  .detail-title { font-size: inherit; }
+  .detail-title + .detail-medium,
+  .detail-size + .detail-year { margin-top: var(--work-pair); }
+  .detail-facts { margin-top: var(--work-break); }
+
+  .detail-stage { order: 2; position: static; margin-top: var(--work-plate); }
+  /* Centred in the column whichever is wider, the painting or what is under it. */
+  .detail-plate { margin-inline: auto; }
+  /* Until the script has measured: the whole picture, within the margins. */
+  .detail-plate img { max-width: var(--plate-room); }
+  .detail-under { position: static; width: auto; margin-top: var(--under-gap); translate: none; }
+  /* More small pictures than the sheet is wide go on to a second row. */
+  .detail-thumbs { flex-wrap: wrap; max-width: calc(375 * var(--p) - 2 * var(--thumb-gap)); }
+  /* All at full strength on the sheet: nothing marks the one on the plate,
+     and a touch leaves no hover behind on another. */
+  .detail-thumb.is-shown,
+  .detail-thumb:not(.is-shown):hover,
+  .detail-thumb:not(.is-shown):focus-visible { opacity: 1; }
+  .detail-index,
+  .detail-index:first-child {
+    margin: var(--work-count) 0 0;
+    font-size: inherit;
+    line-height: inherit;
+  }
+  .detail-index:first-child { margin-top: calc(var(--work-count) - var(--under-gap)); }
+
+  /*
+   * Out of sight, not out of the page — and only once the script that closes
+   * on a touch of the ground and pages on a swipe is there to stand in for
+   * them. Without it they are the page's only way out, so they stay.
+   */
+  html.js .detail-back,
+  html.js .detail-pager {
+    position: absolute;
+    top: 0; left: 0; right: auto; bottom: auto;
+    width: 1px; height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  /* A keyboard still reaches them, and the one it is on shows itself at the
+     top left, on the line the three bars keep elsewhere. */
+  html.js .detail-pager:focus-within { width: auto; height: auto; margin: 0; overflow: visible; clip-path: none; }
+  html.js .detail-back:focus-visible,
+  html.js .detail-pager a:focus-visible {
+    position: fixed; z-index: 2;
+    top: calc(20 * var(--p)); left: calc(20 * var(--p));
+    width: auto; height: auto;
+    margin: 0;
+    overflow: visible;
+    clip-path: none;
+    opacity: 1;
+  }
+}
+
+/* ------------------------------------------- the gallery, on a phone */
+
+/*
+ * THE GALLERY ON A PHONE — the numbers to change are all here.
+ *
+ * No sheet was drawn for it. Two columns of paintings, each a column wide at
+ * its own shape, and the years along the foot of the screen. No pile to open
+ * it (client/stack.ts stands down below 900px), no sizes to choose, nothing
+ * that answers a pointer. In so many of `--p`, as the rest of the phone is.
+ *
+ *   --wall-top      from the top of the screen to the first row: 96, which
+ *                   puts the first painting's edge about 108 down, clear of
+ *                   the three bars.
+ *   --wall-pad      the margin either side: the phone's 20.
+ *   --wall-gutter   between the two columns: 15.
+ *   --wall-row      between one row and the next: 10. A cut-out carries its
+ *                   own paper round the painting, so the paintings stand
+ *                   further apart than this.
+ *   --wall-foot     the paper under the last row, so the years do not cover
+ *                   it: 120.
+ *
+ * The years, as the bars they already were on a phone:
+ *
+ *   --years-pad     above and below the bars: 12.
+ *   --swatch-w      a bar's width: 13.
+ *   --swatch-h      its height: 22,
+ *   --swatch-now    and the height of the year on screen: 34.
+ *   --swatch-gap    between one bar and the next: 3.
+ *   --year-type     the year written under its bar: 9,
+ *   --year-line     on a line of 11,
+ *   --year-gap      and 4 under the bar.
+ */
+@media (max-width: 899px) {
+  /* The ghost of the gallery behind an open work stands on the same grid. */
+  .grid[data-stack],
+  .detail-ghost {
+    --wall-top: calc(96 * var(--p));
+    --wall-pad: var(--phone-pad);
+    --wall-gutter: calc(15 * var(--p));
+    --wall-row: calc(10 * var(--p));
+    --wall-foot: calc(120 * var(--p));
+  }
+  .years {
+    --years-pad: calc(12 * var(--p));
+    --swatch-w: calc(21 * var(--p));      /* with the gap, 24 to press: 13 was too easy to miss by a year */
+    --swatch-h: calc(22 * var(--p));
+    --swatch-now: calc(34 * var(--p));
+    --swatch-gap: calc(3 * var(--p));
+    --year-type: calc(9 * var(--p));
+    --year-line: calc(11 * var(--p));
+    --year-gap: calc(4 * var(--p));
+  }
+
+  /* The runway the pile unfolds over: gone before the script takes it out. */
+  .hero[data-hero] { display: none; }
+
+  .grid[data-stack],
+  html.js .hero[data-hero] + .grid[data-stack] {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--wall-row) var(--wall-gutter);
+    /* A pair of different shapes stands on one middle line, as on the wall. */
+    align-items: center;
+    padding: var(--wall-top) var(--wall-pad) calc(var(--wall-foot) + env(safe-area-inset-bottom, 0px));
+  }
+  .grid[data-stack]::after { content: none; }
+  /* Every painting a column wide, whatever size it was drawn at to scale. */
+  .grid[data-stack] .tile {
+    --k: 1;
+    flex: none;
+    width: auto;
+    height: auto;
+    aspect-ratio: var(--a);
+  }
+  /* A touch leaves its hover behind: the painting just touched stays sharp. */
+  .grid[data-stack] .tile:hover img,
+  .grid[data-stack] .tile:focus-visible img { filter: none; opacity: 1; }
+
+  /* Sizes and scale mean nothing in two fixed columns, and the chevron
+     announced the pile. */
+  .controls { display: none; }
+  .years ~ .scroll-cue { display: none; }
+
+  /*
+   * The years: a bar of their colours fixed to the foot of the screen, the
+   * one on screen taller and named. Each year is a column the full height of
+   * the bar, so the finger has more than 13 by 22 to find. Nothing to wait
+   * for on a phone, so it is there from the first paint.
+   */
+  .years,
+  html.js .years {
+    top: auto; bottom: 0; left: 0; right: 0;
+    box-sizing: border-box;
+    height: calc(2 * var(--years-pad) + var(--swatch-now) + var(--year-gap) + var(--year-line) + env(safe-area-inset-bottom, 0px));
+    margin-top: 0;
+    padding: var(--years-pad) var(--phone-pad) calc(var(--years-pad) + env(safe-area-inset-bottom, 0px));
+    flex-direction: row;
+    justify-content: center;
+    justify-content: safe center;
+    align-items: stretch;
+    /* More years than fit run off to the side; client/years.ts keeps the
+       one on screen in view. */
+    overflow: auto hidden;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    font-size: var(--year-type);
+    line-height: var(--year-line);
+    background: rgb(255 255 255 / 0.88);
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(calc(6 * var(--p)));
+    -webkit-backdrop-filter: blur(calc(6 * var(--p)));
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    animation: none;
+    transition: none;
+  }
+  .years::-webkit-scrollbar { display: none; }
+  .year {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 calc(var(--swatch-gap) / 2);
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* The bar stands on the foot of its column until its year is the one on
+     screen; then the name takes the foot and the bar stands on the name. */
+  .year-swatch {
+    display: block;
+    width: var(--swatch-w);
+    height: var(--swatch-h);
+    margin-top: auto;
+    background: var(--c);
+    transition: height 0.4s var(--ease);
+  }
+  .year.is-current .year-swatch { height: var(--swatch-now); }
+  .year-label { display: none; margin-top: var(--year-gap); color: var(--ink); }
+  .year.is-current .year-label { display: block; }
+}
+@media (max-width: 899px) and (hover: hover) {
+  .year:hover .year-swatch { height: var(--swatch-now); }
+}
+
 /*
  * The Colour Chart.
  *
@@ -4731,8 +5536,42 @@ a.wc-bar:focus-visible {
   /* One line of the statement: 45pt of leading on 40pt of text. */
   --chart-line: calc(var(--pt) * 45);
 
-  padding: calc(var(--bar) + var(--pt) * 205) var(--pad) calc(var(--pt) * 230);
+  /*
+   * Where the statement's first line sits.
+   *
+   * 60pt below the bar, against the sheet's 205. The sheet draws a page you
+   * scroll through; this one has to stand whole on a screen, so the air
+   * between its parts is what gives. The type is hers to the point — only the
+   * room around it has been taken in, and the same is true of every figure
+   * below.
+   */
+  --chart-top: calc(var(--bar) + var(--pt) * 40);
+
 }
+
+/*
+ * The whole page, on one screen, stuck to the top of the view.
+ *
+ * Everything the sheet sets is in here, and it does not move: the run behind
+ * it (`.chart-runway`) is what the reader scrolls, and this stays put being
+ * written. A column rather than a stack of margins, so the line at the foot
+ * can be pushed to the foot of the screen and the room left over goes there
+ * rather than being spent on a figure chosen in advance.
+ *
+ * `min-height`, not `height`: on a short window the content is taller than a
+ * screen and has to be allowed to be. The stage then releases near the end of
+ * the run and the last of the page scrolls up, which is the ordinary thing a
+ * page does when it does not fit.
+ */
+.chart-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: var(--chart-top) var(--pad) calc(var(--pt) * 10);
+}
+
+/* The line at the foot goes to the foot. */
+.chart-footer { margin-top: auto; }
 
 /* ----------------------------------------------------------- the statement */
 
@@ -4756,6 +5595,83 @@ a.wc-bar:focus-visible {
 .chart-statement p { margin: 0 0 1.125em; }
 .chart-statement p:last-child { margin-bottom: 0; }
 
+/* --------------------------------------------------------- the writing */
+
+/*
+ * The statement is written by the scroll, and the scroll is the page's own.
+ *
+ * The page holds still (`.chart-page`, above) and a run of empty height
+ * behind it is what the reader travels: each word has a slice of that run,
+ * worked out where the words are, at build, and riding on the elements as
+ * `animation-range` (`components/colour-chart.ts`). The last word lands on
+ * the last pixel, so when the sentence stands the page will not go on — there
+ * is nothing after it to go to.
+ *
+ * Scrolling back unwrites it, which is not a feature added here but what a
+ * scroll timeline is: the words are at a position, not partway through a
+ * performance, so the page is as readable backwards as forwards.
+ *
+ * One knob: --chart-run, how much scroll the writing takes. More is slower.
+ * It is only the run's height — the slices are fractions of whatever it is —
+ * so it can be tuned here alone without moving a word's turn.
+ *
+ * Everything below asks the engine first. Without scroll-run animations, or
+ * with motion reduced, no word is ever hidden, the run is not there at all
+ * and the page is the static one the sheet draws.
+ *
+ * And from 900 wide up only. The phone sheet is a page taller than a phone,
+ * which cannot be pinned to one screen, so there it is the static page too
+ * (the phone block below; `client/chart.ts` makes the same test).
+ */
+.chart-runway { display: none; }
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) and (min-width: 900px) {
+    .chart-page { position: sticky; top: 0; }
+
+    .chart-runway {
+      display: block;
+      height: var(--chart-run, 300vh);
+    }
+
+    .chart-word {
+      opacity: 0;
+      /* Each word arrives whole, the moment its turn comes: no fade, so there
+         is never a half-written word ahead of the reader. */
+      animation: chart-word-in steps(1, jump-start) both;
+      animation-timeline: scroll(root block);
+      /* Each word's own animation-range rides on the element. */
+    }
+
+    /*
+     * And the four under the sentence come in rather than being written:
+     * each rises a little out of a blur over its own slice of the same run,
+     * the way the last part of About arrives. Written word by word they would
+     * read as more of the statement; arriving whole, they are what the page
+     * is for — where to get one, what it costs, her thanks, the line at the
+     * foot.
+     *
+     * Eased, not stepped, because the point of this one is the arrival.
+     */
+    .chart-in {
+      opacity: 0;
+      filter: blur(10px);
+      transform: translateY(14px);
+      animation: chart-in var(--ease) both;
+      animation-timeline: scroll(root block);
+      /* Each one's own animation-range rides on the element. */
+    }
+  }
+}
+
+@keyframes chart-word-in {
+  to { opacity: 1; }
+}
+
+@keyframes chart-in {
+  to { opacity: 1; filter: none; transform: none; }
+}
+
 /* ------------------------------------------------------------- the ordering */
 
 /*
@@ -4767,7 +5683,7 @@ a.wc-bar:focus-visible {
   display: inline-flex;
   align-items: center;
   gap: 0.55em;
-  margin-top: calc(var(--pt) * 103);
+  margin-top: calc(var(--pt) * 24);
   font-size: calc(var(--pt) * 45);
   font-weight: 600;
   line-height: 1.125;
@@ -4799,8 +5715,28 @@ a.wc-bar:focus-visible {
   transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-.chart-order:hover .chart-arrow,
-.chart-order:focus-visible .chart-arrow { transform: rotate(90deg); }
+/* The phone sheet draws an arrow of its own — longer arms, a heavier line —
+   and it stands in for this one below 900 (the phone block below). */
+.chart-arrow-phone { display: none; }
+
+/*
+ * Only where there is a pointer to hover with, and only on hover.
+ *
+ * A tap on a touch screen leaves `:hover` standing on what was tapped until
+ * something else is tapped, so on a phone the arrow turned once and stayed
+ * turned — pointing down for the life of the page. `(hover: hover) and
+ * (pointer: fine)` is the test the site already uses for the pointer label,
+ * and it keeps the whole gesture to the machines that can actually make it.
+ *
+ * `:focus-visible` is not in here either, and that is the other half of the
+ * same complaint. Closing the form puts focus back on the control it was
+ * opened from; after a key that counts as a visible focus, so the arrow was
+ * left turned by a form the reader had finished with. Focus is shown by the
+ * underline below, which does not pretend to be a gesture.
+ */
+@media (hover: hover) and (pointer: fine) {
+  .chart-order:hover .chart-arrow { transform: rotate(90deg); }
+}
 
 /* The site shows focus the way it shows hover; this one also underlines, since
    a keyboard arriving on a control that opens a form should be unmistakable. */
@@ -4813,7 +5749,7 @@ a.wc-bar:focus-visible {
  * above it rather than the size of the words above that.
  */
 .chart-price {
-  margin: calc(var(--pt) * 25) 0 0;
+  margin: calc(var(--pt) * 18) 0 0;
   font-size: calc(var(--pt) * 45);
   font-weight: 300;
   line-height: 1.125;
@@ -4825,8 +5761,16 @@ a.wc-bar:focus-visible {
 /* ---------------------------------------------------------------- the close */
 
 /* Her thanks, down the middle: 45pt, the same size as the control above it. */
+/*
+ * Her thanks, down the middle — and lifted clear of the line at the foot.
+ *
+ * --chart-thanks-lift is that lift, a tenth of the screen, and the room for
+ * it comes out of the gaps above rather than out of the page's height: this
+ * page stands on one screen and that is not negotiable. The figures above are
+ * what paid for it.
+ */
 .chart-thanks {
-  margin: calc(var(--pt) * 69) 0 0;
+  margin: calc(var(--pt) * 18) 0 var(--chart-thanks-lift, 10vh);
   text-align: center;
   font-size: calc(var(--pt) * 45);
   font-weight: 500;
@@ -4840,7 +5784,6 @@ a.wc-bar:focus-visible {
  * the notice by weight alone — there is no second size for it to use.
  */
 .chart-footer {
-  margin-top: calc(var(--pt) * 136);
   text-align: center;
   font-size: calc(var(--pt) * 18);
   font-weight: 400;
@@ -4851,22 +5794,100 @@ a.wc-bar:focus-visible {
 
 .chart-footer b { font-weight: 600; }
 
-/* ------------------------------------------------------------------ narrow */
+/* ------------------------------------------------------------------- phone */
 
 /*
- * Nothing to rearrange — the page is one column at every width. Only the room
- * around it comes in, since the sheet's spacing is drawn for a screen twice as
- * wide as a phone and leaves half of one empty.
+ * The phone sheet ("COLOR CHART PHONE", 375 wide).
+ *
+ * A page you scroll, not a page that is written. At the sheet's sizes it is
+ * 1080 tall, and Order yours and the thanks cannot be held on one pinned
+ * screen, so below 900 there is no pin, no run behind it, no cue and no line
+ * at the foot: every word stands and the document scrolls the ordinary way.
+ * (The query on the writing, above, is what leaves the words standing.)
+ *
+ * Every figure is the sheet's, in units of its frame (`--p`, 09-phone.css).
+ * The ones to change by hand are the list at the top; the side margin is the
+ * phone's own (`--phone-pad`, 20).
+ *
+ * Everything is set solid — 20 on 20, 30 on 30 — so each gap below is the
+ * whole distance from one line box to the next. It is also why the first
+ * figure ends in a half: a line box 20 tall carries its baseline 17.5 down,
+ * and the sheet's first baseline is at 123.
  */
 @media (max-width: 899px) {
   .chart {
-    padding-top: calc(var(--bar) + var(--pt) * 90);
-    padding-bottom: calc(var(--pt) * 110);
+    --chart-phone-top: calc(105.5 * var(--p));        /* top of the page to the statement */
+    --chart-phone-text: calc(20 * var(--p));          /* the statement's size, and its leading */
+    --chart-phone-para: calc(20 * var(--p));          /* between its paragraphs: one empty line */
+    --chart-phone-large: calc(30 * var(--p));         /* Order yours, the cost, the thanks */
+    --chart-phone-order-gap: calc(89 * var(--p));     /* statement to Order yours */
+    --chart-phone-arrow-gap: calc(20 * var(--p));     /* Order yours to its arrow */
+    --chart-phone-arrow-w: calc(22.5 * var(--p));     /* the arrow, 22.5 by 22 */
+    --chart-phone-arrow-h: calc(22 * var(--p));
+    --chart-phone-cost-gap: calc(16 * var(--p));      /* Order yours to the cost */
+    --chart-phone-thanks-gap: calc(154 * var(--p));   /* the cost to the thanks */
+    --chart-phone-rule: calc(1.5 * var(--p));         /* the line under the thanks: how thick */
+    --chart-phone-rule-drop: calc(3.75 * var(--p));   /* and how far under the baseline */
+    --chart-phone-foot: calc(185.5 * var(--p));       /* under the thanks to the end of the page */
   }
 
-  .chart-order { margin-top: calc(var(--pt) * 60); }
-  .chart-thanks { margin-top: calc(var(--pt) * 48); }
-  .chart-footer { margin-top: calc(var(--pt) * 80); }
+  .chart-page {
+    position: static;
+    min-height: 0;
+    padding: var(--chart-phone-top) var(--phone-pad) var(--chart-phone-foot);
+  }
+
+  /* Medium, capitals and no tracking come from the rule above. */
+  .chart-statement { font-size: var(--chart-phone-text); line-height: 1; }
+  .chart-statement p { margin-bottom: var(--chart-phone-para); }
+
+  .chart-order {
+    /* The link is its words and its arrow, not the whole row beside them. */
+    align-self: flex-start;
+    /* The arrow stands on the baseline: a drawing's baseline is its foot. */
+    align-items: baseline;
+    gap: var(--chart-phone-arrow-gap);
+    margin-top: var(--chart-phone-order-gap);
+    font-size: var(--chart-phone-large);
+    line-height: 1;
+  }
+  .chart-arrow { display: none; }
+  .chart-arrow-phone {
+    display: block;
+    flex: none;
+    width: var(--chart-phone-arrow-w);
+    height: var(--chart-phone-arrow-h);
+    overflow: visible;
+  }
+
+  /* "Cost:" is regular on this sheet, where the desktop's is light. */
+  .chart-price {
+    margin-top: var(--chart-phone-cost-gap);
+    font-size: var(--chart-phone-large);
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  /* From the left edge like everything else, and regular. */
+  .chart-thanks {
+    margin: var(--chart-phone-thanks-gap) 0 0;
+    text-align: left;
+    font-size: var(--chart-phone-large);
+    font-weight: 400;
+    line-height: 1;
+  }
+  /* Underlined where it opens the photographs: there is no hover on a phone
+     to say that it does. Straight through the descenders, as the sheet's is. */
+  .chart-thanks a {
+    text-decoration: underline;
+    text-decoration-thickness: var(--chart-phone-rule);
+    text-underline-offset: var(--chart-phone-rule-drop);
+    text-decoration-skip-ink: none;
+  }
+
+  .chart-footer { display: none; }
+  /* Nothing is written by the scroll here, so there is nothing to cue. */
+  .chart-body .scroll-cue { display: none; }
 }
 
 /* --------------------------------------------------------------- inquiries */
@@ -4966,7 +5987,7 @@ html:not(.js) .inq-close { display: none; }
   grid-column: 1 / -1;
   margin: 0 0 0.6em;
   font-size: var(--type);
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.02em;
   text-transform: uppercase;
   line-height: var(--lead);
@@ -5046,14 +6067,17 @@ html:not(.js) .inq-close { display: none; }
 
 .inq-button {
   font-size: var(--type);
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.02em;
   text-transform: uppercase;
   line-height: var(--lead);
   color: var(--ink);
   transition: opacity var(--hover) var(--ease);
 }
-.inq-button:hover, .inq-button:focus-visible { opacity: 0.55; }
+.inq-button:focus-visible { opacity: 0.55; }
+/* Only where something hovers: a finger leaves :hover behind it, and Send
+   stayed dimmed after it was pressed. */
+@media (hover: hover) { .inq-button:hover { opacity: 0.55; } }
 .inq-button[disabled] { opacity: 0.35; cursor: default; }
 
 /*
@@ -5097,17 +6121,63 @@ html:not(.js) .inq-close { display: none; }
  * grid does not fall back to that column — it conjures a second one, and the
  * form came out in two ragged columns with the fields alternating between them.
  */
+/*
+ * On a phone it is set on the page's own scale, so that it reads as the same
+ * page: the phone's margin, the title where the statement begins, the two
+ * controls at the size and weight of Order yours, labels and fields at the
+ * statement's 20 (which also keeps a field above the 16px under which iOS
+ * zooms in on it). There is no sheet for this one; the figures are the Colour
+ * Chart's phone sheet carried over, in the same unit (`--p`, 09-phone.css).
+ */
 @media (max-width: 899px) {
-  .inq { align-content: start; padding-left: var(--pad); padding-right: var(--pad); }
-  .inq-form { grid-template-columns: minmax(0, 1fr); row-gap: 1.4rem; }
+  .inq {
+    --inq-phone-top: calc(105.5 * var(--p));      /* top of the screen to Inquiries */
+    --inq-phone-foot: calc(40 * var(--p));        /* under Send */
+    --inq-phone-text: calc(20 * var(--p));        /* labels, fields, the line of news */
+    --inq-phone-large: calc(30 * var(--p));       /* Inquiries and Send */
+    --inq-phone-row: calc(20 * var(--p));         /* between one field and the next */
+    --inq-phone-field-top: calc(10 * var(--p));   /* a label to what is typed under it */
+    --inq-phone-field-foot: calc(5 * var(--p));   /* what is typed to its rule */
+    --inq-phone-news: calc(10 * var(--p));        /* the line of news to Send */
+    /* A field, top to rule: what is typed, the room either side of it, the rule. */
+    --inq-phone-field: calc(var(--inq-phone-text) + var(--inq-phone-field-top) + var(--inq-phone-field-foot) + 1px);
+
+    align-content: start;
+    padding: var(--inq-phone-top) var(--phone-pad) var(--inq-phone-foot);
+  }
+  .inq-form { grid-template-columns: minmax(0, 1fr); row-gap: var(--inq-phone-row); }
+  .inq-title {
+    margin: 0 0 var(--inq-phone-row);
+    font-size: var(--inq-phone-large);
+    line-height: 1;
+    letter-spacing: 0;
+  }
   .inq-field { display: block; }
-  .inq-label { display: block; margin-bottom: 0.2em; }
+  .inq-label { display: block; margin: 0; font-size: var(--inq-phone-text); line-height: 1; letter-spacing: 0; }
+  .inq-input {
+    /* Stated, because a one-line field will not be set solid: a browser
+       holds its line at the face's own leading whatever is asked for, and
+       the four of them came out 7 taller than the message under them. */
+    height: var(--inq-phone-field);
+    font-size: var(--inq-phone-text);
+    line-height: 1;
+    letter-spacing: 0;
+    padding: var(--inq-phone-field-top) 0 var(--inq-phone-field-foot);
+  }
+  /* The doubled rule takes its second pixel out of the room above it, as it
+     does on the desktop, so the field does not change height under a thumb. */
+  .inq-input:focus-visible { padding-bottom: calc(var(--inq-phone-field-foot) - 1px); }
+  /* The message starts as one line like the rest and grows from there
+     (`client/inquiries.ts` writes its height as it is typed in). */
+  .inq-area { height: auto; min-height: var(--inq-phone-field); }
   .inq-message .inq-label, .inq-message .inq-input { margin-top: 0; }
   .inq-check, .inq-send { grid-column: 1; }
 
-  /* The line of news takes a line; the button keeps its corner under it. */
-  .inq-send { flex-wrap: wrap; justify-content: flex-end; gap: 0.6rem; }
-  .inq-status { flex: 1 0 100%; }
+  /* The line of news takes a line; Send stands under it, at the left edge
+     with everything else. */
+  .inq-send { flex-wrap: wrap; justify-content: flex-start; gap: var(--inq-phone-news); margin-top: var(--inq-phone-row); }
+  .inq-status { flex: 1 0 100%; font-size: var(--inq-phone-text); line-height: 1; letter-spacing: 0; }
+  .inq-button { font-size: var(--inq-phone-large); line-height: 1; letter-spacing: 0; }
 }
 
 /*
@@ -5137,7 +6207,13 @@ html:not(.js) .inq-close { display: none; }
 .sheet {
   position: relative;
   display: grid;
-  grid-template-columns: calc(var(--f) * 960) minmax(0, 1fr);
+  /*
+   * The reading column. 960 of the sheet's pixels was its measured width; a
+   * tenth off that is 864, which is what this is. Change this one figure to
+   * change how wide the text runs on every detail — exhibitions and
+   * commissioned both, since they are one sheet.
+   */
+  grid-template-columns: calc(var(--f) * 800) minmax(0, 1fr);
   grid-template-rows: auto minmax(0, 1fr);
   height: 100vh;
   height: 100dvh;
@@ -5204,16 +6280,24 @@ html:not(.js) .inq-close { display: none; }
   text-transform: uppercase;
   letter-spacing: -0.005em;
 }
-/* Cased as each sheet sets it — some are capitals, a few are not. */
+/*
+ * Always capitals, on every detail — exhibitions and commissioned alike. The
+ * sheets were cased one at a time before, some capitals and a few not, which
+ * made the masthead read as several different things depending on which show
+ * you had opened.
+ */
 .sheet-lines {
   margin-top: calc(var(--f) * 43);
   font-weight: 500;
+  text-transform: uppercase;
   line-height: 1;
 }
 .sheet-when {
   margin-top: calc(var(--f) * 1);
-  font-style: italic;
-  font-weight: 400;
+  /* Light, upright: the second line of the masthead in the designer's key. */
+  font-weight: 300;
+  font-style: normal;
+  text-transform: uppercase;
   font-variant-numeric: tabular-nums;
 }
 
@@ -5241,6 +6325,16 @@ html:not(.js) .inq-close { display: none; }
 }
 /* A paragraph's gap is one empty line, as the sheets have it. */
 .sheet-prose p { margin: 0 0 calc(var(--s-lead) * 1em); }
+/*
+ * The opening paragraph is the lede, and the sheets set it apart from the
+ * text that follows: capitals and medium, against the regular that carries
+ * the rest. `first-of-type` rather than `first-child` because the prose can
+ * open with something that is not a paragraph.
+ */
+.sheet-prose > p:first-of-type {
+  font-weight: 500;
+  text-transform: uppercase;
+}
 .sheet-prose p:last-child { margin-bottom: 0; }
 .sheet-prose .is-style-lead {
   font-weight: 500;
@@ -5248,6 +6342,17 @@ html:not(.js) .inq-close { display: none; }
 }
 /* Some sheets leave a second empty line before a change of voice. */
 .sheet-prose .apart { margin-top: calc(var(--s-lead) * 1em); }
+/*
+ * The sheet decides the distribution, not the pasted markup.
+ *
+ * Transitions arrived from a word processor with sixty-five <i> tags wrapping
+ * every fragment of it, so the whole page — lede and body alike — came out
+ * italic. Moll de l'Os, which was typed cleanly, has none. <i> is
+ * presentational and means nothing here, so it is neutralised; <em> is left
+ * alone, because the sheets do use it and the commissioned mastheads set a
+ * curator's name in it.
+ */
+.sheet-prose i { font-style: normal; font-weight: inherit; }
 .sheet-prose b { font-weight: 500; }
 /* Bold proper, the editor's B: the client's name where the sheet sets it apart. */
 /* Semibold, which is the heaviest the sheets go. */
@@ -5266,7 +6371,12 @@ html:not(.js) .inq-close { display: none; }
  */
 .sheet-prose .is-style-note {
   margin-top: 5.2em;
-  font-weight: 300;
+  /*
+   * Regular, like the text above it. These were set at 30 against the text's
+   * 40 once, and light when that size was taken out; regular is what they
+   * actually are. The name inside keeps the medium its own markup asks for,
+   * so the line reads 'Photography by' plain and the credit a shade stronger.
+   */
   line-height: var(--lead-45);
 }
 .sheet-prose .is-style-cta {
@@ -5407,10 +6517,10 @@ html:not(.js) .inq-close { display: none; }
   translate: 0 -80%;
 }
 
-/* ------------------------------------------------------------------- phone */
+/* ------------------------------------------------------- without scripting */
 
-/* Phones held sideways are below. Without scripting, at any width, the sheet
-   is a plain page: the masthead, the text, then every photograph. */
+/* At any width the sheet is then a plain page: the masthead, the text, then
+   every photograph. The phone's own sheet is at the foot of this file. */
 html:not(.js) .panel:has(.sheet) { position: relative; overflow: visible; }
 html:not(.js) .sheet { display: block; height: auto; }
 html:not(.js) .sheet-text { overflow: visible; padding-bottom: var(--gap); -webkit-mask-image: none; mask-image: none; }
@@ -5418,61 +6528,6 @@ html:not(.js) .sheet-stage { position: static; width: auto; margin: 0 var(--s-pa
 html:not(.js) .sheet-figure { margin-bottom: var(--gap); }
 html:not(.js) .sheet-more,
 html:not(.js) .sheet-step { display: none; }
-
-/*
- * Too narrow for two columns. The masthead and the photograph stand at the
- * top and the text scrolls beneath them — still the only thing that moves.
- */
-@media (max-width: 899px) {
-  .panel:has(.sheet) {
-    --s-pad: var(--pad);
-    --s-lead: 1.2;
-  }
-  .sheet {
-    display: flex;
-    flex-direction: column;
-  }
-  .panel:has(.sheet) .panel-close { top: 1.6rem; translate: none; line-height: var(--lead); }
-  .sheet-head,
-  .sheet.is-wide-text .sheet-head {
-    display: block;
-    min-height: 0;
-    padding: 1.6rem calc(var(--s-pad) + 5rem) 0 var(--s-pad);
-  }
-  .sheet-lines { margin-top: 0.6rem; }
-  .sheet-when, .sheet.is-wide-text .sheet-when { margin: 0.3rem 0 0; }
-  .sheet.is-wide-text .sheet-title { min-width: 0; padding: 0; }
-  .sheet-stage {
-    position: relative;
-    order: 2;
-    left: auto; top: auto; bottom: auto; width: auto;
-    flex: none;
-    height: 36vh;
-    margin: 1.2rem calc(var(--s-pad) + 1.6rem) 0;
-  }
-  .sheet-prev { left: -1.9rem; }
-  .sheet-next { right: -1.9rem; }
-  .sheet-step { padding: 1rem 0.5rem; }
-  .sheet-text,
-  .sheet.is-wide-text .sheet-text {
-    order: 3;
-    flex: 1;
-    min-height: 0;
-    padding: 1.4rem var(--s-pad) 4rem;
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 1.4rem);
-            mask-image: linear-gradient(to bottom, transparent 0, #000 1.4rem);
-  }
-  .sheet-more,
-  .sheet.is-wide-text .sheet-more {
-    position: absolute;
-    margin: 0;
-    right: var(--s-pad);
-    top: 4.2rem;
-    translate: none;
-    width: 26px;
-    height: 26px;
-  }
-}
 
 /* ------------------------------------------------------------ the index */
 
@@ -5498,24 +6553,62 @@ html:not(.js) .sheet-step { display: none; }
 .com-list .xgroup:nth-child(2) { margin-bottom: clamp(2.5rem, 7.656vw, 11rem); }
 
 /*
- * A phone held sideways, or any window too short for the photograph above the
- * text: the photograph goes beside the text instead, so the text keeps the
- * height it needs and is still the only thing that moves.
+ * The same index on the phone sheet: 375 wide, every figure so many of `--p`,
+ * one unit of that frame (09-phone.css).
+ *
+ * The kind of work over its projects instead of beside them, large: a 30
+ * heading, the names at 25 on a line of 25 in the regular weight, a rule
+ * under each. No years — the sheet draws none. Names turn where the 335
+ * column turns them, but for the one break set by hand (`.xrow-br`).
+ *
+ * It has to come after the two group margins above: the same weight of
+ * selector, so the later rule is the one that holds.
+ *
+ * The figures to change by hand are the first block.
  */
-@media (max-width: 899px) and (max-height: 520px) {
-  html.js .sheet {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 38%;
-    grid-template-rows: auto minmax(0, 1fr);
+@media (max-width: 899px) {
+  .xlist.com-list {
+    --com-top: calc(106 * var(--p));         /* top of the page → the first heading's line; its baseline lands at 131 */
+    --com-foot: calc(106 * var(--p));        /* under the last rule */
+    --com-head: calc(30 * var(--p));         /* COMMISSIONED, EDUCATION, SOLIDARY, on a line of the same */
+    --com-head-gap: calc(13 * var(--p));     /* a heading → its first row: baseline to baseline 49 */
+    --com-size: calc(25 * var(--p));         /* a project's name, on a line of the same */
+    --row-top: calc(10 * var(--p));          /* rule → name: the baseline 31 under the rule above */
+    --row-bottom: calc(8 * var(--p));        /* name → rule: the rule 12 under the baseline */
+    --com-group-gap: calc(85 * var(--p));    /* the last rule of a group → the next heading */
+
+    padding: var(--com-top) var(--phone-pad) var(--com-foot);
   }
-  html.js .sheet-head { grid-area: 1 / 1; padding-top: 1rem; }
-  html.js .sheet-text { grid-area: 2 / 1; }
-  html.js .sheet-stage {
-    grid-area: 1 / 2 / 3 / 3;
-    height: auto;
-    /* Clear of Close and the round button above it. */
-    margin: 6.4rem calc(var(--s-pad) + 1.6rem) 1rem 0.6rem;
+
+  .xlist.com-list .xgroup {
+    display: block;
+    margin-bottom: var(--com-group-gap);
   }
+  .xlist.com-list .xgroup:last-child { margin-bottom: 0; }
+
+  .com-list .xgroup-name {
+    margin: 0 0 var(--com-head-gap);
+    padding: 0;
+    font-size: var(--com-head);
+  }
+
+  /* No year column: the name has the row to itself. */
+  .com-list .xrow {
+    display: block;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .com-list .xrow-title {
+    display: block;
+    font-size: var(--com-size);
+    font-weight: 400;
+  }
+  .com-list .xrow-when { display: none; }
+}
+
+/* The one break the phone sheet sets by hand inside a name
+   (components/commissioned.ts). Wider than the phone the name runs on. */
+@media (min-width: 900px) {
+  .xrow-br { display: none; }
 }
 
 /* ------------------------------------------ the second sheet: photographs */
@@ -5621,18 +6714,449 @@ html:not(.js) .sheet-step { display: none; }
 html:not(.js) .plates-step { display: none; }
 html:not(.js) .plates-figure { position: static; opacity: 1; }
 
+/*
+ * A show that opens on its own name and a translation of it: the sheet sets
+ * those apart and leaves an empty line under them before the text begins.
+ * A block inside the lede rather than a paragraph of its own, so the whole
+ * opening stays the lede and keeps its capitals (`content/shows.ts`).
+ */
+.sheet-prose .lede-open { display: block; margin-bottom: calc(var(--s-lead) * 1em); }
+
+/* ------------------------------------------------------------------- phone */
+
+/*
+ * The phone's sheets, off the designer's 375 frames. Every figure is so many
+ * of `--p`, one unit of that frame (09-phone.css).
+ *
+ * A detail is a page here: the panel scrolls, top to bottom, and nothing
+ * inside it does. For a photograph to stand inside the text, the text's box
+ * and the photographs' box are dissolved (`display: contents`), which makes
+ * every paragraph and every photograph an item of the sheet's one column, and
+ * `order` puts each where the frames draw it. The source keeps its own order
+ * — masthead, text, photographs — which is the order it is read out in.
+ *
+ * Two scales, as drawn, told apart by the panel's id:
+ *
+ *   exhibition-…    Moll de l’Ós: the name at 25, everything else at 20, from
+ *                   157 down; the first photograph after the lede.
+ *   commissioned-…  Terra Rossa: 30 throughout and the credits at 20, from
+ *                   107 down; the credits come up under the year, and the
+ *                   first photograph follows the second block of the text.
+ *
+ * A show that is photographs and nothing else — and the colour chart's own —
+ * is set in the exhibitions' type, its pictures straight under the masthead.
+ *
+ * A photograph keeps its own proportions. A landscape takes the column; any
+ * other stands 261 wide in the middle of it. The first goes where the frame
+ * has it and the rest follow the text, in their order: there are no arrows on
+ * the phone, and nothing is kept behind a gesture that is not drawn.
+ *
+ * Nor is there a Close, or the round button. The three bars stay on top
+ * (09-phone.css) and the ways out are the phone's own Back (client/panels.ts),
+ * the section's name in the menu, and Escape. Close is still in the page, for
+ * a keyboard and for a screen reader, out of sight until a key reaches it.
+ *
+ * The figures to change by hand are the three blocks that follow: one for
+ * each kind of sheet.
+ */
 @media (max-width: 899px) {
-  .panel:has(.plates) { overflow: auto; }
-  .plates { height: auto; padding: calc(var(--bar) * 0.6) var(--pad) var(--gap); }
-  .plates-head { position: static; width: auto; }
-  .plates-stage {
+  /* Exhibitions that have a text. */
+  .panel:has(> .sheet) {
+    --sh-top: calc(157 * var(--p));          /* top of the page → the name's line */
+    --sh-foot: calc(80 * var(--p));          /* under the last block */
+    --sh-name: calc(25 * var(--p));          /* the name, on a line of the same */
+    --sh-type: calc(20 * var(--p));          /* place, dates, lede and text, on a line of the same */
+    --sh-note: calc(20 * var(--p));          /* credits, likewise */
+    --sh-measure: none;                      /* where the lines under the name turn: the column */
+    --sh-lines-top: calc(14 * var(--p));     /* name → place */
+    --sh-when-top: 0px;                      /* place → dates: the next line */
+    --sh-text-top: calc(49 * var(--p));      /* dates → lede */
+    --sh-para: calc(20 * var(--p));          /* paragraph → paragraph: one empty line */
+    --sh-caps: calc(33 * var(--p));          /* plain text → a paragraph in capitals, or back */
+    --sh-pic-tall: calc(261 * var(--p));     /* a portrait or a square: 57 clear either side */
+    --sh-pic-top: calc(22 * var(--p));       /* lede → the first photograph */
+    --sh-pic-bottom: calc(18 * var(--p));    /* the first photograph → text */
+    --sh-pics-top: calc(40 * var(--p));      /* end of the text → the other photographs */
+    --sh-pics-gap: calc(20 * var(--p));      /* photograph → photograph */
+  }
+  /* Commissioned work. */
+  .panel[id^='commissioned-'] {
+    --sh-top: calc(107 * var(--p));
+    --sh-foot: calc(119 * var(--p));
+    --sh-name: calc(30 * var(--p));
+    --sh-type: calc(30 * var(--p));
+    --sh-note: calc(20 * var(--p));
+    --sh-measure: calc(261 * var(--p));      /* the lines under the name turn at the photograph's width */
+    --sh-lines-top: calc(60 * var(--p));
+    --sh-when-top: calc(29 * var(--p));      /* lines → year */
+    --sh-note-top: calc(60 * var(--p));      /* year → credits */
+    --sh-text-top: calc(55 * var(--p));      /* credits → text */
+    --sh-text-bare: calc(60 * var(--p));     /* year → text, on a sheet with no credits */
+    --sh-para: calc(30 * var(--p));
+    --sh-apart: calc(60 * var(--p));         /* a change of voice: two empty lines */
+    --sh-cta: calc(90 * var(--p));           /* the closing call: three */
+    --sh-pic-top: calc(117 * var(--p));      /* text → the first photograph */
+    --sh-pic-bottom: calc(106 * var(--p));   /* the first photograph → text */
+    --sh-pics-top: calc(117 * var(--p));     /* end of the text → the other photographs */
+    --sh-pics-gap: calc(30 * var(--p));
+  }
+  /* Photographs only. */
+  .panel:has(> .plates) {
+    --sh-top: calc(157 * var(--p));
+    --sh-foot: calc(80 * var(--p));
+    --sh-name: calc(25 * var(--p));
+    --sh-type: calc(20 * var(--p));
+    --sh-measure: none;
+    --sh-lines-top: calc(17 * var(--p));     /* name → place */
+    --sh-when-top: calc(32 * var(--p));      /* place → dates, set apart on this sheet */
+    --sh-pic-tall: calc(261 * var(--p));
+    --sh-pic-top: calc(64 * var(--p));       /* dates → the first photograph */
+    --sh-pics-gap: calc(20 * var(--p));
+  }
+
+  /* ---- the page ---- */
+
+  .panel:has(> .sheet),
+  .panel:has(> .plates) {
+    overflow: hidden auto;
+    overscroll-behavior: contain;
+    /* The body's 0.01em is not in the phone frames, and turns their lines early. */
+    letter-spacing: 0;
+  }
+  .panel > .sheet,
+  .panel > .plates {
+    height: auto;
+    padding: var(--sh-top) var(--phone-pad) var(--sh-foot);
+    font-size: var(--sh-type);
+    line-height: var(--sh-type);
+  }
+  .panel > .sheet { display: flex; flex-direction: column; }
+
+  /* ---- masthead ---- */
+
+  .panel > .sheet .sheet-head,
+  .panel > .plates .plates-head {
+    display: block;
+    position: static;
+    width: auto;
+    min-height: 0;
+    padding: 0;
+    font-size: inherit;
+    line-height: inherit;
+  }
+  .panel > :is(.sheet, .plates) .sheet-title {
+    min-width: 0;
+    padding: 0;
+    font-size: var(--sh-name);
+    line-height: var(--sh-name);
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+  .panel > :is(.sheet, .plates) .sheet-lines {
+    max-width: var(--sh-measure);
+    margin: var(--sh-lines-top) 0 0;
+    font-weight: 500;
+    line-height: inherit;
+  }
+  /* Regular italic, as both phone frames draw the dates. */
+  .panel > :is(.sheet, .plates) .sheet-when {
+    margin: var(--sh-when-top) 0 0;
+    font-weight: 400;
+    font-style: italic;
+    font-variant-numeric: normal;
+  }
+  /* Nothing to say between the name and the dates: the dates take that gap. */
+  .panel > .sheet .sheet-title + .sheet-when { margin-top: var(--sh-lines-top); }
+
+  /* ---- text and photographs, one column ---- */
+
+  .panel > .sheet :is(.sheet-text, .sheet-prose, .sheet-stage, .sheet-frame) { display: contents; }
+  .panel > .sheet .sheet-prose { font-size: inherit; line-height: inherit; }
+  .panel > .sheet .sheet-prose > * { margin: var(--sh-para) 0 0; }
+  /* Pasted text that arrived in boxes of its own keeps the same empty line. */
+  .panel > .sheet .sheet-prose > * p { margin: 0 0 var(--sh-para); }
+  .panel > .sheet .sheet-prose > * p:last-child { margin-bottom: 0; }
+  .panel > .sheet .sheet-prose .lede-open { margin-bottom: var(--sh-para); }
+  .panel > .sheet .sheet-prose > .is-style-note { font-size: var(--sh-note); line-height: var(--sh-note); }
+  /* Anything set into the text — a film — keeps to the column. */
+  .panel > .sheet .sheet-prose :is(video, iframe, img) { max-width: 100%; }
+
+  .panel > .sheet .sheet-figure,
+  .panel > .plates .plates-figure {
+    display: block;
+    position: static;
+    inset: auto;
+    margin: var(--sh-pics-gap) 0 0;
+    padding: 0;
+    opacity: 1;
+    pointer-events: auto;
+    transition: none;
+  }
+  .panel > .sheet .sheet-figure img,
+  .panel > .plates .plates-figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: none;
+    max-height: none;
+    object-fit: fill;
+  }
+  .panel > .sheet .sheet-figure:not(.is-wide) img,
+  .panel > .plates .plates-figure:not(.is-wide) img { width: var(--sh-pic-tall); margin: 0 auto; }
+
+  .panel > .sheet :is(.sheet-more, .sheet-step),
+  .panel > .plates .plates-step { display: none; }
+
+  /* ---- exhibitions: lede, photograph, text, the other photographs ---- */
+
+  .panel[id^='exhibition-'] .sheet-prose > * { order: 3; }
+  .panel[id^='exhibition-'] .sheet-figure { order: 4; }
+  /* Capitals anywhere in the text stand clear of the plain text either side. */
+  .panel[id^='exhibition-'] .sheet-prose > .is-style-lead,
+  .panel[id^='exhibition-'] .sheet-prose > .is-style-lead + * { margin-top: var(--sh-caps); }
+  .panel[id^='exhibition-'] .sheet-prose > p:first-child { order: 1; margin-top: var(--sh-text-top); }
+  .panel[id^='exhibition-'] .sheet-prose > p:first-child + * { margin-top: var(--sh-caps); }
+  .panel[id^='exhibition-'] .sheet:has(.sheet-figure) .sheet-prose > p:first-child + * { margin-top: 0; }
+  .panel[id^='exhibition-'] .sheet-figure:first-child { order: 2; margin: var(--sh-pic-top) 0 var(--sh-pic-bottom); }
+  .panel[id^='exhibition-'] .sheet-figure:nth-child(2) { margin-top: var(--sh-pics-top); }
+  /* A text that does not open on a paragraph has no lede to go first: the
+     photograph leads, under the dates, and the whole text follows it. */
+  .panel[id^='exhibition-'] .sheet-prose > :first-child:not(p) { margin-top: 0; }
+  .panel[id^='exhibition-'] .sheet:not(:has(.sheet-figure)) .sheet-prose > :first-child:not(p),
+  .panel[id^='exhibition-'] .sheet:has(.sheet-prose > :first-child:not(p)) .sheet-figure:first-child { margin-top: var(--sh-text-top); }
+
+  /* ---- commissioned: credits, two blocks of text, photograph, the rest ---- */
+
+  .panel[id^='commissioned-'] .sheet-prose > * { order: 4; }
+  .panel[id^='commissioned-'] .sheet-figure { order: 5; }
+  .panel[id^='commissioned-'] .sheet-prose > .apart { margin-top: var(--sh-apart); }
+  .panel[id^='commissioned-'] .sheet-prose > .is-style-cta { margin-top: var(--sh-cta); }
+  /* The credits are last in the source and second on the phone sheet. A name
+     goes under its label, and the line break after it then stands as the
+     empty line between one credit and the next. */
+  .panel[id^='commissioned-'] .sheet-prose > .is-style-note { order: 1; margin-top: var(--sh-note-top); }
+  .panel[id^='commissioned-'] .sheet-prose > .is-style-note :is(b, strong) { display: block; }
+  .panel[id^='commissioned-'] .sheet-prose > :nth-child(-n + 2 of :not(.is-style-note)) { order: 2; }
+  .panel[id^='commissioned-'] .sheet-prose > :nth-child(1 of :not(.is-style-note)) { margin-top: var(--sh-text-top); }
+  .panel[id^='commissioned-'] .sheet-prose:not(:has(> .is-style-note)) > :first-child { margin-top: var(--sh-text-bare); }
+  .panel[id^='commissioned-'] .sheet-figure:first-child { order: 3; margin-top: var(--sh-pic-top); }
+  .panel[id^='commissioned-'] .sheet:has(.sheet-figure) .sheet-prose > :nth-child(3 of :not(.is-style-note)) { margin-top: var(--sh-pic-bottom); }
+  /* The other photographs stand off the text as the first does; with no text
+     between them and the first, they simply follow it. */
+  .panel[id^='commissioned-'] .sheet:has(.sheet-prose > :nth-child(3 of :not(.is-style-note))) .sheet-figure:nth-child(2) { margin-top: var(--sh-pics-top); }
+
+  /* ---- photographs only ---- */
+
+  .panel > .plates .plates-stage {
     position: static;
     translate: none;
-    width: 100%;
-    height: 58vh;
-    margin-top: 1.4rem;
+    width: auto;
+    height: auto;
+    margin: var(--sh-pic-top) 0 0;
   }
-  .plates-prev { left: 0; }
-  .plates-next { right: 0; }
+  .panel > .plates .plates-frame { height: auto; }
+  .panel > .plates .plates-figure:first-child { margin-top: 0; }
+
+  /* ---- Close ---- */
+
+  /* Shown only to a keyboard: top left, on the line of the three bars, which
+     keep the right. Drawn as they are, as the negative of what passes under. */
+  .panel:has(> .sheet, > .plates) > .panel-close {
+    position: fixed;
+    top: calc(20 * var(--p));
+    left: var(--phone-pad);
+    right: auto;
+    margin: 0;
+    translate: none;
+    font-size: calc(20 * var(--p));
+    line-height: calc(20 * var(--p));
+    font-weight: 400;
+    letter-spacing: 0;
+    color: rgb(219, 218, 215);
+    mix-blend-mode: difference;
+  }
+  /* It is only ever seen with the focus on it, so that is not its dimmed state. */
+  .panel:has(> .sheet, > .plates) > .panel-close:focus-visible { opacity: 1; }
+  .panel:has(> .sheet, > .plates) > .panel-close:not(:focus-visible) {
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/*
+ * The phone: the unit everything on it is measured in, and its bar.
+ *
+ * Last of the numbered parts on purpose. The bar's desktop rules are spread
+ * over the base sheet and What's Color's, some of them heavier than they look
+ * (the film's three states, the block of colour on the current page), and a
+ * phone rule that came before any of them would lose to it on order alone.
+ *
+ * The designer's phone sheets are 375 wide, and every figure in the phone
+ * rules across the site is a measurement off those sheets, written as so many
+ * of `--p`: one unit of that frame. On a 375 phone it is one pixel, on a wider
+ * phone the whole sheet grows with the screen, as the desktop's does with its
+ * 1920 — up to `--phone-frame-max`, past which it stops growing so that a
+ * phone on its side or a small tablet is not set in 90px type.
+ *
+ * The phone layout is everything below 900px wide: `(max-width: 899px)` here
+ * and in each page's own sheet, `phone` in client/env.ts for the scripts.
+ */
+.menu-toggle { display: none; }
+
+@media (max-width: 899px) {
+  :root {
+    --phone-frame-max: 480px;
+    --p: calc(min(100vw, var(--phone-frame-max)) / 375);
+    /* The page margin of the phone sheets: 20 either side, content 335 wide. */
+    --phone-pad: calc(20 * var(--p));
+    /* What a page with no sheet of its own clears at the top: the three bars
+       end 37 down, and 20 under them. Every drawn page sets its own. */
+    --bar: calc(57 * var(--p));
+  }
+
+  /*
+   * About is not on the phone unit. Its phone layout was approved as it stood,
+   * measured from the old two-line bar and the desktop's own clamps, so the
+   * figures it reads off the root are held here at what they were. Nothing
+   * else on the phone depends on them any more.
+   */
+  .about { --bar: 8rem; }
+  .about-close { --pad: clamp(1.25rem, 3.5vw, 3rem); --type: clamp(1rem, 2.0833vw, 3.4rem); --lead: 1.25; }
+  .about-cue { --cue-stroke: 4.5; }
+
+  /* ------------------------------------------------ the hamburger */
+  .menu-toggle {
+    display: block;
+    position: fixed; z-index: 96;
+    top: calc(20 * var(--p)); right: calc(20 * var(--p));
+    width: calc(27 * var(--p)); height: calc(17 * var(--p));
+    /* three bars 27 x 3 at 0 / 7 / 14 */
+    background:
+      linear-gradient(currentColor, currentColor) 0 0 / 100% calc(3 * var(--p)) no-repeat,
+      linear-gradient(currentColor, currentColor) 0 calc(7 * var(--p)) / 100% calc(3 * var(--p)) no-repeat,
+      linear-gradient(currentColor, currentColor) 0 calc(14 * var(--p)) / 100% calc(3 * var(--p)) no-repeat;
+    /* The negative of what is under it, as the desktop bar is: 255 less the
+       ink (36, 37, 40), so that over paper it comes out as the ink itself. */
+    color: rgb(219, 218, 215);
+    mix-blend-mode: difference;
+    -webkit-tap-highlight-color: transparent;
+    transition: opacity 0.35s var(--ease), visibility 0s;
+  }
+  /* 44 x 44 to press, without moving the bars */
+  .menu-toggle::before { content: ''; position: absolute; inset: calc(-13.5 * var(--p)) calc(-8.5 * var(--p)); }
+  /* Reached by key, a frame round the bars. The site shows focus as it shows
+     hover, by a change of colour (00-base.css), and this button has neither a
+     hover nor a second colour to change to. Never drawn for a finger. */
+  .menu-toggle:focus-visible { outline: calc(2 * var(--p)) solid currentColor; outline-offset: calc(8 * var(--p)); }
+  /* The overlays that keep a Close of their own in this corner. */
+  body:has(.about.is-open) .menu-toggle,
+  body:has(.lightbox.is-open) .menu-toggle,
+  body:has(.inq.is-open) .menu-toggle,
+  body:has(.wc-book-view.is-open) .menu-toggle { opacity: 0; visibility: hidden; transition: opacity 0.35s var(--ease), visibility 0s linear 0.35s; }
+  html:not(.js) .menu-toggle { display: none; }
+
+  /* ------------------------------------- the bar is the menu screen */
+  .top {
+    --bar-ink: var(--ink);
+    inset: 0; z-index: 95;
+    display: block;
+    justify-items: start;                /* Chromium honours this on blocks too */
+    gap: 0;
+    padding: calc(21 * var(--p)) calc(20 * var(--p)) calc(40 * var(--p));
+    background: var(--paper);
+    mix-blend-mode: normal;
+    overflow: hidden auto; overscroll-behavior: contain;
+    pointer-events: auto;
+    visibility: hidden; opacity: 0;
+    transition: opacity 0.35s var(--ease), visibility 0s linear 0.35s;
+  }
+  /* The start page's own first screen stands under About and the panels;
+     raised by the hamburger it stands over everything. */
+  html.is-start .top { z-index: 50; }
+  html.is-menu-open .top, html.is-start .top { visibility: visible; opacity: 1; transition-delay: 0s; }
+  html.is-menu-open body, html.is-start body { overflow: hidden; }
+  /* The scroll handle the site draws for itself (client/scrollbar.ts) is the
+     desktop's: no phone sheet has it, and it stood in the page's right margin. */
+  .scroll-thumb { display: none; }
+  /* Leaving for another page: the words go, the paper stays for the next page's own fade. */
+  html.is-leaving:not(.is-menu-held) .top > * { opacity: 0; transition: opacity 0.3s var(--ease); }
+
+  /* Rules elsewhere that take the bar away outright. */
+/* A work on its own page is drawn with no bar at all on the phone sheet
+     either: it is put away by touching the ground around it (client/paging.ts). */
+  .is-detail .menu-toggle { display: none; }
+  html.is-menu-open body:has(.panel.is-open) .top { opacity: 1; pointer-events: auto; }   /* 02-overlays.css:730 */
+
+  /* The film's three-phase bar stands down: only what those rules set. */
+  body.has-film .top,
+  body.has-film.is-film-past .top,
+  html.wc-arriving body.has-film .top {
+    position: fixed; top: 0; height: auto; margin-top: 0;
+    padding-bottom: calc(40 * var(--p));
+  }
+  body.has-film main, body.has-film.is-film-past main { margin-top: 0; }
+  .wc-film { display: none; }
+
+  /* Without scripting the menu is the head of every page, in the flow. */
+  html:not(.js) .top,
+  html:not(.js) body.has-film .top { position: static; visibility: visible; opacity: 1; overflow: visible; }
+
+  /* ------------------------------------------------------ the words */
+  .wordmark, .top-soon, .menu a {
+    display: block;
+    font-size: calc(40 * var(--p));
+    line-height: calc(40 * var(--p));
+    letter-spacing: 0.1em;
+  }
+  /* One colour for every state: nothing on the sheet is dimmed. */
+  .top :is(.wordmark, .top-soon, .menu a):is(*, :hover, :focus-visible, [aria-current='page']) { color: var(--ink); --roll-color: var(--ink); }
+  /* Which leaves the keyboard nothing to show where it is, the desktop bar's
+     focus being that change of colour: reached by key, the word is underlined. */
+  .top :is(.wordmark, .top-soon, .menu a):focus-visible { text-decoration: underline; text-underline-offset: 0.12em; }
+  /* The letters boxed for the desktop's other hover (client/scramble.ts), left
+     in the words when a window that loaded wide goes below 900px: they flow as
+     plain text. The roll's are taken out again by its own script. */
+  .top .scram { display: inline; }
+  /* The two names break after their first word because the column is 335 wide. */
+  .wordmark, .top-soon { width: calc(335 * var(--p)); white-space: normal; }
+  .wordmark { margin-bottom: calc(179 * var(--p)); }
+  .menu {
+    display: flex; flex-flow: column nowrap; align-items: flex-start; justify-content: flex-start;
+    gap: calc(27 * var(--p));
+    margin-top: calc(103 * var(--p));
+  }
+  /* Drawn in the sheet's order; a keyboard walks them in the document's, which
+     is the desktop bar's. */
+  .menu a { white-space: nowrap; order: var(--menu-phone, 0); }
+
+  /* ------------------------------- no block of colour on the phone */
+  .top [aria-current='page']:is(a, button),
+  .has-film:not(.is-film-past) .top [aria-current='page']:is(a, button),
+  html.wc-arriving body.has-film .top [aria-current='page']:is(a, button) { position: static; padding: 0; margin: 0; }
+  .top [aria-current='page']:is(a, button)::before,
+  html.wc-arriving body.has-film .top [aria-current='page']:is(a, button)::before { display: none; }
+  body.has-film .top .top-face { display: contents; clip-path: none; animation: none; }
+  body.has-film .top .top-echo { display: none; }
+}
+
+@media (max-width: 899px) and (prefers-reduced-motion: reduce) {
+  .top, .menu-toggle { transition: none; }
+}
+
+/*
+ * A screen shorter than the sheet. The menu is drawn 771 tall to the foot of
+ * its last word, which no phone shows at once, so below 811 of height the
+ * shortfall comes out of the two large gaps — under the wordmark and under
+ * What's Color? — in the proportion they stand in, and never below 40. From
+ * 811 up it is the sheet exactly. Take this block out to have the sheet's
+ * gaps at any height, and the menu scroll.
+ */
+@media (max-width: 899px) {
+  .top { --menu-short: max(0px, calc(811 * var(--p) - 100svh)); }
+  .wordmark { margin-bottom: max(calc(40 * var(--p)), calc(179 * var(--p) - 0.635 * var(--menu-short))); }
+  .menu { margin-top: max(calc(40 * var(--p)), calc(103 * var(--p) - 0.365 * var(--menu-short))); }
 }
 

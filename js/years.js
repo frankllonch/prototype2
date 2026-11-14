@@ -1,3 +1,4 @@
+import { reduceMotion } from './env.js';
 import { SCROLL_SPAN } from './stack.js';
 import { glide } from './glide.js';
 /*
@@ -176,6 +177,8 @@ export function initYears() {
             .filter((a) => a.el !== null);
         if (!anchors.length)
             return;
+        /** The year last marked, so the bar is only moved when it changes. */
+        let marked = null;
         const update = () => {
             /*
              * Nothing is in the middle of a heap.
@@ -203,6 +206,22 @@ export function initYears() {
             }
             for (const { link } of anchors)
                 link.classList.toggle('is-current', link === current.link);
+            /*
+             * On a phone the rail is a bar along the foot of the screen, and with
+             * enough years it is wider than the screen. The year being looked at is
+             * brought to the middle of it, once each time it changes. A rail that
+             * fits — every desktop, and a phone with today's eleven years — has
+             * nowhere to scroll and is left alone.
+             */
+            if (current.link !== marked) {
+                marked = current.link;
+                if (rail.scrollWidth > rail.clientWidth) {
+                    rail.scrollTo({
+                        left: marked.offsetLeft - (rail.clientWidth - marked.offsetWidth) / 2,
+                        behavior: reduceMotion.matches ? 'auto' : 'smooth',
+                    });
+                }
+            }
         };
         let last = 0;
         window.addEventListener('scroll', () => {

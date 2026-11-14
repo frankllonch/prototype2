@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-hover="roll" style="--hues:11;--hue-0:#18817a;--neg-0:rgb(231, 126, 133);--hue-1:#b25f2a;--neg-1:rgb(77, 160, 213);--hue-2:#0f8557;--neg-2:rgb(240, 122, 168);--hue-3:#1f8440;--neg-3:rgb(224, 123, 191);--hue-4:#087e9c;--neg-4:rgb(247, 129, 99);--hue-5:#936e1f;--neg-5:rgb(108, 145, 224);--hue-6:#cf4230;--neg-6:rgb(48, 189, 207);--hue-7:#cf303a;--neg-7:rgb(48, 207, 197);--hue-8:#747c1d;--neg-8:rgb(139, 131, 226);--hue-9:#092cf6;--neg-9:rgb(246, 211, 9);--hue-10:#cf3c30;--neg-10:rgb(48, 195, 207)">
+<html lang="en" data-hover="roll" data-start style="--hues:11;--hue-0:#18817a;--neg-0:rgb(231, 126, 133);--hue-1:#b25f2a;--neg-1:rgb(77, 160, 213);--hue-2:#0f8557;--neg-2:rgb(240, 122, 168);--hue-3:#1f8440;--neg-3:rgb(224, 123, 191);--hue-4:#087e9c;--neg-4:rgb(247, 129, 99);--hue-5:#936e1f;--neg-5:rgb(108, 145, 224);--hue-6:#cf4230;--neg-6:rgb(48, 189, 207);--hue-7:#cf303a;--neg-7:rgb(48, 207, 197);--hue-8:#747c1d;--neg-8:rgb(139, 131, 226);--hue-9:#092cf6;--neg-9:rgb(246, 211, 9);--hue-10:#cf3c30;--neg-10:rgb(48, 195, 207)">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -25,12 +25,14 @@
 <link rel="modulepreload" href="/prototype2/js/scroll-cue.js" />
 <link rel="modulepreload" href="/prototype2/js/about.js" />
 <link rel="modulepreload" href="/prototype2/js/inquiries.js" />
+<link rel="modulepreload" href="/prototype2/js/chart.js" />
 <link rel="modulepreload" href="/prototype2/js/book.js" />
 <link rel="modulepreload" href="/prototype2/js/focus.js" />
 <link rel="modulepreload" href="/prototype2/js/hues.js" />
 <link rel="modulepreload" href="/prototype2/js/current.js" />
 <link rel="modulepreload" href="/prototype2/js/scrollbar.js" />
 <link rel="modulepreload" href="/prototype2/js/scramble.js" />
+<link rel="modulepreload" href="/prototype2/js/menu.js" />
 <link rel="modulepreload" href="/prototype2/js/index.js" />
 <script>document.documentElement.classList.add('js');
 // Arriving at What's Color by its link, the page is laid out at the top and
@@ -43,16 +45,33 @@
 try { var nav = performance.getEntriesByType('navigation')[0];
   if (location.hash === '#whats-color' && (!nav || nav.type === 'navigate')
     && CSS.supports('animation-timeline: view()')
-    && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    && !matchMedia('(prefers-reduced-motion: reduce)').matches
+    && !matchMedia('(max-width: 899px)').matches) {
     document.documentElement.classList.add('wc-arriving', 'wc-swatch-drop');
     setTimeout(function () { document.documentElement.classList.remove('wc-arriving') }, 1500);
     setTimeout(function () { document.documentElement.classList.remove('wc-swatch-drop') }, 700);
-  } } catch (e) {}</script>
+  } } catch (e) {}
+// On a phone the start page opens on the menu, where the film is on a desktop
+// (client/menu.ts): decided here, before the first paint, so the page under
+// it is never seen.
+try { if (document.documentElement.hasAttribute('data-start')
+  && matchMedia('(max-width: 899px)').matches
+  && (location.hash === '' || location.hash === '#about'))
+  document.documentElement.classList.add('is-start') } catch (e) {}
+// From here on the stylesheet keeps the phone's menu out of sight, and only
+// client/menu.ts can raise it. If that has not said it is there after four
+// seconds — the scripts never arrived, or one of them fell over on the way —
+// the page goes back to what it is without them: the menu at its head, in
+// the flow, and no start screen held over it. Scripts that arrive later than
+// that take the page back (client/index.ts).
+setTimeout(function () { var root = document.documentElement;
+  if (!root.hasAttribute('data-menu')) root.classList.remove('js', 'is-start') }, 4000);</script>
 </head>
 <body class="has-film">
 <div class="page-veil" aria-hidden="true"></div>
 <a class="skip-link" href="#main">Skip to content</a>
-<header class="top">
+<button type="button" class="menu-toggle" data-menu-toggle aria-label="Menu" aria-expanded="false" aria-controls="site-menu"></button>
+  <header class="top" id="site-menu">
     <a class="wordmark" href="/prototype2/" data-roll>CLAUDIA VALSELLS</a>
     <a class="top-soon" href="/prototype2/#whats-color" aria-current="page" data-roll>What&rsquo;s Color?</a>
     <nav class="menu" aria-label="Primary">
@@ -60,26 +79,31 @@ try { var nav = performance.getEntriesByType('navigation')[0];
             href="/prototype2/color-chart/"
             
             
+            style="--menu-phone: 5"
             data-roll
           >Color Chart</a><a
             href="/prototype2/commissioned/"
             
             
+            style="--menu-phone: 3"
             data-roll
           >Commissioned</a><a
             href="/prototype2/exhibitions/"
             
             
+            style="--menu-phone: 4"
             data-roll
           >Exhibitions</a><a
             href="/prototype2/artwork/"
             
             
+            style="--menu-phone: 2"
             data-roll
           >Artwork</a><a
             href="/prototype2/#about"
             data-panel-open="about"
             
+            style="--menu-phone: 1"
             data-roll
           >About</a>
     </nav>
@@ -99,10 +123,12 @@ try { var nav = performance.getEntriesByType('navigation')[0];
       loop
       playsinline
       preload="auto"
-      poster="/prototype2/video/whats-color-poster.jpg"
+      data-poster="/prototype2/video/whats-color-poster.jpg"
     >
-      <source src="/prototype2/video/whats-color.mp4" type="video/mp4" />
+      <source src="/prototype2/video/whats-color.mp4" type="video/mp4" media="(min-width: 900px)" />
     </video>
+    <script>(function (v) { if (!matchMedia('(max-width: 899px)').matches) v.poster = v.dataset.poster })(document.currentScript.previousElementSibling)</script>
+    <noscript><style>.wc-film-video::-webkit-media-controls { display: none !important; }</style></noscript>
   </section>
       <div class="wc" id="whats-color">
     <!--
@@ -297,7 +323,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
       <p class="wc-numeral" aria-hidden="true">(III)</p>
       <h2 class="sr-only">What&rsquo;s Color? (III)</h2>
       <p class="wc-names">
-    <a class="wc-name" href="/prototype2/whats-color/iii/#wc-alvaro-galmes" style="--swatch: #d1a03a; --swatch-ink: var(--paper)">Álvaro Galmés</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-marta-d-riezu" style="--swatch: #5f8a4f; --swatch-ink: var(--paper)">Marta D. Riezu</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #1e1e1e; --swatch-ink: var(--paper)">María Prats</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #dfcb6c; --swatch-ink: var(--ink)">Carlota Guerrero</span><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-lucia-boned" style="--swatch: #5f8fb3; --swatch-ink: var(--paper)">Lucia Boned</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-albert-riera-galceran" style="--swatch: #af8385; --swatch-ink: var(--paper)">Albert Riera Galcerán</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #2f5ea8; --swatch-ink: var(--paper)">Guillermo Santomà</span><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-cristina-stolhe" style="--swatch: #1d2a20; --swatch-ink: var(--paper)">Cristina Stolhe</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-jose-quintanar" style="--swatch: #e6c33f; --swatch-ink: var(--ink)">José Quintanar</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-luis-cervero" style="--swatch: #11151f; --swatch-ink: var(--paper)">Luís Cerveró</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #e8a08a; --swatch-ink: var(--ink)">Irene Royo</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #2f5ea8; --swatch-ink: var(--paper)">Adrià Cañameras</span><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-isabel-martinez" style="--swatch: #c4455c; --swatch-ink: var(--paper)">Isabel Martinez</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #b5582f; --swatch-ink: var(--paper)">Salva López</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #1f8440; --swatch-ink: var(--paper)">Berta Blanca Ivanow</span><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-marc-gomez-del-moral" style="--swatch: #d6c4a3; --swatch-ink: var(--ink)">Marc Gómez del Moral</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-jose-javier-serrano" style="--swatch: #3fa3b5; --swatch-ink: var(--paper)">Jose Javier Serrano</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-raquel-quevedo" style="--swatch: #c4c4be; --swatch-ink: var(--ink)">Raquel Quevedo</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #a39f98; --swatch-ink: var(--paper)">Xavi Mañosa</span><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-arnau-blanch" style="--swatch: #4f6070; --swatch-ink: var(--paper)">Arnau Blanch</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-maria-medem" style="--swatch: #af8385; --swatch-ink: var(--paper)">María Medem</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-ana-cuba" style="--swatch: #e8823a; --swatch-ink: var(--paper)">Ana Cuba</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-belen-gayan" style="--swatch: #2f7a7c; --swatch-ink: var(--paper)">Belén Gayán</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-juan-diego-valera" style="--swatch: #7f9284; --swatch-ink: var(--paper)">Juan Diego Valera</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-julia-ruiz-cabello" style="--swatch: #b8693a; --swatch-ink: var(--paper)">Julia Ruiz Cabello</a>
+    <a class="wc-name" href="/prototype2/whats-color/iii/#wc-alvaro-galmes" style="--swatch: #ebad02; --swatch-ink: var(--ink)">Álvaro Galmés</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-marta-d-riezu" style="--swatch: #82ad7b; --swatch-ink: var(--paper)">Marta D. Riezu</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/" style="--swatch: #0a0a0a; --swatch-ink: var(--paper)">María Prats</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/" style="--swatch: #f7e9b2; --swatch-ink: var(--ink)">Carlota Guerrero</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-lucia-boned" style="--swatch: #16396e; --swatch-ink: var(--paper)">Lucia Boned</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-albert-riera-galceran" style="--swatch: #ff85a9; --swatch-ink: var(--paper)">Albert Riera Galcerán</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/" style="--swatch: #2b6db6; --swatch-ink: var(--paper)">Guillermo Santomà</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-cristina-stolhe" style="--swatch: #023831; --swatch-ink: var(--paper)">Cristina Stolhe</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-jose-quintanar" style="--swatch: #ffe270; --swatch-ink: var(--ink)">José Quintanar</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-luis-cervero" style="--swatch: #00034d; --swatch-ink: var(--paper)">Luís Cerveró</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/" style="--swatch: #f2b391; --swatch-ink: var(--ink)">Irene Royo</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/" style="--swatch: #86a7b8; --swatch-ink: var(--paper)">Adrià Cañameras</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-isabel-martinez" style="--swatch: #f23d67; --swatch-ink: var(--paper)">Isabel Martinez</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/" style="--swatch: #b84300; --swatch-ink: var(--paper)">Salva López</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/" style="--swatch: #d4916a; --swatch-ink: var(--paper)">Berta Blanca Ivanow</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-marc-gomez-del-moral" style="--swatch: #edd3b2; --swatch-ink: var(--ink)">Marc Gómez del Moral</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-jose-javier-serrano" style="--swatch: #00a3cc; --swatch-ink: var(--paper)">Jose Javier Serrano</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-raquel-quevedo" style="--swatch: #daded7; --swatch-ink: var(--ink)">Raquel Quevedo</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/" style="--swatch: #d2cecd; --swatch-ink: var(--ink)">Xavi Mañosa</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-arnau-blanch" style="--swatch: #779fbf; --swatch-ink: var(--paper)">Arnau Blanch</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-maria-medem" style="--swatch: #85497b; --swatch-ink: var(--paper)">María Medem</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-ana-cuba" style="--swatch: #ffb08f; --swatch-ink: var(--ink)">Ana Cuba</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-belen-gayan" style="--swatch: #00899e; --swatch-ink: var(--paper)">Belén Gayán</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-juan-diego-valera" style="--swatch: #cdddcb; --swatch-ink: var(--ink)">Juan Diego Valera</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/iii/#wc-julia-ruiz-cabello" style="--swatch: #c24700; --swatch-ink: var(--paper)">Julia Ruiz Cabello</a>
   </p>
     </div>
   </section><section class="wc-group">
@@ -305,7 +331,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
       <p class="wc-numeral" aria-hidden="true">(II)</p>
       <h2 class="sr-only">What&rsquo;s Color? (II)</h2>
       <p class="wc-names">
-    <a class="wc-name" href="/prototype2/whats-color/ii/#wc-plantea-estudio" style="--swatch: #cf4230; --swatch-ink: var(--paper)">Plantea Estudio</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-kal-a" style="--swatch: #cf3c30; --swatch-ink: var(--paper)">Kal-a</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-elii" style="--swatch: #092cf6; --swatch-ink: var(--paper)">Elii</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-hanghar" style="--swatch: #cf303a; --swatch-ink: var(--paper)">HANGHAR</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #1f8440; --swatch-ink: var(--paper)">Nomos arquitectos</span><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-montse-vicens" style="--swatch: #cf3c30; --swatch-ink: var(--paper)">Montse Vicens</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-isabel-francoy" style="--swatch: #b25f2a; --swatch-ink: var(--paper)">Isabel Francoy</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-tomas-lopez-amat" style="--swatch: #092cf6; --swatch-ink: var(--paper)">Tomás López Amat</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-stefano-colli" style="--swatch: #cf303a; --swatch-ink: var(--paper)">Stefano Colli</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-conticert" style="--swatch: #cf303a; --swatch-ink: var(--paper)">ContiCert</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-un-parell-d-arquitectes" style="--swatch: #18817a; --swatch-ink: var(--paper)">Un parell d’arquitectes</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #18817a; --swatch-ink: var(--paper)">Naso ++</span><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-isla-arquitectos" style="--swatch: #087e9c; --swatch-ink: var(--paper)">Isla arquitectos</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-auxi-galvez" style="--swatch: #18817a; --swatch-ink: var(--paper)">Auxi Gálvez</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-escobedo-soliz" style="--swatch: #1f8440; --swatch-ink: var(--paper)">Escobedo Soliz</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-antoni-arola" style="--swatch: #1f8440; --swatch-ink: var(--paper)">Antoni Arola</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-barbara-aurell" style="--swatch: #b25f2a; --swatch-ink: var(--paper)">Barbara Aurell</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-laura-castanya" style="--swatch: #1f8440; --swatch-ink: var(--paper)">Laura Castanya</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #936e1f; --swatch-ink: var(--paper)">Andrea Batlló y Adrià Escolano</span><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-marc-morro" style="--swatch: #092cf6; --swatch-ink: var(--paper)">Marc Morro</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-anna-vidal" style="--swatch: #cf3c30; --swatch-ink: var(--paper)">Anna Vidal</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-gema-sach" style="--swatch: #cf3c30; --swatch-ink: var(--paper)">Gema Sach</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-mariona-espinet" style="--swatch: #cf4230; --swatch-ink: var(--paper)">Mariona Espinet</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-isabel-sendra" style="--swatch: #0f8557; --swatch-ink: var(--paper)">Isabel Sendra</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-amoo" style="--swatch: #cf4230; --swatch-ink: var(--paper)">AMOO</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-loca-studio" style="--swatch: #b25f2a; --swatch-ink: var(--paper)">Loca Studio</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #0f8557; --swatch-ink: var(--paper)">Paula Arroyo</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #936e1f; --swatch-ink: var(--paper)">Cierto Estudio</span><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-oscar-tusquets" style="--swatch: #087e9c; --swatch-ink: var(--paper)">Oscar Tusquets</a>
+    <a class="wc-name" href="/prototype2/whats-color/ii/#wc-plantea-estudio" style="--swatch: #8d4c3b; --swatch-ink: var(--paper)">Plantea Estudio</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-kal-a" style="--swatch: #4b4e5a; --swatch-ink: var(--paper)">Kal-a</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-elii" style="--swatch: #134270; --swatch-ink: var(--paper)">Elii</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-hanghar" style="--swatch: #a8a691; --swatch-ink: var(--paper)">HANGHAR</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/" style="--swatch: #3e1912; --swatch-ink: var(--paper)">Nomos arquitectos</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-montse-vicens" style="--swatch: #fff0db; --swatch-ink: var(--ink)">Montse Vicens</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-isabel-francoy" style="--swatch: #bf7d19; --swatch-ink: var(--paper)">Isabel Francoy</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-tomas-lopez-amat" style="--swatch: #411e1f; --swatch-ink: var(--paper)">Tomás López Amat</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-stefano-colli" style="--swatch: #779fbf; --swatch-ink: var(--paper)">Stefano Colli</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-conticert" style="--swatch: #763027; --swatch-ink: var(--paper)">ContiCert</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-un-parell-d-arquitectes" style="--swatch: #829ba4; --swatch-ink: var(--paper)">Un parell d’arquitectes</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/" style="--swatch: #ab9789; --swatch-ink: var(--paper)">Naso ++</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-isla-arquitectos" style="--swatch: #ac6758; --swatch-ink: var(--paper)">Isla arquitectos</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-auxi-galvez" style="--swatch: #7a6e7d; --swatch-ink: var(--paper)">Auxi Gálvez</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-escobedo-soliz" style="--swatch: #155472; --swatch-ink: var(--paper)">Escobedo Soliz</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-antoni-arola" style="--swatch: #a55117; --swatch-ink: var(--paper)">Antoni Arola</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-barbara-aurell" style="--swatch: #e05f09; --swatch-ink: var(--paper)">Barbara Aurell</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-laura-castanya" style="--swatch: #d7943b; --swatch-ink: var(--paper)">Laura Castanya</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/" style="--swatch: #be8e88; --swatch-ink: var(--paper)">Andrea Batlló y Adrià Escolano</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-marc-morro" style="--swatch: #97432c; --swatch-ink: var(--paper)">Marc Morro</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-anna-vidal" style="--swatch: #2250b3; --swatch-ink: var(--paper)">Anna Vidal</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-gema-sach" style="--swatch: #be8e88; --swatch-ink: var(--paper)">Gema Sach</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-mariona-espinet" style="--swatch: #87222c; --swatch-ink: var(--paper)">Mariona Espinet</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-isabel-sendra" style="--swatch: #c29a97; --swatch-ink: var(--paper)">Isabel Sendra</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-amoo" style="--swatch: #592222; --swatch-ink: var(--paper)">AMOO</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/#wc-loca-studio" style="--swatch: #eb7373; --swatch-ink: var(--paper)">Loca Studio</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/" style="--swatch: #fab75f; --swatch-ink: var(--ink)">Paula Arroyo</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/ii/" style="--swatch: #936e1f; --swatch-ink: var(--paper)">Cierto Estudio</a>
   </p>
     </div>
   </section><section class="wc-group">
@@ -313,7 +339,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
       <p class="wc-numeral" aria-hidden="true">(I)</p>
       <h2 class="sr-only">What&rsquo;s Color? (I)</h2>
       <p class="wc-names">
-    <a class="wc-name" href="/prototype2/whats-color/i/#wc-marina-garces" style="--swatch: #c4706a; --swatch-ink: var(--paper)">Marina Garcés</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-olafur-eliasson" style="--swatch: #e6c33f; --swatch-ink: var(--ink)">Olafur Eliasson</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-li-edelkoort" style="--swatch: #ece5d3; --swatch-ink: var(--ink)">Li Edelkoort</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-rupi-kaur" style="--swatch: #c0aa8b; --swatch-ink: var(--paper)">Rupi Kaur</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-ramon-andres" style="--swatch: #2f4b35; --swatch-ink: var(--paper)">Ramón Andrés</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-victoria-cirlot" style="--swatch: #8e2a33; --swatch-ink: var(--paper)">Victoria Cirlot</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-tortell-poltrona" style="--swatch: #642625; --swatch-ink: var(--paper)">Tortell Poltrona</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-angelica-dass" style="--swatch: #d8c3a0; --swatch-ink: var(--ink)">Angelica Dass</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-jaume-funes" style="--swatch: #2f7a74; --swatch-ink: var(--paper)">Jaume Funes</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-oscar-tusquets" style="--swatch: #2b0803; --swatch-ink: var(--paper)">Oscar Tusquets</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-david-bueno-i-torrens" style="--swatch: #8a9a85; --swatch-ink: var(--paper)">David Bueno i Torrens</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-flavia-company" style="--swatch: #8f8a3c; --swatch-ink: var(--paper)">Flavia Company</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-siri-hustvedt" style="--swatch: #c4581f; --swatch-ink: var(--paper)">Siri Hustvedt</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-henry-giroux" style="--swatch: #c8402e; --swatch-ink: var(--paper)">Henry Giroux</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #0f8557; --swatch-ink: var(--paper)">Carolin Emcke</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #183b81; --swatch-ink: var(--paper)">Valeria Luiselli</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #1f3466; --swatch-ink: var(--paper)">David Attenborough</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #b7a3c9; --swatch-ink: var(--paper)">Judy Wajcmann</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #b5562f; --swatch-ink: var(--paper)">Alessandro Baricco</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #e07a2b; --swatch-ink: var(--paper)">Arno Stern</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #087e9c; --swatch-ink: var(--paper)">Fina Birulés</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #5f8a4f; --swatch-ink: var(--paper)">Stefano Mancuso</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #8d8d87; --swatch-ink: var(--paper)">David Le Breton</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #2f7f86; --swatch-ink: var(--paper)">Noah Harari</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #c9dde6; --swatch-ink: var(--ink)">Himali Singh Soin</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #1f4a35; --swatch-ink: var(--paper)">César Bona</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #d6c29c; --swatch-ink: var(--ink)">Kristine McDivitt Tompkins</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #b25f2a; --swatch-ink: var(--paper)">Francesco Tonucci</span>
+    <a class="wc-name" href="/prototype2/whats-color/i/#wc-marina-garces" style="--swatch: #b15f60; --swatch-ink: var(--paper)">Marina Garcés</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-olafur-eliasson" style="--swatch: #fbc644; --swatch-ink: var(--ink)">Olafur Eliasson</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-li-edelkoort" style="--swatch: #f1d7ae; --swatch-ink: var(--ink)">Li Edelkoort</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-rupi-kaur" style="--swatch: #efc7ab; --swatch-ink: var(--ink)">Rupi Kaur</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-ramon-andres" style="--swatch: #164f41; --swatch-ink: var(--paper)">Ramón Andrés</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-victoria-cirlot" style="--swatch: #8d252f; --swatch-ink: var(--paper)">Victoria Cirlot</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-tortell-poltrona" style="--swatch: #e83a41; --swatch-ink: var(--paper)">Tortell Poltrona</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-angelica-dass" style="--swatch: #da7f2e; --swatch-ink: var(--paper)">Angelica Dass</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-jaume-funes" style="--swatch: #5aba9f; --swatch-ink: var(--paper)">Jaume Funes</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-oscar-tusquets" style="--swatch: #b9593f; --swatch-ink: var(--paper)">Oscar Tusquets</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-david-bueno-i-torrens" style="--swatch: #cdddcb; --swatch-ink: var(--ink)">David Bueno i Torrens</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-flavia-company" style="--swatch: #fbbe41; --swatch-ink: var(--ink)">Flavia Company</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-siri-hustvedt" style="--swatch: #e19645; --swatch-ink: var(--paper)">Siri Hustvedt</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/#wc-henry-giroux" style="--swatch: #eb5d41; --swatch-ink: var(--paper)">Henry Giroux</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/" style="--swatch: #a8a594; --swatch-ink: var(--paper)">Carolin Emcke</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/" style="--swatch: #244e9d; --swatch-ink: var(--paper)">Valeria Luiselli</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/" style="--swatch: #006780; --swatch-ink: var(--paper)">David Attenborough</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/" style="--swatch: #6d69a4; --swatch-ink: var(--paper)">Judy Wajcmann</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/" style="--swatch: #d59a2b; --swatch-ink: var(--paper)">Alessandro Baricco</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/" style="--swatch: #ec692b; --swatch-ink: var(--paper)">Arno Stern</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/" style="--swatch: #85709d; --swatch-ink: var(--paper)">Fina Birulés</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/" style="--swatch: #5c7e52; --swatch-ink: var(--paper)">Stefano Mancuso</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/" style="--swatch: #a9a2a1; --swatch-ink: var(--paper)">David Le Breton</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/" style="--swatch: #a1d2cb; --swatch-ink: var(--ink)">Noah Harari</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/" style="--swatch: #9abad6; --swatch-ink: var(--ink)">Himali Singh Soin</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/" style="--swatch: #056e59; --swatch-ink: var(--paper)">César Bona</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/" style="--swatch: #b9975b; --swatch-ink: var(--paper)">Kristine McDivitt Tompkins</a><span class="wc-sep">, </span><a class="wc-name" href="/prototype2/whats-color/i/" style="--swatch: #008abd; --swatch-ink: var(--paper)">Francesco Tonucci</a>
   </p>
     </div>
   </section>
@@ -416,10 +442,52 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <div class="about-reel-track" data-about-track>
       <button type="button" class="about-reel-item">
             <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-1-800.avif 800w, /prototype2/about/about-1-1600.avif 1600w, /prototype2/about/about-1-2692.avif 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-1-800.webp 800w, /prototype2/about/about-1-1600.webp 1600w, /prototype2/about/about-1-2692.webp 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/avif" srcset="/prototype2/about/about-1-400.avif 400w, /prototype2/about/about-1-800.avif 800w, /prototype2/about/about-1-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-1-400.webp 400w, /prototype2/about/about-1-800.webp 800w, /prototype2/about/about-1-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
       <img
-        src="/prototype2/about/about-1-2692.jpg"
+        src="/prototype2/about/about-1-1600.jpg"
+        alt="Colour charts pinned to the studio wall above jars of brushes and a broad, paint-spattered brush"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-2-400.avif 400w, /prototype2/about/about-2-800.avif 800w, /prototype2/about/about-2-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-2-400.webp 400w, /prototype2/about/about-2-800.webp 800w, /prototype2/about/about-2-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-2-1600.jpg"
+        alt="Claudia Valsells in her studio among canvases and pots of paint, seen from above"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-3-400.avif 400w, /prototype2/about/about-3-800.avif 800w, /prototype2/about/about-3-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-3-400.webp 400w, /prototype2/about/about-3-800.webp 800w, /prototype2/about/about-3-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-3-1600.jpg"
+        alt="Claudia Valsells on a step, reaching up to paint the studio wall, a pot of paint in her hand"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-4-400.avif 400w, /prototype2/about/about-4-800.avif 800w, /prototype2/about/about-4-1600.avif 1600w, /prototype2/about/about-4-2692.avif 2692w" sizes="(max-width: 1097px) 177px, 16.1vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-4-400.webp 400w, /prototype2/about/about-4-800.webp 800w, /prototype2/about/about-4-1600.webp 1600w, /prototype2/about/about-4-2692.webp 2692w" sizes="(max-width: 1097px) 177px, 16.1vw" />
+      <img
+        src="/prototype2/about/about-4-2692.jpg"
         alt="Claudia Valsells, seen from behind, painting fields of colour on a studio wall with a pot of paint in hand"
         width="2692"
         height="1830"
@@ -430,11 +498,95 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
           </button><button type="button" class="about-reel-item">
             <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-2-800.avif 800w, /prototype2/about/about-2-1600.avif 1600w, /prototype2/about/about-2-2692.avif 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-2-800.webp 800w, /prototype2/about/about-2-1600.webp 1600w, /prototype2/about/about-2-2692.webp 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/avif" srcset="/prototype2/about/about-5-400.avif 400w, /prototype2/about/about-5-800.avif 800w, /prototype2/about/about-5-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-5-400.webp 400w, /prototype2/about/about-5-800.webp 800w, /prototype2/about/about-5-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
       <img
-        src="/prototype2/about/about-2-2692.jpg"
+        src="/prototype2/about/about-5-1600.jpg"
+        alt="Claudia Valsells standing between two large canvases propped against the studio wall"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-6-400.avif 400w, /prototype2/about/about-6-800.avif 800w, /prototype2/about/about-6-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-6-400.webp 400w, /prototype2/about/about-6-800.webp 800w, /prototype2/about/about-6-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-6-1600.jpg"
+        alt="Pots of paint and brushes on a trestle in front of a painted canvas"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-7-400.avif 400w, /prototype2/about/about-7-800.avif 800w, /prototype2/about/about-7-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-7-400.webp 400w, /prototype2/about/about-7-800.webp 800w, /prototype2/about/about-7-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-7-1600.jpg"
+        alt="A hand holding up a pink board with a red square over a pot of paint"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-8-400.avif 400w, /prototype2/about/about-8-800.avif 800w, /prototype2/about/about-8-1600.avif 1600w, /prototype2/about/about-8-2327.avif 2327w" sizes="(max-width: 1097px) 153px, 13.9vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-8-400.webp 400w, /prototype2/about/about-8-800.webp 800w, /prototype2/about/about-8-1600.webp 1600w, /prototype2/about/about-8-2327.webp 2327w" sizes="(max-width: 1097px) 153px, 13.9vw" />
+      <img
+        src="/prototype2/about/about-8-2327.jpg"
         alt="Claudia Valsells painting a large canvas in her studio, pots of colour on the table beside her"
+        width="2327"
+        height="1830"
+        style="aspect-ratio:2327 / 1830"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-9-400.avif 400w, /prototype2/about/about-9-800.avif 800w, /prototype2/about/about-9-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-9-400.webp 400w, /prototype2/about/about-9-800.webp 800w, /prototype2/about/about-9-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-9-1600.jpg"
+        alt="Small paintings and patches of colour on a white studio wall"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-10-400.avif 400w, /prototype2/about/about-10-800.avif 800w, /prototype2/about/about-10-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-10-400.webp 400w, /prototype2/about/about-10-800.webp 800w, /prototype2/about/about-10-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-10-1600.jpg"
+        alt="A hand painting with a round brush on a canvas of green, pink and blue"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-11-400.avif 400w, /prototype2/about/about-11-800.avif 800w, /prototype2/about/about-11-1600.avif 1600w, /prototype2/about/about-11-2692.avif 2692w" sizes="(max-width: 1097px) 177px, 16.1vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-11-400.webp 400w, /prototype2/about/about-11-800.webp 800w, /prototype2/about/about-11-1600.webp 1600w, /prototype2/about/about-11-2692.webp 2692w" sizes="(max-width: 1097px) 177px, 16.1vw" />
+      <img
+        src="/prototype2/about/about-11-2692.jpg"
+        alt="Claudia Valsells unrolling a sheet of paper in front of her canvases"
         width="2692"
         height="1830"
         style="aspect-ratio:2692 / 1830"
@@ -444,10 +596,66 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
           </button><button type="button" class="about-reel-item">
             <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-3-800.avif 800w, /prototype2/about/about-3-845.avif 845w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-3-800.webp 800w, /prototype2/about/about-3-845.webp 845w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/avif" srcset="/prototype2/about/about-12-400.avif 400w, /prototype2/about/about-12-800.avif 800w, /prototype2/about/about-12-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-12-400.webp 400w, /prototype2/about/about-12-800.webp 800w, /prototype2/about/about-12-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
       <img
-        src="/prototype2/about/about-3-845.jpg"
+        src="/prototype2/about/about-12-1600.jpg"
+        alt="Claudia Valsells on a stepladder, putting up small paintings on the studio wall"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-13-400.avif 400w, /prototype2/about/about-13-800.avif 800w, /prototype2/about/about-13-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-13-400.webp 400w, /prototype2/about/about-13-800.webp 800w, /prototype2/about/about-13-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-13-1600.jpg"
+        alt="A hand setting a small painting on the studio wall beside an easel"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-14-400.avif 400w, /prototype2/about/about-14-800.avif 800w, /prototype2/about/about-14-1600.avif 1600w, /prototype2/about/about-14-2692.avif 2692w" sizes="(max-width: 1097px) 180px, 16.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-14-400.webp 400w, /prototype2/about/about-14-800.webp 800w, /prototype2/about/about-14-1600.webp 1600w, /prototype2/about/about-14-2692.webp 2692w" sizes="(max-width: 1097px) 180px, 16.4vw" />
+      <img
+        src="/prototype2/about/about-14-2692.jpg"
+        alt="Claudia Valsells at work at the end of her long studio, canvases laid out on the table"
+        width="2692"
+        height="1795"
+        style="aspect-ratio:2692 / 1795"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-15-400.avif 400w, /prototype2/about/about-15-800.avif 800w, /prototype2/about/about-15-1600.avif 1600w" sizes="(max-width: 1097px) 90px, 8.2vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-15-400.webp 400w, /prototype2/about/about-15-800.webp 800w, /prototype2/about/about-15-1600.webp 1600w" sizes="(max-width: 1097px) 90px, 8.2vw" />
+      <img
+        src="/prototype2/about/about-15-1600.jpg"
+        alt="A hand painting a deep red canvas with a fine brush"
+        width="1600"
+        height="2133"
+        style="aspect-ratio:1600 / 2133"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-16-400.avif 400w, /prototype2/about/about-16-800.avif 800w, /prototype2/about/about-16-845.avif 845w" sizes="(max-width: 1097px) 184px, 16.8vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-16-400.webp 400w, /prototype2/about/about-16-800.webp 800w, /prototype2/about/about-16-845.webp 845w" sizes="(max-width: 1097px) 184px, 16.8vw" />
+      <img
+        src="/prototype2/about/about-16-845.jpg"
         alt="Claudia Valsells reaching up to paint a canvas propped against the studio wall, among other canvases"
         width="845"
         height="550"
@@ -458,24 +666,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
           </button><button type="button" class="about-reel-item">
             <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-4-800.avif 800w, /prototype2/about/about-4-833.avif 833w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-4-800.webp 800w, /prototype2/about/about-4-833.webp 833w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/avif" srcset="/prototype2/about/about-17-400.avif 400w, /prototype2/about/about-17-765.avif 765w" sizes="(max-width: 1097px) 127px, 11.6vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-17-400.webp 400w, /prototype2/about/about-17-765.webp 765w" sizes="(max-width: 1097px) 127px, 11.6vw" />
       <img
-        src="/prototype2/about/about-4-833.jpg"
-        alt="Claudia Valsells in her studio holding a palette and a brush over pots of paint"
-        width="833"
-        height="600"
-        style="aspect-ratio:833 / 600"
-        loading="lazy"
-        decoding="async"
-      />
-    </picture>
-          </button><button type="button" class="about-reel-item">
-            <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-5-765.avif 765w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-5-765.webp 765w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <img
-        src="/prototype2/about/about-5-765.jpg"
+        src="/prototype2/about/about-17-765.jpg"
         alt="Claudia Valsells in profile against a red wall stencilled AC 068"
         width="765"
         height="724"
@@ -484,8 +678,28 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-18-400.avif 400w, /prototype2/about/about-18-800.avif 800w, /prototype2/about/about-18-833.avif 833w" sizes="(max-width: 1097px) 167px, 15.2vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-18-400.webp 400w, /prototype2/about/about-18-800.webp 800w, /prototype2/about/about-18-833.webp 833w" sizes="(max-width: 1097px) 167px, 15.2vw" />
+      <img
+        src="/prototype2/about/about-18-833.jpg"
+        alt="Claudia Valsells in her studio holding a palette and a brush over pots of paint"
+        width="833"
+        height="600"
+        style="aspect-ratio:833 / 600"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
           </button>
     </div>
+    <button type="button" class="about-reel-step is-prev" data-about-reel-step="-1" aria-label="Earlier photographs" hidden>
+      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="M8 1 1 8l7 7" /></svg>
+    </button>
+    <button type="button" class="about-reel-step is-next" data-about-reel-step="1" aria-label="More photographs" hidden>
+      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="m1 1 7 7-7 7" /></svg>
+    </button>
   </div>
           </div>
         </div>

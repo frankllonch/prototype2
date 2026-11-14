@@ -1,4 +1,4 @@
-import { isPlainClick, reduceMotion } from './env.js';
+import { isPlainClick, phone, reduceMotion } from './env.js';
 import { glide } from './glide.js';
 import { writtenPoint } from './write.js';
 /**
@@ -56,6 +56,31 @@ function startFilm() {
     // poster is the picture.
     if (!video || reduceMotion.matches)
         return;
+    /*
+     * Not on a phone, where the start page opens on the menu and the film is not
+     * shown at all. Hiding it is not enough to keep it from being fetched — a
+     * video set to autoplay loads inside a `display: none` section all the same —
+     * so its one source carries `media="(min-width: 900px)"` and a phone makes no
+     * request for it. Nothing is asked to play here; and if the window is later
+     * made wide enough to show the film, the source is read again and it starts.
+     *
+     * Its still is kept from a phone the same way. A poster is fetched for a
+     * video nobody can see, and there is no asking for one by width, so the
+     * markup carries the address as `data-poster`. A window wide enough at the
+     * start has it made the poster by the line of script beside the video
+     * (components/whats-color.ts); one that becomes wide enough later has it
+     * made here.
+     */
+    if (phone.matches) {
+        phone.addEventListener('change', () => { if (!phone.matches) {
+            video.load();
+            startFilm();
+        } }, { once: true });
+        return;
+    }
+    const still = video.dataset.poster;
+    if (still && !video.hasAttribute('poster'))
+        video.poster = still;
     video.muted = true;
     video.playsInline = true;
     const ask = () => video.play().then(() => true, (error) => {
@@ -67,6 +92,9 @@ function startFilm() {
         return false;
     });
     const onGesture = () => {
+        // Kept for when there is a film on screen to start.
+        if (phone.matches)
+            return;
         for (const type of GESTURES)
             window.removeEventListener(type, onGesture);
         void ask();
@@ -80,7 +108,16 @@ function startFilm() {
     });
     // Safari stops the film with the tab and does not always take it up again.
     document.addEventListener('visibilitychange', () => {
-        if (!document.hidden && video.paused)
+        if (!document.hidden && video.paused && !phone.matches)
+            void ask();
+    });
+    // Below 900px the film is not shown, and a film that is only hidden goes on
+    // decoding: stopped there, and taken up again where it was when the window
+    // is wide enough to show it.
+    phone.addEventListener('change', () => {
+        if (phone.matches)
+            video.pause();
+        else
             void ask();
     });
 }
@@ -182,6 +219,14 @@ export function initFilm() {
     let gone = 0;
     let cleared = null;
     const measure = () => {
+        // On a phone the film is not displayed, so there is nothing to cross: its
+        // boxes all measure nothing, and a line read off them would be wherever
+        // the page happened to stand. The bar is past it and it is gone, always.
+        if (phone.matches) {
+            crossing = -1;
+            gone = -1;
+            return;
+        }
         const top = window.scrollY;
         crossing = mark.getBoundingClientRect().top + top;
         gone = film.getBoundingClientRect().bottom + top;
@@ -209,6 +254,7 @@ export function initFilm() {
         measure();
         update();
     });
+    phone.addEventListener('change', () => { measure(); update(); });
     samePageLinks();
 }
 /**
@@ -237,6 +283,10 @@ function samePageLinks() {
             // A modified click means "open this elsewhere", and a link to another page
             // is left to be a link.
             if (!isPlainClick(event) || link.pathname !== window.location.pathname)
+                return;
+            // On a phone these two are the menu's (client/menu.ts): the wordmark
+            // leads to the start screen and the name to the page under it.
+            if (phone.matches)
                 return;
             event.preventDefault();
             window.history.replaceState(null, '', href);

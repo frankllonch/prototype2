@@ -1,4 +1,5 @@
-import { isPlainClick } from './env.js';
+import { isPlainClick, phone } from './env.js';
+import { keepScroll, stepBack, stepState } from './panels.js';
 /**
  * Ordering a colour chart.
  *
@@ -11,6 +12,12 @@ import { isPlainClick } from './env.js';
  *
  * What this file is for is that a person ordering a colour chart should not
  * have to reload a page to find out whether it worked.
+ *
+ * On a phone the form is the whole screen, and opening it is a step in the
+ * history, as a panel's is (client/panels.ts): the phone's Back puts the form
+ * away and leaves the page — it used to leave the site, with whatever had been
+ * typed — and Close goes back over the same step. What was typed stays in the
+ * fields either way. Wider than a phone the address is replaced, as it was.
  */
 /*
  * What the person is told, keyed by what the handler says went wrong.
@@ -111,6 +118,9 @@ export function initInquiries() {
     const guard = turnstile(form, check);
     let opener = null;
     let sent = false;
+    // The open form stands on a history step of its own, one on from the page.
+    let stepped = false;
+    const mine = () => stepState().view === 'inquiries';
     const say = (key, state = '') => {
         status.textContent = SAID[key] ?? SAID.server;
         if (state)
@@ -129,12 +139,21 @@ export function initInquiries() {
         started.value = String(Date.now());
         form.querySelector('.inq-input')?.focus({ preventScroll: true });
     };
-    const close = () => {
+    /** `byHistory`: Back has already left the form's step, and only the form is left to put away. */
+    const close = (byHistory = false) => {
         if (!panel.classList.contains('is-open'))
             return;
+        // Close and Escape go back over the step rather than leaving it behind,
+        // and the `popstate` below does the closing.
+        if (stepped && !byHistory && mine()) {
+            stepBack();
+            return;
+        }
+        stepped = false;
         panel.classList.remove('is-open');
         document.body.classList.remove('is-locked');
-        history.replaceState(null, '', location.pathname + location.search);
+        if (!byHistory)
+            history.replaceState(null, '', location.pathname + location.search);
         opener?.focus({ preventScroll: true });
         opener = null;
     };
@@ -143,13 +162,31 @@ export function initInquiries() {
             if (!isPlainClick(event))
                 return;
             event.preventDefault();
-            history.replaceState(null, '', '#inquiries');
+            if (phone.matches)
+                history.pushState({ view: 'inquiries' }, '', '#inquiries');
+            else
+                history.replaceState(null, '', '#inquiries');
+            stepped = phone.matches;
             open(trigger);
         });
     }
     panel.querySelector('[data-inquiries-close]')?.addEventListener('click', (event) => {
         event.preventDefault();
         close();
+    });
+    // Back from the form's step puts it away; Forward onto it raises it again.
+    // A form that made no step — a shared #inquiries link — is not touched.
+    window.addEventListener('popstate', () => {
+        if (mine()) {
+            keepScroll();
+            if (!panel.classList.contains('is-open'))
+                open(null);
+            stepped = true;
+        }
+        else if (stepped) {
+            keepScroll();
+            close(true);
+        }
     });
     document.addEventListener('keydown', (event) => {
         if (!panel.classList.contains('is-open'))
@@ -261,6 +298,9 @@ export function initInquiries() {
         }
     });
     // A shared or reloaded #inquiries link opens it, as a shared #about does.
-    if (location.hash === '#inquiries')
+    // Reloaded on the form's step, the step is still there behind it.
+    if (location.hash === '#inquiries') {
         open(null);
+        stepped = mine();
+    }
 }

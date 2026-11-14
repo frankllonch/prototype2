@@ -1,4 +1,4 @@
-import { finePointer, reduceMotion } from './env.js';
+import { finePointer, phone, reduceMotion } from './env.js';
 /**
  * Over a painting the pointer *becomes* its name — title and year, read from
  * the tile's own data attributes, drawn where the arrow would be. The arrow is
@@ -15,7 +15,11 @@ export function initCursor() {
         return;
     // Only now is it safe to take the arrow away over a tile: without this class
     // a browser that never runs the script would leave people with no pointer.
-    document.documentElement.classList.add('has-cursor');
+    // Not below 900px: the phone's gallery answers no pointer, even where a
+    // narrow window happens to have one. That is the window as it stands and not
+    // as it was when the page loaded, so the class follows it (`follow`, below).
+    const root = document.documentElement;
+    root.classList.toggle('has-cursor', !phone.matches);
     let targetX = 0, targetY = 0, x = 0, y = 0;
     let active = false;
     let frame = 0;
@@ -66,7 +70,7 @@ export function initCursor() {
             frame = requestAnimationFrame(tick);
     };
     document.addEventListener('pointermove', (event) => {
-        if (event.pointerType !== 'mouse')
+        if (event.pointerType !== 'mouse' || phone.matches)
             return;
         targetX = event.clientX;
         targetY = event.clientY;
@@ -86,7 +90,7 @@ export function initCursor() {
     // off, Safari pays for every one, which it felt during the opening's unfold.
     let looking = 0;
     const relook = () => {
-        if (!placed || looking)
+        if (!placed || looking || phone.matches)
             return;
         looking = requestAnimationFrame(() => {
             looking = 0;
@@ -101,6 +105,13 @@ export function initCursor() {
     const clear = () => { active = false; cursor.classList.remove('is-visible'); };
     window.addEventListener('pageshow', clear);
     window.addEventListener('pagehide', clear);
+    // Crossing 900px: the arrow comes back and the name goes, or the other way.
+    const follow = () => {
+        root.classList.toggle('has-cursor', !phone.matches);
+        if (phone.matches)
+            clear();
+    };
+    phone.addEventListener('change', follow);
     document.addEventListener('pointerleave', () => {
         active = false;
         cursor.classList.remove('is-visible');

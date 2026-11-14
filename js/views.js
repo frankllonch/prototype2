@@ -15,6 +15,7 @@
  * buttons that do nothing, which is a page with one picture — complete, if
  * less than it could be.
  */
+import { phone } from './env.js';
 /** Resolves once the picture's bytes are in — at once if they already are. */
 const loaded = (img) => new Promise((resolve) => {
     if (img.complete && img.naturalWidth > 0) {
@@ -27,15 +28,36 @@ const loaded = (img) => new Promise((resolve) => {
 });
 const EDGE_TO_EDGE = { l: 0, t: 0, r: 1, b: 1 };
 const inks = new Map();
+/*
+ * The picture's shape, as a width and a height to take the ratio of.
+ *
+ * The natural size is that of the file the browser chose, scaled to the
+ * layout and rounded to whole pixels: 374 by 446, say, for a picture that is
+ * 1401 by 1667 — a fifth of a percent out, which on a phone is a point in the
+ * painting's height against a sheet that draws it to the half point. There
+ * the picture's own width and height are used, as the page states them. A
+ * wide screen keeps the reading its layout was approved with.
+ */
+function shapeOf(img) {
+    if (phone.matches && img.naturalWidth) {
+        const w = Number(img.getAttribute('width')), h = Number(img.getAttribute('height'));
+        if (w > 0 && h > 0)
+            return { w, h };
+    }
+    return { w: img.naturalWidth, h: img.naturalHeight };
+}
 function inkOf(img) {
     const key = img.currentSrc || img.src;
     const known = inks.get(key);
     if (known)
         return known;
-    const w = img.naturalWidth, h = img.naturalHeight;
+    const { w, h } = shapeOf(img);
     if (!w || !h)
         return EDGE_TO_EDGE;
-    const SIDE = 360;
+    // One pixel of the sample is a 360th of the picture. On a phone, where the
+    // sheet's figures are kept to the half point, it is read at twice that. A
+    // wide screen keeps the sample its layout was approved with.
+    const SIDE = phone.matches ? 720 : 360;
     const cw = w >= h ? SIDE : Math.max(1, Math.round((SIDE * w) / h));
     const ch = w >= h ? Math.max(1, Math.round((SIDE * h) / w)) : SIDE;
     const canvas = document.createElement('canvas');
@@ -83,20 +105,30 @@ function inkOf(img) {
  * against the painting.
  */
 function fit(frame, img, ink, maxW, maxH) {
-    const nw = img.naturalWidth, nh = img.naturalHeight;
+    const { w: nw, h: nh } = shapeOf(img);
     if (!nw || !nh || !maxH)
         return 0;
     const iw = (ink.r - ink.l) * nw, ih = (ink.b - ink.t) * nh;
     const s = Math.min(maxW / iw, maxH / ih);
-    const W = nw * s, H = nh * s;
+    // On a phone every figure is brought to the screen's own pixels, the
+    // picture's and the frame's alike. Left as fractions the browser rounds
+    // each edge for itself, and the painting lands a pixel to one side of the
+    // place the sheet gives it or comes out a pixel short. The frame's width
+    // is the one that, centred on the screen, starts on a pixel.
+    const dpr = window.devicePixelRatio || 1;
+    const px = phone.matches ? (v) => Math.round(v * dpr) / dpr : (v) => v;
+    const W = px(nw * s), H = px(nh * s);
+    const screen = document.documentElement.clientWidth;
+    const width = phone.matches ? screen - 2 * px((screen - (ink.r - ink.l) * W) / 2) : (ink.r - ink.l) * W;
+    const height = px((ink.b - ink.t) * H);
     Object.assign(img.style, {
         width: `${W}px`, height: `${H}px`, maxWidth: 'none', maxHeight: 'none',
-        marginLeft: `${-ink.l * W}px`, marginTop: `${-ink.t * H}px`,
+        marginLeft: `${-px(ink.l * W)}px`, marginTop: `${-px(ink.t * H)}px`,
     });
-    frame.style.width = `${(ink.r - ink.l) * W}px`;
-    frame.style.height = `${(ink.b - ink.t) * H}px`;
+    frame.style.width = `${width}px`;
+    frame.style.height = `${height}px`;
     frame.classList.add('is-fitted');
-    return (ink.r - ink.l) * W;
+    return width;
 }
 export function initViews() {
     for (const stage of document.querySelectorAll('.detail-stage')) {
@@ -111,10 +143,19 @@ export function initViews() {
          * page. Down: --plate-max. Both may be in any unit; a probe resolves them.
          */
         const probe = document.createElement('div');
-        probe.style.cssText = 'position:absolute;visibility:hidden;pointer-events:none;width:var(--plate-room);height:var(--plate-max)';
+        // Pinned to a corner: left where it falls in the flow it hangs below the
+        // painting, and on a phone, where the page scrolls, made the page longer.
+        probe.style.cssText = 'position:absolute;top:0;left:0;visibility:hidden;pointer-events:none;width:var(--plate-room);height:var(--plate-max)';
         stage.append(probe);
         const room = () => {
             const beside = parseFloat(getComputedStyle(stage).getPropertyValue('--caption-beside')) || 0;
+            // The phone sheet's figures come in tenths of a unit, so there the probe
+            // is read as it is; `offsetWidth` gives whole pixels, as the wide layout
+            // has always been measured.
+            if (phone.matches && !beside) {
+                const box = probe.getBoundingClientRect();
+                return { w: box.width, h: box.height };
+            }
             return { w: probe.offsetWidth - (beside && caption ? caption.offsetWidth : 0), h: probe.offsetHeight };
         };
         const isCut = (i) => views[i]?.hasAttribute('data-plate') ?? false;
@@ -148,8 +189,9 @@ export function initViews() {
                 maxW = anchor + 2 * Math.max(0, Math.min(box.left - edge, gap * spill));
             }
             else {
-                // Stacked (a phone): the caption is under the picture, so it is the
-                // height that is held, and another view fits the cut-out's height.
+                // Stacked (a phone): the caption is over the picture and its place is
+                // under it, so it is the height that is held, and another view fits
+                // the cut-out's height.
                 maxH = parseFloat(views[0].style.height) || h;
             }
             fit(view, img, isCut(i) ? inkOf(img) : EDGE_TO_EDGE, maxW, maxH);
@@ -159,7 +201,15 @@ export function initViews() {
             const img = thumb?.querySelector('img');
             if (!thumb || !img || !img.naturalWidth)
                 return;
-            fit(thumb, img, isCut(i) ? inkOf(img) : EDGE_TO_EDGE, Infinity, thumb.clientHeight);
+            // Back to the stylesheet's height first: the last fit wrote one on the
+            // button, and read again it would hold against a --thumb-h that has since
+            // changed (a turned phone, a window dragged across 900px).
+            thumb.style.height = '';
+            thumb.style.width = '';
+            // The phone's 39.5 is kept to the half; `clientHeight` rounds, which is
+            // what the wide layout was approved with.
+            const height = phone.matches ? thumb.getBoundingClientRect().height : thumb.clientHeight;
+            fit(thumb, img, isCut(i) ? inkOf(img) : EDGE_TO_EDGE, Infinity, height);
         };
         /*
          * Everything else follows from the painting's box without help: the page

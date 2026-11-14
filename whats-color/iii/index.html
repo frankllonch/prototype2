@@ -25,12 +25,14 @@
 <link rel="modulepreload" href="/prototype2/js/scroll-cue.js" />
 <link rel="modulepreload" href="/prototype2/js/about.js" />
 <link rel="modulepreload" href="/prototype2/js/inquiries.js" />
+<link rel="modulepreload" href="/prototype2/js/chart.js" />
 <link rel="modulepreload" href="/prototype2/js/book.js" />
 <link rel="modulepreload" href="/prototype2/js/focus.js" />
 <link rel="modulepreload" href="/prototype2/js/hues.js" />
 <link rel="modulepreload" href="/prototype2/js/current.js" />
 <link rel="modulepreload" href="/prototype2/js/scrollbar.js" />
 <link rel="modulepreload" href="/prototype2/js/scramble.js" />
+<link rel="modulepreload" href="/prototype2/js/menu.js" />
 <link rel="modulepreload" href="/prototype2/js/index.js" />
 <script>document.documentElement.classList.add('js');
 // Arriving at What's Color by its link, the page is laid out at the top and
@@ -43,43 +45,65 @@
 try { var nav = performance.getEntriesByType('navigation')[0];
   if (location.hash === '#whats-color' && (!nav || nav.type === 'navigate')
     && CSS.supports('animation-timeline: view()')
-    && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    && !matchMedia('(prefers-reduced-motion: reduce)').matches
+    && !matchMedia('(max-width: 899px)').matches) {
     document.documentElement.classList.add('wc-arriving', 'wc-swatch-drop');
     setTimeout(function () { document.documentElement.classList.remove('wc-arriving') }, 1500);
     setTimeout(function () { document.documentElement.classList.remove('wc-swatch-drop') }, 700);
-  } } catch (e) {}</script>
+  } } catch (e) {}
+// On a phone the start page opens on the menu, where the film is on a desktop
+// (client/menu.ts): decided here, before the first paint, so the page under
+// it is never seen.
+try { if (document.documentElement.hasAttribute('data-start')
+  && matchMedia('(max-width: 899px)').matches
+  && (location.hash === '' || location.hash === '#about'))
+  document.documentElement.classList.add('is-start') } catch (e) {}
+// From here on the stylesheet keeps the phone's menu out of sight, and only
+// client/menu.ts can raise it. If that has not said it is there after four
+// seconds — the scripts never arrived, or one of them fell over on the way —
+// the page goes back to what it is without them: the menu at its head, in
+// the flow, and no start screen held over it. Scripts that arrive later than
+// that take the page back (client/index.ts).
+setTimeout(function () { var root = document.documentElement;
+  if (!root.hasAttribute('data-menu')) root.classList.remove('js', 'is-start') }, 4000);</script>
 </head>
 <body>
 <div class="page-veil" aria-hidden="true"></div>
 <a class="skip-link" href="#main">Skip to content</a>
-<header class="top">
+<button type="button" class="menu-toggle" data-menu-toggle aria-label="Menu" aria-expanded="false" aria-controls="site-menu"></button>
+  <header class="top" id="site-menu">
     <a class="wordmark" href="/prototype2/" data-roll>CLAUDIA VALSELLS</a>
-    <a class="top-soon" href="/prototype2/#whats-color"  data-roll>What&rsquo;s Color?</a>
+    <a class="top-soon" href="/prototype2/#whats-color" aria-current="page" data-roll>What&rsquo;s Color?</a>
     <nav class="menu" aria-label="Primary">
       <a
             href="/prototype2/color-chart/"
             
             
+            style="--menu-phone: 5"
             data-roll
           >Color Chart</a><a
             href="/prototype2/commissioned/"
             
             
+            style="--menu-phone: 3"
             data-roll
           >Commissioned</a><a
             href="/prototype2/exhibitions/"
             
             
+            style="--menu-phone: 4"
             data-roll
           >Exhibitions</a><a
             href="/prototype2/artwork/"
             
             
+            style="--menu-phone: 2"
             data-roll
           >Artwork</a><a
             href="/prototype2/#about"
             data-panel-open="about"
             
+            style="--menu-phone: 1"
             data-roll
           >About</a>
     </nav>
@@ -89,7 +113,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-numeral" aria-hidden="true">(III)</p>
     <h1 class="sr-only">What&rsquo;s Color? (III)</h1>
     <p class="wc-names">
-    <a class="wc-name" href="#wc-alvaro-galmes" style="--swatch: #d1a03a; --swatch-ink: var(--paper)">Álvaro Galmés</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-marta-d-riezu" style="--swatch: #5f8a4f; --swatch-ink: var(--paper)">Marta D. Riezu</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #1e1e1e; --swatch-ink: var(--paper)">María Prats</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #dfcb6c; --swatch-ink: var(--ink)">Carlota Guerrero</span><span class="wc-sep">, </span><a class="wc-name" href="#wc-lucia-boned" style="--swatch: #5f8fb3; --swatch-ink: var(--paper)">Lucia Boned</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-albert-riera-galceran" style="--swatch: #af8385; --swatch-ink: var(--paper)">Albert Riera Galcerán</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #2f5ea8; --swatch-ink: var(--paper)">Guillermo Santomà</span><span class="wc-sep">, </span><a class="wc-name" href="#wc-cristina-stolhe" style="--swatch: #1d2a20; --swatch-ink: var(--paper)">Cristina Stolhe</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-jose-quintanar" style="--swatch: #e6c33f; --swatch-ink: var(--ink)">José Quintanar</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-luis-cervero" style="--swatch: #11151f; --swatch-ink: var(--paper)">Luís Cerveró</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #e8a08a; --swatch-ink: var(--ink)">Irene Royo</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #2f5ea8; --swatch-ink: var(--paper)">Adrià Cañameras</span><span class="wc-sep">, </span><a class="wc-name" href="#wc-isabel-martinez" style="--swatch: #c4455c; --swatch-ink: var(--paper)">Isabel Martinez</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #b5582f; --swatch-ink: var(--paper)">Salva López</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #1f8440; --swatch-ink: var(--paper)">Berta Blanca Ivanow</span><span class="wc-sep">, </span><a class="wc-name" href="#wc-marc-gomez-del-moral" style="--swatch: #d6c4a3; --swatch-ink: var(--ink)">Marc Gómez del Moral</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-jose-javier-serrano" style="--swatch: #3fa3b5; --swatch-ink: var(--paper)">Jose Javier Serrano</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-raquel-quevedo" style="--swatch: #c4c4be; --swatch-ink: var(--ink)">Raquel Quevedo</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #a39f98; --swatch-ink: var(--paper)">Xavi Mañosa</span><span class="wc-sep">, </span><a class="wc-name" href="#wc-arnau-blanch" style="--swatch: #4f6070; --swatch-ink: var(--paper)">Arnau Blanch</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-maria-medem" style="--swatch: #af8385; --swatch-ink: var(--paper)">María Medem</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-ana-cuba" style="--swatch: #e8823a; --swatch-ink: var(--paper)">Ana Cuba</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-belen-gayan" style="--swatch: #2f7a7c; --swatch-ink: var(--paper)">Belén Gayán</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-juan-diego-valera" style="--swatch: #7f9284; --swatch-ink: var(--paper)">Juan Diego Valera</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-julia-ruiz-cabello" style="--swatch: #b8693a; --swatch-ink: var(--paper)">Julia Ruiz Cabello</a>
+    <a class="wc-name" href="#wc-alvaro-galmes" style="--swatch: #ebad02; --swatch-ink: var(--ink)">Álvaro Galmés</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-marta-d-riezu" style="--swatch: #82ad7b; --swatch-ink: var(--paper)">Marta D. Riezu</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #0a0a0a; --swatch-ink: var(--paper)">María Prats</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #f7e9b2; --swatch-ink: var(--ink)">Carlota Guerrero</span><span class="wc-sep">, </span><a class="wc-name" href="#wc-lucia-boned" style="--swatch: #16396e; --swatch-ink: var(--paper)">Lucia Boned</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-albert-riera-galceran" style="--swatch: #ff85a9; --swatch-ink: var(--paper)">Albert Riera Galcerán</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #2b6db6; --swatch-ink: var(--paper)">Guillermo Santomà</span><span class="wc-sep">, </span><a class="wc-name" href="#wc-cristina-stolhe" style="--swatch: #023831; --swatch-ink: var(--paper)">Cristina Stolhe</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-jose-quintanar" style="--swatch: #ffe270; --swatch-ink: var(--ink)">José Quintanar</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-luis-cervero" style="--swatch: #00034d; --swatch-ink: var(--paper)">Luís Cerveró</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #f2b391; --swatch-ink: var(--ink)">Irene Royo</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #86a7b8; --swatch-ink: var(--paper)">Adrià Cañameras</span><span class="wc-sep">, </span><a class="wc-name" href="#wc-isabel-martinez" style="--swatch: #f23d67; --swatch-ink: var(--paper)">Isabel Martinez</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #b84300; --swatch-ink: var(--paper)">Salva López</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #d4916a; --swatch-ink: var(--paper)">Berta Blanca Ivanow</span><span class="wc-sep">, </span><a class="wc-name" href="#wc-marc-gomez-del-moral" style="--swatch: #edd3b2; --swatch-ink: var(--ink)">Marc Gómez del Moral</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-jose-javier-serrano" style="--swatch: #00a3cc; --swatch-ink: var(--paper)">Jose Javier Serrano</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-raquel-quevedo" style="--swatch: #daded7; --swatch-ink: var(--ink)">Raquel Quevedo</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #d2cecd; --swatch-ink: var(--ink)">Xavi Mañosa</span><span class="wc-sep">, </span><a class="wc-name" href="#wc-arnau-blanch" style="--swatch: #779fbf; --swatch-ink: var(--paper)">Arnau Blanch</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-maria-medem" style="--swatch: #85497b; --swatch-ink: var(--paper)">María Medem</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-ana-cuba" style="--swatch: #ffb08f; --swatch-ink: var(--ink)">Ana Cuba</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-belen-gayan" style="--swatch: #00899e; --swatch-ink: var(--paper)">Belén Gayán</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-juan-diego-valera" style="--swatch: #cdddcb; --swatch-ink: var(--ink)">Juan Diego Valera</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-julia-ruiz-cabello" style="--swatch: #c24700; --swatch-ink: var(--paper)">Julia Ruiz Cabello</a>
   </p>
 
     <div class="wc-sheet">
@@ -231,7 +255,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
             />
           </picture>
         </a>
-  </div><p class="wc-say" style="--lead: 0.1199"><em>‘*WHAT’S COLOR?</em><strong><em>‘</em></strong> is a personal project I started in 2020 where I assign a color to people who inspire and admire me and whom I ask about their personal relationship with color. I presented this third edition at Llibreria Terranova in Barcelona during April 2024.</p><div
+  </div><p class="wc-say" style="--lead: 0.1199"><strong class="wc-say-ask">‘WHAT’S COLOR?‘</strong> is a personal project I started in 2020 where I assign a color to people who inspire and admire me and whom I ask about their personal relationship with color. I presented this third edition at Llibreria Terranova in Barcelona during April 2024.</p><div
           class="wc-slot"
           style="--col: 1; --drop: 0; --lead: 0.0614"
         ><article class="wc-cell" id="wc-marc-gomez-del-moral">
@@ -239,7 +263,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Director de fotografía</span>
       
-      <span class="wc-cell-code">AC320 Arena</span>
+      <span class="wc-cell-code" style="--swatch: #edd3b2; --swatch-ink: var(--ink)"><span class="wc-code-band">AC320 Sand</span></span>
     </p>
     <div class="wc-cell-text">
           <p>“No puedo disociar el color de la luz, el color como el resultado de una serie de capas infinitas que parten de una o de varias fuentes de luz y que reflejan y que difuminan y que tiñen y que terminan en nuestro ojo. Esa superposición de capas infinitas hacen que cada color sea fruto de un momento único e irrepetible. El color es el presente, el color es el aquí y el ahora, el color es un instante.”</p>
@@ -252,7 +276,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Fotógrafo</span>
       
-      <span class="wc-cell-code">AC259 Azul piscina</span>
+      <span class="wc-cell-code" style="--swatch: #00a3cc; --swatch-ink: var(--paper)"><span class="wc-code-band">AC259 Azul piscina</span></span>
     </p>
     <div class="wc-cell-text">
           <p>‘’Para mi el color es la luz. Siempre me ha fascinado que un mismo objeto, textura o paisaje no tengan un color en sí mismo, sino que vayan absorbiendo diferentes frecuencias de luz. También es pertenencia y asociación de ideas. Por ejemplo para mi el azul representa muchas cosas, y diría que todas buenas. Lo asocio a mi tierra (por el mar y la costa), a mi equipo de fútbol (la bandera es azul y blanca), es un color primario (sencillez), y pese a ser a priori un tono frío a mi me aporta mucha calma y armonía.’’</p>
@@ -265,7 +289,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Librera</span>
       
-      <span class="wc-cell-code">AC033 Azul celeste oscuro</span>
+      <span class="wc-cell-code" style="--swatch: #16396e; --swatch-ink: var(--paper)"><span class="wc-code-band">AC033 Azul oscuro</span></span>
     </p>
     <div class="wc-cell-text">
           <p>‘’La luz del sol ‘’</p>
@@ -278,7 +302,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Artista</span>
       
-      <span class="wc-cell-code">AC016 Rosa intens</span>
+      <span class="wc-cell-code" style="--swatch: #ff85a9; --swatch-ink: var(--paper)"><span class="wc-code-band">AC216 Rosa intens</span></span>
     </p>
     <div class="wc-cell-text">
           <p>‘Per a mi el color es l’atracció, la manera en la que em relaciono amb el que em rodeja i el que determina en gran part les meves sensacions y emocions.’</p>
@@ -291,7 +315,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Ilustradora y dibujante de cómic</span>
       
-      <span class="wc-cell-code">AC016 Lila magenta</span>
+      <span class="wc-cell-code" style="--swatch: #85497b; --swatch-ink: var(--paper)"><span class="wc-code-band">AC016 Lila magenta</span></span>
     </p>
     <div class="wc-cell-text">
           <p>‘Es algo indispensable. Para mi está ligado a la memoria y los recuerdos, y lo necesito para transmitir emociones y construir atmósferas.’</p>
@@ -304,7 +328,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Directora creativa</span>
       
-      <span class="wc-cell-code">AC193 Fresa</span>
+      <span class="wc-cell-code" style="--swatch: #f23d67; --swatch-ink: var(--paper)"><span class="wc-code-band">AC193 Fresa</span></span>
     </p>
     <div class="wc-cell-text">
           <p>‘’El color es para mí como la sal en un plato. Un ingrediente que eleva la experiencia sensorial, la intensifica. A veces, es la expresión del alma, como si la música se pudiera ver.’’</p>
@@ -317,7 +341,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Fotógrafa</span>
       
-      <span class="wc-cell-code">AC080 Mandarina</span>
+      <span class="wc-cell-code" style="--swatch: #ffb08f; --swatch-ink: var(--ink)"><span class="wc-code-band">AC380 Mandarina</span></span>
     </p>
     <div class="wc-cell-text">
           <p>‘El color para mí es un aspecto de nuestra realidad a la que se le pueden asignar tantos significados que, en mi caso como fotógrafa, es mi lenguaje favorito para trasladar lo que quiero decir en imágenes. Sería como las vocales en el abecedario.’</p>
@@ -330,7 +354,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Arquitecta</span>
       
-      <span class="wc-cell-code">AC075 Ocre rojizo</span>
+      <span class="wc-cell-code" style="--swatch: #c24700; --swatch-ink: var(--paper)"><span class="wc-code-band">AC074 Ocre rojizo</span></span>
     </p>
     <div class="wc-cell-text">
           <p>El color es una ventana ̈ Para mí el color es un elemento de muchos rostros que permanece en constante proceso de cambio según el material, el lugar o el paso del tiempo. Esta característica tan relativa y singular me hace relacionarlo directamente con la influencia del color en la memoria y en mis recuerdos. Los colores son una ventana a mi vida y mis experiencias. Son parte de quién soy.</p>
@@ -343,7 +367,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Diseñadora y artista</span>
       
-      <span class="wc-cell-code">AC299 Gris perla</span>
+      <span class="wc-cell-code" style="--swatch: #daded7; --swatch-ink: var(--ink)"><span class="wc-code-band">AC299 Pearl gray</span></span>
     </p>
     <div class="wc-cell-text">
           <p>Color «colors.» 1. Una memoria habitada viajando a la velocidad de la luz 2. «jerg.» Un abrazo de la sombra</p>
@@ -356,7 +380,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Artista y editor</span>
       
-      <span class="wc-cell-code">AC267 Amarillo</span>
+      <span class="wc-cell-code" style="--swatch: #ffe270; --swatch-ink: var(--ink)"><span class="wc-code-band">AC267 Amarillo</span></span>
     </p>
     <div class="wc-cell-text">
           <p>‘El color es un material El color es una ilusión El color es una bandera El color es una elección El color es caprichoso El color es una respuesta. El color es diversión.’</p>
@@ -369,7 +393,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Realizador y librero</span>
       
-      <span class="wc-cell-code">AC250 Azul profundo</span>
+      <span class="wc-cell-code" style="--swatch: #00034d; --swatch-ink: var(--paper)"><span class="wc-code-band">AC250 Deep blue</span></span>
     </p>
     <div class="wc-cell-text">
           <p>‘Me gusta pensar en el color como un lenguaje. Un lenguaje secreto, íntimo y muchas veces inconsciente que todos los objetos y superficies emplean para lanzar un mensaje al mundo. Desde ese punto de vista, me interesa mucho la lectura científica que nos dice que toda superficie absorbe unas ondas y las que no le interesan las repele, o las devuelve hacia el exterior, y esas son las que se traducen en el color que proyectan y nuestros ojos ven. Así que en cierto sentido, el color es el reverso negativo de lo que cada superficie decide guardar en su interior, de aquello que acoge y conserva. Y esta decisión de toda superficie de quedarse para sí un determinado espectro de ondas tiene algo de poético que es a la vez muy sencillo y extremadamente misterioso.</p><p>En esta misma línea, me encanta pensar en la oscuridad como un silencio, un momento en el que absolutamente todos los objetos se relajan, dejan de gritar al mundo su personalidad intrínseca, para unirse en un discurso común en el que todos se ponen de acuerdo. Me encanta observar como la luz desaparece y todos los elementos del espacio físico en el que te encuentras se unifican, como dándose la mano y respirando aliviados. En pocas palabras, me encanta pensar en el color como algo vivo, alterable y ligado a las circunstancias que lo rodean.’</p>
@@ -382,7 +406,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Escritora</span>
       
-      <span class="wc-cell-code">AC263 Verde</span>
+      <span class="wc-cell-code" style="--swatch: #82ad7b; --swatch-ink: var(--paper)"><span class="wc-code-band">AC263 Verde</span></span>
     </p>
     <div class="wc-cell-text">
           <p>‘Para mí el color es, ante todo, símbolo. Antropología, historia, psicoanálisis, misterio. No es una ciencia exacta (esa es su gracia), sino una ensoñación en la que cada mirada tiene el camino libre. El verde siempre es verde, pero su significación emocional cambia de acuerdo a dónde lo encuentro. El color me enfrenta a imágenes poéticas, intuiciones y metáforas. Forma parte de un mundo espiritual que es eterno.’</p>
@@ -395,7 +419,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Productora ejecutiva</span>
       
-      <span class="wc-cell-code">AC049 Blau casi verd</span>
+      <span class="wc-cell-code" style="--swatch: #00899e; --swatch-ink: var(--paper)"><span class="wc-code-band">AC049 Blau casi verd</span></span>
     </p>
     <div class="wc-cell-text">
           <p>‘El color és emoció, vibració, estímul . També es opinió i percepció. Color i llum es fonen per expressar un tot. ‘</p>
@@ -408,7 +432,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Fotógrafa</span>
       
-      <span class="wc-cell-code">AC039 Verde oscuro casi negro</span>
+      <span class="wc-cell-code" style="--swatch: #023831; --swatch-ink: var(--paper)"><span class="wc-code-band">AC239 Verde oscuro casi negro</span></span>
     </p>
     <div class="wc-cell-text">
           <p>‘El color es libertad, una búsqueda y un encuentro, supongo que tiene que ver con la identidad ‘</p>
@@ -421,7 +445,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Fotógrafo</span>
       
-      <span class="wc-cell-code">AC096 Verde gris</span>
+      <span class="wc-cell-code" style="--swatch: #cdddcb; --swatch-ink: var(--ink)"><span class="wc-code-band">AC096 Verde</span></span>
     </p>
     <div class="wc-cell-text">
           <p>‘El color es una fuente de inspiración y contrastes. Es inseguridad, duda y cuestionamiento. Daltonismo.’</p>
@@ -434,7 +458,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Arquitecto, escritor y artista plástico</span>
       
-      <span class="wc-cell-code">AC065 Ocre amarillo</span>
+      <span class="wc-cell-code" style="--swatch: #ebad02; --swatch-ink: var(--ink)"><span class="wc-code-band">AC065 Ocre amarillo</span></span>
     </p>
     <div class="wc-cell-text">
           <p>Como dice Goethe, los colores son las alegrías y los sufrimientos de la luz, por eso es blanca en lo exultante y negra en la insatisfacción. Pero entre ambos extremos está el conjunto de los estados emocionales de la naturaleza, desplegados en todas sus gamas y en los infinitos matices del color. Un vocabulario ubérrimo, incomparablemente más rico que el de nuestra expresión emocional. El color es el lenguaje que la naturaleza utiliza para hablar consigo misma, lenguaje que no se nos ha dado a conocer, pero que, por un prodigio de generosidad, se nos ha permitido contemplar. En consecuencia, nos sentimos desbordados e impotentes, y para mitigar esta impotencia, nos desgañitamos al intentar participar en esa conversación, en cierto sentido nos comportamos como recién nacidos que contemplan fascinados las conversaciones de sus mayores, pero que nada entienden y, aun así, se intentan inmiscuir. Desconocemos incluso cómo se articula una palabra o una oración, pero qué necesidad tan profunda tenemos de intervenir, por eso balbuceamos con el color en nuestras ciudades, en nuestras casas, en nuestras ropas y en nuestros cuerpos, con el objetivo de entrometernos y contribuir a esa conversación eterna con la que la naturaleza se despliega.’</p>
@@ -447,7 +471,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Fotógrafo</span>
       
-      <span class="wc-cell-code">AC037 Azul plomo</span>
+      <span class="wc-cell-code" style="--swatch: #779fbf; --swatch-ink: var(--paper)"><span class="wc-code-band">AC037 Azul plomo</span></span>
     </p>
     <div class="wc-cell-text">
           <p>‘Para mí, el color es un elemento más para jugar en el proceso creativo. En fotografía, puedes jugar con cómo distribuyes la luz y la oscuridad en el “frame» generando una composición concreta. Esta composición también se ve afectada por el color. Así luz, oscuridad y color terminan siendo los pilares sobre los que puedes trabajar a la hora de componer una fotografía.’</p>
@@ -466,6 +490,11 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     -->
     <p class="wc-back"><a href="/prototype2/#whats-color">All of What&rsquo;s Color?</a></p>
     
+    <!--
+      The line the phone sheets close an edition on. Shown on a phone only,
+      where the link above is not; the words are About's own.
+    -->
+    <p class="wc-foot"><b>Claudia Valsells</b> © All Rights Reserved</p>
   </div></main>
 
 
@@ -482,10 +511,52 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <div class="about-reel-track" data-about-track>
       <button type="button" class="about-reel-item">
             <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-1-800.avif 800w, /prototype2/about/about-1-1600.avif 1600w, /prototype2/about/about-1-2692.avif 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-1-800.webp 800w, /prototype2/about/about-1-1600.webp 1600w, /prototype2/about/about-1-2692.webp 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/avif" srcset="/prototype2/about/about-1-400.avif 400w, /prototype2/about/about-1-800.avif 800w, /prototype2/about/about-1-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-1-400.webp 400w, /prototype2/about/about-1-800.webp 800w, /prototype2/about/about-1-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
       <img
-        src="/prototype2/about/about-1-2692.jpg"
+        src="/prototype2/about/about-1-1600.jpg"
+        alt="Colour charts pinned to the studio wall above jars of brushes and a broad, paint-spattered brush"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-2-400.avif 400w, /prototype2/about/about-2-800.avif 800w, /prototype2/about/about-2-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-2-400.webp 400w, /prototype2/about/about-2-800.webp 800w, /prototype2/about/about-2-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-2-1600.jpg"
+        alt="Claudia Valsells in her studio among canvases and pots of paint, seen from above"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-3-400.avif 400w, /prototype2/about/about-3-800.avif 800w, /prototype2/about/about-3-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-3-400.webp 400w, /prototype2/about/about-3-800.webp 800w, /prototype2/about/about-3-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-3-1600.jpg"
+        alt="Claudia Valsells on a step, reaching up to paint the studio wall, a pot of paint in her hand"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-4-400.avif 400w, /prototype2/about/about-4-800.avif 800w, /prototype2/about/about-4-1600.avif 1600w, /prototype2/about/about-4-2692.avif 2692w" sizes="(max-width: 1097px) 177px, 16.1vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-4-400.webp 400w, /prototype2/about/about-4-800.webp 800w, /prototype2/about/about-4-1600.webp 1600w, /prototype2/about/about-4-2692.webp 2692w" sizes="(max-width: 1097px) 177px, 16.1vw" />
+      <img
+        src="/prototype2/about/about-4-2692.jpg"
         alt="Claudia Valsells, seen from behind, painting fields of colour on a studio wall with a pot of paint in hand"
         width="2692"
         height="1830"
@@ -496,11 +567,95 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
           </button><button type="button" class="about-reel-item">
             <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-2-800.avif 800w, /prototype2/about/about-2-1600.avif 1600w, /prototype2/about/about-2-2692.avif 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-2-800.webp 800w, /prototype2/about/about-2-1600.webp 1600w, /prototype2/about/about-2-2692.webp 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/avif" srcset="/prototype2/about/about-5-400.avif 400w, /prototype2/about/about-5-800.avif 800w, /prototype2/about/about-5-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-5-400.webp 400w, /prototype2/about/about-5-800.webp 800w, /prototype2/about/about-5-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
       <img
-        src="/prototype2/about/about-2-2692.jpg"
+        src="/prototype2/about/about-5-1600.jpg"
+        alt="Claudia Valsells standing between two large canvases propped against the studio wall"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-6-400.avif 400w, /prototype2/about/about-6-800.avif 800w, /prototype2/about/about-6-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-6-400.webp 400w, /prototype2/about/about-6-800.webp 800w, /prototype2/about/about-6-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-6-1600.jpg"
+        alt="Pots of paint and brushes on a trestle in front of a painted canvas"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-7-400.avif 400w, /prototype2/about/about-7-800.avif 800w, /prototype2/about/about-7-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-7-400.webp 400w, /prototype2/about/about-7-800.webp 800w, /prototype2/about/about-7-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-7-1600.jpg"
+        alt="A hand holding up a pink board with a red square over a pot of paint"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-8-400.avif 400w, /prototype2/about/about-8-800.avif 800w, /prototype2/about/about-8-1600.avif 1600w, /prototype2/about/about-8-2327.avif 2327w" sizes="(max-width: 1097px) 153px, 13.9vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-8-400.webp 400w, /prototype2/about/about-8-800.webp 800w, /prototype2/about/about-8-1600.webp 1600w, /prototype2/about/about-8-2327.webp 2327w" sizes="(max-width: 1097px) 153px, 13.9vw" />
+      <img
+        src="/prototype2/about/about-8-2327.jpg"
         alt="Claudia Valsells painting a large canvas in her studio, pots of colour on the table beside her"
+        width="2327"
+        height="1830"
+        style="aspect-ratio:2327 / 1830"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-9-400.avif 400w, /prototype2/about/about-9-800.avif 800w, /prototype2/about/about-9-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-9-400.webp 400w, /prototype2/about/about-9-800.webp 800w, /prototype2/about/about-9-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-9-1600.jpg"
+        alt="Small paintings and patches of colour on a white studio wall"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-10-400.avif 400w, /prototype2/about/about-10-800.avif 800w, /prototype2/about/about-10-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-10-400.webp 400w, /prototype2/about/about-10-800.webp 800w, /prototype2/about/about-10-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-10-1600.jpg"
+        alt="A hand painting with a round brush on a canvas of green, pink and blue"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-11-400.avif 400w, /prototype2/about/about-11-800.avif 800w, /prototype2/about/about-11-1600.avif 1600w, /prototype2/about/about-11-2692.avif 2692w" sizes="(max-width: 1097px) 177px, 16.1vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-11-400.webp 400w, /prototype2/about/about-11-800.webp 800w, /prototype2/about/about-11-1600.webp 1600w, /prototype2/about/about-11-2692.webp 2692w" sizes="(max-width: 1097px) 177px, 16.1vw" />
+      <img
+        src="/prototype2/about/about-11-2692.jpg"
+        alt="Claudia Valsells unrolling a sheet of paper in front of her canvases"
         width="2692"
         height="1830"
         style="aspect-ratio:2692 / 1830"
@@ -510,10 +665,66 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
           </button><button type="button" class="about-reel-item">
             <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-3-800.avif 800w, /prototype2/about/about-3-845.avif 845w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-3-800.webp 800w, /prototype2/about/about-3-845.webp 845w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/avif" srcset="/prototype2/about/about-12-400.avif 400w, /prototype2/about/about-12-800.avif 800w, /prototype2/about/about-12-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-12-400.webp 400w, /prototype2/about/about-12-800.webp 800w, /prototype2/about/about-12-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
       <img
-        src="/prototype2/about/about-3-845.jpg"
+        src="/prototype2/about/about-12-1600.jpg"
+        alt="Claudia Valsells on a stepladder, putting up small paintings on the studio wall"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-13-400.avif 400w, /prototype2/about/about-13-800.avif 800w, /prototype2/about/about-13-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-13-400.webp 400w, /prototype2/about/about-13-800.webp 800w, /prototype2/about/about-13-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-13-1600.jpg"
+        alt="A hand setting a small painting on the studio wall beside an easel"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-14-400.avif 400w, /prototype2/about/about-14-800.avif 800w, /prototype2/about/about-14-1600.avif 1600w, /prototype2/about/about-14-2692.avif 2692w" sizes="(max-width: 1097px) 180px, 16.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-14-400.webp 400w, /prototype2/about/about-14-800.webp 800w, /prototype2/about/about-14-1600.webp 1600w, /prototype2/about/about-14-2692.webp 2692w" sizes="(max-width: 1097px) 180px, 16.4vw" />
+      <img
+        src="/prototype2/about/about-14-2692.jpg"
+        alt="Claudia Valsells at work at the end of her long studio, canvases laid out on the table"
+        width="2692"
+        height="1795"
+        style="aspect-ratio:2692 / 1795"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-15-400.avif 400w, /prototype2/about/about-15-800.avif 800w, /prototype2/about/about-15-1600.avif 1600w" sizes="(max-width: 1097px) 90px, 8.2vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-15-400.webp 400w, /prototype2/about/about-15-800.webp 800w, /prototype2/about/about-15-1600.webp 1600w" sizes="(max-width: 1097px) 90px, 8.2vw" />
+      <img
+        src="/prototype2/about/about-15-1600.jpg"
+        alt="A hand painting a deep red canvas with a fine brush"
+        width="1600"
+        height="2133"
+        style="aspect-ratio:1600 / 2133"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-16-400.avif 400w, /prototype2/about/about-16-800.avif 800w, /prototype2/about/about-16-845.avif 845w" sizes="(max-width: 1097px) 184px, 16.8vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-16-400.webp 400w, /prototype2/about/about-16-800.webp 800w, /prototype2/about/about-16-845.webp 845w" sizes="(max-width: 1097px) 184px, 16.8vw" />
+      <img
+        src="/prototype2/about/about-16-845.jpg"
         alt="Claudia Valsells reaching up to paint a canvas propped against the studio wall, among other canvases"
         width="845"
         height="550"
@@ -524,24 +735,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
           </button><button type="button" class="about-reel-item">
             <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-4-800.avif 800w, /prototype2/about/about-4-833.avif 833w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-4-800.webp 800w, /prototype2/about/about-4-833.webp 833w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/avif" srcset="/prototype2/about/about-17-400.avif 400w, /prototype2/about/about-17-765.avif 765w" sizes="(max-width: 1097px) 127px, 11.6vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-17-400.webp 400w, /prototype2/about/about-17-765.webp 765w" sizes="(max-width: 1097px) 127px, 11.6vw" />
       <img
-        src="/prototype2/about/about-4-833.jpg"
-        alt="Claudia Valsells in her studio holding a palette and a brush over pots of paint"
-        width="833"
-        height="600"
-        style="aspect-ratio:833 / 600"
-        loading="lazy"
-        decoding="async"
-      />
-    </picture>
-          </button><button type="button" class="about-reel-item">
-            <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-5-765.avif 765w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-5-765.webp 765w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <img
-        src="/prototype2/about/about-5-765.jpg"
+        src="/prototype2/about/about-17-765.jpg"
         alt="Claudia Valsells in profile against a red wall stencilled AC 068"
         width="765"
         height="724"
@@ -550,8 +747,28 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-18-400.avif 400w, /prototype2/about/about-18-800.avif 800w, /prototype2/about/about-18-833.avif 833w" sizes="(max-width: 1097px) 167px, 15.2vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-18-400.webp 400w, /prototype2/about/about-18-800.webp 800w, /prototype2/about/about-18-833.webp 833w" sizes="(max-width: 1097px) 167px, 15.2vw" />
+      <img
+        src="/prototype2/about/about-18-833.jpg"
+        alt="Claudia Valsells in her studio holding a palette and a brush over pots of paint"
+        width="833"
+        height="600"
+        style="aspect-ratio:833 / 600"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
           </button>
     </div>
+    <button type="button" class="about-reel-step is-prev" data-about-reel-step="-1" aria-label="Earlier photographs" hidden>
+      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="M8 1 1 8l7 7" /></svg>
+    </button>
+    <button type="button" class="about-reel-step is-next" data-about-reel-step="1" aria-label="More photographs" hidden>
+      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="m1 1 7 7-7 7" /></svg>
+    </button>
   </div>
           </div>
         </div>

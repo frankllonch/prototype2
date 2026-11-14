@@ -25,12 +25,14 @@
 <link rel="modulepreload" href="/prototype2/js/scroll-cue.js" />
 <link rel="modulepreload" href="/prototype2/js/about.js" />
 <link rel="modulepreload" href="/prototype2/js/inquiries.js" />
+<link rel="modulepreload" href="/prototype2/js/chart.js" />
 <link rel="modulepreload" href="/prototype2/js/book.js" />
 <link rel="modulepreload" href="/prototype2/js/focus.js" />
 <link rel="modulepreload" href="/prototype2/js/hues.js" />
 <link rel="modulepreload" href="/prototype2/js/current.js" />
 <link rel="modulepreload" href="/prototype2/js/scrollbar.js" />
 <link rel="modulepreload" href="/prototype2/js/scramble.js" />
+<link rel="modulepreload" href="/prototype2/js/menu.js" />
 <link rel="modulepreload" href="/prototype2/js/index.js" />
 <script>document.documentElement.classList.add('js');
 // Arriving at What's Color by its link, the page is laid out at the top and
@@ -43,43 +45,65 @@
 try { var nav = performance.getEntriesByType('navigation')[0];
   if (location.hash === '#whats-color' && (!nav || nav.type === 'navigate')
     && CSS.supports('animation-timeline: view()')
-    && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    && !matchMedia('(prefers-reduced-motion: reduce)').matches
+    && !matchMedia('(max-width: 899px)').matches) {
     document.documentElement.classList.add('wc-arriving', 'wc-swatch-drop');
     setTimeout(function () { document.documentElement.classList.remove('wc-arriving') }, 1500);
     setTimeout(function () { document.documentElement.classList.remove('wc-swatch-drop') }, 700);
-  } } catch (e) {}</script>
+  } } catch (e) {}
+// On a phone the start page opens on the menu, where the film is on a desktop
+// (client/menu.ts): decided here, before the first paint, so the page under
+// it is never seen.
+try { if (document.documentElement.hasAttribute('data-start')
+  && matchMedia('(max-width: 899px)').matches
+  && (location.hash === '' || location.hash === '#about'))
+  document.documentElement.classList.add('is-start') } catch (e) {}
+// From here on the stylesheet keeps the phone's menu out of sight, and only
+// client/menu.ts can raise it. If that has not said it is there after four
+// seconds — the scripts never arrived, or one of them fell over on the way —
+// the page goes back to what it is without them: the menu at its head, in
+// the flow, and no start screen held over it. Scripts that arrive later than
+// that take the page back (client/index.ts).
+setTimeout(function () { var root = document.documentElement;
+  if (!root.hasAttribute('data-menu')) root.classList.remove('js', 'is-start') }, 4000);</script>
 </head>
 <body>
 <div class="page-veil" aria-hidden="true"></div>
 <a class="skip-link" href="#main">Skip to content</a>
-<header class="top">
+<button type="button" class="menu-toggle" data-menu-toggle aria-label="Menu" aria-expanded="false" aria-controls="site-menu"></button>
+  <header class="top" id="site-menu">
     <a class="wordmark" href="/prototype2/" data-roll>CLAUDIA VALSELLS</a>
-    <a class="top-soon" href="/prototype2/#whats-color"  data-roll>What&rsquo;s Color?</a>
+    <a class="top-soon" href="/prototype2/#whats-color" aria-current="page" data-roll>What&rsquo;s Color?</a>
     <nav class="menu" aria-label="Primary">
       <a
             href="/prototype2/color-chart/"
             
             
+            style="--menu-phone: 5"
             data-roll
           >Color Chart</a><a
             href="/prototype2/commissioned/"
             
             
+            style="--menu-phone: 3"
             data-roll
           >Commissioned</a><a
             href="/prototype2/exhibitions/"
             
             
+            style="--menu-phone: 4"
             data-roll
           >Exhibitions</a><a
             href="/prototype2/artwork/"
             
             
+            style="--menu-phone: 2"
             data-roll
           >Artwork</a><a
             href="/prototype2/#about"
             data-panel-open="about"
             
+            style="--menu-phone: 1"
             data-roll
           >About</a>
     </nav>
@@ -89,7 +113,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-numeral" aria-hidden="true">(I)</p>
     <h1 class="sr-only">What&rsquo;s Color? (I)</h1>
     <p class="wc-names">
-    <a class="wc-name" href="#wc-marina-garces" style="--swatch: #c4706a; --swatch-ink: var(--paper)">Marina Garcés</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-olafur-eliasson" style="--swatch: #e6c33f; --swatch-ink: var(--ink)">Olafur Eliasson</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-li-edelkoort" style="--swatch: #ece5d3; --swatch-ink: var(--ink)">Li Edelkoort</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-rupi-kaur" style="--swatch: #c0aa8b; --swatch-ink: var(--paper)">Rupi Kaur</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-ramon-andres" style="--swatch: #2f4b35; --swatch-ink: var(--paper)">Ramón Andrés</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-victoria-cirlot" style="--swatch: #8e2a33; --swatch-ink: var(--paper)">Victoria Cirlot</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-tortell-poltrona" style="--swatch: #642625; --swatch-ink: var(--paper)">Tortell Poltrona</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-angelica-dass" style="--swatch: #d8c3a0; --swatch-ink: var(--ink)">Angelica Dass</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-jaume-funes" style="--swatch: #2f7a74; --swatch-ink: var(--paper)">Jaume Funes</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-oscar-tusquets" style="--swatch: #2b0803; --swatch-ink: var(--paper)">Oscar Tusquets</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-david-bueno-i-torrens" style="--swatch: #8a9a85; --swatch-ink: var(--paper)">David Bueno i Torrens</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-flavia-company" style="--swatch: #8f8a3c; --swatch-ink: var(--paper)">Flavia Company</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-siri-hustvedt" style="--swatch: #c4581f; --swatch-ink: var(--paper)">Siri Hustvedt</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-henry-giroux" style="--swatch: #c8402e; --swatch-ink: var(--paper)">Henry Giroux</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #0f8557; --swatch-ink: var(--paper)">Carolin Emcke</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #183b81; --swatch-ink: var(--paper)">Valeria Luiselli</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #1f3466; --swatch-ink: var(--paper)">David Attenborough</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #b7a3c9; --swatch-ink: var(--paper)">Judy Wajcmann</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #b5562f; --swatch-ink: var(--paper)">Alessandro Baricco</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #e07a2b; --swatch-ink: var(--paper)">Arno Stern</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #087e9c; --swatch-ink: var(--paper)">Fina Birulés</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #5f8a4f; --swatch-ink: var(--paper)">Stefano Mancuso</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #8d8d87; --swatch-ink: var(--paper)">David Le Breton</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #2f7f86; --swatch-ink: var(--paper)">Noah Harari</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #c9dde6; --swatch-ink: var(--ink)">Himali Singh Soin</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #1f4a35; --swatch-ink: var(--paper)">César Bona</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #d6c29c; --swatch-ink: var(--ink)">Kristine McDivitt Tompkins</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #b25f2a; --swatch-ink: var(--paper)">Francesco Tonucci</span>
+    <a class="wc-name" href="#wc-marina-garces" style="--swatch: #b15f60; --swatch-ink: var(--paper)">Marina Garcés</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-olafur-eliasson" style="--swatch: #fbc644; --swatch-ink: var(--ink)">Olafur Eliasson</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-li-edelkoort" style="--swatch: #f1d7ae; --swatch-ink: var(--ink)">Li Edelkoort</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-rupi-kaur" style="--swatch: #efc7ab; --swatch-ink: var(--ink)">Rupi Kaur</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-ramon-andres" style="--swatch: #164f41; --swatch-ink: var(--paper)">Ramón Andrés</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-victoria-cirlot" style="--swatch: #8d252f; --swatch-ink: var(--paper)">Victoria Cirlot</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-tortell-poltrona" style="--swatch: #e83a41; --swatch-ink: var(--paper)">Tortell Poltrona</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-angelica-dass" style="--swatch: #da7f2e; --swatch-ink: var(--paper)">Angelica Dass</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-jaume-funes" style="--swatch: #5aba9f; --swatch-ink: var(--paper)">Jaume Funes</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-oscar-tusquets" style="--swatch: #b9593f; --swatch-ink: var(--paper)">Oscar Tusquets</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-david-bueno-i-torrens" style="--swatch: #cdddcb; --swatch-ink: var(--ink)">David Bueno i Torrens</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-flavia-company" style="--swatch: #fbbe41; --swatch-ink: var(--ink)">Flavia Company</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-siri-hustvedt" style="--swatch: #e19645; --swatch-ink: var(--paper)">Siri Hustvedt</a><span class="wc-sep">, </span><a class="wc-name" href="#wc-henry-giroux" style="--swatch: #eb5d41; --swatch-ink: var(--paper)">Henry Giroux</a><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #a8a594; --swatch-ink: var(--paper)">Carolin Emcke</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #244e9d; --swatch-ink: var(--paper)">Valeria Luiselli</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #006780; --swatch-ink: var(--paper)">David Attenborough</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #6d69a4; --swatch-ink: var(--paper)">Judy Wajcmann</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #d59a2b; --swatch-ink: var(--paper)">Alessandro Baricco</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #ec692b; --swatch-ink: var(--paper)">Arno Stern</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #85709d; --swatch-ink: var(--paper)">Fina Birulés</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #5c7e52; --swatch-ink: var(--paper)">Stefano Mancuso</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #a9a2a1; --swatch-ink: var(--paper)">David Le Breton</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #a1d2cb; --swatch-ink: var(--ink)">Noah Harari</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #9abad6; --swatch-ink: var(--ink)">Himali Singh Soin</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #056e59; --swatch-ink: var(--paper)">César Bona</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #b9975b; --swatch-ink: var(--paper)">Kristine McDivitt Tompkins</span><span class="wc-sep">, </span><span class="wc-name" style="--swatch: #008abd; --swatch-ink: var(--paper)">Francesco Tonucci</span>
   </p>
 
     <div class="wc-sheet">
@@ -171,7 +195,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Filòsofa</span>
       <span class="wc-cell-role wc-cell-also">Philosopher</span>
-      <span class="wc-cell-code">AC011 Powder red</span>
+      <span class="wc-cell-code" style="--swatch: #b15f60; --swatch-ink: var(--paper)"><span class="wc-code-band">AC011 Powder red</span></span>
     </p>
     <div class="wc-cell-text">
           <p>‘Diria que el color, per a mi, és el gust del tacte’</p>
@@ -184,7 +208,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Artist</span>
       
-      <span class="wc-cell-code">AC002 Yellow</span>
+      <span class="wc-cell-code" style="--swatch: #fbc644; --swatch-ink: var(--ink)"><span class="wc-code-band">AC002 Yellow</span></span>
     </p>
     <div class="wc-cell-text">
           <p>‘Colour has an enormous psychological and associative potential: even though it has been cultivated to the extreme, the amount of individuality in experiencing colours is equally extreme. Colour does not exist in itself but only when looked at. The unique fact that colour only materialises when light bounces off a surface onto our retinas shows us that the analysis of colours is, in fact, about the ability to analyse ourselves.’</p>
@@ -197,7 +221,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Trend forecaster</span>
       
-      <span class="wc-cell-code">AC119 Natural off white</span>
+      <span class="wc-cell-code" style="--swatch: #f1d7ae; --swatch-ink: var(--ink)"><span class="wc-code-band">AC119 Natural off white</span></span>
     </p>
     <div class="wc-cell-text">
           <p>‘Color approach to body and soul.The mystical aspect in colour; colour as an expression of a higher goal; colour as a form of profound concentration; colour as a new level of awareness.’</p>
@@ -210,7 +234,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Poet</span>
       
-      <span class="wc-cell-code">AC206 Soft nude</span>
+      <span class="wc-cell-code" style="--swatch: #efc7ab; --swatch-ink: var(--ink)"><span class="wc-code-band">AC206 Soft nude</span></span>
     </p>
     <div class="wc-cell-text">
           <p>‘ Colour is laughter, and joy, and air. Colour is one of the most beautiful details of life.’</p>
@@ -223,7 +247,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Ensayista, pensador</span>
       <span class="wc-cell-role wc-cell-also">Essayist and thinker</span>
-      <span class="wc-cell-code">AC052 Dark green</span>
+      <span class="wc-cell-code" style="--swatch: #164f41; --swatch-ink: var(--paper)"><span class="wc-code-band">AC052 Dark green</span></span>
     </p>
     <div class="wc-cell-text">
           <p>«El color es una forma de nostalgia, un modo de entender la noche, de desnudar su sombra para que las cosas sean cuando ella duerme. El color es una lluvia, un vaso, el alba, la hoja vuelta de un álamo, la rodera de un carro de heno, que amarillea. Es el relieve del mundo para que nosotros, a ciegas, tocándolo, descubramos desde nuestra oscuridad su rostro y nos reconozcamos en él».</p>
@@ -236,7 +260,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Catedrática de Filología Románica</span>
       <span class="wc-cell-role wc-cell-also">Professor of Romanic Philology</span>
-      <span class="wc-cell-code">AC019 Rouge</span>
+      <span class="wc-cell-code" style="--swatch: #8d252f; --swatch-ink: var(--paper)"><span class="wc-code-band">AC019 Rouge</span></span>
     </p>
     <div class="wc-cell-text">
           <p>‘Entiendo el color como el aspecto espiritual de una representación. El color es un estado de ánimo, una emoción. El rojo burdeos expresa una pasión hecha de dolor y gozo. ‘</p>
@@ -249,7 +273,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Pallasso</span>
       <span class="wc-cell-role wc-cell-also">Clown</span>
-      <span class="wc-cell-code">AC009 Red</span>
+      <span class="wc-cell-code" style="--swatch: #e83a41; --swatch-ink: var(--paper)"><span class="wc-code-band">AC009 Red</span></span>
     </p>
     <div class="wc-cell-text">
           <p>‘Els meus colors de maquillatge son el Blanc, el negre i el vermell, que es el que més m’agrada’</p>
@@ -262,7 +286,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Fotògrafa</span>
       <span class="wc-cell-role wc-cell-also">Photographer — Humanae project</span>
-      <span class="wc-cell-code">AC073 Beautiful sand</span>
+      <span class="wc-cell-code" style="--swatch: #da7f2e; --swatch-ink: var(--paper)"><span class="wc-code-band">AC073 Beautiful sand</span></span>
     </p>
     <div class="wc-cell-text">
           <p>‘Nací en una familia llena de color ‘</p>
@@ -275,7 +299,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Psicòleg, educador i periodista</span>
       <span class="wc-cell-role wc-cell-also">Psychologist, educator and journalist</span>
-      <span class="wc-cell-code">AC048 Green blue</span>
+      <span class="wc-cell-code" style="--swatch: #5aba9f; --swatch-ink: var(--paper)"><span class="wc-code-band">AC048 Green blue</span></span>
     </p>
     <div class="wc-cell-text">
           <p>‘Per a mi el color es una manera de mirar i d’interpretar la realitat que m’envolta. Miro amb filtres de llums i colors. La llum i el color són maneres d’entendre i explicar el món.’</p>
@@ -288,7 +312,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Arquitecto, pintor y escritor</span>
       <span class="wc-cell-role wc-cell-also">Architect, painter and writer</span>
-      <span class="wc-cell-code">AC071 Pompeian red</span>
+      <span class="wc-cell-code" style="--swatch: #b9593f; --swatch-ink: var(--paper)"><span class="wc-code-band">AC071 Pompeian red</span></span>
     </p>
     <div class="wc-cell-text">
           <p>“En Arquitectura, la posibilidad de huir osadamente de la dictadura contemporánea del blanco ¡Viva Barragán!”.</p>
@@ -301,7 +325,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Biòleg especialitzat en neurociència aplicada a l’educació</span>
       <span class="wc-cell-role wc-cell-also">Biologist, education and neuroscience</span>
-      <span class="wc-cell-code">AC098 Grey green</span>
+      <span class="wc-cell-code" style="--swatch: #cdddcb; --swatch-ink: var(--ink)"><span class="wc-code-band">AC098 Grey green</span></span>
     </p>
     <div class="wc-cell-text">
           <p>‘ Com a científic haig de dir que el color és una ona electromagnètica de natura corpuscular que vibra en una determinada longitud d’ona. Ara bé, això és només una descripció que únicament grata la superfície. Per a mí el color és l’expressió vital de la natura, el reflex d’allò que ha estat i l’ombra del que vindrà.’</p>
@@ -314,7 +338,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Essayist, novelist and poet</span>
       
-      <span class="wc-cell-code">AC074 Dark orange</span>
+      <span class="wc-cell-code" style="--swatch: #e19645; --swatch-ink: var(--paper)"><span class="wc-code-band">AC074 Dark orange</span></span>
     </p>
     <div class="wc-cell-text">
           <p>My neurological sensitivities have determined my life, I suffer from synaesthesia. I also have strong physical responses to colors—once while looking at a shade of turquoise in Iceland I had a revolting crawling sensation all over my body. Everyone responds to color, but my mirror-touch sensations probably exaggerate the response. It’s possible that this sensitivity increased my interest in looking at paintings. My earliest exposure to a painter was to Munch. The colors are subjective. Everyone has her or his own.</p>
@@ -327,7 +351,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Escriptora i periodista</span>
       <span class="wc-cell-role wc-cell-also">Writer and journalist</span>
-      <span class="wc-cell-code">AC062 Ocher green</span>
+      <span class="wc-cell-code" style="--swatch: #fbbe41; --swatch-ink: var(--ink)"><span class="wc-code-band">AC062 Ocher green</span></span>
     </p>
     <div class="wc-cell-text">
           <p>‘ El color és el filtre amb què mirem la vida.’</p><p>Flavia Company m’escriu aquestes increíbles ratlles en referència a les meves obres:</p><p>‘La verticalitat del que comença i no acaba. Ens representa. Ens convoca. Ens pregunta -què podries construir amb mi?- però també ens contesta -tu ets dels colors del que construeixes-. La relació entre l’horitzontalitat dels diferents colors -diferents conceptes, individualitats, temps, espais, idees, illes, cases, mons, sentiments, tot i tant-, colors interromputs -la vida- en les seves formes trencades, recolzades sobre el blanc, que és tots els colors, que és cap ni un. Contrast i significació. Context.’</p><p>Flavia Company writes me these beautiful words in reference to my artworks :</p><p>‘The verticality of what begins and doesn’t end. It represents us. It convenes us. It asks us -what could construct with me?- but also it answers us -you are the colors that you build. The relation among the horizontality of the diferent colors-distinct concepts, individualities, time, rooms, ideas, islands, homes, worlds, feelings, everything and so much-, colors interrupted -the life- at its broken forms, placed on the white, that is all the colours, which is none and no one . Contrast and significance. Context.’</p><p>Thank you Flavia!</p>
@@ -340,7 +364,7 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <p class="wc-cell-meta">
       <span class="wc-cell-role">Writer and cultural critic, founder of critical pedagogy</span>
       <span class="wc-cell-role wc-cell-also">Escriptor i crític cultural</span>
-      <span class="wc-cell-code">AC008 Warm red</span>
+      <span class="wc-cell-code" style="--swatch: #eb5d41; --swatch-ink: var(--paper)"><span class="wc-code-band">AC008 Warm red</span></span>
     </p>
     <div class="wc-cell-text">
           <p>«Color for me opens a world that allows hope to present itself as a landscape of passion, possibility, and joy. Color pushes against the darkness, literal and symbolic, and creates a world in which words appear limited. Color elevates and merges with a visual world in which love and hope merge. Red is my color, it connects the blood in my veins and heart to the passion of resistance and the narratives of courage that give the present a future. «</p>
@@ -359,6 +383,11 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     -->
     <p class="wc-back"><a href="/prototype2/#whats-color">All of What&rsquo;s Color?</a></p>
     
+    <!--
+      The line the phone sheets close an edition on. Shown on a phone only,
+      where the link above is not; the words are About's own.
+    -->
+    <p class="wc-foot"><b>Claudia Valsells</b> © All Rights Reserved</p>
   </div></main>
 
 
@@ -375,10 +404,52 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     <div class="about-reel-track" data-about-track>
       <button type="button" class="about-reel-item">
             <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-1-800.avif 800w, /prototype2/about/about-1-1600.avif 1600w, /prototype2/about/about-1-2692.avif 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-1-800.webp 800w, /prototype2/about/about-1-1600.webp 1600w, /prototype2/about/about-1-2692.webp 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/avif" srcset="/prototype2/about/about-1-400.avif 400w, /prototype2/about/about-1-800.avif 800w, /prototype2/about/about-1-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-1-400.webp 400w, /prototype2/about/about-1-800.webp 800w, /prototype2/about/about-1-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
       <img
-        src="/prototype2/about/about-1-2692.jpg"
+        src="/prototype2/about/about-1-1600.jpg"
+        alt="Colour charts pinned to the studio wall above jars of brushes and a broad, paint-spattered brush"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-2-400.avif 400w, /prototype2/about/about-2-800.avif 800w, /prototype2/about/about-2-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-2-400.webp 400w, /prototype2/about/about-2-800.webp 800w, /prototype2/about/about-2-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-2-1600.jpg"
+        alt="Claudia Valsells in her studio among canvases and pots of paint, seen from above"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-3-400.avif 400w, /prototype2/about/about-3-800.avif 800w, /prototype2/about/about-3-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-3-400.webp 400w, /prototype2/about/about-3-800.webp 800w, /prototype2/about/about-3-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-3-1600.jpg"
+        alt="Claudia Valsells on a step, reaching up to paint the studio wall, a pot of paint in her hand"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-4-400.avif 400w, /prototype2/about/about-4-800.avif 800w, /prototype2/about/about-4-1600.avif 1600w, /prototype2/about/about-4-2692.avif 2692w" sizes="(max-width: 1097px) 177px, 16.1vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-4-400.webp 400w, /prototype2/about/about-4-800.webp 800w, /prototype2/about/about-4-1600.webp 1600w, /prototype2/about/about-4-2692.webp 2692w" sizes="(max-width: 1097px) 177px, 16.1vw" />
+      <img
+        src="/prototype2/about/about-4-2692.jpg"
         alt="Claudia Valsells, seen from behind, painting fields of colour on a studio wall with a pot of paint in hand"
         width="2692"
         height="1830"
@@ -389,11 +460,95 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
           </button><button type="button" class="about-reel-item">
             <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-2-800.avif 800w, /prototype2/about/about-2-1600.avif 1600w, /prototype2/about/about-2-2692.avif 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-2-800.webp 800w, /prototype2/about/about-2-1600.webp 1600w, /prototype2/about/about-2-2692.webp 2692w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/avif" srcset="/prototype2/about/about-5-400.avif 400w, /prototype2/about/about-5-800.avif 800w, /prototype2/about/about-5-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-5-400.webp 400w, /prototype2/about/about-5-800.webp 800w, /prototype2/about/about-5-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
       <img
-        src="/prototype2/about/about-2-2692.jpg"
+        src="/prototype2/about/about-5-1600.jpg"
+        alt="Claudia Valsells standing between two large canvases propped against the studio wall"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-6-400.avif 400w, /prototype2/about/about-6-800.avif 800w, /prototype2/about/about-6-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-6-400.webp 400w, /prototype2/about/about-6-800.webp 800w, /prototype2/about/about-6-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-6-1600.jpg"
+        alt="Pots of paint and brushes on a trestle in front of a painted canvas"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-7-400.avif 400w, /prototype2/about/about-7-800.avif 800w, /prototype2/about/about-7-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-7-400.webp 400w, /prototype2/about/about-7-800.webp 800w, /prototype2/about/about-7-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-7-1600.jpg"
+        alt="A hand holding up a pink board with a red square over a pot of paint"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-8-400.avif 400w, /prototype2/about/about-8-800.avif 800w, /prototype2/about/about-8-1600.avif 1600w, /prototype2/about/about-8-2327.avif 2327w" sizes="(max-width: 1097px) 153px, 13.9vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-8-400.webp 400w, /prototype2/about/about-8-800.webp 800w, /prototype2/about/about-8-1600.webp 1600w, /prototype2/about/about-8-2327.webp 2327w" sizes="(max-width: 1097px) 153px, 13.9vw" />
+      <img
+        src="/prototype2/about/about-8-2327.jpg"
         alt="Claudia Valsells painting a large canvas in her studio, pots of colour on the table beside her"
+        width="2327"
+        height="1830"
+        style="aspect-ratio:2327 / 1830"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-9-400.avif 400w, /prototype2/about/about-9-800.avif 800w, /prototype2/about/about-9-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-9-400.webp 400w, /prototype2/about/about-9-800.webp 800w, /prototype2/about/about-9-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-9-1600.jpg"
+        alt="Small paintings and patches of colour on a white studio wall"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-10-400.avif 400w, /prototype2/about/about-10-800.avif 800w, /prototype2/about/about-10-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-10-400.webp 400w, /prototype2/about/about-10-800.webp 800w, /prototype2/about/about-10-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-10-1600.jpg"
+        alt="A hand painting with a round brush on a canvas of green, pink and blue"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-11-400.avif 400w, /prototype2/about/about-11-800.avif 800w, /prototype2/about/about-11-1600.avif 1600w, /prototype2/about/about-11-2692.avif 2692w" sizes="(max-width: 1097px) 177px, 16.1vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-11-400.webp 400w, /prototype2/about/about-11-800.webp 800w, /prototype2/about/about-11-1600.webp 1600w, /prototype2/about/about-11-2692.webp 2692w" sizes="(max-width: 1097px) 177px, 16.1vw" />
+      <img
+        src="/prototype2/about/about-11-2692.jpg"
+        alt="Claudia Valsells unrolling a sheet of paper in front of her canvases"
         width="2692"
         height="1830"
         style="aspect-ratio:2692 / 1830"
@@ -403,10 +558,66 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
           </button><button type="button" class="about-reel-item">
             <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-3-800.avif 800w, /prototype2/about/about-3-845.avif 845w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-3-800.webp 800w, /prototype2/about/about-3-845.webp 845w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/avif" srcset="/prototype2/about/about-12-400.avif 400w, /prototype2/about/about-12-800.avif 800w, /prototype2/about/about-12-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-12-400.webp 400w, /prototype2/about/about-12-800.webp 800w, /prototype2/about/about-12-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
       <img
-        src="/prototype2/about/about-3-845.jpg"
+        src="/prototype2/about/about-12-1600.jpg"
+        alt="Claudia Valsells on a stepladder, putting up small paintings on the studio wall"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-13-400.avif 400w, /prototype2/about/about-13-800.avif 800w, /prototype2/about/about-13-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-13-400.webp 400w, /prototype2/about/about-13-800.webp 800w, /prototype2/about/about-13-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-13-1600.jpg"
+        alt="A hand setting a small painting on the studio wall beside an easel"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-14-400.avif 400w, /prototype2/about/about-14-800.avif 800w, /prototype2/about/about-14-1600.avif 1600w, /prototype2/about/about-14-2692.avif 2692w" sizes="(max-width: 1097px) 180px, 16.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-14-400.webp 400w, /prototype2/about/about-14-800.webp 800w, /prototype2/about/about-14-1600.webp 1600w, /prototype2/about/about-14-2692.webp 2692w" sizes="(max-width: 1097px) 180px, 16.4vw" />
+      <img
+        src="/prototype2/about/about-14-2692.jpg"
+        alt="Claudia Valsells at work at the end of her long studio, canvases laid out on the table"
+        width="2692"
+        height="1795"
+        style="aspect-ratio:2692 / 1795"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-15-400.avif 400w, /prototype2/about/about-15-800.avif 800w, /prototype2/about/about-15-1600.avif 1600w" sizes="(max-width: 1097px) 90px, 8.2vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-15-400.webp 400w, /prototype2/about/about-15-800.webp 800w, /prototype2/about/about-15-1600.webp 1600w" sizes="(max-width: 1097px) 90px, 8.2vw" />
+      <img
+        src="/prototype2/about/about-15-1600.jpg"
+        alt="A hand painting a deep red canvas with a fine brush"
+        width="1600"
+        height="2133"
+        style="aspect-ratio:1600 / 2133"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-16-400.avif 400w, /prototype2/about/about-16-800.avif 800w, /prototype2/about/about-16-845.avif 845w" sizes="(max-width: 1097px) 184px, 16.8vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-16-400.webp 400w, /prototype2/about/about-16-800.webp 800w, /prototype2/about/about-16-845.webp 845w" sizes="(max-width: 1097px) 184px, 16.8vw" />
+      <img
+        src="/prototype2/about/about-16-845.jpg"
         alt="Claudia Valsells reaching up to paint a canvas propped against the studio wall, among other canvases"
         width="845"
         height="550"
@@ -417,24 +628,10 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     </picture>
           </button><button type="button" class="about-reel-item">
             <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-4-800.avif 800w, /prototype2/about/about-4-833.avif 833w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-4-800.webp 800w, /prototype2/about/about-4-833.webp 833w" sizes="(max-width: 899px) 45vw, 20vw" />
+      <source type="image/avif" srcset="/prototype2/about/about-17-400.avif 400w, /prototype2/about/about-17-765.avif 765w" sizes="(max-width: 1097px) 127px, 11.6vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-17-400.webp 400w, /prototype2/about/about-17-765.webp 765w" sizes="(max-width: 1097px) 127px, 11.6vw" />
       <img
-        src="/prototype2/about/about-4-833.jpg"
-        alt="Claudia Valsells in her studio holding a palette and a brush over pots of paint"
-        width="833"
-        height="600"
-        style="aspect-ratio:833 / 600"
-        loading="lazy"
-        decoding="async"
-      />
-    </picture>
-          </button><button type="button" class="about-reel-item">
-            <picture class="">
-      <source type="image/avif" srcset="/prototype2/about/about-5-765.avif 765w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <source type="image/webp" srcset="/prototype2/about/about-5-765.webp 765w" sizes="(max-width: 899px) 45vw, 20vw" />
-      <img
-        src="/prototype2/about/about-5-765.jpg"
+        src="/prototype2/about/about-17-765.jpg"
         alt="Claudia Valsells in profile against a red wall stencilled AC 068"
         width="765"
         height="724"
@@ -443,8 +640,28 @@ try { var nav = performance.getEntriesByType('navigation')[0];
         decoding="async"
       />
     </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-18-400.avif 400w, /prototype2/about/about-18-800.avif 800w, /prototype2/about/about-18-833.avif 833w" sizes="(max-width: 1097px) 167px, 15.2vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-18-400.webp 400w, /prototype2/about/about-18-800.webp 800w, /prototype2/about/about-18-833.webp 833w" sizes="(max-width: 1097px) 167px, 15.2vw" />
+      <img
+        src="/prototype2/about/about-18-833.jpg"
+        alt="Claudia Valsells in her studio holding a palette and a brush over pots of paint"
+        width="833"
+        height="600"
+        style="aspect-ratio:833 / 600"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
           </button>
     </div>
+    <button type="button" class="about-reel-step is-prev" data-about-reel-step="-1" aria-label="Earlier photographs" hidden>
+      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="M8 1 1 8l7 7" /></svg>
+    </button>
+    <button type="button" class="about-reel-step is-next" data-about-reel-step="1" aria-label="More photographs" hidden>
+      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="m1 1 7 7-7 7" /></svg>
+    </button>
   </div>
           </div>
         </div>
