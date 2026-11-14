@@ -12,13 +12,15 @@ import { finePointer, phone, reduceMotion } from './env.ts';
 export function initCursor(): void {
   const cursor = document.querySelector<HTMLElement>('[data-cursor]');
   const label = cursor?.querySelector<HTMLElement>('.cursor-label');
-  // Not below 900px either: the phone's gallery answers no pointer, even
-  // where a narrow window happens to have one.
-  if (!cursor || !label || !finePointer.matches || phone.matches) return;
+  if (!cursor || !label || !finePointer.matches) return;
 
   // Only now is it safe to take the arrow away over a tile: without this class
   // a browser that never runs the script would leave people with no pointer.
-  document.documentElement.classList.add('has-cursor');
+  // Not below 900px: the phone's gallery answers no pointer, even where a
+  // narrow window happens to have one. That is the window as it stands and not
+  // as it was when the page loaded, so the class follows it (`follow`, below).
+  const root = document.documentElement;
+  root.classList.toggle('has-cursor', !phone.matches);
 
   let targetX = 0, targetY = 0, x = 0, y = 0;
   let active = false;
@@ -66,7 +68,7 @@ export function initCursor(): void {
   };
 
   document.addEventListener('pointermove', (event) => {
-    if (event.pointerType !== 'mouse') return;
+    if (event.pointerType !== 'mouse' || phone.matches) return;
     targetX = event.clientX;
     targetY = event.clientY;
     // Start where the pointer already is, or the label swoops in from 0,0.
@@ -82,7 +84,7 @@ export function initCursor(): void {
   // off, Safari pays for every one, which it felt during the opening's unfold.
   let looking = 0;
   const relook = () => {
-    if (!placed || looking) return;
+    if (!placed || looking || phone.matches) return;
     looking = requestAnimationFrame(() => {
       looking = 0;
       refresh(document.elementFromPoint(targetX, targetY));
@@ -97,6 +99,13 @@ export function initCursor(): void {
   const clear = () => { active = false; cursor.classList.remove('is-visible'); };
   window.addEventListener('pageshow', clear);
   window.addEventListener('pagehide', clear);
+
+  // Crossing 900px: the arrow comes back and the name goes, or the other way.
+  const follow = () => {
+    root.classList.toggle('has-cursor', !phone.matches);
+    if (phone.matches) clear();
+  };
+  phone.addEventListener('change', follow);
 
   document.addEventListener('pointerleave', () => {
     active = false;

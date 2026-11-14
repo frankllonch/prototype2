@@ -420,6 +420,22 @@ function chart(edition: Edition): Html {
  * page does not wait on three minutes of video to become usable. With scripting
  * or autoplay refused, the poster stands in its place and the page below is
  * unaffected — nothing here is load-bearing.
+ *
+ * The poster's address is printed as `data-poster`, not `poster`: a phone does
+ * not show the film, and a `poster` is fetched all the same. The line of
+ * script after the video makes it the poster where the window is wide enough
+ * for the film, there and then, so the still is in place before anything is
+ * painted; client/film.ts does the same for a window that is widened later.
+ * It is not left to that module alone because the section's background, which
+ * is the same picture and is the still with scripting off, is cut to the
+ * section, and the video is taller than the section (the parallax's spare):
+ * the still would change size when the module arrived.
+ *
+ * With scripting off there is no poster, and Chromium then draws the video
+ * black under the controls it puts on any video when scripts are off, which
+ * hid that background until the first frame came. The controls are taken off
+ * there, so the background is the still; nothing is lost, since the film
+ * starts, mutes and loops by itself.
  */
 export function whatsColorFilm(): Html {
   const poster = withBase('/video/whats-color-poster.jpg');
@@ -435,10 +451,12 @@ export function whatsColorFilm(): Html {
       loop
       playsinline
       preload="auto"
-      poster="${poster}"
+      data-poster="${poster}"
     >
       <source src="${withBase('/video/whats-color.mp4')}" type="video/mp4" media="(min-width: 900px)" />
     </video>
+    <script>(function (v) { if (!matchMedia('(max-width: 899px)').matches) v.poster = v.dataset.poster })(document.currentScript.previousElementSibling)</script>
+    <noscript><style>.wc-film-video::-webkit-media-controls { display: none !important; }</style></noscript>
   </section>`;
 }
 

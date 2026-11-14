@@ -64,11 +64,21 @@ function startFilm(): void {
    * so its one source carries `media="(min-width: 900px)"` and a phone makes no
    * request for it. Nothing is asked to play here; and if the window is later
    * made wide enough to show the film, the source is read again and it starts.
+   *
+   * Its still is kept from a phone the same way. A poster is fetched for a
+   * video nobody can see, and there is no asking for one by width, so the
+   * markup carries the address as `data-poster`. A window wide enough at the
+   * start has it made the poster by the line of script beside the video
+   * (components/whats-color.ts); one that becomes wide enough later has it
+   * made here.
    */
   if (phone.matches) {
     phone.addEventListener('change', () => { if (!phone.matches) { video.load(); startFilm(); } }, { once: true });
     return;
   }
+
+  const still = video.dataset.poster;
+  if (still && !video.hasAttribute('poster')) video.poster = still;
 
   video.muted = true;
   video.playsInline = true;
@@ -87,6 +97,8 @@ function startFilm(): void {
     );
 
   const onGesture = () => {
+    // Kept for when there is a film on screen to start.
+    if (phone.matches) return;
     for (const type of GESTURES) window.removeEventListener(type, onGesture);
     void ask();
   };
@@ -100,7 +112,15 @@ function startFilm(): void {
 
   // Safari stops the film with the tab and does not always take it up again.
   document.addEventListener('visibilitychange', () => {
-    if (!document.hidden && video.paused) void ask();
+    if (!document.hidden && video.paused && !phone.matches) void ask();
+  });
+
+  // Below 900px the film is not shown, and a film that is only hidden goes on
+  // decoding: stopped there, and taken up again where it was when the window
+  // is wide enough to show it.
+  phone.addEventListener('change', () => {
+    if (phone.matches) video.pause();
+    else void ask();
   });
 }
 

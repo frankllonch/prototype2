@@ -23,7 +23,8 @@ export function initMenu(): void {
   const root = document.documentElement;
   const bar = document.querySelector<HTMLElement>('.top');
   const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
-  if (!bar || !toggle) return;
+  // No menu on the page, nothing for the head to give back (see the end).
+  if (!bar || !toggle) { root.setAttribute('data-menu', ''); return; }
 
   const startPage = root.hasAttribute('data-start');
   // The page the panels here belong to. Read now, because in WordPress an open
@@ -67,25 +68,41 @@ export function initMenu(): void {
   const raise = () => { root.classList.add('is-menu-open'); sync(); };
   const lower = () => { root.classList.remove('is-menu-open', 'is-menu-held'); sync(); };
 
-  /** To the start screen: the top of the page, and its plain address. */
+  /** The step `toNames` makes is marked, so `toStart` can tell it is standing on it. */
+  const onStep = () => (history.state as { start?: boolean } | null)?.start === true;
+
+  /**
+   * To the start screen: the top of the page, and its plain address.
+   *
+   * From the step `toNames` made that is one step back, and it is taken as
+   * one. Replacing the address instead left the start screen in the history
+   * twice running, once more for every round of hamburger and wordmark, and
+   * Back then had to be pressed through each copy with nothing changing on
+   * screen. `settle` hears the step back and finds the screen already up.
+   */
   const toStart = () => {
     root.classList.add('is-start');
     root.classList.remove('is-menu-open');
-    history.replaceState(null, '', location.pathname + location.search);
+    if (onStep()) history.back();
+    else history.replaceState(null, '', location.pathname + location.search);
     window.scrollTo(0, 0);
     sync();
   };
   /** From it to What's Color?, which is one step on, so Back returns here. */
   const toNames = () => {
     const was = atStart();
+    // Asked for from inside the bar, which is about to go out of sight and
+    // would take the keyboard's place with it.
+    const within = bar.contains(document.activeElement);
     root.classList.remove('is-start', 'is-menu-open');
     if (location.hash !== '#whats-color') {
-      if (was) history.pushState(null, '', '#whats-color');
+      if (was) history.pushState({ start: true }, '', '#whats-color');
       else history.replaceState(null, '', '#whats-color');
     }
     const section = document.getElementById('whats-color');
     window.scrollTo(0, writtenPoint() ?? (section ? section.getBoundingClientRect().top + window.scrollY : 0));
     sync();
+    if (within) toggle.focus({ preventScroll: true });
   };
 
   toggle.addEventListener('click', () => {
@@ -117,8 +134,11 @@ export function initMenu(): void {
     event.preventDefault();
     if (startPage && link === wordmark) return toStart();
     if (startPage && link === names) return toNames();
-    // The page you are on: back to it, and out of any panel open on it.
+    // The page you are on: back to it, and out of any panel open on it. The
+    // button takes the keyboard from the link, which goes out of sight.
+    const within = bar.contains(document.activeElement);
     lower();
+    if (within) toggle.focus({ preventScroll: true });
     document.querySelector<HTMLElement>('.panel.is-open [data-panel-close]')?.click();
   }, true);
 
@@ -130,14 +150,31 @@ export function initMenu(): void {
     toggle.focus({ preventScroll: true });
   }, true);
 
-  const settle = () => {
-    root.classList.toggle('is-start', wantsStart());
+  /*
+   * The start screen comes with the address and never with the window. The
+   * head raises it for an arrival, and Back or Forward onto the start page's
+   * plain address raise it here (`byAddress`). Everything else that settles —
+   * the boot, a page restored whole, the window crossing 900px — may take it
+   * down and may not put it up: a tablet read on its side and then turned
+   * upright is below 900 at the start page's address, and had the menu dropped
+   * over the text being read. There the address is made to say what is on
+   * screen instead — the page, not the screen before it — so a later Back onto
+   * it (out of About, say) does not raise the start screen either.
+   */
+  const settle = (byAddress = false) => {
+    if (!wantsStart()) root.classList.remove('is-start');
+    else if (byAddress) root.classList.add('is-start');
+    else if (!atStart() && location.hash === '') history.replaceState(history.state, '', '#whats-color');
     if (!phone.matches || atStart()) root.classList.remove('is-menu-open', 'is-menu-held');
     sync();
   };
-  window.addEventListener('popstate', settle);
-  window.addEventListener('hashchange', settle);
+  window.addEventListener('popstate', () => settle(true));
+  window.addEventListener('hashchange', () => settle(true));
   window.addEventListener('pageshow', (event) => { if (event.persisted) { root.classList.remove('is-menu-open', 'is-menu-held'); settle(); } });
-  phone.addEventListener('change', settle);
+  phone.addEventListener('change', () => settle());
   settle();
+
+  // Said last, once the button answers: the head of the page waits to hear it
+  // (components/layout.ts) and otherwise gives the menu back to the document.
+  root.setAttribute('data-menu', '');
 }

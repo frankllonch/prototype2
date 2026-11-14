@@ -59,6 +59,10 @@
   }
   /* 44 x 44 to press, without moving the bars */
   .menu-toggle::before { content: ''; position: absolute; inset: calc(-13.5 * var(--p)) calc(-8.5 * var(--p)); }
+  /* Reached by key, a frame round the bars. The site shows focus as it shows
+     hover, by a change of colour (00-base.css), and this button has neither a
+     hover nor a second colour to change to. Never drawn for a finger. */
+  .menu-toggle:focus-visible { outline: calc(2 * var(--p)) solid currentColor; outline-offset: calc(8 * var(--p)); }
   /* The overlays that keep a Close of their own in this corner. */
   body:has(.about.is-open) .menu-toggle,
   body:has(.lightbox.is-open) .menu-toggle,
@@ -86,7 +90,9 @@
   html.is-start .top { z-index: 50; }
   html.is-menu-open .top, html.is-start .top { visibility: visible; opacity: 1; transition-delay: 0s; }
   html.is-menu-open body, html.is-start body { overflow: hidden; }
-  html.is-menu-open .scroll-thumb, html.is-start .scroll-thumb { visibility: hidden; }
+  /* The scroll handle the site draws for itself (client/scrollbar.ts) is the
+     desktop's: no phone sheet has it, and it stood in the page's right margin. */
+  .scroll-thumb { display: none; }
   /* Leaving for another page: the words go, the paper stays for the next page's own fade. */
   html.is-leaving:not(.is-menu-held) .top > * { opacity: 0; transition: opacity 0.3s var(--ease); }
 
@@ -119,6 +125,13 @@
   }
   /* One colour for every state: nothing on the sheet is dimmed. */
   .top :is(.wordmark, .top-soon, .menu a):is(*, :hover, :focus-visible, [aria-current='page']) { color: var(--ink); --roll-color: var(--ink); }
+  /* Which leaves the keyboard nothing to show where it is, the desktop bar's
+     focus being that change of colour: reached by key, the word is underlined. */
+  .top :is(.wordmark, .top-soon, .menu a):focus-visible { text-decoration: underline; text-underline-offset: 0.12em; }
+  /* The letters boxed for the desktop's other hover (client/scramble.ts), left
+     in the words when a window that loaded wide goes below 900px: they flow as
+     plain text. The roll's are taken out again by its own script. */
+  .top .scram { display: inline; }
   /* The two names break after their first word because the column is 335 wide. */
   .wordmark, .top-soon { width: calc(335 * var(--p)); white-space: normal; }
   .wordmark { margin-bottom: calc(179 * var(--p)); }
@@ -127,6 +140,8 @@
     gap: calc(27 * var(--p));
     margin-top: calc(103 * var(--p));
   }
+  /* Drawn in the sheet's order; a keyboard walks them in the document's, which
+     is the desktop bar's. */
   .menu a { white-space: nowrap; order: var(--menu-phone, 0); }
 
   /* ------------------------------- no block of colour on the phone */

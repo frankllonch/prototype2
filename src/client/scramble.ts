@@ -111,7 +111,9 @@ function wire(root: HTMLElement, cells: readonly HTMLElement[]): void {
   };
 
   const run = () => {
-    if (reduceMotion.matches) return;
+    // Nor on a page that loaded wide and is below 900px now: the boxes are
+    // still in the words there (09-phone.css lets them flow as plain text).
+    if (reduceMotion.matches || phone.matches) return;
     if (frame) return;
     let piece = -1;
 

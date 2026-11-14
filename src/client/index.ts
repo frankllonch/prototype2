@@ -31,6 +31,14 @@ import { initGlide } from './glide.ts';
 import { initWrite } from './write.ts';
 import { initMenu } from './menu.ts';
 
+// The head stops waiting for these scripts after a few seconds and lets the
+// page stand as it does without them (components/layout.ts). Arriving later
+// than that, they take it back before anything below reads the document.
+document.documentElement.classList.add('js');
+// The menu first: on a phone it is the only way from one page to another, so
+// nothing that fails further down may leave its button unanswered. And before
+// the panels: it gets out of About's way on the click that opens it.
+initMenu();
 // One hover or the other, never both: the document says which, and
 // components/layout.ts is where that is decided.
 if (document.documentElement.dataset.hover === 'scramble') initScramble();
@@ -40,8 +48,6 @@ initControls();
 initStack();
 initYears();
 initHoverList();
-// Before the panels: the menu gets out of About's way on the click that opens it.
-initMenu();
 initPanels();
 initFigures();
 initSheets();

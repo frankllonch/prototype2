@@ -442,14 +442,21 @@ function cv_wc_split_role( string $role ): array {
 /**
  * The opening film: the documentation of edition I, full screen, with the bar
  * across the middle of it. The `media` on its source keeps a phone, whose start
- * page has no film, from fetching it.
+ * page has no film, from fetching it, and `data-poster` in place of `poster`
+ * does the same for its still: the line of script after the video makes it
+ * the poster where the film is shown, and client/film.ts does for a window
+ * widened later. With scripting off the browser's controls are taken off the
+ * video, which drew it black over the section's still (components/whats-color.ts).
  */
 function cv_wc_film(): string {
 	$poster = cv_asset( 'video/whats-color-poster.jpg' );
 	return '<section class="wc-film" style="--film-poster: url(\'' . esc_url( $poster ) . '\')" aria-label="What’s Color? (I), Alzueta Gallery, December 2020">'
-		. '<video class="wc-film-video" autoplay muted loop playsinline preload="auto" poster="' . esc_url( $poster ) . '">'
+		. '<video class="wc-film-video" autoplay muted loop playsinline preload="auto" data-poster="' . esc_url( $poster ) . '">'
 		. '<source src="' . esc_url( cv_asset( 'video/whats-color.mp4' ) ) . '" type="video/mp4" media="(min-width: 900px)" />'
-		. '</video></section>';
+		. '</video>'
+		. '<script>(function (v) { if (!matchMedia(\'(max-width: 899px)\').matches) v.poster = v.dataset.poster })(document.currentScript.previousElementSibling)</script>'
+		. '<noscript><style>.wc-film-video::-webkit-media-controls { display: none !important; }</style></noscript>'
+		. '</section>';
 }
 
 /** The start page's body, with or without About already open over it. */

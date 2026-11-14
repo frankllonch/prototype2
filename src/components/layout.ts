@@ -349,7 +349,15 @@ try { var nav = performance.getEntriesByType('navigation')[0];
 try { if (document.documentElement.hasAttribute('data-start')
   && matchMedia('(max-width: 899px)').matches
   && (location.hash === '' || location.hash === '#about'))
-  document.documentElement.classList.add('is-start') } catch (e) {}</script>
+  document.documentElement.classList.add('is-start') } catch (e) {}
+// From here on the stylesheet keeps the phone's menu out of sight, and only
+// client/menu.ts can raise it. If that has not said it is there after four
+// seconds — the scripts never arrived, or one of them fell over on the way —
+// the page goes back to what it is without them: the menu at its head, in
+// the flow, and no start screen held over it. Scripts that arrive later than
+// that take the page back (client/index.ts).
+setTimeout(function () { var root = document.documentElement;
+  if (!root.hasAttribute('data-menu')) root.classList.remove('js', 'is-start') }, 4000);</script>
 </head>
 <body${bodyClass ? ' class="' + bodyClass + '"' : ''}>
 <div class="page-veil" aria-hidden="true"></div>
