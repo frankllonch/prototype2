@@ -51,7 +51,7 @@ export function initMenu(): void {
    */
   const held = new Set<HTMLElement>();
   const sync = () => {
-    const shown = raised() || (atStart() && !collapsed());
+    const shown = (raised() || atStart()) && !collapsed();
     toggle.setAttribute('aria-expanded', String(shown));
     for (const el of held) el.inert = false;
     held.clear();
@@ -66,7 +66,7 @@ export function initMenu(): void {
   };
 
   const raise = () => { root.classList.add('is-menu-open'); sync(); };
-  const lower = () => { root.classList.remove('is-menu-open', 'is-menu-held', 'is-menu-closing'); sync(); };
+  const lower = () => { root.classList.remove('is-menu-open', 'is-menu-held', 'is-menu-closing', 'is-menu-collapsed'); sync(); };
 
   /*
    * The sections leave as they came, in the reverse cascade (THE MENU'S MOTION
@@ -131,12 +131,13 @@ export function initMenu(): void {
     if (within) toggle.focus({ preventScroll: true });
   };
 
-  // The bars close what is showing and go nowhere (Frank, 2026-11-15): a
-  // raised menu leaves the page as it was; the start screen keeps its name.
+  // The bars close what is showing and go nowhere (Frank, 2026-11-15): the
+  // sections leave and the name stays with the bars, over the paper, on the
+  // start screen and over any other page alike. Only a section, the name, or
+  // Escape leaves the menu for a page.
   toggle.addEventListener('click', () => {
     if (root.classList.contains('is-menu-closing')) return;
-    if (raised()) leave(lower);
-    else if (atStart()) (collapsed() ? expand() : collapse());
+    if (raised() || atStart()) (collapsed() ? expand() : collapse());
     else raise();
   });
 
@@ -195,11 +196,12 @@ export function initMenu(): void {
     else if (byAddress) root.classList.add('is-start');
     else if (!atStart() && location.hash === '') history.replaceState(history.state, '', '#whats-color');
     if (!phone.matches || atStart()) root.classList.remove('is-menu-open', 'is-menu-held');
+    if (!phone.matches || (!atStart() && !raised())) root.classList.remove('is-menu-collapsed');
     sync();
   };
   window.addEventListener('popstate', () => settle(true));
   window.addEventListener('hashchange', () => settle(true));
-  window.addEventListener('pageshow', (event) => { if (event.persisted) { root.classList.remove('is-menu-open', 'is-menu-held'); settle(); } });
+  window.addEventListener('pageshow', (event) => { if (event.persisted) { root.classList.remove('is-menu-open', 'is-menu-held', 'is-menu-closing', 'is-menu-collapsed'); settle(); } });
   phone.addEventListener('change', () => settle());
   settle();
 

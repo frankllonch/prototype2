@@ -230,13 +230,13 @@
   .menu-line:nth-child(2) { top: calc(7 * var(--p));     transition-duration: var(--line2-duration); transition-delay: var(--line2-delay); }
   .menu-line:nth-child(3) { top: calc(14 * var(--p));    transition-duration: var(--line3-duration); transition-delay: var(--line3-delay); }
 
-  :is(html.is-menu-open, html.is-start:not(.is-menu-collapsed)):not(.is-menu-closing) .menu-line:nth-child(1) {
+  :is(html.is-menu-open, html.is-start):not(.is-menu-collapsed, .is-menu-closing) .menu-line:nth-child(1) {
     transform: translateY(calc(var(--line1-shift) * var(--p))) rotate(var(--line1-rotate)); opacity: var(--line1-opacity);
   }
-  :is(html.is-menu-open, html.is-start:not(.is-menu-collapsed)):not(.is-menu-closing) .menu-line:nth-child(2) {
+  :is(html.is-menu-open, html.is-start):not(.is-menu-collapsed, .is-menu-closing) .menu-line:nth-child(2) {
     transform: translateY(calc(var(--line2-shift) * var(--p))) rotate(var(--line2-rotate)); opacity: var(--line2-opacity);
   }
-  :is(html.is-menu-open, html.is-start:not(.is-menu-collapsed)):not(.is-menu-closing) .menu-line:nth-child(3) {
+  :is(html.is-menu-open, html.is-start):not(.is-menu-collapsed, .is-menu-closing) .menu-line:nth-child(3) {
     transform: translateY(calc(var(--line3-shift) * var(--p))) rotate(var(--line3-rotate)); opacity: var(--line3-opacity);
   }
 
@@ -252,9 +252,10 @@
     animation-direction: reverse;
     animation-delay: calc((5 - var(--cascade-at)) * var(--cascade-step));
   }
-  /* Put away on the start screen: the name and the bars stay, the rest is gone. */
-  html.is-start.is-menu-collapsed:not(.is-menu-closing) .top :is(.top-soon, .menu) { visibility: hidden; }
-  html.is-start.is-menu-collapsed:not(.is-menu-closing) .top :is(.top-soon, .menu a) { animation: none; }
+  /* Put away, on the start screen or over a page: the name and the bars stay
+     on the paper, the rest is gone (Frank, 2026-11-15). */
+  html.is-menu-collapsed:not(.is-menu-closing) .top :is(.top-soon, .menu) { visibility: hidden; }
+  html.is-menu-collapsed:not(.is-menu-closing) .top :is(.top-soon, .menu a) { animation: none; }
   /* The paper stays until the last section has gone. */
   html.is-menu-closing .top { visibility: visible; opacity: 1; transition: none; }
 }
