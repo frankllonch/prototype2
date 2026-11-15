@@ -187,8 +187,8 @@
  *   --lineN-duration  how long the turn takes
  *   --lineN-delay     how long it waits before turning
  *   --line-ease       the turn's curve, the same for all three
- * The defaults make an X: top and bottom meet on the middle line and turn
- * ±45°, the middle one goes.
+ * Frank's settings (2026-11-15): top and bottom meet on the middle line and
+ * turn ±45°, the middle one stays and spins a half turn.
  *
  * The cascade: the sections drop in one after another, top to bottom, and
  * leave in the reverse order when the menu closes.
@@ -206,14 +206,14 @@
 @media (max-width: 899px) {
   :root {
     --line1-rotate: 45deg;   --line1-shift: 7;  --line1-opacity: 1; --line1-duration: 400ms; --line1-delay: 0ms;
-    --line2-rotate: 0deg;    --line2-shift: 0;  --line2-opacity: 0; --line2-duration: 200ms; --line2-delay: 0ms;
-    --line3-rotate: -45deg;  --line3-shift: -7; --line3-opacity: 1; --line3-duration: 400ms; --line3-delay: 0ms;
+    --line2-rotate: -180deg; --line2-shift: 0;  --line2-opacity: 1; --line2-duration: 650ms; --line2-delay: 0ms;
+    --line3-rotate: -45deg;  --line3-shift: -7; --line3-opacity: 1; --line3-duration: 530ms; --line3-delay: 0ms;
     --line-ease: cubic-bezier(0.65, 0, 0.35, 1);
 
-    --cascade-style: cascade-slide;
-    --cascade-duration: 420ms;
-    --cascade-step: 60ms;
-    --cascade-distance: 24;
+    --cascade-style: cascade-unfold;
+    --cascade-duration: 70ms;
+    --cascade-step: 90ms;
+    --cascade-distance: 120;
     --cascade-ease: cubic-bezier(0.22, 1, 0.36, 1);
   }
 
