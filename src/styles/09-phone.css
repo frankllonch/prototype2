@@ -300,3 +300,17 @@
   }
   .phone-pop.is-in { opacity: 1; filter: none; transform: none; }
 }
+
+/*
+ * Nothing on a phone pulls past its top or its foot: not the pages, not the
+ * start page (which had pull-to-reload back on, 04-whats-color.css), not a
+ * sheet, About or the menu (Frank, 2026-11-15).
+ */
+@media (max-width: 899px) {
+  html,
+  html:has(body.has-film),
+  body,
+  .panel:is(.panel, :has(> .sheet), :has(> .plates)),   /* as heavy as 07-sheet.css's own */
+  .about,
+  .top { overscroll-behavior-y: none; }
+}

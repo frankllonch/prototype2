@@ -510,10 +510,3 @@
   .year-swatch { display: none; }
   .year-label { display: block; margin: 0; color: inherit; }
 }
-
-/* The gallery on a phone stops at its top and its foot: no pulling past
-   either into the empty ground behind the page (Frank, 2026-11-15). */
-@media (max-width: 899px) {
-  html:has(.grid[data-stack]),
-  html:has(.grid[data-stack]) body { overscroll-behavior-y: none; }
-}
