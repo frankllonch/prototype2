@@ -9,9 +9,10 @@
  * The designer's phone sheets are 375 wide, and every figure in the phone
  * rules across the site is a measurement off those sheets, written as so many
  * of `--p`: one unit of that frame. On a 375 phone it is one pixel, on a wider
- * phone the whole sheet grows with the screen, as the desktop's does with its
- * 1920 — up to `--phone-frame-max`, past which it stops growing so that a
- * phone on its side or a small tablet is not set in 90px type.
+ * phone or an upright tablet the whole sheet grows with the screen, as the
+ * desktop's does with its 1920, so a tablet is the phone layout at its own
+ * size. A phone on its side is the exception: wide but short, it stops growing
+ * at `--phone-frame-max` so that it is not set in 90px type.
  *
  * The phone layout is everything below 900px wide: `(max-width: 899px)` here
  * and in each page's own sheet, `phone` in client/env.ts for the scripts.
@@ -21,7 +22,10 @@
 @media (max-width: 899px) {
   :root {
     --phone-frame-max: 480px;
-    --p: calc(min(100vw, var(--phone-frame-max)) / 375);
+    --p: max(
+      calc(min(100vw, var(--phone-frame-max)) / 375),
+      min(calc(100vw / 375), calc(100dvh / 667))
+    );
     /* The page margin of the phone sheets: 20 either side, content 335 wide. */
     --phone-pad: calc(20 * var(--p));
     /* What a page with no sheet of its own clears at the top: the three bars
