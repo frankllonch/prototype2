@@ -74,6 +74,12 @@
   .detail-plate { --tilt-max: 0deg; --tilt-lift: 1; }
 }
 
+/* Nor anywhere but the computer layout, mouse or not: the lean is the
+   desktop's, and the phone and tablet layouts are still (Frank, 2026-11-15). */
+@media (max-width: 899px) {
+  .detail-plate, [data-tilt] { --tilt-max: 0deg; --tilt-lift: 1; }
+}
+
 /* ------------------------------------------------- the other pictures */
 
 /*
@@ -301,6 +307,68 @@
     overflow: visible;
     clip-path: none;
     opacity: 1;
+  }
+}
+
+/*
+ * A WORK ON A PHONE, ON ONE SCREEN (Frank, 2026-11-15): plain white, nothing
+ * scrolls, the painting first and as big as what is left allows, the words
+ * compact under it, the count at the foot and Close at the top left where the
+ * sheets keep theirs. Swipe still pages; a touch of the ground still closes.
+ *
+ *   --work-chrome   everything on the screen that is not the painting: the
+ *                   top, the small pictures, the caption and the count. The
+ *                   painting takes the screen's height less this.
+ */
+@media (max-width: 899px) {
+  .detail {
+    --work-top: calc(64 * var(--p));
+    --work-type: calc(16 * var(--p));
+    --work-lead: calc(20 * var(--p));
+    --work-pair: calc(2 * var(--p));
+    --work-break: calc(10 * var(--p));
+    --work-plate: calc(16 * var(--p));
+    --under-gap: calc(12 * var(--p));
+    --work-foot: calc(16 * var(--p));
+    --work-ghost: 0;
+    --work-chrome: calc(300 * var(--p) + env(safe-area-inset-bottom, 0px));
+    --plate-max: calc(100dvh - var(--work-chrome));
+    height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
+    /* A wide work leaves room over: the painting and its words stand in the
+       middle of what is between Close and the count. */
+    justify-content: center;
+    padding-bottom: calc(56 * var(--p) + env(safe-area-inset-bottom, 0px));
+  }
+  .detail-ghost { display: none; }
+  .detail-stage { order: 1; margin-top: 0; }
+  .detail-caption { order: 2; margin-top: var(--work-plate); }
+  .detail-plate img { max-height: var(--plate-max); width: auto; }
+
+  .detail .detail-index,
+  .detail .detail-index:first-child {
+    position: fixed;
+    left: 0; right: 0;
+    bottom: calc(var(--work-foot) + env(safe-area-inset-bottom, 0px));
+    margin: 0;
+    text-align: center;
+  }
+
+  /* Close, as every sheet has it: top left, on the line of the three bars. */
+  html.js .detail-back.detail-close {
+    position: fixed; z-index: 2;
+    top: calc(20 * var(--p)); left: var(--phone-pad); right: auto;
+    width: auto; height: auto;
+    opacity: 1;
+    margin: 0;
+    overflow: visible;
+    clip-path: none;
+    font-size: calc(20 * var(--p));
+    line-height: calc(20 * var(--p));
+    font-weight: 400;
+    letter-spacing: 0;
+    color: var(--ink);
   }
 }
 
