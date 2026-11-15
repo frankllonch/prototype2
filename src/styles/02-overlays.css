@@ -611,11 +611,24 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   .about-record { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 3.5em; }
   .about-show-columns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+/*
+ * On a phone too the record stays in two columns, solo beside group and the
+ * fairs in their own two (Frank, 2026-11-15: one column ran too long), set
+ * smaller to fit: --about-record-type is the size there.
+ */
 @media (max-width: 559px) {
   .about-text > p { text-align: left; }
-  .about-record { grid-template-columns: minmax(0, 1fr); }
-  .about-shows.is-wide { grid-column: auto; }
-  .about-show-columns { grid-template-columns: minmax(0, 1fr); row-gap: calc(65.5em / 20); }
+  .about-record {
+    --about-record-type: calc(11 * var(--p, 1px));
+    font-size: var(--about-record-type);
+    column-gap: calc(14 * var(--p, 1px));
+  }
+  .about-record { row-gap: 2.5em; }
+  .about-record .about-label { font-size: inherit; margin-bottom: 1.5em; }
+  .about-show-list, .about-collection-list { row-gap: 1.4em; }
+  .about-shows, .about-collections { padding-right: 0; }
+  .about-show-columns { column-gap: calc(14 * var(--p, 1px)); }
+  .about-show-columns > .about-show-list { padding-right: 0; }
 }
 
 html:not(.js) .about { display: none; }
