@@ -30,6 +30,7 @@ import { initWcTexts } from './texts.ts';
 import { initGlide } from './glide.ts';
 import { initWrite } from './write.ts';
 import { initMenu } from './menu.ts';
+import { initReveal } from './reveal.ts';
 
 // The head stops waiting for these scripts after a few seconds and lets the
 // page stand as it does without them (components/layout.ts). Arriving later
@@ -68,3 +69,4 @@ initWcFocus();
 initWcTexts();
 initGlide();
 initWrite();
+initReveal();

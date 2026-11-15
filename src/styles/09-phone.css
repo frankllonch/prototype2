@@ -281,3 +281,21 @@
   .menu-line { transition: none; }
   .top :is(.top-soon, .menu a) { animation: none !important; }
 }
+
+/*
+ * What's Color? and the Color Chart come in as About's record does: each block
+ * rises a little out of a blur as it reaches the screen (client/reveal.ts).
+ * The same figures as `.about-pop` in 02-overlays.css.
+ */
+@media (max-width: 899px) {
+  .phone-pop {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(14px);
+    transition:
+      opacity 0.9s var(--ease) var(--pop-delay, 0s),
+      filter 0.9s var(--ease) var(--pop-delay, 0s),
+      transform 0.9s var(--ease) var(--pop-delay, 0s);
+  }
+  .phone-pop.is-in { opacity: 1; filter: none; transform: none; }
+}
