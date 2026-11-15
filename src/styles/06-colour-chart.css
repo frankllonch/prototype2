@@ -118,8 +118,10 @@
  * and the page is the static one the sheet draws.
  *
  * And from 900 wide up only. The phone sheet is a page taller than a phone,
- * which cannot be pinned to one screen, so there it is the static page too
- * (the phone block below; `client/chart.ts` makes the same test).
+ * which cannot stand whole on one screen, so a phone held upright has a run
+ * of its own, measured in lengths rather than in shares of the document (the
+ * block after the phone one, Frank, 2026-11-15); on its side it is the static
+ * page (`client/env.ts`, `scrollWrites`, makes the same test).
  */
 .chart-runway { display: none; }
 
@@ -297,11 +299,12 @@
 /*
  * The phone sheet ("COLOR CHART PHONE", 375 wide).
  *
- * A page you scroll, not a page that is written. At the sheet's sizes it is
- * 1080 tall, and Order yours and the thanks cannot be held on one pinned
- * screen, so below 900 there is no pin, no run behind it, no cue and no line
- * at the foot: every word stands and the document scrolls the ordinary way.
- * (The query on the writing, above, is what leaves the words standing.)
+ * At the sheet's sizes it is 1080 tall, and Order yours and the thanks cannot
+ * be held on one pinned screen, so here there is no line at the foot, and the
+ * page as this block leaves it has no pin, no run behind it and no cue: every
+ * word stands and the document scrolls the ordinary way. That is the page on
+ * its side, or wherever the scroll writes nothing; held upright, the block
+ * after this one writes the statement first (Frank, 2026-11-15).
  *
  * Every figure is the sheet's, in units of its frame (`--p`, 09-phone.css).
  * The ones to change by hand are the list at the top; the side margin is the
@@ -386,6 +389,61 @@
   .chart-footer { display: none; }
   /* Nothing is written by the scroll here, so there is nothing to cue. */
   .chart-body .scroll-cue { display: none; }
+}
+
+/*
+ * The statement typed by the scroll on a phone held upright (Frank,
+ * 2026-11-15): the page arrives blank, the first paragraph types itself
+ * (`client/chart.ts`) and the cue asks for the rest; scrolling types the
+ * other two and scrolling back takes every word away again. Once the last
+ * word stands, Order yours, the cost and the thanks pop in under it
+ * (`client/chart.ts` again — they come in as everything else on a phone does,
+ * not over a slice of the run).
+ *
+ * The desktop's mechanism on the phone's sheet: the page is stuck to the top
+ * and a run behind it is what the reader travels. The page is taller than
+ * the screen, so it is pinned with its foot below the edge, and lets go when
+ * the run is spent. Each word's turn is a length of that run — its fractions
+ * (`--w0`, `--w1`, written at build) times --chart-phone-run — so neither the
+ * page's height nor the toolbar coming and going moves a word. This relies on
+ * the chart starting at the top of the document, which on a phone it does.
+ *
+ * Upright only, for the same reason as the note on What's Color: on its side
+ * the pinned statement runs below the foot of the screen.
+ */
+@supports (animation-timeline: scroll()) {
+  /* Upright and tall enough for the statement to be typed on screen: a phone
+     no squatter than 375 by 590, or one wide enough that --p follows the
+     height. client/env.ts asks the same (`chartUpright`). */
+  @media (prefers-reduced-motion: no-preference) and (max-width: 899px) and (orientation: portrait) and ((max-aspect-ratio: 375/590) or (min-width: 481px)) {
+    /* THE knob for "the typing is too fast / too slow": more is slower. At
+       2400 each word has about 22 of travel. */
+    /* In the small viewport's height rather than --p, which past 480 wide
+       follows the dynamic one: a toolbar coming and going must not move a word. */
+    .chart { --chart-phone-run: calc(2400 * max(min(100vw, 480px) / 375, min(100vw / 375, 100svh / 667))); }
+
+    .chart-page { position: sticky; top: 0; }
+
+    .chart-runway {
+      display: block;
+      /* The pin lets go when the last word stands: the words take 0.8 of the
+         run (data-chart-written), so the runway is that much of it. */
+      height: calc(var(--chart-phone-run) * 0.8);
+    }
+
+    .chart-word {
+      opacity: 0;
+      animation: chart-word-in steps(1, jump-start) both;
+      animation-timeline: scroll(root block);
+      /* Important, because the desktop's range rides on the element too, as
+         its inline style, and would otherwise outrank this one. */
+      animation-range:
+        calc(var(--w0) * var(--chart-phone-run))
+        calc(var(--w1) * var(--chart-phone-run)) !important;
+    }
+
+    html.js .chart-body .scroll-cue { display: block; }
+  }
 }
 
 /* --------------------------------------------------------------- inquiries */

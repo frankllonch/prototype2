@@ -1310,9 +1310,8 @@ html:has(body.has-film) {
   background-size: calc(100% - 0.033em) 0.905em;
 }
 
-/* From 900 up only: on a phone the note is not written by the scroll, it is
-   an ordinary paragraph at the head of the page (the phone rules at the foot
-   of this sheet), and so are the names under it. */
+/* From 900 up. A phone held upright has a stage of its own, at the foot of
+   this sheet, on the same words and the same timeline (Frank, 2026-11-15). */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) and (min-width: 900px) {
     .wc-write {
@@ -1563,10 +1562,11 @@ a.wc-bar:focus-visible {
  * measurement from them in units of that frame (`--p`, 09-phone.css), and the
  * ones to tune by hand are the first rule's.
  *
- * There is no film here, no cue and no writing by the scroll (the stage above
- * is the desktop's alone): past the menu the page opens on the note, set as
- * an ordinary paragraph, and the three rosters and the three texts follow it
- * down one column, 20 in from either edge.
+ * There is no film here: past the menu the page opens on the note, and the
+ * three rosters and the three texts follow it down one column, 20 in from
+ * either edge. Held upright, the note is typed by the scroll from a blank
+ * page (the block after this one); on its side, or wherever the scroll writes
+ * nothing, it is an ordinary paragraph and there is no cue.
  *
  * This block and the editions' after it stay at the foot of the sheet: this
  * one has to come after the rule that sets `.wc-lead` justified a second time.
@@ -1667,6 +1667,57 @@ a.wc-bar:focus-visible {
     content: '';
     position: absolute;
     inset: calc(-12 * var(--p)) calc(-20 * var(--p));
+  }
+}
+
+/*
+ * The note typed by the scroll on a phone held upright (Frank, 2026-11-15):
+ * the page opens blank with the cue asking for the scroll, the note's words
+ * step in as it comes, down to the invitation, and step out again as it goes
+ * back up. The desktop's stage on the same words — their ranges ride on the
+ * elements, computed at build — with the note pinned at its own place under
+ * the bar rather than at the centre, and not pulled up under a film, since
+ * there is none here.
+ *
+ * The section spends --wc-phone-write-length of scroll; the pin's height is
+ * the note's own, so the names come up from the foot of the screen in the
+ * ordinary flow behind it and meet it, the note's gap under it, as the pin
+ * lets go. The names pop in as everything else does on a phone
+ * (client/reveal.ts), with none of the desktop's held fade.
+ *
+ * Upright only (client/env.ts, `scrollWrites`, makes the same test): on its
+ * side a phone's screen is shorter than the pinned note, and the words would
+ * be typed below its edge. Placed after the phone block, which it outweighs
+ * where both speak.
+ */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) and (max-width: 899px) and (orientation: portrait) {
+    #whats-color { padding-top: 0; }
+    .wc-write {
+      /* THE knob for "the typing is too fast / too slow" by hand. More than
+         240svh, or the first word is already there on the blank page. */
+      height: var(--wc-phone-write-length, 370svh);
+      margin: 0 0 var(--wc-phone-note-gap);
+      view-timeline: --wc-write block;
+    }
+    .wc-write-pin {
+      position: sticky;
+      top: 0;
+      padding-top: var(--wc-phone-top);
+      /* Nothing in here is for pointing at, as on the desktop's stage. */
+      pointer-events: none;
+    }
+    .wc-word {
+      opacity: 0;
+      animation: wc-word-in steps(1, jump-start) both;
+      animation-timeline: --wc-write;
+    }
+    /* The cue over the blank page, standing clear of the screen's foot.
+       It overrides the film's place for it and the phone's 'no cue'. */
+    html.js .has-film .scroll-cue {
+      display: block;
+      bottom: calc(24 * var(--p));
+    }
   }
 }
 

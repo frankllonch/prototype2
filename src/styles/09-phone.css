@@ -299,6 +299,8 @@
       transform 0.9s var(--ease) var(--pop-delay, 0s);
   }
   .phone-pop.is-in { opacity: 1; filter: none; transform: none; }
+  /* Out of sight is out of reach: a hidden block takes no tap. */
+  .phone-pop:not(.is-in) { pointer-events: none; }
 }
 
 /*

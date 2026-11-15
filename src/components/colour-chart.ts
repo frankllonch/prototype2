@@ -97,9 +97,16 @@ function written(paragraphs: readonly string[]): { readonly block: Html; readonl
      */
     const to = ((i + 2) / (total + 1)) * WRITTEN_BY;
     const pc = (v: number) => (v * 100).toFixed(2);
+    /*
+     * The same turn twice: as the desktop's share of the document, and as the
+     * bare fractions (`--w0`, `--w1`) a phone held upright multiplies by its
+     * own run (Frank, 2026-11-15). There the sheet is taller than the screen,
+     * so a share of the document would be a share of the page under the
+     * writing too; a length of run is the same however tall the page is.
+     */
     return html`<span
       class="chart-word"
-      style="animation-range: ${pc(from)}% ${pc(to)}%"
+      style="--w0:${from.toFixed(4)};--w1:${to.toFixed(4)};animation-range: ${pc(from)}% ${pc(to)}%"
     >${w}</span>`;
   };
 

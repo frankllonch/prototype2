@@ -266,9 +266,11 @@ export function colourChartPage(): Html {
      * does (`client/scroll-cue.ts`), which is also before the line at the
      * foot arrives, so the two never share the bottom of the screen.
      *
-     * Not on a phone, where the page is not written but simply stands: the
-     * stylesheet takes the cue away there, and the body's class is how it
-     * knows this page from the others that have one (06-colour-chart.css).
+     * Not on a phone on its side, where the page is not written but simply
+     * stands: the stylesheet takes the cue away there, and the body's class
+     * is how it knows this page from the others that have one
+     * (06-colour-chart.css). Held upright the page is written, and the cue
+     * stands (Frank, 2026-11-15).
      */
     cue: 'ink',
     bodyClass: 'chart-body',

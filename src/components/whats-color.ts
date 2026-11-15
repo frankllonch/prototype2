@@ -206,8 +206,12 @@ function openingText(edition: Edition): Html {
  * the pace falls as it arrives and picks back up after. Every word fades over
  * roughly two slots rather than one, because a mouse wheel moves in coarse
  * steps and overlapping fades keep one step from popping a clutch of words at
- * once. And SCREENS here must agree with --wc-write-length in the stylesheet,
- * because the slices are fractions of that travel, computed at build.
+ * once. And the slices are fractions of the cover timeline, computed at build
+ * on SCREENS, while the stylesheet's --wc-write-length (and on a phone held
+ * upright --wc-phone-write-length) sets the travel they are fractions of: at
+ * the 370 it has now against a SCREENS of 2.4, each word lands later in the
+ * stage than the figures below say, and the written point (client/write.ts)
+ * is measured against the stylesheet's length.
  *
  * Every word occupies its place from the start and only becomes visible, so
  * nothing reflows as the sentence appears. The question is marked and takes a

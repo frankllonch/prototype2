@@ -1,30 +1,62 @@
-import { phone, reduceMotion } from './env.ts';
+import { phone, scrollWrites } from './env.ts';
+import { glide } from './glide.ts';
 
 /**
- * Matches `writeOn()` in components/whats-color.ts: the words' slots end at
- * 85% of the pinned stretch, but the last word's own fade is allowed to run
- * 0.04 screens past its slot — (END + 0.04 - START) / (SCREENS - START) is
- * 0.8786 — so landing at 85% left the final words a breath short of solid.
- * This stands just past the last fade: the sentence whole, the held beat
+ * Matches `writeOn()` in components/whats-color.ts: each word steps in whole
+ * at the start of its own range, and the last one's starts at 64% of the
+ * stage's cover timeline — about three quarters of the way through the
+ * stage's pinned stretch at its length of 3.7 screens, on the desktop and
+ * on a phone alike. This stands past it: the sentence whole, the held beat
  * still ahead, the names still to come.
  */
 const WRITTEN = 0.885;
 
 /**
+ * How long a phone takes to type the note in front of the reader when the
+ * menu or a link brings them to the page (Frank, 2026-11-15): the journey's
+ * own length, given rather than worked out from the distance, which on a
+ * phone would rush fifty-odd words through in a second and a half. Longer is
+ * slower typing.
+ */
+export const WRITE_MS = 2400;
+
+/**
  * The scroll offset at which the note stands fully written and the names have
  * yet to rise — the scene a link into the page should open on. Null when
- * there is no scene: no write section on this page, a phone (where the note
- * is never written by the scroll: 04-whats-color.css keeps the stage to 900
- * and up), no scroll-run animations in this engine, or motion reduced, in all
- * of which the note is an ordinary paragraph and the top of the page's own
- * section is the place to land.
+ * there is no scene: no write section on this page, a phone on its side, no
+ * scroll-run animations in this engine, or motion reduced (`scrollWrites`),
+ * in all of which the note is an ordinary paragraph and the top of the page's
+ * own section is the place to land.
  */
 export function writtenPoint(): number | null {
   const section = document.querySelector<HTMLElement>('.wc-write');
-  if (!section || phone.matches) return null;
-  if (!CSS.supports('animation-timeline: view()') || reduceMotion.matches) return null;
+  if (!section || !scrollWrites()) return null;
   const top = section.getBoundingClientRect().top + window.scrollY;
   return top + (section.offsetHeight - window.innerHeight) * WRITTEN;
+}
+
+/**
+ * On a phone the note is typed in front of the reader rather than found
+ * written (Frank, 2026-11-15): they arrive on the blank stage, the page's
+ * very top, and after a beat the page carries itself down to the written
+ * point slowly enough to watch the words come — the same scroll that writes
+ * them by hand, so scrolling back up afterwards takes them away again. The
+ * beat is the menu's own fade (`.top`'s opacity, 09-phone.css), so the typing
+ * starts as the stage comes clear. Only from the stage: a reader who has
+ * already moved off it is left where they are, and their first touch ends
+ * the journey as it ends any other (client/glide.ts).
+ */
+const TYPE_WAIT_MS = 350;
+
+export function typeIn(): void {
+  window.setTimeout(() => {
+    const section = document.querySelector<HTMLElement>('.wc-write');
+    const to = writtenPoint();
+    if (!section || to === null) return;
+    const top = section.getBoundingClientRect().top + window.scrollY;
+    if (Math.abs(window.scrollY - top) > window.innerHeight * 0.1) return;
+    glide(to, WRITE_MS);
+  }, TYPE_WAIT_MS);
 }
 
 /**
@@ -57,6 +89,16 @@ export function initWrite(): void {
   const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
   if (nav && nav.type !== 'navigate') return uncover();
   if (writtenPoint() === null) return uncover();
+  // A phone does not hold the reader on the written point: the address puts
+  // them at the head of the page, which there is the blank stage, and the
+  // note is typed from it once the page has loaded (`typeIn`). The head never
+  // veiled it (components/layout.ts), so there is nothing to wait for.
+  if (phone.matches) {
+    uncover();
+    if (document.readyState === 'complete') typeIn();
+    else window.addEventListener('load', typeIn, { once: true });
+    return;
+  }
 
   let held = true;
   const release = () => {

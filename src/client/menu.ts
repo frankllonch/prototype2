@@ -1,5 +1,5 @@
 import { isPlainClick, phone, reduceMotion } from './env.ts';
-import { writtenPoint } from './write.ts';
+import { typeIn } from './write.ts';
 
 /**
  * The bar on a phone: three bars at the top right, and the bar's own words —
@@ -116,6 +116,10 @@ export function initMenu(): void {
   };
   /** From it to What's Color?, which is one step on, so Back returns here. */
   const toNames = () => {
+    // A collapse still running would put the paper back over the typing.
+    window.clearTimeout(closing);
+    root.classList.remove('is-menu-closing');
+    document.dispatchEvent(new Event('cueagain'));
     const was = atStart();
     // Asked for from inside the bar, which is about to go out of sight and
     // would take the keyboard's place with it.
@@ -125,8 +129,14 @@ export function initMenu(): void {
       if (was) history.pushState({ start: true }, '', '#whats-color');
       else history.replaceState(null, '', '#whats-color');
     }
+    // The page's head, put back while the menu is still fading over it. Where
+    // the scroll writes the note that is its blank stage, and the note is then
+    // typed in front of the reader as the menu clears (Frank, 2026-11-15) —
+    // from the start screen and from a raised menu alike. Elsewhere the note
+    // is an ordinary paragraph standing there, and `typeIn` does nothing.
     const section = document.getElementById('whats-color');
-    window.scrollTo(0, writtenPoint() ?? (section ? section.getBoundingClientRect().top + window.scrollY : 0));
+    window.scrollTo(0, section ? section.getBoundingClientRect().top + window.scrollY : 0);
+    typeIn();
     sync();
     if (within) toggle.focus({ preventScroll: true });
   };

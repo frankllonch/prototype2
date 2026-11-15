@@ -7,6 +7,42 @@ export const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)
  * page makes the same test before the first paint (components/layout.ts).
  */
 export const phone = window.matchMedia('(max-width: 899px)');
+/** A screen held upright. Only the phone layout asks: see `scrollWrites`. */
+export const portrait = window.matchMedia('(orientation: portrait)');
+
+/**
+ * Whether the scroll writes the words here — the note on What's Color and the
+ * statement on the Colour Chart, typed in as the page is scrolled down and
+ * taken away as it is scrolled back up. The one test for scripts; the
+ * stylesheets make the same one around each stage.
+ *
+ * Wherever the engine runs scroll-driven animations and motion is not
+ * reduced — and on a phone only when it is held upright (Frank, 2026-11-15):
+ * turned on its side the screen is too short for the pinned words, which
+ * would be typed below its edge, so there the words simply stand, as they do
+ * everywhere the scene does not run. Asked at the moment it matters rather
+ * than once, because a phone turned mid-page changes the answer and the
+ * stylesheet with it.
+ */
+export const scrollWrites = (
+  timeline: 'view()' | 'scroll()' = 'view()',
+  upright: MediaQueryList = portrait,
+): boolean =>
+  !reduceMotion.matches &&
+  CSS.supports(`animation-timeline: ${timeline}`) &&
+  (!phone.matches || upright.matches);
+
+/**
+ * The Colour Chart's statement is taller than What's Color's note, so its
+ * phone scene asks for a screen that is upright and tall enough: no squatter
+ * than 375 by 590, or wider than 480, where --p follows the height. The same
+ * query as 06-colour-chart.css's phone stage.
+ */
+export const chartUpright = window.matchMedia(
+  '(orientation: portrait) and ((max-aspect-ratio: 375/590) or (min-width: 481px))',
+);
+/** The Colour Chart's own test: its stylesheet asks for scroll(), not view(). */
+export const chartWrites = (): boolean => scrollWrites('scroll()', chartUpright);
 
 /** True for a plain left click — modified clicks mean "open this elsewhere". */
 export const isPlainClick = (event: MouseEvent): boolean =>

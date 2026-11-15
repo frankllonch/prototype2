@@ -1,4 +1,4 @@
-import { phone, reduceMotion } from './env.ts';
+import { chartWrites, phone, reduceMotion } from './env.ts';
 
 /** Matches About's own: a beat later from one column to the next. */
 const STAGGER_MS = 260;
@@ -12,6 +12,11 @@ const STAGGER_MS = 260;
  * Phone only, and only for a page that loads as one: the desktop has its own
  * scroll-run scenes on these pages. Without scripting, or with motion
  * reduced, nothing is hidden in the first place.
+ *
+ * Except what the scroll writes. On a phone held upright the Color Chart's
+ * statement is typed by the scroll, and what comes under it waits for the
+ * last word (client/chart.ts, Frank, 2026-11-15), so those are left out here;
+ * they stay on the list for the phone on its side, where nothing is typed.
  */
 const BLOCKS = [
   // What's Color? on the start page
@@ -19,13 +24,19 @@ const BLOCKS = [
   // an edition's own page
   '.wc-edition > .wc-numeral', '.wc-edition > .wc-names', '.wc-book', '.wc-say',
   '.wc-cell-name', '.wc-cell-meta', '.wc-cell-text > *', '.wc-back', '.wc-foot',
-  // the Color Chart
-  '.chart-statement p', '.chart-order', '.chart-price', '.chart-thanks', '.chart-footer',
+  // the Color Chart (what comes under the statement is client/chart.ts's)
+  '.chart-statement p', '.chart-footer',
 ].join(', ');
+
+/** The Color Chart's statement, when the scroll writes it. */
+const CHART_WRITTEN = '.chart-statement p';
 
 export function initReveal(): void {
   if (!phone.matches || reduceMotion.matches || !('IntersectionObserver' in window)) return;
-  const blocks = [...document.querySelectorAll<HTMLElement>(BLOCKS)];
+  const writes = chartWrites();
+  const blocks = [...document.querySelectorAll<HTMLElement>(BLOCKS)].filter(
+    (el) => !writes || !el.matches(CHART_WRITTEN),
+  );
   if (!blocks.length) return;
 
   const seen = new IntersectionObserver(
