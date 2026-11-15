@@ -47,6 +47,9 @@ export function initYears(): void {
   grid?.addEventListener('gridchange', () => { settledAt = performance.now() + 560; });
   /* One journey at a time, cancelled by the reader's own hand: glide's rules. */
   const travel = (to: number) => glide(to, JUMP_MS);
+  /** The year last chosen on a phone, and until when it holds the row. */
+  let chosen: HTMLAnchorElement | null = null;
+  let chosenUntil = 0;
 
   const afterRelayout = (run: () => void) => {
     const wait = settledAt - performance.now();
@@ -115,9 +118,11 @@ export function initYears(): void {
         const img = tile.querySelector('img');
         if (img?.loading === 'lazy') img.loading = 'eager';
       }
-      // On a phone the wheel itself says which year, and it turns with every
-      // scroll: the other years' paintings are not dimmed there.
+      // On a phone the row itself says which year, and it moves with every
+      // scroll: the other years' paintings are not dimmed there. The chosen
+      // year is held in the middle while the paintings travel to it.
       if (!phone.matches) focus(year);
+      else { chosen = link; chosenUntil = performance.now() + JUMP_MS + 400; }
       /*
        * A jump that starts from the folded pile scrolls down through it, and
        * the pile is still `running` for the whole of that journey — which the
@@ -204,6 +209,13 @@ export function initYears(): void {
       for (const anchor of anchors) {
         if (anchor.el.getBoundingClientRect().top <= probe) current = anchor;
       }
+      // A year just chosen stays the year until the paintings have got there:
+      // the row does not run through the years passed on the way and back.
+      if (chosen && performance.now() < chosenUntil) {
+        current = anchors.find((a) => a.link === chosen) ?? current;
+      } else {
+        chosen = null;
+      }
       for (const { link } of anchors) link.classList.toggle('is-current', link === current.link);
       /*
        * On a phone the rail is a bar along the foot of the screen, and with
@@ -224,28 +236,12 @@ export function initYears(): void {
     };
 
     /*
-     * The phone's wheel (THE YEAR WHEEL in 05-artwork.css). Each year is told
-     * how far it stands from the middle of the row, in years, and the
-     * stylesheet grows, fades and leans it by that. A turn of the wheel by a
-     * finger — not the turns `update` makes to follow the page — takes the
-     * paintings to the year it comes to rest on, by the year's own link.
+     * The phone's row of years (THE YEAR WHEEL in 05-artwork.css). A swipe
+     * along it — a finger that actually moves it, not a tap and not the turns
+     * `update` makes to follow the page — takes the paintings to the year it
+     * comes to rest on, by that year's own link.
      */
     if (phone.matches) {
-      let frame = 0;
-      const place = () => {
-        frame = 0;
-        const middle = rail.getBoundingClientRect().left + rail.clientWidth / 2;
-        const centres = links.map((link) => {
-          const box = link.getBoundingClientRect();
-          return box.left + box.width / 2;
-        });
-        const step = centres.length > 1 ? Math.abs(centres[1]! - centres[0]!) || 1 : 1;
-        links.forEach((link, i) => {
-          const d = (centres[i]! - middle) / step;
-          link.style.setProperty('--d', d.toFixed(3));
-          link.style.setProperty('--ad', Math.abs(d).toFixed(3));
-        });
-      };
       let turning = false;
       let restTimer = 0;
       const rest = () => {
@@ -259,18 +255,15 @@ export function initYears(): void {
           const off = Math.abs(box.left + box.width / 2 - middle);
           if (off < best) { best = off; nearest = link; }
         }
-        if (nearest !== marked) { marked = nearest; nearest.click(); }
+        if (nearest !== marked) nearest.click();
       };
-      for (const type of ['touchstart', 'pointerdown', 'wheel'] as const) {
+      for (const type of ['touchmove', 'wheel'] as const) {
         rail.addEventListener(type, () => { turning = true; }, { passive: true });
       }
       rail.addEventListener('scroll', () => {
-        if (!frame) frame = requestAnimationFrame(place);
         window.clearTimeout(restTimer);
         restTimer = window.setTimeout(rest, 160);
       }, { passive: true });
-      window.addEventListener('resize', () => { if (!frame) frame = requestAnimationFrame(place); });
-      place();
     }
 
     let last = 0;

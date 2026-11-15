@@ -442,46 +442,36 @@
  * ============================================================================
  * THE YEAR WHEEL — the phone's years, every knob here (Frank, 2026-11-15).
  *
- * The years in a row along the foot of the screen, newest on the left, in the
- * desktop's type and each in its own colour. The year whose paintings are on
- * screen stands in the middle, larger; the others shrink, fade and lean away
- * towards the edges, as on a drum. Scrolling the paintings turns the wheel;
- * turning the wheel (a swipe) takes the paintings to the year it stops on; a
- * tap on a year does the same. client/years.ts writes each year's distance
- * from the middle, in years, as --d (and --ad, the same without its sign).
+ * The years in a flat row along the foot of the screen, newest on the left,
+ * evenly spaced, in the desktop's type. No bar behind them: they sit on the
+ * paintings and are drawn as their negative, as the three bars are, each year
+ * coming out in its own colour over white paper. The year whose paintings are
+ * on screen stands in the middle, a little larger. Scrolling the paintings
+ * moves the row; a swipe along it, or a tap on a year, takes the paintings
+ * there (client/years.ts).
  *
- *   --wheel-type     the years' size
- *   --wheel-gap      the space between two years
- *   --wheel-pad      above and below the row
- *   --wheel-zoom     how much larger the middle year is: 1.4 is 40% larger
- *   --wheel-shrink   how much smaller each year further out gets: 0.12 is 12%
- *   --wheel-fade     how much fainter each year further out gets: 0.25
- *   --wheel-curve    how far each year further out leans away, in degrees:
- *                    0deg is flat, 20deg a gentle drum, 45deg a tight one
- *   --wheel-depth    the drum's perspective: smaller is more dramatic
- *   --wheel-motion   how long a year takes to grow, shrink and lean
- *   --wheel-ease     the curve of that motion
+ *   --wheel-type    the years' size
+ *   --wheel-gap     the space between two years
+ *   --wheel-foot    from the foot of the screen to the years' baseline
+ *   --wheel-zoom    how much larger the middle year is: 1.25 is a quarter
+ *   --wheel-motion  how long the middle year takes to grow, and the others
+ *                   to shrink back
  * ============================================================================
  */
 @media (max-width: 899px) {
   .years {
     --wheel-type: calc(28 * var(--p));
-    --wheel-gap: calc(22 * var(--p));
-    --wheel-pad: calc(14 * var(--p));
-    --wheel-zoom: 1.4;
-    --wheel-shrink: 0.12;
-    --wheel-fade: 0.25;
-    --wheel-curve: 22deg;
-    --wheel-depth: calc(500 * var(--p));
-    --wheel-motion: 0.25s;
-    --wheel-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --wheel-gap: calc(32 * var(--p));
+    --wheel-foot: calc(18 * var(--p));
+    --wheel-zoom: 1.25;
+    --wheel-motion: 0.3s;
   }
 
   .years,
   html.js .years {
     top: auto; bottom: 0; left: 0; right: 0;
     box-sizing: border-box;
-    height: calc(2 * var(--wheel-pad) + var(--wheel-type) * var(--wheel-zoom) + env(safe-area-inset-bottom, 0px));
+    height: calc(var(--wheel-foot) * 2 + var(--wheel-type) * var(--wheel-zoom) + env(safe-area-inset-bottom, 0px));
     margin-top: 0;
     /* Half the screen either side, so the first and last years can come to
        the middle too. */
@@ -493,13 +483,12 @@
     overscroll-behavior-x: contain;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
-    perspective: var(--wheel-depth);
     font-size: var(--wheel-type);
     line-height: 1;
-    background: rgb(255 255 255 / 0.88);
-    background: color-mix(in srgb, var(--paper) 88%, transparent);
-    backdrop-filter: blur(calc(6 * var(--p)));
-    -webkit-backdrop-filter: blur(calc(6 * var(--p)));
+    background: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    mix-blend-mode: difference;
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
@@ -508,18 +497,23 @@
   }
   .years::-webkit-scrollbar { display: none; }
   .year {
-    --d: 0;
-    --ad: 0;
     flex: none;
     scroll-snap-align: center;
-    color: var(--c);
-    transform:
-      rotateY(calc(var(--d) * var(--wheel-curve)))
-      scale(calc(max(0.3, 1 - var(--ad) * var(--wheel-shrink)) * (1 + (var(--wheel-zoom) - 1) * max(0, 1 - var(--ad)))));
-    opacity: max(0.15, calc(1 - var(--ad) * var(--wheel-fade)));
-    transition: transform var(--wheel-motion) var(--wheel-ease), opacity var(--wheel-motion) var(--wheel-ease);
+    /* The negative of the year's colour, so that over white it comes out as
+       the colour itself; over a painting, as the bars do, its negative. */
+    color: rgb(from var(--c) calc(255 - r) calc(255 - g) calc(255 - b));
+    transform: scale(1);
+    transition: transform var(--wheel-motion) var(--ease);
     -webkit-tap-highlight-color: transparent;
   }
+  .year.is-current { transform: scale(var(--wheel-zoom)); }
   .year-swatch { display: none; }
   .year-label { display: block; margin: 0; color: inherit; }
+}
+
+/* The gallery on a phone stops at its top and its foot: no pulling past
+   either into the empty ground behind the page (Frank, 2026-11-15). */
+@media (max-width: 899px) {
+  html:has(.grid[data-stack]),
+  html:has(.grid[data-stack]) body { overscroll-behavior-y: none; }
 }
