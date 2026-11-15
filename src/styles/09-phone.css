@@ -302,15 +302,15 @@
 }
 
 /*
- * Nothing on a phone pulls past its top or its foot: not the pages, not the
- * start page (which had pull-to-reload back on, 04-whats-color.css), not a
- * sheet, About or the menu (Frank, 2026-11-15).
+ * Nothing pulls past its top or its foot, on a phone or a computer, in any
+ * browser: not the pages, not the start page (which had pull-to-reload back
+ * on for phones, 04-whats-color.css), not a sheet, About or the menu (Frank,
+ * 2026-11-15). Wider than the Safari-only rule in 00-base.css, which it
+ * outlasts.
  */
-@media (max-width: 899px) {
-  html,
-  html:has(body.has-film),
-  body,
-  .panel:is(.panel, :has(> .sheet), :has(> .plates)),   /* as heavy as 07-sheet.css's own */
-  .about,
-  .top { overscroll-behavior-y: none; }
-}
+html,
+html:has(body.has-film),
+body,
+.panel:is(.panel, :has(> .sheet), :has(> .plates)),   /* as heavy as 07-sheet.css's own */
+.about,
+.top { overscroll-behavior-y: none; }
