@@ -36,7 +36,7 @@ function cv_menu(): array {
  */
 function cv_top_bar(): string {
 	$path = cv_page()['path'];
-	$out  = '<button type="button" class="menu-toggle" data-menu-toggle aria-label="Menu" aria-expanded="false" aria-controls="site-menu"></button>'
+	$out  = '<button type="button" class="menu-toggle" data-menu-toggle aria-label="Menu" aria-expanded="false" aria-controls="site-menu"><span class="menu-line"></span><span class="menu-line"></span><span class="menu-line"></span></button>'
 		. '<header class="top" id="site-menu">'
 		// Decoded before it is uppercased, since the site's name arrives already
 		// escaped and an entity's letters must not be touched; escaped once after.

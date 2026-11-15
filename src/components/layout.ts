@@ -80,7 +80,7 @@ const CLIENT_MODULES = [
  * header so that it is reached first and the menu's links follow it.
  */
 function topBar(path: string): Html {
-  return html`<button type="button" class="menu-toggle" data-menu-toggle aria-label="Menu" aria-expanded="false" aria-controls="site-menu"></button>
+  return html`<button type="button" class="menu-toggle" data-menu-toggle aria-label="Menu" aria-expanded="false" aria-controls="site-menu"><span class="menu-line"></span><span class="menu-line"></span><span class="menu-line"></span></button>
   <header class="top" id="site-menu">
     <a class="wordmark" href="${withBase('/')}" data-roll>CLAUDIA VALSELLS</a>
     <a class="top-soon" href="${withBase('/#whats-color')}" ${path === '/' || path.startsWith('/whats-color/') ? raw('aria-current="page"') : ''} data-roll>What&rsquo;s Color?</a>

@@ -1,4 +1,4 @@
-import { isPlainClick, phone } from './env.ts';
+import { isPlainClick, phone, reduceMotion } from './env.ts';
 import { writtenPoint } from './write.ts';
 
 /**
@@ -51,7 +51,7 @@ export function initMenu(): void {
    */
   const held = new Set<HTMLElement>();
   const sync = () => {
-    const shown = raised() || atStart();
+    const shown = raised() || (atStart() && !collapsed());
     toggle.setAttribute('aria-expanded', String(shown));
     for (const el of held) el.inert = false;
     held.clear();
@@ -66,7 +66,33 @@ export function initMenu(): void {
   };
 
   const raise = () => { root.classList.add('is-menu-open'); sync(); };
-  const lower = () => { root.classList.remove('is-menu-open', 'is-menu-held'); sync(); };
+  const lower = () => { root.classList.remove('is-menu-open', 'is-menu-held', 'is-menu-closing'); sync(); };
+
+  /*
+   * The sections leave as they came, in the reverse cascade (THE MENU'S MOTION
+   * in 09-phone.css), and only then does `done` take the menu away. Each
+   * section's drop is restarted so it runs backwards from where it stands; the
+   * wait is the cascade's own length, read from the stylesheet.
+   */
+  let closing = 0;
+  const sections = () => [...bar.querySelectorAll<HTMLElement>('.top-soon, .menu a')];
+  const leave = (done: () => void) => {
+    window.clearTimeout(closing);
+    const style = getComputedStyle(root);
+    const ms = (name: string) => {
+      const v = style.getPropertyValue(name).trim();
+      return (Number.parseFloat(v) || 0) * (v.endsWith('ms') ? 1 : 1000);
+    };
+    const total = reduceMotion.matches ? 0 : ms('--cascade-duration') + 5 * ms('--cascade-step');
+    root.classList.add('is-menu-closing');
+    for (const el of sections()) { el.style.animation = 'none'; void el.offsetWidth; el.style.animation = ''; }
+    closing = window.setTimeout(() => { root.classList.remove('is-menu-closing'); done(); }, total);
+  };
+
+  /** The start screen with its sections put away: the name and the bars alone. */
+  const collapsed = () => root.classList.contains('is-menu-collapsed');
+  const collapse = () => leave(() => { root.classList.add('is-menu-collapsed'); sync(); });
+  const expand = () => { root.classList.remove('is-menu-collapsed'); sync(); };
 
   /** The step `toNames` makes is marked, so `toStart` can tell it is standing on it. */
   const onStep = () => (history.state as { start?: boolean } | null)?.start === true;
@@ -82,7 +108,7 @@ export function initMenu(): void {
    */
   const toStart = () => {
     root.classList.add('is-start');
-    root.classList.remove('is-menu-open');
+    root.classList.remove('is-menu-open', 'is-menu-collapsed');
     if (onStep()) history.back();
     else history.replaceState(null, '', location.pathname + location.search);
     window.scrollTo(0, 0);
@@ -94,7 +120,7 @@ export function initMenu(): void {
     // Asked for from inside the bar, which is about to go out of sight and
     // would take the keyboard's place with it.
     const within = bar.contains(document.activeElement);
-    root.classList.remove('is-start', 'is-menu-open');
+    root.classList.remove('is-start', 'is-menu-open', 'is-menu-collapsed');
     if (location.hash !== '#whats-color') {
       if (was) history.pushState({ start: true }, '', '#whats-color');
       else history.replaceState(null, '', '#whats-color');
@@ -105,9 +131,12 @@ export function initMenu(): void {
     if (within) toggle.focus({ preventScroll: true });
   };
 
+  // The bars close what is showing and go nowhere (Frank, 2026-11-15): a
+  // raised menu leaves the page as it was; the start screen keeps its name.
   toggle.addEventListener('click', () => {
-    if (atStart() && !raised()) toNames();
-    else if (raised()) lower();
+    if (root.classList.contains('is-menu-closing')) return;
+    if (raised()) leave(lower);
+    else if (atStart()) (collapsed() ? expand() : collapse());
     else raise();
   });
 
@@ -162,7 +191,7 @@ export function initMenu(): void {
    * it (out of About, say) does not raise the start screen either.
    */
   const settle = (byAddress = false) => {
-    if (!wantsStart()) root.classList.remove('is-start');
+    if (!wantsStart()) root.classList.remove('is-start', 'is-menu-collapsed');
     else if (byAddress) root.classList.add('is-start');
     else if (!atStart() && location.hash === '') history.replaceState(history.state, '', '#whats-color');
     if (!phone.matches || atStart()) root.classList.remove('is-menu-open', 'is-menu-held');

@@ -49,11 +49,8 @@
     position: fixed; z-index: 96;
     top: calc(20 * var(--p)); right: calc(20 * var(--p));
     width: calc(27 * var(--p)); height: calc(17 * var(--p));
-    /* three bars 27 x 3 at 0 / 7 / 14 */
-    background:
-      linear-gradient(currentColor, currentColor) 0 0 / 100% calc(3 * var(--p)) no-repeat,
-      linear-gradient(currentColor, currentColor) 0 calc(7 * var(--p)) / 100% calc(3 * var(--p)) no-repeat,
-      linear-gradient(currentColor, currentColor) 0 calc(14 * var(--p)) / 100% calc(3 * var(--p)) no-repeat;
+    /* three bars 27 x 3 at 0 / 7 / 14, each its own element (.menu-line) so
+       each can turn on its own: see THE MENU'S MOTION at the foot. */
     /* The negative of what is under it, as the desktop bar is: 255 less the
        ink (36, 37, 40), so that over paper it comes out as the ink itself. */
     color: rgb(219, 218, 215);
@@ -174,4 +171,113 @@
   .top { --menu-short: max(0px, calc(811 * var(--p) - 100svh)); }
   .wordmark { margin-bottom: max(calc(40 * var(--p)), calc(179 * var(--p) - 0.635 * var(--menu-short))); }
   .menu { margin-top: max(calc(40 * var(--p)), calc(103 * var(--p) - 0.365 * var(--menu-short))); }
+}
+
+/*
+ * ============================================================================
+ * THE MENU'S MOTION — every knob for the three bars and the cascade is here.
+ * (Frank, 2026-11-15.) Times in ms or s, angles in deg, shifts in --p (so 7
+ * is 7 px on a 375 phone). Try them live on the preview page's sliders.
+ *
+ * The three bars, when the menu is showing. Each bar turns about its middle:
+ *   --lineN-rotate    how far it turns (0deg leaves it straight)
+ *   --lineN-shift     how far it moves down (minus is up) before turning;
+ *                     7 brings the top bar to the middle one's line
+ *   --lineN-opacity   1 shows it, 0 hides it
+ *   --lineN-duration  how long the turn takes
+ *   --lineN-delay     how long it waits before turning
+ *   --line-ease       the turn's curve, the same for all three
+ * The defaults make an X: top and bottom meet on the middle line and turn
+ * ±45°, the middle one goes.
+ *
+ * The cascade: the sections drop in one after another, top to bottom, and
+ * leave in the reverse order when the menu closes.
+ *   --cascade-style   which drop. Change the one word to try another:
+ *                       cascade-slide    straight down into place
+ *                       cascade-bounce   down, a little past, and back
+ *                       cascade-unfold   swings down from its top edge
+ *                       cascade-side     in from the left
+ *   --cascade-duration  how long each section takes
+ *   --cascade-step      the wait between one section and the next
+ *   --cascade-distance  how far each comes from, in --p
+ *   --cascade-ease      the curve
+ * ============================================================================
+ */
+@media (max-width: 899px) {
+  :root {
+    --line1-rotate: 45deg;   --line1-shift: 7;  --line1-opacity: 1; --line1-duration: 400ms; --line1-delay: 0ms;
+    --line2-rotate: 0deg;    --line2-shift: 0;  --line2-opacity: 0; --line2-duration: 200ms; --line2-delay: 0ms;
+    --line3-rotate: -45deg;  --line3-shift: -7; --line3-opacity: 1; --line3-duration: 400ms; --line3-delay: 0ms;
+    --line-ease: cubic-bezier(0.65, 0, 0.35, 1);
+
+    --cascade-style: cascade-slide;
+    --cascade-duration: 420ms;
+    --cascade-step: 60ms;
+    --cascade-distance: 24;
+    --cascade-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* ---- the three bars ---- */
+  .menu-line {
+    position: absolute; left: 0;
+    width: 100%; height: calc(3 * var(--p));
+    background: currentColor;
+    transform-origin: 50% 50%;
+    transition-property: transform, opacity;
+    transition-timing-function: var(--line-ease);
+  }
+  .menu-line:nth-child(1) { top: 0;                      transition-duration: var(--line1-duration); transition-delay: var(--line1-delay); }
+  .menu-line:nth-child(2) { top: calc(7 * var(--p));     transition-duration: var(--line2-duration); transition-delay: var(--line2-delay); }
+  .menu-line:nth-child(3) { top: calc(14 * var(--p));    transition-duration: var(--line3-duration); transition-delay: var(--line3-delay); }
+
+  :is(html.is-menu-open, html.is-start:not(.is-menu-collapsed)):not(.is-menu-closing) .menu-line:nth-child(1) {
+    transform: translateY(calc(var(--line1-shift) * var(--p))) rotate(var(--line1-rotate)); opacity: var(--line1-opacity);
+  }
+  :is(html.is-menu-open, html.is-start:not(.is-menu-collapsed)):not(.is-menu-closing) .menu-line:nth-child(2) {
+    transform: translateY(calc(var(--line2-shift) * var(--p))) rotate(var(--line2-rotate)); opacity: var(--line2-opacity);
+  }
+  :is(html.is-menu-open, html.is-start:not(.is-menu-collapsed)):not(.is-menu-closing) .menu-line:nth-child(3) {
+    transform: translateY(calc(var(--line3-shift) * var(--p))) rotate(var(--line3-rotate)); opacity: var(--line3-opacity);
+  }
+
+  /* ---- the cascade ---- */
+  .top .top-soon { --cascade-at: 0; }
+  .top .menu a   { --cascade-at: var(--menu-phone, 0); }
+  :is(html.is-menu-open, html.is-start) .top :is(.top-soon, .menu a) {
+    animation: var(--cascade-style) var(--cascade-duration) var(--cascade-ease) both;
+    animation-delay: calc(var(--cascade-at) * var(--cascade-step));
+  }
+  /* Leaving: the same drop run backwards, last section first. */
+  html.is-menu-closing .top :is(.top-soon, .menu a) {
+    animation-direction: reverse;
+    animation-delay: calc((5 - var(--cascade-at)) * var(--cascade-step));
+  }
+  /* Put away on the start screen: the name and the bars stay, the rest is gone. */
+  html.is-start.is-menu-collapsed:not(.is-menu-closing) .top :is(.top-soon, .menu) { visibility: hidden; }
+  html.is-start.is-menu-collapsed:not(.is-menu-closing) .top :is(.top-soon, .menu a) { animation: none; }
+  /* The paper stays until the last section has gone. */
+  html.is-menu-closing .top { visibility: visible; opacity: 1; transition: none; }
+}
+
+@keyframes cascade-slide {
+  from { transform: translateY(calc(-1 * var(--cascade-distance) * var(--p))); clip-path: inset(0 0 100% 0); }
+  to   { transform: none; clip-path: inset(0 0 0 0); }
+}
+@keyframes cascade-bounce {
+  0%   { transform: translateY(calc(-1 * var(--cascade-distance) * var(--p))); clip-path: inset(0 0 100% 0); }
+  65%  { transform: translateY(calc(0.25 * var(--cascade-distance) * var(--p))); clip-path: inset(0 0 0 0); }
+  100% { transform: none; clip-path: inset(0 0 0 0); }
+}
+@keyframes cascade-unfold {
+  from { transform: perspective(600px) rotateX(-90deg); transform-origin: 50% 0; }
+  to   { transform: perspective(600px) rotateX(0deg);   transform-origin: 50% 0; }
+}
+@keyframes cascade-side {
+  from { transform: translateX(calc(-1 * var(--cascade-distance) * var(--p))); clip-path: inset(0 100% 0 0); }
+  to   { transform: none; clip-path: inset(0 0 0 0); }
+}
+
+@media (max-width: 899px) and (prefers-reduced-motion: reduce) {
+  .menu-line { transition: none; }
+  .top :is(.top-soon, .menu a) { animation: none !important; }
 }
