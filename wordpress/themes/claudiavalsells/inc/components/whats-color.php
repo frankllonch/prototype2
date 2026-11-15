@@ -314,7 +314,7 @@ function cv_wc_strip( array $plates, $lead = null ): string {
 
 /** Where a clicked photograph opens. Empty and hidden until the script fills it. */
 function cv_wc_book_view(): string {
-	return '<div class="wc-book-view" data-book-view hidden><figure class="wc-book-plate" data-book-plate></figure></div>';
+	return '<div class="wc-book-view" data-book-view hidden><button type="button" class="panel-close">Close</button><figure class="wc-book-plate" data-book-plate></figure></div>';
 }
 
 /**
