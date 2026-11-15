@@ -688,7 +688,7 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
 
   /* ---- text and photographs, one column ---- */
 
-  .panel > .sheet :is(.sheet-text, .sheet-prose, .sheet-stage, .sheet-frame) { display: contents; }
+  .panel > .sheet :is(.sheet-text, .sheet-prose) { display: contents; }
   .panel > .sheet .sheet-prose { font-size: inherit; line-height: inherit; }
   .panel > .sheet .sheet-prose > * { margin: var(--sh-para) 0 0; }
   /* Pasted text that arrived in boxes of its own keeps the same empty line. */
@@ -775,6 +775,71 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
   .panel > .plates .plates-frame { height: auto; }
   .panel > .plates .plates-figure:first-child { margin-top: 0; }
 
+  /* ---- the photographs: one reel, as on the desktop (Frank, 2026-11-15) ----
+
+     Every sheet's photographs are one reel where the first photograph stood:
+     one at a time, turned by the arrows under it or a swipe, the count between
+     the arrows. client/figures.ts turns them and writes the count.
+       --reel-arrow   an arrow's height
+       --reel-gap     photograph → the row of arrows
+       --reel-count   the count's size */
+  .panel > :is(.sheet, .plates) {
+    --reel-arrow: calc(16 * var(--p));
+    --reel-gap: calc(14 * var(--p));
+    --reel-count: calc(14 * var(--p));
+  }
+  .panel > .sheet .sheet-stage,
+  .panel > .plates {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+  }
+  .panel > .sheet .sheet-stage { position: static; inset: auto; width: auto; height: auto; translate: none; }
+  .panel > .sheet .sheet-frame,
+  .panel > .plates > :is(.plates-head, .plates-stage) { grid-column: 1 / -1; }
+  .panel > .sheet .sheet-frame { position: static; width: auto; height: auto; }
+  .panel > .sheet .sheet-figure,
+  .panel > .plates .plates-figure,
+  .panel > .plates .plates-figure:first-child { margin: 0; }
+  html.js .panel > .sheet .sheet-figure:not(.is-current),
+  html.js .panel > .plates .plates-figure:not(.is-current) { display: none; }
+
+  .panel > .sheet .sheet-step,
+  .panel > .plates .plates-step {
+    display: block;
+    position: static;
+    inset: auto;
+    translate: none;
+    width: auto;
+    height: auto;
+    margin: var(--reel-gap) 0 0;
+    padding: calc(10 * var(--p)) calc(16 * var(--p));
+    opacity: 1;
+    color: var(--ink);
+  }
+  .panel > :is(.sheet, .plates) :is(.sheet-step, .plates-step) svg { display: block; width: auto; height: var(--reel-arrow); }
+  .panel > :is(.sheet, .plates) :is(.sheet-prev, .plates-prev) { grid-column: 1; justify-self: end; }
+  .panel > :is(.sheet, .plates) :is(.sheet-next, .plates-next) { grid-column: 3; justify-self: start; }
+  .panel > :is(.sheet, .plates) .reel-count {
+    grid-column: 2; grid-row: auto;
+    margin: var(--reel-gap) 0 0;
+    font-size: var(--reel-count);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.06em;
+  }
+  /* Arrows and count on one row: the next arrow and the count follow the
+     previous one on its row. */
+  .panel > .sheet .sheet-stage > :is(.sheet-prev, .sheet-next, .reel-count) { grid-row: 2; }
+  .panel > .plates > .plates-head { grid-row: 1; }
+  .panel > .plates > .plates-stage { grid-row: 2; }
+  .panel > .plates > :is(.plates-prev, .plates-next, .reel-count) { grid-row: 3; }
+  .panel > .sheet .sheet-stage > .sheet-frame { grid-row: 1; }
+
+  /* Where the reel stands: where its first photograph stood. */
+  .panel[id^='exhibition-'] .sheet-stage { order: 2; margin: var(--sh-pic-top) 0 var(--sh-pic-bottom); }
+  .panel[id^='commissioned-'] .sheet-stage { order: 3; margin-top: var(--sh-pic-top); }
+
   /* ---- Close ---- */
 
   /* Top left, on the line of the three bars, which keep the right. Drawn as
@@ -799,4 +864,9 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
   /* Pressed with a thumb: 44 high without moving the word. */
   .panel > .panel-close::after,
   .wc-book-view > .panel-close::after { content: ''; position: absolute; inset: -12px; }
+}
+
+/* The count between the arrows is the phone's (client/figures.ts). */
+@media (min-width: 900px) {
+  .reel-count { display: none; }
 }

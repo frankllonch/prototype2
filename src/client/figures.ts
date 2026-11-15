@@ -29,6 +29,20 @@ export function initFigures(): void {
     // version's; only what advances it differs.
     if (stage && figures.length) stage.classList.add('is-live');
 
+    /*
+     * The count a phone shows between the arrows, "2 / 8" (07-sheet.css hides
+     * it on a computer, where the frame stands alone). Made here rather than in
+     * the markup: it is only ever filled by this script, and the WordPress
+     * theme's markup then needs nothing new.
+     */
+    const next = reader.querySelector<HTMLElement>('[data-figure-step="1"]');
+    const visible = next && figures.length > 1 ? document.createElement('p') : null;
+    if (visible && next) {
+      visible.className = 'reel-count';
+      visible.setAttribute('aria-hidden', 'true');
+      next.before(visible);
+    }
+
     let shown = 0;
     const show = (index: number) => {
       if (!figures.length) return;
@@ -40,7 +54,26 @@ export function initFigures(): void {
           .replace('{n}', String(shown + 1))
           .replace('{total}', String(figures.length));
       }
+      if (visible) visible.textContent = `${shown + 1} / ${figures.length}`;
     };
+    show(0);
+
+    // A swipe across the photograph turns it, as the arrows do.
+    if (stage && figures.length > 1) {
+      let from: { x: number; y: number } | null = null;
+      stage.addEventListener('touchstart', (event) => {
+        const t = event.touches[0];
+        from = event.touches.length === 1 && t ? { x: t.clientX, y: t.clientY } : null;
+      }, { passive: true });
+      stage.addEventListener('touchend', (event) => {
+        const t = event.changedTouches[0];
+        if (!from || !t) return;
+        const dx = t.clientX - from.x;
+        const dy = t.clientY - from.y;
+        from = null;
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) show(shown + (dx < 0 ? 1 : -1));
+      }, { passive: true });
+    }
 
     for (const button of reader.querySelectorAll<HTMLButtonElement>('[data-figure-step]')) {
       button.addEventListener('click', () => show(shown + Number(button.dataset.figureStep)));
