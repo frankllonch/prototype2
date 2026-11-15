@@ -393,16 +393,8 @@
  *   --wall-foot     the paper under the last row, so the years do not cover
  *                   it: 120.
  *
- * The years, as the bars they already were on a phone:
- *
- *   --years-pad     above and below the bars: 12.
- *   --swatch-w      a bar's width: 13.
- *   --swatch-h      its height: 22,
- *   --swatch-now    and the height of the year on screen: 34.
- *   --swatch-gap    between one bar and the next: 3.
- *   --year-type     the year written under its bar: 9,
- *   --year-line     on a line of 11,
- *   --year-gap      and 4 under the bar.
+ * The years are a wheel along the foot of the screen (Frank, 2026-11-15):
+ * see THE YEAR WHEEL below for its knobs.
  */
 @media (max-width: 899px) {
   /* The ghost of the gallery behind an open work stands on the same grid. */
@@ -414,17 +406,6 @@
     --wall-row: calc(10 * var(--p));
     --wall-foot: calc(120 * var(--p));
   }
-  .years {
-    --years-pad: calc(12 * var(--p));
-    --swatch-w: calc(21 * var(--p));      /* with the gap, 24 to press: 13 was too easy to miss by a year */
-    --swatch-h: calc(22 * var(--p));
-    --swatch-now: calc(34 * var(--p));
-    --swatch-gap: calc(3 * var(--p));
-    --year-type: calc(9 * var(--p));
-    --year-line: calc(11 * var(--p));
-    --year-gap: calc(4 * var(--p));
-  }
-
   /* The runway the pile unfolds over: gone before the script takes it out. */
   .hero[data-hero] { display: none; }
 
@@ -455,30 +436,66 @@
   .controls { display: none; }
   .years ~ .scroll-cue { display: none; }
 
-  /*
-   * The years: a bar of their colours fixed to the foot of the screen, the
-   * one on screen taller and named. Each year is a column the full height of
-   * the bar, so the finger has more than 13 by 22 to find. Nothing to wait
-   * for on a phone, so it is there from the first paint.
-   */
+}
+
+/*
+ * ============================================================================
+ * THE YEAR WHEEL — the phone's years, every knob here (Frank, 2026-11-15).
+ *
+ * The years in a row along the foot of the screen, newest on the left, in the
+ * desktop's type and each in its own colour. The year whose paintings are on
+ * screen stands in the middle, larger; the others shrink, fade and lean away
+ * towards the edges, as on a drum. Scrolling the paintings turns the wheel;
+ * turning the wheel (a swipe) takes the paintings to the year it stops on; a
+ * tap on a year does the same. client/years.ts writes each year's distance
+ * from the middle, in years, as --d (and --ad, the same without its sign).
+ *
+ *   --wheel-type     the years' size
+ *   --wheel-gap      the space between two years
+ *   --wheel-pad      above and below the row
+ *   --wheel-zoom     how much larger the middle year is: 1.4 is 40% larger
+ *   --wheel-shrink   how much smaller each year further out gets: 0.12 is 12%
+ *   --wheel-fade     how much fainter each year further out gets: 0.25
+ *   --wheel-curve    how far each year further out leans away, in degrees:
+ *                    0deg is flat, 20deg a gentle drum, 45deg a tight one
+ *   --wheel-depth    the drum's perspective: smaller is more dramatic
+ *   --wheel-motion   how long a year takes to grow, shrink and lean
+ *   --wheel-ease     the curve of that motion
+ * ============================================================================
+ */
+@media (max-width: 899px) {
+  .years {
+    --wheel-type: calc(28 * var(--p));
+    --wheel-gap: calc(22 * var(--p));
+    --wheel-pad: calc(14 * var(--p));
+    --wheel-zoom: 1.4;
+    --wheel-shrink: 0.12;
+    --wheel-fade: 0.25;
+    --wheel-curve: 22deg;
+    --wheel-depth: calc(500 * var(--p));
+    --wheel-motion: 0.25s;
+    --wheel-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
   .years,
   html.js .years {
     top: auto; bottom: 0; left: 0; right: 0;
     box-sizing: border-box;
-    height: calc(2 * var(--years-pad) + var(--swatch-now) + var(--year-gap) + var(--year-line) + env(safe-area-inset-bottom, 0px));
+    height: calc(2 * var(--wheel-pad) + var(--wheel-type) * var(--wheel-zoom) + env(safe-area-inset-bottom, 0px));
     margin-top: 0;
-    padding: var(--years-pad) var(--phone-pad) calc(var(--years-pad) + env(safe-area-inset-bottom, 0px));
+    /* Half the screen either side, so the first and last years can come to
+       the middle too. */
+    padding: 0 50vw env(safe-area-inset-bottom, 0px);
     flex-direction: row;
-    justify-content: center;
-    justify-content: safe center;
-    align-items: stretch;
-    /* More years than fit run off to the side; client/years.ts keeps the
-       one on screen in view. */
+    align-items: center;
+    gap: var(--wheel-gap);
     overflow: auto hidden;
     overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
     scrollbar-width: none;
-    font-size: var(--year-type);
-    line-height: var(--year-line);
+    perspective: var(--wheel-depth);
+    font-size: var(--wheel-type);
+    line-height: 1;
     background: rgb(255 255 255 / 0.88);
     background: color-mix(in srgb, var(--paper) 88%, transparent);
     backdrop-filter: blur(calc(6 * var(--p)));
@@ -491,27 +508,18 @@
   }
   .years::-webkit-scrollbar { display: none; }
   .year {
+    --d: 0;
+    --ad: 0;
     flex: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0 calc(var(--swatch-gap) / 2);
+    scroll-snap-align: center;
+    color: var(--c);
+    transform:
+      rotateY(calc(var(--d) * var(--wheel-curve)))
+      scale(calc(max(0.3, 1 - var(--ad) * var(--wheel-shrink)) * (1 + (var(--wheel-zoom) - 1) * max(0, 1 - var(--ad)))));
+    opacity: max(0.15, calc(1 - var(--ad) * var(--wheel-fade)));
+    transition: transform var(--wheel-motion) var(--wheel-ease), opacity var(--wheel-motion) var(--wheel-ease);
     -webkit-tap-highlight-color: transparent;
   }
-  /* The bar stands on the foot of its column until its year is the one on
-     screen; then the name takes the foot and the bar stands on the name. */
-  .year-swatch {
-    display: block;
-    width: var(--swatch-w);
-    height: var(--swatch-h);
-    margin-top: auto;
-    background: var(--c);
-    transition: height 0.4s var(--ease);
-  }
-  .year.is-current .year-swatch { height: var(--swatch-now); }
-  .year-label { display: none; margin-top: var(--year-gap); color: var(--ink); }
-  .year.is-current .year-label { display: block; }
-}
-@media (max-width: 899px) and (hover: hover) {
-  .year:hover .year-swatch { height: var(--swatch-now); }
+  .year-swatch { display: none; }
+  .year-label { display: block; margin: 0; color: inherit; }
 }

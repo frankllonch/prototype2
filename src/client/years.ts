@@ -1,4 +1,4 @@
-import { reduceMotion } from './env.ts';
+import { phone, reduceMotion } from './env.ts';
 import { SCROLL_SPAN } from './stack.ts';
 import { glide } from './glide.ts';
 
@@ -115,7 +115,9 @@ export function initYears(): void {
         const img = tile.querySelector('img');
         if (img?.loading === 'lazy') img.loading = 'eager';
       }
-      focus(year);
+      // On a phone the wheel itself says which year, and it turns with every
+      // scroll: the other years' paintings are not dimmed there.
+      if (!phone.matches) focus(year);
       /*
        * A jump that starts from the folded pile scrolls down through it, and
        * the pile is still `running` for the whole of that journey — which the
@@ -220,6 +222,56 @@ export function initYears(): void {
         }
       }
     };
+
+    /*
+     * The phone's wheel (THE YEAR WHEEL in 05-artwork.css). Each year is told
+     * how far it stands from the middle of the row, in years, and the
+     * stylesheet grows, fades and leans it by that. A turn of the wheel by a
+     * finger — not the turns `update` makes to follow the page — takes the
+     * paintings to the year it comes to rest on, by the year's own link.
+     */
+    if (phone.matches) {
+      let frame = 0;
+      const place = () => {
+        frame = 0;
+        const middle = rail.getBoundingClientRect().left + rail.clientWidth / 2;
+        const centres = links.map((link) => {
+          const box = link.getBoundingClientRect();
+          return box.left + box.width / 2;
+        });
+        const step = centres.length > 1 ? Math.abs(centres[1]! - centres[0]!) || 1 : 1;
+        links.forEach((link, i) => {
+          const d = (centres[i]! - middle) / step;
+          link.style.setProperty('--d', d.toFixed(3));
+          link.style.setProperty('--ad', Math.abs(d).toFixed(3));
+        });
+      };
+      let turning = false;
+      let restTimer = 0;
+      const rest = () => {
+        if (!turning) return;
+        turning = false;
+        const middle = rail.getBoundingClientRect().left + rail.clientWidth / 2;
+        let nearest = links[0]!;
+        let best = Infinity;
+        for (const link of links) {
+          const box = link.getBoundingClientRect();
+          const off = Math.abs(box.left + box.width / 2 - middle);
+          if (off < best) { best = off; nearest = link; }
+        }
+        if (nearest !== marked) { marked = nearest; nearest.click(); }
+      };
+      for (const type of ['touchstart', 'pointerdown', 'wheel'] as const) {
+        rail.addEventListener(type, () => { turning = true; }, { passive: true });
+      }
+      rail.addEventListener('scroll', () => {
+        if (!frame) frame = requestAnimationFrame(place);
+        window.clearTimeout(restTimer);
+        restTimer = window.setTimeout(rest, 160);
+      }, { passive: true });
+      window.addEventListener('resize', () => { if (!frame) frame = requestAnimationFrame(place); });
+      place();
+    }
 
     let last = 0;
     window.addEventListener('scroll', () => {
