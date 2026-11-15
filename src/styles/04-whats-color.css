@@ -1141,6 +1141,12 @@ html:has(body.has-film) {
 .wc-book-view[hidden] {
   display: none;
 }
+/* The sheets' Close. The bar stays above this view, so it sits under the bar
+   rather than on its line, where it would cover the last page's name. */
+.wc-book-view > .panel-close {
+  top: var(--bar);
+  color: var(--ink);
+}
 .wc-book-plate {
   margin: 0;
 }

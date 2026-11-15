@@ -561,12 +561,13 @@ function strip(plates: readonly Plate[], lead?: number): Html {
 
 /**
  * Where a clicked photograph opens: the picture large over the page, the page
- * blurred behind it, closed by a click anywhere or Escape. Empty and hidden
+ * blurred behind it, closed by Close (the sheets' own), a click anywhere or Escape. Empty and hidden
  * until the script fills it; without scripting it never shows and the links
  * above stand on their own.
  */
 function bookView(): Html {
   return html`<div class="wc-book-view" data-book-view hidden>
+    <button type="button" class="panel-close">Close</button>
     <figure class="wc-book-plate" data-book-plate></figure>
   </div>`;
 }

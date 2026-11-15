@@ -777,9 +777,12 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
 
   /* ---- Close ---- */
 
-  /* Shown only to a keyboard: top left, on the line of the three bars, which
-     keep the right. Drawn as they are, as the negative of what passes under. */
-  .panel:has(> .sheet, > .plates) > .panel-close {
+  /* Top left, on the line of the three bars, which keep the right. Drawn as
+     they are, as the negative of what passes under. The same Close on every
+     sheet and on the photograph opened from a strip (What's Color's book). */
+  .panel > .panel-close,
+  .panel:has(> .sheet, > .plates) > .panel-close,
+  .wc-book-view > .panel-close {
     position: fixed;
     top: calc(20 * var(--p));
     left: var(--phone-pad);
@@ -793,13 +796,7 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
     color: rgb(219, 218, 215);
     mix-blend-mode: difference;
   }
-  /* It is only ever seen with the focus on it, so that is not its dimmed state. */
-  .panel:has(> .sheet, > .plates) > .panel-close:focus-visible { opacity: 1; }
-  .panel:has(> .sheet, > .plates) > .panel-close:not(:focus-visible) {
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
+  /* Pressed with a thumb: 44 high without moving the word. */
+  .panel > .panel-close::after,
+  .wc-book-view > .panel-close::after { content: ''; position: absolute; inset: -12px; }
 }
