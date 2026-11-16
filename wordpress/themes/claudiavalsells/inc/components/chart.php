@@ -7,7 +7,9 @@
  * line at the foot. On a desktop the page holds still on one screen and the
  * scroll writes the statement, a word to a slice of the run behind it
  * (`.chart-runway`), which is why every word and each of the four things under
- * them carries its own `animation-range`; on a phone it simply stands.
+ * them carries its own `animation-range`, and its slice as bare fractions
+ * (`--w0`, `--w1`) that a phone held upright multiplies by its own run
+ * (06-colour-chart.css), as colour-chart.ts writes them.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -77,7 +79,7 @@ function cv_chart_written( array $paragraphs ): array {
 				$from   = ( ( $n + 1 ) / ( $total + 1 ) ) * CV_CHART_WRITTEN_BY;
 				$to     = ( ( $n + 2 ) / ( $total + 1 ) ) * CV_CHART_WRITTEN_BY;
 				$block .= ( $i > 0 ? ' ' : '' )
-					. '<span class="chart-word" style="animation-range: ' . cv_chart_pc( $from ) . '% ' . cv_chart_pc( $to ) . '%">' . esc_html( $word ) . '</span>';
+					. '<span class="chart-word" style="--w0:' . sprintf( '%.4F', $from ) . ';--w1:' . sprintf( '%.4F', $to ) . ';animation-range: ' . cv_chart_pc( $from ) . '% ' . cv_chart_pc( $to ) . '%">' . esc_html( $word ) . '</span>';
 				$n++;
 			}
 		}
