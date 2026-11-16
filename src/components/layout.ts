@@ -47,8 +47,8 @@ interface LayoutProps {
  */
 const MENU = [
   { label: 'Color Chart', href: '/color-chart/', phone: 5 },
-  { label: 'Commissioned', href: '/commissioned/', phone: 3 },
-  { label: 'Exhibitions', href: '/exhibitions/', phone: 4 },
+  { label: 'Exhibitions', href: '/exhibitions/', phone: 3 },
+  { label: 'Commissioned', href: '/commissioned/', phone: 4 },
   { label: 'Artwork', href: '/artwork/', phone: 2 },
   { label: 'About', href: '/#about', panel: 'about', phone: 1 },
 ] as const;
