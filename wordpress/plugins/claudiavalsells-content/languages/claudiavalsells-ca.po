@@ -83,8 +83,8 @@ msgid "Inventory reference"
 msgstr "Referència d’inventari"
 
 #: includes/editor.php:47
-msgid "Your own, e.g. L585. Not shown on the site."
-msgstr "La teva, p. ex. L585. No es mostra al lloc web."
+msgid "Your own, e.g. L585. Shown on the site as the painting’s name."
+msgstr "La teva, p. ex. L585. Al lloc web és el nom del quadre."
 
 #: includes/editor.php:48
 msgid "Available"

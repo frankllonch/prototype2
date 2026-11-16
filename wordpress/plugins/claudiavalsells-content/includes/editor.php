@@ -44,7 +44,7 @@ function cvc_editor_fields(): array {
 					[ 'key' => '_cv_year', 'label' => __( 'Year', 'claudiavalsells' ), 'type' => 'number' ],
 					[ 'key' => '_cv_dimensions', 'label' => __( 'Dimensions', 'claudiavalsells' ), 'type' => 'text', 'help' => __( 'As it should read, e.g. 162 × 130 cm', 'claudiavalsells' ) ],
 					[ 'key' => '_cv_materials', 'label' => __( 'Materials', 'claudiavalsells' ), 'type' => 'text', 'help' => __( 'e.g. Acrylic on canvas', 'claudiavalsells' ) ],
-					[ 'key' => '_cv_reference', 'label' => __( 'Inventory reference', 'claudiavalsells' ), 'type' => 'text', 'help' => __( 'Your own, e.g. L585. Not shown on the site.', 'claudiavalsells' ) ],
+					[ 'key' => '_cv_reference', 'label' => __( 'Inventory reference', 'claudiavalsells' ), 'type' => 'text', 'help' => __( 'Your own, e.g. L585. Shown on the site as the painting’s name.', 'claudiavalsells' ) ],
 					[ 'key' => '_cv_available', 'label' => __( 'Available', 'claudiavalsells' ), 'type' => 'toggle' ],
 					[ 'key' => '_cv_plate', 'label' => __( 'The picture shows the painting alone', 'claudiavalsells' ), 'type' => 'toggle', 'help' => __( 'On: the grid can draw it to scale. Off for a photograph of a room with the painting in it.', 'claudiavalsells' ) ],
 					[ 'key' => '_cv_photo_id', 'label' => __( 'Photograph of the work in place', 'claudiavalsells' ), 'type' => 'image', 'help' => __( 'The painting on the wall, if the main picture is a cut-out. Shown beside it on the work’s page.', 'claudiavalsells' ) ],

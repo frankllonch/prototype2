@@ -18,6 +18,10 @@ export interface GridItem {
   readonly dimensions?: string;
   readonly materials?: string;
   readonly reference?: string;
+  /** What the tile is called, when the caller has decided (a painting's reference). */
+  readonly name?: string;
+  /** Claudia's own caption lines, in her order, for the pointer's label. */
+  readonly caption?: readonly string[];
   readonly available?: boolean;
   /**
    * The image shows the work alone, rather than hanging in a room. Only then is
@@ -79,7 +83,7 @@ function tile(
   item: GridItem, basePath: string, index: number, priority: boolean,
   panels?: string, anchor?: number, scaled?: Scaled,
 ): Html {
-  const name = displayTitle(item.title, 'work');
+  const name = item.name ?? displayTitle(item.title, 'work');
   // A tile that raises a panel points at the panel's own anchor — there is no
   // page behind it — so the link is real with or without scripting.
   const href = panels ? `#${panels}-${item.slug}` : withBase(`${basePath}/${item.slug}/`);
@@ -94,6 +98,7 @@ function tile(
     data-dimensions="${item.dimensions ?? ''}"
     data-materials="${item.materials ?? ''}"
     data-reference="${item.reference ?? ''}"
+    data-caption="${(item.caption ?? []).join('\n')}"
     data-available="${item.available ? 'true' : 'false'}"
     data-index="${index}"
     aria-label="${name}${item.year ? `, ${item.year}` : ''}"

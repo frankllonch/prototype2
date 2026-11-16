@@ -14,9 +14,9 @@ Each work's reference (for example L569) is becoming its title. On the current w
 - **M550**: [UNTITLED 2024, 100X80CM](https://www.claudiavalsells.com/portfolio/untitled-2024-100x80cm-2/); [UNTITLED 2023, 70X60cm](https://www.claudiavalsells.com/portfolio/untitled-2023-70x60cm-4/)
 - **S569**: [UNTITLED 2025, 31X25,5CM](https://www.claudiavalsells.com/portfolio/untitled-2025-31x255cm/); [UNTITLED 2024, 26X36CM](https://www.claudiavalsells.com/portfolio/untitled-2024-26x36cm-3/)
 
-## 3. Works with no reference (73)
+## 3. Works with no reference (72)
 
-These works show no reference on the current website, so on the new site they have no reference to use as a title. They are every work from 2016 to 2021, plus one from 2026; references start with the 2022 works. What is the reference for each? (If the older works never had one, say so and they will keep their year and size as title.)
+These works show no reference on the current website, so on the new site they have no reference to use as a title. They are every work from 2016 to 2021; references start with the 2022 works. (The 2026 "Untitled, 200×180 cm" has its reference written in lower case, l581, and is read as L581.) What is the reference for each? (If the older works never had one, say so and they will keep their year and size as title.)
 
 ### 2016 (10)
 
@@ -107,8 +107,3 @@ These works show no reference on the current website, so on the new site they ha
 - [Untitled 2021, 110x153cm](https://www.claudiavalsells.com/portfolio/untitled-2021-110x153cm/) — Untitled 2021, 110x153cm, 43,30 x 60,23 inches. Gouache on paper.
 - [Untitled 2021, 200x200cm](https://www.claudiavalsells.com/portfolio/untitled-2020-200x200cm-2/) — Untitled 2020, 200x200cm, 78,74 x 78,74 inches. Mixed technique on canvas.
 - [UNTITLED 2021, 220X270CM](https://www.claudiavalsells.com/portfolio/untitled-2021-220x270cm/) — Acrylic on canvas 220x270cm
-
-### 2026 (1)
-
-- [UNTITLED 2026, 200X180 CM](https://www.claudiavalsells.com/portfolio/untitled-2026-200x180-cm/) — l581, CV 2026, Acrylic on canvas , 200X180 CM
-

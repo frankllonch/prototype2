@@ -17,7 +17,8 @@ import { chartPhotographs, colourChart, inquiries } from '../components/colour-c
 import { EDITIONS, allParticipants, type Edition } from '../content/whats-color.ts';
 import { isPlate, showPhotos, type YearColour } from '../content/load.ts';
 import { describeImage } from '../content/describe.ts';
-import { displayTitle } from '../content/title.ts';
+import { displayTitle, workTitle } from '../content/title.ts';
+import { captionLines, referenceOf } from '../content/caption.ts';
 import { withBase } from '../content/paths.ts';
 import type { Exhibition } from '../content/sections.ts';
 import type { Project, ProjectImage } from '../content/types.ts';
@@ -31,7 +32,9 @@ const workItem = (p: Project): GridItem => ({
   year: p.metadata.year,
   dimensions: p.metadata.dimensions,
   materials: p.metadata.materials,
-  reference: p.metadata.reference,
+  reference: referenceOf(p),
+  name: workTitle(p),
+  caption: captionLines(p),
   available: p.metadata.available,
   plate: isPlate(p.cover),
 });
@@ -362,7 +365,7 @@ export function artworkDetailPage(
   work: Project, previous?: Project, next?: Project, place?: { index: number; total: number },
   around: readonly Project[] = [],
 ): Html {
-  const name = displayTitle(work.title, 'work');
+  const name = workTitle(work);
   const { year, dimensions, materials } = work.metadata;
   const link = (p: Project | undefined, label: string, rel: string) =>
     p ? html`<a href="${withBase(`/artwork/${p.slug}/`)}" rel="${rel}" data-replace>${label}</a>` : html`<span></span>`;

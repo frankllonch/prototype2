@@ -113,15 +113,22 @@ function cv_work( WP_Post $p ): array {
 	$views = array_values( array_filter( $parts['images'], fn( $i ) => $i['id'] !== $cover && $i['id'] !== $photo ) );
 	$year  = (int) cv_meta( $p->ID, '_cv_year', 0 );
 
+	$caption   = cv_caption_lines( $parts['text'] );
+	$reference = (string) cv_meta( $p->ID, '_cv_reference' );
+	if ( '' === $reference && preg_match( '/^([a-z]{1,3}\d{2,4})\b/i', $caption[0] ?? '', $m ) ) {
+		$reference = strtoupper( $m[1] );
+	}
+
 	return $cache[ $p->ID ] = [
 		'id'         => $p->ID,
 		'slug'       => $p->post_name,
-		'title'      => get_the_title( $p ),
+		'title'      => cv_work_title( get_the_title( $p ), $reference, $year, (string) cv_meta( $p->ID, '_cv_dimensions' ) ),
+		'caption'    => $caption,
 		'url'        => get_permalink( $p ),
 		'year'       => $year ?: null,
 		'dimensions' => (string) cv_meta( $p->ID, '_cv_dimensions' ),
 		'materials'  => (string) cv_meta( $p->ID, '_cv_materials' ),
-		'reference'  => (string) cv_meta( $p->ID, '_cv_reference' ),
+		'reference'  => $reference,
 		'available'  => (bool) get_post_meta( $p->ID, '_cv_available', true ),
 		'plate'      => (bool) get_post_meta( $p->ID, '_cv_plate', true ),
 		'image'      => $cover,
@@ -129,6 +136,40 @@ function cv_work( WP_Post $p ): array {
 		'views'      => $views,
 		'text'       => $parts['text'],
 	];
+}
+
+/**
+ * A painting's name on the site (Frank, 2026-11-16), as `workTitle` in
+ * src/content/title.ts: its reference (the Inventory reference field, "L569")
+ * when it has one; else its own title if that is a real name; and in place of
+ * "Untitled", or of a title that only says what it is made of, its year and
+ * size until a reference is given.
+ */
+function cv_work_title( string $title, string $reference, int $year, string $dimensions ): string {
+	if ( '' !== $reference ) {
+		return $reference;
+	}
+	if ( ! preg_match( '/^(?:untitled$|acrylic|gouache|goauche|collage|mixed|oil\b|(?:recent )?works\b)/i', $title ) ) {
+		return $title;
+	}
+	$named = implode( ', ', array_filter( [ $year ? (string) $year : '', $dimensions ] ) );
+	return '' !== $named ? $named : $title;
+}
+
+/**
+ * A painting's caption as Claudia wrote it, line for line and in her order:
+ * a line per paragraph or break of the work's text (`captionLines` in
+ * src/content/caption.ts).
+ */
+function cv_caption_lines( string $html ): array {
+	$lines = [];
+	foreach ( preg_split( '#</p>|<br\s*/?>#i', $html ) as $part ) {
+		$line = trim( preg_replace( '/\s+/u', ' ', html_entity_decode( wp_strip_all_tags( $part ), ENT_QUOTES | ENT_HTML5, 'UTF-8' ) ) );
+		if ( '' !== $line && 'null' !== $line ) {
+			$lines[] = $line;
+		}
+	}
+	return $lines;
 }
 
 /** Alt text for a work's picture, built from its own facts where the library has none. */

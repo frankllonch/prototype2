@@ -54,8 +54,10 @@ export function initCursor(): void {
     const title = usable?.dataset.title ?? '';
 
     if (usable && title) {
+      // A painting's label is Claudia's own caption, line for line in her
+      // order (Frank, 2026-11-16); without one, its name and year.
       const year = usable.dataset.year;
-      const text = year ? `${title}, ${year}` : title;
+      const text = usable.dataset.caption || (year ? `${title}, ${year}` : title);
       if (label.textContent !== text) label.textContent = text;
       if (!active) { active = true; cursor.classList.add('is-visible'); }
       // Snap rather than trail while it is standing in for the pointer.

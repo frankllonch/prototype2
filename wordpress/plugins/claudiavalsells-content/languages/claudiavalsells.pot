@@ -78,7 +78,7 @@ msgid "Inventory reference"
 msgstr ""
 
 #: includes/editor.php:47
-msgid "Your own, e.g. L585. Not shown on the site."
+msgid "Your own, e.g. L585. Shown on the site as the painting’s name."
 msgstr ""
 
 #: includes/editor.php:48

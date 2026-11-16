@@ -35,7 +35,7 @@ function cv_tile( array $item, int $index, bool $priority, ?string $panels = nul
 	$year = $item['year'] ?? null;
 
 	return sprintf(
-		'<a class="tile" href="%s"%s style="%s"%s data-title="%s" data-year="%s" data-dimensions="%s" data-materials="%s" data-reference="%s" data-available="%s" data-index="%d" aria-label="%s">%s</a>',
+		'<a class="tile" href="%s"%s style="%s"%s data-title="%s" data-year="%s" data-dimensions="%s" data-materials="%s" data-reference="%s" data-caption="%s" data-available="%s" data-index="%d" aria-label="%s">%s</a>',
 		esc_url( $href ),
 		$anchor ? ' id="year-' . (int) $anchor . '"' : '',
 		esc_attr( $style ),
@@ -45,6 +45,7 @@ function cv_tile( array $item, int $index, bool $priority, ?string $panels = nul
 		esc_attr( $item['dimensions'] ?? '' ),
 		esc_attr( $item['materials'] ?? '' ),
 		esc_attr( $item['reference'] ?? '' ),
+		esc_attr( implode( "\n", $item['caption'] ?? [] ) ),
 		! empty( $item['available'] ) ? 'true' : 'false',
 		$index,
 		esc_attr( $name . ( $year ? ", $year" : '' ) ),

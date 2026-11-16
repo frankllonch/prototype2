@@ -1,5 +1,6 @@
 
-import type { ProjectKind } from './types.ts';
+import type { Project, ProjectKind } from './types.ts';
+import { referenceOf } from './caption.ts';
 
 /**
  * Presentation titles.
@@ -56,4 +57,23 @@ export function displayTitle(
   }
 
   return title || 'Untitled';
+}
+
+/**
+ * A painting's name on the site (Frank, 2026-11-16): its reference — Claudia's
+ * own inventory number, "L569" — when it has one, since that is what she calls
+ * it. Without one it keeps its own title if it has a real one ("Color
+ * Dialogues III"); "Untitled" goes, and it is named by its year and size
+ * instead until she gives it a reference.
+ */
+export function workTitle(work: Project): string {
+  const { year, dimensions } = work.metadata;
+  const reference = referenceOf(work);
+  if (reference) return reference;
+  const name = displayTitle(work.title, 'work');
+  // Some of the old pages are named by what they are made of ("Gouache on
+  // paper 65x55cm (4)", "Recent Works 2017"), which is no more a name than
+  // "Untitled" is: those go the same way.
+  if (!/^(?:untitled$|acrylic|gouache|goauche|collage|mixed|oil\b|(?:recent )?works\b)/i.test(name)) return name;
+  return [year ? String(year) : '', dimensions ?? ''].filter(Boolean).join(', ') || name;
 }

@@ -681,7 +681,10 @@ html.is-scrolled .scroll-cue { opacity: 0; }
    * pointer is always over a painting, where contrast matters more than hue.
    */
   color: #ffffff;
-  white-space: nowrap;
+  /* A painting's caption keeps Claudia's own lines (client/cursor.ts). */
+  white-space: pre;
+  text-align: center;
+  line-height: 1.35;
   font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
