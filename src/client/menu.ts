@@ -83,10 +83,15 @@ export function initMenu(): void {
       const v = style.getPropertyValue(name).trim();
       return (Number.parseFloat(v) || 0) * (v.endsWith('ms') ? 1 : 1000);
     };
-    const total = reduceMotion.matches ? 0 : ms('--cascade-duration') + 5 * ms('--cascade-step');
+    // Until the last section has gone and the last bar has turned back.
+    const total = reduceMotion.matches ? 0 : Math.max(
+      ms('--cascade-duration') + 5 * ms('--cascade-step'),
+      ...[1, 2, 3].map((n) => ms(`--line${n}-duration`) + ms(`--line${n}-delay`)),
+    );
     root.classList.add('is-menu-closing');
     for (const el of sections()) { el.style.animation = 'none'; void el.offsetWidth; el.style.animation = ''; }
     closing = window.setTimeout(() => { root.classList.remove('is-menu-closing'); done(); }, total);
+    return total;
   };
 
   /** The start screen with its sections put away: the name and the bars alone. */
@@ -169,6 +174,15 @@ export function initMenu(): void {
       // Another page: client/transitions.ts fades and goes. The wordmark leads
       // to this same screen, so its words are not faded on the way.
       root.classList.toggle('is-menu-held', link === wordmark);
+      /*
+       * The menu is the way from one page to the next (Frank, 2026-11-16): the
+       * sections leave, the X turns back into the three bars, and the paper
+       * holds until the next page comes up under bars standing just where they
+       * were. transitions.ts waits for it (`data-leave-ms`) before it goes.
+       */
+      if (raised() || atStart()) {
+        root.dataset.leaveMs = String(leave(() => { root.classList.add('is-menu-collapsed'); }));
+      }
       return;
     }
     event.preventDefault();
@@ -176,10 +190,14 @@ export function initMenu(): void {
     if (startPage && link === names) return toNames();
     // The page you are on: back to it, and out of any panel open on it. The
     // button takes the keyboard from the link, which goes out of sight.
+    // The sections leave and the bars turn back first, as on the way to
+    // another page.
     const within = bar.contains(document.activeElement);
-    lower();
-    if (within) toggle.focus({ preventScroll: true });
-    document.querySelector<HTMLElement>('.panel.is-open [data-panel-close]')?.click();
+    leave(() => {
+      lower();
+      if (within) toggle.focus({ preventScroll: true });
+      document.querySelector<HTMLElement>('.panel.is-open [data-panel-close]')?.click();
+    });
   }, true);
 
   // Before the panels and the lightbox hear it: Escape puts away the menu only.

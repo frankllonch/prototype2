@@ -95,7 +95,10 @@
      desktop's: no phone sheet has it, and it stood in the page's right margin. */
   .scroll-thumb { display: none; }
   /* Leaving for another page: the words go, the paper stays for the next page's own fade. */
-  html.is-leaving:not(.is-menu-held) .top > * { opacity: 0; transition: opacity 0.3s var(--ease); }
+  html.is-leaving:not(.is-menu-held, .is-menu-closing, .is-menu-collapsed) .top > * { opacity: 0; transition: opacity 0.3s var(--ease); }
+  /* Leaving through the menu, the sections go by their own cascade (THE MENU'S
+     MOTION) and only the name fades: the next page has the bars alone. */
+  html.is-leaving:is(.is-menu-closing, .is-menu-collapsed):not(.is-menu-held) .top .wordmark { opacity: 0; transition: opacity 0.3s var(--ease); }
 
   /* Rules elsewhere that take the bar away outright. */
 /* A work on its own page is drawn with no bar at all on the phone sheet

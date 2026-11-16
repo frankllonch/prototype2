@@ -63,7 +63,11 @@ export function initTransitions(): void {
    * that faded it and the departure that was in flight. Without this, going back
    * lands under an opaque sheet with every link already spoken for.
    */
-  const arrive = () => { root.classList.remove('is-leaving'); target = ''; gone = false; replace = false; };
+  const arrive = () => {
+    root.classList.remove('is-leaving');
+    delete root.dataset.leaveMs;
+    target = ''; gone = false; replace = false;
+  };
   window.addEventListener('pageshow', (event) => {
     arrive();
     /*
@@ -107,10 +111,13 @@ export function initTransitions(): void {
     root.classList.add('is-leaving');
     if (!first) return;   // already counting down; only the destination changed
 
-    window.setTimeout(go, OUT_MS);
+    // Longer when the phone's menu is on its way out first (client/menu.ts):
+    // the next page waits for the bars to stand straight again.
+    const wait = Math.max(OUT_MS, Number(root.dataset.leaveMs) || 0);
+    window.setTimeout(go, wait);
     // A tab backgrounded mid-fade may never run the first timer; the guard is
     // what stops a click from being swallowed entirely.
-    window.setTimeout(go, LEAVE_GUARD);
+    window.setTimeout(go, Math.max(LEAVE_GUARD, wait + 280));
     /*
      * And if the navigation never commits at all — the load is stopped, or the
      * URL turns out to be something the browser downloads rather than opens —
