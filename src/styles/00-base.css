@@ -876,72 +876,272 @@ html.is-leaving .top [aria-current='page']:is(a, button)::before {
 }
 
 /*
- * On the opening page the block waits for the film to have gone.
+ * The name twice over, for the stretch where the film is still passing it.
  *
- * Nothing shows while the bar is still held on the middle line: there the bar
- * is the film's negative, and a second colour laid over that reads as part of
- * the picture. Nor while the film's last stretch is still sliding up past the
- * bar at the top: the block used to be drawn out from under it there, which
- * left a band of dark film standing above the colour for the length of the
- * stretch (Frank, 2026-11-17: "the black should not be seen"). So the name
- * stays the bar's negative over the film, and once the film has left the
- * screen the block drops onto it exactly as it does on every other page
- * arriving — and goes back up the same way when the film is scrolled back.
+ * `--edge` is where the film's bottom edge falls inside the name's own box:
+ * the edge sits --film-lift below the top of the item, and the name begins
+ * --bar-rise below that same top, so the difference is the edge measured from
+ * the name. Floored at nothing, since the edge passes the name and keeps going.
  *
- * A transition rather than the drop animation, because this goes both ways
- * with the scroll. The clip moves with the transform, step for step, so the
- * block only ever shows below the line it drops from: it never appears over
- * the film while the bar is riding the film's edge further down the screen.
+ * The lower copy is the one in the document; the upper is drawn over it in the
+ * ink the bar wears over the film, with no block behind it. Each shows only its
+ * own side of that edge, so as the film clears, the name is handed from one to
+ * the other a letter at a time.
  */
-.has-film:not(.is-film-past) .top [aria-current='page']:is(a, button)::before { display: none; }
-.has-film:not(.is-film-gone) .top [aria-current='page']:is(a, button) {
+.top-face { display: inline-block; }
+
+.top-echo {
+  position: absolute;
+  top: var(--bar-rise);
+  left: var(--bar-side);
+  display: none;
+  white-space: nowrap;
+  pointer-events: none;
   color: var(--bar-ink);
   --roll-color: var(--bar-ink);
 }
+
+.has-film.is-film-past .top [aria-current='page'] {
+  /* A plain length, not a guarded one: a clip-path keyframe will not
+     interpolate from a value still carrying a math function, and an inset
+     clamps a negative of its own accord anyway. */
+  --edge: calc(var(--film-lift) - var(--bar-rise));
+}
+.has-film.is-film-past .top-face { clip-path: inset(var(--edge) 0 0 0); }
+.has-film.is-film-past .top-echo {
+  display: block;
+  clip-path: inset(0 0 calc(100% - var(--edge)) 0);
+}
+
+/* Once the film has gone there is one name again. */
+.has-film.is-film-gone .top-face { clip-path: none; }
+.has-film.is-film-gone .top-echo { display: none; }
+
+@supports (animation-timeline: scroll()) {
+  .has-film.is-film-past .top-face,
+  .has-film.is-film-past .top-echo {
+    animation-duration: auto;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: scroll(root block);
+    animation-range: calc(var(--film-h) - var(--film-lift)) var(--film-h);
+  }
+  .has-film.is-film-past .top-face { animation-name: face-reveal; }
+  .has-film.is-film-past .top-echo { animation-name: echo-clear; }
+}
+
+/*
+ * Both copies are cut at the film's edge all the way through, which ends the
+ * stretch not at the name's top but --bar-rise above it, at the top of the
+ * window. Ending the cut at the name's top instead made it trail the edge,
+ * so the upper copy, in the ink, stood on the block for a moment and the
+ * name read as turning from black to white as the film cleared.
+ */
+@keyframes face-reveal {
+  from { clip-path: inset(var(--edge) 0 0 0); }
+  to { clip-path: inset(calc(-1 * var(--bar-rise)) 0 0 0); }
+}
+@keyframes echo-clear {
+  from { clip-path: inset(0 0 calc(100% - var(--edge)) 0); }
+  to { clip-path: inset(0 0 calc(100% + var(--bar-rise)) 0); }
+}
+
+/*
+ * On the opening page the block comes out from under the film rather than
+ * appearing once it has gone.
+ *
+ * Nothing shows while the bar is still held on the middle line: there the bar
+ * is the film's negative, and a second colour laid over that reads as part of
+ * the picture.
+ *
+ * From the moment the bar settles on the film's bottom edge the block is there
+ * but cut off at that edge, so only what has cleared the film is seen. The cut
+ * is a constant and not something to recompute as the page moves: the bar rides
+ * that edge for the whole of the film's last stretch, so the film's bottom
+ * always sits exactly `--film-lift` below the top of the block.
+ *
+ * What is left is the final stretch — the bar has reached the top and the
+ * film's last `--film-lift` of picture is still sliding past it — and that one
+ * opens the cut, on the scroll itself, so the block looks drawn out from
+ * beneath the film. Where scroll timelines are not understood the cut is simply
+ * dropped once the film has gone, which is the behaviour this replaces.
+ */
+.has-film:not(.is-film-past) .top [aria-current='page']:is(a, button)::before { display: none; }
 .has-film:not(.is-film-past) .top [aria-current='page']:is(a, button) {
+  color: var(--bar-ink);
+  --roll-color: var(--bar-ink);
   padding-top: 0;
   padding-bottom: 0;
   margin-top: 0;
   margin-bottom: 0;
 }
-.has-film .top [aria-current='page']:is(a, button) { animation: none; }
+
+/*
+ * The cut falls on the colour and on nothing else.
+ *
+ * It used to be set on the item itself, which carries the name as well as the
+ * block behind it, so the moment the cut came in it took the top of the item
+ * away — and since the name sits in that top, the name went with it. What is
+ * wanted is a block emerging from under the film with its name on it the whole
+ * time, so the cut belongs to the layer that is the block.
+ */
 .has-film.is-film-past .top [aria-current='page']:is(a, button)::before {
-  animation: none;
-  transform: translateY(-100%);
-  clip-path: inset(100% 0 0 0);
-  transition: transform 0.46s var(--ease), clip-path 0.46s var(--ease);
+  /* The block runs on above the window by --bar-reach; the cut is measured
+     from the item's own top, so that is added back. */
+  clip-path: inset(calc(var(--film-lift) + var(--bar-reach)) 0 0 0);
 }
 .has-film.is-film-gone .top [aria-current='page']:is(a, button)::before {
-  transform: none;
-  clip-path: inset(0);
+  clip-path: none;
 }
-/* The name knocks out of the block once the block is under it, as on arrival. */
-.has-film.is-film-gone .top [aria-current='page']:is(a, button) {
-  transition: color var(--knock-time) linear var(--knock-delay), --roll-color var(--knock-time) linear var(--knock-delay);
+
+@supports (animation-timeline: scroll()) {
+  .has-film.is-film-past .top [aria-current='page']:is(a, button)::before {
+    animation: swatch-slide linear both;
+    animation-timeline: scroll(root block);
+    animation-range: calc(var(--film-h) - var(--film-lift)) var(--film-h);
+  }
+}
+
+@keyframes swatch-slide {
+  from { clip-path: inset(calc(var(--film-lift) + var(--bar-reach)) 0 0 0); }
+  to { clip-path: inset(var(--bar-reach) 0 0 0); }
 }
 
 /*
- * Arriving at What's Color by its link, and leaving it: the block moves here
- * as it does on every other page, and those moments out-weigh the rules above.
- * The drop starts with the page's first frame (the arrival rules near the
- * top of this file) and keeps running through the hand-over to the film's
- * own state — the same animation by name, so it continues rather than
- * restarts; the head lifts the class once it has finished. Leaving comes
- * last, so it wins if the two ever meet.
+ * Arriving and leaving, the block moves here as it does on every other page.
+ *
+ * The scroll-driven reveal above takes the block's animation slot for as long
+ * as the film is behind the bar — and, being the more specific rule, for good
+ * once it is: the drop on arrival never ran (landing below the film, the
+ * reveal is already over, so the block was simply there) and neither did the
+ * lift on leaving, so the block was cut off with the page instead of drawn up
+ * out of it. Both moments win the slot back here, by out-weighing that rule.
+ *
+ * The drop starts with the page's first frame (the arrival rules above) and
+ * this keeps it running through the hand-over to the film's own state — the
+ * same animation by name, so it continues rather than restarts; the head lifts
+ * the class once it has finished. The lift comes with the page-leaving class,
+ * as everywhere. The shorthand resets the timeline, so both run on the clock,
+ * not the scroll. Leaving comes last, so it wins if the two ever meet.
  */
 html.wc-swatch-drop body.has-film.is-film-past .top [aria-current='page']:is(a, button)::before {
   animation: swatch-drop 0.46s var(--ease) both;
 }
+html.is-leaving body.has-film.is-film-past .top [aria-current='page']:is(a, button)::before {
+  animation: swatch-lift 0.34s var(--ease) both;
+}
+
+/*
+ * The name never changes colour here as the block slides out: its two copies
+ * hand it over at the film's edge, the same line the block is cut at, so the
+ * paper copy only ever shows on the block. The turn from ink to paper that
+ * the other pages make once their block has dropped is kept for arriving by
+ * the link, where the block drops in the same way.
+ */
+.has-film .top [aria-current='page']:is(a, button) { animation: none; }
 html.wc-swatch-drop body.has-film .top [aria-current='page']:is(a, button) {
   animation: name-knock var(--knock-time) linear var(--knock-delay) backwards;
 }
-html.is-leaving body.has-film .top [aria-current='page']:is(a, button) {
-  color: var(--bar-ink);
-  --roll-color: var(--bar-ink);
-  transition: none;
+
+
+/* ------------------------------------------------------------- scrollbar */
+
+/*
+ * The handle and nothing else.
+ *
+ * The browser's own bar draws a channel down the right edge — a pale box with
+ * a rule beside it — which on a site that is otherwise paper and ink reads as
+ * a piece of the operating system left on the page. The track is given no
+ * colour at all, so what is left is the handle, apparently floating on
+ * whatever the page happens to be behind it.
+ *
+ * The handle is a mid grey on purpose rather than the ink: it has to hold on
+ * the white pages and on the opening film alike, and nothing here can blend
+ * the way the bar does — a scrollbar is drawn by the browser, outside anything
+ * `mix-blend-mode` can reach. A grey at this weight reads against both.
+ *
+ * Its slimness comes from a transparent border with the paint clipped inside
+ * it, which is the one way to inset a handle: the track keeps its full width
+ * for the pointer to find, while the mark itself is narrow.
+ *
+ * Firefox has no pseudo-elements for this and takes the two properties above
+ * instead; between them every browser gets a handle and no box.
+ */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(140 140 140 / 0.55) transparent;
 }
-html.is-leaving body.has-film.is-film-past .top [aria-current='page']:is(a, button)::before {
-  animation: swatch-lift 0.34s var(--ease) both;
+
+::-webkit-scrollbar { width: 11px; height: 11px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-corner { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgb(140 140 140 / 0.55);
+  background-clip: content-box;
+  border: 3px solid transparent;
+  border-radius: 11px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgb(120 120 120 / 0.75); background-clip: content-box; }
+
+/*
+ * The drawn handle.
+ *
+ * It replaces the browser's bar rather than restyling it, because a native bar
+ * cannot be moved onto the page: however the track is painted, the column it
+ * sits in is still held open beside the content. Taking it away gives those
+ * pixels back to the page and leaves the handle floating over whatever is
+ * behind it.
+ *
+ * Both halves are behind the same support query, and deliberately so. The
+ * handle is carried by a scroll-driven animation, so where that is not
+ * understood there is no handle — and in that case the native bar has to stay,
+ * styled as far as it can be. Hiding it unconditionally would have left those
+ * browsers with no indication of position at all.
+ *
+ * Mid grey rather than the ink: it has to hold on the white pages and on the
+ * opening film alike, and nothing can blend it — this is drawn over the page,
+ * not into it.
+ */
+@supports (animation-timeline: scroll()) {
+  html { scrollbar-width: none; }
+  html::-webkit-scrollbar { width: 0; height: 0; }
+
+  .scroll-thumb {
+    position: fixed;
+    top: 0;
+    right: 3px;
+    z-index: 60;
+    width: 4px;
+    height: var(--thumb-h, 0px);
+    border-radius: 4px;
+    background: rgb(140 140 140 / 0.5);
+    pointer-events: none;
+    animation: thumb-run linear both;
+    animation-timeline: scroll(root block);
+  }
+}
+
+@keyframes thumb-run {
+  to { transform: translateY(calc(100vh - var(--thumb-h, 0px))); }
+}
+
+/* ---------------------------------------------------------- text scramble */
+
+/*
+ * The churning hover's characters.
+ *
+ * Each keeps the width it measured while the word was still, so whatever
+ * nonsense lands in it cannot push the word wider and shove the rest of the
+ * bar along — every position up there was set against the designer's sheet and
+ * none of it may move. A piece too wide for its box is centred and cut rather
+ * than allowed to spread.
+ */
+.scram {
+  display: inline-block;
+  width: var(--w);
+  overflow: hidden;
+  text-align: center;
+  white-space: pre;
 }
 
 
