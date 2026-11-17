@@ -54,8 +54,8 @@ export function initCursor(): void {
     const title = usable?.dataset.title ?? '';
 
     if (usable && title) {
-      // A painting's label is Claudia's own caption, line for line in her
-      // order (Frank, 2026-11-16); without one, its name and year.
+      // A painting's label is its reference (and collection code), size and
+      // technique (content/caption.ts); without any, its name and year.
       const year = usable.dataset.year;
       const text = usable.dataset.caption || (year ? `${title}, ${year}` : title);
       if (label.textContent !== text) label.textContent = text;
