@@ -17,6 +17,7 @@ import type { DocumentEntry } from './whats-color-document.ts';
  *
  * Cierto Estudio was invited and is named in the roster, but the document
  * carries no answer, which is why the count is twenty-seven of twenty-eight.
+ * Its colour (AC097 Verd Gris, #cdddcb) is in `whats-color-colours.ts`.
  *
  * Paragraphs are separated by a blank line and the component splits on it.
  */

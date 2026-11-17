@@ -25,7 +25,15 @@ import { phone } from './env.ts';
  */
 export function initTextRoll(): void {
   const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' });
+  /*
+   * The static site writes the letters into the page already
+   * (components/layout.ts), both drawings of each word, and the stylesheet
+   * picks one by the window's width — nothing to do here, and nothing to
+   * change after the first paint. This cuts them only where a page arrives
+   * with plain words, which is a page that writes its bar some other way.
+   */
   const words = [...document.querySelectorAll<HTMLElement>('[data-roll]')]
+    .filter((root) => !root.querySelector('.roll-word'))
     .map((root) => ({ root, text: root.textContent ?? '' }));
 
   const wrap = (into: HTMLElement, text: string) => {
@@ -47,14 +55,8 @@ export function initTextRoll(): void {
 
   const set = () => {
     for (const { root, text } of words) {
-      // On the opening page the current name is drawn twice, each drawing in
-      // a span of its own (client/current.ts). Those two hold the letters
-      // then, and the name itself holds only them.
-      const faces = root.querySelectorAll<HTMLElement>('.top-face, .top-echo');
-      for (const into of faces.length ? faces : [root]) {
-        if (phone.matches) into.textContent = text;
-        else wrap(into, text);
-      }
+      if (phone.matches) root.textContent = text;
+      else wrap(root, text);
     }
   };
 

@@ -29,6 +29,24 @@ function cv_menu(): array {
 }
 
 /**
+ * A word in the bar, already cut into the roll's letters, as the static
+ * site's `rolled` writes it (src/components/layout.ts): the letters for the
+ * eye, hidden from a screen reader, and the plain word, which a screen reader
+ * reads and the phone shows. Cut here rather than by the script after the
+ * first paint, which moved every letter by its kerning on every page.
+ */
+function cv_rolled( string $text ): string {
+	$letters = '';
+	$i       = 0;
+	foreach ( preg_split( '//u', $text, -1, PREG_SPLIT_NO_EMPTY ) as $ch ) {
+		$letters .= '' === trim( $ch )
+			? esc_html( $ch )
+			: '<span class="roll" data-ch="' . esc_attr( $ch ) . '" style="--i: ' . $i++ . '">' . esc_html( $ch ) . '</span>';
+	}
+	return '<span class="roll-word" aria-hidden="true">' . $letters . '</span><span class="roll-text">' . esc_html( $text ) . '</span>';
+}
+
+/**
  * The button is the phone's whole bar: three bars at the top right, drawn by
  * the stylesheet, which raise the header below as a screen of its own (the
  * theme's client/menu.js). Above 899px it is not displayed. It stands before
@@ -40,8 +58,8 @@ function cv_top_bar(): string {
 		. '<header class="top" id="site-menu">'
 		// Decoded before it is uppercased, since the site's name arrives already
 		// escaped and an entity's letters must not be touched; escaped once after.
-		. '<a class="wordmark" href="' . esc_url( home_url( '/' ) ) . '" data-roll>' . esc_html( mb_strtoupper( wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) ) ) . '</a>'
-		. '<a class="top-soon" href="' . esc_url( home_url( '/#whats-color' ) ) . '"' . ( '/' === $path || str_starts_with( $path, '/whats-color/' ) ? ' aria-current="page"' : '' ) . ' data-roll>What&rsquo;s Color?</a>'
+		. '<a class="wordmark" href="' . esc_url( home_url( '/' ) ) . '" data-roll>' . cv_rolled( mb_strtoupper( wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) ) ) . '</a>'
+		. '<a class="top-soon" href="' . esc_url( home_url( '/#whats-color' ) ) . '"' . ( '/' === $path || str_starts_with( $path, '/whats-color/' ) ? ' aria-current="page"' : '' ) . ' data-roll>' . cv_rolled( "What\u{2019}s Color?" ) . '</a>'
 		. '<nav class="menu" aria-label="Primary">';
 	foreach ( cv_menu() as $item ) {
 		$out .= sprintf(
@@ -50,7 +68,7 @@ function cv_top_bar(): string {
 			isset( $item['panel'] ) ? ' data-panel-open="' . esc_attr( $item['panel'] ) . '"' : '',
 			$item['path'] === $path ? ' aria-current="page"' : '',
 			(int) $item['phone'],
-			esc_html( $item['label'] )
+			cv_rolled( $item['label'] )
 		);
 	}
 	return $out . '</nav></header>';

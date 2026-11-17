@@ -136,6 +136,11 @@
      in the words when a window that loaded wide goes below 900px: they flow as
      plain text. The roll's are taken out again by its own script. */
   .top .scram { display: inline; }
+  /* The roll's letters stand down for the plain word, which kerns: boxed one
+     to a box, VALSELLS and WHAT'S sat three and four pixels off the sheet at
+     this size, and a word could break between any two of its letters. */
+  .top .roll-word { display: none; }
+  .top .roll-text { position: static; width: auto; height: auto; margin: 0; overflow: visible; clip-path: none; white-space: inherit; }
   /* The two names break after their first word because the column is 335 wide. */
   .wordmark, .top-soon { width: calc(335 * var(--p)); white-space: normal; }
   .wordmark { margin-bottom: calc(179 * var(--p)); }
@@ -154,8 +159,6 @@
   html.wc-arriving body.has-film .top [aria-current='page']:is(a, button) { position: static; padding: 0; margin: 0; }
   .top [aria-current='page']:is(a, button)::before,
   html.wc-arriving body.has-film .top [aria-current='page']:is(a, button)::before { display: none; }
-  body.has-film .top .top-face { display: contents; clip-path: none; animation: none; }
-  body.has-film .top .top-echo { display: none; }
 }
 
 @media (max-width: 899px) and (prefers-reduced-motion: reduce) {

@@ -182,6 +182,7 @@ const CV_SWATCH_FINAL = [
 	'wc-amoo'                           => '#592222',
 	'wc-loca-studio'                    => '#eb7373',
 	'wc-paula-arroyo'                   => '#fab75f',
+	'wc-cierto-estudio'                 => '#cdddcb',
 	'wc-alvaro-galmes'                  => '#ebad02',
 	'wc-marta-d-riezu'                  => '#82ad7b',
 	'wc-maria-prats'                    => '#0a0a0a',
