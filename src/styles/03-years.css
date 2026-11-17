@@ -17,9 +17,9 @@
  * and simply fades in there.
  */
 :root {
-  /* The column's lines. Years at the page's leading (50 over 40), controls at
-     40 over 30. */
-  --year-lead: 1.25;
+  /* The column's lines. Years medium 40 on 40 (DATA on the typography
+     sheet, 2026-11-17), controls at 40 over 30. */
+  --year-lead: 1;
   --side-lead: 1.3333;
   /* How many years there are: written by client/years.ts, eleven until then. */
   --years-count: 11;
@@ -41,6 +41,7 @@
   flex-direction: column;
   align-items: flex-start;
   font-size: var(--type);
+  font-weight: 500;
   line-height: var(--year-lead);
   /* The capitals, not the line box, start on that line: half the leading less
      the 0.317 em Switzer puts above a capital (see .detail-caption). */

@@ -112,6 +112,8 @@
    */
   --t-40: var(--type);
   --t-45: calc(var(--type) * 1.125);
+  --t-30: calc(var(--type) * 0.75);
+  --t-20: calc(var(--type) * 0.5);
   --lead-45: 1.125;      /* 45 over 40, the sheets own leading */
   --type-menu: clamp(0.75rem, 1.0417vw, 1.7rem);
   /*

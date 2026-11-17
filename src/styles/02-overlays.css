@@ -198,7 +198,8 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   --m: max(1.25rem, calc(48 * var(--u)));
   /* The sizes on the frame: 45 for the lead, 40 for the biography (below),
      20 for the record, the labels, the contact and the copyright. */
-  --about-body: max(1rem, calc(45 * var(--u)));
+  /* The lead: medium 40 on 45 (JERARQUIA ABOUT, 2026-11-17). */
+  --about-body: max(0.9375rem, calc(40 * var(--u)));
   --about-small: max(0.6875rem, calc(20 * var(--u)));
   /* Every line on the frame is set at 0, and the site's small type is not. */
   letter-spacing: 0;
@@ -279,7 +280,7 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .about-text p { margin: 0; letter-spacing: 0; }
 .about-lead {
   font-size: var(--about-body);
-  line-height: calc(50 / 45);
+  line-height: calc(45 / 40);
   font-weight: 500;
   text-transform: uppercase;
   text-align: left;
@@ -613,6 +614,8 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   /* On a phone the lead and the biography are both 20 on 20, the size of
      Color Charts' statement (--chart-phone-text). The record keeps its own. */
   .about-lead, .about-text > p { font-size: calc(20 * var(--p)); line-height: 1; }
+  /* The lead keeps the computer's 45 over 40, at the phone's size. */
+  .about-lead { line-height: calc(45 / 40); }
   .about-record { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 3.5em; }
   .about-show-columns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
