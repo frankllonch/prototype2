@@ -55,8 +55,14 @@ export function initTextRoll(): void {
 
   const set = () => {
     for (const { root, text } of words) {
-      if (phone.matches) root.textContent = text;
-      else wrap(root, text);
+      // On the opening page the current name is drawn twice, each drawing in
+      // a span of its own (client/current.ts). Those two hold the letters
+      // then, and the name itself holds only them.
+      const faces = root.querySelectorAll<HTMLElement>('.top-face, .top-echo');
+      for (const into of faces.length ? faces : [root]) {
+        if (phone.matches) into.textContent = text;
+        else wrap(into, text);
+      }
     }
   };
 

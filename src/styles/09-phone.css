@@ -159,6 +159,8 @@
   html.wc-arriving body.has-film .top [aria-current='page']:is(a, button) { position: static; padding: 0; margin: 0; }
   .top [aria-current='page']:is(a, button)::before,
   html.wc-arriving body.has-film .top [aria-current='page']:is(a, button)::before { display: none; }
+  body.has-film .top .top-face { display: contents; clip-path: none; animation: none; }
+  body.has-film .top .top-echo { display: none; }
 }
 
 @media (max-width: 899px) and (prefers-reduced-motion: reduce) {
