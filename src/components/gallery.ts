@@ -20,7 +20,7 @@ export interface GridItem {
   readonly reference?: string;
   /** What the tile is called, when the caller has decided (a painting's reference). */
   readonly name?: string;
-  /** Claudia's own caption lines, in her order, for the pointer's label. */
+  /** The pointer's label, a line each: reference, size, technique. */
   readonly caption?: readonly string[];
   readonly available?: boolean;
   /**
