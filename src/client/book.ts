@@ -1,4 +1,4 @@
-import { isPlainClick, phone } from './env.ts';
+import { isPlainClick, phone, returnFocus } from './env.ts';
 import { keepScroll, stepBack, stepState } from './panels.ts';
 
 /**
@@ -83,7 +83,7 @@ export function initBook(): void {
     view.classList.remove('is-open');
     view.hidden = true;
     document.body.style.overflow = '';
-    opener?.focus({ preventScroll: true });
+    returnFocus(opener);
     opener = null;
   };
 

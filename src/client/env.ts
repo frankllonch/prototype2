@@ -47,3 +47,25 @@ export const chartWrites = (): boolean => scrollWrites('scroll()', chartUpright)
 /** True for a plain left click — modified clicks mean "open this elsewhere". */
 export const isPlainClick = (event: MouseEvent): boolean =>
   !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey && event.button === 0;
+
+/**
+ * Gives focus back to the photograph a viewer was opened from, or was last
+ * showing, without the photograph answering as if it were hovered.
+ *
+ * Focus has to go back there, so a keyboard carries on from the same place.
+ * But the browser decides whether that focus *shows* from the last input it
+ * saw, and inside a viewer that is the arrow keys and Escape — so the
+ * photograph came back lifted, or dimmed, and stayed so with the pointer
+ * nowhere near it (Frank, 2026-11-17). Marked here, the stylesheets hold its
+ * focus-visible look back until focus leaves it; hovering it still answers.
+ */
+export function returnFocus(el: HTMLElement | null | undefined): void {
+  if (!el) return;
+  el.dataset.quietFocus = '';
+  el.focus({ preventScroll: true });
+  const done = () => { delete el.dataset.quietFocus; };
+  // Focus may not take — the element hidden, or gone — and a mark left behind
+  // would quiet the next, real, keyboard focus.
+  if (document.activeElement === el) el.addEventListener('blur', done, { once: true });
+  else done();
+}

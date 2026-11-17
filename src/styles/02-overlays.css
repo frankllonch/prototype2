@@ -332,7 +332,7 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 }
 .about-reel-item picture, .about-reel-item img { display: block; height: 100%; width: auto; }
 .about-reel-item img { transition: opacity var(--hover) var(--ease); }
-.about-reel-item:hover img, .about-reel-item:focus-visible img { opacity: 0.86; }
+.about-reel-item:hover img, .about-reel-item:focus-visible:not([data-quiet-focus]) img { opacity: 0.86; }
 
 .about-reel.is-looped { overflow: visible; }
 .about-reel.is-looped .about-reel-track {

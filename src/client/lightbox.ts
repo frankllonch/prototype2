@@ -1,4 +1,4 @@
-import { isPlainClick, reduceMotion } from './env.ts';
+import { isPlainClick, reduceMotion, returnFocus } from './env.ts';
 
 /**
  * A painting opens over the contact sheet: the grid stays put, blurred, and you
@@ -111,7 +111,7 @@ export function initLightbox(): void {
     // Held until the fade has finished, or the painting vanishes mid-close.
     teardown = window.setTimeout(() => { box.hidden = true; plate.replaceChildren(); }, 620);
     if (restore && openedAt) history.replaceState({}, '', openedAt);
-    tiles()[current]?.focus({ preventScroll: true });
+    returnFocus(tiles()[current]);
   };
 
   galleryEl.addEventListener('click', (event) => {
