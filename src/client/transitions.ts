@@ -1,4 +1,5 @@
-import { isPlainClick, reduceMotion } from './env.ts';
+import { isPlainClick, phone, reduceMotion } from './env.ts';
+import { nextHue } from './hues.ts';
 
 /**
  * Moving between pages, and the loading screen that precedes the first one.
@@ -19,6 +20,15 @@ export const OUT_MS = 420;
 const LEAVE_GUARD = 700;
 /** If the navigation has not happened by now, assume it never will. */
 export const ABANDONED = 6000;
+/**
+ * Leaving the start page for another page by the bar (see `fromStart`): the
+ * bar's climb to the top, then the new page's block dropping in under its
+ * name, and only then the next page. Kept in step with THE WAY OUT OF THE
+ * START PAGE in 04-whats-color.css.
+ */
+const START_MS = 1100;
+/** The note the start page leaves for the page it is going to. */
+export const HELD_KEY = 'cv-held';
 /**
  * When to stop trusting the entrance animations and simply show the page.
  *
@@ -64,7 +74,8 @@ export function initTransitions(): void {
    * lands under an opaque sheet with every link already spoken for.
    */
   const arrive = () => {
-    root.classList.remove('is-leaving');
+    root.classList.remove('is-leaving', 'is-leaving-start');
+    document.querySelector('.top .is-chosen')?.classList.remove('is-chosen');
     delete root.dataset.leaveMs;
     target = ''; gone = false; replace = false;
   };
@@ -108,12 +119,15 @@ export function initTransitions(): void {
     const first = !target;
     target = url.href;
     replace = link.hasAttribute('data-replace');
+    const start = fromStart(link);
+    if (start) choose(link, url);
     root.classList.add('is-leaving');
     if (!first) return;   // already counting down; only the destination changed
 
     // Longer when the phone's menu is on its way out first (client/menu.ts):
-    // the next page waits for the bars to stand straight again.
-    const wait = Math.max(OUT_MS, Number(root.dataset.leaveMs) || 0);
+    // the next page waits for the bars to stand straight again. Longer again
+    // from the start page, where the bar climbs to the top first.
+    const wait = Math.max(start ? START_MS : OUT_MS, Number(root.dataset.leaveMs) || 0);
     window.setTimeout(go, wait);
     // A tab backgrounded mid-fade may never run the first timer; the guard is
     // what stops a click from being swallowed entirely.
@@ -127,4 +141,41 @@ export function initTransitions(): void {
      */
     window.setTimeout(() => { if (!document.hidden) arrive(); }, ABANDONED);
   });
+}
+
+/**
+ * From the start page to another page, by the bar (Frank, 2026-11-17).
+ *
+ * There the bar stands across the middle of the film. Going to What's Color
+ * it climbs to the top with the film and the colour comes out under the
+ * name; going anywhere else it used to stay where it was while the page
+ * faded, and the next page then opened with the bar at the top — a jump.
+ * Now it does the same climb: the film goes to paper, the bar slides up to
+ * where it stands on every other page, the colour drops onto the name you
+ * chose, and the page you chose comes up under a bar already standing just
+ * so. The colour is handed over in a note, so the next page wears it from
+ * its first frame and does not drop it a second time (components/layout.ts).
+ *
+ * Only while the bar is still on the film's middle line: once it has
+ * climbed it is the ordinary bar, and leaves as it does everywhere.
+ */
+function fromStart(link: HTMLAnchorElement): boolean {
+  return document.body.classList.contains('has-film')
+    && !document.body.classList.contains('is-film-past')
+    && !phone.matches
+    && link.closest('.top') !== null;
+}
+
+function choose(link: HTMLAnchorElement, url: URL): void {
+  const root = document.documentElement;
+  document.querySelector('.top .is-chosen')?.classList.remove('is-chosen');
+  const n = nextHue();
+  if (n >= 0) link.style.setProperty('--bar-swatch', `var(--neg-${n})`);
+  // Restarted, for a second choice made while the first is still dropping.
+  void link.offsetWidth;
+  link.classList.add('is-chosen');
+  root.classList.add('is-leaving-start');
+  try {
+    sessionStorage.setItem(HELD_KEY, JSON.stringify({ path: url.pathname, hue: n, at: Date.now() }));
+  } catch { /* private window: the next page simply drops its own block */ }
 }

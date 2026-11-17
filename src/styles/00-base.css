@@ -1044,6 +1044,65 @@ html.wc-swatch-drop body.has-film .top [aria-current='page']:is(a, button) {
 }
 
 
+/*
+ * THE WAY OUT OF THE START PAGE — to any page but What's Color, by the bar
+ * (client/transitions.ts, `fromStart`).
+ *
+ * The film goes to paper under the bar (the veil, as on every departure),
+ * the bar climbs from the film's middle line to the top of the window, where
+ * it stands on every other page, and the colour drops onto the name chosen,
+ * just as the block drops onto a page's own name when it opens. The next page
+ * then comes up under a bar standing exactly so, wearing the same colour and
+ * not dropping it again (`arrive-held` below).
+ *
+ * The film rides up with the bar. The climb is the bar's resting offset taken back: it stands at
+ * (film-h − film-bar) / 2 and every other page has it at 0, with the same
+ * padding over the line. The drop waits for the paper, since a colour drawn
+ * over the film comes out as its opposite.
+ *
+ *   --start-climb   how long the bar takes to reach the top
+ *   --start-veil    how long the film takes to go to paper
+ *   --start-drop    when the colour starts to drop, from the click: not
+ *                   before the paper is whole, or it is drawn over the film
+ *                   as its own opposite
+ */
+.has-film { --start-climb: 0.6s; --start-veil: 0.5s; --start-drop: 0.5s; }
+html.is-leaving-start body.has-film .top,
+html.is-leaving-start body.has-film main {
+  transform: translateY(calc((var(--film-bar) - var(--film-h)) / 2));
+  transition: transform var(--start-climb) var(--ease);
+}
+/* The film is carried up with the bar, as the scroll carries it on the way
+   to What's Color, and the paper comes over it a little slower than on other
+   departures so the climb is seen. */
+@media (prefers-reduced-motion: no-preference) {
+  html.is-leaving-start body.has-film .page-veil { animation: veil-in var(--start-veil) linear both; }
+}
+html.is-leaving-start .top a.is-chosen {
+  position: relative;
+  color: #000;
+  --roll-color: #000;
+  padding: var(--bar-rise) var(--bar-side) var(--bar-drop);
+  margin: calc(-1 * var(--bar-rise)) calc(-1 * var(--bar-side)) calc(-1 * var(--bar-drop));
+  animation: name-knock var(--knock-time) linear calc(var(--start-drop) + var(--knock-delay)) backwards;
+}
+html.is-leaving-start .top a.is-chosen::before {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * var(--bar-reach)) 0 var(--bar-trim) 0;
+  z-index: -1;
+  background: var(--bar-swatch, var(--neg-0));
+  /* Held out of sight until it drops: waiting above the name, it would
+     stand over the film while the bar is still climbing. */
+  animation: swatch-drop 0.46s var(--ease) var(--start-drop) both, swatch-wait 0s linear var(--start-drop) both;
+}
+@keyframes swatch-wait { from { visibility: hidden; } to { visibility: visible; } }
+
+/* Arrived that way: the block and the name stand as they were left. */
+html.arrive-held .top [aria-current='page']:is(a, button),
+html.arrive-held .top [aria-current='page']:is(a, button)::before { animation: none; }
+
+
 /* ------------------------------------------------------------- scrollbar */
 
 /*
