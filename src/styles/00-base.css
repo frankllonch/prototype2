@@ -708,11 +708,13 @@ html.is-scrolled .scroll-cue { opacity: 0; }
   padding-bottom: 0.18em; margin-bottom: -0.18em; }
 .roll::before, .roll::after {
   content: attr(data-ch); position: absolute; left: 0; top: 0; color: var(--roll-color, var(--ink));
-  transition: transform 350ms ease-in-out, opacity 260ms ease-in-out;
+  /* Frank's settings from the hover tuner (2026-11-17): a slow turn that
+     overshoots and settles ("back out"), a quick fade, 85ms between letters. */
+  transition: transform 810ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
   /* Each character a step behind the one before it, going and coming back:
      staggered, the word turns over; in step, it swaps all at once, which
      reads as the two copies trading places rather than as one roll. */
-  transition-delay: calc(var(--i) * 60ms);
+  transition-delay: calc(var(--i) * 85ms);
 }
 .roll::after { transform: translateY(100%); opacity: 0; }
 [data-roll]:hover .roll::before { transform: translateY(-100%); opacity: 0; }
