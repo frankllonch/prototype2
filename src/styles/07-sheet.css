@@ -422,7 +422,6 @@ html:not(.js) .sheet-step { display: none; }
   .com-list .xrow-title {
     display: block;
     font-size: var(--com-size);
-    font-weight: 600;                       /* semibold, as on the computer (typography sheet) */
   }
   .com-list .xrow-when { display: none; }
 }
