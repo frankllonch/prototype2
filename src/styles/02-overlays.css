@@ -340,7 +340,9 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   display: block;
   width: auto;
   height: var(--reel-h);
-  overflow: clip;
+  /* The photographs run on past the margins to the edges of the window,
+     where the panel (`.about`, overflow-x hidden) cuts them off. */
+  overflow: visible;
   /* Sideways is the reel's; up and down is still the page's. */
   touch-action: pan-y;
   user-select: none;

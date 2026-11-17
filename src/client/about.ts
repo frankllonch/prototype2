@@ -413,10 +413,17 @@ function initReel(about: HTMLElement): Loop | null {
     const widest = Math.max(...widths);
     const wasLength = length;
     looped = total - gap > span + 1;
-    before = widest + gap;
+    // The photographs are seen to the edges of the window, not only within the
+    // measure: `lead` is the margin left of the track, `tail` the window's
+    // width from the track's left edge.
+    const box = about.getBoundingClientRect();
+    const left = track.getBoundingClientRect().left;
+    const lead = Math.max(0, left - box.left);
+    const tail = Math.max(span, box.right - left);
+    before = lead + widest + gap;
     // Enough of a loop that what leaves on one side is gone before it comes
     // back on the other.
-    const copies = looped ? Math.max(1, Math.ceil((span + before) / total)) : 1;
+    const copies = looped ? Math.max(1, Math.ceil((tail + before) / total)) : 1;
     for (const clone of track.querySelectorAll('[data-clone]')) clone.remove();
     slots = [];
     for (let c = 0; c < copies; c++) {
