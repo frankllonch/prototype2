@@ -125,7 +125,7 @@ const EFFECTS: Effect[] = [
   {
     id: 'roll',
     name: 'Roll',
-    note: 'On the site now. Each letter turns over like a split-flap board.',
+    note: 'The site\u2019s hover until 2026-11-17. Each letter turns over like a split-flap board.',
     fields: [
       num('duration', 'Roll time', 810, 50, 1500, 10, 'ms'),
       num('fade', 'Fade time', 220, 0, 1500, 10, 'ms'),
@@ -159,12 +159,12 @@ const EFFECTS: Effect[] = [
   {
     id: 'scramble',
     name: 'Scramble',
-    note: 'In the code, not on the site. The letters near the pointer churn.',
+    note: 'On the site now. The letters near the pointer churn.',
     fields: [
       text('glyphs', 'Characters', '*'),
-      num('step', 'Churn speed', 45, 15, 300, 5, 'ms'),
-      num('radius', 'Reach', 30, 0, 300, 5, 'px'),
-      num('edge', 'Soft edge', 0.55, 0, 1, 0.05),
+      num('step', 'Churn speed', 100, 15, 300, 5, 'ms'),
+      num('radius', 'Reach', 55, 0, 300, 5, 'px'),
+      num('edge', 'Soft edge', 1, 0, 1, 0.05),
       pick('mode', 'Where', 'under the pointer', ['under the pointer', 'whole word', 'left to right, then settle']),
       num('settle', 'Settle time (last mode)', 500, 100, 2000, 50, 'ms'),
     ],
@@ -586,13 +586,14 @@ export function initHoverTuner(): void {
   const menuDefaults = valuesOf(menuFields);
   const saved = read<Partial<State>>(STORE);
   const state: State = {
-    effect: saved?.effect && EFFECTS.some((e) => e.id === saved.effect) ? saved.effect : 'roll',
+    effect: saved?.effect && EFFECTS.some((e) => e.id === saved.effect) ? saved.effect : (document.documentElement.dataset.hover === 'roll' ? 'roll' : 'scramble'),
     effects: Object.fromEntries(EFFECTS.map((e) => [e.id, { ...valuesOf(e.fields), ...(saved?.effects?.[e.id] ?? {}) }])),
     menu: { ...menuDefaults, ...(saved?.menu ?? {}) },
     open: saved?.open ?? true,
     pin: false,
   };
 
+  const siteHover = document.documentElement.dataset.hover ?? 'scramble';
   document.documentElement.dataset.tune = '';
   const style = document.createElement('style');
   style.id = 'tune-live';
@@ -657,7 +658,7 @@ export function initHoverTuner(): void {
       restore();
       style.remove();
       delete document.documentElement.dataset.tune;
-      document.documentElement.dataset.hover = 'roll';
+      document.documentElement.dataset.hover = siteHover;
       panel.remove();
     },
     save: () => write(STORE, { ...state, pin: false }),
