@@ -1112,7 +1112,7 @@ html:has(body.has-film) {
   transition: transform 0.35s ease;
 }
 .wc-book:hover img,
-.wc-book:focus-visible img {
+.wc-book:focus-visible:not([data-quiet-focus]) img {
   transform: translateY(-4%);
 }
 

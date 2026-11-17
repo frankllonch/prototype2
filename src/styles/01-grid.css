@@ -126,7 +126,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
   transition: filter 0.7s var(--ease), opacity 0.7s var(--ease);
 }
 
-.tile:hover img, .tile:focus-visible img {
+.tile:hover img, .tile:focus-visible:not([data-quiet-focus]) img {
   filter: blur(1.6px);
   opacity: 0.82;
 }

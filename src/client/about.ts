@@ -1,4 +1,4 @@
-import { reduceMotion } from './env.ts';
+import { reduceMotion, returnFocus } from './env.ts';
 
 /**
  * About, told in four parts as you scroll down it.
@@ -665,7 +665,7 @@ function initViewer(about: HTMLElement): void {
     viewer.classList.remove('is-open');
     viewer.hidden = true;
     about.classList.remove('is-viewing');
-    if (restore) items[at]?.focus({ preventScroll: true });
+    if (restore) returnFocus(items[at]);
   };
 
   items.forEach((item, i) => item.addEventListener('click', () => open(i)));
