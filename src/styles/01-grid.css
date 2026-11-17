@@ -589,9 +589,14 @@ html.js .hero[data-hero]+.grid[data-stack] {
  * The designer's sheet says 600 in as many words.
  */
 .exh-title,
-.xrow-title,
 .xgroup-name {
   font-weight: 600;
+}
+
+/* A commission's name is regular: on that list the group heading is the one
+   line in semibold (Frank, 2026-11-17). */
+.xrow-title {
+  font-weight: 400;
 }
 
 .xrow-when {
