@@ -301,7 +301,9 @@ html.is-revealed:not(.is-leaving) .page-veil,
 html.is-revealed .feed-column,
 html.is-revealed .chart,
 html.is-revealed .grid-justified,
-html.is-revealed .detail { animation-name: none; }
+html.is-revealed .detail,
+html.is-revealed .xlist,
+html.is-revealed .grid[data-stack] { animation-name: none; }
 
 /*
  * The other half of it: the page fades in, and then its content settles rather
@@ -320,6 +322,36 @@ html.is-revealed .detail { animation-name: none; }
     animation: settle-in 0.9s var(--ease) 0.1s backwards;
   }
   .feed-column:nth-child(2) { animation-delay: 0.25s; }
+}
+
+/*
+ * THE CONTENT RISING — Exhibitions, Commissioned and Artwork (Frank,
+ * 2026-11-17). Each time the section is opened from the bar the page's
+ * content comes up from the bottom of the window and settles into place:
+ * arriving at the page, and clicking the section again while on it
+ * (client/rise.ts, which replays it). On Artwork it is the pile that rises.
+ *
+ * THE KNOBS:
+ *
+ *   --rise-distance  how far below its place the content starts
+ *   --rise-time      how long it takes to settle
+ *   --rise-ease      the curve: fast off the bottom, slow into place
+ *   --rise-delay     how long after the page opens it sets off
+ */
+:root {
+  --rise-distance: 60vh;
+  --rise-time: 1.5s;
+  --rise-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --rise-delay: 0.001s;
+}
+@keyframes content-rise {
+  from { opacity: 0; transform: translateY(var(--rise-distance)); }
+  30% { opacity: 1; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .xlist, .grid[data-stack] {
+    animation: content-rise var(--rise-time) var(--rise-ease) var(--rise-delay) backwards;
+  }
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -1087,7 +1119,7 @@ html.wc-swatch-drop body.has-film .top [aria-current='page']:is(a, button) {
   --start-pause: 0.01s;
   --start-climb: 0.5s;
   --start-ease: cubic-bezier(0.65, 0, 0.17, 1);
-  --start-swatch: 0.8s;
+  --start-swatch: 0.3s;
   --start-hold: 0.01s;
   /* Derived: where the climb and the drop begin. */
   --start-climb-at: calc(var(--start-veil) + var(--start-pause));

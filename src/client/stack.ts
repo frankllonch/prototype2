@@ -185,13 +185,18 @@ export function initStack(): void {
     const h = window.innerHeight;
     const scroll = window.scrollY;
 
+    // The pile rises into the page on arrival (THE CONTENT RISING,
+    // 00-base.css), which moves the grid itself: measured mid-rise, every
+    // tile would be taken that far too low. Taken back out here.
+    const lift = new DOMMatrixReadOnly(getComputedStyle(grid).transform).m42;
+
     targets = live.map((tile, i) => {
       const r = tile.getBoundingClientRect();
       const pileHeight = h * (i === 0 ? FRONT : FRONT - 0.02 - Math.min(i, VISIBLE) * 0.006);
       const off = i < VISIBLE ? OFFSETS[i]! : [0, 0];
       return {
         tx: r.left + r.width / 2,
-        ty: r.top + scroll + r.height / 2,
+        ty: r.top - lift + scroll + r.height / 2,
         s: r.height ? pileHeight / r.height : 1,
         ox: off[0]! * window.innerWidth,
         oy: off[1]! * h,

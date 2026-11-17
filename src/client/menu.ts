@@ -1,5 +1,6 @@
 import { isPlainClick, phone, reduceMotion } from './env.ts';
 import { typeIn } from './write.ts';
+import { replayRise } from './rise.ts';
 
 /**
  * The bar on a phone: three bars at the top right, and the bar's own words —
@@ -197,6 +198,9 @@ export function initMenu(): void {
       lower();
       if (within) toggle.focus({ preventScroll: true });
       document.querySelector<HTMLElement>('.panel.is-open [data-panel-close]')?.click();
+      // And its content rises again, as it does on arriving (client/rise.ts).
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      replayRise();
     });
   }, true);
 

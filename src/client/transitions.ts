@@ -1,5 +1,6 @@
 import { isPlainClick, phone, reduceMotion } from './env.ts';
 import { nextHue } from './hues.ts';
+import { replayRise, rises } from './rise.ts';
 
 /**
  * Moving between pages, and the loading screen that precedes the first one.
@@ -105,6 +106,17 @@ export function initTransitions(): void {
 
     const url = new URL(link.href, location.href);
     if (url.origin !== location.origin) return;
+    // The section you are on, clicked again in the bar: back to its top, out
+    // of any panel open on it, and its content rises once more (Frank,
+    // 2026-11-17). It used to reload the page.
+    if (url.pathname === location.pathname && url.search === location.search && !url.hash
+      && link.closest('.top') && rises()) {
+      event.preventDefault();
+      document.querySelector<HTMLElement>('.panel.is-open [data-panel-close]')?.click();
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      replayRise();
+      return;
+    }
     // A link to somewhere on this same page is a jump, not a departure.
     if (url.pathname === location.pathname && url.search === location.search) return;
 
