@@ -19,3 +19,32 @@
 [data-roll]:hover .roll::before, [data-roll]:hover .roll::after {
   transition-delay: calc(var(--i) * 85ms);
 }
+
+/* ------------------------------------------------- the roll, without a cut */
+
+/*
+ * No visible edge to the roll (Frank, 2026-11-17).
+ *
+ * Each letter rolls inside a box that cuts off whatever leaves it, and the
+ * cut was a hard line: a letter rising out was sliced flat across, which drew
+ * the box it sits in. Now the box reaches --roll-pad further above and below
+ * the letter, taken straight back as margin so nothing in the bar moves, and
+ * instead of cutting it fades: clear at the box's edge, solid by --roll-soft
+ * in from it. A letter leaving dissolves as it goes, and one arriving
+ * condenses out of nothing.
+ *
+ * The two copies are placed by `top`, which counts from inside that padding,
+ * so they are set down by the same amount to stay where they were.
+ */
+.roll {
+  --roll-pad: 0.35em;
+  --roll-soft: 0.35em;
+  overflow: hidden;
+  padding-top: var(--roll-pad);
+  padding-bottom: calc(0.18em + var(--roll-pad));
+  margin-top: calc(-1 * var(--roll-pad));
+  margin-bottom: calc(-0.18em - var(--roll-pad));
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 var(--roll-soft), #000 calc(100% - var(--roll-soft)), transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 var(--roll-soft), #000 calc(100% - var(--roll-soft)), transparent 100%);
+}
+.roll::before, .roll::after { top: var(--roll-pad); }

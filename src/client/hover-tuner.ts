@@ -134,6 +134,8 @@ const EFFECTS: Effect[] = [
       pick('direction', 'Direction', 'up', ['up', 'down']),
       flag('reverse', 'Hover on: last letter first', false),
       pick('leave', 'Hover off (rewinds = last letter first)', 'rewinds', ['rewinds', 'same order as on']),
+      num('pad', 'Room above and below', 0.35, 0, 1, 0.01, 'em'),
+      num('soft', 'Edge softness', 0.35, 0, 1, 0.01, 'em'),
     ],
     css: (v) => {
       const sign = v.direction === 'down' ? -1 : 1;
@@ -143,6 +145,7 @@ const EFFECTS: Effect[] = [
       // Rewinding plays the way in backwards: whichever letter went first comes back last.
       const off = v.leave === 'same order as on' ? on : v.reverse ? first : last;
       return `
+.roll { --roll-pad: ${v.pad ?? 0.35}em; --roll-soft: ${v.soft ?? 0.35}em; }
 .roll::before, .roll::after {
   transition: transform ${v.duration}ms ${easeOf(v.ease)}, opacity ${v.fade}ms ${easeOf(v.ease)};
   transition-delay: calc(${off} * ${v.stagger}ms);
