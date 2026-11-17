@@ -1873,14 +1873,13 @@ html.js .hero[data-hero]+.grid[data-stack] {
  * The designer's sheet says 600 in as many words.
  */
 .exh-title,
-.xrow-title,
 .xgroup-name {
   font-weight: 600;
 }
 
-/* Except a commission's own name, which is regular (Frank, 2026-11-17): on
-   Commissioned only the group heading is semibold. */
-.com-list .xrow-title {
+/* A commission's name is regular: on that list the group heading is the one
+   line in semibold (Frank, 2026-11-17). */
+.xrow-title {
   font-weight: 400;
 }
 
@@ -7037,6 +7036,7 @@ html:not(.js) .sheet-step { display: none; }
   .com-list .xrow-title {
     display: block;
     font-size: var(--com-size);
+    font-weight: 400;
   }
   .com-list .xrow-when { display: none; }
 }
