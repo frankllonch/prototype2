@@ -380,10 +380,14 @@ try { var nav = performance.getEntriesByType('navigation')[0];
   if (!hues) return; var hue = Math.floor(Math.random() * hues);
   // Arriving from the start page by its bar, which has already dropped this
   // page's colour onto its name (client/transitions.ts): the same colour, and
-  // standing there from the first frame rather than dropping again.
+  // standing there from the first frame rather than dropping again. Or
+  // arriving back at the start page by the name, the bar already come down
+  // to the film's middle line: the film fades in under it, slowly.
+  // The timings for both are THE WAY OUT OF THE START PAGE, 00-base.css.
   try { var held = JSON.parse(sessionStorage.getItem('cv-held') || 'null'); sessionStorage.removeItem('cv-held');
-    if (held && held.path === location.pathname && Date.now() - held.at < 5000 && held.hue >= 0 && held.hue < hues) {
-      hue = held.hue; root.classList.add('arrive-held'); } } catch (e) {}
+    if (held && held.path === location.pathname && Date.now() - held.at < 5000) {
+      if (held.start) root.classList.add('arrive-start');
+      else if (held.hue >= 0 && held.hue < hues) { hue = held.hue; root.classList.add('arrive-held'); } } } catch (e) {}
   root.dataset.hue = String(hue);
   root.style.setProperty('--bar-swatch', 'var(--neg-' + hue + ')');
   root.style.setProperty('--wc-ask', 'var(--hue-' + hue + ')'); } catch (e) {} })();
