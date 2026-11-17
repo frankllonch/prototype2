@@ -708,7 +708,7 @@ html.is-scrolled .scroll-cue { opacity: 0; }
   padding-bottom: 0.18em; margin-bottom: -0.18em; }
 .roll::before, .roll::after {
   content: attr(data-ch); position: absolute; left: 0; top: 0; color: var(--roll-color, var(--ink));
-  transition: transform 350ms ease-in-out, opacity 260ms ease-in-out;
+  transition: transform 200ms ease-in-out, opacity 100ms ease-in-out;
   /* Each character a step behind the one before it, going and coming back:
      staggered, the word turns over; in step, it swaps all at once, which
      reads as the two copies trading places rather than as one roll. */
