@@ -14,8 +14,10 @@
  * of her swatch; Carlota Guerrero's #F7E9B200 carries a stray alpha of zero
  * on a swatch that is plainly opaque, so it is #f7e9b2.
  *
- * Cierto Estudio is on neither sheet, and keeps a colour from the site's
- * palette until Claudia names one.
+ * Cierto Estudio is on neither sheet. Its colour came later, on a sheet of
+ * its own (CIERTO STUDIO, ARQUITECTES, AC097 VERD GRIS / LIGHT GREEN,
+ * HEX #CDDDCB, 17 November 2026). The code is not shown on the page, because
+ * no one else in edition II has one.
  */
 export interface FinalColour {
   readonly edition: 'I' | 'II' | 'III';
@@ -83,6 +85,7 @@ export const FINAL_COLOURS: readonly FinalColour[] = [
   { edition: 'II', name: 'AMOO', hex: '#592222', from: 'designer' },
   { edition: 'II', name: 'Loca Studio', hex: '#eb7373', from: 'client' },
   { edition: 'II', name: 'Paula Arroyo', hex: '#fab75f', from: 'client' },
+  { edition: 'II', name: 'Cierto Estudio', hex: '#cdddcb', from: 'client' },
   // III — all of it is on Claudia's sheet
   { edition: 'III', name: 'Álvaro Galmés', hex: '#ebad02', from: 'client' },
   { edition: 'III', name: 'Marta D. Riezu', hex: '#82ad7b', from: 'client' },
