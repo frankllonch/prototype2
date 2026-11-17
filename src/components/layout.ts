@@ -63,7 +63,11 @@ const MENU = [
  * Only one is ever wired up: the choice is written onto the document and the
  * boot reads it, so the other costs nothing but the file it sits in.
  */
-const HOVER: 'roll' | 'scramble' = 'roll';
+/*
+ * The scramble since 2026-11-17, Frank's pick from the hover tuner (?tune,
+ * client/hover-tuner.ts); its settings are at the head of client/scramble.ts.
+ */
+const HOVER: 'roll' | 'scramble' = 'scramble';
 
 const CLIENT_MODULES = [
   'env', 'text-roll', 'transitions', 'controls', 'stack', 'years', 'hover-list', 'panels',
@@ -113,15 +117,16 @@ function topBar(path: string): Html {
  * Both drawings are here: the letters for the desktop, shown to the eye and
  * hidden from a screen reader, and the plain word, which a screen reader
  * reads and the phone shows (09-phone.css), since a phone has no hover and
- * its bigger type wants the kerning. Only for the roll; the scramble cuts its
- * own letters when it is the one chosen.
+ * its bigger type wants the kerning. The same for either hover: the roll's
+ * letters carry two drawings each (00-base.css, "text roll"), the scramble's
+ * one box each that the churn writes into (client/scramble.ts).
  */
 const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' });
 function rolled(text: string): Html {
-  if (HOVER !== 'roll') return html`${text}`;
   let i = 0;
+  const cell = HOVER === 'roll' ? 'roll' : 'scram';
   const letters = [...segmenter.segment(text)].map(({ segment }) =>
-    segment.trim() ? html`<span class="roll" data-ch="${segment}" style="--i: ${i++}">${segment}</span>` : html`${segment}`);
+    segment.trim() ? html`<span class="${cell}" data-ch="${segment}" style="--i: ${i++}">${segment}</span>` : html`${segment}`);
   return html`<span class="roll-word" aria-hidden="true" style="--n: ${i}">${join(letters)}</span><span class="roll-text">${text}</span>`;
 }
 

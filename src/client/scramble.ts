@@ -35,21 +35,21 @@ import { phone, reduceMotion } from './env.ts';
 const GLYPHS = '*';
 
 /** How long a character holds one piece of nonsense before taking another. */
-const STEP = 45;
+const STEP = 100;
 
 /**
  * How far either side of the pointer the churn reaches, in pixels. The knob
  * for "only the letters I am on" against "most of the word": at 0 nothing
  * churns, and at the width of the longest word it all does.
  */
-const RADIUS = 30;
+const RADIUS = 55;
 
 /**
  * How much of that reach is the soft edge, as a fraction of it. At 0 the reach
  * is a hard edge and letters snap in and out of the churn; at 1 it fades the
  * whole way from the pointer outwards.
  */
-const EDGE = 0.55;
+const EDGE = 1;
 
 export function initScramble(): void {
   // Not on a phone, for the roll's reasons (client/text-roll.ts): nothing
@@ -58,6 +58,15 @@ export function initScramble(): void {
   const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' });
 
   for (const root of document.querySelectorAll<HTMLElement>('[data-roll]')) {
+    // The build writes the boxes into the page already (components/layout.ts),
+    // so the bar's first frame is its last; they are cut here only where a
+    // page arrives with a plain word.
+    const written = [...root.querySelectorAll<HTMLElement>('.scram')];
+    if (written.length) {
+      measure(written);
+      wire(root, written);
+      continue;
+    }
     const text = root.textContent ?? '';
     root.textContent = '';
 
@@ -77,13 +86,28 @@ export function initScramble(): void {
     }
     if (!cells.length) continue;
 
-    // Measured once, while the word is still itself, and held from then on.
-    for (const cell of cells) {
-      cell.style.setProperty('--w', `${cell.getBoundingClientRect().width.toFixed(2)}px`);
-    }
-
+    measure(cells);
     wire(root, cells);
   }
+}
+
+/** Measured once, while the word is still itself, and held from then on. */
+function measure(cells: readonly HTMLElement[]): void {
+  const widths = cells.map((cell) => cell.getBoundingClientRect().width.toFixed(2));
+  cells.forEach((cell, i) => cell.style.setProperty('--w', `${widths[i]}px`));
+}
+
+/*
+ * On the opening page the current name is drawn twice (client/current.ts),
+ * each copy holding a set of the same boxes; the copy is made after this has
+ * run. So the boxes are looked up as they stand each time they are written,
+ * and the nth box of every copy takes what the nth letter takes.
+ */
+function boxes(root: HTMLElement, count: number): HTMLElement[][] {
+  const all = [...root.querySelectorAll<HTMLElement>('.scram')];
+  const sets: HTMLElement[][] = [];
+  for (let i = 0; i < all.length; i += count) sets.push(all.slice(i, i + count));
+  return sets;
 }
 
 function wire(root: HTMLElement, cells: readonly HTMLElement[]): void {
@@ -91,10 +115,15 @@ function wire(root: HTMLElement, cells: readonly HTMLElement[]): void {
   let pointer = 0;
   let centres: number[] = [];
 
+  // The hover tuner (?tune, client/hover-tuner.ts) writes the bar's words
+  // itself while it is on; this stands aside for it.
+  const tuning = () => 'tune' in document.documentElement.dataset;
+
   const settle = () => {
     if (frame) cancelAnimationFrame(frame);
     frame = 0;
-    for (const cell of cells) cell.textContent = cell.dataset.ch ?? '';
+    if (tuning()) return;
+    for (const set of boxes(root, cells.length)) for (const cell of set) cell.textContent = cell.dataset.ch ?? '';
   };
 
   /*
@@ -104,7 +133,7 @@ function wire(root: HTMLElement, cells: readonly HTMLElement[]): void {
    * one layout and saves having to watch for everything that could move them.
    */
   const locate = () => {
-    centres = cells.map((cell) => {
+    centres = (boxes(root, cells.length)[0] ?? cells).map((cell) => {
       const box = cell.getBoundingClientRect();
       return box.left + box.width / 2;
     });
@@ -113,7 +142,7 @@ function wire(root: HTMLElement, cells: readonly HTMLElement[]): void {
   const run = () => {
     // Nor on a page that loaded wide and is below 900px now: the boxes are
     // still in the words there (09-phone.css lets them flow as plain text).
-    if (reduceMotion.matches || phone.matches) return;
+    if (reduceMotion.matches || phone.matches || tuning()) return;
     if (frame) return;
     let piece = -1;
 
@@ -121,15 +150,17 @@ function wire(root: HTMLElement, cells: readonly HTMLElement[]): void {
       const now = Math.floor(performance.now() / STEP);
       if (now !== piece) {
         piece = now;
+        const sets = boxes(root, cells.length);
         cells.forEach((cell, i) => {
           const away = Math.abs((centres[i] ?? 0) - pointer);
           // Certain within the solid part of the reach, thinning to nothing at
           // its edge, so the churn frays rather than stopping at a line.
           const solid = RADIUS * (1 - EDGE);
           const chance = away <= solid ? 1 : 1 - (away - solid) / Math.max(1, RADIUS - solid);
-          cell.textContent = chance > 0 && Math.random() < chance
+          const shown = chance > 0 && Math.random() < chance
             ? GLYPHS[Math.floor(Math.random() * GLYPHS.length)] ?? ''
             : cell.dataset.ch ?? '';
+          for (const set of sets) { const box = set[i]; if (box) box.textContent = shown; }
         });
       }
       frame = requestAnimationFrame(tick);
