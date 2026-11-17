@@ -340,9 +340,9 @@ html.is-revealed .grid[data-stack] { animation-name: none; }
  */
 :root {
   --rise-distance: 60vh;
-  --rise-time: 1.4s;
+  --rise-time: 1.5s;
   --rise-ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --rise-delay: 0.1s;
+  --rise-delay: 0.001s;
 }
 @keyframes content-rise {
   from { opacity: 0; transform: translateY(var(--rise-distance)); }
@@ -1119,7 +1119,7 @@ html.wc-swatch-drop body.has-film .top [aria-current='page']:is(a, button) {
   --start-pause: 0.01s;
   --start-climb: 0.5s;
   --start-ease: cubic-bezier(0.65, 0, 0.17, 1);
-  --start-swatch: 0.8s;
+  --start-swatch: 0.3s;
   --start-hold: 0.01s;
   /* Derived: where the climb and the drop begin. */
   --start-climb-at: calc(var(--start-veil) + var(--start-pause));
