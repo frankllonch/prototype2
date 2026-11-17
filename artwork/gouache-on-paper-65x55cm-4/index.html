@@ -1,0 +1,919 @@
+<!doctype html>
+<html lang="en" data-hover="scramble" style="--hues:11;--hue-0:#18817a;--neg-0:rgb(231, 126, 133);--hue-1:#b25f2a;--neg-1:rgb(77, 160, 213);--hue-2:#0f8557;--neg-2:rgb(240, 122, 168);--hue-3:#1f8440;--neg-3:rgb(224, 123, 191);--hue-4:#087e9c;--neg-4:rgb(247, 129, 99);--hue-5:#936e1f;--neg-5:rgb(108, 145, 224);--hue-6:#cf4230;--neg-6:rgb(48, 189, 207);--hue-7:#cf303a;--neg-7:rgb(48, 207, 197);--hue-8:#747c1d;--neg-8:rgb(139, 131, 226);--hue-9:#092cf6;--neg-9:rgb(246, 211, 9);--hue-10:#cf3c30;--neg-10:rgb(48, 195, 207)">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>2019, 65 × 55 cm — Claudia Valsells</title>
+<meta name="description" content="Gouache sobre papel 65×55 cm Goauche on paper 25,5 x 21, 6 inches." />
+<link rel="preload" href="/prototype2/fonts/Switzer-Variable.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="/prototype2/site.css" />
+<link rel="modulepreload" href="/prototype2/js/env.js" />
+<link rel="modulepreload" href="/prototype2/js/text-roll.js" />
+<link rel="modulepreload" href="/prototype2/js/transitions.js" />
+<link rel="modulepreload" href="/prototype2/js/controls.js" />
+<link rel="modulepreload" href="/prototype2/js/stack.js" />
+<link rel="modulepreload" href="/prototype2/js/years.js" />
+<link rel="modulepreload" href="/prototype2/js/hover-list.js" />
+<link rel="modulepreload" href="/prototype2/js/panels.js" />
+<link rel="modulepreload" href="/prototype2/js/figures.js" />
+<link rel="modulepreload" href="/prototype2/js/lightbox.js" />
+<link rel="modulepreload" href="/prototype2/js/cursor.js" />
+<link rel="modulepreload" href="/prototype2/js/film.js" />
+<link rel="modulepreload" href="/prototype2/js/tilt.js" />
+<link rel="modulepreload" href="/prototype2/js/paging.js" />
+<link rel="modulepreload" href="/prototype2/js/views.js" />
+<link rel="modulepreload" href="/prototype2/js/scroll-cue.js" />
+<link rel="modulepreload" href="/prototype2/js/about.js" />
+<link rel="modulepreload" href="/prototype2/js/inquiries.js" />
+<link rel="modulepreload" href="/prototype2/js/chart.js" />
+<link rel="modulepreload" href="/prototype2/js/book.js" />
+<link rel="modulepreload" href="/prototype2/js/focus.js" />
+<link rel="modulepreload" href="/prototype2/js/hues.js" />
+<link rel="modulepreload" href="/prototype2/js/current.js" />
+<link rel="modulepreload" href="/prototype2/js/scrollbar.js" />
+<link rel="modulepreload" href="/prototype2/js/scramble.js" />
+<link rel="modulepreload" href="/prototype2/js/hover-tuner.js" />
+<link rel="modulepreload" href="/prototype2/js/rise.js" />
+<link rel="modulepreload" href="/prototype2/js/menu.js" />
+<link rel="modulepreload" href="/prototype2/js/index.js" />
+<script>document.documentElement.classList.add('js');
+// The hover tuner's lettering, laid over the stylesheet before the first paint
+// so that moving between pages with it on does not flash the defaults. Only in
+// a browser that has asked for the tuner (?tune); see client/hover-tuner.ts.
+try { if (localStorage.getItem('cv-tune') === '1') { document.documentElement.setAttribute('data-tune', ''); var tc = localStorage.getItem('cv-tune-css'); if (tc) { var ts = document.createElement('style'); ts.id = 'tune-early'; ts.textContent = tc; document.head.appendChild(ts); } } } catch (e) {}
+// Arriving at What's Color by its link, the page is laid out at the top and
+// moved down to the written sentence by script — so it is kept covered until
+// it has been, and no frame is ever painted in the wrong place. The script
+// uncovers it as soon as it lands (client/write.ts); this timer is the net if
+// it never runs.
+// Only where that landing is made at all — the same tests client/write.ts
+// makes — so a browser that keeps the plain anchor jump never waits for it.
+try { var nav = performance.getEntriesByType('navigation')[0];
+  if (location.hash === '#whats-color' && (!nav || nav.type === 'navigate')
+    && CSS.supports('animation-timeline: view()')
+    && !matchMedia('(prefers-reduced-motion: reduce)').matches
+    && !matchMedia('(max-width: 899px)').matches) {
+    document.documentElement.classList.add('wc-arriving', 'wc-swatch-drop');
+    setTimeout(function () { document.documentElement.classList.remove('wc-arriving') }, 1500);
+    setTimeout(function () { document.documentElement.classList.remove('wc-swatch-drop') }, 700);
+  } } catch (e) {}
+// The page's colour, drawn here rather than by client/current.ts so that the
+// block in the bar is the right colour on the first frame. Drawn by the scripts,
+// it was painted once in the list's first colour and then changed, on every
+// page. client/hues.ts carries on from this one.
+(function () { try { var root = document.documentElement, hues = Number(root.style.getPropertyValue('--hues')) || 0;
+  if (!hues) return; var hue = Math.floor(Math.random() * hues);
+  // Arriving from the start page by its bar, which has already dropped this
+  // page's colour onto its name (client/transitions.ts): the same colour, and
+  // standing there from the first frame rather than dropping again. Or
+  // arriving back at the start page by the name, the bar already come down
+  // to the film's middle line: the film fades in under it, slowly.
+  // The timings for both are THE WAY OUT OF THE START PAGE, 00-base.css.
+  try { var held = JSON.parse(sessionStorage.getItem('cv-held') || 'null'); sessionStorage.removeItem('cv-held');
+    if (held && held.path === location.pathname && Date.now() - held.at < 5000) {
+      if (held.start) root.classList.add('arrive-start');
+      else if (held.hue >= 0 && held.hue < hues) { hue = held.hue; root.classList.add('arrive-held'); } } } catch (e) {}
+  root.dataset.hue = String(hue);
+  root.style.setProperty('--bar-swatch', 'var(--neg-' + hue + ')');
+  root.style.setProperty('--wc-ask', 'var(--hue-' + hue + ')'); } catch (e) {} })();
+// On a phone the start page opens on the menu, where the film is on a desktop
+// (client/menu.ts): decided here, before the first paint, so the page under
+// it is never seen.
+try { if (document.documentElement.hasAttribute('data-start')
+  && matchMedia('(max-width: 899px)').matches
+  && (location.hash === '' || location.hash === '#about'))
+  document.documentElement.classList.add('is-start') } catch (e) {}
+// From here on the stylesheet keeps the phone's menu out of sight, and only
+// client/menu.ts can raise it. If that has not said it is there after four
+// seconds — the scripts never arrived, or one of them fell over on the way —
+// the page goes back to what it is without them: the menu at its head, in
+// the flow, and no start screen held over it. Scripts that arrive later than
+// that take the page back (client/index.ts).
+setTimeout(function () { var root = document.documentElement;
+  if (!root.hasAttribute('data-menu')) root.classList.remove('js', 'is-start') }, 4000);</script>
+</head>
+<body class="is-detail">
+<div class="page-veil" aria-hidden="true"></div>
+<a class="skip-link" href="#main">Skip to content</a>
+<button type="button" class="menu-toggle" data-menu-toggle aria-label="Menu" aria-expanded="false" aria-controls="site-menu"><span class="menu-line"></span><span class="menu-line"></span><span class="menu-line"></span></button>
+  <header class="top" id="site-menu">
+    <a class="wordmark" href="/prototype2/" data-roll><span class="roll-word" aria-hidden="true" style="--n: 15"><span class="scram" data-ch="C" style="--i: 0">C</span><span class="scram" data-ch="L" style="--i: 1">L</span><span class="scram" data-ch="A" style="--i: 2">A</span><span class="scram" data-ch="U" style="--i: 3">U</span><span class="scram" data-ch="D" style="--i: 4">D</span><span class="scram" data-ch="I" style="--i: 5">I</span><span class="scram" data-ch="A" style="--i: 6">A</span> <span class="scram" data-ch="V" style="--i: 7">V</span><span class="scram" data-ch="A" style="--i: 8">A</span><span class="scram" data-ch="L" style="--i: 9">L</span><span class="scram" data-ch="S" style="--i: 10">S</span><span class="scram" data-ch="E" style="--i: 11">E</span><span class="scram" data-ch="L" style="--i: 12">L</span><span class="scram" data-ch="L" style="--i: 13">L</span><span class="scram" data-ch="S" style="--i: 14">S</span></span><span class="roll-text">CLAUDIA VALSELLS</span></a>
+    <a class="top-soon" href="/prototype2/#whats-color"  data-roll><span class="roll-word" aria-hidden="true" style="--n: 12"><span class="scram" data-ch="W" style="--i: 0">W</span><span class="scram" data-ch="h" style="--i: 1">h</span><span class="scram" data-ch="a" style="--i: 2">a</span><span class="scram" data-ch="t" style="--i: 3">t</span><span class="scram" data-ch="’" style="--i: 4">’</span><span class="scram" data-ch="s" style="--i: 5">s</span> <span class="scram" data-ch="C" style="--i: 6">C</span><span class="scram" data-ch="o" style="--i: 7">o</span><span class="scram" data-ch="l" style="--i: 8">l</span><span class="scram" data-ch="o" style="--i: 9">o</span><span class="scram" data-ch="r" style="--i: 10">r</span><span class="scram" data-ch="?" style="--i: 11">?</span></span><span class="roll-text">What’s Color?</span></a>
+    <nav class="menu" aria-label="Primary">
+      <a
+            href="/prototype2/color-chart/"
+            
+            
+            style="--menu-phone: 5"
+            data-roll
+          ><span class="roll-word" aria-hidden="true" style="--n: 10"><span class="scram" data-ch="C" style="--i: 0">C</span><span class="scram" data-ch="o" style="--i: 1">o</span><span class="scram" data-ch="l" style="--i: 2">l</span><span class="scram" data-ch="o" style="--i: 3">o</span><span class="scram" data-ch="r" style="--i: 4">r</span> <span class="scram" data-ch="C" style="--i: 5">C</span><span class="scram" data-ch="h" style="--i: 6">h</span><span class="scram" data-ch="a" style="--i: 7">a</span><span class="scram" data-ch="r" style="--i: 8">r</span><span class="scram" data-ch="t" style="--i: 9">t</span></span><span class="roll-text">Color Chart</span></a><a
+            href="/prototype2/exhibitions/"
+            
+            
+            style="--menu-phone: 3"
+            data-roll
+          ><span class="roll-word" aria-hidden="true" style="--n: 11"><span class="scram" data-ch="E" style="--i: 0">E</span><span class="scram" data-ch="x" style="--i: 1">x</span><span class="scram" data-ch="h" style="--i: 2">h</span><span class="scram" data-ch="i" style="--i: 3">i</span><span class="scram" data-ch="b" style="--i: 4">b</span><span class="scram" data-ch="i" style="--i: 5">i</span><span class="scram" data-ch="t" style="--i: 6">t</span><span class="scram" data-ch="i" style="--i: 7">i</span><span class="scram" data-ch="o" style="--i: 8">o</span><span class="scram" data-ch="n" style="--i: 9">n</span><span class="scram" data-ch="s" style="--i: 10">s</span></span><span class="roll-text">Exhibitions</span></a><a
+            href="/prototype2/commissioned/"
+            
+            
+            style="--menu-phone: 4"
+            data-roll
+          ><span class="roll-word" aria-hidden="true" style="--n: 12"><span class="scram" data-ch="C" style="--i: 0">C</span><span class="scram" data-ch="o" style="--i: 1">o</span><span class="scram" data-ch="m" style="--i: 2">m</span><span class="scram" data-ch="m" style="--i: 3">m</span><span class="scram" data-ch="i" style="--i: 4">i</span><span class="scram" data-ch="s" style="--i: 5">s</span><span class="scram" data-ch="s" style="--i: 6">s</span><span class="scram" data-ch="i" style="--i: 7">i</span><span class="scram" data-ch="o" style="--i: 8">o</span><span class="scram" data-ch="n" style="--i: 9">n</span><span class="scram" data-ch="e" style="--i: 10">e</span><span class="scram" data-ch="d" style="--i: 11">d</span></span><span class="roll-text">Commissioned</span></a><a
+            href="/prototype2/artwork/"
+            
+            aria-current="page"
+            style="--menu-phone: 2"
+            data-roll
+          ><span class="roll-word" aria-hidden="true" style="--n: 7"><span class="scram" data-ch="A" style="--i: 0">A</span><span class="scram" data-ch="r" style="--i: 1">r</span><span class="scram" data-ch="t" style="--i: 2">t</span><span class="scram" data-ch="w" style="--i: 3">w</span><span class="scram" data-ch="o" style="--i: 4">o</span><span class="scram" data-ch="r" style="--i: 5">r</span><span class="scram" data-ch="k" style="--i: 6">k</span></span><span class="roll-text">Artwork</span></a><a
+            href="/prototype2/#about"
+            data-panel-open="about"
+            
+            style="--menu-phone: 1"
+            data-roll
+          ><span class="roll-word" aria-hidden="true" style="--n: 5"><span class="scram" data-ch="A" style="--i: 0">A</span><span class="scram" data-ch="b" style="--i: 1">b</span><span class="scram" data-ch="o" style="--i: 2">o</span><span class="scram" data-ch="u" style="--i: 3">u</span><span class="scram" data-ch="t" style="--i: 4">t</span></span><span class="roll-text">About</span></a>
+    </nav>
+  </header>
+
+<main id="main"><article class="detail">
+      <div class="detail-ghost" aria-hidden="true"><picture class="">
+      <source type="image/avif" srcset="/prototype2/media/98b339acfa029f5bc6d0f4ffb-400.avif 400w, /prototype2/media/98b339acfa029f5bc6d0f4ffb-800.avif 800w, /prototype2/media/98b339acfa029f5bc6d0f4ffb-1198.avif 1198w" sizes="43vw" />
+      <source type="image/webp" srcset="/prototype2/media/98b339acfa029f5bc6d0f4ffb-400.webp 400w, /prototype2/media/98b339acfa029f5bc6d0f4ffb-800.webp 800w, /prototype2/media/98b339acfa029f5bc6d0f4ffb-1198.webp 1198w" sizes="43vw" />
+      <img
+        src="/prototype2/media/98b339acfa029f5bc6d0f4ffb-1198.jpg"
+        alt=""
+        width="1198"
+        height="1426"
+        style="aspect-ratio:1198 / 1426"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture><picture class="">
+      <source type="image/avif" srcset="/prototype2/media/ceebdf22c5794adac0da7e96f-400.avif 400w, /prototype2/media/ceebdf22c5794adac0da7e96f-683.avif 683w" sizes="43vw" />
+      <source type="image/webp" srcset="/prototype2/media/ceebdf22c5794adac0da7e96f-400.webp 400w, /prototype2/media/ceebdf22c5794adac0da7e96f-683.webp 683w" sizes="43vw" />
+      <img
+        src="/prototype2/media/ceebdf22c5794adac0da7e96f-683.jpg"
+        alt=""
+        width="683"
+        height="813"
+        style="aspect-ratio:683 / 813"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture><picture class="">
+      <source type="image/avif" srcset="/prototype2/media/d22b390bb96f14dbcdd7e95d1-400.avif 400w, /prototype2/media/d22b390bb96f14dbcdd7e95d1-683.avif 683w" sizes="43vw" />
+      <source type="image/webp" srcset="/prototype2/media/d22b390bb96f14dbcdd7e95d1-400.webp 400w, /prototype2/media/d22b390bb96f14dbcdd7e95d1-683.webp 683w" sizes="43vw" />
+      <img
+        src="/prototype2/media/d22b390bb96f14dbcdd7e95d1-683.jpg"
+        alt=""
+        width="683"
+        height="813"
+        style="aspect-ratio:683 / 813"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture><picture class="">
+      <source type="image/avif" srcset="/prototype2/media/004cf5a319935c98ced3f4182-400.avif 400w, /prototype2/media/004cf5a319935c98ced3f4182-683.avif 683w" sizes="43vw" />
+      <source type="image/webp" srcset="/prototype2/media/004cf5a319935c98ced3f4182-400.webp 400w, /prototype2/media/004cf5a319935c98ced3f4182-683.webp 683w" sizes="43vw" />
+      <img
+        src="/prototype2/media/004cf5a319935c98ced3f4182-683.jpg"
+        alt=""
+        width="683"
+        height="813"
+        style="aspect-ratio:683 / 813"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture><picture class="">
+      <source type="image/avif" srcset="/prototype2/media/0e0b9e2dbfbac0fac7e15bd6a-400.avif 400w, /prototype2/media/0e0b9e2dbfbac0fac7e15bd6a-683.avif 683w" sizes="43vw" />
+      <source type="image/webp" srcset="/prototype2/media/0e0b9e2dbfbac0fac7e15bd6a-400.webp 400w, /prototype2/media/0e0b9e2dbfbac0fac7e15bd6a-683.webp 683w" sizes="43vw" />
+      <img
+        src="/prototype2/media/0e0b9e2dbfbac0fac7e15bd6a-683.jpg"
+        alt=""
+        width="683"
+        height="813"
+        style="aspect-ratio:683 / 813"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture><picture class="">
+      <source type="image/avif" srcset="/prototype2/media/908571beaa329002cfa8a6ce3-400.avif 400w, /prototype2/media/908571beaa329002cfa8a6ce3-683.avif 683w" sizes="43vw" />
+      <source type="image/webp" srcset="/prototype2/media/908571beaa329002cfa8a6ce3-400.webp 400w, /prototype2/media/908571beaa329002cfa8a6ce3-683.webp 683w" sizes="43vw" />
+      <img
+        src="/prototype2/media/908571beaa329002cfa8a6ce3-683.jpg"
+        alt=""
+        width="683"
+        height="813"
+        style="aspect-ratio:683 / 813"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture><picture class="">
+      <source type="image/avif" srcset="/prototype2/media/c658d7f13d47150acebaff167-400.avif 400w, /prototype2/media/c658d7f13d47150acebaff167-683.avif 683w" sizes="43vw" />
+      <source type="image/webp" srcset="/prototype2/media/c658d7f13d47150acebaff167-400.webp 400w, /prototype2/media/c658d7f13d47150acebaff167-683.webp 683w" sizes="43vw" />
+      <img
+        src="/prototype2/media/c658d7f13d47150acebaff167-683.jpg"
+        alt=""
+        width="683"
+        height="813"
+        style="aspect-ratio:683 / 813"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture><picture class="">
+      <source type="image/avif" srcset="/prototype2/media/45d24138aed924acc97c6cb84-400.avif 400w, /prototype2/media/45d24138aed924acc97c6cb84-683.avif 683w" sizes="43vw" />
+      <source type="image/webp" srcset="/prototype2/media/45d24138aed924acc97c6cb84-400.webp 400w, /prototype2/media/45d24138aed924acc97c6cb84-683.webp 683w" sizes="43vw" />
+      <img
+        src="/prototype2/media/45d24138aed924acc97c6cb84-683.jpg"
+        alt=""
+        width="683"
+        height="813"
+        style="aspect-ratio:683 / 813"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture><picture class="">
+      <source type="image/avif" srcset="/prototype2/media/ba959adcb8de1f09-400.avif 400w, /prototype2/media/ba959adcb8de1f09-800.avif 800w, /prototype2/media/ba959adcb8de1f09-1200.avif 1200w" sizes="43vw" />
+      <source type="image/webp" srcset="/prototype2/media/ba959adcb8de1f09-400.webp 400w, /prototype2/media/ba959adcb8de1f09-800.webp 800w, /prototype2/media/ba959adcb8de1f09-1200.webp 1200w" sizes="43vw" />
+      <img
+        src="/prototype2/media/ba959adcb8de1f09-1200.jpg"
+        alt=""
+        width="1200"
+        height="1138"
+        style="aspect-ratio:1200 / 1138"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture><picture class="">
+      <source type="image/avif" srcset="/prototype2/media/5d555e25302d7b31-400.avif 400w, /prototype2/media/5d555e25302d7b31-800.avif 800w, /prototype2/media/5d555e25302d7b31-1200.avif 1200w" sizes="43vw" />
+      <source type="image/webp" srcset="/prototype2/media/5d555e25302d7b31-400.webp 400w, /prototype2/media/5d555e25302d7b31-800.webp 800w, /prototype2/media/5d555e25302d7b31-1200.webp 1200w" sizes="43vw" />
+      <img
+        src="/prototype2/media/5d555e25302d7b31-1200.jpg"
+        alt=""
+        width="1200"
+        height="1138"
+        style="aspect-ratio:1200 / 1138"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture><picture class="">
+      <source type="image/avif" srcset="/prototype2/media/38c8b2b7e3012e19-400.avif 400w, /prototype2/media/38c8b2b7e3012e19-800.avif 800w, /prototype2/media/38c8b2b7e3012e19-1200.avif 1200w" sizes="43vw" />
+      <source type="image/webp" srcset="/prototype2/media/38c8b2b7e3012e19-400.webp 400w, /prototype2/media/38c8b2b7e3012e19-800.webp 800w, /prototype2/media/38c8b2b7e3012e19-1200.webp 1200w" sizes="43vw" />
+      <img
+        src="/prototype2/media/38c8b2b7e3012e19-1200.jpg"
+        alt=""
+        width="1200"
+        height="1138"
+        style="aspect-ratio:1200 / 1138"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture><picture class="">
+      <source type="image/avif" srcset="/prototype2/media/e3644687f887bdbd-400.avif 400w, /prototype2/media/e3644687f887bdbd-800.avif 800w, /prototype2/media/e3644687f887bdbd-1600.avif 1600w" sizes="43vw" />
+      <source type="image/webp" srcset="/prototype2/media/e3644687f887bdbd-400.webp 400w, /prototype2/media/e3644687f887bdbd-800.webp 800w, /prototype2/media/e3644687f887bdbd-1600.webp 1600w" sizes="43vw" />
+      <img
+        src="/prototype2/media/e3644687f887bdbd-1600.jpg"
+        alt=""
+        width="4016"
+        height="6016"
+        style="aspect-ratio:4016 / 6016"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture></div>
+      <a class="detail-back detail-section" href="/prototype2/artwork/">Artwork</a>
+      <a class="detail-back detail-close" href="/prototype2/artwork/" aria-label="Close, back to the gallery">Close</a>
+      <div class="detail-stage">
+    <figure class="detail-plate" data-tilt>
+      <span class="detail-plate-inner is-photo">
+        <span class="detail-view is-shown" data-view="0">
+          <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/0e0b9e2dbfbac0fa-400.avif 400w, /prototype2/media/0e0b9e2dbfbac0fa-600.avif 600w" sizes="(max-width: 900px) 92vw, 54vw" />
+      <source type="image/webp" srcset="/prototype2/media/0e0b9e2dbfbac0fa-400.webp 400w, /prototype2/media/0e0b9e2dbfbac0fa-600.webp 600w" sizes="(max-width: 900px) 92vw, 54vw" />
+      <img
+        src="/prototype2/media/0e0b9e2dbfbac0fa-600.jpg"
+        alt="Photograph of 2019, 65 × 55 cm, uncropped"
+        width="600"
+        height="800"
+        style="aspect-ratio:600 / 800"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </picture>
+        </span>
+      </span>
+    </figure>
+    <div class="detail-under">
+      
+      <p class="detail-index"><b>143</b> of 181</p>
+    </div>
+  </div>
+      <div class="detail-caption">
+        <div class="detail-head">
+          <h1 class="detail-title">2019, 65 × 55 cm</h1>
+          <p class="detail-medium">Gouache on paper</p>
+        </div>
+        <div class="detail-facts">
+          <p class="detail-size">65 × 55 cm</p>
+          <p class="detail-year">2019</p>
+        </div>
+      </div>
+      <nav class="detail-pager" aria-label="Between works">
+        <a href="/prototype2/artwork/collage-gouache-on-paper-115x105cm/" rel="prev" data-replace>Previous</a>
+        <a href="/prototype2/artwork/goauche-on-paper-65x55-cm-2/" rel="next" data-replace>Next</a>
+      </nav>
+    </article></main>
+
+
+
+<div class="cursor" data-cursor aria-hidden="true"><span class="cursor-label"></span></div>
+<div class="panel-veil" data-panel-veil></div>
+<section class="about" id="about" data-panel aria-label="About">
+    <div class="about-sheet">
+      <div class="about-text">
+        <div class="about-opening" data-about-opening>
+          <div class="about-stage" data-about-stage>
+            <p class="about-lead">Claudia is an artist specialized in color. A multidisciplinary creator, she discovered painting through her own instinct for color. Her formation as a mural painter gave her a professional opportunity, and her passion in color her own artistic language.</p>
+            <div class="about-reel" data-about-reel>
+    <div class="about-reel-track" data-about-track>
+      <button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-1-400.avif 400w, /prototype2/about/about-1-800.avif 800w, /prototype2/about/about-1-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-1-400.webp 400w, /prototype2/about/about-1-800.webp 800w, /prototype2/about/about-1-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-1-1600.jpg"
+        alt="Colour charts pinned to the studio wall above jars of brushes and a broad, paint-spattered brush"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-2-400.avif 400w, /prototype2/about/about-2-800.avif 800w, /prototype2/about/about-2-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-2-400.webp 400w, /prototype2/about/about-2-800.webp 800w, /prototype2/about/about-2-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-2-1600.jpg"
+        alt="Claudia Valsells in her studio among canvases and pots of paint, seen from above"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-3-400.avif 400w, /prototype2/about/about-3-800.avif 800w, /prototype2/about/about-3-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-3-400.webp 400w, /prototype2/about/about-3-800.webp 800w, /prototype2/about/about-3-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-3-1600.jpg"
+        alt="Claudia Valsells on a step, reaching up to paint the studio wall, a pot of paint in her hand"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-4-400.avif 400w, /prototype2/about/about-4-800.avif 800w, /prototype2/about/about-4-1600.avif 1600w, /prototype2/about/about-4-2692.avif 2692w" sizes="(max-width: 1097px) 177px, 16.1vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-4-400.webp 400w, /prototype2/about/about-4-800.webp 800w, /prototype2/about/about-4-1600.webp 1600w, /prototype2/about/about-4-2692.webp 2692w" sizes="(max-width: 1097px) 177px, 16.1vw" />
+      <img
+        src="/prototype2/about/about-4-2692.jpg"
+        alt="Claudia Valsells, seen from behind, painting fields of colour on a studio wall with a pot of paint in hand"
+        width="2692"
+        height="1830"
+        style="aspect-ratio:2692 / 1830"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-5-400.avif 400w, /prototype2/about/about-5-800.avif 800w, /prototype2/about/about-5-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-5-400.webp 400w, /prototype2/about/about-5-800.webp 800w, /prototype2/about/about-5-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-5-1600.jpg"
+        alt="Claudia Valsells standing between two large canvases propped against the studio wall"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-6-400.avif 400w, /prototype2/about/about-6-800.avif 800w, /prototype2/about/about-6-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-6-400.webp 400w, /prototype2/about/about-6-800.webp 800w, /prototype2/about/about-6-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-6-1600.jpg"
+        alt="Pots of paint and brushes on a trestle in front of a painted canvas"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-7-400.avif 400w, /prototype2/about/about-7-800.avif 800w, /prototype2/about/about-7-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-7-400.webp 400w, /prototype2/about/about-7-800.webp 800w, /prototype2/about/about-7-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-7-1600.jpg"
+        alt="A hand holding up a pink board with a red square over a pot of paint"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-8-400.avif 400w, /prototype2/about/about-8-800.avif 800w, /prototype2/about/about-8-1600.avif 1600w, /prototype2/about/about-8-2327.avif 2327w" sizes="(max-width: 1097px) 153px, 13.9vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-8-400.webp 400w, /prototype2/about/about-8-800.webp 800w, /prototype2/about/about-8-1600.webp 1600w, /prototype2/about/about-8-2327.webp 2327w" sizes="(max-width: 1097px) 153px, 13.9vw" />
+      <img
+        src="/prototype2/about/about-8-2327.jpg"
+        alt="Claudia Valsells painting a large canvas in her studio, pots of colour on the table beside her"
+        width="2327"
+        height="1830"
+        style="aspect-ratio:2327 / 1830"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-9-400.avif 400w, /prototype2/about/about-9-800.avif 800w, /prototype2/about/about-9-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-9-400.webp 400w, /prototype2/about/about-9-800.webp 800w, /prototype2/about/about-9-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-9-1600.jpg"
+        alt="Small paintings and patches of colour on a white studio wall"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-10-400.avif 400w, /prototype2/about/about-10-800.avif 800w, /prototype2/about/about-10-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-10-400.webp 400w, /prototype2/about/about-10-800.webp 800w, /prototype2/about/about-10-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-10-1600.jpg"
+        alt="A hand painting with a round brush on a canvas of green, pink and blue"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-11-400.avif 400w, /prototype2/about/about-11-800.avif 800w, /prototype2/about/about-11-1600.avif 1600w, /prototype2/about/about-11-2692.avif 2692w" sizes="(max-width: 1097px) 177px, 16.1vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-11-400.webp 400w, /prototype2/about/about-11-800.webp 800w, /prototype2/about/about-11-1600.webp 1600w, /prototype2/about/about-11-2692.webp 2692w" sizes="(max-width: 1097px) 177px, 16.1vw" />
+      <img
+        src="/prototype2/about/about-11-2692.jpg"
+        alt="Claudia Valsells unrolling a sheet of paper in front of her canvases"
+        width="2692"
+        height="1830"
+        style="aspect-ratio:2692 / 1830"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-12-400.avif 400w, /prototype2/about/about-12-800.avif 800w, /prototype2/about/about-12-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-12-400.webp 400w, /prototype2/about/about-12-800.webp 800w, /prototype2/about/about-12-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-12-1600.jpg"
+        alt="Claudia Valsells on a stepladder, putting up small paintings on the studio wall"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-13-400.avif 400w, /prototype2/about/about-13-800.avif 800w, /prototype2/about/about-13-1600.avif 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-13-400.webp 400w, /prototype2/about/about-13-800.webp 800w, /prototype2/about/about-13-1600.webp 1600w" sizes="(max-width: 1097px) 82px, 7.4vw" />
+      <img
+        src="/prototype2/about/about-13-1600.jpg"
+        alt="A hand setting a small painting on the studio wall beside an easel"
+        width="1600"
+        height="2354"
+        style="aspect-ratio:1600 / 2354"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-14-400.avif 400w, /prototype2/about/about-14-800.avif 800w, /prototype2/about/about-14-1600.avif 1600w, /prototype2/about/about-14-2692.avif 2692w" sizes="(max-width: 1097px) 180px, 16.4vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-14-400.webp 400w, /prototype2/about/about-14-800.webp 800w, /prototype2/about/about-14-1600.webp 1600w, /prototype2/about/about-14-2692.webp 2692w" sizes="(max-width: 1097px) 180px, 16.4vw" />
+      <img
+        src="/prototype2/about/about-14-2692.jpg"
+        alt="Claudia Valsells at work at the end of her long studio, canvases laid out on the table"
+        width="2692"
+        height="1795"
+        style="aspect-ratio:2692 / 1795"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-15-400.avif 400w, /prototype2/about/about-15-800.avif 800w, /prototype2/about/about-15-1600.avif 1600w" sizes="(max-width: 1097px) 90px, 8.2vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-15-400.webp 400w, /prototype2/about/about-15-800.webp 800w, /prototype2/about/about-15-1600.webp 1600w" sizes="(max-width: 1097px) 90px, 8.2vw" />
+      <img
+        src="/prototype2/about/about-15-1600.jpg"
+        alt="A hand painting a deep red canvas with a fine brush"
+        width="1600"
+        height="2133"
+        style="aspect-ratio:1600 / 2133"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-16-400.avif 400w, /prototype2/about/about-16-800.avif 800w, /prototype2/about/about-16-845.avif 845w" sizes="(max-width: 1097px) 184px, 16.8vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-16-400.webp 400w, /prototype2/about/about-16-800.webp 800w, /prototype2/about/about-16-845.webp 845w" sizes="(max-width: 1097px) 184px, 16.8vw" />
+      <img
+        src="/prototype2/about/about-16-845.jpg"
+        alt="Claudia Valsells reaching up to paint a canvas propped against the studio wall, among other canvases"
+        width="845"
+        height="550"
+        style="aspect-ratio:845 / 550"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-17-400.avif 400w, /prototype2/about/about-17-765.avif 765w" sizes="(max-width: 1097px) 127px, 11.6vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-17-400.webp 400w, /prototype2/about/about-17-765.webp 765w" sizes="(max-width: 1097px) 127px, 11.6vw" />
+      <img
+        src="/prototype2/about/about-17-765.jpg"
+        alt="Claudia Valsells in profile against a red wall stencilled AC 068"
+        width="765"
+        height="724"
+        style="aspect-ratio:765 / 724"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button><button type="button" class="about-reel-item">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/about/about-18-400.avif 400w, /prototype2/about/about-18-800.avif 800w, /prototype2/about/about-18-833.avif 833w" sizes="(max-width: 1097px) 167px, 15.2vw" />
+      <source type="image/webp" srcset="/prototype2/about/about-18-400.webp 400w, /prototype2/about/about-18-800.webp 800w, /prototype2/about/about-18-833.webp 833w" sizes="(max-width: 1097px) 167px, 15.2vw" />
+      <img
+        src="/prototype2/about/about-18-833.jpg"
+        alt="Claudia Valsells in her studio holding a palette and a brush over pots of paint"
+        width="833"
+        height="600"
+        style="aspect-ratio:833 / 600"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </button>
+    </div>
+    <button type="button" class="about-reel-step is-prev" data-about-reel-step="-1" aria-label="Earlier photographs" hidden>
+      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="M8 1 1 8l7 7" /></svg>
+    </button>
+    <button type="button" class="about-reel-step is-next" data-about-reel-step="1" aria-label="More photographs" hidden>
+      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="m1 1 7 7-7 7" /></svg>
+    </button>
+  </div>
+          </div>
+        </div>
+        <p>Based on her reflections as an artist, her experience in color prediction and mural painting, brings to all her work, with color as a primary tool, an identifiable language.</p><p>She began her artistic career painting and soon realized that she had a natural ability with color. In her own words, ‘All I have done throughout my career has been to cultivate this natural gift. First as a mural painter, then designing color charts and prescribing color and finally as an artist’.</p><p>The tireless search for the reason of color and its form has obsessed artists throughout history, from the very creation of pictorial expression. Claudia Valsells knows about this and she aims to portray this into her artwork.</p><p>In her beginnings as a colorist she worked on commissions, for architects, and on projects of different scales advising and prescribing color. Soon she founded her own Studio, under the name of ‘Arts&amp;Claus’, in allegory to the ‘Arts&amp;Craft’ movement where she always found a lot of inspiration. She specialized in mural painting, color applied to architecture, and interior design for 20 years on projects in Spain and abroad. Her role was to convey the value of color and its texture in the decoration of interior spaces working closely with professionals in the fields of art, design, and architecture. It was in this context, working close with architects and designers, that she found out the communication between professionals was based by the painting companies, relegated the work of the colorist to the background due to ignorance or fear clients to make a mistake or be branded as eccentric. It was then when Claudia Valsells created a specific chromatic selection, a COLOUR CHART, with more than 200 references, which have been used as color communication tools by Spain’s best architects.</p><p>Her work has two very defined characteristics: on the one hand her chromatic instinct, a gift of colors and on the other her ability to select, group and interact colors creating a chromatic language of her own.</p>
+      </div>
+      <div class="about-record">
+        <section class="about-shows">
+      <h3 class="about-label">Solo exhibitions</h3>
+      <ul class="about-show-list"><li class="about-show">
+    <span class="about-show-when">2026 May - June</span>
+    <span class="about-show-title">‘Moll de l’os’ peintures 2026</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    
+  </li><li class="about-show">
+    <span class="about-show-when">2025 April</span>
+    <span class="about-show-title">‘Mira’m no deixis de mirar-me’</span>
+    <span class="about-show-line">Solo show with Alzueta Gallery</span>
+    <span class="about-show-place">at Palau de Casavells</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2024 July</span>
+    <span class="about-show-title">Painting as a gift from color</span>
+    <span class="about-show-line">Solo show</span>
+    <span class="about-show-place">Gallery_br, Tetbury, UK</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2023 September</span>
+    <span class="about-show-title">Transitions</span>
+    <span class="about-show-line">Solo show</span>
+    <span class="about-show-place">Alzueta Gallery Turó</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2021 December</span>
+    <span class="about-show-title">Color Dialogues</span>
+    <span class="about-show-line">Solo exhibition</span>
+    <span class="about-show-place">Alzueta Gallery Madrid</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2021 December</span>
+    <span class="about-show-title">What’s color?</span>
+    <span class="about-show-line">2n edition</span>
+    <span class="about-show-place">Espacio Pavillion, Madrid,</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2020 December</span>
+    <span class="about-show-title">What’s color?</span>
+    <span class="about-show-line">Solo Exhibition</span>
+    <span class="about-show-place">Alzueta Gallery, Barcelona,</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2020 February</span>
+    <span class="about-show-title">Aoo&amp;Claudia Valsells<br />Silla8 show</span>
+    
+    <span class="about-show-place">Alzueta Gallery, Barcelona</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2019 November</span>
+    <span class="about-show-title">Almost Perfect</span>
+    <span class="about-show-line">Solo Exhibition</span>
+    <span class="about-show-place">Tokyo, Japan</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2019 October</span>
+    <span class="about-show-title">Art Élysées-Art &amp; Design</span>
+    <span class="about-show-line">Solo Exhibition</span>
+    
+  </li><li class="about-show">
+    <span class="about-show-when">2018 November</span>
+    <span class="about-show-title">solo exhibition</span>
+    
+    <span class="about-show-place">Palau de Casavells,</span><span class="about-show-place">Girona, Spain</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2017 February</span>
+    <span class="about-show-title">Color y forma</span>
+    <span class="about-show-line">solo exhibition<br />Alzueta Gallery</span>
+    
+  </li><li class="about-show">
+    <span class="about-show-when">2007 May</span>
+    <span class="about-show-title">Solo Exhibition</span>
+    
+    <span class="about-show-place">Palau de Casavells,<br />Baix Empordà</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2005 March</span>
+    <span class="about-show-title">Expresions de mur.<br />Abstract Informalism Paintings.</span>
+    <span class="about-show-line">Solo exhibition,</span>
+    <span class="about-show-place">Galeria Miquel Alzueta, Barcelona</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2000 April</span>
+    <span class="about-show-title">El color no existe, existe la luz<br />The color doesn’t exist, just the light</span>
+    
+    
+  </li></ul>
+    </section><section class="about-shows">
+      <h3 class="about-label">Group exhibitions</h3>
+      <ul class="about-show-list"><li class="about-show">
+    <span class="about-show-when">2026 June - July</span>
+    <span class="about-show-title">‘Shift Towards Coincidence’,</span>
+    <span class="about-show-line">Group exhibition</span>
+    <span class="about-show-place">Palau de Casavells</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2026 June - July</span>
+    <span class="about-show-title">Abstract Paintings</span>
+    <span class="about-show-line">Group Exhibition</span>
+    <span class="about-show-place">Scroll Ny, New York</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2025 March</span>
+    <span class="about-show-title">‘Marco, límite y lugar’,</span>
+    <span class="about-show-line">Group Exhibition,<br />with Alzueta Gallery</span>
+    <span class="about-show-place">Madrid</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2024 January</span>
+    <span class="about-show-title">What abstract art means to me?</span>
+    <span class="about-show-line">Group exhibition</span>
+    <span class="about-show-place">Alzueta Gallery, Séneca</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2023 November</span>
+    <span class="about-show-title">La terre est bleu comme<br />une orange</span>
+    <span class="about-show-line">Group exhibition</span>
+    <span class="about-show-place">Alzueta Gallery Madrid.</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2018 November</span>
+    <span class="about-show-title">T10 at Alzueta Gallery,</span>
+    
+    <span class="about-show-place">Barcelona</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2016 December</span>
+    <span class="about-show-title">Exposición colectiva</span>
+    
+    <span class="about-show-place">Galeria Axel Pairon</span>
+  </li></ul>
+    </section><section class="about-shows is-wide">
+    <h3 class="about-label">Art fairs</h3>
+    <div class="about-show-columns">
+      <ul class="about-show-list"><li class="about-show">
+    <span class="about-show-when">2026 February</span>
+    <span class="about-show-title">Zona Maco CDMX</span>
+    <span class="about-show-line">with Alzueta Gallery</span>
+    <span class="about-show-place">Mexico</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2025 October</span>
+    <span class="about-show-title">Estampa contemporary<br />art fair,</span>
+    <span class="about-show-line">with Alzueta Gallery</span>
+    <span class="about-show-place">Madrid</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2024 February</span>
+    <span class="about-show-title">ZONA MACO</span>
+    <span class="about-show-line">with Alzueta Gallery</span>
+    
+  </li><li class="about-show">
+    <span class="about-show-when">2024 November</span>
+    <span class="about-show-title">Luxemburg art week</span>
+    <span class="about-show-line">with Alzueta Gallery</span>
+    <span class="about-show-place">Luxemburg</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2023 February</span>
+    <span class="about-show-title">Contemporary Art Fair</span>
+    <span class="about-show-line">Art Rotterdam</span>
+    <span class="about-show-place">Rotterdam</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2021 October</span>
+    <span class="about-show-title">Estampa Contemporary Art Fair</span>
+    
+    <span class="about-show-place">Alzueta Gallery, Madrid</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2021 September</span>
+    <span class="about-show-title">Art Paris Fair</span>
+    
+    <span class="about-show-place">Alzueta Gallery, Paris</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2021 June</span>
+    <span class="about-show-title">Art Madrid Feria</span>
+    
+    <span class="about-show-place">Alzueta Gallery, Madrid</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2019 March</span>
+    <span class="about-show-title">AFF Art Fair</span>
+    
+    <span class="about-show-place">Brussels</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2019 March</span>
+    <span class="about-show-title">Art Madrid</span>
+    
+    <span class="about-show-place">Madrid</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">Art fair</span>
+    
+    <span class="about-show-place">Hamburg</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">Art Elysees</span>
+    
+    <span class="about-show-place">París</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">Art Fair</span>
+    
+    <span class="about-show-place">Stockholm</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">Contemporary Art Fair<br />Just LX,</span>
+    
+    <span class="about-show-place">Portugal</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">Almoneda Antik Passion</span>
+    
+    <span class="about-show-place">Madrid</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2019 April</span>
+    <span class="about-show-title">Almoneda, Ifema<br />Feria de Madrid</span>
+    
+    <span class="about-show-place">Palau de Casavells, Madrid.</span>
+  </li></ul>
+      <ul class="about-show-list"><li class="about-show">
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">Art Fair Grand Palais</span>
+    
+    <span class="about-show-place">Paris</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">Eurantica Art Fair</span>
+    
+    <span class="about-show-place">Brussels</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2019 April</span>
+    <span class="about-show-title">Art Paris Grand Palais</span>
+    
+    <span class="about-show-place">París</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">Art Madrid,</span>
+    
+    <span class="about-show-place">Madrid</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2017 July</span>
+    <span class="about-show-title">Uterqüe Art Essays</span>
+    <span class="about-show-line">AW 2017</span>
+    
+  </li><li class="about-show">
+    <span class="about-show-when">2017 March</span>
+    <span class="about-show-title">International Art Fair,<br />Art Paris</span>
+    
+    <span class="about-show-place">París</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2017 February</span>
+    <span class="about-show-title">Art Madrid</span>
+    
+    <span class="about-show-place">Madrid</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2016 November</span>
+    <span class="about-show-title">Antica Namur,</span>
+    
+    <span class="about-show-place">Belgium</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2016 October</span>
+    <span class="about-show-title">Art Élysées,<br />International Art Fair,</span>
+    
+    <span class="about-show-place">París</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2016 June</span>
+    <span class="about-show-title">Scope Basel,</span>
+    
+    <span class="about-show-place">Basel art fair</span>
+  </li></ul>
+    </div>
+  </section>
+        <section class="about-collections">
+          <h3 class="about-label">Private collections</h3>
+          <ul class="about-collection-list">
+            <li class="about-collection">
+                  <span class="about-collection-name">Fundació Vilacases</span>
+                  <span class="about-collection-place">Barcelona</span>
+                </li><li class="about-collection">
+                  <span class="about-collection-name">Fundació Banc Sabadell</span>
+                  <span class="about-collection-place">Barcelona</span>
+                </li><li class="about-collection">
+                  <span class="about-collection-name">Collection Hayot</span>
+                  <span class="about-collection-place">France</span>
+                </li><li class="about-collection">
+                  <span class="about-collection-name">Niederberghaus Collection</span>
+                  <span class="about-collection-place">Mexico - US</span>
+                </li><li class="about-collection">
+                  <span class="about-collection-name">Collection Richard</span>
+                  <span class="about-collection-place">France</span>
+                </li><li class="about-collection">
+                  <span class="about-collection-name">Smith Collection</span>
+                  <span class="about-collection-place">Wyoming</span>
+                </li>
+          </ul>
+        </section>
+      </div>
+      <address class="about-contact">
+        <a href="tel:+34609769186">+34 609 76 91 86</a>
+        <a href="mailto:editorial@alzuetagallery.com">editorial@alzuetagallery.com</a><a href="mailto:claudia@claudiacolor.com">claudia@claudiacolor.com</a>
+      </address>
+      <p class="about-foot"><b>Claudia Valsells</b> © All Rights Reserved</p>
+    </div>
+    <div class="about-viewer" data-about-viewer hidden>
+    <figure class="about-viewer-plate" data-about-plate></figure>
+    <p class="sr-only" data-about-count data-template="Photograph {n} of {total}" aria-live="polite"></p>
+  </div>
+  </section>
+  <a class="about-close" href="#" data-panel-close="about">Close</a>
+  <div class="about-cue" data-about-cue aria-hidden="true">
+    <svg viewBox="0 0 28 16" focusable="false">
+      <path d="M1.5 1.5 L14 13 L26.5 1.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
+    </svg>
+  </div>
+  <button type="button" class="about-viewer-step is-prev" data-about-step="-1" aria-label="Previous photograph">
+      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="M8 1 1 8l7 7" /></svg>
+    </button>
+    <button type="button" class="about-viewer-step is-next" data-about-step="1" aria-label="Next photograph">
+      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="m1 1 7 7-7 7" /></svg>
+    </button>
+<div class="lightbox" data-lightbox data-available-label="Available" hidden>
+    <div class="lightbox-veil" data-lightbox-veil></div>
+    <button type="button" class="lightbox-close" data-lightbox-close>Close</button>
+    <button type="button" class="lightbox-nav lightbox-prev" data-lightbox-prev aria-label="Previous">←</button>
+    <div class="lightbox-plate" data-lightbox-plate></div>
+    <div class="lightbox-caption">
+      <h2 class="lightbox-title" data-lightbox-title></h2>
+      <p class="lightbox-meta" data-lightbox-meta></p>
+      <p class="lightbox-count" data-lightbox-count data-template="{n} of {total}"></p>
+    </div>
+    <button type="button" class="lightbox-nav lightbox-next" data-lightbox-next aria-label="Next">→</button>
+  </div>
+<script type="module" src="/prototype2/js/index.js"></script>
+</body>
+</html>
