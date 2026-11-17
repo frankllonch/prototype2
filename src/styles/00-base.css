@@ -1141,8 +1141,11 @@ html.is-leaving-to-start .top [aria-current='page']:is(a, button)::before {
 }
 
 /* Arrived that way: the block and the name stand as they were left. */
-html.arrive-held .top [aria-current='page']:is(a, button),
-html.arrive-held .top [aria-current='page']:is(a, button)::before { animation: none; }
+html.arrive-held:not(.is-leaving) .top [aria-current='page']:is(a, button),
+html.arrive-held:not(.is-leaving) .top [aria-current='page']:is(a, button)::before { animation: none; }
+/* Only until it leaves: leaving, the block lifts off as on any page. Without
+   the :not, a page arrived at this way held its block through the way back,
+   and the block came down with the bar instead of lifting off first. */
 
 
 /* ------------------------------------------------------------- scrollbar */
