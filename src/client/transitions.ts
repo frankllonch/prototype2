@@ -20,13 +20,6 @@ export const OUT_MS = 420;
 const LEAVE_GUARD = 700;
 /** If the navigation has not happened by now, assume it never will. */
 export const ABANDONED = 6000;
-/**
- * Leaving the start page for another page by the bar (see `fromStart`): the
- * bar's climb to the top, then the new page's block dropping in under its
- * name, and only then the next page. Kept in step with THE WAY OUT OF THE
- * START PAGE in 04-whats-color.css.
- */
-const START_MS = 1100;
 /** The note the start page leaves for the page it is going to. */
 export const HELD_KEY = 'cv-held';
 /**
@@ -74,7 +67,7 @@ export function initTransitions(): void {
    * lands under an opaque sheet with every link already spoken for.
    */
   const arrive = () => {
-    root.classList.remove('is-leaving', 'is-leaving-start');
+    root.classList.remove('is-leaving', 'is-leaving-start', 'is-leaving-to-start');
     document.querySelector('.top .is-chosen')?.classList.remove('is-chosen');
     delete root.dataset.leaveMs;
     target = ''; gone = false; replace = false;
@@ -116,18 +109,20 @@ export function initTransitions(): void {
     if (url.pathname === location.pathname && url.search === location.search) return;
 
     event.preventDefault();
+    // The way out of the start page is under way and has a name in its
+    // colour already: it runs to the end rather than starting over elsewhere.
+    if (root.classList.contains('is-leaving-start') || root.classList.contains('is-leaving-to-start')) return;
     const first = !target;
     target = url.href;
     replace = link.hasAttribute('data-replace');
-    const start = fromStart(link);
-    if (start) choose(link, url);
+    const start = fromStart(link) ? choose(link, url) : toStart(link, url) ? goBack(url) : 0;
     root.classList.add('is-leaving');
     if (!first) return;   // already counting down; only the destination changed
 
     // Longer when the phone's menu is on its way out first (client/menu.ts):
     // the next page waits for the bars to stand straight again. Longer again
     // from the start page, where the bar climbs to the top first.
-    const wait = Math.max(start ? START_MS : OUT_MS, Number(root.dataset.leaveMs) || 0);
+    const wait = Math.max(start || OUT_MS, Number(root.dataset.leaveMs) || 0);
     window.setTimeout(go, wait);
     // A tab backgrounded mid-fade may never run the first timer; the guard is
     // what stops a click from being swallowed entirely.
@@ -166,7 +161,12 @@ function fromStart(link: HTMLAnchorElement): boolean {
     && link.closest('.top') !== null;
 }
 
-function choose(link: HTMLAnchorElement, url: URL): void {
+/**
+ * Marks the choice and says how long the way out takes, in milliseconds: the
+ * four beats as the stylesheet sets them (THE WAY OUT OF THE START PAGE in
+ * 00-base.css), so the timings live in one place.
+ */
+function choose(link: HTMLAnchorElement, url: URL): number {
   const root = document.documentElement;
   document.querySelector('.top .is-chosen')?.classList.remove('is-chosen');
   const n = nextHue();
@@ -178,4 +178,41 @@ function choose(link: HTMLAnchorElement, url: URL): void {
   try {
     sessionStorage.setItem(HELD_KEY, JSON.stringify({ path: url.pathname, hue: n, at: Date.now() }));
   } catch { /* private window: the next page simply drops its own block */ }
+
+  return beats('--start-veil', '--start-pause', '--start-climb', '--start-swatch', '--start-hold');
+}
+
+/** The sum of the stylesheet's beats named, in milliseconds. */
+function beats(...names: string[]): number {
+  const style = getComputedStyle(document.documentElement);
+  const ms = (name: string) => {
+    const v = style.getPropertyValue(name).trim();
+    return (Number.parseFloat(v) || 0) * (v.endsWith('ms') ? 1 : 1000);
+  };
+  return names.reduce((total, name) => total + ms(name), 0) || 1100;
+}
+
+/**
+ * And back (Frank, 2026-11-17): from any other page to the start page by the
+ * name at the top left, the way out run backwards. The block lifts off this
+ * page's name as the page goes to paper, the bar comes down to the film's
+ * middle line, waits, and the start page comes up under it with the film
+ * fading in — told so by a note, as the way out tells the page it goes to.
+ */
+function toStart(link: HTMLAnchorElement, url: URL): boolean {
+  const home = document.querySelector<HTMLAnchorElement>('.top .wordmark');
+  return !document.body.classList.contains('has-film')
+    && !phone.matches
+    && link.closest('.top') !== null
+    && home !== null
+    && url.pathname === new URL(home.href, location.href).pathname
+    && url.hash === '';
+}
+
+function goBack(url: URL): number {
+  document.documentElement.classList.add('is-leaving-to-start');
+  try {
+    sessionStorage.setItem(HELD_KEY, JSON.stringify({ path: url.pathname, start: true, at: Date.now() }));
+  } catch { /* the start page simply opens as it always does */ }
+  return beats('--start-veil', '--start-climb', '--start-pause');
 }

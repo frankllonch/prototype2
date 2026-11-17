@@ -1050,35 +1050,55 @@ html.wc-swatch-drop body.has-film .top [aria-current='page']:is(a, button) {
  * THE WAY OUT OF THE START PAGE — to any page but What's Color, by the bar
  * (client/transitions.ts, `fromStart`).
  *
- * The film goes to paper under the bar (the veil, as on every departure),
- * the bar climbs from the film's middle line to the top of the window, where
- * it stands on every other page, and the colour drops onto the name chosen,
- * just as the block drops onto a page's own name when it opens. The next page
- * then comes up under a bar standing exactly so, wearing the same colour and
- * not dropping it again (`arrive-held` below).
+ * In four beats, one after the other (Frank, 2026-11-17):
  *
- * The film rides up with the bar. The climb is the bar's resting offset taken back: it stands at
+ *   1. the film goes to paper, the bar standing still on its middle line
+ *   2. a pause, the bar alone on the paper
+ *   3. the bar climbs to the top of the window, where it stands on every other
+ *      page: slow away, fast through the middle, slow into place
+ *   4. the colour drops onto the name chosen, as a page's own block drops in
+ *      when it opens — and then the next page comes up under a bar standing
+ *      exactly so, in the same colour, without dropping it again
+ *      (`arrive-held` below)
+ *
+ * THE KNOBS — every one of them is here; the script reads them to know when
+ * to go, so nothing else needs changing:
+ *
+ *   --start-veil    beat 1: how long the film takes to go
+ *   --start-pause   beat 2: how long the bar waits before it climbs
+ *   --start-climb   beat 3: how long the climb takes
+ *   --start-ease    beat 3: the climb's curve. (0.83, 0, 0.17, 1) is very slow,
+ *                   fast, very slow; (0.65, 0, 0.35, 1) is gentler
+ *   --start-swatch  beat 4: how long the colour takes to drop
+ *   --start-hold    after beat 4: how long it all stands before the next page
+ *
+ * And back again, by the name at the top left from any other page: the same
+ * beats run backwards, with the same knobs. The block lifts off the page's
+ * name as the page goes to paper (--start-veil), the bar comes down to the
+ * film's middle line (--start-climb, --start-ease), it waits (--start-pause),
+ * and the start page comes up under it, the film fading in (--start-veil).
+ *
+ * The climb is the bar's resting offset taken back: it stands at
  * (film-h − film-bar) / 2 and every other page has it at 0, with the same
- * padding over the line. The drop waits for the paper, since a colour drawn
- * over the film comes out as its opposite.
- *
- *   --start-climb   how long the bar takes to reach the top
- *   --start-veil    how long the film takes to go to paper
- *   --start-drop    when the colour starts to drop, from the click: not
- *                   before the paper is whole, or it is drawn over the film
- *                   as its own opposite
+ * padding over the line.
  */
-.has-film { --start-climb: 0.6s; --start-veil: 0.5s; --start-drop: 0.5s; }
-html.is-leaving-start body.has-film .top,
-html.is-leaving-start body.has-film main {
-  transform: translateY(calc((var(--film-bar) - var(--film-h)) / 2));
-  transition: transform var(--start-climb) var(--ease);
+:root {
+  --start-veil: 0.7s;
+  --start-pause: 0.35s;
+  --start-climb: 1.2s;
+  --start-ease: cubic-bezier(0.83, 0, 0.17, 1);
+  --start-swatch: 0.46s;
+  --start-hold: 0.1s;
+  /* Derived: where the climb and the drop begin. */
+  --start-climb-at: calc(var(--start-veil) + var(--start-pause));
+  --start-drop-at: calc(var(--start-climb-at) + var(--start-climb));
 }
-/* The film is carried up with the bar, as the scroll carries it on the way
-   to What's Color, and the paper comes over it a little slower than on other
-   departures so the climb is seen. */
+html.is-leaving-start body.has-film .top {
+  transform: translateY(calc((var(--film-bar) - var(--film-h)) / 2));
+  transition: transform var(--start-climb) var(--start-ease) var(--start-climb-at);
+}
 @media (prefers-reduced-motion: no-preference) {
-  html.is-leaving-start body.has-film .page-veil { animation: veil-in var(--start-veil) linear both; }
+  html.is-leaving-start body.has-film .page-veil { animation: veil-in var(--start-veil) ease-in-out both; }
 }
 html.is-leaving-start .top a.is-chosen {
   position: relative;
@@ -1086,7 +1106,7 @@ html.is-leaving-start .top a.is-chosen {
   --roll-color: #000;
   padding: var(--bar-rise) var(--bar-side) var(--bar-drop);
   margin: calc(-1 * var(--bar-rise)) calc(-1 * var(--bar-side)) calc(-1 * var(--bar-drop));
-  animation: name-knock var(--knock-time) linear calc(var(--start-drop) + var(--knock-delay)) backwards;
+  animation: name-knock var(--knock-time) linear calc(var(--start-drop-at) + var(--knock-delay)) backwards;
 }
 html.is-leaving-start .top a.is-chosen::before {
   content: '';
@@ -1095,115 +1115,37 @@ html.is-leaving-start .top a.is-chosen::before {
   z-index: -1;
   background: var(--bar-swatch, var(--neg-0));
   /* Held out of sight until it drops: waiting above the name, it would
-     stand over the film while the bar is still climbing. */
-  animation: swatch-drop 0.46s var(--ease) var(--start-drop) both, swatch-wait 0s linear var(--start-drop) both;
+     stand over the bar's other words while the bar is still climbing. */
+  animation:
+    swatch-drop var(--start-swatch) var(--ease) var(--start-drop-at) both,
+    swatch-wait 0s linear var(--start-drop-at) both;
 }
 @keyframes swatch-wait { from { visibility: hidden; } to { visibility: visible; } }
 
+/* Back to the start page (client/transitions.ts, `toStart`). The bar comes
+   down to where the start page holds it; the film's figures live on that
+   page alone (04-whats-color.css), so they are repeated here as fallbacks. */
+html.is-leaving-to-start .top {
+  transform: translateY(calc((var(--film-h, 100vh) - var(--film-bar, 4.2rem)) / 2));
+  transition: transform var(--start-climb) var(--start-ease) var(--start-veil);
+}
+/* The block lifts off as everywhere, and then is gone: lifted, it waits just
+   above the name, which is in sight once the bar starts down. */
+html.is-leaving-to-start .top [aria-current='page']:is(a, button)::before {
+  animation: swatch-lift 0.34s var(--ease) both, swatch-gone 0s linear 0.34s both;
+}
+@keyframes swatch-gone { to { visibility: hidden; } }
+@media (prefers-reduced-motion: no-preference) {
+  html.is-leaving-to-start .page-veil { animation: veil-in var(--start-veil) ease-in-out both; }
+  html.arrive-start .page-veil { animation: veil-out var(--start-veil) ease-in-out backwards; }
+}
+
 /* Arrived that way: the block and the name stand as they were left. */
-html.arrive-held .top [aria-current='page']:is(a, button),
-html.arrive-held .top [aria-current='page']:is(a, button)::before { animation: none; }
-
-
-/* ------------------------------------------------------------- scrollbar */
-
-/*
- * The handle and nothing else.
- *
- * The browser's own bar draws a channel down the right edge — a pale box with
- * a rule beside it — which on a site that is otherwise paper and ink reads as
- * a piece of the operating system left on the page. The track is given no
- * colour at all, so what is left is the handle, apparently floating on
- * whatever the page happens to be behind it.
- *
- * The handle is a mid grey on purpose rather than the ink: it has to hold on
- * the white pages and on the opening film alike, and nothing here can blend
- * the way the bar does — a scrollbar is drawn by the browser, outside anything
- * `mix-blend-mode` can reach. A grey at this weight reads against both.
- *
- * Its slimness comes from a transparent border with the paint clipped inside
- * it, which is the one way to inset a handle: the track keeps its full width
- * for the pointer to find, while the mark itself is narrow.
- *
- * Firefox has no pseudo-elements for this and takes the two properties above
- * instead; between them every browser gets a handle and no box.
- */
-html {
-  scrollbar-width: thin;
-  scrollbar-color: rgb(140 140 140 / 0.55) transparent;
-}
-
-::-webkit-scrollbar { width: 11px; height: 11px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-corner { background: transparent; }
-::-webkit-scrollbar-thumb {
-  background: rgb(140 140 140 / 0.55);
-  background-clip: content-box;
-  border: 3px solid transparent;
-  border-radius: 11px;
-}
-::-webkit-scrollbar-thumb:hover { background: rgb(120 120 120 / 0.75); background-clip: content-box; }
-
-/*
- * The drawn handle.
- *
- * It replaces the browser's bar rather than restyling it, because a native bar
- * cannot be moved onto the page: however the track is painted, the column it
- * sits in is still held open beside the content. Taking it away gives those
- * pixels back to the page and leaves the handle floating over whatever is
- * behind it.
- *
- * Both halves are behind the same support query, and deliberately so. The
- * handle is carried by a scroll-driven animation, so where that is not
- * understood there is no handle — and in that case the native bar has to stay,
- * styled as far as it can be. Hiding it unconditionally would have left those
- * browsers with no indication of position at all.
- *
- * Mid grey rather than the ink: it has to hold on the white pages and on the
- * opening film alike, and nothing can blend it — this is drawn over the page,
- * not into it.
- */
-@supports (animation-timeline: scroll()) {
-  html { scrollbar-width: none; }
-  html::-webkit-scrollbar { width: 0; height: 0; }
-
-  .scroll-thumb {
-    position: fixed;
-    top: 0;
-    right: 3px;
-    z-index: 60;
-    width: 4px;
-    height: var(--thumb-h, 0px);
-    border-radius: 4px;
-    background: rgb(140 140 140 / 0.5);
-    pointer-events: none;
-    animation: thumb-run linear both;
-    animation-timeline: scroll(root block);
-  }
-}
-
-@keyframes thumb-run {
-  to { transform: translateY(calc(100vh - var(--thumb-h, 0px))); }
-}
-
-/* ---------------------------------------------------------- text scramble */
-
-/*
- * The churning hover's characters.
- *
- * Each keeps the width it measured while the word was still, so whatever
- * nonsense lands in it cannot push the word wider and shove the rest of the
- * bar along — every position up there was set against the designer's sheet and
- * none of it may move. A piece too wide for its box is centred and cut rather
- * than allowed to spread.
- */
-.scram {
-  display: inline-block;
-  width: var(--w);
-  overflow: hidden;
-  text-align: center;
-  white-space: pre;
-}
+html.arrive-held:not(.is-leaving) .top [aria-current='page']:is(a, button),
+html.arrive-held:not(.is-leaving) .top [aria-current='page']:is(a, button)::before { animation: none; }
+/* Only until it leaves: leaving, the block lifts off as on any page. Without
+   the :not, a page arrived at this way held its block through the way back,
+   and the block came down with the bar instead of lifting off first. */
 
 
 /* ------------------------------------------------------------- scrollbar */
