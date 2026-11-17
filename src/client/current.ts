@@ -1,4 +1,4 @@
-import { nextHue } from './hues.ts';
+import { nextHue, pageHue } from './hues.ts';
 
 /**
  * Paints the page you are on, in the bar, as a block of colour.
@@ -34,12 +34,17 @@ export function initCurrent(): void {
   const here = bar?.querySelector<HTMLElement>('[aria-current="page"]');
   if (!bar || !here) return;
 
-  const n = nextHue();
-  if (n >= 0) {
-    here.style.setProperty('--bar-swatch', `var(--neg-${n})`);
-    // The question in the opening note wears the same colour as the block in
-    // the bar, so the two read as one mark. Set on the root so it reaches it.
-    document.documentElement.style.setProperty('--wc-ask', `var(--hue-${n})`);
+  // Drawn in the head before the first paint (components/layout.ts), so the
+  // block is never seen in another colour first. Drawn here only where the
+  // head did not, which is a page without that script.
+  if (pageHue() < 0) {
+    const n = nextHue();
+    if (n >= 0) {
+      document.documentElement.style.setProperty('--bar-swatch', `var(--neg-${n})`);
+      // The question in the opening note wears the same colour as the block in
+      // the bar, so the two read as one mark. Set on the root so it reaches it.
+      document.documentElement.style.setProperty('--wc-ask', `var(--hue-${n})`);
+    }
   }
 
   const rise = () => {
@@ -63,38 +68,4 @@ export function initCurrent(): void {
   if (document.body.classList.contains('has-film')) {
     new MutationObserver(rise).observe(document.body, { attributes: true, attributeFilter: ['class'] });
   }
-
-  if (document.body.classList.contains('has-film')) split(here);
-}
-
-/**
- * Two copies of the name, for the stretch where the film is still passing it.
- *
- * On the opening page the bar travels up across the film before it settles, and
- * for that stretch the name is over the picture. The name on the block is drawn
- * black so the bar's `difference` turns it to paper — which only holds where
- * what lies behind is paper. Over the film it is dark on dark, and the name
- * simply went missing for the whole of that climb.
- *
- * So the name is drawn twice, each copy showing only its own side of the film's
- * bottom edge: the upper in the ink the bar wears over the film, with no block
- * behind it, and the lower in paper on the block. The edge sweeps down through
- * the two as the film clears, so the name is handed from one to the other a
- * letter at a time and is never absent from either.
- *
- * The copy is taken after the roll has built itself, so it carries the same
- * per-character spans and rolls with the original rather than sitting still
- * beside it. It is spoken by neither — the original is the one in the document's
- * reading, and this is a second drawing of it.
- */
-function split(here: HTMLElement): void {
-  const face = document.createElement('span');
-  face.className = 'top-face';
-  while (here.firstChild) face.append(here.firstChild);
-  here.append(face);
-
-  const echo = face.cloneNode(true) as HTMLElement;
-  echo.className = 'top-echo';
-  echo.setAttribute('aria-hidden', 'true');
-  here.append(echo);
 }
