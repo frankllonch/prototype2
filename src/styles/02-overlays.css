@@ -610,6 +610,9 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
  * lines of a few words would open rivers, so the biography is set ragged.
  */
 @media (max-width: 899px) {
+  /* The lead on a phone is 30, the size of Color Charts' large lettering
+     (--chart-phone-large), as the two match on the desktop at 45. */
+  .about-lead { font-size: calc(30 * var(--p)); }
   .about-record { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 3.5em; }
   .about-show-columns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
