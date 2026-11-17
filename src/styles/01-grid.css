@@ -705,8 +705,6 @@ html.js .hero[data-hero]+.grid[data-stack] {
    */
   --row-top: 0.344vw;    /* 6.6 of the frame's pixels */
   --row-bottom: 0.448vw;
-  margin: 0 auto;
-  padding: max(calc(var(--bar) + 1rem), var(--list-top, 16.050vw)) var(--pad) 18vh;
 }
 
 /*
@@ -985,6 +983,28 @@ html.js .hero[data-hero]+.grid[data-stack] {
 .xgroup-name {
   margin: 0;
   padding-top: var(--row-top, 1.0785vw);
+}
+
+/*
+ * Exhibitions starts exactly where Commissioned does, so switching between the
+ * two moves nothing: "Solo shows" sits where Commissioned's first group name
+ * sits, and the first show's name starts on the same line as the first
+ * commission's. The figures are Commissioned's own (`.xlist.com-list` in
+ * 07-sheet.css): its list top, its side margins, and the padding above its
+ * first row. Exhibitions' rows carry less padding above the type, so the list
+ * starts lower by the difference. The show's name is a size up from the
+ * group name, but on its 0.942 line its capitals start where a 40 on a 40
+ * line does, so the group name is set on a 40 line here too and the two start
+ * together. Change one of these figures and change it in both.
+ */
+/* The computer only: the phone sets its own list top, above. */
+@media (min-width: 900px) {
+  .xlist.exh-list {
+    --row-leading: 1;
+    --anchor-row-top: 0.78125vw;
+    padding: calc(max(calc(var(--bar) + 2rem), 20.745vw) + var(--anchor-row-top) - var(--row-top))
+      clamp(1.25rem, 2.604vw, 4rem) 18vh;
+  }
 }
 
 /* Scoped to the list: the two indexes share every rule above but the columns,
