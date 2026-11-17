@@ -377,7 +377,14 @@ try { var nav = performance.getEntriesByType('navigation')[0];
 // it was painted once in the list's first colour and then changed, on every
 // page. client/hues.ts carries on from this one.
 (function () { try { var root = document.documentElement, hues = Number(root.style.getPropertyValue('--hues')) || 0;
-  if (!hues) return; var hue = Math.floor(Math.random() * hues); root.dataset.hue = String(hue);
+  if (!hues) return; var hue = Math.floor(Math.random() * hues);
+  // Arriving from the start page by its bar, which has already dropped this
+  // page's colour onto its name (client/transitions.ts): the same colour, and
+  // standing there from the first frame rather than dropping again.
+  try { var held = JSON.parse(sessionStorage.getItem('cv-held') || 'null'); sessionStorage.removeItem('cv-held');
+    if (held && held.path === location.pathname && Date.now() - held.at < 5000 && held.hue >= 0 && held.hue < hues) {
+      hue = held.hue; root.classList.add('arrive-held'); } } catch (e) {}
+  root.dataset.hue = String(hue);
   root.style.setProperty('--bar-swatch', 'var(--neg-' + hue + ')');
   root.style.setProperty('--wc-ask', 'var(--hue-' + hue + ')'); } catch (e) {} })();
 // On a phone the start page opens on the menu, where the film is on a desktop
