@@ -1,0 +1,48 @@
+/* ------------------------------------------------------------ hover tuner */
+
+/*
+ * The panel for trying the bar's hover live (client/hover-tuner.ts). Only on
+ * a page opened with ?tune, and never below 900px. It sets its own type and
+ * colours throughout, so nothing of the site's lettering leaks into it.
+ */
+.tuner {
+  /* Clear of the bar, which it is there to watch. */
+  position: fixed; right: 16px; bottom: 16px; z-index: 100000;
+  width: 340px; max-height: calc(100vh - 110px);
+  display: flex; flex-direction: column;
+  font: 12px/1.35 -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  letter-spacing: 0; text-transform: none;
+  color: #eee; background: rgb(22 22 24 / 0.94);
+  border-radius: 10px; box-shadow: 0 8px 30px rgb(0 0 0 / 0.35);
+  backdrop-filter: blur(6px);
+  mix-blend-mode: normal;
+}
+.tuner[hidden] { display: none; }
+.tuner * { box-sizing: border-box; font: inherit; letter-spacing: inherit; text-transform: none; }
+.tuner-head { display: flex; align-items: center; gap: 6px; padding: 10px 12px; border-bottom: 1px solid rgb(255 255 255 / 0.1); }
+.tuner-head strong { flex: 1; font-weight: 600; }
+.tuner.is-closed .tuner-body { display: none; }
+.tuner.is-closed .tuner-head { border-bottom: 0; }
+.tuner-body { overflow-y: auto; padding: 4px 12px 12px; overscroll-behavior: contain; }
+.tuner-section h3 { margin: 12px 0 6px; font-weight: 600; color: #999; text-transform: uppercase; font-size: 10px; letter-spacing: 0.08em; }
+.tuner button {
+  padding: 4px 8px; border: 1px solid rgb(255 255 255 / 0.18); border-radius: 5px;
+  color: #eee; background: rgb(255 255 255 / 0.06); cursor: pointer;
+}
+.tuner button:hover { background: rgb(255 255 255 / 0.14); }
+.tuner button[aria-pressed='true'] { background: #eee; color: #111; border-color: #eee; }
+.tuner-effects { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+.tuner-note { margin: 8px 0; color: #aaa; }
+.tuner-row { display: grid; grid-template-columns: 1fr 140px 56px; align-items: center; gap: 6px; padding: 3px 0; }
+.tuner-try, .tuner-out { display: flex; gap: 10px; margin-top: 8px; }
+.tuner-label { color: #ccc; cursor: default; user-select: none; }
+.tuner-value { color: #888; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tuner input[type='range'] { width: 100%; accent-color: #eee; }
+.tuner input[type='checkbox'] { justify-self: start; accent-color: #eee; }
+.tuner input[type='color'] { width: 100%; height: 22px; padding: 0; border: 0; background: none; }
+.tuner select, .tuner input[type='text'] {
+  width: 100%; padding: 2px 4px; border: 1px solid rgb(255 255 255 / 0.18); border-radius: 4px;
+  color: #eee; background: #222;
+}
+.tuner-small { margin-top: 6px; font-size: 11px !important; color: #aaa !important; }
+.tuner-copied { color: #9c9; align-self: center; }

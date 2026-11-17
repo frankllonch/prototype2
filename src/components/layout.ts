@@ -68,7 +68,7 @@ const HOVER: 'roll' | 'scramble' = 'roll';
 const CLIENT_MODULES = [
   'env', 'text-roll', 'transitions', 'controls', 'stack', 'years', 'hover-list', 'panels',
   'figures', 'lightbox', 'cursor', 'film', 'tilt', 'paging', 'views',
-  'scroll-cue', 'about', 'inquiries', 'chart', 'book', 'focus', 'hues', 'current', 'scrollbar', 'scramble', 'menu', 'index',
+  'scroll-cue', 'about', 'inquiries', 'chart', 'book', 'focus', 'hues', 'current', 'scrollbar', 'scramble', 'hover-tuner', 'menu', 'index',
 ] as const;
 
 /** The loading screen's five lines, set in blue on peach. */
@@ -122,7 +122,7 @@ function rolled(text: string): Html {
   let i = 0;
   const letters = [...segmenter.segment(text)].map(({ segment }) =>
     segment.trim() ? html`<span class="roll" data-ch="${segment}" style="--i: ${i++}">${segment}</span>` : html`${segment}`);
-  return html`<span class="roll-word" aria-hidden="true">${join(letters)}</span><span class="roll-text">${text}</span>`;
+  return html`<span class="roll-word" aria-hidden="true" style="--n: ${i}">${join(letters)}</span><span class="roll-text">${text}</span>`;
 }
 
 /**
@@ -352,6 +352,10 @@ ${description ? `<meta name="description" content="${description.replace(/"/g, '
 <link rel="stylesheet" href="${withBase('/site.css')}" />
 ${modules.map((m) => `<link rel="modulepreload" href="${m}" />`).join('\n')}
 <script>document.documentElement.classList.add('js');
+// The hover tuner's lettering, laid over the stylesheet before the first paint
+// so that moving between pages with it on does not flash the defaults. Only in
+// a browser that has asked for the tuner (?tune); see client/hover-tuner.ts.
+try { if (localStorage.getItem('cv-tune') === '1') { document.documentElement.setAttribute('data-tune', ''); var tc = localStorage.getItem('cv-tune-css'); if (tc) { var ts = document.createElement('style'); ts.id = 'tune-early'; ts.textContent = tc; document.head.appendChild(ts); } } } catch (e) {}
 // Arriving at What's Color by its link, the page is laid out at the top and
 // moved down to the written sentence by script — so it is kept covered until
 // it has been, and no frame is ever painted in the wrong place. The script
