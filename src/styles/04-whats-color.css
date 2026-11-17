@@ -972,7 +972,9 @@ html:has(body.has-film) {
 .wc-sheet-page .wc-cell-name {
   grid-column: 1;
   margin: 0;
-  font-size: 1em;
+  /* NOM: medium 20 on 20, the size of the rest of the block — the roster
+     above keeps the 40 (typography sheet; Frank, 2026-11-17). */
+  font-size: 0.5em;
   font-weight: 500;
   line-height: var(--sheet-name-lead, 1);
   letter-spacing: 0;
@@ -1748,8 +1750,8 @@ a.wc-bar:focus-visible {
     --wc-ed-say: calc(20 * var(--p));
     --wc-ed-say-lead: calc(20 * var(--p));
     /* A person's name above their answer: size, leading. */
-    --wc-ed-name: calc(20 * var(--p));
-    --wc-ed-name-lead: calc(20 * var(--p));
+    --wc-ed-name: var(--wc-ed-small);        /* the answer's name: the block's own size, as on the computer */
+    --wc-ed-name-lead: var(--wc-ed-small-lead);
     /* What they do, their answer and their colour: size, leading. */
     --wc-ed-small: calc(14 * var(--p));
     --wc-ed-small-lead: calc(14 * var(--p));
