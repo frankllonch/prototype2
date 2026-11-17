@@ -1878,6 +1878,12 @@ html.js .hero[data-hero]+.grid[data-stack] {
   font-weight: 600;
 }
 
+/* Except a commission's own name, which is regular (Frank, 2026-11-17): on
+   Commissioned only the group heading is semibold. */
+.com-list .xrow-title {
+  font-weight: 400;
+}
+
 .xrow-when {
   font-weight: 400;
   font-style: italic;
@@ -7031,7 +7037,6 @@ html:not(.js) .sheet-step { display: none; }
   .com-list .xrow-title {
     display: block;
     font-size: var(--com-size);
-    font-weight: 600;                       /* semibold, as on the computer (typography sheet) */
   }
   .com-list .xrow-when { display: none; }
 }
