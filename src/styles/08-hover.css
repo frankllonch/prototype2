@@ -10,12 +10,12 @@
  * hover is one motion played forwards and then backwards.
  *
  * `--n` is the number of letters in the word, written on it by the build
- * (components/layout.ts). 60ms is the roll's own step, and has to move with it.
+ * (components/layout.ts). 85ms is the roll's own step, and has to move with it.
  * Kept in a file of its own, below the roll, so it can be lifted out whole.
  */
 .roll::before, .roll::after {
-  transition-delay: max(0ms, calc((var(--n, 1) - 1 - var(--i)) * 60ms));
+  transition-delay: max(0ms, calc((var(--n, 1) - 1 - var(--i)) * 85ms));
 }
 [data-roll]:hover .roll::before, [data-roll]:hover .roll::after {
-  transition-delay: calc(var(--i) * 60ms);
+  transition-delay: calc(var(--i) * 85ms);
 }
