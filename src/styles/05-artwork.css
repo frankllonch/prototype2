@@ -324,7 +324,7 @@
   .detail {
     --work-top: calc(64 * var(--p));
     --work-type: calc(16 * var(--p));
-    --work-lead: calc(20 * var(--p));
+    --work-lead: calc(16 * var(--p));      /* solid, as the typography sheet sets the caption */
     --work-pair: calc(2 * var(--p));
     --work-break: calc(10 * var(--p));
     --work-plate: calc(16 * var(--p));

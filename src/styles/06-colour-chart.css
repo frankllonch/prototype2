@@ -19,7 +19,7 @@
  * as a unit. Everything below is then the sheet's own figure, and the page
  * still scales with the site rather than against it.
  *
- *     --pt  =  --type / 36        (40pt = 1.111 × --type; 45pt = 1.25 ×)
+ *     --pt  =  --type / 40        (since the typography sheets of 2026-11-17)
  *
  * The page margin is the one figure not taken from the sheet. She sets it at
  * 45pt, which is 50 against the site's 40, and the bar is set at 40 everywhere
@@ -30,7 +30,11 @@
  */
 
 .chart {
-  --pt: calc(var(--type) / 36);
+  /* One point of the typography sheets (JERARQUIA, 2026-11-17), which are set
+     on the site's 1920 frame like every other page: 40pt is `--type`. It was
+     `--type / 36` while this page followed the older 1728 sheet, which set
+     the whole page a ninth larger than the rest of the site. */
+  --pt: calc(var(--type) / 40);
   /* One line of the statement: 45pt of leading on 40pt of text. */
   --chart-line: calc(var(--pt) * 45);
 
@@ -83,14 +87,14 @@
 .chart-statement {
   font-size: calc(var(--pt) * 40);
   font-weight: 500;
-  line-height: 1.125;
+  line-height: 1;                       /* INTRO: medium 40 on 40 (typography sheet) */
   text-transform: uppercase;
   /* None. Capitals are already wide; a page of them does not need help, and
      the sheet's line measures to within a third of a pixel of zero. */
   letter-spacing: 0;
 }
 
-.chart-statement p { margin: 0 0 1.125em; }
+.chart-statement p { margin: 0 0 1em; }
 .chart-statement p:last-child { margin-bottom: 0; }
 
 /* --------------------------------------------------------- the writing */
@@ -175,9 +179,9 @@
 /* ------------------------------------------------------------- the ordering */
 
 /*
- * The way to get one, and what it costs. 45pt semibold over 40pt, with the
- * price itself the only thing on the page set heavier than the words around
- * it — "Cost:" is the sheet's LIGHT, the figure its SEMIBOLD.
+ * The way to get one, and what it costs. ORDER YOURS is semibold 45 on a
+ * line of 40, its arrow drawn the size a 50 would set it; "Cost:" is regular
+ * 40 and the figure semibold 40 (JERARQUIA, 2026-11-17).
  */
 .chart-order {
   display: inline-flex;
@@ -186,7 +190,7 @@
   margin-top: calc(var(--pt) * 24);
   font-size: calc(var(--pt) * 45);
   font-weight: 600;
-  line-height: 1.125;
+  line-height: calc(40 / 45);
   letter-spacing: 0;
   text-transform: uppercase;
   color: var(--ink);
@@ -209,8 +213,9 @@
  * nothing to drift against.
  */
 .chart-arrow {
-  width: 0.68em;
-  height: 0.68em;
+  /* 0.68 of a 50, against the words' 45. */
+  width: calc(0.68em * 50 / 45);
+  height: calc(0.68em * 50 / 45);
   overflow: visible;
   transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1);
 }
@@ -242,17 +247,11 @@
    a keyboard arriving on a control that opens a form should be unmistakable. */
 .chart-order:focus-visible { text-decoration: underline; text-underline-offset: 0.3em; }
 
-/*
- * 45pt, not the 40 the style list gives for LIGHT: measured off the sheet, the
- * line runs 277 where 40pt would set it at 248. The price is the one fact on
- * the page a buyer is looking for, and it is set at the size of the control
- * above it rather than the size of the words above that.
- */
 .chart-price {
   margin: calc(var(--pt) * 18) 0 0;
-  font-size: calc(var(--pt) * 45);
-  font-weight: 300;
-  line-height: 1.125;
+  font-size: calc(var(--pt) * 40);
+  font-weight: 400;
+  line-height: 1;
   letter-spacing: 0;
 }
 
@@ -361,10 +360,10 @@
     overflow: visible;
   }
 
-  /* "Cost:" is regular on this sheet, where the desktop's is light. */
+  /* A step under Order yours, as on the computer: 40 to its 45. */
   .chart-price {
     margin-top: var(--chart-phone-cost-gap);
-    font-size: var(--chart-phone-large);
+    font-size: calc(var(--chart-phone-large) * 40 / 45);
     font-weight: 400;
     line-height: 1;
   }

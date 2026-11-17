@@ -16,7 +16,9 @@
 .panel:has(.sheet) {
   --f: calc(100vw / 1920);
   --s-pad: calc(var(--f) * 50);
-  --s-lead: 1.125;                 /* 45 over 40, the sheets' leading */
+  /* Solid: every style on the typography sheet (JERARQUIA, 2026-11-17) is set
+     on a line of its own size — 45 on 45, 40 on 40, 30 on 30. */
+  --s-lead: 1;
   overflow: hidden;
   padding: 0;
   background: var(--paper);
@@ -106,15 +108,17 @@
  */
 .sheet-lines {
   margin-top: calc(var(--f) * 43);
-  font-weight: 500;
+  /* Regular 40 on 40: DESCRIPCIÓ on the commissioned sheet, LOCALITZACIÓ on
+     the exhibitions' (typography sheets, 2026-11-17). */
+  font-weight: 400;
   text-transform: uppercase;
   line-height: 1;
 }
 .sheet-when {
   margin-top: calc(var(--f) * 1);
-  /* Light, upright: the second line of the masthead in the designer's key. */
-  font-weight: 300;
-  font-style: normal;
+  /* Regular italic, 40 on 40: DATA on both typography sheets. */
+  font-weight: 400;
+  font-style: italic;
   text-transform: uppercase;
   font-variant-numeric: tabular-nums;
 }
@@ -150,11 +154,13 @@
  * open with something that is not a paragraph.
  */
 .sheet-prose > p:first-of-type {
+  font-size: var(--t-45);           /* INTRO: medium 45 on 45 */
   font-weight: 500;
   text-transform: uppercase;
 }
 .sheet-prose p:last-child { margin-bottom: 0; }
 .sheet-prose .is-style-lead {
+  font-size: var(--t-45);
   font-weight: 500;
   text-transform: uppercase;
 }
@@ -179,24 +185,22 @@
 .sheet-prose a { color: inherit; text-decoration: none; }
 .sheet-prose a:hover,
 .sheet-prose a:focus-visible { text-decoration: underline; text-underline-offset: 0.15em; text-decoration-thickness: 1px; }
-/* Credits: in a smaller hand, kept well clear of the text above — three of
-   the text's lines and more, which is what the sheets leave. */
-/*
- * Credits: light rather than small. They were set at 30 against the text's 40,
- * which is a size the designer's scale does not have — light at 40 is the one
- * style in it that means the same thing, a line that is there to be read but
- * not to be read first.
- */
 .sheet-prose .is-style-note {
-  margin-top: 5.2em;
+  /* The same distance from the text as before the credits went to 30. */
+  margin-top: calc(var(--type) * 5.2);
   /*
-   * Regular, like the text above it. These were set at 30 against the text's
-   * 40 once, and light when that size was taken out; regular is what they
-   * actually are. The name inside keeps the medium its own markup asks for,
-   * so the line reads 'Photography by' plain and the credit a shade stronger.
+   * ROLS: regular 30 on 30 (typography sheets, 2026-11-17). Everyone credited
+   * here is set a size under the text, so no one else's name is ever the size
+   * of hers. Claudia's own name, where a credit carries it, stays at the
+   * text's 40: wrap it in `.is-artist`.
    */
-  line-height: var(--lead-45);
+  font-size: var(--t-30);
+  font-weight: 400;
+  line-height: 1;
 }
+/* The names keep their capitals, in the regular weight of the line. */
+.sheet-prose .is-style-note :is(b, strong, em) { font-weight: 400; }
+.sheet-prose .is-style-note .is-artist { font-size: calc(1em * 40 / 30); }
 .sheet-prose .is-style-cta {
   margin-top: calc(var(--s-lead) * 3em);
   font-style: italic;
@@ -297,7 +301,7 @@
  * designer's expanded sheets set it.
  */
 .sheet.is-wide-text {
-  --s-lead: 1.25;
+  --s-lead: 1;
   grid-template-columns: minmax(0, 1fr);
 }
 .sheet.is-wide-text .sheet-stage { display: none; }
@@ -309,7 +313,7 @@
   min-height: calc(var(--f) * 153);
   padding-right: calc(var(--f) * 300);
   padding-bottom: calc(var(--f) * 34);
-  line-height: 1.125;
+  line-height: 1;
 }
 .sheet.is-wide-text .sheet-title {
   /* Shrinks to its column and wraps, so a long name never runs under the
@@ -418,7 +422,7 @@ html:not(.js) .sheet-step { display: none; }
   .com-list .xrow-title {
     display: block;
     font-size: var(--com-size);
-    font-weight: 400;
+    font-weight: 600;                       /* semibold, as on the computer (typography sheet) */
   }
   .com-list .xrow-when { display: none; }
 }
@@ -447,7 +451,7 @@ html:not(.js) .sheet-step { display: none; }
 .panel:has(.plates) {
   --f: calc(100vw / 1920);
   --s-pad: calc(var(--f) * 50);
-  --s-lead: 1.125;
+  --s-lead: 1;
   overflow: hidden;
   padding: 0;
   background: var(--paper);
@@ -582,9 +586,13 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
   .panel:has(> .sheet) {
     --sh-top: calc(157 * var(--p));          /* top of the page → the name's line */
     --sh-foot: calc(80 * var(--p));          /* under the last block */
-    --sh-name: calc(25 * var(--p));          /* the name, on a line of the same */
-    --sh-type: calc(20 * var(--p));          /* place, dates, lede and text, on a line of the same */
-    --sh-note: calc(20 * var(--p));          /* credits, likewise */
+    /* The typography sheet's hierarchy at the phone's scale: the text keeps
+       the phone frame's size, and the rest stand to it as on the computer —
+       name and lede 45 to its 40, credits 30 (Frank, 2026-11-17). */
+    --sh-type: calc(20 * var(--p));          /* place, dates and text, on a line of the same */
+    --sh-name: calc(var(--sh-type) * 1.125); /* the name, likewise */
+    --sh-lede: calc(var(--sh-type) * 1.125); /* the lede, likewise */
+    --sh-note: calc(var(--sh-type) * 0.75);  /* credits, likewise */
     --sh-measure: none;                      /* where the lines under the name turn: the column */
     --sh-lines-top: calc(14 * var(--p));     /* name → place */
     --sh-when-top: 0px;                      /* place → dates: the next line */
@@ -601,9 +609,10 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
   .panel[id^='commissioned-'] {
     --sh-top: calc(107 * var(--p));
     --sh-foot: calc(119 * var(--p));
-    --sh-name: calc(30 * var(--p));
     --sh-type: calc(30 * var(--p));
-    --sh-note: calc(20 * var(--p));
+    --sh-name: calc(var(--sh-type) * 1.125);
+    --sh-lede: calc(var(--sh-type) * 1.125);
+    --sh-note: calc(var(--sh-type) * 0.75);
     --sh-measure: calc(261 * var(--p));      /* the lines under the name turn at the photograph's width */
     --sh-lines-top: calc(60 * var(--p));
     --sh-when-top: calc(29 * var(--p));      /* lines → year */
@@ -622,8 +631,8 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
   .panel:has(> .plates) {
     --sh-top: calc(157 * var(--p));
     --sh-foot: calc(80 * var(--p));
-    --sh-name: calc(25 * var(--p));
     --sh-type: calc(20 * var(--p));
+    --sh-name: calc(var(--sh-type) * 1.125);
     --sh-measure: none;
     --sh-lines-top: calc(17 * var(--p));     /* name → place */
     --sh-when-top: calc(32 * var(--p));      /* place → dates, set apart on this sheet */
@@ -673,7 +682,7 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
   .panel > :is(.sheet, .plates) .sheet-lines {
     max-width: var(--sh-measure);
     margin: var(--sh-lines-top) 0 0;
-    font-weight: 500;
+    font-weight: 400;
     line-height: inherit;
   }
   /* Regular italic, as both phone frames draw the dates. */
@@ -695,6 +704,7 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
   .panel > .sheet .sheet-prose > * p { margin: 0 0 var(--sh-para); }
   .panel > .sheet .sheet-prose > * p:last-child { margin-bottom: 0; }
   .panel > .sheet .sheet-prose .lede-open { margin-bottom: var(--sh-para); }
+  .panel > .sheet .sheet-prose > :is(p:first-of-type, .is-style-lead) { font-size: var(--sh-lede); line-height: var(--sh-lede); }
   .panel > .sheet .sheet-prose > .is-style-note { font-size: var(--sh-note); line-height: var(--sh-note); }
   /* Anything set into the text — a film — keeps to the column. */
   .panel > .sheet .sheet-prose :is(video, iframe, img) { max-width: 100%; }

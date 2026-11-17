@@ -394,15 +394,16 @@ html.js .hero[data-hero]+.grid[data-stack] {
  * 0.317 em above, and half the leading less 0.363 em below.
  */
 .detail-caption {
-  /* THE CAPTION'S LEADING — 50 over 40 on the sheet, as on the rest of the page. */
-  --caption-lead: 1.25;
+  /* DETALL ARTWORK on the typography sheet (2026-11-17): every line 30 on
+     30 — the title and the year semibold, the rest regular. */
+  --caption-lead: 1;
   grid-column: 3;
   grid-row: 1;
   position: relative;
   z-index: 1;
   min-width: var(--text-w);
   max-width: var(--text-max);
-  font-size: var(--type);
+  font-size: var(--t-30);
   line-height: var(--caption-lead);
   margin-top: calc((0.317 - var(--caption-lead) / 2) * 1em);
   margin-bottom: calc((0.363 - var(--caption-lead) / 2) * 1em);
@@ -411,7 +412,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
 
 .detail-caption p { margin: 0; }
 .detail-title {
-  font-size: var(--type);
+  font-size: inherit;
   font-weight: 600;
   letter-spacing: 0;
   text-transform: uppercase;
@@ -423,9 +424,9 @@ html.js .hero[data-hero]+.grid[data-stack] {
 /* "87 of 154", its capitals --index-gap under the small pictures, or under the
    painting itself when there are none. */
 .detail-index {
-  --index-lead: 1.25;
+  --index-lead: 1;
   margin: calc(var(--index-gap) - (var(--index-lead) / 2 - 0.317) * 1em) 0 0;
-  font-size: var(--type);
+  font-size: var(--t-30);
   line-height: var(--index-lead);
   white-space: nowrap;
 }
@@ -588,11 +589,13 @@ html.js .hero[data-hero]+.grid[data-stack] {
  * The designer's sheet says 600 in as many words.
  */
 .exh-title,
+.xrow-title,
 .xgroup-name {
   font-weight: 600;
 }
 
 .xrow-when {
+  font-weight: 400;
   font-style: italic;
   white-space: nowrap;
 }
@@ -730,16 +733,14 @@ html.js .hero[data-hero]+.grid[data-stack] {
 /*
  * The sheet's type, and only the sheet's type.
  *
- * Semibold at 45 for the name, medium at 40 in capitals for the line under
- * it, regular at 40 for the year. The leading is 45 over 40 throughout, which
- * is the one figure every style on the sheet shares.
+ * The designer's typography sheet (JERARQUIA EXHIBITIONS, 2026-11-17): the
+ * name semibold 40 on 40, the line under it light 40 on 40, the year regular
+ * 40 on 40 and upright. Every line is set solid.
  */
 .exh-title {
-  font-size: var(--t-45);
+  font-size: var(--t-40);
   font-weight: 600;
-  /* 40.4 over 45: the sheet sets the name and its line tight to each other,
-     not on the 45 leading that the prose takes. */
-  line-height: 0.942;
+  line-height: 1;
 }
 .exh-venue {
   font-size: var(--t-40);
@@ -752,7 +753,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
   font-weight: 300;
   font-style: normal;
   text-transform: uppercase;
-  line-height: 1.01;     /* 40.4 over 40 */
+  line-height: 1;
 }
 /* The kind of show, and the "at" after it: the group's name already says the
    first on this layout, so both are in the row for the phone alone (below). */
@@ -766,7 +767,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
   font-weight: 400;
   font-style: italic;
   text-transform: uppercase;
-  line-height: var(--lead-45);
+  line-height: 1;
 }
 .exh-year {
   display: grid;
@@ -775,7 +776,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
   font-size: var(--t-40);
   font-weight: 400;
   font-style: normal;
-  line-height: var(--lead-45);
+  line-height: 1;
   font-variant-numeric: tabular-nums;
 }
 
@@ -868,8 +869,10 @@ html.js .hero[data-hero]+.grid[data-stack] {
     display: inline;
   }
 
+  /* Upright, as on the computer: the typography sheet keeps the list's
+     year upright (Frank, 2026-11-17). */
   .exh-list .exh-year {
-    font-style: italic;
+    font-style: normal;
   }
 
   /* A run across two years stacks them, the second level with the kind. */
