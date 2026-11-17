@@ -48,6 +48,14 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     setTimeout(function () { document.documentElement.classList.remove('wc-arriving') }, 1500);
     setTimeout(function () { document.documentElement.classList.remove('wc-swatch-drop') }, 700);
   } } catch (e) {}
+// The page's colour, drawn here rather than by client/current.ts so that the
+// block in the bar is the right colour on the first frame. Drawn by the scripts,
+// it was painted once in the list's first colour and then changed, on every
+// page. client/hues.ts carries on from this one.
+(function () { try { var root = document.documentElement, hues = Number(root.style.getPropertyValue('--hues')) || 0;
+  if (!hues) return; var hue = Math.floor(Math.random() * hues); root.dataset.hue = String(hue);
+  root.style.setProperty('--bar-swatch', 'var(--neg-' + hue + ')');
+  root.style.setProperty('--wc-ask', 'var(--hue-' + hue + ')'); } catch (e) {} })();
 // On a phone the start page opens on the menu, where the film is on a desktop
 // (client/menu.ts): decided here, before the first paint, so the page under
 // it is never seen.
