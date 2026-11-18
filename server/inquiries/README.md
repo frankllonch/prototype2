@@ -39,6 +39,7 @@ cd server/inquiries
 npx wrangler kv namespace create INQUIRIES_RATE   # put the printed id in wrangler.toml
 npx wrangler secret put RESEND_API_KEY
 npx wrangler secret put INQUIRY_TO                # Claudia's address
+npx wrangler secret put INQUIRY_TO_GALLERY        # the Alzueta gallery, for the Gallery's Inquiries
 npx wrangler secret put IP_PEPPER                 # any long random string
 npx wrangler deploy
 ```

@@ -14,6 +14,11 @@
 #
 #   npx wrangler secret put INQUIRY_TO
 #
+# The Gallery's Inquiries form goes to the Alzueta gallery instead (its address
+# is on the About page). Set it the same way; until it is, those go to INQUIRY_TO:
+#
+#   npx wrangler secret put INQUIRY_TO_GALLERY
+#
 name = "claudiavalsells-inquiries"
 main = "worker.ts"
 compatibility_date = "2025-09-01"

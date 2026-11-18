@@ -38,7 +38,7 @@ const SAID: Record<string, string> = {
   blocked: 'This message could not be sent.',
   network: 'That did not send — check your connection and try again.',
   server: 'Something went wrong at our end. Please try again shortly.',
-  unconfigured: 'The order form is not connected yet.',
+  unconfigured: 'This form is not connected yet.',
 };
 
 /** A conservative test: something, an @, something with a dot in it. */
@@ -237,6 +237,7 @@ export function initInquiries(): void {
       subject: value('subject'),
       message: value('message'),
       website: value('website'),
+      desk: value('desk'),
       started: Number(started.value) || 0,
       token: '',
     };
