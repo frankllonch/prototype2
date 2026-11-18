@@ -44,7 +44,7 @@ export const SHEETS: Readonly<Record<string, Sheet>> = {
       <p>My intervention examined the meaning related to the ‘readymade’ color: the color purchased in the store instead of hand-mixed.<br>‘’Color of red clay, rich with red iron oxides. Clay is a Mediterranean element, very characteristic…»<br>Words that describe the color ‘brown earth’ and invite you to touche it. Descriptions that help us to perceive and understand color, to feel it. Words that are also the name of the color itself.<br>So what happens when colors are described by codes, numbers?<br>Is the emotional part of the color lost?<br>Does the perception we have of that color change?</p>
       <p>I had chosen 5 colors with a reference to explore the impact of mass-produced color on contemporary art. References that openly testify to the status of painting as a product manufactured in series and standardized.</p>
       <p>The dialogue is precisely between the natural clay color base with the almost provocative color sample and its reference.</p>
-      <p class="is-style-note">Photos by <b>FRANCESCO STELITANO</b><br>Concept by <b>APARTAMENTO STUDIOS</b><br>Curated by <a href="https://www.juliaesque.com"><b>JÚLIA ESQUÉ</b></a><br>Creative partners <b>ELOI BONADONA, CARLES LLARCH AND MAX MILÀ</b></p>`,
+      <p class="is-style-note is-20">Photos by <b>FRANCESCO STELITANO</b><br>Concept by <b>APARTAMENTO STUDIOS</b><br>Curated by <a href="https://www.juliaesque.com"><b>JÚLIA ESQUÉ</b></a><br>Creative partners <b>ELOI BONADONA, CARLES LLARCH AND MAX MILÀ</b></p>`,
   },
 
   'color-chart-el-taller-de-arquitectura-rbta': {
@@ -74,7 +74,7 @@ export const SHEETS: Readonly<Record<string, Sheet>> = {
       <p>As a colourist, I approached my chromatic studies through a constant juxtaposition of colours. The key lies in placing one colour next to another, so as to influence their perception and achieve the desired visual experience. Rather than simply an individual selection of colours, the new palette represents a careful study of their combination. Demonstrating the close relationship between light and colour, the inside of the screens is covered in white, a detail that softens the light reflection.</p>
       <p>This collaboration seeks to add another layer of meaning to an existing product by emphasising the light interaction between the colours of the screens and how they engage with the space they are placed in.</p>
       <p>During the colour study, I developed the interaction of the selected colours to present the collection as chromatic harmonies. From this exercise, six new Neoseries, the art editions of Santa &amp; Cole were born.</p>
-      <p class="is-style-note">More info at <a href="https://www.santacole.com/es/neoseries/colour-scheme-i-n-00240/"><em>Claudia Valsells ‘Color Schemes’</em></a><br>Campaign images © <b>JARA VARELA</b><br>Studio images © <b>ENRIC BADRINAS</b></p>`,
+      <p class="is-style-note is-20">More info at <a href="https://www.santacole.com/es/neoseries/colour-scheme-i-n-00240/"><em>Claudia Valsells ‘Color Schemes’</em></a><br>Campaign images © <b>JARA VARELA</b><br>Studio images © <b>ENRIC BADRINAS</b></p>`,
   },
 
   'artist-residence-2022': {
