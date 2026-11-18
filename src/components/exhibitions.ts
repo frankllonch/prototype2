@@ -51,7 +51,7 @@ function group(
   return html`<section class="xgroup" data-group="${name}"${merged ? raw(' data-phone="merged"') : ''}>
     <h2 class="xgroup-name"${merged ? '' : raw(` style="--phone-order:${first}"`)}>${name}</h2>
     <div class="xrows">
-      ${join(shows.map((s) => row(s, order.get(s) ?? 0, s.slug ? covers.get(s.slug) : undefined)))}
+      ${join(shows.map((s) => row(s, order.get(s) ?? 0, covers.get(s.commission ?? s.slug ?? ''))))}
     </div>
   </section>`;
 }
@@ -91,7 +91,8 @@ function row(s: Show, order: number, cover?: ProjectImage): Html {
       ${s.yearEnd !== undefined ? html`<span>${s.yearEnd}</span>` : ''}
     </span>`;
 
-  return s.slug
-    ? html`<a class="xrow hrow" href="#exhibition-${s.slug}" data-panel-open="exhibition-${s.slug}" style="--phone-order:${order}">${inner}</a>`
+  const panel = s.commission ? `commissioned-${s.commission}` : s.slug ? `exhibition-${s.slug}` : undefined;
+  return panel
+    ? html`<a class="xrow hrow" href="#${panel}" data-panel-open="${panel}" style="--phone-order:${order}">${inner}</a>`
     : html`<div class="xrow hrow" style="--phone-order:${order}">${inner}</div>`;
 }
