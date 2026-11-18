@@ -238,11 +238,11 @@ function aboutReelSteps(): Html {
 
 /** The start page's chevron, for About's own scroll. */
 function aboutCue(): Html {
-  return html`<div class="about-cue" data-about-cue aria-hidden="true">
-    <svg viewBox="0 0 28 16" focusable="false">
+  return html`<button type="button" class="about-cue" data-about-cue aria-label="Scroll down">
+    <svg viewBox="0 0 28 16" aria-hidden="true" focusable="false">
       <path d="M1.5 1.5 L14 13 L26.5 1.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
     </svg>
-  </div>`;
+  </button>`;
 }
 
 /** One photograph large over the page. */

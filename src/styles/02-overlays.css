@@ -433,12 +433,15 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   color: rgb(219, 218, 215);
   mix-blend-mode: difference;
   pointer-events: none;
+  visibility: hidden;
   opacity: 0;
-  transition: opacity 0.7s var(--ease);
+  cursor: pointer;
+  transition: opacity 0.7s var(--ease), visibility 0s 0.7s;
 }
-.about.is-open ~ .about-cue.is-shown { opacity: 1; }
+/* Clickable only while it shows: it carries the panel on (client/about.ts). */
+.about.is-open ~ .about-cue.is-shown { opacity: 1; pointer-events: auto; visibility: visible; transition: opacity 0.7s var(--ease); }
 /* Not while a photograph is up: the panel does not scroll then. */
-.about.is-viewing ~ .about-cue.is-shown { opacity: 0; }
+.about.is-viewing ~ .about-cue.is-shown { opacity: 0; pointer-events: none; visibility: hidden; transition: opacity 0.7s var(--ease), visibility 0s 0.7s; }
 @media (prefers-reduced-motion: no-preference) {
   .about-cue svg { animation: scroll-cue-fall 2.4s var(--ease) infinite; }
 }

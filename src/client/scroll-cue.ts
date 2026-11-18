@@ -1,4 +1,7 @@
 import { chartWrites, phone, scrollWrites } from './env.ts';
+import { glide, topOf } from './glide.ts';
+import { SCROLL_SPAN } from './stack.ts';
+import { WRITE_MS, writtenPoint } from './write.ts';
 
 /**
  * The scroll hint goes once it has been taken.
@@ -26,7 +29,8 @@ import { chartWrites, phone, scrollWrites } from './env.ts';
  * own.
  */
 export function initScrollCue(): void {
-  if (!document.querySelector('[data-scroll-cue]')) return;
+  const cue = document.querySelector<HTMLElement>('[data-scroll-cue]');
+  if (!cue) return;
 
   const root = document.documentElement;
   let gone = false;
@@ -85,6 +89,35 @@ export function initScrollCue(): void {
 
   update();
   window.addEventListener('scroll', update, { passive: true });
+
+  /*
+   * Clicked, the cue goes where it points (Frank, 2026-11-18): on to the next
+   * part of the page, by the site's own glide.
+   *
+   *   The start page: the sentence written first, then the names.
+   *   The gallery: the pile spread into the grid.
+   *   The Colour Chart: the sentence standing — where the cue would go anyway.
+   *
+   * Anywhere else, or past every stop, a screen further down.
+   */
+  cue.addEventListener('click', () => {
+    const y = window.scrollY;
+    const h = window.innerHeight;
+    const stops: [number, number?][] = [];
+    if (write) {
+      const written = writtenPoint();
+      if (written !== null) stops.push([written, WRITE_MS]);
+      const names = document.getElementById('whats-color');
+      if (names) stops.push([topOf(names)]);
+    } else if (chart) {
+      stops.push([threshold() + 2]);
+    } else if (document.querySelector('[data-hero]')) {
+      stops.push([h * SCROLL_SPAN]);
+    }
+    const next = stops.find(([at]) => at > y + h * 0.05);
+    if (next) glide(next[0], next[1]);
+    else glide(y + h * 0.9);
+  });
 
   /*
    * Back on a blank stage — the menu's What's Color? takes the page back to the
