@@ -419,7 +419,6 @@ html.js .hero[data-hero]+.grid[data-stack] {
 }
 /* The medium as it is written, straight under the title. */
 .detail-facts { margin-top: var(--caption-break); }
-.detail-year { font-weight: 600; }
 
 /* "87 of 154", its capitals --index-gap under the small pictures, or under the
    painting itself when there are none. */

@@ -353,7 +353,8 @@ function plateStage(work: Project, name: string, under: Html = html``): Html {
 /**
  * After the designer's sheet of 11 November: the painting and the caption
  * side by side and centred on the page together, the caption centred on the
- * painting's middle — the title and the medium, then the size and the year —
+ * painting's middle — the title and the medium, then the size (no year: Frank,
+ * 2026-11-18, though the gallery's year list still reads it from the data) —
  * and under the painting its other pictures and the work's place in the
  * archive. The arrangement itself is in the stylesheet (01-grid.css, THE
  * DETAIL PAGE); client/views.ts only sizes the painting by its painted part.
@@ -369,7 +370,6 @@ export function artworkDetailPage(
   around: readonly Project[] = [],
 ): Html {
   const name = workTitle(work);
-  const { year } = work.metadata;
   const dimensions = sizeOf(work);
   const materials = techniqueOf(work);
   const collection = collectionOf(work);
@@ -396,8 +396,7 @@ export function artworkDetailPage(
           ${materials ? html`<p class="detail-medium">${materials}</p>` : ''}
         </div>
         <div class="detail-facts">
-          ${dimensions ? html`<p class="detail-size">${dimensions}</p>` : ''}
-          ${year ? html`<p class="detail-year">${String(year)}</p>` : ''}
+          ${dimensions && dimensions !== name ? html`<p class="detail-size">${dimensions}</p>` : ''}
         </div>
       </div>
       <nav class="detail-pager" aria-label="Between works">

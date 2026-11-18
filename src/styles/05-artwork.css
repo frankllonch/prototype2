@@ -255,8 +255,7 @@
     line-height: inherit;
   }
   .detail-title { font-size: inherit; }
-  .detail-title + .detail-medium,
-  .detail-size + .detail-year { margin-top: var(--work-pair); }
+  .detail-title + .detail-medium { margin-top: var(--work-pair); }
   .detail-facts { margin-top: var(--work-break); }
 
   .detail-stage { order: 2; position: static; margin-top: var(--work-plate); }
