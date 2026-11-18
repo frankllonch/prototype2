@@ -142,6 +142,8 @@ export function initStack(): void {
   let unlayer = 0;
   /** Whether the grid may have changed shape since the targets were taken. */
   let stale = true;
+  /** The pile tuner changed a setting: take the starting places again on the next frame. */
+  let retake = false;
 
   const clearTransforms = () => {
     for (const tile of tiles) {
@@ -264,6 +266,7 @@ export function initStack(): void {
     // its real positions. Only the watchdog gives up for good; abandoning the
     // pile on a single early frame would lose it to nothing worse than a slow
     // first layout.
+    if (retake && !settled) { retake = false; measure(); }
     if (!measured) { measure(); if (!measured) return; }
 
     const h = window.innerHeight;
@@ -387,10 +390,12 @@ export function initStack(): void {
   window.addEventListener('load', relayout);
   // The pile tuner (client/pile-tuner.ts) changed a setting: take the
   // starting places again and draw.
+  // Many arrive while a slider is dragged; they are gathered into the next
+  // frame and measured once there, never once per event.
   document.addEventListener('piletune', () => {
     if (disabled) return;
     stale = true;
-    if (!settled) measure();
+    retake = true;
     schedule();
   });
   void document.fonts.ready.then(relayout);
