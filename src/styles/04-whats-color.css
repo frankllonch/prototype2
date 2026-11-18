@@ -1067,17 +1067,10 @@ html:has(body.has-film) {
   --sheet-strip-h: 0.0991;
 }
 .wc-edition-iii .wc-sheet {
-  --sheet-top: 0.0537;
+  /* Held to the other two (I 0.0705, II 0.0727) so its reel and its text sit
+     as far under the names as theirs do (Frank, 2026-11-18). */
+  --sheet-top: 0.0716;
   --sheet-strip-h: 0.1;
-}
-
-/* (III)'s page sits a fifth higher than the others: the whole of it, from the
-   numeral down, starts 20% nearer the top of the screen (Frank, 2026-11-18).
-   The computer only; the phone keeps the top measured off its sheet. */
-@media (min-width: 900px) {
-  .wc-edition-iii {
-    padding-top: calc(0.8 * (var(--bar) + var(--wc-zoom, 1) * var(--wc-top, 15.92vw)));
-  }
 }
 
 /*

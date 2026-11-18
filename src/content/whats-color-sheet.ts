@@ -240,7 +240,7 @@ export const SAYS_III_SHEET: readonly string[] = [
  */
 export const SHEET_III: readonly SheetSlot[] = [
   { strip: REEL_III, lead: 0 },
-  { say: 0, lead: 0.1199 },
+  { say: 0, lead: 0.0415 },
 
   { who: 'Marc G\u00f3mez del Moral', col: 1, lead: 0.0614 },
   { who: 'Jose Javier Serrano', col: 2 },
