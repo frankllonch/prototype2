@@ -575,7 +575,7 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 
 /*
  * How to reach her, centred above the copyright: the record's size, its
- * three ways in a row, 192 under the record.
+ * two emails in a row, 192 under the record.
  */
 .about-contact {
   display: flex;
