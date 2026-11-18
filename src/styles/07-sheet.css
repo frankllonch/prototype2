@@ -492,6 +492,11 @@ html:not(.js) .sheet-step { display: none; }
 }
 .plates-head .sheet-lines { margin-top: 1em; }
 .plates-head .sheet-when { margin-top: 1.6em; }
+/* El color no existe: the date sits 30% closer to the venue (Frank, 2026-11-18).
+   Desktop only here; the phone's gap is set with the other phone spacing. */
+@media (min-width: 900px) {
+  #exhibition-el-color-no-existe .plates-head .sheet-when { margin-top: 1.12em; }
+}
 
 .plates-stage {
   position: absolute;
@@ -655,6 +660,8 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
     --sh-pic-top: calc(64 * var(--p));       /* dates → the first photograph */
     --sh-pics-gap: calc(20 * var(--p));
   }
+  /* El color no existe: place → dates 30% closer (Frank, 2026-11-18). */
+  #exhibition-el-color-no-existe { --sh-when-top: calc(22.4 * var(--p)); }
 
   /* ---- the page ---- */
 
