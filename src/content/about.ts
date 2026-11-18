@@ -242,9 +242,9 @@ export const ABOUT_COLLECTIONS: readonly AboutCollection[] = [
   { name: 'Fundació Vilacases', place: 'Barcelona' },
   { name: 'Fundació Banc Sabadell', place: 'Barcelona' },
   { name: 'Collection Hayot', place: 'France' },
-  { name: 'Niederberghaus Collection', place: 'Mexico - US' },
+  { name: 'Niederberghaus Collection', place: 'Mexico' },
   { name: 'Collection Richard', place: 'France' },
-  { name: 'Smith Collection', place: 'Wyoming' },
+  { name: 'Smith Collection', place: 'Wyoming-US' },
 ];
 
 export const ABOUT_COPYRIGHT = '© All Rights Reserved';
