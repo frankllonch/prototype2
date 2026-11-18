@@ -284,10 +284,10 @@
   top: 50%;
   translate: 0 -50%;
   padding: calc(var(--f) * 24) calc(var(--f) * 14);
-  color: var(--ink);
+  color: rgb(252, 252, 250);
+  mix-blend-mode: difference;
   transition: opacity var(--hover) var(--ease);
 }
-.sheet-step svg { display: block; width: calc(var(--f) * 9); min-width: 7px; height: auto; overflow: visible; }
 .sheet-step:hover, .sheet-step:focus-visible { opacity: 0.45; }
 .sheet-next { right: calc(var(--f) * (1870 - 1840) * -1 - var(--f) * 14); }
 .sheet-prev { left: calc(var(--f) * -30 - var(--f) * 14 - var(--f) * 9); }
@@ -524,10 +524,10 @@ html:not(.js) .sheet-step { display: none; }
   top: 50%;
   translate: 0 -50%;
   padding: calc(var(--f) * 24) calc(var(--f) * 14);
-  color: var(--ink);
+  color: rgb(252, 252, 250);
+  mix-blend-mode: difference;
   transition: opacity var(--hover) var(--ease);
 }
-.plates-step svg { display: block; width: calc(var(--f) * 9); min-width: 7px; height: auto; overflow: visible; }
 .plates-step:hover, .plates-step:focus-visible { opacity: 0.45; }
 .plates-prev { left: calc(var(--s-pad) - var(--f) * 14); }
 .plates-next { right: calc(var(--s-pad) - var(--f) * 14); }
@@ -790,11 +790,10 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
      Every sheet's photographs are one reel where the first photograph stood:
      one at a time, turned by the arrows under it or a swipe, the count between
      the arrows. client/figures.ts turns them and writes the count.
-       --reel-arrow   an arrow's height
+       (the arrows are the start page's chevron, sized by --cue-size)
        --reel-gap     photograph → the row of arrows
        --reel-count   the count's size */
   .panel > :is(.sheet, .plates) {
-    --reel-arrow: calc(16 * var(--p));
     --reel-gap: calc(14 * var(--p));
     --reel-count: calc(14 * var(--p));
   }
@@ -825,9 +824,7 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
     margin: var(--reel-gap) 0 0;
     padding: calc(10 * var(--p)) calc(16 * var(--p));
     opacity: 1;
-    color: var(--ink);
   }
-  .panel > :is(.sheet, .plates) :is(.sheet-step, .plates-step) svg { display: block; width: auto; height: var(--reel-arrow); }
   .panel > :is(.sheet, .plates) :is(.sheet-prev, .plates-prev) { grid-column: 1; justify-self: end; }
   .panel > :is(.sheet, .plates) :is(.sheet-next, .plates-next) { grid-column: 3; justify-self: start; }
   .panel > :is(.sheet, .plates) .reel-count {

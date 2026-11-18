@@ -1,5 +1,6 @@
 import { html, join, raw, type Html } from './html.ts';
 import { responsiveImage } from './image.ts';
+import { stepChevron } from './scroll-cue.ts';
 import type { ProjectImage } from '../content/types.ts';
 
 export interface SheetProps {
@@ -78,10 +79,10 @@ export function sheetBody({ title, lines, when, body, images }: SheetProps): Htm
           </div>
           ${images.length > 1
             ? html`<button type="button" class="sheet-step sheet-prev" data-figure-step="-1" aria-label="Previous photograph">
-                ${chevron('M8 1 1 8l7 7')}
+                ${stepChevron(-1)}
               </button>
               <button type="button" class="sheet-step sheet-next" data-figure-step="1" aria-label="Next photograph">
-                ${chevron('m1 1 7 7-7 7')}
+                ${stepChevron(1)}
               </button>
               <p class="sr-only" data-figure-count data-template="Photograph {n} of {total}" aria-live="polite"></p>`
             : ''}
@@ -98,9 +99,3 @@ export function sheetBody({ title, lines, when, body, images }: SheetProps): Htm
  */
 export const wide = (image: ProjectImage): boolean => image.width > image.height * 1.1;
 
-/** The sheet's arrow: a hairline chevron, eight wide and fifteen tall at 1920. */
-function chevron(d: string): Html {
-  return raw(
-    `<svg viewBox="0 0 9 16" aria-hidden="true"><path d="${d}" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-  );
-}

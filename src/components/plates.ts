@@ -1,5 +1,6 @@
 import { html, join, raw, type Html } from './html.ts';
 import { responsiveImage } from './image.ts';
+import { stepChevron } from './scroll-cue.ts';
 import { wide } from './sheet.ts';
 import type { ProjectImage } from '../content/types.ts';
 import { placeOf, type Show } from '../content/exhibitions-list.ts';
@@ -81,19 +82,13 @@ export function plates({ title, place, when }: PlatesHead, images: readonly Proj
 
     ${images.length > 1
       ? html`<button type="button" class="plates-step plates-prev" data-figure-step="-1" aria-label="Previous photograph">
-          ${chevron('M8 1 1 8l7 7')}
+          ${stepChevron(-1)}
         </button>
         <button type="button" class="plates-step plates-next" data-figure-step="1" aria-label="Next photograph">
-          ${chevron('m1 1 7 7-7 7')}
+          ${stepChevron(1)}
         </button>
         <p class="sr-only" data-figure-count data-template="Photograph {n} of {total}" aria-live="polite"></p>`
       : ''}
   </div>`;
 }
 
-/** The same mark the read-and-looked-at sheet uses, so the two agree. */
-function chevron(d: string): Html {
-  return raw(
-    `<svg viewBox="0 0 9 16" aria-hidden="true"><path d="${d}" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-  );
-}

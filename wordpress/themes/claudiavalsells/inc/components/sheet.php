@@ -53,8 +53,8 @@ function cv_sheet_body( array $item ): string {
 		}
 		$out .= '</div>';
 		if ( $n > 1 ) {
-			$out .= '<button type="button" class="sheet-step sheet-prev" data-figure-step="-1" aria-label="Previous photograph">' . cv_sheet_chevron( 'M8 1 1 8l7 7' ) . '</button>'
-				. '<button type="button" class="sheet-step sheet-next" data-figure-step="1" aria-label="Next photograph">' . cv_sheet_chevron( 'm1 1 7 7-7 7' ) . '</button>'
+			$out .= '<button type="button" class="sheet-step sheet-prev" data-figure-step="-1" aria-label="Previous photograph">' . cv_step_chevron( -1 ) . '</button>'
+				. '<button type="button" class="sheet-step sheet-next" data-figure-step="1" aria-label="Next photograph">' . cv_step_chevron( 1 ) . '</button>'
 				. '<p class="sr-only" data-figure-count data-template="Photograph {n} of {total}" aria-live="polite"></p>';
 		}
 		$out .= '</div>';
@@ -66,11 +66,6 @@ function cv_sheet_body( array $item ): string {
 function cv_sheet_wide( int $id ): bool {
 	$meta = $id ? wp_get_attachment_metadata( $id ) : null;
 	return $meta && ! empty( $meta['width'] ) && ! empty( $meta['height'] ) && $meta['width'] > $meta['height'] * 1.1;
-}
-
-/** The sheet's arrow: a hairline chevron, eight wide and fifteen tall at 1920. */
-function cv_sheet_chevron( string $d ): string {
-	return '<svg viewBox="0 0 9 16" aria-hidden="true"><path d="' . esc_attr( $d ) . '" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 }
 
 /**

@@ -206,7 +206,7 @@ export function colourChart(): Html {
     -->
     <p class="chart-thanks chart-in" style="${arriving(2)}">${
       photographs.length
-        ? html`<a href="#chart-photographs" data-panel-open="chart-photographs">Thanks to everyone!</a>`
+        ? html`<a class="hrow" href="#chart-photographs" data-panel-open="chart-photographs">Thanks to everyone!</a>`
         : 'Thanks to everyone!'
     }</p>
 
