@@ -28,13 +28,13 @@ import type { DocumentEntry } from './whats-color-document.ts';
  * NOMS COLORS, November 2026) names the colour of fourteen of these guests, in
  * English, and gives no AC reference, so the page shows the name in its
  * highlight and nothing else. Her "Corail" is set as Coral and her
- * "ULTTRAMARINE" as Ultramarine, at Frank's ask. The others are not on
- * her sheet, and their highlight is still the signed-off colour in
- * `whats-color-colours.ts` with no name under it.
+ * "ULTTRAMARINE" as Ultramarine, at Frank's ask. The rest are named on the
+ * designer's sheet (WHATS COLOR COLORS), spelt as it spells them.
  */
 export const EDITION_II: readonly DocumentEntry[] = [
   {
     name: 'Plantea Estudio',
+    colourName: 'Terracotta',
     aka: ['Plantea Estudi'],
     answer: `“…opté por un amarillo dorado y un rojo vivo oscuro, y como tercer color un pardo. Se tejió la alfombra, pero con gran sorpresa mía, la fuerte y cálida vecindad del amarillo y el rojo transformó por completo el color pardo en un azul” Carl Petersen, “Colores”, 1923.
 
@@ -42,6 +42,7 @@ Para nosotros, como para Petersen, el color es sorprendente, innombrable, efíme
   },
   {
     name: 'Kal-a',
+    colourName: 'Purple grey',
     answer: `Generalmente el color se educa y se concibe como un matiz plano sin profundidad pero a veces los materiales definen su procedencia en función de su tonalidad. Los diferentes aceros reflejan con diversas tonalidades, así como la madera define su procedencia y la capacidad de identificarla por un matiz específico. Una de las cuestiones que más nos preocupa es la autenticidad, que sin duda tiene una vinculación indisociable con el color.
 
 En otro orden de cosas, el color surge a veces en lo espontáneo y mutable como es el simple estado espumoso del té verde tras su preparación. Los esmaltes en la cerámica mutan de tonalidad tras la cocción y los esmaltes atenúan el contenido. El color es una percepción en tránsito, quizá definido por el instante que cada uno elegimos.`,
@@ -60,6 +61,7 @@ Preferimos pensar cada proyecto de manera específica, tanto en su dimensión es
   },
   {
     name: 'Nomos arquitectos',
+    colourName: 'Dark brown',
     inImages: true,
   },
   {
@@ -78,6 +80,7 @@ Aquí mi vida empezó a ser una carta de colores. Con el tiempo, el color se ha 
   },
   {
     name: 'Tomás López Amat',
+    colourName: 'Brown',
     aka: ['Tomás López Design'],
     answer: `“Siento el color como un vehículo de transmisión vibracional, una herramienta perceptiva de gran poder y potencia transformadora, en cualquier espacio o persona. El color es indisociable del fenómeno físico de la luz. La luz y el color son las materias de mayor carga poética y reveladora de un lugar o de un objeto, que existen en el diseño y la arquitectura, así como en la naturaleza. El color y la luz son siempre, siempre, parte del proyecto. Sin luz no hay color, o sí… el color negro: la oscuridad.
 
@@ -92,11 +95,13 @@ Solo recientemente he descubierto el color y su gran eficacia como herramienta y
   },
   {
     name: 'ContiCert',
+    colourName: 'Burnt siena',
     aka: ['Conti.Cert'],
     answer: `Envueltas en una neutralidad casi característica en nosotras, solemos darle un punto de fuerza al proyecto asociándolo a un solo color. En un solo espacio. Y ese es nuestro hilo conductor para guiarnos en el resto del proyecto. A esa mezcla de colores le ponemos el nombre del proyecto. Color “Elisa”, color “Narcís Oller”…`,
   },
   {
     name: 'Un parell d’arquitectes',
+    colourName: 'Light grey blue',
     answer: `Hace unos años, a raíz de la rehabilitación integral, urbanización y fachadas, de una plaza del núcleo histórico de Olot, propusimos al estudio Gabinete del Color el encargo del plan del color para el casco antiguo de la ciudad. La propuesta cromática resultante se basaba en el estudio y análisis de los revestimientos antiguos de distintas casas del barrio. Nuestra imaginación nos traicionó al llevarnos a pensar, equivocadamente, que la propuesta cromática estaría inspirada en el paisaje natural volcánico de la zona. Cuando conocimos la carta, la sorpresa fue descubrir la gran variedad y vivacidad de los colores antiguos que predominaban en el paisaje urbano olotense. Contrastaban perfectamente con la gama de grises, azules y rojizos, la mayoría de tonos oscuros, procedentes de los áridos y las piedras volcánicas que constituyen la base de esas construcciones. ¡Ay, a veces, qué ilusos llegamos a ser!`,
   },
   {
@@ -106,6 +111,7 @@ Solo recientemente he descubierto el color y su gran eficacia como herramienta y
   },
   {
     name: 'Isla arquitectos',
+    colourName: 'Red siena',
     aka: ['Isla'],
     answer: `La Lover’s House es una vivienda en Santa María, de un llamativo color que flota entre el rojo, el rosa y el naranja, según le de la luz, que hace que la casa se funda con el terreno, una tierra fértil de viñedos en el Plà de Mallorca. La fachada rugosa de mortero pigmentado, los suelos, exteriores e interiores, y el resto de piezas de hormigón coloreado en el mismo tono, y los propios muros que encapsulan los patios semi abiertos, hacen que la luz que entra en la casa tenga esa misma calidez y adquiera cuerpo y densidad.
 
@@ -121,10 +127,12 @@ El resultado convenció a todos. Las fotos que hizo Luis no necesitaron retoque 
   },
   {
     name: 'Escobedo Soliz',
+    colourName: 'Petroleum blue',
     answer: `“El color es materia.”`,
   },
   {
     name: 'Antoni Arola',
+    colourName: 'Toasted siena',
     answer: `Parets Mèxic. Recopilació fotogràfica, 2009 – actualitat. El més interessant d’aquest treball: veure-hi reflectida la idiosincràsia de cada poble en els colors pintats en les façanes.`,
   },
   {
@@ -134,14 +142,17 @@ El resultado convenció a todos. Las fotos que hizo Luis no necesitaron retoque 
   },
   {
     name: 'Laura Castanya',
+    colourName: 'Ochre',
     answer: `“El blanc per ampliar espais, els verds per recordar la natura, el blau per fer desaparèixer amb el cel, els vermells han de ser continguts de dia o descarats de nit junt amb els daurats. El meu preferit, el color torrat de la fusta quan li dona el sol.”`,
   },
   {
     name: 'Andrea Batlló y Adrià Escolano',
+    colourName: 'Dark off pink',
     inImages: true,
   },
   {
     name: 'Marc Morro',
+    colourName: 'Oxid red',
     answer: `“Rojo imprimación.”`,
   },
   {
@@ -154,6 +165,7 @@ El color que més utilitzo a la meva paleta es el blau ultramar.`,
   },
   {
     name: 'Gema Sach',
+    colourName: 'Off pink',
     answer: `La gama cromática que le des a un proyecto es la parte más emocional. Un mismo proyecto te provocará muy distintas sensaciones según la opción que eliges, es ahí donde se refleja la personalidad de quien vive. El color es el traje a medida de la personalidad de quién te encarga un proyecto sea del tipo que sea… por eso respeto muchísimo las preferencias de los clientes porque cada uno sabe en dónde se siente mejor. Soy partidaria del color que cuesta definir, que no es plano, que tiene valores y no suele surgir a la primera, por eso nunca puedo compartir un color cuando me lo preguntan… porque no es ninguno concreto, es la mezcla de varios la que suele convencerme. Ni tan siquiera el negro o el blanco los hago tal cual, como dicen los de mi equipo: “Tú cocinas con los colores”.`,
   },
   {
@@ -168,6 +180,7 @@ El color que més utilitzo a la meva paleta es el blau ultramar.`,
   },
   {
     name: 'AMOO',
+    colourName: 'Red dark brown',
     answer: `Quatre divagacions sobre el color: Mai no hem entès els arquitectes que no utilitzen més que el blanc, el gris i/o el negre. Si tenim tots els colors possibles a la nostra disposició, per què no fer-los servir? Serà la por d’equivocar-se? A fer un pas en fals?
 
 Efectivament, hi ha projectes que requereixen una absència total de color, però no tenir-los mai en compte seria equivalent a no utilitzar materials com la pedra, la fusta o la ceràmica, a favor d’altres materials. Ells s’ho perden. El color és un conglomerat de llengües minoritàries que, quan es regiren contra el seu Goliath, i vencen, poden donar lloc a espais inesperats.
