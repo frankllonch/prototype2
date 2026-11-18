@@ -44,7 +44,7 @@ export const SHEETS: Readonly<Record<string, Sheet>> = {
       <p>My intervention examined the meaning related to the ‘readymade’ color: the color purchased in the store instead of hand-mixed.<br>‘’Color of red clay, rich with red iron oxides. Clay is a Mediterranean element, very characteristic…»<br>Words that describe the color ‘brown earth’ and invite you to touche it. Descriptions that help us to perceive and understand color, to feel it. Words that are also the name of the color itself.<br>So what happens when colors are described by codes, numbers?<br>Is the emotional part of the color lost?<br>Does the perception we have of that color change?</p>
       <p>I had chosen 5 colors with a reference to explore the impact of mass-produced color on contemporary art. References that openly testify to the status of painting as a product manufactured in series and standardized.</p>
       <p>The dialogue is precisely between the natural clay color base with the almost provocative color sample and its reference.</p>
-      <p class="is-style-note">Photos by <b>FRANCESCO STELITANO</b><br>Concept by <b>APARTAMENTO STUDIOS</b><br>Curated by <a href="https://www.juliaesque.com"><b>JÚLIA ESQUÉ</b></a><br>Creative partners <b>ELOI BONADONA, CARLES LLARCH AND MAX MILÀ</b></p>`,
+      <p class="is-style-note is-20">Photos by <b>FRANCESCO STELITANO</b><br>Concept by <b>APARTAMENTO STUDIOS</b><br>Curated by <a href="https://www.juliaesque.com"><b>JÚLIA ESQUÉ</b></a><br>Creative partners <b>ELOI BONADONA, CARLES LLARCH AND MAX MILÀ</b></p>`,
   },
 
   'color-chart-el-taller-de-arquitectura-rbta': {
