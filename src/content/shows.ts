@@ -103,3 +103,53 @@ export function splitOpening(html: string): string {
   // without changing what the paragraph is.
   return `${first[1]}<span class="lede-open">${head}</span>${rest}${first[3]}${html.slice(first[0].length)}`;
 }
+
+/**
+ * The credit and thank-you list at the foot of What's Color? (II), set as one
+ * block at 20.
+ *
+ * The source has them as a stray "photos ©" paragraph and a "THANKS TO:" list
+ * three empty <div>s deep. Frank gave the text to use (2026-11-18), so the
+ * block is replaced by his wording rather than restyled in place, and wrapped
+ * in `is-style-thanks` (07-sheet.css), which sets all of it at 20.
+ *
+ * Found by the two phrases rather than by position, and only on this show; if
+ * the source stops saying them the prose is returned untouched.
+ */
+const THANKS: Readonly<Record<string, { readonly credit: string; readonly heading: string; readonly names: string }>> = {
+  'what-s-color-ii-for-architects-and-designers': {
+    credit: 'photos © Julia Ruiz-Cabello and Gonzalo de Benito',
+    heading: 'THANKS TO:',
+    names:
+      'Plantea Estudi, Kal-a, Elii, HANGHAR, Nomos arquitectos, Montse Vicens (Int-sight), Isabel Francoy, ' +
+      'Tomás López Design, Stefano Colli, Conti.Cert, Un parell d’arquitectes, Naso ++, Isla, Auxi Gálvez (PSAAP), ' +
+      'Escobedo Soliz, Antoni Arola, Barbara Aurell, Laura Castanya, Andrea Batlló y Adrià Escolano, Marc Morro, ' +
+      'Anna Vidal (Vis arquitectes), Gema Sach, Oscar Tusquets, Mariona Espinet, Isabel Sendra, AMOO, Loca Studio, ' +
+      'Paula Arroyo, Cierto Estudio.',
+  },
+};
+
+export function setThanks(slug: string, html: string): string {
+  const thanks = THANKS[slug];
+  if (!thanks) return html;
+
+  // From the paragraph that opens on "photos" …
+  const start = /<p>\s*(?:<span>\s*)?photos\b/i.exec(html);
+  if (!start) return html;
+  // … through the paragraph after "THANKS TO:", and the wrappers it sits in.
+  const after = html.slice(start.index);
+  const heading = /<p>\s*THANKS TO:\s*<\/p>\s*<p>[\s\S]*?<\/p>/i.exec(after);
+  if (!heading) return html;
+  const between = after.slice(0, heading.index);
+  const opened = (between.match(/<div\b[^>]*>/gi) ?? []).length - (between.match(/<\/div>/gi) ?? []).length;
+  let end = start.index + heading.index + heading[0].length;
+  for (let i = 0; i < opened; i++) {
+    const close = /^\s*<\/div>/.exec(html.slice(end));
+    if (!close) return html;
+    end += close[0].length;
+  }
+
+  const block =
+    `<div class="is-style-thanks"><p>${thanks.credit}</p><p>${thanks.heading}</p><p>${thanks.names}</p></div>`;
+  return html.slice(0, start.index) + block + html.slice(end);
+}
