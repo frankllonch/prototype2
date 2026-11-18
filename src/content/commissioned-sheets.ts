@@ -129,7 +129,8 @@ export const SHEETS: Readonly<Record<string, Sheet>> = {
     lines: ['FOR NANI MARQUINA'],
     when: '2019',
     body: `
-      <p class="is-style-lead">An exclusive collection I designed for Design Within Reach, edited by Nani Marquina<br>«The abstract forms of this piece ‘Edges’ have significant value, a dichotomy between structure and form, a singular balance.» Claudia Valsells</p>
+      <p class="is-style-lead">An exclusive collection I designed for Design Within Reach, edited by Nani Marquina</p>
+      <p class="is-quote">“The abstract forms of this piece ‘Edges’ have significant value, a dichotomy between structure and form, a singular balance.” Claudia Valsells</p>
       <p class="is-style-note">To discover the collection link <a href="https://nanimarquina.com/es/"><em>Nani Marquina</em></a></p>`,
   },
 

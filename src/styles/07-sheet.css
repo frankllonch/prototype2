@@ -211,6 +211,11 @@
 .sheet-prose .is-style-thanks { font-size: var(--t-20); line-height: 1; }
 .sheet-prose .is-style-thanks p { margin-bottom: 1em; }
 .sheet-prose .is-style-thanks p:last-child { margin-bottom: 0; }
+/*
+ * A quotation set apart from the lede: the text's 40, regular, in the case it
+ * was written in, opening on a tab (Edges, Frank 2026-11-18).
+ */
+.sheet-prose .is-quote { font-size: var(--type); font-weight: 400; text-transform: none; text-indent: 2em; }
 .sheet-prose .is-style-cta {
   margin-top: calc(var(--s-lead) * 3em);
   font-style: italic;
@@ -716,6 +721,7 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
   .panel > .sheet .sheet-prose .lede-open { margin-bottom: var(--sh-para); }
   .panel > .sheet .sheet-prose > :is(p:first-of-type, .is-style-lead) { font-size: var(--sh-lede); line-height: var(--sh-lede); }
   .panel > .sheet .sheet-prose > .is-style-note { font-size: var(--sh-note); line-height: var(--sh-note); }
+  .panel > .sheet .sheet-prose > .is-quote { font-size: var(--sh-type); line-height: var(--sh-type); }
   .panel > .sheet .sheet-prose > .is-style-thanks { font-size: var(--sh-note); line-height: var(--sh-note); }
   .panel > .sheet .sheet-prose > .is-style-thanks p { margin: 0 0 1em; }
   .panel > .sheet .sheet-prose > .is-style-thanks p:last-child { margin-bottom: 0; }
