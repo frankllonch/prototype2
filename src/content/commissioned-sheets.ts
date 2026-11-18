@@ -74,7 +74,7 @@ export const SHEETS: Readonly<Record<string, Sheet>> = {
       <p>As a colourist, I approached my chromatic studies through a constant juxtaposition of colours. The key lies in placing one colour next to another, so as to influence their perception and achieve the desired visual experience. Rather than simply an individual selection of colours, the new palette represents a careful study of their combination. Demonstrating the close relationship between light and colour, the inside of the screens is covered in white, a detail that softens the light reflection.</p>
       <p>This collaboration seeks to add another layer of meaning to an existing product by emphasising the light interaction between the colours of the screens and how they engage with the space they are placed in.</p>
       <p>During the colour study, I developed the interaction of the selected colours to present the collection as chromatic harmonies. From this exercise, six new Neoseries, the art editions of Santa &amp; Cole were born.</p>
-      <p class="is-style-note">More info at <a href="https://www.santacole.com/es/neoseries/colour-scheme-i-n-00240/"><em>Claudia Valsells ‘Color Schemes’</em></a><br>Campaign images © <b>JARA VARELA</b><br>Studio images © <b>ENRIC BADRINAS</b></p>`,
+      <p class="is-style-note is-20">More info at <a href="https://www.santacole.com/es/neoseries/colour-scheme-i-n-00240/"><em>Claudia Valsells ‘Color Schemes’</em></a><br>Campaign images © <b>JARA VARELA</b><br>Studio images © <b>ENRIC BADRINAS</b></p>`,
   },
 
   'artist-residence-2022': {

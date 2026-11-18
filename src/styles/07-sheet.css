@@ -201,7 +201,7 @@
 /* The names keep their capitals, in the regular weight of the line. */
 .sheet-prose .is-style-note :is(b, strong, em) { font-weight: 400; }
 .sheet-prose .is-style-note .is-artist { font-size: calc(1em * 40 / 30); }
-/* A credit block Frank asked to be set at 20 rather than 30 (Terra Rossa, 2026-11-18). */
+/* Credit blocks Frank asked to be set at 20 rather than 30 (Terra Rossa, Santa & Cole, 2026-11-18). */
 .sheet-prose .is-style-note.is-20 { font-size: var(--t-20); }
 /*
  * A credit and thank-you list set apart at 20, all of it: What's Color? (II)'s
