@@ -1153,6 +1153,30 @@ html:has(body.has-film) {
 .wc-book-plate {
   margin: 0;
 }
+/*
+ * The start page's chevron on its side, either side of the photograph, in the
+ * negative. The script moves them to the end of the body (client/book.ts) so
+ * the blend reaches the photograph and the page rather than only the view's
+ * own veil, and shows them (`.is-shown`) only while a photograph is up.
+ */
+.wc-book-step {
+  position: fixed;
+  top: 50%;
+  translate: 0 -50%;
+  z-index: 41;
+  padding: 1.5rem 1rem;
+  color: rgb(252, 252, 250);
+  mix-blend-mode: difference;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+}
+.wc-book-step.is-shown { opacity: 1; visibility: visible; transition-delay: 0s; }
+.wc-book-step.is-shown:hover,
+.wc-book-step.is-shown:focus-visible { opacity: 0.45; }
+.wc-book-step.is-prev { left: max(0.5rem, 2.5vw); }
+.wc-book-step.is-next { right: max(0.5rem, 2.5vw); }
 .wc-book-plate img {
   display: block;
   width: auto;

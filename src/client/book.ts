@@ -33,6 +33,14 @@ export function initBook(): void {
   if (!plate) return;
 
   let opener: HTMLAnchorElement | null = null;
+
+  // The view's two chevrons are drawn in the negative, and the page's <main>
+  // is a group of its own (isolation), so a blend inside it would only reach
+  // the view's pale veil and come out grey. Out at the end of the body they
+  // blend with the photograph and the page as the start page's cue does.
+  const turns = [...document.querySelectorAll<HTMLElement>('[data-book-step]')];
+  document.body.append(...turns);
+  const showTurns = (on: boolean) => { for (const t of turns) t.classList.toggle('is-shown', on); };
   // The open view stands on a history step of its own, one on from the page.
   let stepped = false;
 
@@ -68,6 +76,7 @@ export function initBook(): void {
     // way. The fade then starts from a state the engine has actually built.
     void view.offsetWidth;
     view.classList.add('is-open');
+    showTurns(true);
     document.body.style.overflow = 'hidden';
     view.tabIndex = -1;
     view.focus({ preventScroll: true });
@@ -81,6 +90,7 @@ export function initBook(): void {
     if (stepped && !byHistory && stepState().view === 'book') { stepBack(); return; }
     stepped = false;
     view.classList.remove('is-open');
+    showTurns(false);
     view.hidden = true;
     document.body.style.overflow = '';
     returnFocus(opener);
@@ -101,6 +111,14 @@ export function initBook(): void {
       }
       if (!view.hidden) {
         event.preventDefault();
+        // Its two chevrons (beside the view, components/whats-color.ts) turn
+        // the book rather than closing it.
+        const turn = (event.target as Element).closest<HTMLElement>('[data-book-step]');
+        if (turn) {
+          event.stopPropagation();
+          step(Number(turn.dataset.bookStep));
+          return;
+        }
         close();
       }
     },

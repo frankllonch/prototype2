@@ -1,4 +1,5 @@
 import { html, join, raw, type Html } from './html.ts';
+import { stepChevron } from './scroll-cue.ts';
 import { LEAD, swatchFor, inkOn, type Edition, type Participant } from '../content/whats-color.ts';
 import { withBase } from '../content/paths.ts';
 import { ABOUT_CARD, ABOUT_COPYRIGHT } from '../content/about.ts';
@@ -573,7 +574,9 @@ function bookView(): Html {
   return html`<div class="wc-book-view" data-book-view hidden>
     <button type="button" class="panel-close">Close</button>
     <figure class="wc-book-plate" data-book-plate></figure>
-  </div>`;
+  </div>
+  <button type="button" class="wc-book-step is-prev" data-book-step="-1" aria-label="Previous photograph">${stepChevron(-1)}</button>
+  <button type="button" class="wc-book-step is-next" data-book-step="1" aria-label="Next photograph">${stepChevron(1)}</button>`;
 }
 
 /**
