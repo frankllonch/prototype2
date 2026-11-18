@@ -24,3 +24,14 @@ export function yearRail(years: readonly YearColour[]): Html {
     )}
   </nav>`;
 }
+
+/**
+ * "Inquiries", over the years on the Gallery (Frank, 2026-11-18): set at 30
+ * regular, as the controls under the years are, and lit on hover in a new hue
+ * each time the way the Exhibitions and Commissioned rows are (it carries their
+ * `.hrow`; client/hover-list.ts picks the hue). It opens the inquiries form
+ * over the page, and is a plain link to it with scripting off.
+ */
+export function sideInquiries(): Html {
+  return html`<a class="side-inquiries hrow" href="#inquiries" data-inquiries-open>Inquiries</a>`;
+}

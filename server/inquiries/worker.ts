@@ -29,6 +29,12 @@
 export interface Env {
   /** Where the mail goes. Claudia's address, and the only place it appears. */
   INQUIRY_TO: string;
+  /**
+   * Where the Gallery's inquiries go: the Alzueta gallery (Frank, 2026-11-18).
+   * Set the same way as INQUIRY_TO. Until it is set they go to INQUIRY_TO, so
+   * an inquiry is never dropped for want of an address.
+   */
+  INQUIRY_TO_GALLERY?: string;
   /** A sender the mail provider has verified for the site's own domain. */
   INQUIRY_FROM: string;
   /** Comma-separated origins allowed to post here. No wildcards. */
@@ -213,9 +219,22 @@ async function verified(token: string, ip: string, secret: string | undefined): 
  * verified address, because mail claiming to be from an address the site does
  * not control is mail that lands in a spam folder.
  */
-async function send(env: Env, message: {
+/**
+ * The two forms the site has, and what each one's mail says it is. Anything the
+ * request names that is not one of these is the Colour Chart's, which is what
+ * every message was before there were two.
+ */
+const DESKS = {
+  chart: { label: 'Colour chart', untitled: 'order', form: 'the Colour Chart order form' },
+  gallery: { label: 'Gallery inquiry', untitled: 'inquiry', form: 'the Gallery inquiries form' },
+} as const;
+type Desk = keyof typeof DESKS;
+
+async function send(env: Env, desk: Desk, message: {
   name: string; country: string; email: string; subject: string; body: string;
 }): Promise<boolean> {
+  const { label, untitled, form } = DESKS[desk];
+  const to = desk === 'gallery' ? (env.INQUIRY_TO_GALLERY || env.INQUIRY_TO) : env.INQUIRY_TO;
   const lines = [
     `From: ${message.name}`,
     `Email: ${message.email}`,
@@ -224,7 +243,7 @@ async function send(env: Env, message: {
     message.body,
     '',
     '\u2014',
-    'Sent from the Colour Chart order form on claudiavalsells.com.',
+    `Sent from ${form} on claudiavalsells.com.`,
   ];
 
   const response = await fetch('https://api.resend.com/emails', {
@@ -235,11 +254,11 @@ async function send(env: Env, message: {
     },
     body: JSON.stringify({
       from: env.INQUIRY_FROM,
-      to: [env.INQUIRY_TO],
+      to: [to],
       reply_to: message.email,
       subject: message.subject
-        ? `Colour chart — ${message.subject}`
-        : `Colour chart — order from ${message.name}`,
+        ? `${label} — ${message.subject}`
+        : `${label} — ${untitled} from ${message.name}`,
       text: lines.join('\n'),
     }),
   });
@@ -331,7 +350,8 @@ export default {
       return json(429, { ok: false, error: 'rate' }, origin);
     }
 
-    const sent = await send(env, { name, country, email, subject, body: message });
+    const desk: Desk = str('desk') === 'gallery' ? 'gallery' : 'chart';
+    const sent = await send(env, desk, { name, country, email, subject, body: message });
     if (!sent) return json(502, { ok: false, error: 'server' }, origin);
 
     return json(200, { ok: true }, origin);

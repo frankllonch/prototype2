@@ -11,7 +11,7 @@ import { commissionedList } from '../components/commissioned.ts';
 import { sheetBody } from '../components/sheet.ts';
 import { SHEETS } from '../content/commissioned-sheets.ts';
 import { groupCommissioned } from '../content/groups.ts';
-import { yearRail } from '../components/years.ts';
+import { yearRail, sideInquiries } from '../components/years.ts';
 import { whatsColorOpening, whatsColorEdition, whatsColorFilm } from '../components/whats-color.ts';
 import { chartPhotographs, colourChart, inquiries } from '../components/colour-chart.ts';
 import { EDITIONS, allParticipants, type Edition } from '../content/whats-color.ts';
@@ -48,7 +48,10 @@ export function artworkPage(works: readonly Project[], years: readonly YearColou
     title: 'Artwork',
     description: TAGLINE,
     path: '/artwork/',
-    rail: yearRail(years),
+    // Inquiries stands over the years and opens the same form the Colour
+    // Chart's order does, sent to the gallery (Frank, 2026-11-18).
+    rail: html`${sideInquiries()}${yearRail(years)}`,
+    overlays: inquiries('gallery'),
     // The pile fills the screen and does not read as the top of a document.
     cue: 'ink',
     controls: gridControls([], true, works.length),
