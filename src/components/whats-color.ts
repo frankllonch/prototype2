@@ -318,6 +318,9 @@ function namesOfEdition(edition: Edition): Html {
   </section>`;
 }
 
+/** "AC071 Pompeian red", or just the name where there is no code (edition II). */
+const colourLine = (p: Participant): string => [p.code, p.colourName].filter(Boolean).join(' ');
+
 /**
  * One participant's answer, as the sheet sets it: the name large, what they do
  * ranged right beside it, the colour their answer was given underneath that,
@@ -335,8 +338,8 @@ function answer(p: Participant, index: number): Html {
     <h2 class="wc-answer-name">${p.name}${p.alias ? html`<span class="wc-answer-alias">${p.alias}</span>` : ''}</h2>
     <p class="wc-answer-meta">
       ${p.role ? html`<span class="wc-answer-role">${p.role}</span>` : ''}
-      ${p.code
-        ? html`<span class="wc-answer-code" style="--swatch: ${swatch}; --swatch-ink: var(--${inkOn(swatch)})"><span class="wc-code-band">${p.code}${p.colourName ? ` ${p.colourName}` : ''}</span></span>`
+      ${p.code || p.colourName
+        ? html`<span class="wc-answer-code" style="--swatch: ${swatch}; --swatch-ink: var(--${inkOn(swatch)})"><span class="wc-code-band">${colourLine(p)}</span></span>`
         : ''}
     </p>
     ${p.answer
@@ -610,8 +613,8 @@ function sheetEntry(p: Participant): Html {
     <p class="wc-cell-meta">
       ${role ? html`<span class="wc-cell-role">${role}</span>` : ''}
       ${translated ? html`<span class="wc-cell-role wc-cell-also">${translated}</span>` : ''}
-      ${p.code
-        ? html`<span class="wc-cell-code" style="--swatch: ${swatchFor(p)}; --swatch-ink: var(--${inkOn(swatchFor(p))})"><span class="wc-code-band">${p.code}${p.colourName ? ` ${p.colourName}` : ''}</span></span>`
+      ${p.code || p.colourName
+        ? html`<span class="wc-cell-code" style="--swatch: ${swatchFor(p)}; --swatch-ink: var(--${inkOn(swatchFor(p))})"><span class="wc-code-band">${colourLine(p)}</span></span>`
         : ''}
     </p>
     ${p.answer
