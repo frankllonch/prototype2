@@ -15,6 +15,10 @@
  * rows open a panel and carry a photograph; the rest have neither yet and are
  * rendered as plain rows that still answer to the pointer.
  *
+ * `commission` is for a show that was also a commission: the row opens the
+ * commissioned work's own sheet, the same one the Commissioned page opens.
+ * The repetition is intended — the show belongs on both lists.
+ *
  * `from` and `to` are the months, which the detail's masthead states and the
  * index does not — the sheet gives the index years alone. `yearEnd` is for the
  * one run that crosses a year, and `note` for the one show the sheet describes
@@ -36,6 +40,8 @@ export interface Show {
   readonly year?: number;
   readonly yearEnd?: number;
   readonly slug?: string;
+  /** The slug of the commissioned project whose sheet this row opens. */
+  readonly commission?: string;
   readonly note?: string;
 }
 
@@ -48,7 +54,7 @@ export const SHOWS: readonly Show[] = [
   { group: 'Solo shows', title: 'Color dialogues', venue: 'Solo show, Alzueta Gallery, Madrid', from: 'December', to: 'January', year: 2022, yearEnd: 2021, slug: 'color-dialogues' },
   { group: 'Solo shows', title: 'What’s color (II)', venue: 'Solo show, Espacio Pavilon, Madrid', from: 'December', year: 2021, slug: 'what-s-color-ii-for-architects-and-designers' },
   { group: 'Solo shows', title: 'What’s color (I)', venue: 'Solo show, Alzueta Gallery, Barcelona', from: 'December', year: 2020, slug: 'what-s-color-i' },
-  { group: 'Solo shows', title: 'Aoo&Claudia Valsells ‘Silla8’ show', venue: 'Solo show, Alzueta Gallery, Barcelona', from: 'February', year: 2020 },
+  { group: 'Solo shows', title: 'Aoo&Claudia Valsells ‘Silla8’ show', venue: 'Solo show, Alzueta Gallery, Barcelona', from: 'February', year: 2020, commission: 'silla-8-aoo-2019-2020' },
   { group: 'Solo shows', title: 'Almost perfect,', venue: 'Solo exhibition, Tokyo, Japan', from: 'November', year: 2019 },
   { group: 'Solo shows', title: 'T10', venue: 'Solo show, at Alzueta Gallery, Barcelona', from: 'November', year: 2018, slug: 't10' },
   { group: 'Solo shows', title: 'Solo exhibition', venue: 'Palau de Casavells, Barcelona', from: 'November', year: 2018 },

@@ -10,7 +10,7 @@ import { platesBody } from '../components/plates.ts';
 import { commissionedList } from '../components/commissioned.ts';
 import { sheetBody } from '../components/sheet.ts';
 import { SHEETS } from '../content/commissioned-sheets.ts';
-import { groupCommissioned } from '../content/groups.ts';
+import { groupCommissioned, type GroupedProject } from '../content/groups.ts';
 import { yearRail, sideInquiries } from '../components/years.ts';
 import { whatsColorOpening, whatsColorEdition, whatsColorFilm } from '../components/whats-color.ts';
 import { chartPhotographs, colourChart, inquiries } from '../components/colour-chart.ts';
@@ -131,7 +131,7 @@ export const exhibitionItem = (e: Exhibition): PanelItem => ({
  * name and place at the left, the run of dates and the year at the right, a rule
  * between each — and the photograph only when you reach for a row.
  */
-export function exhibitionsPage(items: readonly Exhibition[]): Html {
+export function exhibitionsPage(items: readonly Exhibition[], commissioned: readonly Project[] = []): Html {
   // The What’s Color? shows are held for their own section, panels and all: a
   // row taken off the index whose panel still answered would be a page nothing
   // links to.
@@ -158,6 +158,20 @@ export function exhibitionsPage(items: readonly Exhibition[]): Html {
    * by a list — so a show that gains a press release later moves across on its
    * own.
    */
+  // A show that was also a commission opens the commissioned work's own sheet,
+  // the same one the Commissioned page opens, and leads with its photograph.
+  const commissions = new Map(
+    groupCommissioned(commissioned).flatMap((g) => g.items).map((item) => [item.slug, item] as const),
+  );
+  const shared = SHOWS.flatMap((show) => {
+    const item = show.commission ? commissions.get(show.commission) : undefined;
+    return item ? [item] : [];
+  });
+  for (const item of shared) {
+    const cover = item.project.cover ?? item.project.images[0];
+    if (cover && !covers.has(item.slug)) covers.set(item.slug, cover);
+  }
+
   const bySlug = new Map(items.map((e) => [e.slug, e] as const));
   const sheets = SHOWS.flatMap((show) => {
     if (!show.slug) return [];
@@ -190,7 +204,7 @@ export function exhibitionsPage(items: readonly Exhibition[]): Html {
   return layout({
     title: 'Exhibitions',
     path: '/exhibitions/',
-    overlays: html`<div class="panels">${join(sheets)}</div>`,
+    overlays: html`<div class="panels">${join([...sheets, ...shared.map(commissionedSheet)])}</div>`,
     children: html`
       <h1 class="sr-only">Exhibitions</h1>
       ${exhibitionList(SHOWS, covers)}
@@ -407,6 +421,20 @@ export function artworkDetailPage(
   });
 }
 
+/** A commissioned project's sheet, as the Commissioned page opens it. */
+function commissionedSheet(item: GroupedProject): Html {
+  const p = item.project;
+  const drawn = SHEETS[p.slug];
+  const own = p.rows.flatMap((row) => row.columns).map((c) => (c.kind === 'text' ? c.html : '')).join('');
+  return panelShell('commissioned', p.slug, sheetBody({
+    title: drawn?.title ?? item.title,
+    lines: drawn?.lines ?? [],
+    when: drawn?.when ?? item.when,
+    body: raw(drawn?.body ?? own),
+    images: p.images,
+  }));
+}
+
 /**
  * Commissioned work: grouped by the kind of job rather than shown as a grid,
  * after the designer's layout. Same index behaviour as the exhibitions page —
@@ -420,18 +448,7 @@ export function commissionedPage(items: readonly Project[]): Html {
   // index, its dates, its own text — which is what the WordPress theme does
   // with an entry whose sheet fields are empty. Nothing off the index gets a
   // panel: one nothing links to would only be found by its address.
-  const sheets = groups.flatMap((group) => group.items).map((item) => {
-    const p = item.project;
-    const drawn = SHEETS[p.slug];
-    const own = p.rows.flatMap((row) => row.columns).map((c) => (c.kind === 'text' ? c.html : '')).join('');
-    return panelShell('commissioned', p.slug, sheetBody({
-      title: drawn?.title ?? item.title,
-      lines: drawn?.lines ?? [],
-      when: drawn?.when ?? item.when,
-      body: raw(drawn?.body ?? own),
-      images: p.images,
-    }));
-  });
+  const sheets = groups.flatMap((group) => group.items).map(commissionedSheet);
   return layout({
     title: 'Commissioned',
     path: '/commissioned/',
