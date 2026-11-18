@@ -151,7 +151,7 @@ function rolled(text: string): Html {
 function aboutOverlay(): Html {
   const lead = ABOUT_BLOCKS.find((b) => b.kind === 'lead');
   const images = ABOUT_BLOCKS.flatMap((b) => (b.kind === 'figure' ? [b.image] : []));
-  const text = ABOUT_BLOCKS.flatMap((b) => (b.kind === 'text' ? [b.text] : []));
+  const text = ABOUT_BLOCKS.flatMap((b) => (b.kind === 'text' ? [b] : []));
   return html`<section class="about" id="about" data-panel aria-label="About">
     <div class="about-sheet">
       <div class="about-text">
@@ -161,7 +161,14 @@ function aboutOverlay(): Html {
             ${images.length ? aboutReel(images) : ''}
           </div>
         </div>
-        ${join(text.map((t) => html`<p>${t}</p>`))}
+        ${join(
+          text.map(
+            (t) =>
+              html`<p>${t.text}${t.link
+                ? html` <a class="about-link hrow" href="${t.link.href}" target="_blank" rel="noopener">${t.link.label}</a>`
+                : ''}</p>`,
+          ),
+        )}
       </div>
       <div class="about-record">
         ${join(ABOUT_SHOWS.map(aboutShows))}

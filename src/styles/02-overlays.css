@@ -295,6 +295,17 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 }
 .about-opening + p { margin-top: calc(70.5em / 40); }
 .about-text > p + p { margin-top: 1em; }
+/*
+ * The gallery's name at the end of the biography: set as the text is, and
+ * lit like the Exhibitions and Commissioned rows (its `.hrow` takes their
+ * hover and focus colour from 01-grid.css, a new hue each time from
+ * hover-list.ts; ink without scripting).
+ */
+.about-link {
+  --exh-hover: var(--ink);
+  color: inherit;
+  transition: color var(--hover) var(--ease);
+}
 
 /*
  * The photographs: a reel 210 tall, each at its own proportion, 53 apart,

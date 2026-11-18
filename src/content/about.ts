@@ -20,10 +20,16 @@ export interface AboutCard {
   readonly emails: readonly string[];
 }
 
+/** A link set at the end of a paragraph, after its text. */
+export interface AboutLink {
+  readonly label: string;
+  readonly href: string;
+}
+
 /** A paragraph of the biography, or one of the photographs set between them. */
 export type AboutBlock =
   | { readonly kind: 'lead'; readonly text: string }
-  | { readonly kind: 'text'; readonly text: string }
+  | { readonly kind: 'text'; readonly text: string; readonly link?: AboutLink }
   | { readonly kind: 'figure'; readonly image: ProjectImage };
 
 /**
@@ -141,6 +147,17 @@ export const ABOUT_BLOCKS: readonly AboutBlock[] = [
     kind: 'text',
     text:
       'Her work has two very defined characteristics: on the one hand her chromatic instinct, a gift of colors and on the other her ability to select, group and interact colors creating a chromatic language of her own.',
+  },
+  // The last two paragraphs, and the gallery's name in capitals linking to
+  // its site (Frank, 2026-11-18).
+  {
+    kind: 'text',
+    text: 'Currently she combines her activity as an artist with colour prescription in the areas of design and architecture.',
+  },
+  {
+    kind: 'text',
+    text: 'Her work is represented, in Spain and abroad, by the Barcelona gallery owner Miquel Alzueta.',
+    link: { label: 'ALZUETA GALLERY', href: 'https://alzuetagallery.com' },
   },
 ];
 

@@ -13,6 +13,8 @@ export function initHoverList(): void {
   for (const list of document.querySelectorAll<HTMLElement>('.xlist, .chart-thanks')) wire(list);
   // The Gallery's "Inquiries", over the years, answers the same way.
   for (const link of document.querySelectorAll<HTMLElement>('.side-inquiries')) wireRow(link);
+  // So does the gallery's name at the foot of About's biography.
+  for (const link of document.querySelectorAll<HTMLElement>('.about-link')) wireRow(link);
 }
 
 function wire(list: HTMLElement): void {
