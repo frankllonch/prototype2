@@ -1,5 +1,5 @@
 import { phone, reduceMotion } from './env.ts';
-import { SCROLL_SPAN } from './stack.ts';
+import { scrollSpan } from './pile.ts';
 import { glide } from './glide.ts';
 
 /*
@@ -75,7 +75,7 @@ export function initYears(): void {
    * Where to scroll so a year sits in the middle of the screen.
    *
    * Two things stop it being simply "half a viewport above the year". The pile
-   * only lets go after `SCROLL_SPAN` of scrolling, so anything above that would
+   * only lets go after `scrollSpan()` (client/pile.ts) of scrolling, so anything above that would
    * gather the paintings back up — and take the year selection with it, since
    * that is what `stackrestart` is for. And the last years have nothing much
    * below them, so the page runs out before they reach the middle.
@@ -91,7 +91,7 @@ export function initYears(): void {
     // the pile is turned off for reduced motion, but `stack.ts` removes the hero,
     // and a floor held against an opening that never runs would scroll straight
     // past the newest year and put it out of reach altogether.
-    const floor = document.querySelector('[data-hero]') ? window.innerHeight * SCROLL_SPAN + 8 : 0;
+    const floor = document.querySelector('[data-hero]') ? window.innerHeight * scrollSpan() + 8 : 0;
     const ceiling = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
     return Math.max(0, Math.min(Math.max(floor, wanted), ceiling));
   };

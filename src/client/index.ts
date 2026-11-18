@@ -32,6 +32,7 @@ import { initWrite } from './write.ts';
 import { initMenu } from './menu.ts';
 import { initReveal } from './reveal.ts';
 import { initHoverTuner } from './hover-tuner.ts';
+import { initPileTuner } from './pile-tuner.ts';
 
 // The head stops waiting for these scripts after a few seconds and lets the
 // page stand as it does without them (components/layout.ts). Arriving later
@@ -74,3 +75,6 @@ initReveal();
 // Last, so the bar's words are as every other module left them. Off unless
 // the page was opened with ?tune (client/hover-tuner.ts).
 initHoverTuner();
+// The gallery opening's tuner: off unless the page was opened with ?pile
+// (client/pile-tuner.ts).
+initPileTuner();

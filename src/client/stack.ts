@@ -1,4 +1,5 @@
 import { phone, reduceMotion } from './env.ts';
+import { LAYOUTS, easeOf, pile, scrollSpan, seeded, type Start } from './pile.ts';
 
 /**
  * The opening: every painting gathered into one pile in the middle of the
@@ -42,8 +43,12 @@ import { phone, reduceMotion } from './env.ts';
  * lets go: scrolling to a year above that point would gather the paintings
  * back up under the reader.
  */
-export const SCROLL_SPAN = 1.3;
-const EASE_IN = 2;
+/*
+ * Both now live in client/pile.ts with the rest of the opening's shape —
+ * `motion.span` and `motion.power` — where the pile tuner (?pile) can reach
+ * them. SCROLL_SPAN is kept as the site's value for anything that reads it once.
+ */
+export const SCROLL_SPAN = scrollSpan();
 /*
  *   FOLLOW       how closely the pile keeps up with the scroll. The paintings
  *                ease towards where the scroll says they should be rather than
@@ -63,19 +68,12 @@ const EASE_IN = 2;
  *                caught up half as fast and lingered in the half-dispersed
  *                state, where the grid shows as a shrunken copy of itself.
  */
-const FOLLOW = 0.14;
+// FOLLOW is `motion.follow` in client/pile.ts.
 /** The frame length FOLLOW was tuned at. */
 const FOLLOW_FRAME_MS = 1000 / 120;
-const FRONT = 0.38;         // height of the front painting, as a fraction of the viewport
-const VISIBLE = 12;         // tiles given their own offset in the pile; the rest sit behind
 const WATCHDOG = 4000;      // ms: if the pile cannot be measured by now, show the grid
 
-/** Small, fixed offsets for the front of the pile — the fanned look in the mockup. */
-const OFFSETS: ReadonlyArray<readonly [number, number]> = [
-  [0, 0], [0.035, -0.06], [-0.045, -0.02], [0.02, 0.055], [-0.03, 0.06],
-  [0.055, 0.015], [-0.055, -0.05], [0.01, -0.075], [-0.015, 0.075], [0.045, -0.035],
-  [-0.04, 0.03], [0.03, 0.04],
-];
+// The pile's size, fan and offsets are `effects.pile` in client/pile.ts.
 
 /*
  * WebKit — Safari, and every browser on iOS. The repaint below is a WebKit
@@ -86,7 +84,7 @@ const OFFSETS: ReadonlyArray<readonly [number, number]> = [
 const webkit = /AppleWebKit/.test(navigator.userAgent) && !/Chrome|Chromium|Edg\//.test(navigator.userAgent)
   || /CriOS|FxiOS|EdgiOS/.test(navigator.userAgent);
 
-interface Target { tx: number; ty: number; s: number; ox: number; oy: number }
+interface Target { tx: number; ty: number; s: number; ox: number; oy: number; rot: number; op: number; delay: number }
 
 export function initStack(): void {
   const grid = document.querySelector<HTMLElement>('[data-stack]');
@@ -149,6 +147,7 @@ export function initStack(): void {
     for (const tile of tiles) {
       tile.style.transform = '';
       tile.style.zIndex = '';
+      tile.style.opacity = '';
     }
     ordered = false;
   };
@@ -190,16 +189,55 @@ export function initStack(): void {
     // tile would be taken that far too low. Taken back out here.
     const lift = new DOMMatrixReadOnly(getComputedStyle(grid).transform).m42;
 
-    targets = live.map((tile, i) => {
-      const r = tile.getBoundingClientRect();
-      const pileHeight = h * (i === 0 ? FRONT : FRONT - 0.02 - Math.min(i, VISIBLE) * 0.006);
-      const off = i < VISIBLE ? OFFSETS[i]! : [0, 0];
+    const vw = window.innerWidth;
+    const layout = LAYOUTS[pile.effect] ?? LAYOUTS.pile!;
+    const v = pile.effects[pile.effect] ?? {};
+    const m = pile.motion;
+    const box = grid.getBoundingClientRect();
+    const gridBox = { left: box.left, top: box.top - lift + scroll, width: box.width };
+    const seed = Number(m.seed) * 7919;
+    const rects = live.map((tile) => tile.getBoundingClientRect());
+    const starts: Start[] = rects.map((r, i) => layout({
+      i, n: live.length, vw, vh: h,
+      tx: r.left + r.width / 2, ty: r.top - lift + scroll + r.height / 2, th: r.height,
+      grid: gridBox, rand: seeded(seed + i * 101),
+    }, v));
+
+    /*
+     * The stagger: each painting waits its share of the unfold before it
+     * moves, in the order chosen. `rank` runs from 0 (first away) to 1.
+     */
+    const order = String(m.order);
+    const order_ = seeded(seed + 17);
+    const n = Math.max(1, live.length - 1);
+    const far = Math.max(1, ...starts.map((s) => Math.hypot(s.x, s.y)));
+    const tops = rects.map((r) => r.top);
+    const lo = Math.min(...tops);
+    const hi = Math.max(lo + 1, ...tops);
+    const rank = (i: number): number => {
+      switch (order) {
+        case 'random': return order_();
+        case 'centre first': return Math.hypot(starts[i]!.x, starts[i]!.y) / far;
+        case 'edges first': return 1 - Math.hypot(starts[i]!.x, starts[i]!.y) / far;
+        case 'top rows first': return (tops[i]! - lo) / (hi - lo);
+        case 'bottom rows first': return 1 - (tops[i]! - lo) / (hi - lo);
+        case 'back of pile first': return 1 - i / n;
+        default: return i / n;
+      }
+    };
+    const fade = Number(m.fade);
+
+    targets = rects.map((r, i) => {
+      const st = starts[i]!;
       return {
         tx: r.left + r.width / 2,
         ty: r.top - lift + scroll + r.height / 2,
-        s: r.height ? pileHeight / r.height : 1,
-        ox: off[0]! * window.innerWidth,
-        oy: off[1]! * h,
+        s: r.height ? st.h / r.height : 1,
+        ox: st.x,
+        oy: st.y,
+        rot: st.rot,
+        op: st.op * fade,
+        delay: Number(m.stagger) * rank(i),
       };
     });
     measured = live.length > 0 && live.every((tile) => tile.getBoundingClientRect().height > 0);
@@ -207,14 +245,9 @@ export function initStack(): void {
   };
 
   /*
-   * In-and-out: gentle leaving the heap, gentle arriving in the grid. The
-   * power is EASE_IN on the way in and mirrored on the way out, so 2 is the
-   * familiar smooth step and 1 is no easing at all.
+   * The curve is `motion.curve` in client/pile.ts: in-and-out with a power of
+   * 2 (gentle leaving the heap, gentle arriving in the grid) is the site's.
    */
-  const ease = (p: number) => (p < 0.5
-    ? Math.pow(2 * p, EASE_IN) / 2
-    : 1 - Math.pow(2 * (1 - p), EASE_IN) / 2);
-
   const render = (time: number) => {
     frame = 0;
     if (disabled) return;
@@ -223,6 +256,7 @@ export function initStack(): void {
     // scrolling is never mistaken for time to catch up. Otherwise the real
     // interval, capped so one long stall cannot throw it all the way.
     const elapsed = drawnAt ? Math.min(time - drawnAt, 100) : FOLLOW_FRAME_MS;
+    const FOLLOW = Math.min(1, Math.max(0.005, Number(pile.motion.follow)));
     drawnAt = time;
 
     // Without a trustworthy measurement there is nothing sensible to draw, so
@@ -233,7 +267,7 @@ export function initStack(): void {
     if (!measured) { measure(); if (!measured) return; }
 
     const h = window.innerHeight;
-    const wanted = Math.min(1, Math.max(0, window.scrollY / (h * SCROLL_SPAN)));
+    const wanted = pile.freeze ?? Math.min(1, Math.max(0, window.scrollY / (h * scrollSpan())));
     // Drawn behind the scroll, not at it: close the gap by FOLLOW each frame,
     // snap the last sliver so it does not creep for ever, and keep drawing
     // frames until the pile has caught up — the scroll may have stopped.
@@ -289,16 +323,23 @@ export function initStack(): void {
 
     grid.classList.add('is-stacked');
     layer();
-    const e = ease(p);
-    const cx = window.innerWidth / 2;
-    const cy = window.scrollY + h * 0.54;
+    const ease = easeOf(pile.motion);
+    const cx = window.innerWidth * Number(pile.motion.cx);
+    const cy = window.scrollY + h * Number(pile.motion.cy);
+    const stagger = Math.min(0.95, Math.max(0, Number(pile.motion.stagger)));
 
     live.forEach((tile, i) => {
       const t = targets[i]!;
+      // Each painting's own share of the unfold, after its wait.
+      const q = stagger ? Math.min(1, Math.max(0, (p - t.delay) / (1 - stagger))) : p;
+      const e = ease(q);
       const dx = (cx + t.ox - t.tx) * (1 - e);
       const dy = (cy + t.oy - t.ty) * (1 - e);
       const s = t.s + (1 - t.s) * e;
-      tile.style.transform = `translate3d(${dx.toFixed(1)}px, ${dy.toFixed(1)}px, 0) scale(${s.toFixed(4)})`;
+      const r = t.rot * (1 - e);
+      tile.style.transform = `translate3d(${dx.toFixed(1)}px, ${dy.toFixed(1)}px, 0)${r ? ` rotate(${r.toFixed(2)}deg)` : ''} scale(${s.toFixed(4)})`;
+      if (t.op !== 1) tile.style.opacity = (t.op + (1 - t.op) * Math.min(1, Math.max(0, e))).toFixed(3);
+      else if (tile.style.opacity) tile.style.opacity = '';
       // The order is written once per gathering, not every frame: rewriting
       // 181 z-indexes per frame was a style recalculation for nothing.
       if (!ordered) tile.style.zIndex = String(live.length - i);
@@ -344,6 +385,14 @@ export function initStack(): void {
   // stale targets.
   grid.addEventListener('gridchange', relayoutAfterResize);
   window.addEventListener('load', relayout);
+  // The pile tuner (client/pile-tuner.ts) changed a setting: take the
+  // starting places again and draw.
+  document.addEventListener('piletune', () => {
+    if (disabled) return;
+    stale = true;
+    if (!settled) measure();
+    schedule();
+  });
   void document.fonts.ready.then(relayout);
 
   // A tablet turned upright, or a window drawn in below 900px: the gallery

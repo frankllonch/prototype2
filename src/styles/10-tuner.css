@@ -46,3 +46,23 @@
 }
 .tuner-small { margin-top: 6px; font-size: 11px !important; color: #aaa !important; }
 .tuner-copied { color: #9c9; align-self: center; }
+
+/* ------------------------------------------------------------- pile tuner */
+
+/*
+ * The gallery opening's panel (client/pile-tuner.ts, ?pile). It wears the
+ * hover tuner's clothes; when both are open it stands to the left of it.
+ */
+html[data-tune] .tuner-pile { right: 372px; }
+.tuner-pile .tuner-effects { grid-template-columns: repeat(4, 1fr); }
+.tuner-spread {
+  margin: 6px 0 8px; padding: 6px 8px 8px;
+  border: 1px solid rgb(255 255 255 / 0.22); border-radius: 7px;
+  background: rgb(255 255 255 / 0.05);
+}
+.tuner-kicker { display: block; margin-bottom: 2px; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; font-weight: 600; }
+.tuner-row.is-big { grid-template-columns: 1fr 150px 64px; }
+.tuner-row.is-big .tuner-label { color: #fff; font-weight: 600; }
+.tuner-row.is-big .tuner-value { color: #eee; }
+.tuner-pile .tuner-row { grid-template-columns: 1fr 130px 72px; }
+.tuner-pile .tuner-row.is-big { grid-template-columns: 1fr 140px 64px; }
