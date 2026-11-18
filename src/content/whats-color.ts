@@ -768,26 +768,19 @@ export const EDITIONS_ALL: readonly Edition[] = built.map((edition) => ({
  * Filtered here rather than per page, so the opening run of names and each
  * edition's own run cannot disagree about who is in it.
  */
-/*
- * One exception: Cierto Estudio sent no answer, but Claudia gave it a colour
- * and asked for it on the page, so a guest of edition II with a named colour
- * is shown as the name and the colour. The ones who answered in images stay
- * off, as before.
- */
-const onPage = (p: Participant, numeral: string): boolean =>
-  Boolean(p.answer) || (numeral === 'II' && Boolean(p.colourName) && !p.inImages);
+const onPage = (p: Participant): boolean => Boolean(p.answer);
 
 export const EDITIONS: readonly Edition[] = built.map((edition) => ({
   ...edition,
   // The roster is everyone; only those on the page get an id, because only
   // they have an entry for a name to point at.
   roster: edition.participants.map((p) =>
-    onPage(p, edition.numeral)
+    onPage(p)
       ? { ...p, edition: edition.numeral, id: idFor(p.name) }
       : { ...p, edition: edition.numeral },
   ),
   participants: edition.participants
-    .filter((p) => onPage(p, edition.numeral))
+    .filter((p) => onPage(p))
     .map((p) => ({ ...p, edition: edition.numeral, id: idFor(p.name) })),
 }));
 
