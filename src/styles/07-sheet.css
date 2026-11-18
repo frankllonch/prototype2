@@ -185,6 +185,8 @@
 .sheet-prose a { color: inherit; text-decoration: none; }
 .sheet-prose a:hover,
 .sheet-prose a:focus-visible { text-decoration: underline; text-underline-offset: 0.15em; text-decoration-thickness: 1px; }
+/* The gallery's name, lit in colour like About's (02-overlays.css) rather than underlined. */
+.sheet-prose a.about-link:is(:hover, :focus-visible) { text-decoration: none; }
 .sheet-prose .is-style-note {
   /* The same distance from the text as before the credits went to 30. */
   margin-top: calc(var(--type) * 5.2);
