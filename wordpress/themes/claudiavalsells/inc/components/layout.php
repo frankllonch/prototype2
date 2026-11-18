@@ -106,9 +106,9 @@ function cv_about_overlay( bool $open = false ): string {
 		// script once the photographs overrun the measure.
 		if ( count( $a['images'] ) > 1 ) {
 			$out .= '<button type="button" class="about-reel-step is-prev" data-about-reel-step="-1" aria-label="Earlier photographs" hidden>'
-				. '<svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="M8 1 1 8l7 7" /></svg></button>'
+				. cv_step_chevron( -1 ) . '</button>'
 				. '<button type="button" class="about-reel-step is-next" data-about-reel-step="1" aria-label="More photographs" hidden>'
-				. '<svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="m1 1 7 7-7 7" /></svg></button>';
+				. cv_step_chevron( 1 ) . '</button>';
 		}
 		$out .= '</div>';
 	}
@@ -179,9 +179,9 @@ function cv_about_overlay( bool $open = false ): string {
 		// and only when there is more than one to step through.
 		. ( count( $a['images'] ) > 1
 			? '<button type="button" class="about-viewer-step is-prev" data-about-step="-1" aria-label="Previous photograph">'
-				. '<svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="M8 1 1 8l7 7" /></svg></button>'
+				. cv_step_chevron( -1 ) . '</button>'
 				. '<button type="button" class="about-viewer-step is-next" data-about-step="1" aria-label="Next photograph">'
-				. '<svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="m1 1 7 7-7 7" /></svg></button>'
+				. cv_step_chevron( 1 ) . '</button>'
 			: '' );
 }
 
@@ -265,6 +265,15 @@ function cv_lightbox(): string {
  * something. `negative` is drawn as the inverse of the film behind it; `ink` is
  * the gallery's, where there is nothing behind it but paper.
  */
+/**
+ * The start page's chevron on its side, for every viewer's Previous and Next:
+ * the cue's drawing, size and weight (components/scroll-cue.ts, stepChevron).
+ */
+function cv_step_chevron( int $by ): string {
+	$d = $by < 0 ? 'M14.5 1.5 L3 14 L14.5 26.5' : 'M1.5 1.5 L13 14 L1.5 26.5';
+	return '<svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="' . $d . '" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>';
+}
+
 function cv_scroll_cue( string $mode ): string {
 	return '<div class="scroll-cue scroll-cue-' . esc_attr( $mode ) . '" data-scroll-cue aria-hidden="true">'
 		. '<svg viewBox="0 0 28 16" focusable="false"><path d="M1.5 1.5 L14 13 L26.5 1.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" /></svg>'

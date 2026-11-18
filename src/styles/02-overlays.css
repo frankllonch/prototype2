@@ -373,7 +373,8 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   padding: 0;
   border: 0;
   background: none;
-  color: #000;
+  color: rgb(252, 252, 250);
+  mix-blend-mode: difference;
   cursor: pointer;
   translate: 0 -50%;
   opacity: 0;
@@ -385,21 +386,10 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .about-reel-step[hidden] { display: none; }
 .about-reel-step.is-prev { left: calc(-1 * var(--m)); justify-items: start; padding-left: calc(var(--m) / 2 - var(--chev-w) / 2); }
 .about-reel-step.is-next { right: calc(-1 * var(--m)); justify-items: end; padding-right: calc(var(--m) / 2 - var(--chev-w) / 2); }
-.about-reel { --chev-w: clamp(0.4375rem, calc(var(--m) * 0.3), 0.875rem); }
-.about-reel.is-placed .about-reel-step { opacity: var(--reel-dim, 0.3); visibility: visible; transition-delay: 0s; }
+.about-reel { --chev-w: calc(var(--cue-size) * 16 / 28); }
+.about-reel.is-placed .about-reel-step { opacity: 1; visibility: visible; transition-delay: 0s; }
 .about-reel.is-placed .about-reel-step:hover,
-.about-reel.is-placed .about-reel-step:focus-visible { opacity: 1; }
-.about-reel-step svg {
-  display: block;
-  width: var(--chev-w);
-  height: auto;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  overflow: visible;
-}
+.about-reel.is-placed .about-reel-step:focus-visible { opacity: 0.45; }
 
 /*
  * The four parts.
@@ -511,7 +501,6 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .about-viewer-step.is-next { right: max(0.5rem, 2.5vw); }
 .about.is-viewing ~ .about-viewer-step:hover,
 .about.is-viewing ~ .about-viewer-step:focus-visible { opacity: 0.45; }
-.about-viewer-step svg { display: block; width: 0.9rem; height: auto; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
 
 /* ----------------------------------------------------------- the record */
 
@@ -864,14 +853,15 @@ body:has(.panel.is-open) .top { opacity: 0; pointer-events: none; }
   transform: translateY(-50%);
   z-index: 3;
   padding: 0.6rem 0.9rem;
-  color: var(--ink);
-  opacity: 0.45;
+  color: rgb(252, 252, 250);
+  mix-blend-mode: difference;
+  opacity: 1;
   font-size: var(--type);
   line-height: 1;
   transition: opacity var(--hover) var(--ease);
 }
 [data-panel] .reader:not(.plates) .reader-step:hover,
-[data-panel] .reader:not(.plates) .reader-step:focus-visible { opacity: 1; }
+[data-panel] .reader:not(.plates) .reader-step:focus-visible { opacity: 0.45; }
 [data-panel] .reader:not(.plates) .reader-prev { left: -3.2rem; }
 [data-panel] .reader:not(.plates) .reader-next { right: -3.2rem; }
 

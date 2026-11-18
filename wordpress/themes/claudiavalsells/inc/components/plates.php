@@ -46,8 +46,8 @@ function cv_plates_body( array $show ): string {
 	}
 	$out .= '</div></div>';
 	if ( count( $images ) > 1 ) {
-		$out .= '<button type="button" class="plates-step plates-prev" data-figure-step="-1" aria-label="Previous photograph">' . cv_sheet_chevron( 'M8 1 1 8l7 7' ) . '</button>'
-			. '<button type="button" class="plates-step plates-next" data-figure-step="1" aria-label="Next photograph">' . cv_sheet_chevron( 'm1 1 7 7-7 7' ) . '</button>'
+		$out .= '<button type="button" class="plates-step plates-prev" data-figure-step="-1" aria-label="Previous photograph">' . cv_step_chevron( -1 ) . '</button>'
+			. '<button type="button" class="plates-step plates-next" data-figure-step="1" aria-label="Next photograph">' . cv_step_chevron( 1 ) . '</button>'
 			. '<p class="sr-only" data-figure-count data-template="Photograph {n} of {total}" aria-live="polite"></p>';
 	}
 	return $out . '</div>';

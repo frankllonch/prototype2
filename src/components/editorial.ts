@@ -1,5 +1,6 @@
 import { html, join, raw, type Html } from './html.ts';
 import { responsiveImage } from './image.ts';
+import { stepChevron } from './scroll-cue.ts';
 import type { ProjectImage, Row } from '../content/types.ts';
 
 export interface EditorialProps {
@@ -83,11 +84,11 @@ export function editorialBody({ title, year, images, rows, venue, from, to, kind
         ${images.length > 1
           ? html`<nav class="reader-nav" aria-label="Images">
               <button type="button" class="reader-step" data-figure-step="-1" aria-label="Previous image">
-                <span aria-hidden="true">&#8592;</span>
+                ${stepChevron(-1)}
               </button>
               <p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>
               <button type="button" class="reader-step" data-figure-step="1" aria-label="Next image">
-                <span aria-hidden="true">&#8594;</span>
+                ${stepChevron(1)}
               </button>
             </nav>`
           : ''}

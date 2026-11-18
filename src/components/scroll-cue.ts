@@ -1,4 +1,4 @@
-import { html, type Html } from './html.ts';
+import { html, raw, type Html } from './html.ts';
 
 /**
  * The hint that there is more below, on the two pages that open on a full
@@ -30,4 +30,20 @@ export function scrollCue(mode: 'ink' | 'negative'): Html {
       />
     </svg>
   </div>`;
+}
+
+/**
+ * The start page's chevron turned on its side, for every viewer's Previous and
+ * Next: the same drawing, the same size and the same weight as the scroll cue
+ * (Frank, 2026-11-18), so every arrow on the site is one arrow.
+ *
+ * The cue is 28 across and 16 deep; turned, this is 16 across and 28 tall,
+ * with the same three points. Its size and weight are the cue's knobs,
+ * `--cue-size` and `--cue-stroke` (00-base.css), applied by `.step-chevron`.
+ */
+export function stepChevron(by: -1 | 1): Html {
+  const d = by < 0 ? 'M14.5 1.5 L3 14 L14.5 26.5' : 'M1.5 1.5 L13 14 L1.5 26.5';
+  return raw(
+    `<svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="${d}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>`,
+  );
 }
