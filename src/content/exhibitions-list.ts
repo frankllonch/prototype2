@@ -53,7 +53,6 @@ export const SHOWS: readonly Show[] = [
   { group: 'Solo shows', title: 'T10', venue: 'Solo show, at Alzueta Gallery, Barcelona', from: 'November', year: 2018, slug: 't10' },
   { group: 'Solo shows', title: 'Solo exhibition', venue: 'Palau de Casavells, Barcelona', from: 'November', year: 2018 },
   { group: 'Solo shows', title: 'Color y forma', venue: 'Solo exhibition, Alzueta Gallery, Barcelona', from: 'February', year: 2017, slug: 'color-y-forma' },
-  { group: 'Solo shows', title: 'Galeria Axel Pairon', venue: 'Group exhibition', from: 'December', year: 2016, slug: 'galeria-axel-pairon' },
   { group: 'Solo shows', title: 'Solo exhibition', venue: 'Palau de Casavells,', from: 'May', year: 2007 },
   { group: 'Solo shows', title: '‘Expresions de mur’ abstract in formalism paintings', venue: 'Solo exhibition, Galeria Miquel Alzueta, Barcelona', from: 'March', year: 2005 },
   {
@@ -72,6 +71,7 @@ export const SHOWS: readonly Show[] = [
   { group: 'Group shows', title: 'Marco, Límite y Lugar', venue: 'Group exhibition, Alzueta Gallery Madrid', from: 'March', year: 2025, slug: 'marco-limite-y-lugar' },
   { group: 'Group shows', title: 'What abstract art means to me?', venue: 'Group exhibition, Alzueta Gallery Séneca', from: 'January', year: 2024, slug: 'what-abstract-art-means-to-me' },
   { group: 'Group shows', title: 'La terre est bleu comme un organge', venue: 'Group exhibition, Alzueta Gallery, Madrid', from: 'November', year: 2023, slug: 'la-terre-est-bleu' },
+  { group: 'Group shows', title: 'Galeria Axel Pairon', venue: 'Group exhibition', from: 'December', year: 2016, slug: 'galeria-axel-pairon' },
 
   // ----------------------------------------------------------- art fairs
   { group: 'Art fairs', title: 'Zona Maco CDMX', venue: 'With Alzueta Gallery, Mexico', from: 'February', year: 2026 },
