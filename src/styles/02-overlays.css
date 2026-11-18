@@ -295,6 +295,17 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 }
 .about-opening + p { margin-top: calc(70.5em / 40); }
 .about-text > p + p { margin-top: 1em; }
+/*
+ * The gallery's name at the end of the biography: set as the text is, and
+ * lit like the Exhibitions and Commissioned rows (its `.hrow` takes their
+ * hover and focus colour from 01-grid.css, a new hue each time from
+ * hover-list.ts; ink without scripting).
+ */
+.about-link {
+  --exh-hover: var(--ink);
+  color: inherit;
+  transition: color var(--hover) var(--ease);
+}
 
 /*
  * The photographs: a reel 210 tall, each at its own proportion, 53 apart,
@@ -433,12 +444,15 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   color: rgb(219, 218, 215);
   mix-blend-mode: difference;
   pointer-events: none;
+  visibility: hidden;
   opacity: 0;
-  transition: opacity 0.7s var(--ease);
+  cursor: pointer;
+  transition: opacity 0.7s var(--ease), visibility 0s 0.7s;
 }
-.about.is-open ~ .about-cue.is-shown { opacity: 1; }
+/* Clickable only while it shows: it carries the panel on (client/about.ts). */
+.about.is-open ~ .about-cue.is-shown { opacity: 1; pointer-events: auto; visibility: visible; transition: opacity 0.7s var(--ease); }
 /* Not while a photograph is up: the panel does not scroll then. */
-.about.is-viewing ~ .about-cue.is-shown { opacity: 0; }
+.about.is-viewing ~ .about-cue.is-shown { opacity: 0; pointer-events: none; visibility: hidden; transition: opacity 0.7s var(--ease), visibility 0s 0.7s; }
 @media (prefers-reduced-motion: no-preference) {
   .about-cue svg { animation: scroll-cue-fall 2.4s var(--ease) infinite; }
 }

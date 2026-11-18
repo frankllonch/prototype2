@@ -8,19 +8,18 @@ import { html, raw, type Html } from './html.ts';
  * screen and neither looks like the top of a document, so nothing on the first
  * view says that scrolling is what happens next.
  *
- * A chevron and nothing else. It is decorative and `aria-hidden` — a reader
- * that is not looking at the screen is told the page's length by the page, and
- * the cue would only be a stray graphic in the middle of it. It is not a button
- * either: it reports where to go rather than going there, so it takes no
- * pointer events and leaves the film and the tiles beneath it clickable.
+ * A chevron and nothing else, and a button: clicked, it takes the reader on to
+ * the next part of the page (Frank, 2026-11-18; client/scroll-cue.ts). Only
+ * the chevron itself takes the pointer, so the film and the tiles around it
+ * stay clickable, and once the cue has gone it takes nothing at all.
  *
  * `negative` is for the start page, where it crosses the film and is drawn as
  * the inverse of whatever frame is behind it, exactly as the bar's type is.
  * `ink` is the gallery's, where there is nothing behind it but paper.
  */
 export function scrollCue(mode: 'ink' | 'negative'): Html {
-  return html`<div class="scroll-cue scroll-cue-${mode}" data-scroll-cue aria-hidden="true">
-    <svg viewBox="0 0 28 16" focusable="false">
+  return html`<button type="button" class="scroll-cue scroll-cue-${mode}" data-scroll-cue aria-label="Scroll down">
+    <svg viewBox="0 0 28 16" aria-hidden="true" focusable="false">
       <path
         d="M1.5 1.5 L14 13 L26.5 1.5"
         fill="none"
@@ -29,7 +28,7 @@ export function scrollCue(mode: 'ink' | 'negative'): Html {
         stroke-linecap="square"
       />
     </svg>
-  </div>`;
+  </button>`;
 }
 
 /**

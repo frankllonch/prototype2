@@ -151,7 +151,7 @@ function rolled(text: string): Html {
 function aboutOverlay(): Html {
   const lead = ABOUT_BLOCKS.find((b) => b.kind === 'lead');
   const images = ABOUT_BLOCKS.flatMap((b) => (b.kind === 'figure' ? [b.image] : []));
-  const text = ABOUT_BLOCKS.flatMap((b) => (b.kind === 'text' ? [b.text] : []));
+  const text = ABOUT_BLOCKS.flatMap((b) => (b.kind === 'text' ? [b] : []));
   return html`<section class="about" id="about" data-panel aria-label="About">
     <div class="about-sheet">
       <div class="about-text">
@@ -161,7 +161,14 @@ function aboutOverlay(): Html {
             ${images.length ? aboutReel(images) : ''}
           </div>
         </div>
-        ${join(text.map((t) => html`<p>${t}</p>`))}
+        ${join(
+          text.map(
+            (t) =>
+              html`<p>${t.text}${t.link
+                ? html` <a class="about-link hrow" href="${t.link.href}" target="_blank" rel="noopener">${t.link.label}</a>`
+                : ''}</p>`,
+          ),
+        )}
       </div>
       <div class="about-record">
         ${join(ABOUT_SHOWS.map(aboutShows))}
@@ -238,11 +245,11 @@ function aboutReelSteps(): Html {
 
 /** The start page's chevron, for About's own scroll. */
 function aboutCue(): Html {
-  return html`<div class="about-cue" data-about-cue aria-hidden="true">
-    <svg viewBox="0 0 28 16" focusable="false">
+  return html`<button type="button" class="about-cue" data-about-cue aria-label="Scroll down">
+    <svg viewBox="0 0 28 16" aria-hidden="true" focusable="false">
       <path d="M1.5 1.5 L14 13 L26.5 1.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
     </svg>
-  </div>`;
+  </button>`;
 }
 
 /** One photograph large over the page. */

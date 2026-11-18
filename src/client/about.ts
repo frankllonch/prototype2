@@ -223,19 +223,22 @@ export function initAbout(): void {
     glide = 0;
     glided = true;
   };
-  const runGlide = () => {
+  // The panel carried to a scroll of its own, gently: the opening's glide and
+  // the chevron's. A hand on the panel stops it where it is.
+  const glideTo = (to: number, ms: number) => {
+    endGlide();
+    glided = false;
     const from = about.scrollTop;
-    // Already moved — a jump, a restored position — and there is nothing to
-    // glide to: the reader is somewhere of their own choosing.
-    if (from > 2) return endGlide();
-    const to = leadRun;
+    to = Math.max(0, Math.min(to, about.scrollHeight - about.clientHeight));
+    if (Math.abs(to - from) < 1) return endGlide();
+    if (reduceMotion.matches) { about.scrollTop = to; return endGlide(); }
     const began = performance.now();
     let placed = from;
     const step = (now: number) => {
       // Moved by anything but the glide — the scrollbar dragged, a key, a
       // script — and the glide gives way rather than pulling it back.
       if (Math.abs(about.scrollTop - placed) > 2) return endGlide();
-      const t = Math.min(1, (now - began) / GLIDE_MS);
+      const t = Math.min(1, (now - began) / ms);
       const e = t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2;
       about.scrollTop = from + (to - from) * e;
       placed = about.scrollTop;
@@ -244,6 +247,24 @@ export function initAbout(): void {
     };
     glide = requestAnimationFrame(step);
   };
+  const runGlide = () => {
+    // Already moved — a jump, a restored position — and there is nothing to
+    // glide to: the reader is somewhere of their own choosing.
+    if (about.scrollTop > 2) return endGlide();
+    glideTo(leadRun, GLIDE_MS);
+  };
+
+  /*
+   * The chevron takes the reader on, as well as asking them to go (Frank,
+   * 2026-11-18): to the next of the panel's own stops — the lead written, the
+   * photographs in — and after those a screen at a time, to the end.
+   */
+  cue?.addEventListener('click', () => {
+    const y = about.scrollTop;
+    const h = about.clientHeight;
+    const stops = [leadRun, reelFrom + reelRun].filter((at) => at > y + h * 0.05);
+    glideTo(stops[0] ?? y + h * 0.8, GLIDE_MS);
+  });
   for (const kind of ['wheel', 'touchstart', 'pointerdown'] as const) {
     about.addEventListener(kind, () => { if (!glided) endGlide(); }, { passive: true });
   }

@@ -597,8 +597,9 @@ body.is-locked { overflow: hidden; }
  * Fixed at the foot of the screen rather than placed in the page, because the
  * gallery's runway is removed outright for reduced motion and on a back
  * navigation (`client/stack.ts`), and a cue living inside it would go with it.
- * Pointer events off: it says where to go, it does not go there, so the film
- * and the tiles under it stay clickable.
+ * A button: clicked, it goes where it points (`client/scroll-cue.ts`). It
+ * takes the pointer only on the chevron and a little around it, so the film
+ * and the tiles under it stay clickable, and not at all once it has gone.
  */
 /*
  * The two knobs for the scroll-down chevron, shared by the page's cue and the
@@ -621,9 +622,16 @@ body.is-locked { overflow: hidden; }
   z-index: 35;
   width: var(--cue-size);
   margin-left: calc(var(--cue-size) / -2);
-  pointer-events: none;
+  cursor: pointer;
   transition: opacity 0.7s var(--ease);
 }
+/* A target a little larger than the drawing, so the click need not be exact. */
+.scroll-cue::before, .about-cue::before {
+  content: '';
+  position: absolute;
+  inset: -0.9rem -0.6rem;
+}
+.scroll-cue:focus-visible, .about-cue:focus-visible { outline: 1px solid currentColor; outline-offset: 0.6rem; }
 /* The stroke is set here rather than on the path so the knob reaches it, and
    the drawing may spill past its box: a heavy line on a chevron drawn 1.5 from
    the edge would otherwise lose its top corners. */
@@ -632,7 +640,7 @@ body.is-locked { overflow: hidden; }
 
 /* Taken, and so no longer a cue. `client/scroll-cue.ts` sets this once, on the
    first movement worth the name, and never takes it off. */
-html.is-scrolled .scroll-cue { opacity: 0; }
+html.is-scrolled .scroll-cue { opacity: 0; pointer-events: none; visibility: hidden; transition: opacity 0.7s var(--ease), visibility 0s 0.7s; }
 
 /*
  * The same chevron on its side: every viewer's Previous and Next

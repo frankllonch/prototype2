@@ -71,9 +71,21 @@ function arriving(i: number): string {
   return `animation-range: ${(from * 100).toFixed(2)}% ${(to * 100).toFixed(2)}%`;
 }
 
+/**
+ * The page's title, set over the statement (Frank, 2026-11-18): semibold 45
+ * in capitals, in the room the page's drop (06-colour-chart.css) leaves above
+ * the first line, so nothing that was already on the page moves for it.
+ *
+ * It is written by the scroll like the statement, and first: its words take
+ * the first slices of the run, so arriving on the page types the title and
+ * then the opening paragraph, and scrolling back takes the title away last.
+ */
+const TITLE = 'Artist colour chart for architects and designers';
+
 function written(paragraphs: readonly string[]): { readonly block: Html; readonly reveal: number } {
   const lines = paragraphs.map((p) => p.split(/<br\s*\/?>/));
-  const total = lines.flat().join(' ').trim().split(/\s+/).length;
+  const titleWords = TITLE.trim().split(/\s+/);
+  const total = titleWords.length + lines.flat().join(' ').trim().split(/\s+/).length;
   let n = 0;
 
   const word = (w: string): Html => {
@@ -111,6 +123,7 @@ function written(paragraphs: readonly string[]): { readonly block: Html; readonl
   };
 
   const block = html`<div class="chart-statement">
+    <h1 class="chart-title">${join(titleWords.map((w, i) => html`${i > 0 ? ' ' : ''}${word(w)}`))}</h1>
     ${join(
       lines.map(
         (halves) => html`<p>${join(
@@ -128,7 +141,7 @@ function written(paragraphs: readonly string[]): { readonly block: Html; readonl
    * lands on the seventh as readily as the sixth. The middle of the sixth
    * slice is unambiguous.
    */
-  const opening = (lines[0] ?? []).join(' ').trim().split(/\s+/).length;
+  const opening = titleWords.length + (lines[0] ?? []).join(' ').trim().split(/\s+/).length;
   return { block, reveal: ((opening + 0.5) / (total + 1)) * WRITTEN_BY };
 }
 
@@ -151,13 +164,6 @@ export function colourChart(): Html {
   const { block, reveal } = written(statement);
   return html`<div class="chart" data-chart-reveal="${reveal.toFixed(4)}" data-chart-written="${WRITTEN_BY}">
   <div class="chart-page">
-    <!--
-      The bar names the page, so the heading would be the same words twice. It
-      is here for the document's structure and for anything reading the page
-      rather than looking at it.
-    -->
-    <h1 class="sr-only">Color Chart</h1>
-
     ${block}
 
     <!--
