@@ -314,7 +314,9 @@ function cv_wc_strip( array $plates, $lead = null ): string {
 
 /** Where a clicked photograph opens. Empty and hidden until the script fills it. */
 function cv_wc_book_view(): string {
-	return '<div class="wc-book-view" data-book-view hidden><button type="button" class="panel-close">Close</button><figure class="wc-book-plate" data-book-plate></figure></div>';
+	return '<div class="wc-book-view" data-book-view hidden><button type="button" class="panel-close">Close</button><figure class="wc-book-plate" data-book-plate></figure></div>'
+		. '<button type="button" class="wc-book-step is-prev" data-book-step="-1" aria-label="Previous photograph">' . cv_step_chevron( -1 ) . '</button>'
+		. '<button type="button" class="wc-book-step is-next" data-book-step="1" aria-label="Next photograph">' . cv_step_chevron( 1 ) . '</button>';
 }
 
 /**

@@ -1,5 +1,5 @@
 import { html, join, raw, type Html } from './html.ts';
-import { scrollCue } from './scroll-cue.ts';
+import { scrollCue, stepChevron } from './scroll-cue.ts';
 import { responsiveImage } from './image.ts';
 import type { ProjectImage } from '../content/types.ts';
 import { withBase } from '../content/paths.ts';
@@ -180,7 +180,6 @@ function aboutOverlay(): Html {
         </section>
       </div>
       <address class="about-contact">
-        <a href="tel:${ABOUT_CARD.phone.replace(/\s+/g, '')}">${ABOUT_CARD.phone}</a>
         ${join(ABOUT_CARD.emails.map((email) => html`<a href="mailto:${email}">${email}</a>`))}
       </address>
       <p class="about-foot"><b>${ABOUT_CARD.name}</b> ${ABOUT_COPYRIGHT}</p>
@@ -230,10 +229,10 @@ function reelSizes(image: ProjectImage): string {
 /** The reel's own chevrons: back round the loop, and on. */
 function aboutReelSteps(): Html {
   return html`<button type="button" class="about-reel-step is-prev" data-about-reel-step="-1" aria-label="Earlier photographs" hidden>
-      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="M8 1 1 8l7 7" /></svg>
+      ${stepChevron(-1)}
     </button>
     <button type="button" class="about-reel-step is-next" data-about-reel-step="1" aria-label="More photographs" hidden>
-      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="m1 1 7 7-7 7" /></svg>
+      ${stepChevron(1)}
     </button>`;
 }
 
@@ -261,10 +260,10 @@ function aboutViewer(): Html {
  */
 function aboutSteps(): Html {
   return html`<button type="button" class="about-viewer-step is-prev" data-about-step="-1" aria-label="Previous photograph">
-      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="M8 1 1 8l7 7" /></svg>
+      ${stepChevron(-1)}
     </button>
     <button type="button" class="about-viewer-step is-next" data-about-step="1" aria-label="Next photograph">
-      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="m1 1 7 7-7 7" /></svg>
+      ${stepChevron(1)}
     </button>`;
 }
 

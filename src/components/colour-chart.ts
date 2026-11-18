@@ -206,7 +206,7 @@ export function colourChart(): Html {
     -->
     <p class="chart-thanks chart-in" style="${arriving(2)}">${
       photographs.length
-        ? html`<a href="#chart-photographs" data-panel-open="chart-photographs">Thanks to everyone!</a>`
+        ? html`<a class="hrow" href="#chart-photographs" data-panel-open="chart-photographs">Thanks to everyone!</a>`
         : 'Thanks to everyone!'
     }</p>
 
@@ -272,8 +272,14 @@ export function chartPhotographs(): Html {
  *
  * The address it sends to is not here. It is in the handler's environment, so
  * the page that offers to write to Claudia never says where to.
+ *
+ * `desk` says which form this is, and so where the handler sends it: the
+ * Colour Chart's orders go to Claudia, the Gallery's inquiries to the Alzueta
+ * gallery (Frank, 2026-11-18). Both addresses are the handler's alone.
  */
-export function inquiries(): Html {
+export type InquiryDesk = 'chart' | 'gallery';
+
+export function inquiries(desk: InquiryDesk = 'chart'): Html {
   const field = (
     id: string,
     label: string,
@@ -333,6 +339,7 @@ export function inquiries(): Html {
         <input id="inq-website" name="website" type="text" tabindex="-1" autocomplete="off" />
       </div>
       <input type="hidden" name="started" value="" data-inquiries-started />
+      <input type="hidden" name="desk" value="${desk}" />
 
       <!-- Cloudflare's widget is rendered in here, and only if a key is set. -->
       <div class="inq-check" data-inquiries-check></div>

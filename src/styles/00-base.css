@@ -634,6 +634,16 @@ body.is-locked { overflow: hidden; }
    first movement worth the name, and never takes it off. */
 html.is-scrolled .scroll-cue { opacity: 0; }
 
+/*
+ * The same chevron on its side: every viewer's Previous and Next
+ * (`stepChevron`, components/scroll-cue.ts). The cue's size and weight, so the
+ * arrows that turn the photographs are the arrow that asks for the scroll
+ * (Frank, 2026-11-18). Each viewer's button draws it in the negative, as the
+ * start page does, because the arrows are big enough now to cross a picture.
+ */
+.step-chevron { display: block; width: calc(var(--cue-size) * 16 / 28); height: auto; overflow: visible; }
+.step-chevron path { stroke-width: var(--cue-stroke); }
+
 /* The gallery's: paper behind it and nothing else, so it is simply the ink. */
 .scroll-cue-ink { color: var(--ink); }
 
@@ -667,7 +677,8 @@ html.is-scrolled .scroll-cue { opacity: 0; }
 
 /* No room to spare, and a phone's own scrollbar already says the page is long. */
 @media (max-width: 899px) {
-  .scroll-cue { bottom: 1.1rem; --cue-size: 2rem; }
+  :root { --cue-size: 2rem; }
+  .scroll-cue { bottom: 1.1rem; }
 }
 
 /* The phone's bar is three bars and a screen of its own: 09-phone.css. */

@@ -11,7 +11,7 @@ import { commissionedList } from '../components/commissioned.ts';
 import { sheetBody } from '../components/sheet.ts';
 import { SHEETS } from '../content/commissioned-sheets.ts';
 import { groupCommissioned } from '../content/groups.ts';
-import { yearRail } from '../components/years.ts';
+import { yearRail, sideInquiries } from '../components/years.ts';
 import { whatsColorOpening, whatsColorEdition, whatsColorFilm } from '../components/whats-color.ts';
 import { chartPhotographs, colourChart, inquiries } from '../components/colour-chart.ts';
 import { EDITIONS, allParticipants, type Edition } from '../content/whats-color.ts';
@@ -48,7 +48,10 @@ export function artworkPage(works: readonly Project[], years: readonly YearColou
     title: 'Artwork',
     description: TAGLINE,
     path: '/artwork/',
-    rail: yearRail(years),
+    // Inquiries stands over the years and opens the same form the Colour
+    // Chart's order does, sent to the gallery (Frank, 2026-11-18).
+    rail: html`${sideInquiries()}${yearRail(years)}`,
+    overlays: inquiries('gallery'),
     // The pile fills the screen and does not read as the top of a document.
     cue: 'ink',
     controls: gridControls([], true, works.length),
@@ -350,7 +353,8 @@ function plateStage(work: Project, name: string, under: Html = html``): Html {
 /**
  * After the designer's sheet of 11 November: the painting and the caption
  * side by side and centred on the page together, the caption centred on the
- * painting's middle — the title and the medium, then the size and the year —
+ * painting's middle — the title and the medium, then the size (no year: Frank,
+ * 2026-11-18, though the gallery's year list still reads it from the data) —
  * and under the painting its other pictures and the work's place in the
  * archive. The arrangement itself is in the stylesheet (01-grid.css, THE
  * DETAIL PAGE); client/views.ts only sizes the painting by its painted part.
@@ -366,7 +370,6 @@ export function artworkDetailPage(
   around: readonly Project[] = [],
 ): Html {
   const name = workTitle(work);
-  const { year } = work.metadata;
   const dimensions = sizeOf(work);
   const materials = techniqueOf(work);
   const collection = collectionOf(work);
@@ -393,8 +396,7 @@ export function artworkDetailPage(
           ${materials ? html`<p class="detail-medium">${materials}</p>` : ''}
         </div>
         <div class="detail-facts">
-          ${dimensions ? html`<p class="detail-size">${dimensions}</p>` : ''}
-          ${year ? html`<p class="detail-year">${String(year)}</p>` : ''}
+          ${dimensions && dimensions !== name ? html`<p class="detail-size">${dimensions}</p>` : ''}
         </div>
       </div>
       <nav class="detail-pager" aria-label="Between works">

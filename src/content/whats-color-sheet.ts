@@ -193,6 +193,8 @@ export const SHEET_II: readonly SheetSlot[] = [
   { who: 'Escobedo Soliz', col: 3 },
 
   { who: 'Marc Morro', col: 1, lead: 0.09 },
+  // No answer; on the page as its name and its colour, at Claudia's ask.
+  { who: 'Cierto Estudio', col: 2 },
 ];
 
 /**
@@ -238,7 +240,7 @@ export const SAYS_III_SHEET: readonly string[] = [
  */
 export const SHEET_III: readonly SheetSlot[] = [
   { strip: REEL_III, lead: 0 },
-  { say: 0, lead: 0.1199 },
+  { say: 0, lead: 0.0415 },
 
   { who: 'Marc G\u00f3mez del Moral', col: 1, lead: 0.0614 },
   { who: 'Jose Javier Serrano', col: 2 },

@@ -76,9 +76,9 @@ function cv_editorial_body( array $item ): string {
 	$out .= '</div>';
 	if ( $n > 1 ) {
 		$out .= '<nav class="reader-nav" aria-label="Images">'
-			. '<button type="button" class="reader-step" data-figure-step="-1" aria-label="Previous image"><span aria-hidden="true">&#8592;</span></button>'
+			. '<button type="button" class="reader-step" data-figure-step="-1" aria-label="Previous image">' . cv_step_chevron( -1 ) . '</button>'
 			. '<p class="reader-counter" data-figure-count data-template="{n} / {total}"></p>'
-			. '<button type="button" class="reader-step" data-figure-step="1" aria-label="Next image"><span aria-hidden="true">&#8594;</span></button>'
+			. '<button type="button" class="reader-step" data-figure-step="1" aria-label="Next image">' . cv_step_chevron( 1 ) . '</button>'
 			. '</nav>';
 	}
 	return $out . '</div></div></div>';

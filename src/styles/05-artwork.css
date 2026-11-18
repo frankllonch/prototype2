@@ -255,8 +255,7 @@
     line-height: inherit;
   }
   .detail-title { font-size: inherit; }
-  .detail-title + .detail-medium,
-  .detail-size + .detail-year { margin-top: var(--work-pair); }
+  .detail-title + .detail-medium { margin-top: var(--work-pair); }
   .detail-facts { margin-top: var(--work-break); }
 
   .detail-stage { order: 2; position: static; margin-top: var(--work-plate); }
@@ -507,6 +506,26 @@
     -webkit-tap-highlight-color: transparent;
   }
   .year.is-current { transform: scale(var(--wheel-zoom)); }
+
+  /* "Inquiries" on the phone: over the wheel, in the middle where the current
+     year stands, at 30 to the years' 40 as on a wide screen. Drawn as the
+     years are, as its negative, so it reads black over white paper. */
+  .side-inquiries,
+  html.js .side-inquiries {
+    top: auto;
+    left: 50%;
+    bottom: calc(18 * var(--p) * 2 + 28 * var(--p) * 1.25 + env(safe-area-inset-bottom, 0px));
+    margin: 0;
+    transform: translateX(-50%);
+    font-size: calc(21 * var(--p));
+    color: #fff;
+    mix-blend-mode: difference;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    animation: none;
+    -webkit-tap-highlight-color: transparent;
+  }
   .year-swatch { display: none; }
   .year-label { display: block; margin: 0; color: inherit; }
 }

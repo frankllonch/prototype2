@@ -4,7 +4,7 @@ import type { ProjectImage } from './types.ts';
  * About, as the designer's sheet sets it: the capitals lead, the studio
  * photographs in a row, the biography, the record of exhibitions and the
  * private collections in five columns, how to reach her, and the line of
- * copyright. (The card's name, phone and emails are still kept in ABOUT_CARD.)
+ * copyright. (The card's name and emails are still kept in ABOUT_CARD.)
  *
  * Typed here rather than read from WordPress. The source About page was one run
  * of nested HTML that had to be cut apart by guesswork to lay out at all, and
@@ -17,7 +17,6 @@ export interface AboutCard {
   readonly name: string;
   readonly city: string;
   readonly year: string;
-  readonly phone: string;
   readonly emails: readonly string[];
 }
 
@@ -89,7 +88,6 @@ export const ABOUT_CARD: AboutCard = {
   name: 'Claudia Valsells',
   city: 'Barcelona',
   year: '1969',
-  phone: '+34 609 76 91 86',
   emails: ['editorial@alzuetagallery.com', 'claudia@claudiacolor.com'],
 };
 
