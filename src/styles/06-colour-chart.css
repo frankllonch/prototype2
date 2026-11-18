@@ -72,6 +72,23 @@
   padding: var(--chart-top) var(--pad) calc(var(--pt) * 10);
 }
 
+/*
+ * The whole page set lower (Frank, 2026-11-18): 30% of the screen further down,
+ * as long as it all still stands on one screen.
+ *
+ * An empty first item that grows into the room left over, up to --chart-drop
+ * and no more. Growing comes before the footer's auto margin takes what is
+ * left, so on a tall screen the page drops the full 30% and the rest still
+ * goes under the thanks; on a short one it drops only as far as there is room,
+ * and where there is none it does not drop at all. The thanks' own lift above
+ * the foot is a margin, so it is kept whole either way.
+ */
+.chart-page::before {
+  content: '';
+  flex: 1 1 0;
+  max-height: var(--chart-drop, 30vh);
+}
+
 /* The line at the foot goes to the foot. */
 .chart-footer { margin-top: auto; }
 
@@ -268,7 +285,14 @@
  * page stands on one screen and that is not negotiable. The figures above are
  * what paid for it.
  */
+/*
+ * The link in it lights up the way the Exhibitions and Commissioned rows do
+ * (Frank, 2026-11-18): it carries their `.hrow`, so it takes their hover and
+ * focus colour from 01-grid.css and a new hue each time from hover-list.ts.
+ * Ink is the fallback without scripting, as it is for the lists.
+ */
 .chart-thanks {
+  --exh-hover: var(--ink);
   margin: calc(var(--pt) * 18) 0 var(--chart-thanks-lift, 10vh);
   text-align: center;
   font-size: calc(var(--pt) * 45);
