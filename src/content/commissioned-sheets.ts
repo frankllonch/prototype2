@@ -82,7 +82,6 @@ export const SHEETS: Readonly<Record<string, Sheet>> = {
     lines: ['BRAVA ARTS WITH ALZUETA GALLERY'],
     when: '2022',
     body: `
-      <p>At @brava_arts<br>With @alzuetagallery</p>
       <p>BRAVA! is where @alzueta_gallery has its creation center where develops its artistic residency program to support the creativity and work of contemporary artist of our time. I was so glad to be there, 500m industrial building to work in the heart of Costa Brava.</p>
       <p class="is-style-note is-20">Photography by <a href="https://www.juditbou.com"><b>JUDIT BOU</b></a></p>`,
   },
