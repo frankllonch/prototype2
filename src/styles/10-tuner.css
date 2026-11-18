@@ -77,3 +77,15 @@ html[data-tune] .tuner-pile { right: 372px; }
   box-shadow: 0 4px 16px rgb(0 0 0 / 0.3);
   isolation: isolate; contain: layout paint;
 }
+
+/* The panel holds still: Try it and the tabs at the top, one pane below. */
+.tuner-pile .tuner-body { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: visible; }
+.tuner-pile .tuner-pane { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.tuner-pile .tuner-pane > .tuner-section { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.tuner-pile .tuner-pane .tuner-fields { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+.tuner-pile .tuner-pane > [hidden] { display: none; }
+.tuner-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin: 12px 0 10px; padding-bottom: 10px; border-bottom: 1px solid rgb(255 255 255 / 0.1); padding-top: 10px; border-top: 1px solid rgb(255 255 255 / 0.1); }
+.tuner-pile .tuner-pane .tuner-section h3 { display: none; }
+.tuner-tabs button { font-weight: 600 !important; }
+.tuner-pile .tuner-row { padding: 2px 0; }
+.tuner-pile .tuner-note { margin: 6px 0; }

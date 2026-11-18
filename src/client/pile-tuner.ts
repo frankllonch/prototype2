@@ -186,7 +186,17 @@ export function initPileTuner(): void {
       style.textContent = gridCss(pile);
       // The grid's new shape has to be laid out before it is measured.
       requestAnimationFrame(tell);
-    } else tell();
+    } else {
+      /*
+       * Changed while the grid is at rest, the change would be invisible: the
+       * opening has already happened. So the page goes back to the top, where
+       * the new start shows and scrolling down plays it.
+       */
+      if (pile.freeze === null && window.scrollY >= window.innerHeight * scrollSpan() - 2) {
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+      }
+      tell();
+    }
     save();
   };
 
@@ -224,6 +234,8 @@ export function initPileTuner(): void {
     tell();
   };
   hold.addEventListener('change', setFreeze);
+  // Scrolling is how the opening is played, so it always lets go of a hold.
+  window.addEventListener('wheel', () => { if (hold.checked) { hold.checked = false; setFreeze(); } }, { passive: true });
   at.addEventListener('input', () => { hold.checked = true; setFreeze(); });
   const holdLabel = el('label', '');
   holdLabel.append(hold, ' Hold');
@@ -296,15 +308,49 @@ export function initPileTuner(): void {
     navigator.clipboard?.writeText(payload).then(done, () => { window.prompt('Copy these settings:', payload); });
   }), copied);
 
+  /*
+   * Three tabs rather than one long column: each fits on the screen, so the
+   * panel never has to scroll, and the buttons never slide out of sight.
+   */
+  const panes: Record<string, HTMLElement> = {
+    Opening: section('Opening', picker, note, fieldsBox),
+    Motion: section('Motion', motionBox),
+    Grid: section('Grid at rest', gridBox),
+  };
+  const tabs = el('div', 'tuner-tabs');
+  const show = (name: string) => {
+    for (const [k, pane] of Object.entries(panes)) pane.hidden = k !== name;
+    for (const b of tabs.querySelectorAll('button')) b.setAttribute('aria-pressed', String(b.textContent === name));
+    try { sessionStorage.setItem('cv-pile-tab', name); } catch { /* private window */ }
+  };
+  for (const name of Object.keys(panes)) tabs.append(button(name, () => show(name)));
+  let first = 'Opening';
+  try { first = sessionStorage.getItem('cv-pile-tab') ?? first; } catch { /* default */ }
+
   const body = el('div', 'tuner-body');
-  body.append(
-    section('Try it', scrubRow, tryRow),
-    section('Opening', picker, note, fieldsBox),
-    section('Motion', motionBox),
-    section('Grid at rest', gridBox),
-    out,
-  );
+  const pane = el('div', 'tuner-pane');
+  pane.append(...Object.values(panes));
+  body.append(section('Try it', scrubRow, tryRow), tabs, pane, out);
   panel.append(head, body);
+  show(first in panes ? first : 'Opening');
+
+  /*
+   * The wheel over the panel scrolls the page, exactly as if the panel were
+   * not there — the opening is scroll-driven, and the panel sits over a third
+   * of the window. Only a pane taller than a short window keeps its own
+   * scrollbar, which can still be dragged.
+   */
+  panel.addEventListener('wheel', (e) => {
+    if ((e.target as Element).closest?.('select')) return;
+    // A pane too tall for a short window scrolls its own knobs while it can;
+    // the tabs and buttons above it stay where they are.
+    const list = (e.target as Element).closest?.<HTMLElement>('.tuner-fields');
+    const down = e.deltaY > 0;
+    const room = list && (down ? list.scrollHeight - list.clientHeight - list.scrollTop > 1 : list.scrollTop > 0);
+    if (room) return;
+    e.preventDefault();
+    window.scrollBy({ top: e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY, left: 0, behavior: 'instant' as ScrollBehavior });
+  }, { passive: false });
   drawEffect();
   drawMotion();
   drawGrid();
