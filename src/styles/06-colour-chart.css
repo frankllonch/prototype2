@@ -111,6 +111,35 @@
   letter-spacing: 0;
 }
 
+/*
+ * The title over the statement (Frank, 2026-11-18): semibold 45 in capitals,
+ * the size Order yours is set at, standing in the room the drop leaves above
+ * the first line. Out of the flow, hung from the statement's top edge, so the
+ * statement and everything under it stay exactly where they were.
+ */
+.chart-statement { position: relative; }
+
+.chart-title {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  margin: 0 0 calc(var(--pt) * 30);
+  font-size: calc(var(--pt) * 45);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+/* On a screen too short for the full drop, keep at least the title's room, so
+   it never runs up under the bar: 45 of type and 30 of air, less the 40 the
+   page already stands below the bar. A tall screen drops further than this
+   anyway, so there nothing moves. */
+@media (min-width: 900px) {
+  .chart-page::before { min-height: calc(var(--pt) * 45); }
+}
+
 .chart-statement p { margin: 0 0 1em; }
 .chart-statement p:last-child { margin-bottom: 0; }
 
@@ -359,6 +388,14 @@
     position: static;
     min-height: 0;
     padding: var(--chart-phone-top) var(--phone-pad) var(--chart-phone-foot);
+  }
+
+  /* No room above the statement under the phone's bar, so here the title is
+     in the flow, at the size of Order yours, one empty line over the text. */
+  .chart-title {
+    position: static;
+    margin: 0 0 var(--chart-phone-para);
+    font-size: var(--chart-phone-large);
   }
 
   /* Medium, capitals and no tracking come from the rule above. */
