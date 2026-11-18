@@ -17,7 +17,8 @@ import type { DocumentEntry } from './whats-color-document.ts';
  *
  * Cierto Estudio was invited and is named in the roster, but the document
  * carries no answer, which is why the count is twenty-seven of twenty-eight.
- * It is on the page all the same, as its name and its colour (Light green).
+ * Its colour name (Light green) is recorded below; with no answer it has no
+ * entry on the page.
  *
  * Paragraphs are separated by a blank line and the component splits on it.
  */
@@ -26,8 +27,8 @@ import type { DocumentEntry } from './whats-color-document.ts';
  * Colour names, no codes. Claudia's sheet for this edition (SEGONA EDICIO AMB
  * NOMS COLORS, November 2026) names the colour of fourteen of these guests, in
  * English, and gives no AC reference, so the page shows the name in its
- * highlight and nothing else. "Corail" and "ocher" are spelt as she spells
- * them; her "ULTTRAMARINE" is a slip and is not kept. The others are not on
+ * highlight and nothing else. Her "Corail" is set as Coral and her
+ * "ULTTRAMARINE" as Ultramarine, at Frank's ask. The others are not on
  * her sheet, and their highlight is still the signed-off colour in
  * `whats-color-colours.ts` with no name under it.
  */
@@ -175,7 +176,7 @@ Què és el color sinó un altre material de construcció més?`,
   },
   {
     name: 'Loca Studio',
-    colourName: 'Corail',
+    colourName: 'Coral',
     answer: `¿Qué es el color? El color es luz. Muy evidente e inmediato, pero tan cierto y científico como poético y romántico. Una vida en blanco y negro, más allá de algo del pasado, se asocia a lo lúgubre, lo triste, lo apagado; sin embargo, la vida en color es alegría, despertar, es vida en sí misma.
 
 Así que como arquitectos decimos sí, totalmente sí al color, a espacios llenos de vida. El color es complejo y difícil de aprender, de controlar, de trabajar, pero una vez te liberas y experimentas es un aliado maravilloso para crear. ¡Viva el color!`,

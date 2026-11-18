@@ -6,16 +6,16 @@ import {
   SHEET_I,
   SHEET_II,
   SHEET_III,
-  CHART_II,
   type ChartBar,
   type Plate,
   type SheetSlot,
 } from '../content/whats-color-sheet.ts';
 
-/** The editions with a colour chart at their foot, by numeral. */
-const CHARTS: Record<string, readonly ChartBar[] | undefined> = {
-  II: CHART_II,
-};
+/**
+ * The editions with a colour chart at their foot, by numeral. Edition II had
+ * one (CHART_II in whats-color-sheet.ts) until Frank took it off, 18 Nov 2026.
+ */
+const CHARTS: Record<string, readonly ChartBar[] | undefined> = {};
 
 /** The editions the designer composed by hand, by numeral. */
 const SHEETS: Record<string, readonly SheetSlot[] | undefined> = {
