@@ -157,9 +157,9 @@ export function initTransitions(): void {
  * it climbs to the top with the film and the colour comes out under the
  * name; going anywhere else it used to stay where it was while the page
  * faded, and the next page then opened with the bar at the top — a jump.
- * Now it does the same climb: the film goes to paper, the bar slides up to
- * where it stands on every other page, the colour drops onto the name you
- * chose, and the page you chose comes up under a bar already standing just
+ * Now it does the same climb: the bar slides up over the film to where it
+ * stands on every other page, the film goes just before the colour drops
+ * onto the name you chose (2026-11-19), and the page you chose comes up under a bar already standing just
  * so. The colour is handed over in a note, so the next page wears it from
  * its first frame and does not drop it a second time (components/layout.ts).
  *
@@ -175,7 +175,7 @@ function fromStart(link: HTMLAnchorElement): boolean {
 
 /**
  * Marks the choice and says how long the way out takes, in milliseconds: the
- * four beats as the stylesheet sets them (THE WAY OUT OF THE START PAGE in
+ * beats as the stylesheet sets them (THE WAY OUT OF THE START PAGE in
  * 00-base.css), so the timings live in one place.
  */
 function choose(link: HTMLAnchorElement, url: URL): number {
@@ -191,7 +191,13 @@ function choose(link: HTMLAnchorElement, url: URL): number {
     sessionStorage.setItem(HELD_KEY, JSON.stringify({ path: url.pathname, hue: n, at: Date.now() }));
   } catch { /* private window: the next page simply drops its own block */ }
 
-  return beats('--start-veil', '--start-pause', '--start-climb', '--start-swatch', '--start-hold');
+  // Until the drop and what follows it, or until the film has gone, if the
+  // film is set to go after the colour has dropped (a negative lead).
+  const drop = beats('--start-pause', '--start-climb', '--start-settle');
+  return Math.max(
+    drop + beats('--start-swatch', '--start-hold'),
+    drop - beats('--start-film-lead'),
+  );
 }
 
 /** The sum of the stylesheet's beats named, in milliseconds. */
@@ -201,7 +207,7 @@ function beats(...names: string[]): number {
     const v = style.getPropertyValue(name).trim();
     return (Number.parseFloat(v) || 0) * (v.endsWith('ms') ? 1 : 1000);
   };
-  return names.reduce((total, name) => total + ms(name), 0) || 1100;
+  return names.reduce((total, name) => total + ms(name), 0);
 }
 
 /**

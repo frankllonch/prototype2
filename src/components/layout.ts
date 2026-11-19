@@ -383,6 +383,14 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     setTimeout(function () { document.documentElement.classList.remove('wc-arriving') }, 1500);
     setTimeout(function () { document.documentElement.classList.remove('wc-swatch-drop') }, 700);
   } } catch (e) {}
+// Trying the ways the start page's film can go and come back (THE WAY OUT
+// OF THE START PAGE, 00-base.css): ?film=wipe, fade, cut or blur holds for
+// the visit; ?film=off goes back to the stylesheet's own setting.
+try { var film = new URLSearchParams(location.search).get('film');
+  if (film === 'off') sessionStorage.removeItem('cv-film');
+  else if (film && /^(fade|cut|wipe|blur)$/.test(film)) sessionStorage.setItem('cv-film', film);
+  film = sessionStorage.getItem('cv-film');
+  if (film) document.documentElement.style.setProperty('--start-film-style', 'film-' + film); } catch (e) {}
 // The page's colour, drawn here rather than by client/current.ts so that the
 // block in the bar is the right colour on the first frame. Drawn by the scripts,
 // it was painted once in the list's first colour and then changed, on every
