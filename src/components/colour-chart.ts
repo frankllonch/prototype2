@@ -10,7 +10,8 @@ import { ENDPOINT, TURNSTILE_SITE_KEY } from '../content/inquiries.ts';
  *
  * An ordinary page that scrolls, as About does: no pinned screen and no run
  * behind it. The title and the statement are typed in on arrival
- * (`client/chart.ts`); everything under them — Order yours, the cost, the two
+ * (`client/chart.ts`): the title and the first paragraph by themselves, the
+ * rest by the reader's scroll, forwards only; everything under them — Order yours, the cost, the two
  * sections in three columns, the thanks and the line at the foot — comes in
  * out of a blur as it reaches the screen.
  *
@@ -51,9 +52,18 @@ export function colourChart(): Html {
   const set = SET.map((t) => sections.find((s) => s.title === t)).filter((s): s is ChartSection => !!s);
   return html`<div class="chart" data-chart>
   <div class="chart-page">
-    <div class="chart-statement" data-chart-type>
-      <h1 class="chart-title">${TITLE}</h1>
-      ${join(statement.map((p) => html`<p>${raw(p)}</p>`))}
+    <!--
+      The opening: the title and the statement, held in place while the
+      reader scrolls the rest of it into being (client/chart.ts adds the run
+      of scroll behind it). Without the script it is simply the top of the page.
+    -->
+    <div class="chart-opening" data-chart-opening>
+      <div class="chart-stage" data-chart-stage>
+        <div class="chart-statement" data-chart-type>
+          <h1 class="chart-title">${TITLE}</h1>
+          ${join(statement.map((p, i) => html`<p${i === 0 ? raw(' data-chart-auto') : ''}>${raw(p)}</p>`))}
+        </div>
+      </div>
     </div>
 
     <!--

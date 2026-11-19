@@ -51,7 +51,22 @@
 .chart-page {
   display: flex;
   flex-direction: column;
-  padding: var(--chart-top) var(--pad) var(--chart-end);
+  padding: 0 var(--pad) var(--chart-end);
+}
+
+/*
+ * The opening holds still while the statement is typed by the scroll: the
+ * stage is stuck to the top of the screen and a run of empty height under it
+ * (`.chart-runway`, made by client/chart.ts, which also sets the stage's
+ * `top` so a stage taller than the screen shows its foot) is what the reader
+ * travels. When the run is spent the stage lets go and the page goes on.
+ * The page's top margin is the stage's, so it is pinned exactly where it
+ * stood: the title on Commissioned's line.
+ */
+.chart-stage {
+  position: sticky;
+  top: 0;
+  padding-top: var(--chart-top);
 }
 
 /* ----------------------------------------------------------- the statement */
@@ -297,8 +312,9 @@
   }
 
   .chart-page {
-    padding: var(--chart-phone-top) var(--phone-pad) var(--chart-phone-foot);
+    padding: 0 var(--phone-pad) var(--chart-phone-foot);
   }
+  .chart-stage { padding-top: var(--chart-phone-top); }
 
   .chart-title {
     margin: 0 0 var(--chart-phone-para);

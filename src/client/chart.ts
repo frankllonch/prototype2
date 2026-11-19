@@ -1,28 +1,41 @@
 import { reduceMotion } from './env.ts';
 
 /**
- * The Colour Chart, as an ordinary page that scrolls (Frank, 2026-11-19).
+ * The Colour Chart's opening (Frank, 2026-11-19).
  *
- * 1. On arrival the title and the statement type themselves in, a word at a
- *    time, by a clock: the page is not held while they do, and the reader can
- *    scroll at any point. Their first wheel, touch or key finishes the typing
- *    at once, so nothing is still being written behind them.
- * 2. Everything under the statement — Order yours, the cost, Features and
- *    Technical characteristics in their columns, the thanks and the line at
- *    the foot — comes in out of a blur as it reaches the screen, after the
- *    typing, with About's look and About's beat from one column to the next.
+ * 1. On arrival the title and the first paragraph ("Color has always been my
+ *    inspiration: a source of knowledge, a way of life!") type themselves in.
+ * 2. The rest of the statement is typed by the reader: the opening holds
+ *    still over a run of scroll, and each stretch of it types the next words
+ *    — or a tap on the chevron carries the page down the run for them
+ *    (client/scroll-cue.ts). Forwards only, as About is: a word once typed
+ *    stays, and scrolling back up takes nothing away.
+ * 3. When the run is spent the opening lets go and the page scrolls on as any
+ *    page does. Everything under the statement — Order yours, the cost, the
+ *    two sections, the thanks, the line at the foot — comes in out of a blur
+ *    as it reaches the screen, with About's look and beat.
+ *
+ * Typing never jumps: however fast the scroll, the words come at most one a
+ * beat (`WORD_MS`), so a quick flick types quickly rather than all at once.
  *
  * All of it is an enhancement of a page that already stands. The words are
- * split here; the stylesheet hides the statement only under `html.js`, and the
- * page is marked done (`.is-typed`) whenever this gives up or finishes, which
- * shows every word whatever state the spans are in.
+ * split here and the run is made here; the stylesheet hides the statement
+ * only under `html.js`, and `.is-typed` shows every word whatever happened.
  */
 
 /** After the page's own entrance, so the words are not typed behind a veil. */
 const WAIT_MS = 350;
 
-/** One word every this many milliseconds. Less is faster typing. */
+/** At most one word every this many milliseconds. Less is faster typing. */
 const WORD_MS = 32;
+
+/**
+ * How much scroll the reader types with, per word, in screens. More is
+ * slower: the reader has to travel further for each word. The run is at
+ * least RUN_MIN screens, so a short statement still asks for a real scroll.
+ */
+const PER_WORD = 0.02;
+const RUN_MIN = 0.6;
 
 /** Each column comes in this much later than the one to its left, at most. */
 const STAGGER_MS = 260;
@@ -31,20 +44,17 @@ export function initChart(): void {
   const chart = document.querySelector<HTMLElement>('[data-chart]');
   if (!chart) return;
   const typed = chart.querySelector<HTMLElement>('[data-chart-type]');
+  const opening = chart.querySelector<HTMLElement>('[data-chart-opening]');
+  const stage = chart.querySelector<HTMLElement>('[data-chart-stage]');
   const pops = [...chart.querySelectorAll<HTMLElement>('.chart-in')];
 
   const done = () => chart.classList.add('is-typed');
 
-  if (reduceMotion.matches || !typed || !('IntersectionObserver' in window)) {
+  if (reduceMotion.matches || !typed || !opening || !stage || !('IntersectionObserver' in window)) {
     done();
     for (const el of pops) el.classList.add('is-in');
     return;
   }
-
-  const words = splitWords(typed);
-  let shown = 0;
-  let timer = 0;
-  let finished = false;
 
   /* -------------------------------------------------------- the fade-ins */
 
@@ -61,42 +71,95 @@ export function initChart(): void {
     },
     { rootMargin: '0px 0px -8% 0px' },
   );
+  for (const el of pops) seen.observe(el);
 
-  const finish = () => {
-    if (finished) return;
-    finished = true;
-    window.clearTimeout(timer);
-    for (const w of words) w.classList.add('is-written');
-    done();
-    for (const el of pops) seen.observe(el);
-    for (const kind of ['wheel', 'touchstart', 'keydown'] as const) window.removeEventListener(kind, finish);
+  /* ------------------------------------------------------------- the words */
+
+  const auto = [...typed.querySelectorAll<HTMLElement>('.chart-title, [data-chart-auto]')];
+  const autoWords = auto.flatMap(splitWords);
+  const restWords = [...typed.querySelectorAll<HTMLElement>('p:not([data-chart-auto])')].flatMap(splitWords);
+  const words = [...autoWords, ...restWords];
+
+  /* --------------------------------------------------------------- the run */
+
+  const runway = document.createElement('div');
+  runway.className = 'chart-runway';
+  runway.setAttribute('aria-hidden', 'true');
+  opening.append(runway);
+
+  let run = 1;
+  const measure = () => {
+    run = Math.round(Math.max(RUN_MIN, restWords.length * PER_WORD) * window.innerHeight);
+    runway.style.height = `${run}px`;
+    // A stage taller than the screen is held with its foot on the screen's,
+    // so the words being typed are always in view.
+    stage.style.top = `${Math.min(0, window.innerHeight - stage.offsetHeight)}px`;
+    // Where the run ends, for the chevron to carry the reader to.
+    chart.dataset.chartEnd = String(opening.offsetTop + run);
   };
+  measure();
+  window.addEventListener('resize', measure);
 
   /* ------------------------------------------------------------ the typing */
 
-  // A reload or a back-navigation lands where the reader was: the page simply
-  // stands there, typed.
-  if (window.scrollY > window.innerHeight * 0.1) return finish();
+  let shown = 0;
+  let target = 0;
+  let timer = 0;
 
-  const step = () => {
+  const tick = () => {
+    timer = 0;
+    if (shown >= target) return;
     words[shown++]?.classList.add('is-written');
-    if (shown >= words.length) finish();
-    else timer = window.setTimeout(step, WORD_MS);
+    if (shown >= words.length) {
+      done();
+      window.removeEventListener('scroll', onScroll);
+      return;
+    }
+    timer = window.setTimeout(tick, WORD_MS);
+  };
+  const aim = (n: number) => {
+    // Forwards only: the target never comes back down.
+    target = Math.max(target, Math.min(words.length, n));
+    if (!timer && shown < target) tick();
   };
 
-  for (const kind of ['wheel', 'touchstart', 'keydown'] as const) {
-    window.addEventListener(kind, finish, { passive: true, once: true });
-  }
-  // Scrolled by anything else — a scrollbar drag, the cue — finishes it too.
-  window.addEventListener('scroll', () => { if (window.scrollY > 4) finish(); }, { passive: true });
+  let autoDone = false;
+  const onScroll = () => {
+    // The reader's words follow the clock's: nothing they scroll is typed
+    // until the opening has finished typing itself, and then it catches up.
+    if (!autoDone) return;
+    const travelled = window.scrollY - opening.offsetTop;
+    const share = Math.max(0, Math.min(1, travelled / run));
+    aim(autoWords.length + Math.ceil(share * restWords.length));
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
 
-  timer = window.setTimeout(step, WAIT_MS);
+  // A reload or a back-navigation that lands down the page: it stands typed.
+  if (window.scrollY > window.innerHeight * 0.1) {
+    autoDone = true;
+    target = shown = words.length;
+    for (const w of words) w.classList.add('is-written');
+    done();
+    return;
+  }
+
+  window.setTimeout(() => {
+    aim(autoWords.length);
+    // When the clock's words are in, whatever the reader has scrolled since
+    // is typed after them.
+    const wait = () => {
+      if (shown < autoWords.length) return void window.setTimeout(wait, WORD_MS);
+      autoDone = true;
+      onScroll();
+    };
+    wait();
+  }, WAIT_MS);
 }
 
 /**
  * Every word in the element wrapped in its own span, in reading order, leaving
- * the markup around them (line breaks, the title, the paragraphs) as it is.
- * The spaces stay outside the spans, so the lines break exactly as they did.
+ * the markup around them (line breaks, the paragraphs) as it is. The spaces
+ * stay outside the spans, so the lines break exactly as they did.
  */
 function splitWords(root: HTMLElement): HTMLElement[] {
   const nodes: Text[] = [];
