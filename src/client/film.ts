@@ -103,6 +103,8 @@ function startFilm(): void {
     void ask();
   };
 
+  initSound(video, ask);
+
   void ask().then((playing) => {
     if (playing) return;
     for (const type of GESTURES) {
@@ -121,6 +123,37 @@ function startFilm(): void {
   phone.addEventListener('change', () => {
     if (phone.matches) video.pause();
     else void ask();
+  });
+}
+
+/**
+ * The sound button in the film's corner (components/whats-color.ts). The film
+ * starts silent; a click gives it its sound and another takes it away. A click
+ * is a gesture, so the browser lets the sound through and, if the film had
+ * been refused a start, starts it too. Should it still say no, the film goes
+ * back to silent rather than stopping.
+ */
+function initSound(video: HTMLVideoElement, ask: () => Promise<boolean>): void {
+  const sound = document.querySelector<HTMLButtonElement>('.wc-film-sound');
+  if (!sound) return;
+  sound.hidden = false;
+
+  const show = (on: boolean) => {
+    sound.setAttribute('aria-pressed', String(on));
+    sound.setAttribute('aria-label', on ? 'Sound off' : 'Sound on');
+  };
+
+  sound.addEventListener('click', (event) => {
+    event.preventDefault();
+    const on = video.muted;
+    video.muted = !on;
+    show(on);
+    if (!on) return;
+    void video.play().catch(() => {
+      video.muted = true;
+      show(false);
+      void ask();
+    });
   });
 }
 

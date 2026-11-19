@@ -562,6 +562,44 @@
 }
 
 /*
+ * Sound on and off, in the film's top left corner: the scroll cue's size and
+ * weight, set in from the corner by the cue's own distance from the foot, and
+ * like it the negative of whatever frame is behind it. Above the dimming
+ * layer, inside the film's own stacking context, so the blend is with the
+ * picture.
+ */
+.wc-film-sound {
+  position: absolute;
+  top: 1.9rem;
+  left: 1.9rem;
+  z-index: 1;
+  width: var(--cue-size);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: rgb(252, 252, 250);
+  mix-blend-mode: difference;
+  cursor: pointer;
+}
+.wc-film-sound[hidden] { display: none; }
+/* A target a little larger than the drawing, so the click need not be exact. */
+.wc-film-sound::before {
+  content: '';
+  position: absolute;
+  inset: -0.9rem;
+}
+.wc-film-sound:focus-visible { outline: 1px solid currentColor; outline-offset: 0.6rem; }
+.wc-film-sound svg { display: block; width: 100%; height: auto; overflow: visible; }
+.wc-film-sound path { stroke-width: var(--cue-stroke); }
+.wc-film-sound .wc-sound-on,
+.wc-film-sound[aria-pressed='true'] .wc-sound-off { display: none; }
+.wc-film-sound[aria-pressed='true'] .wc-sound-on { display: inline; }
+/* No film for reduced motion, so nothing to hear. */
+@media (prefers-reduced-motion: reduce) {
+  .wc-film-sound { display: none; }
+}
+
+/*
  * The film lags the page, so it reads as sinking beneath it.
  *
  * Over the screen it takes to scroll past, the film is slid down 15vh while the
@@ -1481,62 +1519,6 @@ html:has(body.has-film) {
 .wc-more {
   display: block;
   margin-top: var(--wc-more-gap, 1em);
-}
-
-/* The first edition's film, under its text, the full width of the column. */
-.wc-text-film {
-  margin: 2em 0 0;
-  cursor: auto;
-}
-.wc-film-frame {
-  position: relative;
-}
-.wc-text-film video {
-  display: block;
-  cursor: pointer;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 16 / 9;
-  background: var(--ink);
-}
-/*
- * Sound on and off, in the film's top left corner: the scroll cue's size and
- * weight, and like it the negative of whatever frame is behind it.
- */
-.wc-film-sound {
-  position: absolute;
-  top: 1.5rem;
-  left: 1.5rem;
-  width: var(--cue-size);
-  padding: 0;
-  border: 0;
-  background: none;
-  color: rgb(252, 252, 250);
-  mix-blend-mode: difference;
-  cursor: pointer;
-}
-.wc-film-sound[hidden] { display: none; }
-/* A target a little larger than the drawing, so the click need not be exact. */
-.wc-film-sound::before {
-  content: '';
-  position: absolute;
-  inset: -0.9rem;
-}
-.wc-film-sound:focus-visible { outline: 1px solid currentColor; outline-offset: 0.6rem; }
-.wc-film-sound svg { display: block; width: 100%; height: auto; overflow: visible; }
-.wc-film-sound path { stroke-width: var(--cue-stroke); }
-.wc-film-sound .wc-sound-on,
-.wc-film-sound[aria-pressed='true'] .wc-sound-off { display: none; }
-.wc-film-sound[aria-pressed='true'] .wc-sound-on { display: inline; }
-@media (max-width: 899px) {
-  .wc-film-sound { top: 0.9rem; left: 0.9rem; }
-}
-.wc-text-film figcaption {
-  margin-top: 0.6em;
-  font-size: 0.45em;
-  font-weight: 400;
-  line-height: 1.2;
-  text-align: left;
 }
 
 /* Which half shows: cut with scripting, whole without, and never both. */
