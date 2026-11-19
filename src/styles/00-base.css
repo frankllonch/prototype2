@@ -1103,12 +1103,13 @@ html.wc-swatch-drop body.has-film .top [aria-current='page']:is(a, button) {
  * THE WAY OUT OF THE START PAGE — to any page but What's Color, by the bar
  * (client/transitions.ts, `fromStart`).
  *
- * In four beats, one after the other (Frank, 2026-11-17):
+ * In this order (Frank, 2026-11-19 — it used to be film first, then the bar):
  *
- *   1. the film goes to paper, the bar standing still on its middle line
- *   2. a pause, the bar alone on the paper
- *   3. the bar climbs to the top of the window, where it stands on every other
- *      page: slow away, fast through the middle, slow into place
+ *   1. a pause, the bar standing on the film's middle line
+ *   2. the bar climbs, over the film still playing, to the top of the window,
+ *      where it stands on every other page: slow away, fast, slow into place
+ *   3. the bar stands at the top a moment (--start-settle) while the film
+ *      goes, finishing just before the colour drops
  *   4. the colour drops onto the name chosen, as a page's own block drops in
  *      when it opens — and then the next page comes up under a bar standing
  *      exactly so, in the same colour, without dropping it again
@@ -1117,41 +1118,86 @@ html.wc-swatch-drop body.has-film .top [aria-current='page']:is(a, button) {
  * THE KNOBS — every one of them is here; the script reads them to know when
  * to go, so nothing else needs changing:
  *
- *   --start-veil    beat 1: how long the film takes to go
- *   --start-pause   beat 2: how long the bar waits before it climbs
- *   --start-climb   beat 3: how long the climb takes
- *   --start-ease    beat 3: the climb's curve. (0.83, 0, 0.17, 1) is very slow,
- *                   fast, very slow; (0.65, 0, 0.35, 1) is gentler
- *   --start-swatch  beat 4: how long the colour takes to drop
- *   --start-hold    after beat 4: how long it all stands before the next page
+ *   --start-film-lead   WHEN THE FILM GOES. How long before the colour drops
+ *                       the film is completely gone. 0s = gone the very moment
+ *                       the colour drops; bigger = earlier (0.3s: gone as the
+ *                       bar reaches the top; 0.6s: gone mid-climb). A negative
+ *                       value (-0.2s) lets the colour drop first and the film
+ *                       go after it.
+ *   --start-film-out    how long the film takes to go
+ *   --start-film-style  HOW THE FILM GOES (and how it comes back when you
+ *                       return to the start page). One of:
+ *                         film-fade  paper fades in over it (as before)
+ *                         film-cut   no fade: gone in one frame
+ *                         film-wipe  paper rises from the bottom, following
+ *                                    the bar up (coming back, it falls away)
+ *                         film-blur  the film blurs out as the paper comes in
+ *   --start-film-in     how long the film takes to come back, on the way back
+ *   --start-pause       how long the bar waits before it climbs
+ *   --start-climb       how long the climb takes
+ *   --start-ease        the climb's curve. (0.83, 0, 0.17, 1) is very slow,
+ *                       fast, very slow; (0.65, 0, 0.35, 1) is gentler
+ *   --start-settle      how long the bar stands at the top before the colour
+ *                       drops: the room the film has to go in after the climb
+ *   --start-swatch      how long the colour takes to drop
+ *   --start-hold        after the drop: how long it all stands before the
+ *                       next page
+ *   --start-veil        on the way back only: how long the page you leave
+ *                       takes to go to paper
  *
- * And back again, by the name at the top left from any other page: the same
- * beats run backwards, with the same knobs. The block lifts off the page's
- * name as the page goes to paper (--start-veil), the bar comes down to the
- * film's middle line (--start-climb, --start-ease), it waits (--start-pause),
- * and the start page comes up under it, the film fading in (--start-veil).
+ * To try the styles without editing anything, open the start page with
+ * ?film=wipe (or fade, cut, blur); it holds for the rest of the visit, and
+ * ?film=off goes back to the setting here.
+ *
+ * And back again, by the name at the top left from any other page: the block
+ * lifts off the page's name as the page goes to paper (--start-veil), the bar
+ * comes down to the film's middle line (--start-climb, --start-ease), it waits
+ * (--start-pause), and the start page comes up under it, the film coming back
+ * in the --start-film-style chosen (--start-film-in).
  *
  * The climb is the bar's resting offset taken back: it stands at
  * (film-h − film-bar) / 2 and every other page has it at 0, with the same
  * padding over the line.
  */
 :root {
-  --start-veil: 0.6s;
+  --start-film-lead: 0.03s;
+  --start-film-out: 0.22s;
+  --start-film-style: film-fade;
+  --start-film-in: 0.6s;
   --start-pause: 0.01s;
   --start-climb: 0.5s;
   --start-ease: cubic-bezier(0.65, 0, 0.17, 1);
+  --start-settle: 0.25s;
   --start-swatch: 0.3s;
   --start-hold: 0.01s;
-  /* Derived: where the climb and the drop begin. */
-  --start-climb-at: calc(var(--start-veil) + var(--start-pause));
-  --start-drop-at: calc(var(--start-climb-at) + var(--start-climb));
+  --start-veil: 0.6s;
+  /* Derived: where the climb, the drop and the film's going begin. */
+  --start-climb-at: var(--start-pause);
+  --start-drop-at: calc(var(--start-climb-at) + var(--start-climb) + var(--start-settle));
+  --start-film-at: calc(var(--start-drop-at) - var(--start-film-lead) - var(--start-film-out));
 }
 html.is-leaving-start body.has-film .top {
   transform: translateY(calc((var(--film-bar) - var(--film-h)) / 2));
   transition: transform var(--start-climb) var(--start-ease) var(--start-climb-at);
 }
 @media (prefers-reduced-motion: no-preference) {
-  html.is-leaving-start body.has-film .page-veil { animation: veil-in var(--start-veil) ease-in-out both; }
+  html.is-leaving-start body.has-film .page-veil {
+    animation: film-fade var(--start-film-out) ease-in-out var(--start-film-at) both;
+    animation-name: var(--start-film-style);
+  }
+}
+/* The ways the film can go. Each is written as the paper arriving; coming
+   back, the same one runs in reverse (`arrive-start` below). */
+@keyframes film-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes film-cut { 0%, 99.9% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes film-wipe {
+  from { opacity: 1; clip-path: inset(100% 0 0 0); }
+  to { opacity: 1; clip-path: inset(0 0 0 0); }
+}
+@keyframes film-blur {
+  from { opacity: 0; backdrop-filter: blur(0); -webkit-backdrop-filter: blur(0); }
+  60% { opacity: 0.35; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+  to { opacity: 1; backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
 }
 html.is-leaving-start .top a.is-chosen {
   position: relative;
@@ -1190,7 +1236,10 @@ html.is-leaving-to-start .top [aria-current='page']:is(a, button)::before {
 @keyframes swatch-gone { to { visibility: hidden; } }
 @media (prefers-reduced-motion: no-preference) {
   html.is-leaving-to-start .page-veil { animation: veil-in var(--start-veil) ease-in-out both; }
-  html.arrive-start .page-veil { animation: veil-out var(--start-veil) ease-in-out backwards; }
+  html.arrive-start .page-veil {
+    animation: film-fade var(--start-film-in) ease-in-out reverse backwards;
+    animation-name: var(--start-film-style);
+  }
 }
 
 /* Arrived that way: the block and the name stand as they were left. */
