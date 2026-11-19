@@ -89,12 +89,41 @@ export function initScramble(): void {
     measure(cells);
     wire(root, cells);
   }
+
+  let settling = 0;
+  window.addEventListener('resize', () => {
+    clearTimeout(settling);
+    settling = window.setTimeout(remeasure, 150);
+  });
 }
 
-/** Measured once, while the word is still itself, and held from then on. */
+/*
+ * Measured while the word is still itself, and held as a share of the
+ * letter's own size rather than in pixels. The bar's type is sized off the
+ * window (--type-menu, 00-base.css), so a box held in pixels stayed the size
+ * of the window the page loaded in: going from a small window to full screen
+ * left every letter cut down to a sliver of itself, until the page was loaded
+ * again. In em the box grows and shrinks with its letter.
+ */
 function measure(cells: readonly HTMLElement[]): void {
-  const widths = cells.map((cell) => cell.getBoundingClientRect().width.toFixed(2));
-  cells.forEach((cell, i) => cell.style.setProperty('--w', `${widths[i]}px`));
+  const widths = cells.map((cell) => {
+    const size = parseFloat(getComputedStyle(cell).fontSize) || 1;
+    return (cell.getBoundingClientRect().width / size).toFixed(4);
+  });
+  cells.forEach((cell, i) => cell.style.setProperty('--w', `${widths[i]}em`));
+}
+
+/*
+ * And measured again once a resize has settled, because type does not scale
+ * quite in step with itself at every size (hinting, rounding) and a box a
+ * hair too narrow clips. Each box is let go to its letter's own width first;
+ * one caught mid-churn is left as it is and taken next time.
+ */
+function remeasure(): void {
+  const still = [...document.querySelectorAll<HTMLElement>('[data-roll] .scram')]
+    .filter((cell) => cell.textContent === cell.dataset.ch);
+  for (const cell of still) cell.style.removeProperty('--w');
+  measure(still);
 }
 
 /*
