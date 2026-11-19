@@ -91,7 +91,17 @@ function initTextFilm(texts: HTMLElement): void {
     video.muted = !on;
     sound.setAttribute('aria-pressed', String(on));
     sound.setAttribute('aria-label', on ? 'Sound off' : 'Sound on');
-    if (on && video.paused) { held = false; play(); }
+    // Sound needs a real click: where the browser refuses to play with it,
+    // it goes back to silent rather than stopping the film.
+    if (on) {
+      held = false;
+      video.play().catch(() => {
+        video.muted = true;
+        sound.setAttribute('aria-pressed', 'false');
+        sound.setAttribute('aria-label', 'Sound on');
+        play();
+      });
+    }
   });
 
   video.addEventListener('click', () => {
