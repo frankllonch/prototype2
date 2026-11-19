@@ -1,4 +1,4 @@
-import { chartWrites, phone, scrollWrites } from './env.ts';
+import { scrollWrites } from './env.ts';
 import { glide, topOf } from './glide.ts';
 import { SCROLL_SPAN } from './stack.ts';
 import { WRITE_MS, writtenPoint } from './write.ts';
@@ -37,31 +37,6 @@ export function initScrollCue(): void {
 
   let threshold = () => window.innerHeight * 0.1;
 
-  /*
-   * The Colour Chart's whole page is written by the document's own scroll, so
-   * the question the cue asks is answered only when the sentence stands: the
-   * share of the scroll the words are spread over, which the page states.
-   * It is also the moment before the line at the foot arrives, so the cue is
-   * gone by the time anything else wants the bottom of the screen.
-   */
-  // On a phone held upright the share is of the run alone, not of the whole
-  // document, which there carries the page's foot too (Frank, 2026-11-15), so
-  // the cue is gone before Order yours comes up under it.
-  const chart = document.querySelector<HTMLElement>('[data-chart-written]');
-  if (chart) {
-    const written = Number.parseFloat(chart.dataset.chartWritten ?? '');
-    const runway = chart.querySelector<HTMLElement>('.chart-runway');
-    if (Number.isFinite(written) && written > 0) {
-      threshold = () =>
-        Math.max(
-          phone.matches && chartWrites() && runway
-            ? runway.offsetHeight   // the runway is the words' share of the run already
-            : (document.documentElement.scrollHeight - window.innerHeight) * written,
-          window.innerHeight * 0.1,
-        );
-    }
-  }
-
   // Asked at each scroll rather than once: a phone turned upright mid-page
   // starts writing, and one turned on its side stops.
   const write = document.querySelector<HTMLElement>('.wc-write');
@@ -96,7 +71,6 @@ export function initScrollCue(): void {
    *
    *   The start page: the sentence written first, then the names.
    *   The gallery: the pile spread into the grid.
-   *   The Colour Chart: the sentence standing — where the cue would go anyway.
    *
    * Anywhere else, or past every stop, a screen further down.
    */
@@ -109,8 +83,6 @@ export function initScrollCue(): void {
       if (written !== null) stops.push([written, WRITE_MS]);
       const names = document.getElementById('whats-color');
       if (names) stops.push([topOf(names)]);
-    } else if (chart) {
-      stops.push([threshold() + 2]);
     } else if (document.querySelector('[data-hero]')) {
       stops.push([h * SCROLL_SPAN]);
     }

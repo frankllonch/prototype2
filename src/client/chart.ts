@@ -1,140 +1,126 @@
-import { chartUpright, chartWrites, phone } from './env.ts';
-import { glide } from './glide.ts';
+import { reduceMotion } from './env.ts';
 
 /**
- * The Colour Chart writes its first line for you.
+ * The Colour Chart, as an ordinary page that scrolls (Frank, 2026-11-19).
  *
- * The page is written by its own scroll (`components/colour-chart.ts`): it
- * stands still and a run of empty height behind it is what the reader
- * travels, a word to each slice of it. Which leaves the arrival blank, and a
- * page whose first screen says nothing until you touch it reads as a page
- * that has failed to load.
+ * 1. On arrival the title and the statement type themselves in, a word at a
+ *    time, by a clock: the page is not held while they do, and the reader can
+ *    scroll at any point. Their first wheel, touch or key finishes the typing
+ *    at once, so nothing is still being written behind them.
+ * 2. Everything under the statement — Order yours, the cost, Features and
+ *    Technical characteristics in their columns, the thanks and the line at
+ *    the foot — comes in out of a blur as it reaches the screen, after the
+ *    typing, with About's look and About's beat from one column to the next.
  *
- * So the page travels the first paragraph's worth of slices itself — "Color
- * has always been my inspiration: a source of knowledge, a way of life!" —
- * and stops there, with the chevron still asking for the rest.
- *
- * Nothing is written by a clock and nothing is held: the words land because
- * the scroll reached them, so the reader can take the page straight back up
- * and unwrite them, which is the whole point of writing by position rather
- * than by performance.
- *
- * `glide` gives up the moment the reader's own hand arrives — a wheel, a
- * touch, a key — so this never fights anyone for the page.
+ * All of it is an enhancement of a page that already stands. The words are
+ * split here; the stylesheet hides the statement only under `html.js`, and the
+ * page is marked done (`.is-typed`) whenever this gives up or finishes, which
+ * shows every word whatever state the spans are in.
  */
 
-/** After the page's own entrance, so the words are not written behind a veil. */
+/** After the page's own entrance, so the words are not typed behind a veil. */
 const WAIT_MS = 350;
 
-/**
- * And fast enough that it is an opening rather than a wait. The whole first
- * paragraph over this — fourteen words, so about twelve a second — which is
- * quick enough to read as typing and slow enough to see it happen. The knob
- * if the line arrives too fast or too slowly.
- */
-const TRAVEL_MS = 1200;
+/** One word every this many milliseconds. Less is faster typing. */
+const WORD_MS = 32;
 
-/** Order yours, the cost, the thanks: a beat apart, as About's are. */
+/** Each column comes in this much later than the one to its left, at most. */
 const STAGGER_MS = 260;
 
 export function initChart(): void {
-  const chart = document.querySelector<HTMLElement>('[data-chart-reveal]');
+  const chart = document.querySelector<HTMLElement>('[data-chart]');
   if (!chart) return;
+  const typed = chart.querySelector<HTMLElement>('[data-chart-type]');
+  const pops = [...chart.querySelectorAll<HTMLElement>('.chart-in')];
 
-  // What comes under the statement on a phone: set up whatever the screen is
-  // now, since it can be turned into the scene or out of it at any time.
-  const runway = chart.querySelector<HTMLElement>('.chart-runway');
-  if (runway) arrivals(chart, runway);
+  const done = () => chart.classList.add('is-typed');
 
-  // No run to travel: the page is the static one the stylesheet falls back to,
-  // and every word is already standing. On a phone that is a phone on its side
-  // or a screen too squat for it (`chartWrites`, client/env.ts); held upright
-  // it has a run of its own.
-  if (!chartWrites()) return;
+  if (reduceMotion.matches || !typed || !('IntersectionObserver' in window)) {
+    done();
+    for (const el of pops) el.classList.add('is-in');
+    return;
+  }
 
-  const reveal = Number.parseFloat(chart.dataset.chartReveal ?? '');
-  if (!Number.isFinite(reveal) || reveal <= 0) return;
+  const words = splitWords(typed);
+  let shown = 0;
+  let timer = 0;
+  let finished = false;
 
-  /*
-   * Only from the top. A reload or a back-navigation restores the reader's
-   * own position — with the sentence part-written, where they left it — and
-   * dragging that back to the first line would be taking the page out of
-   * their hands.
-   */
-  if (window.scrollY > 2) return;
+  /* -------------------------------------------------------- the fade-ins */
 
-  /*
-   * On `load` rather than at once: the fonts settle the layout, and with them
-   * the height of the run, so the six slices are only worth measuring after
-   * the page has stopped changing shape.
-   */
-  const start = () => {
-    // Asked again: this runs after `load`, and a window can have been made
-    // narrow, or a phone turned, in between.
-    if (!chartWrites() || window.scrollY > 2) return;
-    // A phone's run is a length of its own rather than the whole document,
-    // which there carries the page's foot too (06-colour-chart.css). Its
-    // runway is the words' share of the run, so the run is that over the share.
-    const written = Number.parseFloat(chart.dataset.chartWritten ?? '') || 0.8;
-    const max =
-      phone.matches && runway
-        ? runway.offsetHeight / written
-        : document.documentElement.scrollHeight - window.innerHeight;
-    if (max <= 0) return;
-    glide(max * reveal, TRAVEL_MS);
+  const seen = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const el = entry.target as HTMLElement;
+        const across = entry.boundingClientRect.left / Math.max(1, window.innerWidth);
+        el.style.setProperty('--pop-delay', `${Math.round(Math.max(0, across) * STAGGER_MS)}ms`);
+        el.classList.add('is-in');
+        seen.unobserve(el);
+      }
+    },
+    { rootMargin: '0px 0px -8% 0px' },
+  );
+
+  const finish = () => {
+    if (finished) return;
+    finished = true;
+    window.clearTimeout(timer);
+    for (const w of words) w.classList.add('is-written');
+    done();
+    for (const el of pops) seen.observe(el);
+    for (const kind of ['wheel', 'touchstart', 'keydown'] as const) window.removeEventListener(kind, finish);
   };
 
-  const begin = () => window.setTimeout(start, WAIT_MS);
-  if (document.readyState === 'complete') begin();
-  else window.addEventListener('load', begin, { once: true });
+  /* ------------------------------------------------------------ the typing */
+
+  // A reload or a back-navigation lands where the reader was: the page simply
+  // stands there, typed.
+  if (window.scrollY > window.innerHeight * 0.1) return finish();
+
+  const step = () => {
+    words[shown++]?.classList.add('is-written');
+    if (shown >= words.length) finish();
+    else timer = window.setTimeout(step, WORD_MS);
+  };
+
+  for (const kind of ['wheel', 'touchstart', 'keydown'] as const) {
+    window.addEventListener(kind, finish, { passive: true, once: true });
+  }
+  // Scrolled by anything else — a scrollbar drag, the cue — finishes it too.
+  window.addEventListener('scroll', () => { if (window.scrollY > 4) finish(); }, { passive: true });
+
+  timer = window.setTimeout(step, WAIT_MS);
 }
 
 /**
- * What comes after the statement, on a phone held upright (Frank,
- * 2026-11-15): Order yours, the cost and the thanks pop in once the last word
- * stands, as they reach the screen, and go again when the reader scrolls back
- * into the writing — as the desktop's do, though not over a slice of the run.
- * client/reveal.ts leaves them to this, and they use its look (`.phone-pop`).
- *
- * If the phone is turned on its side the writing stops and the words simply
- * stand, so these do too, for good.
+ * Every word in the element wrapped in its own span, in reading order, leaving
+ * the markup around them (line breaks, the title, the paragraphs) as it is.
+ * The spaces stay outside the spans, so the lines break exactly as they did.
  */
-function arrivals(chart: HTMLElement, runway: HTMLElement): void {
-  const items = [...chart.querySelectorAll<HTMLElement>('.chart-order, .chart-price, .chart-thanks')];
-  // Hidden from the first frame, not faded out under the reader's eye.
-  items.forEach((el, i) => {
-    el.style.transition = 'none';
-    el.classList.add('phone-pop');
-    el.style.setProperty('--pop-delay', `${i * STAGGER_MS}ms`);
-  });
+function splitWords(root: HTMLElement): HTMLElement[] {
+  const nodes: Text[] = [];
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  for (let n = walker.nextNode(); n; n = walker.nextNode()) nodes.push(n as Text);
 
-  let queued = false;
-  const update = () => {
-    queued = false;
-    // Out of the scene — a computer, a phone on its side, a squat screen —
-    // they simply stand (and on a computer the class does nothing).
-    if (!phone.matches || !chartWrites()) {
-      for (const el of items) el.classList.add('is-in');
-      return;
+  const words: HTMLElement[] = [];
+  for (const node of nodes) {
+    const text = node.textContent ?? '';
+    if (!text.trim()) continue;
+    const frag = document.createDocumentFragment();
+    for (const part of text.split(/(\s+)/)) {
+      if (!part) continue;
+      if (/^\s+$/.test(part)) {
+        frag.append(part);
+        continue;
+      }
+      const span = document.createElement('span');
+      span.className = 'chart-word';
+      span.textContent = part;
+      words.push(span);
+      frag.append(span);
     }
-    // The pin lets go as the last word stands: the runway is the words' share.
-    const done = window.scrollY >= runway.offsetHeight - 1;
-    for (const el of items) {
-      if (!done) el.classList.remove('is-in');
-      else if (el.getBoundingClientRect().top < window.innerHeight * 0.92) el.classList.add('is-in');
-    }
-  };
-  const schedule = () => {
-    if (queued) return;
-    queued = true;
-    requestAnimationFrame(update);
-  };
-
-  update();
-  void chart.offsetWidth;
-  for (const el of items) el.style.transition = '';
-  window.addEventListener('scroll', schedule, { passive: true });
-  window.addEventListener('resize', schedule);
-  phone.addEventListener('change', schedule);
-  chartUpright.addEventListener('change', schedule);
+    node.replaceWith(frag);
+  }
+  return words;
 }

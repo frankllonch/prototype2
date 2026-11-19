@@ -1,130 +1,76 @@
 /*
- * The Colour Chart.
+ * The Colour Chart (COLOR CHART DISSENY III, Frank, 2026-11-19).
  *
- * A page of type and nothing else: the statement across the full width, the
- * way to order one under it, the price, her thanks, and the site's line at the
- * foot. No columns, no stack of colours, no record — the sheet before this one
- * had all three and this is the simplification.
+ * An ordinary page that scrolls, as About does: the title, the statement
+ * across the full width, the way to order one and the price, Features and
+ * Technical characteristics in three columns each, her thanks, and the
+ * site's line at the foot.
  *
+ * The title and the statement are typed in on arrival and everything under
+ * them comes in out of a blur as it reaches the screen (`client/chart.ts`).
  *
- * THE DESIGNER'S POINT
+ * The type of what was on the page before this sheet is unchanged: only the
+ * room between the parts follows the new sheet. The two sections are the new
+ * text, 20 on 20 with their titles semibold.
  *
- * Her sheets are now drawn at 1728 — a laptop's own width — and the sizes on
- * them are given in points of that frame: 40 for text, 45 for a heading or a
- * control, 45 of leading on 40 of text. The site's one type size is 40 of a
- * 1920 frame (`--type`, 2.0833vw), so her point is a tenth larger than the
- * site's: 40pt comes out at 44.4 where `--type` gives 40.
- *
- * Rather than scatter that ratio through the file as 1.111s, it is stated once
- * as a unit. Everything below is then the sheet's own figure, and the page
- * still scales with the site rather than against it.
- *
- *     --pt  =  --type / 40        (since the typography sheets of 2026-11-17)
- *
- * The page margin is the one figure not taken from the sheet. She sets it at
- * 45pt, which is 50 against the site's 40, and the bar is set at 40 everywhere
- * — so following her here would put the first word of the statement ten pixels
- * to the right of the wordmark above it. The sheet shows them flush, and flush
- * is the thing to keep; `--pad` is a decision for the whole site, not for this
- * page.
+ *     --pt  =  --type / 40        one point of the 1920 sheets
  */
 
 .chart {
-  /* One point of the typography sheets (JERARQUIA, 2026-11-17), which are set
-     on the site's 1920 frame like every other page: 40pt is `--type`. It was
-     `--type / 36` while this page followed the older 1728 sheet, which set
-     the whole page a ninth larger than the rest of the site. */
   --pt: calc(var(--type) / 40);
-  /* One line of the statement: 45pt of leading on 40pt of text. */
-  --chart-line: calc(var(--pt) * 45);
 
   /*
-   * Where the statement's first line sits.
-   *
-   * 60pt below the bar, against the sheet's 205. The sheet draws a page you
-   * scroll through; this one has to stand whole on a screen, so the air
-   * between its parts is what gives. The type is hers to the point — only the
-   * room around it has been taken in, and the same is true of every figure
-   * below.
+   * Where the title stands: on the line where Commissioned and Exhibitions
+   * begin. Their first heading's line box is the list's top (`--list-top`,
+   * 07-sheet.css, held below the bar by the same max as 01-grid.css) plus the
+   * row's own air (`--row-top`), and its capitals are 40. The title's are
+   * 45, so its line box is raised by the five points' share of the cap's drop
+   * in a line set solid — 0.165 of the size in Switzer — which puts the tops
+   * of the two sets of capitals on the same pixel.
    */
-  --chart-top: calc(var(--bar) + var(--pt) * 40);
+  --chart-top: calc(
+    max(calc(var(--bar) + 2rem), 20.745vw) + 0.78125vw - var(--pt) * 5 * 0.165
+  );
 
+  /* The room between the parts, read off the sheet, line box to line box. */
+  --chart-title-gap: calc(var(--pt) * 5);       /* the title to the statement */
+  --chart-order-gap: calc(var(--pt) * 82);      /* the statement to Order yours */
+  --chart-cost-gap: calc(var(--pt) * 8);        /* Order yours to the cost */
+  --chart-section-gap: calc(var(--pt) * 70);    /* the cost to Features */
+  --chart-section-next: calc(var(--pt) * 80);   /* one section to the next */
+  --chart-head-gap: calc(var(--pt) * 40);       /* a section's title to its text */
+  --chart-col-gap: calc(var(--pt) * 20);        /* between the columns */
+  --chart-thanks-gap: calc(var(--pt) * 150);    /* the last section to the thanks */
+  --chart-foot-gap: calc(var(--pt) * 104);      /* the thanks to the line at the foot */
+  --chart-end: calc(var(--pt) * 170);           /* under the line at the foot */
+
+  /* The new text: 20 on 20. */
+  --chart-small: calc(var(--pt) * 20);
 }
 
-/*
- * The whole page, on one screen, stuck to the top of the view.
- *
- * Everything the sheet sets is in here, and it does not move: the run behind
- * it (`.chart-runway`) is what the reader scrolls, and this stays put being
- * written. A column rather than a stack of margins, so the line at the foot
- * can be pushed to the foot of the screen and the room left over goes there
- * rather than being spent on a figure chosen in advance.
- *
- * `min-height`, not `height`: on a short window the content is taller than a
- * screen and has to be allowed to be. The stage then releases near the end of
- * the run and the last of the page scrolls up, which is the ordinary thing a
- * page does when it does not fit.
- */
 .chart-page {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding: var(--chart-top) var(--pad) calc(var(--pt) * 10);
+  padding: var(--chart-top) var(--pad) var(--chart-end);
 }
-
-/*
- * The whole page set lower (Frank, 2026-11-18): 30% of the screen further down,
- * as long as it all still stands on one screen.
- *
- * An empty first item that grows into the room left over, up to --chart-drop
- * and no more. Growing comes before the footer's auto margin takes what is
- * left, so on a tall screen the page drops the full 30% and the rest still
- * goes under the thanks; on a short one it drops only as far as there is room,
- * and where there is none it does not drop at all. The thanks' own lift above
- * the foot is a margin, so it is kept whole either way.
- */
-.chart-page::before {
-  content: '';
-  flex: 1 1 0;
-  max-height: var(--chart-drop, 30vh);
-}
-
-/* The line at the foot goes to the foot. */
-.chart-footer { margin-top: auto; }
 
 /* ----------------------------------------------------------- the statement */
 
 /*
- * What the chart is, in her own words, across the whole width of the page.
- *
- * 40pt medium in capitals, led at 45 — the sheet's "MEDIUM 40 pt MAJUSCULA"
- * and its "INTERLINEAT 45". One clear line between paragraphs, which at this
- * leading is one more line box.
+ * What the chart is, in her own words, across the whole width of the page:
+ * 40 medium in capitals, set solid, one clear line between paragraphs.
  */
 .chart-statement {
   font-size: calc(var(--pt) * 40);
   font-weight: 500;
-  line-height: 1;                       /* INTRO: medium 40 on 40 (typography sheet) */
+  line-height: 1;
   text-transform: uppercase;
-  /* None. Capitals are already wide; a page of them does not need help, and
-     the sheet's line measures to within a third of a pixel of zero. */
   letter-spacing: 0;
 }
 
-/*
- * The title over the statement (Frank, 2026-11-18): semibold 45 in capitals,
- * the size Order yours is set at, standing in the room the drop leaves above
- * the first line. Out of the flow, hung from the statement's top edge, so the
- * statement and everything under it stay exactly where they were.
- */
-.chart-statement { position: relative; }
-
+/* The title over it (Frank, 2026-11-18): semibold 45 in capitals. */
 .chart-title {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 100%;
-  margin: 0 0 calc(var(--pt) * 30);
+  margin: 0 0 var(--chart-title-gap);
   font-size: calc(var(--pt) * 45);
   font-weight: 600;
   line-height: 1;
@@ -132,94 +78,35 @@
   text-transform: uppercase;
 }
 
-/* On a screen too short for the full drop, keep at least the title's room, so
-   it never runs up under the bar: 45 of type and 30 of air, less the 40 the
-   page already stands below the bar. A tall screen drops further than this
-   anyway, so there nothing moves. */
-@media (min-width: 900px) {
-  .chart-page::before { min-height: calc(var(--pt) * 45); }
-}
-
 .chart-statement p { margin: 0 0 1em; }
 .chart-statement p:last-child { margin-bottom: 0; }
 
-/* --------------------------------------------------------- the writing */
+/* ------------------------------------------------------------- the typing */
 
 /*
- * The statement is written by the scroll, and the scroll is the page's own.
- *
- * The page holds still (`.chart-page`, above) and a run of empty height
- * behind it is what the reader travels: each word has a slice of that run,
- * worked out where the words are, at build, and riding on the elements as
- * `animation-range` (`components/colour-chart.ts`). The last word lands on
- * the last pixel, so when the sentence stands the page will not go on — there
- * is nothing after it to go to.
- *
- * Scrolling back unwrites it, which is not a feature added here but what a
- * scroll timeline is: the words are at a position, not partway through a
- * performance, so the page is as readable backwards as forwards.
- *
- * One knob: --chart-run, how much scroll the writing takes. More is slower.
- * It is only the run's height — the slices are fractions of whatever it is —
- * so it can be tuned here alone without moving a word's turn.
- *
- * Everything below asks the engine first. Without scroll-run animations, or
- * with motion reduced, no word is ever hidden, the run is not there at all
- * and the page is the static one the sheet draws.
- *
- * And from 900 wide up only. The phone sheet is a page taller than a phone,
- * which cannot stand whole on one screen, so a phone held upright has a run
- * of its own, measured in lengths rather than in shares of the document (the
- * block after the phone one, Frank, 2026-11-15); on its side it is the static
- * page (`client/env.ts`, `scrollWrites`, makes the same test).
+ * Typed in by the script, a word at a time: the statement is hidden only
+ * where there is a script to type it, and the words it has written are shown
+ * one by one. `.is-typed` shows everything, however far the typing got.
+ * `visibility` rather than opacity, so the lines are laid out from the start
+ * and nothing reflows as the words arrive.
  */
-.chart-runway { display: none; }
+@media (prefers-reduced-motion: no-preference) {
+  html.js .chart:not(.is-typed) .chart-statement { visibility: hidden; }
+  html.js .chart:not(.is-typed) .chart-word.is-written { visibility: visible; }
 
-@supports (animation-timeline: scroll()) {
-  @media (prefers-reduced-motion: no-preference) and (min-width: 900px) {
-    .chart-page { position: sticky; top: 0; }
-
-    .chart-runway {
-      display: block;
-      height: var(--chart-run, 300vh);
-    }
-
-    .chart-word {
-      opacity: 0;
-      /* Each word arrives whole, the moment its turn comes: no fade, so there
-         is never a half-written word ahead of the reader. */
-      animation: chart-word-in steps(1, jump-start) both;
-      animation-timeline: scroll(root block);
-      /* Each word's own animation-range rides on the element. */
-    }
-
-    /*
-     * And the four under the sentence come in rather than being written:
-     * each rises a little out of a blur over its own slice of the same run,
-     * the way the last part of About arrives. Written word by word they would
-     * read as more of the statement; arriving whole, they are what the page
-     * is for — where to get one, what it costs, her thanks, the line at the
-     * foot.
-     *
-     * Eased, not stepped, because the point of this one is the arrival.
-     */
-    .chart-in {
-      opacity: 0;
-      filter: blur(10px);
-      transform: translateY(14px);
-      animation: chart-in var(--ease) both;
-      animation-timeline: scroll(root block);
-      /* Each one's own animation-range rides on the element. */
-    }
+  /* And everything under it comes in out of a blur, as About's record does. */
+  html.js .chart-in {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(14px);
+    transition:
+      opacity 0.9s var(--ease) var(--pop-delay, 0s),
+      filter 0.9s var(--ease) var(--pop-delay, 0s),
+      transform 0.9s var(--ease) var(--pop-delay, 0s);
   }
-}
-
-@keyframes chart-word-in {
-  to { opacity: 1; }
-}
-
-@keyframes chart-in {
-  to { opacity: 1; filter: none; transform: none; }
+  html.js .chart-in.is-in { opacity: 1; filter: none; transform: none; }
+  /* Out of sight is out of reach: a hidden control takes no click. */
+  html.js .chart-in:not(.is-in) { pointer-events: none; }
 }
 
 /* ------------------------------------------------------------- the ordering */
@@ -233,7 +120,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.55em;
-  margin-top: calc(var(--pt) * 24);
+  margin-top: var(--chart-order-gap);
   font-size: calc(var(--pt) * 45);
   font-weight: 600;
   line-height: calc(40 / 45);
@@ -294,7 +181,7 @@
 .chart-order:focus-visible { text-decoration: underline; text-underline-offset: 0.3em; }
 
 .chart-price {
-  margin: calc(var(--pt) * 18) 0 0;
+  margin: var(--chart-cost-gap) 0 0;
   font-size: calc(var(--pt) * 40);
   font-weight: 400;
   line-height: 1;
@@ -303,17 +190,46 @@
 
 .chart-price b { font-weight: 600; }
 
+/* ------------------------------------------------------------ the sections */
+
+/*
+ * Features and Technical characteristics: the new text, 20 on 20, regular,
+ * its titles semibold in capitals at the same size. Three columns, each
+ * running down on its own, a clear line between the blocks in a column.
+ */
+.chart-section {
+  margin-top: var(--chart-section-next);
+  font-size: var(--chart-small);
+  line-height: var(--chart-small);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.chart-price + .chart-section,
+.chart-order + .chart-section { margin-top: var(--chart-section-gap); }
+
+.chart-section-title {
+  margin: 0 0 var(--chart-head-gap);
+  font-size: inherit;
+  line-height: inherit;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.chart-cols {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: var(--chart-col-gap);
+  align-items: start;
+}
+
+.chart-col p { margin: 0 0 var(--chart-small); }
+.chart-col p:last-child { margin-bottom: 0; }
+.chart-col strong, .chart-col b { font-weight: 600; }
+
 /* ---------------------------------------------------------------- the close */
 
-/* Her thanks, down the middle: 45pt, the same size as the control above it. */
-/*
- * Her thanks, down the middle — and lifted clear of the line at the foot.
- *
- * --chart-thanks-lift is that lift, a tenth of the screen, and the room for
- * it comes out of the gaps above rather than out of the page's height: this
- * page stands on one screen and that is not negotiable. The figures above are
- * what paid for it.
- */
+/* Her thanks, down the middle: 45pt, the same size as Order yours. */
 /*
  * The link in it lights up the way the Exhibitions and Commissioned rows do
  * (Frank, 2026-11-18): it carries their `.hrow`, so it takes their hover and
@@ -322,7 +238,7 @@
  */
 .chart-thanks {
   --exh-hover: var(--ink);
-  margin: calc(var(--pt) * 18) 0 var(--chart-thanks-lift, 10vh);
+  margin: var(--chart-thanks-gap) 0 var(--chart-foot-gap);
   text-align: center;
   font-size: calc(var(--pt) * 45);
   font-weight: 500;
@@ -349,63 +265,51 @@
 /* ------------------------------------------------------------------- phone */
 
 /*
- * The phone sheet ("COLOR CHART PHONE", 375 wide).
+ * The phone sheet ("COLOR CHART PHONE", 375 wide), every figure in units of
+ * its frame (`--p`, 09-phone.css), the side margin the phone's own.
  *
- * At the sheet's sizes it is 1080 tall, and Order yours and the thanks cannot
- * be held on one pinned screen, so here there is no line at the foot, and the
- * page as this block leaves it has no pin, no run behind it and no cue: every
- * word stands and the document scrolls the ordinary way. That is the page on
- * its side, or wherever the scroll writes nothing; held upright, the block
- * after this one writes the statement first (Frank, 2026-11-15).
+ * The title stands where Commissioned's first heading does on a phone
+ * (`--com-top`, 07-sheet.css): the same 106, at the same 30 semibold.
  *
- * Every figure is the sheet's, in units of its frame (`--p`, 09-phone.css).
- * The ones to change by hand are the list at the top; the side margin is the
- * phone's own (`--phone-pad`, 20).
- *
- * Everything is set solid — 20 on 20, 30 on 30 — so each gap below is the
- * whole distance from one line box to the next. It is also why the first
- * figure ends in a half: a line box 20 tall carries its baseline 17.5 down,
- * and the sheet's first baseline is at 123.
+ * The two sections run in one column here, their blocks back in the order
+ * they are written in (`--n`). Their text is 14 on 16, the step under the
+ * statement's 20 that a phone can still read.
  */
 @media (max-width: 899px) {
   .chart {
-    --chart-phone-top: calc(105.5 * var(--p));        /* top of the page to the statement */
+    --chart-phone-top: calc(106 * var(--p));          /* top of the page to the title */
     --chart-phone-text: calc(20 * var(--p));          /* the statement's size, and its leading */
     --chart-phone-para: calc(20 * var(--p));          /* between its paragraphs: one empty line */
-    --chart-phone-large: calc(30 * var(--p));         /* Order yours, the cost, the thanks */
+    --chart-phone-large: calc(30 * var(--p));         /* the title, Order yours, the cost, the thanks */
     --chart-phone-order-gap: calc(89 * var(--p));     /* statement to Order yours */
     --chart-phone-arrow-gap: calc(20 * var(--p));     /* Order yours to its arrow */
     --chart-phone-arrow-w: calc(22.5 * var(--p));     /* the arrow, 22.5 by 22 */
     --chart-phone-arrow-h: calc(22 * var(--p));
     --chart-phone-cost-gap: calc(16 * var(--p));      /* Order yours to the cost */
-    --chart-phone-thanks-gap: calc(154 * var(--p));   /* the cost to the thanks */
+    --chart-phone-section-gap: calc(70 * var(--p));   /* the cost to Features, one section to the next */
+    --chart-phone-small: calc(14 * var(--p));         /* the sections' text */
+    --chart-phone-small-lead: calc(16 * var(--p));    /* and its leading */
+    --chart-phone-head-gap: calc(20 * var(--p));      /* a section's title to its text */
+    --chart-phone-thanks-gap: calc(120 * var(--p));   /* the last section to the thanks */
     --chart-phone-rule: calc(1.5 * var(--p));         /* the line under the thanks: how thick */
     --chart-phone-rule-drop: calc(3.75 * var(--p));   /* and how far under the baseline */
     --chart-phone-foot: calc(185.5 * var(--p));       /* under the thanks to the end of the page */
   }
 
   .chart-page {
-    position: static;
-    min-height: 0;
     padding: var(--chart-phone-top) var(--phone-pad) var(--chart-phone-foot);
   }
 
-  /* No room above the statement under the phone's bar, so here the title is
-     in the flow, at the size of Order yours, one empty line over the text. */
   .chart-title {
-    position: static;
     margin: 0 0 var(--chart-phone-para);
     font-size: var(--chart-phone-large);
   }
 
-  /* Medium, capitals and no tracking come from the rule above. */
   .chart-statement { font-size: var(--chart-phone-text); line-height: 1; }
   .chart-statement p { margin-bottom: var(--chart-phone-para); }
 
   .chart-order {
-    /* The link is its words and its arrow, not the whole row beside them. */
     align-self: flex-start;
-    /* The arrow stands on the baseline: a drawing's baseline is its foot. */
     align-items: baseline;
     gap: var(--chart-phone-arrow-gap);
     margin-top: var(--chart-phone-order-gap);
@@ -421,7 +325,6 @@
     overflow: visible;
   }
 
-  /* A step under Order yours, as on the computer: 40 to its 45. */
   .chart-price {
     margin-top: var(--chart-phone-cost-gap);
     font-size: calc(var(--chart-phone-large) * 40 / 45);
@@ -429,7 +332,18 @@
     line-height: 1;
   }
 
-  /* From the left edge like everything else, and regular. */
+  .chart-section,
+  .chart-price + .chart-section,
+  .chart-order + .chart-section {
+    margin-top: var(--chart-phone-section-gap);
+    font-size: var(--chart-phone-small);
+    line-height: var(--chart-phone-small-lead);
+  }
+  .chart-section-title { margin-bottom: var(--chart-phone-head-gap); }
+  .chart-cols { display: flex; flex-direction: column; gap: var(--chart-phone-small-lead); }
+  .chart-col { display: contents; }
+  .chart-col p { order: var(--n, 0); margin: 0; }
+
   .chart-thanks {
     margin: var(--chart-phone-thanks-gap) 0 0;
     text-align: left;
@@ -437,8 +351,6 @@
     font-weight: 400;
     line-height: 1;
   }
-  /* Underlined where it opens the photographs: there is no hover on a phone
-     to say that it does. Straight through the descenders, as the sheet's is. */
   .chart-thanks a {
     text-decoration: underline;
     text-decoration-thickness: var(--chart-phone-rule);
@@ -447,63 +359,6 @@
   }
 
   .chart-footer { display: none; }
-  /* Nothing is written by the scroll here, so there is nothing to cue. */
-  .chart-body .scroll-cue { display: none; }
-}
-
-/*
- * The statement typed by the scroll on a phone held upright (Frank,
- * 2026-11-15): the page arrives blank, the first paragraph types itself
- * (`client/chart.ts`) and the cue asks for the rest; scrolling types the
- * other two and scrolling back takes every word away again. Once the last
- * word stands, Order yours, the cost and the thanks pop in under it
- * (`client/chart.ts` again — they come in as everything else on a phone does,
- * not over a slice of the run).
- *
- * The desktop's mechanism on the phone's sheet: the page is stuck to the top
- * and a run behind it is what the reader travels. The page is taller than
- * the screen, so it is pinned with its foot below the edge, and lets go when
- * the run is spent. Each word's turn is a length of that run — its fractions
- * (`--w0`, `--w1`, written at build) times --chart-phone-run — so neither the
- * page's height nor the toolbar coming and going moves a word. This relies on
- * the chart starting at the top of the document, which on a phone it does.
- *
- * Upright only, for the same reason as the note on What's Color: on its side
- * the pinned statement runs below the foot of the screen.
- */
-@supports (animation-timeline: scroll()) {
-  /* Upright and tall enough for the statement to be typed on screen: a phone
-     no squatter than 375 by 590, or one wide enough that --p follows the
-     height. client/env.ts asks the same (`chartUpright`). */
-  @media (prefers-reduced-motion: no-preference) and (max-width: 899px) and (orientation: portrait) and ((max-aspect-ratio: 375/590) or (min-width: 481px)) {
-    /* THE knob for "the typing is too fast / too slow": more is slower. At
-       2400 each word has about 22 of travel. */
-    /* In the small viewport's height rather than --p, which past 480 wide
-       follows the dynamic one: a toolbar coming and going must not move a word. */
-    .chart { --chart-phone-run: calc(2400 * max(min(100vw, 480px) / 375, min(100vw / 375, 100svh / 667))); }
-
-    .chart-page { position: sticky; top: 0; }
-
-    .chart-runway {
-      display: block;
-      /* The pin lets go when the last word stands: the words take 0.8 of the
-         run (data-chart-written), so the runway is that much of it. */
-      height: calc(var(--chart-phone-run) * 0.8);
-    }
-
-    .chart-word {
-      opacity: 0;
-      animation: chart-word-in steps(1, jump-start) both;
-      animation-timeline: scroll(root block);
-      /* Important, because the desktop's range rides on the element too, as
-         its inline style, and would otherwise outrank this one. */
-      animation-range:
-        calc(var(--w0) * var(--chart-phone-run))
-        calc(var(--w1) * var(--chart-phone-run)) !important;
-    }
-
-    html.js .chart-body .scroll-cue { display: block; }
-  }
 }
 
 /* --------------------------------------------------------------- inquiries */

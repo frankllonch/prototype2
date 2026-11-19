@@ -280,17 +280,8 @@ export function colourChartPage(): Html {
     description:
       'Claudia Valsells\u2019 artist colour chart for architects and designers \u2014 a fan deck of 142 colours in real paint.',
     /*
-     * The page opens blank and is written by the scroll, so nothing on the
-     * first view says that scrolling is what happens next — the same reason
-     * the film and the pile have the chevron. It stands until the sentence
-     * does (`client/scroll-cue.ts`), which is also before the line at the
-     * foot arrives, so the two never share the bottom of the screen.
-     *
-     * Not on a phone on its side, where the page is not written but simply
-     * stands: the stylesheet takes the cue away there, and the body's class
-     * is how it knows this page from the others that have one
-     * (06-colour-chart.css). Held upright the page is written, and the cue
-     * stands (Frank, 2026-11-15).
+     * The page is longer than a screen, and the first one is the statement,
+     * so the chevron says there is more under it; it goes at the first scroll.
      */
     cue: 'ink',
     bodyClass: 'chart-body',
