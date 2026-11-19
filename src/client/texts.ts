@@ -13,6 +13,7 @@ import { glide, topOf } from './glide.ts';
 export function initWcTexts(): void {
   const texts = document.querySelector<HTMLElement>('.wc-texts');
   if (!texts) return;
+  initTextFilm(texts);
 
   texts.addEventListener('click', (event) => {
     const target = event.target as Element;
@@ -52,5 +53,49 @@ export function initWcTexts(): void {
       block.classList.contains('is-open') ? '.wc-text-open .wc-text-head a' : '.wc-text-closed .wc-text-head a',
     );
     visible?.click();
+  });
+}
+
+/**
+ * The first edition's film: silent and looping while it is on screen, paused
+ * when it is not, with its own sound button (components/whats-color.ts). The
+ * browser's controls are taken off once this is in charge.
+ */
+function initTextFilm(texts: HTMLElement): void {
+  const video = texts.querySelector<HTMLVideoElement>('.wc-text-film video');
+  const sound = texts.querySelector<HTMLButtonElement>('.wc-film-sound');
+  if (!video || !sound) return;
+
+  video.controls = false;
+  video.muted = true;
+  sound.hidden = false;
+
+  // Paused by a click, it stays paused until another click, however the
+  // reader scrolls.
+  let held = false;
+  let inView = false;
+  const play = () => { void video.play().catch(() => undefined); };
+
+  new IntersectionObserver(
+    ([entry]) => {
+      inView = !!entry?.isIntersecting;
+      if (inView && !held) play();
+      else if (!inView) video.pause();
+    },
+    { threshold: 0.25 },
+  ).observe(video);
+
+  sound.addEventListener('click', (event) => {
+    event.preventDefault();
+    const on = video.muted;
+    video.muted = !on;
+    sound.setAttribute('aria-pressed', String(on));
+    sound.setAttribute('aria-label', on ? 'Sound off' : 'Sound on');
+    if (on && video.paused) { held = false; play(); }
+  });
+
+  video.addEventListener('click', () => {
+    if (video.paused) { held = false; play(); }
+    else { held = true; video.pause(); }
   });
 }

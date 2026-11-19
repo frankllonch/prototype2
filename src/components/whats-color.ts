@@ -180,21 +180,39 @@ function openingText(edition: Edition): Html {
 
 /**
  * The film of the first edition, by Mariona Domenech, under its text — where
- * the old site had it. Unlike the opening film this one is meant to be
- * watched and heard: it waits for a click, plays with its sound, and carries
- * the browser's own controls. Nothing is fetched but the poster until then.
+ * the old site had it.
+ *
+ * It plays by itself, silent and looping, while it is on screen (a browser
+ * will only start a video by itself with the sound off), and the button in its
+ * top left corner turns the sound on and off (Frank, 2026-11-19). The button is
+ * the scroll cue's size and weight and, like it, drawn as the negative of the
+ * frame behind it. Clicking the film itself pauses and resumes it.
+ * `client/texts.ts` does all of it; without scripting the film keeps the
+ * browser's own controls, which have sound in them.
  */
 function textFilm(): Html {
+  const line = 'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"';
   return html`<figure class="wc-text-film">
-    <video
-      controls
-      playsinline
-      preload="none"
-      poster="${withBase('/video/whats-color-film-poster.jpg')}"
-      aria-label="What’s Color? (I), a film by Mariona Domenech"
-    >
-      <source src="${withBase('/video/whats-color-film.mp4')}" type="video/mp4" />
-    </video>
+    <div class="wc-film-frame">
+      <video
+        controls
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        poster="${withBase('/video/whats-color-film-poster.jpg')}"
+        aria-label="What’s Color? (I), a film by Mariona Domenech"
+      >
+        <source src="${withBase('/video/whats-color-film.mp4')}" type="video/mp4" />
+      </video>
+      <button type="button" class="wc-film-sound" aria-pressed="false" aria-label="Sound on" hidden>
+        <svg viewBox="0 0 28 22" aria-hidden="true" focusable="false">
+          ${raw(`<path d="M1.5 7.5 H6.5 L13 2 V20 L6.5 14.5 H1.5 Z" ${line}/>`)}
+          ${raw(`<path class="wc-sound-off" d="M18 7.5 L25 14.5 M25 7.5 L18 14.5" ${line}/>`)}
+          ${raw(`<path class="wc-sound-on" d="M17 7.5 Q19.5 11 17 14.5 M20.5 3.5 Q26 11 20.5 18.5" ${line}/>`)}
+        </svg>
+      </button>
+    </div>
     <figcaption>Film: Mariona Domenech</figcaption>
   </figure>`;
 }
