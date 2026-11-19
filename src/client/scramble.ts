@@ -148,6 +148,19 @@ function wire(root: HTMLElement, cells: readonly HTMLElement[]): void {
   // itself while it is on; this stands aside for it.
   const tuning = () => 'tune' in document.documentElement.dataset;
 
+  /*
+   * Whether anything still asks for the churn: the pointer on the word, or a
+   * keyboard's focus on it. Asked on every piece, not trusted to the leave and
+   * blur events alone, because those go missing — About opening over the bar
+   * takes the bar out from under the pointer without a leave, and closing it
+   * hands focus back to the link it came from (env.ts, returnFocus), which is
+   * a focus nobody's keyboard made. Whatever the events miss, the word puts
+   * itself right on the next piece.
+   */
+  const keyed = () =>
+    root === document.activeElement && root.matches(':focus-visible') && !('quietFocus' in root.dataset);
+  const wanted = () => root.matches(':hover') || keyed();
+
   const settle = () => {
     if (frame) cancelAnimationFrame(frame);
     frame = 0;
@@ -176,6 +189,7 @@ function wire(root: HTMLElement, cells: readonly HTMLElement[]): void {
     let piece = -1;
 
     const tick = () => {
+      if (!wanted()) { settle(); return; }
       const now = Math.floor(performance.now() / STEP);
       if (now !== piece) {
         piece = now;
@@ -211,10 +225,19 @@ function wire(root: HTMLElement, cells: readonly HTMLElement[]): void {
    * standing still.
    */
   root.addEventListener('focus', () => {
+    // Focus put back by a script, or left by a click, is not a keyboard's.
+    if (!keyed()) return;
     const box = root.getBoundingClientRect();
     pointer = box.left + box.width / 2;
     locate();
     run();
   });
   root.addEventListener('blur', settle);
+
+  // Leaving the window or the page, or coming back to one kept in the back
+  // and forward cache, leaves every word as itself.
+  window.addEventListener('blur', settle);
+  window.addEventListener('pagehide', settle);
+  window.addEventListener('pageshow', settle);
+  document.addEventListener('visibilitychange', settle);
 }
