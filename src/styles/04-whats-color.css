@@ -1488,12 +1488,48 @@ html:has(body.has-film) {
   margin: 2em 0 0;
   cursor: auto;
 }
+.wc-film-frame {
+  position: relative;
+}
 .wc-text-film video {
   display: block;
+  cursor: pointer;
   width: 100%;
   height: auto;
   aspect-ratio: 16 / 9;
   background: var(--ink);
+}
+/*
+ * Sound on and off, in the film's top left corner: the scroll cue's size and
+ * weight, and like it the negative of whatever frame is behind it.
+ */
+.wc-film-sound {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  width: var(--cue-size);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: rgb(252, 252, 250);
+  mix-blend-mode: difference;
+  cursor: pointer;
+}
+.wc-film-sound[hidden] { display: none; }
+/* A target a little larger than the drawing, so the click need not be exact. */
+.wc-film-sound::before {
+  content: '';
+  position: absolute;
+  inset: -0.9rem;
+}
+.wc-film-sound:focus-visible { outline: 1px solid currentColor; outline-offset: 0.6rem; }
+.wc-film-sound svg { display: block; width: 100%; height: auto; overflow: visible; }
+.wc-film-sound path { stroke-width: var(--cue-stroke); }
+.wc-film-sound .wc-sound-on,
+.wc-film-sound[aria-pressed='true'] .wc-sound-off { display: none; }
+.wc-film-sound[aria-pressed='true'] .wc-sound-on { display: inline; }
+@media (max-width: 899px) {
+  .wc-film-sound { top: 0.9rem; left: 0.9rem; }
 }
 .wc-text-film figcaption {
   margin-top: 0.6em;
