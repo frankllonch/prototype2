@@ -312,7 +312,16 @@ function namesOfEdition(edition: Edition): Html {
   // fill would hold its opacity against the farewell's hand.
   return html`<section class="wc-group">
     <div class="wc-rise">
-      <p class="wc-numeral" aria-hidden="true">(${edition.numeral})</p>
+      <!-- The numeral is a doorway to its edition, dressed as a name: the
+           same band on hover, the same farewell when clicked. -->
+      <p class="wc-numeral">
+        <a
+          class="wc-name wc-numeral-link"
+          href="${withBase(`/whats-color/${edition.numeral.toLowerCase()}/`)}"
+          aria-label="What&rsquo;s Color? (${edition.numeral})"
+          >(${edition.numeral})</a
+        >
+      </p>
       <h2 class="sr-only">What&rsquo;s Color? (${edition.numeral})</h2>
       ${whatsColorNames(edition.roster ?? edition.participants)}
     </div>
