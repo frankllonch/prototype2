@@ -100,10 +100,27 @@ function startFilm(): void {
     // Kept for when there is a film on screen to start.
     if (phone.matches) return;
     for (const type of GESTURES) window.removeEventListener(type, onGesture);
-    void ask();
+    if (!away) void ask();
   };
 
-  initSound(video, ask);
+  /*
+   * Stopped once the reader has scrolled down to What's Color? and taken up
+   * again where it was when they come back (Frank, 2026-11-19) — with its
+   * sound, if it had it. Less than a sliver of the film on screen counts as
+   * gone. Every other place that would start it again asks `away` first.
+   */
+  let away = false;
+  const film = video.closest<HTMLElement>('.wc-film') ?? video;
+  new IntersectionObserver(
+    ([entry]) => {
+      away = !entry || entry.intersectionRatio < 0.15;
+      if (away) video.pause();
+      else if (video.paused && !phone.matches) void ask();
+    },
+    { threshold: [0, 0.15] },
+  ).observe(film);
+
+  initSound(video, () => (away ? Promise.resolve(false) : ask()));
 
   void ask().then((playing) => {
     if (playing) return;
@@ -114,7 +131,7 @@ function startFilm(): void {
 
   // Safari stops the film with the tab and does not always take it up again.
   document.addEventListener('visibilitychange', () => {
-    if (!document.hidden && video.paused && !phone.matches) void ask();
+    if (!document.hidden && video.paused && !phone.matches && !away) void ask();
   });
 
   // Below 900px the film is not shown, and a film that is only hidden goes on
@@ -122,7 +139,7 @@ function startFilm(): void {
   // is wide enough to show it.
   phone.addEventListener('change', () => {
     if (phone.matches) video.pause();
-    else void ask();
+    else if (!away) void ask();
   });
 }
 
