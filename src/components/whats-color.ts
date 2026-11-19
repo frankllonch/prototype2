@@ -174,7 +174,29 @@ function openingText(edition: Edition): Html {
         ),
       )}
     </div>
+    ${edition.numeral === 'I' ? textFilm() : ''}
   </div>`;
+}
+
+/**
+ * The film of the first edition, by Mariona Domenech, under its text — where
+ * the old site had it. Unlike the opening film this one is meant to be
+ * watched and heard: it waits for a click, plays with its sound, and carries
+ * the browser's own controls. Nothing is fetched but the poster until then.
+ */
+function textFilm(): Html {
+  return html`<figure class="wc-text-film">
+    <video
+      controls
+      playsinline
+      preload="none"
+      poster="${withBase('/video/whats-color-film-poster.jpg')}"
+      aria-label="What’s Color? (I), a film by Mariona Domenech"
+    >
+      <source src="${withBase('/video/whats-color-film.mp4')}" type="video/mp4" />
+    </video>
+    <figcaption>Film: Mariona Domenech</figcaption>
+  </figure>`;
 }
 
 /**
