@@ -42,6 +42,9 @@ export function initWcTexts(): void {
       return;
     }
     if (target.closest('a')) return;
+    // The film under the first edition's text plays where it is: a click on
+    // its controls is not a click on the doorway.
+    if (target.closest('.wc-text-film')) return;
     if (!isPlainClick(event)) return;
     const block = target.closest<HTMLElement>('.wc-text');
     if (!block) return;
