@@ -28,6 +28,9 @@ import { WRITE_MS, writtenPoint } from './write.ts';
  * shows the cue at all — the first `update` runs before any scrolling of its
  * own.
  */
+/** The tap down the Colour Chart's run: long enough to watch it type. */
+const CHART_TYPE_MS = 2600;
+
 export function initScrollCue(): void {
   const cue = document.querySelector<HTMLElement>('[data-scroll-cue]');
   if (!cue) return;
@@ -54,6 +57,20 @@ export function initScrollCue(): void {
     threshold = () => (scrollWrites() ? Math.max(end, window.innerHeight * 0.1) : window.innerHeight * 0.1);
   }
 
+  /*
+   * The Colour Chart's opening is typed by the scroll (client/chart.ts), so
+   * there the cue asks until the run is spent, and a tap on it carries the
+   * page down the run slowly enough to watch the words come.
+   */
+  const chart = document.querySelector<HTMLElement>('[data-chart]');
+  const chartEnd = () => Number.parseFloat(chart?.dataset.chartEnd ?? '');
+  if (chart) {
+    threshold = () => {
+      const end = chartEnd();
+      return Number.isFinite(end) ? Math.max(end - 2, window.innerHeight * 0.1) : window.innerHeight * 0.1;
+    };
+  }
+
   const update = () => {
     if (gone) return;
     if (window.scrollY < threshold()) return;
@@ -71,6 +88,7 @@ export function initScrollCue(): void {
    *
    *   The start page: the sentence written first, then the names.
    *   The gallery: the pile spread into the grid.
+   *   The Colour Chart: the statement typed to its end.
    *
    * Anywhere else, or past every stop, a screen further down.
    */
@@ -83,6 +101,8 @@ export function initScrollCue(): void {
       if (written !== null) stops.push([written, WRITE_MS]);
       const names = document.getElementById('whats-color');
       if (names) stops.push([topOf(names)]);
+    } else if (chart && Number.isFinite(chartEnd())) {
+      stops.push([chartEnd(), CHART_TYPE_MS]);
     } else if (document.querySelector('[data-hero]')) {
       stops.push([h * SCROLL_SPAN]);
     }
