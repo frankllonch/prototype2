@@ -8,9 +8,9 @@ const easeOf = (name) => {
         default: return typeof name === 'string' ? name : 'ease-in-out';
     }
 };
-const num = (key, label, value, min, max, step, unit = '') => ({ kind: 'num', key, label, value, min, max, step, unit });
-const pick = (key, label, value, options) => ({ kind: 'pick', key, label, value, options });
-const flag = (key, label, value) => ({ kind: 'flag', key, label, value });
+export const num = (key, label, value, min, max, step, unit = '') => ({ kind: 'num', key, label, value, min, max, step, unit });
+export const pick = (key, label, value, options) => ({ kind: 'pick', key, label, value, options });
+export const flag = (key, label, value) => ({ kind: 'flag', key, label, value });
 const text = (key, label, value) => ({ kind: 'text', key, label, value });
 const colour = (key, label, value) => ({ kind: 'colour', key, label, value });
 const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' });
@@ -747,12 +747,12 @@ function buildPanel(state, menuFields, menuDefaults, hooks) {
     drawMenu();
     return panel;
 }
-function section(name, ...children) {
+export function section(name, ...children) {
     const s = el('section', 'tuner-section');
     s.append(el('h3', '', name), ...children);
     return s;
 }
-function el(tag, className, text) {
+export function el(tag, className, text) {
     const node = document.createElement(tag);
     if (className)
         node.className = className;
@@ -760,7 +760,7 @@ function el(tag, className, text) {
         node.textContent = text;
     return node;
 }
-function button(label, onClick, className = '') {
+export function button(label, onClick, className = '') {
     const b = document.createElement('button');
     b.type = 'button';
     if (className)
@@ -770,7 +770,7 @@ function button(label, onClick, className = '') {
     return b;
 }
 /** One setting: label, control, and its value. Double-click the label to reset it. */
-function row(field, values, defaults, changed) {
+export function row(field, values, defaults, changed) {
     const wrap = el('label', 'tuner-row');
     const name = el('span', 'tuner-label', field.label);
     name.title = 'Double-click to reset';

@@ -2,12 +2,12 @@ import { reduceMotion } from './env.js';
 /**
  * The content rising, again (THE CONTENT RISING in 00-base.css).
  *
- * Arriving at Exhibitions, Commissioned or Artwork, the stylesheet runs it on
+ * Arriving at Exhibitions or Commissioned, the stylesheet runs it on
  * its own. Clicking the section in the bar while already on it, this runs it
  * once more: the animation is set inline, so the guarantee that cancels the
  * entrances once the page has shown (`is-revealed`) does not cancel it too.
  */
-export const RISING = '.xlist, .grid[data-stack]';
+export const RISING = '.xlist';
 export function replayRise() {
     if (reduceMotion.matches)
         return;
