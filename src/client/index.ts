@@ -14,6 +14,8 @@ import { initFigures } from './figures.ts';
 import { initSheets } from './sheets.ts';
 import { initLightbox } from './lightbox.ts';
 import { initCursor } from './cursor.ts';
+import { initBall } from './ball.ts';
+import { initBallTuner } from './ball-tuner.ts';
 import { initFilm } from './film.ts';
 import { initCurrent } from './current.ts';
 import { initScrollbar } from './scrollbar.ts';
@@ -55,6 +57,8 @@ initFigures();
 initSheets();
 initLightbox();
 initCursor();
+// The pointer itself: the ball (client/ball.ts, styles/11-ball.css).
+initBall();
 initFilm();
 initCurrent();
 initScrollbar();
@@ -74,3 +78,6 @@ initReveal();
 // Last, so the bar's words are as every other module left them. Off unless
 // the page was opened with ?tune (client/hover-tuner.ts).
 initHoverTuner();
+// The ball's tuner: off unless the page was opened with ?ball
+// (client/ball-tuner.ts).
+initBallTuner();

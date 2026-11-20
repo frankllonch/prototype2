@@ -71,7 +71,7 @@ const HOVER: 'roll' | 'scramble' = 'scramble';
 
 const CLIENT_MODULES = [
   'env', 'text-roll', 'transitions', 'controls', 'stack', 'years', 'hover-list', 'panels',
-  'figures', 'lightbox', 'cursor', 'film', 'tilt', 'paging', 'views',
+  'figures', 'lightbox', 'cursor', 'ball', 'ball-tuner', 'film', 'tilt', 'paging', 'views',
   'scroll-cue', 'about', 'inquiries', 'chart', 'book', 'focus', 'hues', 'current', 'scrollbar', 'scramble', 'hover-tuner', 'rise', 'menu', 'index',
 ] as const;
 

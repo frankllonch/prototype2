@@ -1,0 +1,75 @@
+/* --------------------------------------------------------------- ball */
+
+/*
+ * The site's pointer: a ball that follows the mouse and shows as the negative
+ * of whatever is under it (client/ball.ts). Over the white page it reads as a
+ * black ball; over a painting, as the painting's photographic negative.
+ *
+ * ── Where to adjust it ──────────────────────────────────────────────────
+ * Every setting is one of the variables below. To try them live, open any
+ * page with ?ball (client/ball-tuner.ts), then "Copy settings" and paste the
+ * lines back here.
+ */
+:root {
+  --ball-size: 14px;          /* the ball at rest */
+  --ball-hover-size: 30px;    /* over anything clickable */
+  --ball-press: 0.8;          /* while the button is held, as a share of its size */
+  --ball-follow: 0.4;         /* how fast it catches up: 1 = glued to the pointer, 0.1 = a slow trail */
+  --ball-grow: 0.35s;         /* how long it takes to grow and shrink */
+  --ball-grow-ease: var(--ease);
+  /*
+   * White, with `difference`: the result is |backdrop − white|, the negative of
+   * the backdrop, so the white page makes it black. (A black ball under
+   * `difference` would leave everything unchanged and be invisible.)
+   */
+  --ball-color: #ffffff;
+  --ball-blend: difference;
+  --ball-over-names: 0;       /* over a painting its name stands in for the pointer: 0 hides the ball there, 1 keeps it */
+}
+
+/*
+ * Only once the script is running, and only for a mouse (the class is set by
+ * client/ball.ts): without it a page with no script would have no pointer at
+ * all, and touch screens keep behaving as they always have.
+ */
+html.has-ball, html.has-ball * { cursor: none !important; }
+
+.ball {
+  position: fixed; top: 0; left: 0;
+  /* Above everything, the tuners included. */
+  z-index: 2147483647;
+  pointer-events: none;
+  /* The blend goes on this outer layer, as with the painting names' `.cursor`:
+     blended inside its own stacking context it would only meet itself. */
+  mix-blend-mode: var(--ball-blend);
+  opacity: 0;
+  transition: opacity 0.2s var(--ease);
+  will-change: transform;
+}
+.ball.is-on { opacity: 1; }
+/* Over a painting the pointer becomes its name (client/cursor.ts). */
+html:has(.cursor.is-visible) .ball.is-on { opacity: var(--ball-over-names); }
+
+.ball-dot {
+  display: block;
+  width: var(--ball-size); height: var(--ball-size);
+  border-radius: 50%;
+  background: var(--ball-color);
+  transform: translate(-50%, -50%);
+  transition:
+    width var(--ball-grow) var(--ball-grow-ease),
+    height var(--ball-grow) var(--ball-grow-ease),
+    transform 0.15s var(--ease);
+}
+.ball.is-hover .ball-dot { width: var(--ball-hover-size); height: var(--ball-hover-size); }
+.ball.is-down .ball-dot { transform: translate(-50%, -50%) scale(var(--ball-press)); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ball-dot { transition: none; }
+}
+@media (hover: none), (pointer: coarse) { .ball { display: none; } }
+
+/* The ball's tuner (client/ball-tuner.ts) wears the other tuners' clothes,
+   in the bottom left so it never covers theirs. */
+.tuner-ball { right: auto; left: 16px; width: 320px; }
+.tuner-ball .tuner-row { grid-template-columns: 1fr 130px 58px; }
