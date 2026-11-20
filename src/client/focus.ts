@@ -128,6 +128,11 @@ function openingFocus(): void {
       'a.wc-name, a.wc-intro, .wc-text-head a',
     );
     if (!name || !page.contains(name)) return;
+    // A numeral (I, II, III) opens a whole edition, not one answer: there is
+    // nothing to hold forward, so it leaves like any other link — the page
+    // simply fades — rather than blurring the view behind it (Frank,
+    // 2026-11-20: the blur read as a veil over the page before it loaded).
+    if (name.classList.contains('wc-numeral-link')) return;
     for (const el of page.querySelectorAll('.wc-focused')) el.classList.remove('wc-focused');
     // A text block holds as one; a name holds alone.
     (name.closest('.wc-text') ?? name).classList.add('wc-focused');
