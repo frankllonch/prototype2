@@ -1232,7 +1232,10 @@ html.is-leaving-start .top a.is-chosen::before {
    the bar at the top, brings the film back, and only then lowers the bar to
    the film's middle line, where it rests there. */
 @media (prefers-reduced-motion: no-preference) {
-  html.arrive-start body.has-film:not(.is-film-past) .top {
+  /* `start-arrived` once it has run (client/transitions.ts): the arrival
+     class stays on the page, and without it every scroll back up from What's
+     Color ran the descent again — the bar jumped to the top and came down. */
+  html.arrive-start:not(.start-arrived) body.has-film:not(.is-film-past) .top {
     animation: bar-descend var(--start-climb) var(--start-ease)
       calc(var(--start-film-in) + var(--start-back-gap)) backwards;
   }

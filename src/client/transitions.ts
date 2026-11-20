@@ -90,6 +90,22 @@ export function initTransitions(): void {
   window.addEventListener('popstate', arrive);
   arrive();
 
+  /*
+   * Back at the start page by the name, the bar comes down once (00-base.css,
+   * `bar-descend`) — once. The arrival class lives as long as the page, so
+   * the descent is marked done when it ends, or when a scroll into What's
+   * Color cuts it short; otherwise scrolling back up ran it again.
+   */
+  if (root.classList.contains('arrive-start')) {
+    const bar = document.querySelector<HTMLElement>('.top');
+    const done = (event: AnimationEvent) => {
+      if (event.target !== bar || event.animationName !== 'bar-descend') return;
+      root.classList.add('start-arrived');
+    };
+    bar?.addEventListener('animationend', done);
+    bar?.addEventListener('animationcancel', done);
+  }
+
   // Armed before anything else can fail: whatever happens below, the page shows.
   window.setTimeout(() => root.classList.add('is-revealed'), REVEAL_GUARD);
 
