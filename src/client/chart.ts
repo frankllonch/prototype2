@@ -27,7 +27,14 @@ import { reduceMotion } from './env.ts';
 const WAIT_MS = 350;
 
 /** At most one word every this many milliseconds. Less is faster typing. */
-const WORD_MS = 32;
+const WORD_MS = 24;
+
+/**
+ * And once the reader has scrolled past the end of the run, the words still
+ * owed are typed at this pace, so the statement is finished before anything
+ * under it comes in (Frank, 2026-11-20).
+ */
+const CATCH_UP_MS = 10;
 
 /**
  * How much scroll the reader types with, per word, in screens. More is
@@ -71,7 +78,16 @@ export function initChart(): void {
     },
     { rootMargin: '0px 0px -8% 0px' },
   );
-  for (const el of pops) seen.observe(el);
+  // Nothing under the statement comes in until the statement is finished:
+  // the page reads as one sequence, the words and then the rest (Frank,
+  // 2026-11-20). Asked from `done`, so whatever is already on screen then
+  // comes in at once, column by column.
+  let watching = false;
+  const watch = () => {
+    if (watching) return;
+    watching = true;
+    for (const el of pops) seen.observe(el);
+  };
 
   /* ------------------------------------------------------------- the words */
 
@@ -112,10 +128,11 @@ export function initChart(): void {
     words[shown++]?.classList.add('is-written');
     if (shown >= words.length) {
       done();
+      watch();
       window.removeEventListener('scroll', onScroll);
       return;
     }
-    timer = window.setTimeout(tick, WORD_MS);
+    timer = window.setTimeout(tick, furthest >= run ? CATCH_UP_MS : WORD_MS);
   };
   const aim = (n: number) => {
     // Forwards only: the target never comes back down.
@@ -124,12 +141,16 @@ export function initChart(): void {
   };
 
   let autoDone = false;
+  // The furthest the reader has been down the run. Forwards only: going back
+  // up never lowers it, so a reader who went past the end and came back finds
+  // the statement finished, not stopped where they now are.
+  let furthest = 0;
   const onScroll = () => {
+    furthest = Math.max(furthest, window.scrollY - opening.offsetTop);
     // The reader's words follow the clock's: nothing they scroll is typed
     // until the opening has finished typing itself, and then it catches up.
     if (!autoDone) return;
-    const travelled = window.scrollY - opening.offsetTop;
-    const share = Math.max(0, Math.min(1, travelled / run));
+    const share = Math.max(0, Math.min(1, furthest / run));
     aim(autoWords.length + Math.ceil(share * restWords.length));
   };
   window.addEventListener('scroll', onScroll, { passive: true });
@@ -140,6 +161,7 @@ export function initChart(): void {
     target = shown = words.length;
     for (const w of words) w.classList.add('is-written');
     done();
+    watch();
     return;
   }
 
