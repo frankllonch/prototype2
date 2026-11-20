@@ -706,6 +706,27 @@ html.is-scrolled .scroll-cue { opacity: 0; pointer-events: none; visibility: hid
   50% { transform: translateY(0.18rem); }
 }
 
+/*
+ * THE GALLERY'S CUE INSISTS (Frank, 2026-11-20). Over the scattered paintings
+ * nothing says the page goes on, so here the chevron does not nudge, it
+ * knocks: down hard and back, twice, a breath, and again — for as long as
+ * the opening has not been scrolled through (client/scroll-cue.ts).
+ *
+ *   --cue-knock-time  one round: two knocks and the breath after them
+ *   --cue-knock-drop  how far down each knock goes
+ */
+:root {
+  --cue-knock-time: 1.7s;
+  --cue-knock-drop: 0.75rem;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .years ~ .scroll-cue svg { animation: scroll-cue-knock var(--cue-knock-time) cubic-bezier(0.5, 0, 0.3, 1) infinite; }
+}
+@keyframes scroll-cue-knock {
+  0%, 32%, 64%, 100% { transform: translateY(0); }
+  16%, 48% { transform: translateY(var(--cue-knock-drop)); }
+}
+
 /* No room to spare, and a phone's own scrollbar already says the page is long. */
 @media (max-width: 899px) {
   :root { --cue-size: 2rem; }

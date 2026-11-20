@@ -1,5 +1,5 @@
 import { phone, reduceMotion } from './env.ts';
-import { LAYOUTS, easeOf, pile, scrollSpan, seeded, type Start } from './pile.ts';
+import { LAYOUTS, WATER, easeOf, pile, scrollSpan, seeded, type Start } from './pile.ts';
 
 /**
  * The opening: every painting gathered into one pile in the middle of the
@@ -84,7 +84,9 @@ const WATCHDOG = 4000;      // ms: if the pile cannot be measured by now, show t
 const webkit = /AppleWebKit/.test(navigator.userAgent) && !/Chrome|Chromium|Edg\//.test(navigator.userAgent)
   || /CriOS|FxiOS|EdgiOS/.test(navigator.userAgent);
 
-interface Target { tx: number; ty: number; s: number; ox: number; oy: number; rot: number; op: number; delay: number }
+interface Target { tx: number; ty: number; w: number; h: number; s: number; ox: number; oy: number; rot: number; op: number; delay: number }
+/** Where the water has carried a painting from its starting place, and how fast it is going. */
+interface Drift { x: number; y: number; vx: number; vy: number; phase: number }
 
 export function initStack(): void {
   const grid = document.querySelector<HTMLElement>('[data-stack]');
@@ -259,6 +261,8 @@ export function initStack(): void {
       return {
         tx: r.left + r.width / 2,
         ty: r.top - lift + scroll + r.height / 2,
+        w: r.width,
+        h: r.height,
         s: r.height ? st.h / r.height : 1,
         ox: st.x,
         oy: st.y,
@@ -285,6 +289,33 @@ export function initStack(): void {
    * box. A picture that arrives after its turn comes in at once: `--count-late`
    * is how long the count had already been running.
    */
+  /*
+   * THE WATER (the knobs and what they mean: WATER, client/pile.ts). The
+   * cursor, in window px, and how fast it is moving; and each painting's drift.
+   */
+  const finger = { x: 0, y: 0, vx: 0, vy: 0, at: 0, on: false };
+  const drifts = new Map<HTMLElement, Drift>();
+  let floatedAt = 0;
+  const driftOf = (tile: HTMLElement): Drift => {
+    let d = drifts.get(tile);
+    if (!d) { d = { x: 0, y: 0, vx: 0, vy: 0, phase: Math.random() * Math.PI * 2 }; drifts.set(tile, d); }
+    return d;
+  };
+  window.addEventListener('pointermove', (event) => {
+    if (event.pointerType === 'touch' || settled || disabled) return;
+    const dt = (event.timeStamp - finger.at) / 1000;
+    if (finger.on && dt > 0 && dt < 0.2) {
+      // Smoothed: single events are jumpy, and a jolt would fling a painting.
+      finger.vx += ((event.clientX - finger.x) / dt - finger.vx) * 0.4;
+      finger.vy += ((event.clientY - finger.y) / dt - finger.vy) * 0.4;
+    }
+    finger.x = event.clientX;
+    finger.y = event.clientY;
+    finger.at = event.timeStamp;
+    finger.on = true;
+  }, { passive: true });
+  document.documentElement.addEventListener('pointerleave', () => { finger.on = false; });
+
   let counted = false;
   const count = (members: HTMLElement[]) => {
     counted = true;
@@ -401,14 +432,54 @@ export function initStack(): void {
     const cy = window.scrollY + h * Number(pile.motion.cy);
     const stagger = Math.min(0.95, Math.max(0, Number(pile.motion.stagger)));
 
+    // The water's step: real time, capped so a stalled frame throws nothing.
+    const water = WATER.on;
+    const dt = floatedAt ? Math.min(time - floatedAt, 50) / 1000 : 0;
+    floatedAt = time;
+    const reach = WATER.reach * h;
+    const slow = Math.exp(-WATER.thick * dt);
+    // A cursor that has stopped is still water: its speed dies away.
+    const fade = Math.exp(-6 * dt);
+    finger.vx *= fade;
+    finger.vy *= fade;
+    const force = WATER.push * (WATER.still + (1 - WATER.still) * Math.min(1, Math.hypot(finger.vx, finger.vy) / WATER.fast));
+    const sway = (time / 1000) * (2 * Math.PI / WATER.sway);
+
     live.forEach((tile, i) => {
       const t = targets[i]!;
       // Each painting's own share of the unfold, after its wait.
       const q = stagger ? Math.min(1, Math.max(0, (p - t.delay) / (1 - stagger))) : p;
       const e = ease(q);
-      const dx = (cx + t.ox - t.tx) * (1 - e);
-      const dy = (cy + t.oy - t.ty) * (1 - e);
       const s = t.s + (1 - t.s) * e;
+      let dx = (cx + t.ox - t.tx) * (1 - e);
+      let dy = (cy + t.oy - t.ty) * (1 - e);
+      // Only the paintings that are shown float, and less the nearer the grid.
+      if (water && t.op > 0 && e < 1) {
+        const d = driftOf(tile);
+        const calm = 1 - e;
+        if (finger.on && dt) {
+          // From the cursor to the nearest point of the painting: nothing when
+          // it is over it, so touching is felt the most.
+          const X = t.tx + dx + d.x * calm;
+          const Y = t.ty + dy + d.y * calm - window.scrollY;
+          const hw = (t.w * s) / 2;
+          const hh = (t.h * s) / 2;
+          const gap = Math.hypot(
+            finger.x - Math.min(X + hw, Math.max(X - hw, finger.x)),
+            finger.y - Math.min(Y + hh, Math.max(Y - hh, finger.y)),
+          );
+          const feel = Math.exp(-((gap / reach) ** 2)) * calm;
+          const away = Math.hypot(X - finger.x, Y - finger.y) || 1;
+          d.vx += ((finger.vx - d.vx) * WATER.drag + ((X - finger.x) / away) * force) * feel * dt;
+          d.vy += ((finger.vy - d.vy) * WATER.drag + ((Y - finger.y) / away) * force) * feel * dt;
+        }
+        d.vx = (d.vx - d.x * WATER.home * dt) * slow;
+        d.vy = (d.vy - d.y * WATER.home * dt) * slow;
+        d.x += d.vx * dt;
+        d.y += d.vy * dt;
+        dx += (d.x + WATER.bob * Math.sin(sway + d.phase)) * calm;
+        dy += (d.y + WATER.bob * Math.cos(sway * 0.83 + d.phase * 1.7)) * calm;
+      }
       const r = t.rot * (1 - e);
       tile.style.transform = `translate3d(${dx.toFixed(1)}px, ${dy.toFixed(1)}px, 0)${r ? ` rotate(${r.toFixed(2)}deg)` : ''} scale(${s.toFixed(4)})`;
       if (t.op !== 1) tile.style.opacity = (t.op + (1 - t.op) * Math.min(1, Math.max(0, e))).toFixed(3);
@@ -418,6 +489,9 @@ export function initStack(): void {
       if (!ordered) tile.style.zIndex = String(live.length - i);
     });
     ordered = true;
+    // Water never quite stops: the paintings are drawn every frame until the
+    // grid has them.
+    if (water) schedule();
   };
 
   /** The pile cannot be drawn: stop trying, and leave the grid usable. */

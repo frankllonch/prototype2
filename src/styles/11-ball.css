@@ -14,8 +14,8 @@
   --ball-size: 20px;          /* the ball at rest */
   --ball-hover-size: 50px;    /* over anything clickable */
   --ball-press: 0.8;          /* while the button is held, as a share of its size */
-  --ball-follow: 1;         /* how fast it catches up: 1 = glued to the pointer, 0.1 = a slow trail */
-  --ball-grow: 0.35s;         /* how long it takes to grow and shrink */
+  --ball-follow: 0.5;         /* how fast it catches up: 1 = glued to the pointer, 0.1 = a slow trail */
+  --ball-grow: 0.7s;         /* how long it takes to grow and shrink */
   --ball-grow-ease: var(--ease);
   /*
    * White, with `difference`: the result is |backdrop − white|, the negative of

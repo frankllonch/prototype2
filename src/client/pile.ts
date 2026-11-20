@@ -257,6 +257,41 @@ export const SITE: Pile = {
   freeze: null,
 };
 
+/*
+ * THE WATER — how the paintings float while they wait at the top of the
+ * gallery, before the scroll takes them to the grid (client/stack.ts).
+ *
+ * They lie on water and the cursor is a finger in it: moving it drags the
+ * water, and the paintings near it, along; it nudges them aside as it comes;
+ * and one it rests on slips slowly out from under it. They keep whatever
+ * place they are pushed to, drifting home only very slowly, and the scroll
+ * gathers them from wherever they are.
+ *
+ *   reach   how far from the cursor the water is felt, in screen heights.
+ *   drag    how firmly a moving cursor carries the paintings with it.
+ *   push    how hard it parts them, in px/s² at the cursor.
+ *   still   how much of that push a cursor at rest still has (0 to 1): what
+ *           makes a painting slide away from under a cursor that only hovers.
+ *   fast    the cursor speed, px/s, at which the push is at its full.
+ *   thick   how thick the water is: higher stops a pushed painting sooner.
+ *   home    how strongly each is drawn back to its own place. 0 leaves them
+ *           wherever they were pushed; 1 brings them back within seconds.
+ *   bob     how far each sways on its own, in px, and `sway` how slowly
+ *           (seconds for one sway). bob 0 holds them still until touched.
+ */
+export const WATER = {
+  on: true,
+  reach: 0.16,
+  drag: 2.2,
+  push: 700,
+  still: 0.2,
+  fast: 900,
+  thick: 3,
+  home: 0.12,
+  bob: 5,
+  sway: 7,
+};
+
 export const ON = 'cv-pile-on';
 export const STORE = 'cv-pile';
 
