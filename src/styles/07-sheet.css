@@ -185,22 +185,37 @@
 .sheet-prose a { color: inherit; text-decoration: none; }
 .sheet-prose a:hover,
 .sheet-prose a:focus-visible { text-decoration: underline; text-underline-offset: 0.15em; text-decoration-thickness: 1px; }
+/* The gallery's name, lit in colour like About's (02-overlays.css) rather than underlined. */
+.sheet-prose a.about-link:is(:hover, :focus-visible) { text-decoration: none; }
 .sheet-prose .is-style-note {
   /* The same distance from the text as before the credits went to 30. */
   margin-top: calc(var(--type) * 5.2);
   /*
-   * ROLS: regular 30 on 30 (typography sheets, 2026-11-17). Everyone credited
-   * here is set a size under the text, so no one else's name is ever the size
-   * of hers. Claudia's own name, where a credit carries it, stays at the
+   * ROLS: regular 20 on 20. The typography sheets had them at 30
+   * (2026-11-17); Frank moved every credit to 20 (2026-11-18). Everyone
+   * credited here is set under the text, so no one else's name is ever the
+   * size of hers. Claudia's own name, where a credit carries it, stays at the
    * text's 40: wrap it in `.is-artist`.
    */
-  font-size: var(--t-30);
+  font-size: var(--t-20);
   font-weight: 400;
   line-height: 1;
 }
 /* The names keep their capitals, in the regular weight of the line. */
 .sheet-prose .is-style-note :is(b, strong, em) { font-weight: 400; }
-.sheet-prose .is-style-note .is-artist { font-size: calc(1em * 40 / 30); }
+.sheet-prose .is-style-note .is-artist { font-size: calc(1em * 40 / 20); }
+/*
+ * A credit and thank-you list set apart at 20, all of it: What's Color? (II)'s
+ * "photos ©" line and its THANKS TO list (content/shows.ts, setThanks).
+ */
+.sheet-prose .is-style-thanks { font-size: var(--t-20); line-height: 1; }
+.sheet-prose .is-style-thanks p { margin-bottom: 1em; }
+.sheet-prose .is-style-thanks p:last-child { margin-bottom: 0; }
+/*
+ * A quotation set apart from the lede: the text's 40, regular, in the case it
+ * was written in, opening on a tab (Edges, Frank 2026-11-18).
+ */
+.sheet-prose .is-quote { font-size: var(--type); font-weight: 400; text-transform: none; text-indent: 2em; }
 .sheet-prose .is-style-cta {
   margin-top: calc(var(--s-lead) * 3em);
   font-style: italic;
@@ -477,6 +492,11 @@ html:not(.js) .sheet-step { display: none; }
 }
 .plates-head .sheet-lines { margin-top: 1em; }
 .plates-head .sheet-when { margin-top: 1.6em; }
+/* El color no existe: the date sits 30% closer to the venue (Frank, 2026-11-18).
+   Desktop only here; the phone's gap is set with the other phone spacing. */
+@media (min-width: 900px) {
+  #exhibition-el-color-no-existe .plates-head .sheet-when { margin-top: 1.12em; }
+}
 
 .plates-stage {
   position: absolute;
@@ -592,7 +612,7 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
     --sh-type: calc(20 * var(--p));          /* place, dates and text, on a line of the same */
     --sh-name: calc(var(--sh-type) * 1.125); /* the name, likewise */
     --sh-lede: calc(var(--sh-type) * 1.125); /* the lede, likewise */
-    --sh-note: calc(var(--sh-type) * 0.75);  /* credits, likewise */
+    --sh-note: calc(var(--sh-type) * 0.5);   /* credits, likewise: 20 to the text's 40 */
     --sh-measure: none;                      /* where the lines under the name turn: the column */
     --sh-lines-top: calc(14 * var(--p));     /* name → place */
     --sh-when-top: 0px;                      /* place → dates: the next line */
@@ -612,7 +632,7 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
     --sh-type: calc(30 * var(--p));
     --sh-name: calc(var(--sh-type) * 1.125);
     --sh-lede: calc(var(--sh-type) * 1.125);
-    --sh-note: calc(var(--sh-type) * 0.75);
+    --sh-note: calc(var(--sh-type) * 0.5);
     --sh-measure: calc(261 * var(--p));      /* the lines under the name turn at the photograph's width */
     --sh-lines-top: calc(60 * var(--p));
     --sh-when-top: calc(29 * var(--p));      /* lines → year */
@@ -640,6 +660,8 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
     --sh-pic-top: calc(64 * var(--p));       /* dates → the first photograph */
     --sh-pics-gap: calc(20 * var(--p));
   }
+  /* El color no existe: place → dates 30% closer (Frank, 2026-11-18). */
+  #exhibition-el-color-no-existe { --sh-when-top: calc(22.4 * var(--p)); }
 
   /* ---- the page ---- */
 
@@ -706,6 +728,10 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
   .panel > .sheet .sheet-prose .lede-open { margin-bottom: var(--sh-para); }
   .panel > .sheet .sheet-prose > :is(p:first-of-type, .is-style-lead) { font-size: var(--sh-lede); line-height: var(--sh-lede); }
   .panel > .sheet .sheet-prose > .is-style-note { font-size: var(--sh-note); line-height: var(--sh-note); }
+  .panel > .sheet .sheet-prose > .is-quote { font-size: var(--sh-type); line-height: var(--sh-type); }
+  .panel > .sheet .sheet-prose > .is-style-thanks { font-size: var(--sh-note); line-height: var(--sh-note); }
+  .panel > .sheet .sheet-prose > .is-style-thanks p { margin: 0 0 1em; }
+  .panel > .sheet .sheet-prose > .is-style-thanks p:last-child { margin-bottom: 0; }
   /* Anything set into the text — a film — keeps to the column. */
   .panel > .sheet .sheet-prose :is(video, iframe, img) { max-width: 100%; }
 

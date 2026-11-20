@@ -1,232 +1,108 @@
 import { html, join, raw, type Html } from './html.ts';
-import { photographs, price, statement } from '../content/colour-chart.ts';
+import { photographs, price, sections, statement, type ChartSection } from '../content/colour-chart.ts';
 import { panelShell } from './panels.ts';
 import { plates } from './plates.ts';
 import { ENDPOINT, TURNSTILE_SITE_KEY } from '../content/inquiries.ts';
 
 /**
- * The statement, written by the scroll — and the scroll is the page itself.
+ * The Colour Chart, after the designer's third sheet (COLOR CHART DISSENY III,
+ * Frank, 2026-11-19).
  *
- * The page holds still on one screen while it is read: everything the sheet
- * sets, from the statement to the line at the foot, sits in a block stuck to
- * the top of the view, and behind it runs a strip of nothing whose only job
- * is to be scrolled through. Each word has a slice of that run, so the
- * sentence is typed by the reader's own hand, and when the last word lands
- * the run is spent and the page will not go any further. Scrolling back
- * unwrites it: a scroll timeline is a position, not a performance.
+ * An ordinary page that scrolls, as About does: no pinned screen and no run
+ * behind it. The title and the statement are typed in on arrival
+ * (`client/chart.ts`): the title and the first paragraph by themselves, the
+ * rest by the reader's scroll, forwards only; everything under them — Order yours, the cost, the two
+ * sections in three columns, the thanks and the line at the foot — comes in
+ * out of a blur as it reaches the screen.
  *
- * The timeline is the document's own (`scroll(root block)`) rather than the
- * view timeline the start page's note uses. There the stage travels past a
- * film and the sums have to allow for the screen it enters across; here the
- * page does not move at all, so the only thing to divide is the scroll, and
- * a word's turn is its share of it — nothing to reconcile with a stage height
- * and nothing to drift when one is retuned.
- *
- * `broken()` has already put the designer's line break in, so a paragraph may
- * carry a `<br />`. It is split out and put back between the halves rather
- * than run through the word splitter, which would otherwise wrap a tag.
+ * The markup is the finished page. The words are split into spans by the
+ * script, and nothing is hidden unless the script is there to bring it back.
  */
+
+/** The page's title (Frank, 2026-11-18), semibold 45 in capitals. */
+const TITLE = 'Artist colour chart for architects and designers';
+
+/** The sections the sheet sets, in three columns; About a colour chart is not on it. */
+const SET = ['Features', 'Technical characteristics'];
 
 /**
- * The page writes its own opening, and the opening is the first paragraph.
- *
- * "Color has always been my inspiration: a source of knowledge, a way of
- * life!" — the question and its answer, which is the one part of the
- * statement that does not stand without the other half. Counted off the
- * paragraph rather than stated as a number, so the page goes on stopping at
- * the end of it however Claudia rewrites it.
- *
- * They are not written by a clock and held apart from the rest: they are the
- * first slices of the same run, and the page simply travels to them for the
- * reader (`client/chart.ts`). That is what lets the reader take it back —
- * scrolling up unwrites them like any other word, where a clock would have
- * written them once and for good.
+ * A section's blocks dealt into three columns, left to right and then down
+ * again, as the sheet deals them: the six technical notes are 1 and 4, 2 and
+ * 5, 3 and 6. Each column runs down on its own, not in rows across, so a short
+ * note does not leave a gap beside a long one. `--n` is the block's place in
+ * the text, which is the order a phone reads them in (06-colour-chart.css).
  */
-
-/**
- * The share of the run the statement is written over.
- *
- * The rest of it brings the page in under the sentence — the way to order
- * one, the price, the thanks and the line at the foot — so the scroll is not
- * finished the moment the last word lands. Four fifths to the words, a fifth
- * to the four things they are above.
- */
-const WRITTEN_BY = 0.8;
-
-/** The four that arrive after the sentence, in the order they are read. */
-const ARRIVING = 4;
-
-/**
- * Where each of them comes in, as a slice of the run.
- *
- * The slices overlap by half: one is still arriving as the next begins, so
- * they read as a page settling rather than as four separate events. The last
- * finishes on the last pixel, with the sentence, so nothing is left to scroll
- * to once the page stands whole.
- */
-function arriving(i: number): string {
-  const step = (1 - WRITTEN_BY) / (ARRIVING + 1);
-  const from = WRITTEN_BY + i * step;
-  const to = Math.min(from + step * 2, 1);
-  return `animation-range: ${(from * 100).toFixed(2)}% ${(to * 100).toFixed(2)}%`;
+function columns(section: ChartSection): Html {
+  const cols = [0, 1, 2].map((c) => section.blocks.map((b, n) => ({ b, n })).filter(({ n }) => n % 3 === c));
+  return html`<section class="chart-section">
+    <h2 class="chart-section-title chart-in">${section.title}</h2>
+    <div class="chart-cols">
+      ${join(
+        cols.map(
+          (col) => html`<div class="chart-col">${join(
+            col.map(({ b, n }) => html`<p class="chart-in" style="--n:${n}">${raw(b)}</p>`),
+          )}</div>`,
+        ),
+      )}
+    </div>
+  </section>`;
 }
 
-function written(paragraphs: readonly string[]): { readonly block: Html; readonly reveal: number } {
-  const lines = paragraphs.map((p) => p.split(/<br\s*\/?>/));
-  const total = lines.flat().join(' ').trim().split(/\s+/).length;
-  let n = 0;
-
-  const word = (w: string): Html => {
-    const i = n++;
-    /*
-     * A slice in, not from the edge.
-     *
-     * The words are shared out over one more slice than there are words, and
-     * each takes the one after the first. Starting the first word at nought
-     * left it standing before the page had been touched — a stepped animation
-     * jumps at the start of its range, so a range beginning at the top of the
-     * document is a word that is simply always there. It is typed like every
-     * other word now, and the page at rest is blank.
-     */
-    const from = ((i + 1) / (total + 1)) * WRITTEN_BY;
-    /*
-     * A word arrives whole, the moment its turn comes — the animation is a
-     * single step, so there is never a half-written word ahead of the reader
-     * — and the end of its range only has to come after the start. Its own
-     * share, which puts the last word's end on the last pixel of the run.
-     */
-    const to = ((i + 2) / (total + 1)) * WRITTEN_BY;
-    const pc = (v: number) => (v * 100).toFixed(2);
-    /*
-     * The same turn twice: as the desktop's share of the document, and as the
-     * bare fractions (`--w0`, `--w1`) a phone held upright multiplies by its
-     * own run (Frank, 2026-11-15). There the sheet is taller than the screen,
-     * so a share of the document would be a share of the page under the
-     * writing too; a length of run is the same however tall the page is.
-     */
-    return html`<span
-      class="chart-word"
-      style="--w0:${from.toFixed(4)};--w1:${to.toFixed(4)};animation-range: ${pc(from)}% ${pc(to)}%"
-    >${w}</span>`;
-  };
-
-  const block = html`<div class="chart-statement">
-    ${join(
-      lines.map(
-        (halves) => html`<p>${join(
-          halves.map((half, h) => html`${h > 0 ? raw('<br />') : ''}${join(
-            half.trim().split(/\s+/).map((w, i) => html`${i > 0 ? ' ' : ''}${word(w)}`),
-          )}`),
-        )}</p>`,
-      ),
-    )}
-  </div>`;
-
-  /*
-   * Half a slice short of the sixth word's end, not on it: a word's turn
-   * begins where the last one's ends, so travelling to the boundary itself
-   * lands on the seventh as readily as the sixth. The middle of the sixth
-   * slice is unambiguous.
-   */
-  const opening = (lines[0] ?? []).join(' ').trim().split(/\s+/).length;
-  return { block, reveal: ((opening + 0.5) / (total + 1)) * WRITTEN_BY };
-}
-
-/**
- * The Colour Chart, after the designer's sheet.
- *
- * Simplified to five things: what the chart is, in her own words; the way to
- * order one; what it costs; her thanks; and the site's own line at the foot.
- * The record that used to follow — Features, the technical characteristics,
- * About a colour chart — is not on the sheet any more, and neither are the
- * stack of colours, the photographs or the heading, which the bar already
- * carries. `content/colour-chart.ts` still reads every one of those out of
- * WordPress; this page simply no longer sets them.
- *
- * The statement runs the full width of the page, which is the whole of the
- * change: there is no margin column to hold anything still beside it, so
- * nothing here is a composition — it is a page of type.
- */
 export function colourChart(): Html {
-  const { block, reveal } = written(statement);
-  return html`<div class="chart" data-chart-reveal="${reveal.toFixed(4)}" data-chart-written="${WRITTEN_BY}">
+  const set = SET.map((t) => sections.find((s) => s.title === t)).filter((s): s is ChartSection => !!s);
+  return html`<div class="chart" data-chart>
   <div class="chart-page">
     <!--
-      The bar names the page, so the heading would be the same words twice. It
-      is here for the document's structure and for anything reading the page
-      rather than looking at it.
+      The opening: the title and the statement, held in place while the
+      reader scrolls the rest of it into being (client/chart.ts adds the run
+      of scroll behind it). Without the script it is simply the top of the page.
     -->
-    <h1 class="sr-only">Color Chart</h1>
-
-    ${block}
+    <div class="chart-opening" data-chart-opening>
+      <div class="chart-stage" data-chart-stage>
+        <div class="chart-statement" data-chart-type>
+          <h1 class="chart-title">${TITLE}</h1>
+          ${join(statement.map((p, i) => html`<p${i === 0 ? raw(' data-chart-auto') : ''}>${raw(p)}</p>`))}
+        </div>
+      </div>
+    </div>
 
     <!--
       An anchor rather than a button, and to a real section further down the
       document. With scripting the click opens the form over the page; without
       it the same href simply walks to the form, which is standing open at the
-      foot of the page. The site makes this bargain everywhere — About and each
-      exhibition are plain anchors too — so nothing here is reachable only by
-      way of a script.
+      foot of the page.
     -->
-    <a class="chart-order chart-in" style="${arriving(0)}" href="#inquiries" data-inquiries-open>
+    <a class="chart-order chart-in" href="#inquiries" data-inquiries-open>
       Order yours
       <!--
-        The arrow is drawn rather than typed. An upward-right arrow is a
-        character Switzer may or may not carry, and a missing glyph would be
-        answered with whatever fallback face the machine has, at a weight
-        nothing here chose. Drawn, it is the designer's arrow at the designer's
-        weight — lighter than the stems beside it — everywhere.
-
-        Drawn about its own centre, too, because it turns: the viewBox is
-        square and the arrow is set in the middle of it, so a rotation has
-        nothing to drift against.
+        The arrow is drawn rather than typed, about its own centre, because it
+        turns on hover.
       -->
       <svg class="chart-arrow" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
         <path d="M2.4 9.6 9.4 2.6M4.3 2.6h5.1v5.1" fill="none" stroke="currentColor" stroke-width="1.2" />
       </svg>
-      <!--
-        And the phone sheet's arrow, which is not the one above made smaller:
-        its arms run the full size of its box and its line is 3 of a box 22.5
-        by 22, drawn here in the sheet's own units from the top left of the
-        ink. The stylesheet shows one or the other (06-colour-chart.css); this
-        one does not turn, there being no hover on a phone to turn it.
-      -->
+      <!-- The phone sheet's own arrow; the stylesheet shows one or the other. -->
       <svg class="chart-arrow-phone" viewBox="0 0 22.5 22" aria-hidden="true" focusable="false">
         <path d="M1.5 1.5H21V22M1.2 20.97 20.6 1.57" fill="none" stroke="currentColor" stroke-width="3" />
       </svg>
     </a>
 
-    ${price ? html`<p class="chart-price chart-in" style="${arriving(1)}">Cost: <b>${price}</b></p>` : ''}
+    ${price ? html`<p class="chart-price chart-in">Cost: <b>${price}</b></p>` : ''}
+
+    ${join(set.map(columns))}
 
     <!--
       Her thanks, and a way of seeing who they are to: the photographs people
-      have sent her of the chart in use. An anchor to a real panel, as About
-      and every exhibition are, so without scripting it walks to them instead
-      of opening them over the page.
+      have sent her of the chart in use.
     -->
-    <p class="chart-thanks chart-in" style="${arriving(2)}">${
+    <p class="chart-thanks chart-in">${
       photographs.length
         ? html`<a class="hrow" href="#chart-photographs" data-panel-open="chart-photographs">Thanks to everyone!</a>`
         : 'Thanks to everyone!'
     }</p>
 
-    <!--
-      The site's own line, not the chart's: the same one stands at the foot of
-      the About sheet. It is here rather than in components/layout.ts because
-      this is the only page of the new set that is built; when the others land
-      it belongs in the layout, once, for all of them.
-    -->
-    <footer class="chart-footer chart-in" style="${arriving(3)}"><b>Claudia Valsells</b> &copy; All Rights Reserved</footer>
+    <footer class="chart-footer chart-in"><b>Claudia Valsells</b> &copy; All Rights Reserved</footer>
   </div>
-
-  <!--
-    And the run the writing is divided over: a strip of nothing behind the
-    page, there to be scrolled through. It carries no text and nothing can be
-    done with it, so it is out of the reading order entirely; it is in the
-    markup rather than made by script because the page has to be able to be
-    read by the scroll on its first paint, before anything has run.
-  -->
-  <div class="chart-runway" aria-hidden="true"></div>
 </div>`;
 }
 

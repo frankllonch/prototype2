@@ -70,9 +70,9 @@ const MENU = [
 const HOVER: 'roll' | 'scramble' = 'scramble';
 
 const CLIENT_MODULES = [
-  'env', 'text-roll', 'transitions', 'controls', 'stack', 'years', 'hover-list', 'panels',
-  'figures', 'lightbox', 'cursor', 'film', 'tilt', 'paging', 'views',
-  'scroll-cue', 'about', 'inquiries', 'chart', 'book', 'focus', 'hues', 'current', 'scrollbar', 'scramble', 'hover-tuner', 'rise', 'menu', 'index',
+  'env', 'text-roll', 'transitions', 'controls', 'pile', 'stack', 'years', 'hover-list', 'panels',
+  'figures', 'lightbox', 'cursor', 'ball', 'ball-tuner', 'film', 'tilt', 'paging', 'views',
+  'scroll-cue', 'about', 'inquiries', 'chart', 'book', 'focus', 'hues', 'current', 'scrollbar', 'scramble', 'pile-tuner', 'rise', 'menu', 'index',
 ] as const;
 
 /** The loading screen's five lines, set in blue on peach. */
@@ -151,7 +151,7 @@ function rolled(text: string): Html {
 function aboutOverlay(): Html {
   const lead = ABOUT_BLOCKS.find((b) => b.kind === 'lead');
   const images = ABOUT_BLOCKS.flatMap((b) => (b.kind === 'figure' ? [b.image] : []));
-  const text = ABOUT_BLOCKS.flatMap((b) => (b.kind === 'text' ? [b.text] : []));
+  const text = ABOUT_BLOCKS.flatMap((b) => (b.kind === 'text' ? [b] : []));
   return html`<section class="about" id="about" data-panel aria-label="About">
     <div class="about-sheet">
       <div class="about-text">
@@ -161,7 +161,14 @@ function aboutOverlay(): Html {
             ${images.length ? aboutReel(images) : ''}
           </div>
         </div>
-        ${join(text.map((t) => html`<p>${t}</p>`))}
+        ${join(
+          text.map(
+            (t) =>
+              html`<p>${t.text}${t.link
+                ? html` <a class="about-link hrow" href="${t.link.href}" target="_blank" rel="noopener">${t.link.label}</a>`
+                : ''}</p>`,
+          ),
+        )}
       </div>
       <div class="about-record">
         ${join(ABOUT_SHOWS.map(aboutShows))}
@@ -238,11 +245,11 @@ function aboutReelSteps(): Html {
 
 /** The start page's chevron, for About's own scroll. */
 function aboutCue(): Html {
-  return html`<div class="about-cue" data-about-cue aria-hidden="true">
-    <svg viewBox="0 0 28 16" focusable="false">
+  return html`<button type="button" class="about-cue" data-about-cue aria-label="Scroll down">
+    <svg viewBox="0 0 28 16" aria-hidden="true" focusable="false">
       <path d="M1.5 1.5 L14 13 L26.5 1.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
     </svg>
-  </div>`;
+  </button>`;
 }
 
 /** One photograph large over the page. */
@@ -356,10 +363,6 @@ ${description ? `<meta name="description" content="${description.replace(/"/g, '
 <link rel="stylesheet" href="${withBase('/site.css')}" />
 ${modules.map((m) => `<link rel="modulepreload" href="${m}" />`).join('\n')}
 <script>document.documentElement.classList.add('js');
-// The hover tuner's lettering, laid over the stylesheet before the first paint
-// so that moving between pages with it on does not flash the defaults. Only in
-// a browser that has asked for the tuner (?tune); see client/hover-tuner.ts.
-try { if (localStorage.getItem('cv-tune') === '1') { document.documentElement.setAttribute('data-tune', ''); var tc = localStorage.getItem('cv-tune-css'); if (tc) { var ts = document.createElement('style'); ts.id = 'tune-early'; ts.textContent = tc; document.head.appendChild(ts); } } } catch (e) {}
 // Arriving at What's Color by its link, the page is laid out at the top and
 // moved down to the written sentence by script — so it is kept covered until
 // it has been, and no frame is ever painted in the wrong place. The script
@@ -376,6 +379,14 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     setTimeout(function () { document.documentElement.classList.remove('wc-arriving') }, 1500);
     setTimeout(function () { document.documentElement.classList.remove('wc-swatch-drop') }, 700);
   } } catch (e) {}
+// Trying the ways the start page's film can go and come back (THE WAY OUT
+// OF THE START PAGE, 00-base.css): ?film=wipe, fade, cut or blur holds for
+// the visit; ?film=off goes back to the stylesheet's own setting.
+try { var film = new URLSearchParams(location.search).get('film');
+  if (film === 'off') sessionStorage.removeItem('cv-film');
+  else if (film && /^(fade|cut|wipe|blur)$/.test(film)) sessionStorage.setItem('cv-film', film);
+  film = sessionStorage.getItem('cv-film');
+  if (film) document.documentElement.style.setProperty('--start-film-style', 'film-' + film); } catch (e) {}
 // The page's colour, drawn here rather than by client/current.ts so that the
 // block in the bar is the right colour on the first frame. Drawn by the scripts,
 // it was painted once in the list's first colour and then changed, on every

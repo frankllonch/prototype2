@@ -14,6 +14,8 @@ import { initFigures } from './figures.ts';
 import { initSheets } from './sheets.ts';
 import { initLightbox } from './lightbox.ts';
 import { initCursor } from './cursor.ts';
+import { initBall } from './ball.ts';
+import { initBallTuner } from './ball-tuner.ts';
 import { initFilm } from './film.ts';
 import { initCurrent } from './current.ts';
 import { initScrollbar } from './scrollbar.ts';
@@ -31,7 +33,7 @@ import { initGlide } from './glide.ts';
 import { initWrite } from './write.ts';
 import { initMenu } from './menu.ts';
 import { initReveal } from './reveal.ts';
-import { initHoverTuner } from './hover-tuner.ts';
+import { initPileTuner } from './pile-tuner.ts';
 
 // The head stops waiting for these scripts after a few seconds and lets the
 // page stand as it does without them (components/layout.ts). Arriving later
@@ -55,6 +57,8 @@ initFigures();
 initSheets();
 initLightbox();
 initCursor();
+// The pointer itself: the ball (client/ball.ts, styles/11-ball.css).
+initBall();
 initFilm();
 initCurrent();
 initScrollbar();
@@ -71,6 +75,15 @@ initWcTexts();
 initGlide();
 initWrite();
 initReveal();
-// Last, so the bar's words are as every other module left them. Off unless
-// the page was opened with ?tune (client/hover-tuner.ts).
-initHoverTuner();
+// The menu hover tuner (client/hover-tuner.ts) is retired from the page
+// (Frank, 2026-11-18): whatever it left in this browser is cleared so the bar
+// is drawn exactly as the stylesheet says.
+try { localStorage.removeItem('cv-tune'); localStorage.removeItem('cv-tune-css'); } catch { /* private window */ }
+document.getElementById('tune-early')?.remove();
+delete document.documentElement.dataset.tune;
+// The gallery opening's tuner: off unless the page was opened with ?pile
+// (client/pile-tuner.ts).
+initPileTuner();
+// The ball's tuner: off unless the page was opened with ?ball
+// (client/ball-tuner.ts).
+initBallTuner();

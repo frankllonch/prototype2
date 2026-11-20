@@ -82,8 +82,7 @@ export const SHEETS: Readonly<Record<string, Sheet>> = {
     lines: ['BRAVA ARTS WITH ALZUETA GALLERY'],
     when: '2022',
     body: `
-      <p>At @brava_arts<br>With @alzuetagallery</p>
-      <p>BRAVA! is where @alzueta_gallery has its creation center where develops its artistic residency program to support the creativity and work of contemporary artist of our time. I was so glad to be there, 500m industrial building to work in the heart of Costa Brava.</p>
+      <p>BRAVA! is where <a class="about-link hrow" href="https://alzuetagallery.com" target="_blank" rel="noopener">ALZUETA GALLERY</a> has its creation center where develops its artistic residency program to support the creativity and work of contemporary artist of our time. I was so glad to be there, 500m industrial building to work in the heart of Costa Brava.</p>
       <p class="is-style-note">Photography by <a href="https://www.juditbou.com"><b>JUDIT BOU</b></a></p>`,
   },
 
@@ -130,7 +129,8 @@ export const SHEETS: Readonly<Record<string, Sheet>> = {
     lines: ['FOR NANI MARQUINA'],
     when: '2019',
     body: `
-      <p class="is-style-lead">An exclusive collection I designed for Design Within Reach, edited by Nani Marquina<br>«The abstract forms of this piece ‘Edges’ have significant value, a dichotomy between structure and form, a singular balance.» Claudia Valsells</p>
+      <p class="is-style-lead">An exclusive collection I designed for Design Within Reach, edited by Nani Marquina</p>
+      <p class="is-quote">“The abstract forms of this piece ‘Edges’ have significant value, a dichotomy between structure and form, a singular balance.” Claudia Valsells</p>
       <p class="is-style-note">To discover the collection link <a href="https://nanimarquina.com/es/"><em>Nani Marquina</em></a></p>`,
   },
 

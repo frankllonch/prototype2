@@ -89,12 +89,41 @@ export function initScramble(): void {
     measure(cells);
     wire(root, cells);
   }
+
+  let settling = 0;
+  window.addEventListener('resize', () => {
+    clearTimeout(settling);
+    settling = window.setTimeout(remeasure, 150);
+  });
 }
 
-/** Measured once, while the word is still itself, and held from then on. */
+/*
+ * Measured while the word is still itself, and held as a share of the
+ * letter's own size rather than in pixels. The bar's type is sized off the
+ * window (--type-menu, 00-base.css), so a box held in pixels stayed the size
+ * of the window the page loaded in: going from a small window to full screen
+ * left every letter cut down to a sliver of itself, until the page was loaded
+ * again. In em the box grows and shrinks with its letter.
+ */
 function measure(cells: readonly HTMLElement[]): void {
-  const widths = cells.map((cell) => cell.getBoundingClientRect().width.toFixed(2));
-  cells.forEach((cell, i) => cell.style.setProperty('--w', `${widths[i]}px`));
+  const widths = cells.map((cell) => {
+    const size = parseFloat(getComputedStyle(cell).fontSize) || 1;
+    return (cell.getBoundingClientRect().width / size).toFixed(4);
+  });
+  cells.forEach((cell, i) => cell.style.setProperty('--w', `${widths[i]}em`));
+}
+
+/*
+ * And measured again once a resize has settled, because type does not scale
+ * quite in step with itself at every size (hinting, rounding) and a box a
+ * hair too narrow clips. Each box is let go to its letter's own width first;
+ * one caught mid-churn is left as it is and taken next time.
+ */
+function remeasure(): void {
+  const still = [...document.querySelectorAll<HTMLElement>('[data-roll] .scram')]
+    .filter((cell) => cell.textContent === cell.dataset.ch);
+  for (const cell of still) cell.style.removeProperty('--w');
+  measure(still);
 }
 
 /*
@@ -118,6 +147,19 @@ function wire(root: HTMLElement, cells: readonly HTMLElement[]): void {
   // The hover tuner (?tune, client/hover-tuner.ts) writes the bar's words
   // itself while it is on; this stands aside for it.
   const tuning = () => 'tune' in document.documentElement.dataset;
+
+  /*
+   * Whether anything still asks for the churn: the pointer on the word, or a
+   * keyboard's focus on it. Asked on every piece, not trusted to the leave and
+   * blur events alone, because those go missing — About opening over the bar
+   * takes the bar out from under the pointer without a leave, and closing it
+   * hands focus back to the link it came from (env.ts, returnFocus), which is
+   * a focus nobody's keyboard made. Whatever the events miss, the word puts
+   * itself right on the next piece.
+   */
+  const keyed = () =>
+    root === document.activeElement && root.matches(':focus-visible') && !('quietFocus' in root.dataset);
+  const wanted = () => root.matches(':hover') || keyed();
 
   const settle = () => {
     if (frame) cancelAnimationFrame(frame);
@@ -147,6 +189,7 @@ function wire(root: HTMLElement, cells: readonly HTMLElement[]): void {
     let piece = -1;
 
     const tick = () => {
+      if (!wanted()) { settle(); return; }
       const now = Math.floor(performance.now() / STEP);
       if (now !== piece) {
         piece = now;
@@ -182,10 +225,19 @@ function wire(root: HTMLElement, cells: readonly HTMLElement[]): void {
    * standing still.
    */
   root.addEventListener('focus', () => {
+    // Focus put back by a script, or left by a click, is not a keyboard's.
+    if (!keyed()) return;
     const box = root.getBoundingClientRect();
     pointer = box.left + box.width / 2;
     locate();
     run();
   });
   root.addEventListener('blur', settle);
+
+  // Leaving the window or the page, or coming back to one kept in the back
+  // and forward cache, leaves every word as itself.
+  window.addEventListener('blur', settle);
+  window.addEventListener('pagehide', settle);
+  window.addEventListener('pageshow', settle);
+  document.addEventListener('visibilitychange', settle);
 }

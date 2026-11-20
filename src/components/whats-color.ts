@@ -7,16 +7,16 @@ import {
   SHEET_I,
   SHEET_II,
   SHEET_III,
-  CHART_II,
   type ChartBar,
   type Plate,
   type SheetSlot,
 } from '../content/whats-color-sheet.ts';
 
-/** The editions with a colour chart at their foot, by numeral. */
-const CHARTS: Record<string, readonly ChartBar[] | undefined> = {
-  II: CHART_II,
-};
+/**
+ * The editions with a colour chart at their foot, by numeral. Edition II had
+ * one (CHART_II in whats-color-sheet.ts) until Frank took it off, 18 Nov 2026.
+ */
+const CHARTS: Record<string, readonly ChartBar[] | undefined> = {};
 
 /** The editions the designer composed by hand, by numeral. */
 const SHEETS: Record<string, readonly SheetSlot[] | undefined> = {
@@ -312,7 +312,16 @@ function namesOfEdition(edition: Edition): Html {
   // fill would hold its opacity against the farewell's hand.
   return html`<section class="wc-group">
     <div class="wc-rise">
-      <p class="wc-numeral" aria-hidden="true">(${edition.numeral})</p>
+      <!-- The numeral is a doorway to its edition, dressed as a name: the
+           same band on hover, the same farewell when clicked. -->
+      <p class="wc-numeral">
+        <a
+          class="wc-name wc-numeral-link"
+          href="${withBase(`/whats-color/${edition.numeral.toLowerCase()}/`)}"
+          aria-label="What&rsquo;s Color? (${edition.numeral})"
+          >(${edition.numeral})</a
+        >
+      </p>
       <h2 class="sr-only">What&rsquo;s Color? (${edition.numeral})</h2>
       ${whatsColorNames(edition.roster ?? edition.participants)}
     </div>
@@ -464,6 +473,19 @@ export function whatsColorFilm(): Html {
       <source src="${withBase('/video/whats-color.mp4')}" type="video/mp4" media="(min-width: 900px)" />
     </video>
     <script>(function (v) { if (!matchMedia('(max-width: 899px)').matches) v.poster = v.dataset.poster })(document.currentScript.previousElementSibling)</script>
+    <!--
+      Sound on and off, in the film's top left corner (Frank, 2026-11-19): the
+      scroll cue's size and weight, and like it the negative of the frame
+      behind it. The film starts silent, which is the only way a browser will
+      start one by itself; client/film.ts shows this and wires it up.
+    -->
+    <button type="button" class="wc-film-sound" aria-pressed="false" aria-label="Sound on" hidden>
+      <svg viewBox="0 0 28 22" aria-hidden="true" focusable="false">
+        <path d="M1.5 7.5 H6.5 L13 2 V20 L6.5 14.5 H1.5 Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"/>
+        <path class="wc-sound-off" d="M18 7.5 L25 14.5 M25 7.5 L18 14.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"/>
+        <path class="wc-sound-on" d="M17 7.5 Q19.5 11 17 14.5 M20.5 3.5 Q26 11 20.5 18.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"/>
+      </svg>
+    </button>
     <noscript><style>.wc-film-video::-webkit-media-controls { display: none !important; }</style></noscript>
   </section>`;
 }

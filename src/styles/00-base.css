@@ -151,8 +151,9 @@
    *
    *   --side-top      where the first year's capitals start on the window
    *                   once the opening has ended. It is the first row of
-   *                   paintings: that row lands at --grid-start less the 30vh
-   *                   the pile scrolls beyond one screen (stack.ts, 1.3), so
+   *                   paintings: that row lands at --grid-start less the 45vh
+   *                   the opening scrolls beyond one screen (`motion.span`
+   *                   in client/pile.ts, 1.45), so
    *                   the two start on one line. A number in vh puts it there
    *                   instead.
    *   --type-side     the size of the controls — 24, 60, 181, Equal, To
@@ -164,7 +165,29 @@
    * row and rides up with the paintings as you scroll on, until its last
    * control is a margin above the foot of the window, then stays.
    */
-  --side-top: calc(var(--grid-start) - 30vh);
+  --side-top: calc(var(--grid-start) - 45vh);
+  /*
+   * THE COUNT — the gallery's opening filling up, from no paintings to all of
+   * them (2021 onwards), when the Gallery is opened. client/stack.ts queues
+   * the paintings; everything about the timing is here.
+   *
+   *   --count-delay     the wait before the first painting appears.
+   *   --count-duration  from the first painting to the last. The whole count.
+   *   --count-curve     the pace across it. 1 is steady. Above 1 it rushes
+   *                     first and the last ones trickle in (2 is clearly so);
+   *                     below 1 it starts slowly and ends in a rush (0.5).
+   *   --count-fade      how long each painting takes to appear.
+   *   --count-ease      the curve of that appearance.
+   *
+   * Each appears in its place and nothing else: no growing, no travelling. A
+   * scale here would also scale the distance the opening has moved the
+   * painting from its place in the grid, and it would drift in from below.
+   */
+  --count-delay: 0.2s;
+  --count-duration: 3s;
+  --count-curve: 0.7;
+  --count-fade: 0s;
+  --count-ease: var(--ease);
   --type-side: clamp(0.85rem, 1.5625vw, 2.55rem);
   --controls-gap: 4.7vw;
   /* The gallery's gutters, off the same sheet: 43 between columns and about
@@ -327,11 +350,11 @@ html.is-revealed .grid[data-stack] { animation-name: none; }
 }
 
 /*
- * THE CONTENT RISING — Exhibitions, Commissioned and Artwork (Frank,
- * 2026-11-17). Each time the section is opened from the bar the page's
+ * THE CONTENT RISING — Exhibitions and Commissioned (Frank, 2026-11-17). Each time the section is opened from the bar the page's
  * content comes up from the bottom of the window and settles into place:
  * arriving at the page, and clicking the section again while on it
- * (client/rise.ts, which replays it). On Artwork it is the pile that rises.
+ * (client/rise.ts, which replays it). Not Artwork: its opening is the scatter
+ * filling up (THE COUNT, above), and the two together were one too many.
  *
  * THE KNOBS:
  *
@@ -351,7 +374,7 @@ html.is-revealed .grid[data-stack] { animation-name: none; }
   30% { opacity: 1; }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .xlist, .grid[data-stack] {
+  .xlist {
     animation: content-rise var(--rise-time) var(--rise-ease) var(--rise-delay) backwards;
   }
 }
@@ -597,8 +620,9 @@ body.is-locked { overflow: hidden; }
  * Fixed at the foot of the screen rather than placed in the page, because the
  * gallery's runway is removed outright for reduced motion and on a back
  * navigation (`client/stack.ts`), and a cue living inside it would go with it.
- * Pointer events off: it says where to go, it does not go there, so the film
- * and the tiles under it stay clickable.
+ * A button: clicked, it goes where it points (`client/scroll-cue.ts`). It
+ * takes the pointer only on the chevron and a little around it, so the film
+ * and the tiles under it stay clickable, and not at all once it has gone.
  */
 /*
  * The two knobs for the scroll-down chevron, shared by the page's cue and the
@@ -621,9 +645,16 @@ body.is-locked { overflow: hidden; }
   z-index: 35;
   width: var(--cue-size);
   margin-left: calc(var(--cue-size) / -2);
-  pointer-events: none;
+  cursor: pointer;
   transition: opacity 0.7s var(--ease);
 }
+/* A target a little larger than the drawing, so the click need not be exact. */
+.scroll-cue::before, .about-cue::before {
+  content: '';
+  position: absolute;
+  inset: -0.9rem -0.6rem;
+}
+.scroll-cue:focus-visible, .about-cue:focus-visible { outline: 1px solid currentColor; outline-offset: 0.6rem; }
 /* The stroke is set here rather than on the path so the knob reaches it, and
    the drawing may spill past its box: a heavy line on a chevron drawn 1.5 from
    the edge would otherwise lose its top corners. */
@@ -632,7 +663,7 @@ body.is-locked { overflow: hidden; }
 
 /* Taken, and so no longer a cue. `client/scroll-cue.ts` sets this once, on the
    first movement worth the name, and never takes it off. */
-html.is-scrolled .scroll-cue { opacity: 0; }
+html.is-scrolled .scroll-cue { opacity: 0; pointer-events: none; visibility: hidden; transition: opacity 0.7s var(--ease), visibility 0s 0.7s; }
 
 /*
  * The same chevron on its side: every viewer's Previous and Next
@@ -1086,6 +1117,16 @@ html.is-leaving body.has-film.is-film-past .top [aria-current='page']:is(a, butt
  * the link, where the block drops in the same way.
  */
 .has-film .top [aria-current='page']:is(a, button) { animation: none; }
+/*
+ * And no fade on its colour (Frank, 2026-11-20). At the film's edge the name
+ * turns from paper-on-block to the bar's ink in a single frame — the block
+ * goes with it — but the hover fade on bar names (`.top-soon`, --hover) made
+ * the letters take half a second to follow, so for that half second they
+ * stood dark over the film with nothing behind them: a flicker each time
+ * What's Color was scrolled back up to the start page, and the same the
+ * other way.
+ */
+.has-film .top [aria-current='page']:is(a, button) { transition: none; }
 html.wc-swatch-drop body.has-film .top [aria-current='page']:is(a, button) {
   animation: name-knock var(--knock-time) linear var(--knock-delay) backwards;
 }
@@ -1095,12 +1136,13 @@ html.wc-swatch-drop body.has-film .top [aria-current='page']:is(a, button) {
  * THE WAY OUT OF THE START PAGE — to any page but What's Color, by the bar
  * (client/transitions.ts, `fromStart`).
  *
- * In four beats, one after the other (Frank, 2026-11-17):
+ * In this order (Frank, 2026-11-19 — it used to be film first, then the bar):
  *
- *   1. the film goes to paper, the bar standing still on its middle line
- *   2. a pause, the bar alone on the paper
- *   3. the bar climbs to the top of the window, where it stands on every other
- *      page: slow away, fast through the middle, slow into place
+ *   1. a pause, the bar standing on the film's middle line
+ *   2. the bar climbs, over the film still playing, to the top of the window,
+ *      where it stands on every other page: slow away, fast, slow into place
+ *   3. the bar stands at the top a moment (--start-settle) while the film
+ *      goes, finishing just before the colour drops
  *   4. the colour drops onto the name chosen, as a page's own block drops in
  *      when it opens — and then the next page comes up under a bar standing
  *      exactly so, in the same colour, without dropping it again
@@ -1109,41 +1151,92 @@ html.wc-swatch-drop body.has-film .top [aria-current='page']:is(a, button) {
  * THE KNOBS — every one of them is here; the script reads them to know when
  * to go, so nothing else needs changing:
  *
- *   --start-veil    beat 1: how long the film takes to go
- *   --start-pause   beat 2: how long the bar waits before it climbs
- *   --start-climb   beat 3: how long the climb takes
- *   --start-ease    beat 3: the climb's curve. (0.83, 0, 0.17, 1) is very slow,
- *                   fast, very slow; (0.65, 0, 0.35, 1) is gentler
- *   --start-swatch  beat 4: how long the colour takes to drop
- *   --start-hold    after beat 4: how long it all stands before the next page
+ *   --start-film-lead   WHEN THE FILM GOES. How long before the colour drops
+ *                       the film is completely gone. 0s = gone the very moment
+ *                       the colour drops; bigger = earlier (0.3s: gone as the
+ *                       bar reaches the top; 0.6s: gone mid-climb). A negative
+ *                       value (-0.2s) lets the colour drop first and the film
+ *                       go after it.
+ *   --start-film-out    how long the film takes to go
+ *   --start-film-style  HOW THE FILM GOES (and how it comes back when you
+ *                       return to the start page). One of:
+ *                         film-fade  paper fades in over it (as before)
+ *                         film-cut   no fade: gone in one frame
+ *                         film-wipe  paper rises from the bottom, following
+ *                                    the bar up (coming back, it falls away)
+ *                         film-blur  the film blurs out as the paper comes in
+ *   --start-film-in     how long the film takes to come back, on the way back
+ *   --start-pause       how long the bar waits before it climbs
+ *   --start-climb       how long the climb takes
+ *   --start-ease        the climb's curve. (0.83, 0, 0.17, 1) is very slow,
+ *                       fast, very slow; (0.65, 0, 0.35, 1) is gentler
+ *   --start-settle      how long the bar stands at the top before the colour
+ *                       drops: the room the film has to go in after the climb
+ *   --start-swatch      how long the colour takes to drop
+ *   --start-hold        after the drop: how long it all stands before the
+ *                       next page
+ *   --start-veil        on the way back only: how long the page you leave
+ *                       takes to go to paper
  *
- * And back again, by the name at the top left from any other page: the same
- * beats run backwards, with the same knobs. The block lifts off the page's
- * name as the page goes to paper (--start-veil), the bar comes down to the
- * film's middle line (--start-climb, --start-ease), it waits (--start-pause),
- * and the start page comes up under it, the film fading in (--start-veil).
+ * To try the styles without editing anything, open the start page with
+ * ?film=wipe (or fade, cut, blur); it holds for the rest of the visit, and
+ * ?film=off goes back to the setting here.
+ *
+ * And back again, by the name at the top left from any other page (Frank,
+ * 2026-11-20): the block lifts off the page's name as the page goes to paper
+ * (--start-veil), the bar staying at the top. The start page opens with the
+ * bar still at the top, the film comes back in the --start-film-style chosen
+ * (--start-film-in; film-wipe comes back wiping down), and only then does
+ * the bar come down to the film's middle line (--start-climb, --start-ease):
+ *
+ *   --start-back-gap    how long after the film is back the bar starts down.
+ *                       0s = the moment it is back; negative (-0.3s) = the
+ *                       bar sets off while the film is still coming in
  *
  * The climb is the bar's resting offset taken back: it stands at
  * (film-h − film-bar) / 2 and every other page has it at 0, with the same
  * padding over the line.
  */
 :root {
-  --start-veil: 0.6s;
+  --start-film-lead: 0.03s;
+  --start-film-out: 0.6s;
+  --start-film-style: film-wipe;
+  --start-film-in: 0.6s;
   --start-pause: 0.01s;
   --start-climb: 0.5s;
   --start-ease: cubic-bezier(0.65, 0, 0.17, 1);
+  --start-settle: 0.25s;
   --start-swatch: 0.3s;
   --start-hold: 0.01s;
-  /* Derived: where the climb and the drop begin. */
-  --start-climb-at: calc(var(--start-veil) + var(--start-pause));
-  --start-drop-at: calc(var(--start-climb-at) + var(--start-climb));
+  --start-veil: 0.6s;
+  --start-back-gap: -0.6s;
+  /* Derived: where the climb, the drop and the film's going begin. */
+  --start-climb-at: var(--start-pause);
+  --start-drop-at: calc(var(--start-climb-at) + var(--start-climb) + var(--start-settle));
+  --start-film-at: calc(var(--start-drop-at) - var(--start-film-lead) - var(--start-film-out));
 }
 html.is-leaving-start body.has-film .top {
   transform: translateY(calc((var(--film-bar) - var(--film-h)) / 2));
   transition: transform var(--start-climb) var(--start-ease) var(--start-climb-at);
 }
 @media (prefers-reduced-motion: no-preference) {
-  html.is-leaving-start body.has-film .page-veil { animation: veil-in var(--start-veil) ease-in-out both; }
+  html.is-leaving-start body.has-film .page-veil {
+    animation: film-fade var(--start-film-out) ease-in-out var(--start-film-at) both;
+    animation-name: var(--start-film-style);
+  }
+}
+/* The ways the film can go. Each is written as the paper arriving; coming
+   back, the same one runs in reverse (`arrive-start` below). */
+@keyframes film-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes film-cut { 0%, 99.9% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes film-wipe {
+  from { opacity: 1; clip-path: inset(100% 0 0 0); }
+  to { opacity: 1; clip-path: inset(0 0 0 0); }
+}
+@keyframes film-blur {
+  from { opacity: 0; backdrop-filter: blur(0); -webkit-backdrop-filter: blur(0); }
+  60% { opacity: 0.35; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+  to { opacity: 1; backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
 }
 html.is-leaving-start .top a.is-chosen {
   position: relative;
@@ -1167,22 +1260,34 @@ html.is-leaving-start .top a.is-chosen::before {
 }
 @keyframes swatch-wait { from { visibility: hidden; } to { visibility: visible; } }
 
-/* Back to the start page (client/transitions.ts, `toStart`). The bar comes
-   down to where the start page holds it; the film's figures live on that
-   page alone (04-whats-color.css), so they are repeated here as fallbacks. */
-html.is-leaving-to-start .top {
-  transform: translateY(calc((var(--film-h, 100vh) - var(--film-bar, 4.2rem)) / 2));
-  transition: transform var(--start-climb) var(--start-ease) var(--start-veil);
+/* Back to the start page (client/transitions.ts, `toStart`). The page goes
+   to paper under a bar that stays where it is; the start page then opens with
+   the bar at the top, brings the film back, and only then lowers the bar to
+   the film's middle line, where it rests there. */
+@media (prefers-reduced-motion: no-preference) {
+  /* `start-arrived` once it has run (client/transitions.ts): the arrival
+     class stays on the page, and without it every scroll back up from What's
+     Color ran the descent again — the bar jumped to the top and came down. */
+  html.arrive-start:not(.start-arrived) body.has-film:not(.is-film-past) .top {
+    animation: bar-descend var(--start-climb) var(--start-ease)
+      calc(var(--start-film-in) + var(--start-back-gap)) backwards;
+  }
 }
-/* The block lifts off as everywhere, and then is gone: lifted, it waits just
-   above the name, which is in sight once the bar starts down. */
+@keyframes bar-descend {
+  from { transform: translateY(calc((var(--film-bar) - var(--film-h)) / 2)); }
+  to { transform: none; }
+}
+/* The block lifts off as everywhere, and then is gone. */
 html.is-leaving-to-start .top [aria-current='page']:is(a, button)::before {
   animation: swatch-lift 0.34s var(--ease) both, swatch-gone 0s linear 0.34s both;
 }
 @keyframes swatch-gone { to { visibility: hidden; } }
 @media (prefers-reduced-motion: no-preference) {
   html.is-leaving-to-start .page-veil { animation: veil-in var(--start-veil) ease-in-out both; }
-  html.arrive-start .page-veil { animation: veil-out var(--start-veil) ease-in-out backwards; }
+  html.arrive-start .page-veil {
+    animation: film-fade var(--start-film-in) ease-in-out reverse backwards;
+    animation-name: var(--start-film-style);
+  }
 }
 
 /* Arrived that way: the block and the name stand as they were left. */

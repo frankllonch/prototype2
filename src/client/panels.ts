@@ -1,4 +1,4 @@
-import { isPlainClick, phone } from './env.ts';
+import { isPlainClick, phone, returnFocus } from './env.ts';
 
 /*
  * Steps in the history. On a phone, whatever is raised over the page — a panel
@@ -145,7 +145,9 @@ export function initPanels(): void {
     // On a phone what opened it may be in the menu, which is out of sight
     // again by now: the menu's button takes the keyboard instead.
     const shown = back && back.getClientRects().length > 0 && getComputedStyle(back).visibility !== 'hidden';
-    (shown ? back : document.querySelector<HTMLElement>('[data-menu-toggle]') ?? back)?.focus({ preventScroll: true });
+    // Marked as handed back rather than reached (env.ts), so the bar's hover
+    // (client/scramble.ts) does not take it for a keyboard arriving on the word.
+    returnFocus(shown ? back : document.querySelector<HTMLElement>('[data-menu-toggle]') ?? back);
   };
 
   /**

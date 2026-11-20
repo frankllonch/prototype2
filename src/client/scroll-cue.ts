@@ -1,4 +1,7 @@
-import { chartWrites, phone, scrollWrites } from './env.ts';
+import { scrollWrites } from './env.ts';
+import { glide, topOf } from './glide.ts';
+import { SCROLL_SPAN } from './stack.ts';
+import { WRITE_MS, writtenPoint } from './write.ts';
 
 /**
  * The scroll hint goes once it has been taken.
@@ -25,38 +28,17 @@ import { chartWrites, phone, scrollWrites } from './env.ts';
  * shows the cue at all — the first `update` runs before any scrolling of its
  * own.
  */
+/** The tap down the Colour Chart's run: long enough to watch it type. */
+const CHART_TYPE_MS = 2600;
+
 export function initScrollCue(): void {
-  if (!document.querySelector('[data-scroll-cue]')) return;
+  const cue = document.querySelector<HTMLElement>('[data-scroll-cue]');
+  if (!cue) return;
 
   const root = document.documentElement;
   let gone = false;
 
   let threshold = () => window.innerHeight * 0.1;
-
-  /*
-   * The Colour Chart's whole page is written by the document's own scroll, so
-   * the question the cue asks is answered only when the sentence stands: the
-   * share of the scroll the words are spread over, which the page states.
-   * It is also the moment before the line at the foot arrives, so the cue is
-   * gone by the time anything else wants the bottom of the screen.
-   */
-  // On a phone held upright the share is of the run alone, not of the whole
-  // document, which there carries the page's foot too (Frank, 2026-11-15), so
-  // the cue is gone before Order yours comes up under it.
-  const chart = document.querySelector<HTMLElement>('[data-chart-written]');
-  if (chart) {
-    const written = Number.parseFloat(chart.dataset.chartWritten ?? '');
-    const runway = chart.querySelector<HTMLElement>('.chart-runway');
-    if (Number.isFinite(written) && written > 0) {
-      threshold = () =>
-        Math.max(
-          phone.matches && chartWrites() && runway
-            ? runway.offsetHeight   // the runway is the words' share of the run already
-            : (document.documentElement.scrollHeight - window.innerHeight) * written,
-          window.innerHeight * 0.1,
-        );
-    }
-  }
 
   // Asked at each scroll rather than once: a phone turned upright mid-page
   // starts writing, and one turned on its side stops.
@@ -75,6 +57,20 @@ export function initScrollCue(): void {
     threshold = () => (scrollWrites() ? Math.max(end, window.innerHeight * 0.1) : window.innerHeight * 0.1);
   }
 
+  /*
+   * The Colour Chart's opening is typed by the scroll (client/chart.ts), so
+   * there the cue asks until the run is spent, and a tap on it carries the
+   * page down the run slowly enough to watch the words come.
+   */
+  const chart = document.querySelector<HTMLElement>('[data-chart]');
+  const chartEnd = () => Number.parseFloat(chart?.dataset.chartEnd ?? '');
+  if (chart) {
+    threshold = () => {
+      const end = chartEnd();
+      return Number.isFinite(end) ? Math.max(end - 2, window.innerHeight * 0.1) : window.innerHeight * 0.1;
+    };
+  }
+
   const update = () => {
     if (gone) return;
     if (window.scrollY < threshold()) return;
@@ -85,6 +81,35 @@ export function initScrollCue(): void {
 
   update();
   window.addEventListener('scroll', update, { passive: true });
+
+  /*
+   * Clicked, the cue goes where it points (Frank, 2026-11-18): on to the next
+   * part of the page, by the site's own glide.
+   *
+   *   The start page: the sentence written first, then the names.
+   *   The gallery: the pile spread into the grid.
+   *   The Colour Chart: the statement typed to its end.
+   *
+   * Anywhere else, or past every stop, a screen further down.
+   */
+  cue.addEventListener('click', () => {
+    const y = window.scrollY;
+    const h = window.innerHeight;
+    const stops: [number, number?][] = [];
+    if (write) {
+      const written = writtenPoint();
+      if (written !== null) stops.push([written, WRITE_MS]);
+      const names = document.getElementById('whats-color');
+      if (names) stops.push([topOf(names)]);
+    } else if (chart && Number.isFinite(chartEnd())) {
+      stops.push([chartEnd(), CHART_TYPE_MS]);
+    } else if (document.querySelector('[data-hero]')) {
+      stops.push([h * SCROLL_SPAN]);
+    }
+    const next = stops.find(([at]) => at > y + h * 0.05);
+    if (next) glide(next[0], next[1]);
+    else glide(y + h * 0.9);
+  });
 
   /*
    * Back on a blank stage — the menu's What's Color? takes the page back to the

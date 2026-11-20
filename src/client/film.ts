@@ -100,8 +100,27 @@ function startFilm(): void {
     // Kept for when there is a film on screen to start.
     if (phone.matches) return;
     for (const type of GESTURES) window.removeEventListener(type, onGesture);
-    void ask();
+    if (!away) void ask();
   };
+
+  /*
+   * Stopped once the reader has scrolled down to What's Color? and taken up
+   * again where it was when they come back (Frank, 2026-11-19) — with its
+   * sound, if it had it. Less than a sliver of the film on screen counts as
+   * gone. Every other place that would start it again asks `away` first.
+   */
+  let away = false;
+  const film = video.closest<HTMLElement>('.wc-film') ?? video;
+  new IntersectionObserver(
+    ([entry]) => {
+      away = !entry || entry.intersectionRatio < 0.15;
+      if (away) video.pause();
+      else if (video.paused && !phone.matches) void ask();
+    },
+    { threshold: [0, 0.15] },
+  ).observe(film);
+
+  initSound(video, () => (away ? Promise.resolve(false) : ask()));
 
   void ask().then((playing) => {
     if (playing) return;
@@ -112,7 +131,7 @@ function startFilm(): void {
 
   // Safari stops the film with the tab and does not always take it up again.
   document.addEventListener('visibilitychange', () => {
-    if (!document.hidden && video.paused && !phone.matches) void ask();
+    if (!document.hidden && video.paused && !phone.matches && !away) void ask();
   });
 
   // Below 900px the film is not shown, and a film that is only hidden goes on
@@ -120,7 +139,38 @@ function startFilm(): void {
   // is wide enough to show it.
   phone.addEventListener('change', () => {
     if (phone.matches) video.pause();
-    else void ask();
+    else if (!away) void ask();
+  });
+}
+
+/**
+ * The sound button in the film's corner (components/whats-color.ts). The film
+ * starts silent; a click gives it its sound and another takes it away. A click
+ * is a gesture, so the browser lets the sound through and, if the film had
+ * been refused a start, starts it too. Should it still say no, the film goes
+ * back to silent rather than stopping.
+ */
+function initSound(video: HTMLVideoElement, ask: () => Promise<boolean>): void {
+  const sound = document.querySelector<HTMLButtonElement>('.wc-film-sound');
+  if (!sound) return;
+  sound.hidden = false;
+
+  const show = (on: boolean) => {
+    sound.setAttribute('aria-pressed', String(on));
+    sound.setAttribute('aria-label', on ? 'Sound off' : 'Sound on');
+  };
+
+  sound.addEventListener('click', (event) => {
+    event.preventDefault();
+    const on = video.muted;
+    video.muted = !on;
+    show(on);
+    if (!on) return;
+    void video.play().catch(() => {
+      video.muted = true;
+      show(false);
+      void ask();
+    });
   });
 }
 

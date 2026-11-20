@@ -32,18 +32,6 @@ export const scrollWrites = (
   CSS.supports(`animation-timeline: ${timeline}`) &&
   (!phone.matches || upright.matches);
 
-/**
- * The Colour Chart's statement is taller than What's Color's note, so its
- * phone scene asks for a screen that is upright and tall enough: no squatter
- * than 375 by 590, or wider than 480, where --p follows the height. The same
- * query as 06-colour-chart.css's phone stage.
- */
-export const chartUpright = window.matchMedia(
-  '(orientation: portrait) and ((max-aspect-ratio: 375/590) or (min-width: 481px))',
-);
-/** The Colour Chart's own test: its stylesheet asks for scroll(), not view(). */
-export const chartWrites = (): boolean => scrollWrites('scroll()', chartUpright);
-
 /** True for a plain left click — modified clicks mean "open this elsewhere". */
 export const isPlainClick = (event: MouseEvent): boolean =>
   !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey && event.button === 0;
