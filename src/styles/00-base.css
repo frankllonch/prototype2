@@ -1149,11 +1149,16 @@ html.wc-swatch-drop body.has-film .top [aria-current='page']:is(a, button) {
  * ?film=wipe (or fade, cut, blur); it holds for the rest of the visit, and
  * ?film=off goes back to the setting here.
  *
- * And back again, by the name at the top left from any other page: the block
- * lifts off the page's name as the page goes to paper (--start-veil), the bar
- * comes down to the film's middle line (--start-climb, --start-ease), it waits
- * (--start-pause), and the start page comes up under it, the film coming back
- * in the --start-film-style chosen (--start-film-in).
+ * And back again, by the name at the top left from any other page (Frank,
+ * 2026-11-20): the block lifts off the page's name as the page goes to paper
+ * (--start-veil), the bar staying at the top. The start page opens with the
+ * bar still at the top, the film comes back in the --start-film-style chosen
+ * (--start-film-in; film-wipe comes back wiping down), and only then does
+ * the bar come down to the film's middle line (--start-climb, --start-ease):
+ *
+ *   --start-back-gap    how long after the film is back the bar starts down.
+ *                       0s = the moment it is back; negative (-0.3s) = the
+ *                       bar sets off while the film is still coming in
  *
  * The climb is the bar's resting offset taken back: it stands at
  * (film-h − film-bar) / 2 and every other page has it at 0, with the same
@@ -1161,8 +1166,8 @@ html.wc-swatch-drop body.has-film .top [aria-current='page']:is(a, button) {
  */
 :root {
   --start-film-lead: 0.03s;
-  --start-film-out: 0.22s;
-  --start-film-style: film-fade;
+  --start-film-out: 0.6s;
+  --start-film-style: film-wipe;
   --start-film-in: 0.6s;
   --start-pause: 0.01s;
   --start-climb: 0.5s;
@@ -1171,6 +1176,7 @@ html.wc-swatch-drop body.has-film .top [aria-current='page']:is(a, button) {
   --start-swatch: 0.3s;
   --start-hold: 0.01s;
   --start-veil: 0.6s;
+  --start-back-gap: 0.05s;
   /* Derived: where the climb, the drop and the film's going begin. */
   --start-climb-at: var(--start-pause);
   --start-drop-at: calc(var(--start-climb-at) + var(--start-climb) + var(--start-settle));
@@ -1221,15 +1227,21 @@ html.is-leaving-start .top a.is-chosen::before {
 }
 @keyframes swatch-wait { from { visibility: hidden; } to { visibility: visible; } }
 
-/* Back to the start page (client/transitions.ts, `toStart`). The bar comes
-   down to where the start page holds it; the film's figures live on that
-   page alone (04-whats-color.css), so they are repeated here as fallbacks. */
-html.is-leaving-to-start .top {
-  transform: translateY(calc((var(--film-h, 100vh) - var(--film-bar, 4.2rem)) / 2));
-  transition: transform var(--start-climb) var(--start-ease) var(--start-veil);
+/* Back to the start page (client/transitions.ts, `toStart`). The page goes
+   to paper under a bar that stays where it is; the start page then opens with
+   the bar at the top, brings the film back, and only then lowers the bar to
+   the film's middle line, where it rests there. */
+@media (prefers-reduced-motion: no-preference) {
+  html.arrive-start body.has-film:not(.is-film-past) .top {
+    animation: bar-descend var(--start-climb) var(--start-ease)
+      calc(var(--start-film-in) + var(--start-back-gap)) backwards;
+  }
 }
-/* The block lifts off as everywhere, and then is gone: lifted, it waits just
-   above the name, which is in sight once the bar starts down. */
+@keyframes bar-descend {
+  from { transform: translateY(calc((var(--film-bar) - var(--film-h)) / 2)); }
+  to { transform: none; }
+}
+/* The block lifts off as everywhere, and then is gone. */
 html.is-leaving-to-start .top [aria-current='page']:is(a, button)::before {
   animation: swatch-lift 0.34s var(--ease) both, swatch-gone 0s linear 0.34s both;
 }

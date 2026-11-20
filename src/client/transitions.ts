@@ -211,11 +211,12 @@ function beats(...names: string[]): number {
 }
 
 /**
- * And back (Frank, 2026-11-17): from any other page to the start page by the
- * name at the top left, the way out run backwards. The block lifts off this
- * page's name as the page goes to paper, the bar comes down to the film's
- * middle line, waits, and the start page comes up under it with the film
- * fading in — told so by a note, as the way out tells the page it goes to.
+ * And back (Frank, 2026-11-17, reordered 2026-11-20): from any other page to
+ * the start page by the name at the top left. The block lifts off this page's
+ * name as the page goes to paper, the bar staying at the top; the start page
+ * opens with the bar still there, the film comes back, and then the bar comes
+ * down to the film's middle line (00-base.css, `arrive-start`) — told so by a
+ * note, as the way out tells the page it goes to.
  */
 function toStart(link: HTMLAnchorElement, url: URL): boolean {
   const home = document.querySelector<HTMLAnchorElement>('.top .wordmark');
@@ -232,5 +233,5 @@ function goBack(url: URL): number {
   try {
     sessionStorage.setItem(HELD_KEY, JSON.stringify({ path: url.pathname, start: true, at: Date.now() }));
   } catch { /* the start page simply opens as it always does */ }
-  return beats('--start-veil', '--start-climb', '--start-pause');
+  return beats('--start-veil');
 }
