@@ -1094,6 +1094,16 @@ html.is-leaving body.has-film.is-film-past .top [aria-current='page']:is(a, butt
  * the link, where the block drops in the same way.
  */
 .has-film .top [aria-current='page']:is(a, button) { animation: none; }
+/*
+ * And no fade on its colour (Frank, 2026-11-20). At the film's edge the name
+ * turns from paper-on-block to the bar's ink in a single frame — the block
+ * goes with it — but the hover fade on bar names (`.top-soon`, --hover) made
+ * the letters take half a second to follow, so for that half second they
+ * stood dark over the film with nothing behind them: a flicker each time
+ * What's Color was scrolled back up to the start page, and the same the
+ * other way.
+ */
+.has-film .top [aria-current='page']:is(a, button) { transition: none; }
 html.wc-swatch-drop body.has-film .top [aria-current='page']:is(a, button) {
   animation: name-knock var(--knock-time) linear var(--knock-delay) backwards;
 }
