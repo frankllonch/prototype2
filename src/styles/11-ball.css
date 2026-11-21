@@ -11,11 +11,16 @@
  * lines back here.
  */
 :root {
-  --ball-size: 20px;          /* the ball at rest */
-  --ball-hover-size: 50px;    /* over anything clickable */
-  --ball-press: 0.8;          /* while the button is held, as a share of its size */
-  --ball-follow: 0.5;         /* how fast it catches up: 1 = glued to the pointer, 0.1 = a slow trail */
-  --ball-grow: 0.7s;         /* how long it takes to grow and shrink */
+  --ball-size: 20px;
+  /* the ball at rest */
+  --ball-hover-size: 50px;
+  /* over anything clickable */
+  --ball-press: 2;
+  /* while the button is held, as a share of its size */
+  --ball-follow: 0.5;
+  /* how fast it catches up: 1 = glued to the pointer, 0.1 = a slow trail */
+  --ball-grow: 0.7s;
+  /* how long it takes to grow and shrink */
   --ball-grow-ease: var(--ease);
   /*
    * White, with `difference`: the result is |backdrop − white|, the negative of
@@ -24,7 +29,8 @@
    */
   --ball-color: #ffffff;
   --ball-blend: difference;
-  --ball-over-names: 0;       /* over a painting its name stands in for the pointer: 0 hides the ball there, 1 keeps it */
+  --ball-over-names: 0;
+  /* over a painting its name stands in for the pointer: 0 hides the ball there, 1 keeps it */
 }
 
 /*
@@ -32,10 +38,15 @@
  * client/ball.ts): without it a page with no script would have no pointer at
  * all, and touch screens keep behaving as they always have.
  */
-html.has-ball, html.has-ball * { cursor: none !important; }
+html.has-ball,
+html.has-ball * {
+  cursor: none !important;
+}
 
 .ball {
-  position: fixed; top: 0; left: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
   /* Above everything, the tuners included. */
   z-index: 2147483647;
   pointer-events: none;
@@ -46,13 +57,28 @@ html.has-ball, html.has-ball * { cursor: none !important; }
   transition: opacity 0.2s var(--ease);
   will-change: transform;
 }
-.ball.is-on { opacity: 1; }
+
+.ball.is-on {
+  opacity: 1;
+}
+
+/* Safari: drawn with the page, not on a layer of its own (client/ball.ts),
+   so the bar's blend is never taken apart; and shown or hidden outright, since
+   a fading opacity would put it on a layer again for the length of the fade. */
+.ball.is-flat {
+  will-change: auto;
+  transition: none;
+}
+
 /* Over a painting the pointer becomes its name (client/cursor.ts). */
-html:has(.cursor.is-visible) .ball.is-on { opacity: var(--ball-over-names); }
+html:has(.cursor.is-visible) .ball.is-on {
+  opacity: var(--ball-over-names);
+}
 
 .ball-dot {
   display: block;
-  width: var(--ball-size); height: var(--ball-size);
+  width: var(--ball-size);
+  height: var(--ball-size);
   border-radius: 50%;
   background: var(--ball-color);
   transform: translate(-50%, -50%);
@@ -61,15 +87,37 @@ html:has(.cursor.is-visible) .ball.is-on { opacity: var(--ball-over-names); }
     height var(--ball-grow) var(--ball-grow-ease),
     transform 0.15s var(--ease);
 }
-.ball.is-hover .ball-dot { width: var(--ball-hover-size); height: var(--ball-hover-size); }
-.ball.is-down .ball-dot { transform: translate(-50%, -50%) scale(var(--ball-press)); }
+
+.ball.is-hover .ball-dot {
+  width: var(--ball-hover-size);
+  height: var(--ball-hover-size);
+}
+
+.ball.is-down .ball-dot {
+  transform: translate(-50%, -50%) scale(var(--ball-press));
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .ball-dot { transition: none; }
+  .ball-dot {
+    transition: none;
+  }
 }
-@media (hover: none), (pointer: coarse) { .ball { display: none; } }
+
+@media (hover: none),
+(pointer: coarse) {
+  .ball {
+    display: none;
+  }
+}
 
 /* The ball's tuner (client/ball-tuner.ts) wears the other tuners' clothes,
    in the bottom left so it never covers theirs. */
-.tuner-ball { right: auto; left: 16px; width: 320px; }
-.tuner-ball .tuner-row { grid-template-columns: 1fr 130px 58px; }
+.tuner-ball {
+  right: auto;
+  left: 16px;
+  width: 320px;
+}
+
+.tuner-ball .tuner-row {
+  grid-template-columns: 1fr 130px 58px;
+}

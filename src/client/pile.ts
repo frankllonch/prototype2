@@ -296,7 +296,7 @@ export const WATER = {
   still: 0.2,
   fast: 900,
   thick: 3,
-  home: 14,
+  home: 1,
   limit: 0.2,
   wall: 60,
   bob: 5,

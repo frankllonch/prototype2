@@ -139,7 +139,52 @@ function boxes(root: HTMLElement, count: number): HTMLElement[][] {
   return sets;
 }
 
+/*
+ * Writes a box's character into the text it already holds rather than handing
+ * it new text. Setting textContent throws the old text away and puts a fresh
+ * one in its place, and Safari keeps the very piece of text the button went
+ * down on to decide whether a click happened: swapped for another before the
+ * button came up, ten times a second while the churn ran, and the click was
+ * simply dropped (Frank, 2026-11-21). Chrome looks at the element and never
+ * minded. The same text, rewritten, is the same piece of text.
+ */
+function write(cell: HTMLElement, ch: string): void {
+  const text = cell.firstChild;
+  if (text && text.nodeType === Node.TEXT_NODE && !text.nextSibling) {
+    if ((text as Text).data !== ch) (text as Text).data = ch;
+  } else {
+    cell.textContent = ch;
+  }
+}
+
+/*
+ * Where the pointer last was, for every word at once, and whether it is still
+ * in the window at all. Safari keeps a word :hover after the pointer has gone
+ * — out of the window over the top, where the bar is, or with the bar carried
+ * away from under a pointer that has stood still — so that alone kept the
+ * word churning with nothing on it. Chrome clears it in both cases.
+ */
+const at = { x: -1, y: -1, inside: false };
+let tracking = false;
+function track(): void {
+  if (tracking) return;
+  tracking = true;
+  document.addEventListener('pointermove', (e) => { at.x = e.clientX; at.y = e.clientY; at.inside = true; }, { passive: true, capture: true });
+  document.addEventListener('pointerover', (e) => { at.x = e.clientX; at.y = e.clientY; at.inside = true; }, { passive: true, capture: true });
+  document.addEventListener('mouseout', (e) => { if (!e.relatedTarget) at.inside = false; }, { passive: true });
+  document.documentElement.addEventListener('mouseleave', () => { at.inside = false; });
+  window.addEventListener('blur', () => { at.inside = false; });
+}
+
+/** Whether the last known pointer is on the box, give or take a pixel. */
+function over(root: HTMLElement): boolean {
+  if (!at.inside) return false;
+  const box = root.getBoundingClientRect();
+  return at.x >= box.left - 2 && at.x <= box.right + 2 && at.y >= box.top - 2 && at.y <= box.bottom + 2;
+}
+
 function wire(root: HTMLElement, cells: readonly HTMLElement[]): void {
+  track();
   let frame = 0;
   let pointer = 0;
   let centres: number[] = [];
@@ -159,13 +204,19 @@ function wire(root: HTMLElement, cells: readonly HTMLElement[]): void {
    */
   const keyed = () =>
     root === document.activeElement && root.matches(':focus-visible') && !('quietFocus' in root.dataset);
-  const wanted = () => root.matches(':hover') || keyed();
+  const wanted = () => (root.matches(':hover') && over(root)) || keyed();
+
+  /*
+   * Still while the button is held: what is pressed is the word, and a word
+   * that keeps changing under a press is the one place a click can go astray.
+   */
+  let pressed = false;
 
   const settle = () => {
     if (frame) cancelAnimationFrame(frame);
     frame = 0;
     if (tuning()) return;
-    for (const set of boxes(root, cells.length)) for (const cell of set) cell.textContent = cell.dataset.ch ?? '';
+    for (const set of boxes(root, cells.length)) for (const cell of set) write(cell, cell.dataset.ch ?? '');
   };
 
   /*
@@ -190,6 +241,7 @@ function wire(root: HTMLElement, cells: readonly HTMLElement[]): void {
 
     const tick = () => {
       if (!wanted()) { settle(); return; }
+      if (pressed) { frame = requestAnimationFrame(tick); return; }
       const now = Math.floor(performance.now() / STEP);
       if (now !== piece) {
         piece = now;
@@ -203,7 +255,7 @@ function wire(root: HTMLElement, cells: readonly HTMLElement[]): void {
           const shown = chance > 0 && Math.random() < chance
             ? GLYPHS[Math.floor(Math.random() * GLYPHS.length)] ?? ''
             : cell.dataset.ch ?? '';
-          for (const set of sets) { const box = set[i]; if (box) box.textContent = shown; }
+          for (const set of sets) { const box = set[i]; if (box) write(box, shown); }
         });
       }
       frame = requestAnimationFrame(tick);
@@ -217,7 +269,19 @@ function wire(root: HTMLElement, cells: readonly HTMLElement[]): void {
 
   root.addEventListener('pointerenter', enter);
   root.addEventListener('pointermove', move);
-  root.addEventListener('pointerleave', settle);
+  root.addEventListener('pointerleave', () => { pressed = false; settle(); });
+  root.addEventListener('pointerdown', () => {
+    pressed = true;
+    // The word as itself for the press, in every copy of it.
+    if (!tuning()) for (const set of boxes(root, cells.length)) for (const cell of set) write(cell, cell.dataset.ch ?? '');
+  });
+  const release = () => {
+    if (!pressed) return;
+    pressed = false;
+    if (wanted()) { locate(); run(); }
+  };
+  document.addEventListener('pointerup', release);
+  document.addEventListener('pointercancel', release);
 
   /*
    * A keyboard reaches these too and has no pointer to follow, so focus churns
