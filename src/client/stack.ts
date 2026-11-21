@@ -116,6 +116,8 @@ export function initStack(): void {
   if (entry?.type === 'back_forward') { hero.remove(); reveal(); return; }
 
   root.classList.add('stack-running');
+  // Safari's sharp pile: the paintings' own layers (01-grid.css, .is-webkit).
+  if (webkit) grid.classList.add('is-webkit');
 
   /*
    * Every painting is on the window at once in the opening, so every picture

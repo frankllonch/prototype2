@@ -156,6 +156,19 @@ html.js .hero[data-hero]+.grid[data-stack] {
 .grid.is-layered .tile {
   will-change: transform;
 }
+/*
+ * Safari. A tile on a layer of its own is drawn once at its size in the grid,
+ * and the pile's scale — two or three times that — is then applied to the
+ * drawing, so in Safari the opening came out soft where Chrome and Brave,
+ * which draw the layer again at the size it is shown, are sharp (Frank,
+ * 2026-11-21). Given a layer of its own, the picture is handed to Safari's
+ * compositor as the image itself, which it scales from the full file: sharp
+ * at any size, still moved without repainting anything. Chrome is left as it
+ * was (client/stack.ts sets .is-webkit only in Safari).
+ */
+.grid.is-webkit.is-layered .tile img {
+  will-change: transform;
+}
 
 .grid.is-stacked {
   pointer-events: none;
