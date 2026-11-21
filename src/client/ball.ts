@@ -38,6 +38,16 @@ function pointerRules(): string[] {
   return found.filter((s) => { try { document.querySelector(s); return true; } catch { return false; } });
 }
 
+/*
+ * Safari. There the ball is drawn with the page rather than on a layer of its
+ * own. A blended layer kept apart (will-change, a 3D move) made Safari redo
+ * how it puts the page together, and every so often the bar — which is drawn
+ * with the same blend — came out in its raw colours: the menu gone grey
+ * (Frank, 2026-11-21). Drawn with the page, the ball is blended the same way
+ * the bar is. Chrome keeps the layer, where it was never a problem.
+ */
+const webkit = /AppleWebKit/.test(navigator.userAgent) && !/Chrome|Chromium|Edg\//.test(navigator.userAgent);
+
 export function initBall(): void {
   if (!finePointer.matches) return;
   const root = document.documentElement;
@@ -46,6 +56,7 @@ export function initBall(): void {
   ball.className = 'ball';
   ball.setAttribute('aria-hidden', 'true');
   ball.innerHTML = '<span class="ball-dot"></span>';
+  if (webkit) ball.classList.add('is-flat');
   document.body.append(ball);
   root.classList.add('has-ball');
 
@@ -63,7 +74,9 @@ export function initBall(): void {
   let targetX = 0, targetY = 0, x = 0, y = 0;
   let placed = false, frame = 0, tickedAt = 0;
 
-  const draw = () => { ball.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`; };
+  const draw = webkit
+    ? () => { ball.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`; }
+    : () => { ball.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`; };
 
   const tick = (time: number) => {
     // A share of the way per 120th of a second, applied by elapsed time so

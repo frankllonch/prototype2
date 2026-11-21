@@ -13,9 +13,9 @@
 :root {
   --ball-size: 20px;          /* the ball at rest */
   --ball-hover-size: 50px;    /* over anything clickable */
-  --ball-press: 0.8;          /* while the button is held, as a share of its size */
+  --ball-press: 4;            /* while the button is held, as a share of its size */
   --ball-follow: 0.5;         /* how fast it catches up: 1 = glued to the pointer, 0.1 = a slow trail */
-  --ball-grow: 0.7s;         /* how long it takes to grow and shrink */
+  --ball-grow: 0.7s;          /* how long it takes to grow and shrink */
   --ball-grow-ease: var(--ease);
   /*
    * White, with `difference`: the result is |backdrop − white|, the negative of
@@ -47,6 +47,10 @@ html.has-ball, html.has-ball * { cursor: none !important; }
   will-change: transform;
 }
 .ball.is-on { opacity: 1; }
+/* Safari: drawn with the page, not on a layer of its own (client/ball.ts),
+   so the bar's blend is never taken apart; and shown or hidden outright, since
+   a fading opacity would put it on a layer again for the length of the fade. */
+.ball.is-flat { will-change: auto; transition: none; }
 /* Over a painting the pointer becomes its name (client/cursor.ts). */
 html:has(.cursor.is-visible) .ball.is-on { opacity: var(--ball-over-names); }
 
