@@ -1,4 +1,5 @@
 import { phone, reduceMotion } from './env.ts';
+import { glide } from './glide.ts';
 import { LAYOUTS, WATER, easeOf, pile, scrollSpan, seeded, type Start } from './pile.ts';
 
 /**
@@ -316,6 +317,23 @@ export function initStack(): void {
   }, { passive: true });
   document.documentElement.addEventListener('pointerleave', () => { finger.on = false; });
 
+  /*
+   * A painting clicked while they float opens the gallery, as the arrow does
+   * (Frank, 2026-11-21). The grid takes no pointer while the opening runs
+   * (01-grid.css), so the click lands on the page and is matched here to
+   * the paintings as they are drawn.
+   */
+  document.addEventListener('click', (event) => {
+    if (settled || disabled || !measured || event.defaultPrevented || event.button !== 0) return;
+    if ((event.target as Element | null)?.closest('a, button, input, [role="dialog"]')) return;
+    const hit = live.some((tile) => {
+      if (Number(getComputedStyle(tile).opacity) < 0.5) return false;
+      const r = tile.getBoundingClientRect();
+      return event.clientX >= r.left && event.clientX <= r.right && event.clientY >= r.top && event.clientY <= r.bottom;
+    });
+    if (hit) glide(window.innerHeight * scrollSpan());
+  });
+
   let counted = false;
   const count = (members: HTMLElement[]) => {
     counted = true;
@@ -437,6 +455,8 @@ export function initStack(): void {
     const dt = floatedAt ? Math.min(time - floatedAt, 50) / 1000 : 0;
     floatedAt = time;
     const reach = WATER.reach * h;
+    const tether = Math.max(1, WATER.limit * h);
+    const vw = window.innerWidth;
     const slow = Math.exp(-WATER.thick * dt);
     // A cursor that has stopped is still water: its speed dies away.
     const fade = Math.exp(-6 * dt);
@@ -473,10 +493,24 @@ export function initStack(): void {
           d.vx += ((finger.vx - d.vx) * WATER.drag + ((X - finger.x) / away) * force) * feel * dt;
           d.vy += ((finger.vy - d.vy) * WATER.drag + ((Y - finger.y) / away) * force) * feel * dt;
         }
-        d.vx = (d.vx - d.x * WATER.home * dt) * slow;
-        d.vy = (d.vy - d.y * WATER.home * dt) * slow;
+        // The window's edge: past it, pressed back in, harder the further out.
+        // The painting's own starting place counts as inside, wherever it is.
+        const hx = t.tx + dx;
+        const hy = t.ty + dy - window.scrollY;
+        const outX = Math.max(0, hx + d.x - Math.max(vw, hx)) + Math.min(0, hx + d.x - Math.min(0, hx));
+        const outY = Math.max(0, hy + d.y - Math.max(h, hy)) + Math.min(0, hy + d.y - Math.min(0, hy));
+        d.vx = (d.vx - (d.x * WATER.home + outX * WATER.wall) * dt) * slow;
+        d.vy = (d.vy - (d.y * WATER.home + outY * WATER.wall) * dt) * slow;
         d.x += d.vx * dt;
         d.y += d.vy * dt;
+        // The mooring's length. At its end the painting stops going outward.
+        const far = Math.hypot(d.x, d.y);
+        if (far > tether) {
+          d.x *= tether / far;
+          d.y *= tether / far;
+          const out = (d.vx * d.x + d.vy * d.y) / tether;
+          if (out > 0) { d.vx -= (d.x / tether) * out; d.vy -= (d.y / tether) * out; }
+        }
         dx += (d.x + WATER.bob * Math.sin(sway + d.phase)) * calm;
         dy += (d.y + WATER.bob * Math.cos(sway * 0.83 + d.phase * 1.7)) * calm;
       }
