@@ -19,8 +19,12 @@
  * rather than appearing to work. The build prints a warning in that case, so a
  * site deployed without it is noticed at the point it is made rather than by the
  * first person who tries to order.
+ *
+ * Once the handler is deployed its URL goes in DEPLOYED_ENDPOINT, so a plain
+ * `npm run deploy` sends without anyone remembering the variable.
  */
-export const ENDPOINT = (process.env.INQUIRIES_ENDPOINT ?? '').trim();
+const DEPLOYED_ENDPOINT = '';
+export const ENDPOINT = (process.env.INQUIRIES_ENDPOINT || DEPLOYED_ENDPOINT).trim();
 
 /**
  * Turnstile is optional, and the layer of last resort.
