@@ -73,15 +73,16 @@ interface GridProps {
  * 240 / 150 / 96 pixel steps had.
  */
 export const DENSITIES = [
-  { unit: '14.51vw', label: 24 },
-  { unit: '9.07vw', label: 60 },
-  { unit: '7.26vw', label: 154 },
+  // Labelled 25 / 50 / 100 (Frank, 2026-11-21); the row heights are unchanged.
+  { unit: '14.51vw', label: 25 },
+  { unit: '9.07vw', label: 50 },
+  { unit: '7.26vw', label: 100 },
 ] as const;
 export const DEFAULT_DENSITY = 2;
 
 function tile(
   item: GridItem, basePath: string, index: number, priority: boolean,
-  panels?: string, anchor?: number, scaled?: Scaled,
+  panels?: string, anchor?: number, scaled?: Scaled, pileFront = false,
 ): Html {
   const name = item.name ?? displayTitle(item.title, 'work');
   // A tile that raises a panel points at the panel's own anchor — there is no
@@ -104,7 +105,14 @@ function tile(
     aria-label="${name}${item.year ? `, ${item.year}` : ''}"
   >${responsiveImage({
     image: item.image,
-    sizes: '(max-width: 899px) 43vw, 260px',
+    /*
+     * The paintings at the front of the opening pile are shown far bigger than
+     * their tile, so they ask for a file big enough for that rather than for
+     * the tile, or the heap is the tile's picture blown up (Frank, 2026-11-21).
+     */
+    sizes: pileFront
+      ? `(max-width: 899px) 43vw, max(260px, calc(38vh * ${aspectOf(item.image).toFixed(3)}))`
+      : '(max-width: 899px) 43vw, 260px',
     priority,
     className: 'tile-image',
   })}</a>`;
@@ -165,7 +173,7 @@ export function grid({
     items.map((item, i) => {
       const first = item.year !== undefined && !seen.has(item.year);
       if (first) seen.add(item.year!);
-      return tile(item, basePath, i, i < eagerCount, panels, first ? item.year : undefined, scaleOf(item, i));
+      return tile(item, basePath, i, i < eagerCount, panels, first ? item.year : undefined, scaleOf(item, i), stack && i < eagerCount);
     }),
   )}</div>`;
 }
@@ -182,9 +190,10 @@ export function grid({
  * the wall is where they start.
  */
 export function gridControls(years: readonly number[] = [], scalable = false, total?: number): Html {
-  // The densest step is labelled with the whole archive, however many works
-  // that is by now.
-  const label = (i: number) => (i === DENSITIES.length - 1 && total ? total : DENSITIES[i]!.label);
+  // The steps read 25 / 50 / 100 (Frank, 2026-11-21). The densest used to be
+  // labelled with the whole archive's count; `total` is kept for callers.
+  void total;
+  const label = (i: number) => DENSITIES[i]!.label;
   return html`<div class="controls" data-controls>
     <div class="control-group" role="group" aria-label="Grid size">
       ${join(
