@@ -156,7 +156,7 @@
    *                   in client/pile.ts, 1.45), so
    *                   the two start on one line. A number in vh puts it there
    *                   instead.
-   *   --type-side     the size of the controls — 24, 60, 181, Equal, To
+   *   --type-side     the size of the controls — 25, 50, 100, Equal, To
    *                   scale: 30 of the sheet's 1920. The years are the page's
    *                   own size, --type.
    *   --controls-gap  the space between the last year and the first control.

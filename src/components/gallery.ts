@@ -73,9 +73,10 @@ interface GridProps {
  * 240 / 150 / 96 pixel steps had.
  */
 export const DENSITIES = [
-  { unit: '14.51vw', label: 24 },
-  { unit: '9.07vw', label: 60 },
-  { unit: '7.26vw', label: 154 },
+  // Labelled 25 / 50 / 100 (Frank, 2026-11-21); the row heights are unchanged.
+  { unit: '14.51vw', label: 25 },
+  { unit: '9.07vw', label: 50 },
+  { unit: '7.26vw', label: 100 },
 ] as const;
 export const DEFAULT_DENSITY = 2;
 
@@ -189,9 +190,10 @@ export function grid({
  * the wall is where they start.
  */
 export function gridControls(years: readonly number[] = [], scalable = false, total?: number): Html {
-  // The densest step is labelled with the whole archive, however many works
-  // that is by now.
-  const label = (i: number) => (i === DENSITIES.length - 1 && total ? total : DENSITIES[i]!.label);
+  // The steps read 25 / 50 / 100 (Frank, 2026-11-21). The densest used to be
+  // labelled with the whole archive's count; `total` is kept for callers.
+  void total;
+  const label = (i: number) => DENSITIES[i]!.label;
   return html`<div class="controls" data-controls>
     <div class="control-group" role="group" aria-label="Grid size">
       ${join(

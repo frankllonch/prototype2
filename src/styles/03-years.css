@@ -24,9 +24,15 @@
   /* How many years there are: written by client/years.ts, eleven until then. */
   --years-count: 11;
   --years-height: calc(var(--years-count) * var(--type) * var(--year-lead));
-  --controls-top: calc(var(--side-top) + var(--years-height) + var(--controls-gap));
+  /* Where the first thing under the years stands: Inquiries on the Gallery,
+     otherwise the first control. */
+  --under-years: calc(var(--side-top) + var(--years-height) + var(--controls-gap));
+  /* The room Inquiries takes between the years and the controls: its line
+     and a line clear. Nothing where there is no Inquiries. */
+  --inq-slot: 0px;
+  --controls-top: calc(var(--under-years) + var(--inq-slot));
   /* Five controls: three sizes, then equal and to scale. */
-  --side-height: calc(var(--years-height) + var(--controls-gap) + 5 * var(--type-side) * var(--side-lead));
+  --side-height: calc(var(--years-height) + var(--controls-gap) + var(--inq-slot) + 5 * var(--type-side) * var(--side-lead));
   /* How far above --side-top the column has to stand for its foot to clear the
      window's by a margin. */
   --side-lift: max(0px, calc(var(--side-top) + var(--side-height) + var(--pad) - 100vh));
@@ -70,27 +76,29 @@
 }
 
 /*
- * "Inquiries" over the years (Frank, 2026-11-18): 30 regular, the controls'
- * size, in the years' column. It stands a year's line clear of the first
- * year — from its baseline to that year's capitals — and moves with the column
- * when the column is lifted. Its hover is the index rows' (01-grid.css `.hrow`,
- * a new hue each time from client/hover-list.ts), ink without scripting.
- *
- *   --inq-side-gap  from Inquiries' baseline to the first year's capitals
+ * "INQUIRIES" under the years, before the controls (Frank, 2026-11-21; it
+ * stood over the years until then): 30 regular in capitals, on the controls'
+ * 40 line, where the first control used to start. The controls step down by
+ * its line and a line clear (--inq-slot). Its hover is the index rows'
+ * (01-grid.css `.hrow`, a new hue each time from client/hover-list.ts), ink
+ * without scripting.
  */
+:root:has(.side-inquiries) {
+  --inq-slot: calc(2 * var(--type-side) * var(--side-lead));
+}
+
 .side-inquiries {
   --exh-hover: var(--ink);
-  --inq-side-gap: var(--type);
   position: fixed;
   left: var(--pad);
-  /* The years' capitals start at --side-top less the lift; Inquiries'
-     capitals stand a gap and its own capital height (0.7 em) above them. */
-  top: calc(var(--side-top) - var(--side-lift) - var(--inq-side-gap) - 0.7 * var(--type-side));
+  top: calc(var(--under-years) - var(--side-lift));
   z-index: 30;
   font-size: var(--type-side);
   font-weight: 400;
-  line-height: 1;
-  margin-top: calc((0.317 - 0.5) * 1em);
+  line-height: var(--side-lead);
+  margin-top: calc((0.317 - var(--side-lead) / 2) * 1em);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   white-space: nowrap;
   transition: opacity 0.8s var(--ease), color var(--hover) var(--ease);
 }
