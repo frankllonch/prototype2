@@ -263,9 +263,9 @@ export const SITE: Pile = {
  *
  * They lie on water and the cursor is a finger in it: moving it drags the
  * water, and the paintings near it, along; it nudges them aside as it comes;
- * and one it rests on slips slowly out from under it. They keep whatever
- * place they are pushed to, drifting home only very slowly, and the scroll
- * gathers them from wherever they are.
+ * and one it rests on slips slowly out from under it. Each is moored to its
+ * own place: it gives only so far, and when the cursor has gone it swings
+ * back, a little past, and settles. None can be driven off the window.
  *
  *   reach   how far from the cursor the water is felt, in screen heights.
  *   drag    how firmly a moving cursor carries the paintings with it.
@@ -274,8 +274,17 @@ export const SITE: Pile = {
  *           makes a painting slide away from under a cursor that only hovers.
  *   fast    the cursor speed, px/s, at which the push is at its full.
  *   thick   how thick the water is: higher stops a pushed painting sooner.
- *   home    how strongly each is drawn back to its own place. 0 leaves them
- *           wherever they were pushed; 1 brings them back within seconds.
+ *   home    how strongly each is drawn back to its own place. With `thick`
+ *           it is the recoil: 14 against a thickness of 3 swings back in
+ *           about a second and overshoots once. Lower is lazier; raise
+ *           `thick` towards 7 and it returns without the overshoot. 0 leaves
+ *           them wherever they were pushed.
+ *   limit   the furthest a painting can be carried from its place, in screen
+ *           heights.
+ *   wall    the window's edge. A painting's centre pushed past it is pressed
+ *           back, harder the further out it is: px/s² for each px outside.
+ *           One the scatter itself throws past the edge may stay where it
+ *           was thrown, but go no further.
  *   bob     how far each sways on its own, in px, and `sway` how slowly
  *           (seconds for one sway). bob 0 holds them still until touched.
  */
@@ -287,7 +296,9 @@ export const WATER = {
   still: 0.2,
   fast: 900,
   thick: 3,
-  home: 0.12,
+  home: 1,
+  limit: 0.2,
+  wall: 60,
   bob: 5,
   sway: 7,
 };
