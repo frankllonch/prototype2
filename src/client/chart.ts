@@ -1,4 +1,5 @@
 import { reduceMotion } from './env.ts';
+import { initReel, type Loop } from './about.ts';
 
 /**
  * The Colour Chart's opening (Frank, 2026-11-19).
@@ -47,6 +48,21 @@ const RUN_MIN = 0.6;
 /** Each column comes in this much later than the one to its left, at most. */
 const STAGGER_MS = 260;
 
+/**
+ * The photographs (Frank, 2026-11-22). Once the statement is typed, the reel
+ * is driven in from the right by the next REEL_RUN of a screen of scroll,
+ * starting REEL_LEAD of a screen before the typing run ends, so the words
+ * finishing and the photographs arriving are one movement. Then, as About's,
+ * it goes on round its loop with the scroll: REEL_DRIFT sideways per pixel,
+ * reached over the first REEL_DRIFT_EASE of a screen.
+ */
+const REEL_LEAD = 0.1;
+const REEL_RUN = 0.55;
+const REEL_DRIFT = 0.8;
+const REEL_DRIFT_EASE = 0.25;
+/** How quickly the reel catches up with where the scroll has it. */
+const REEL_SETTLE_MS = 110;
+
 export function initChart(): void {
   const chart = document.querySelector<HTMLElement>('[data-chart]');
   if (!chart) return;
@@ -56,10 +72,12 @@ export function initChart(): void {
   const pops = [...chart.querySelectorAll<HTMLElement>('.chart-in')];
 
   const done = () => chart.classList.add('is-typed');
+  const reel = initChartReel(chart);
 
   if (reduceMotion.matches || !typed || !opening || !stage || !('IntersectionObserver' in window)) {
     done();
     for (const el of pops) el.classList.add('is-in');
+    reel?.still();
     return;
   }
 
@@ -76,7 +94,7 @@ export function initChart(): void {
         seen.unobserve(el);
       }
     },
-    { rootMargin: '0px 0px -8% 0px' },
+    { rootMargin: '0px 0px -2% 0px' },
   );
   // Nothing under the statement comes in until the statement is finished:
   // the page reads as one sequence, the words and then the rest (Frank,
@@ -87,6 +105,7 @@ export function initChart(): void {
     if (watching) return;
     watching = true;
     for (const el of pops) seen.observe(el);
+    reel?.go(() => Number.parseFloat(chart.dataset.chartEnd ?? '') || 0);
   };
 
   /* ------------------------------------------------------------- the words */
@@ -176,6 +195,110 @@ export function initChart(): void {
     };
     wait();
   }, WAIT_MS);
+}
+
+/**
+ * The reel of photographs between the statement and Order yours: About's loop
+ * (client/about.ts), seen through the page to the window's edges, and moved by
+ * the window's scroll instead of About's panel's.
+ *
+ * `still` stands it in its place, to be moved only by hand (motion reduced).
+ * `go` starts it on the scroll, once the statement is typed: in from the right
+ * over its run, which starts a little before `end()`, where the typing run
+ * ends, and round the loop after that. Tapped, a photograph opens the panel of
+ * photographs at itself (client/figures.ts reads `figureStart`).
+ */
+function initChartReel(chart: HTMLElement): { still(): void; go(end: () => number): void } | null {
+  const el = chart.querySelector<HTMLElement>('[data-chart-reel]');
+  if (!el) return null;
+  const panel = document.getElementById('chart-photographs');
+  el.addEventListener(
+    'click',
+    (event) => {
+      const item = (event.target as HTMLElement).closest<HTMLElement>('[data-chart-photo]');
+      if (item && panel) panel.dataset.figureStart = item.dataset.chartPhoto ?? '0';
+    },
+    { capture: true },
+  );
+  const loop: Loop | null = initReel(chart, document.documentElement);
+  if (!loop) return null;
+  // Off to the side they would only be asked for as they slide in.
+  for (const img of el.querySelectorAll<HTMLImageElement>('img')) img.loading = 'eager';
+
+  let started = false;
+  let end = () => 0;
+  let start = 0;
+  let entry = 0;
+  let along = 0;
+  let frame = 0;
+  let last = 0;
+
+  const target = () => {
+    const h = window.innerHeight;
+    const from = end() - h * REEL_LEAD;
+    const run = Math.max(1, h * REEL_RUN);
+    const y = window.scrollY;
+    const p = Math.min(1, Math.max(0, (y - from) / run));
+    const eased = 1 - (1 - p) * (1 - p);
+    const past = Math.max(0, y - from - run);
+    const ease = Math.max(1, h * REEL_DRIFT_EASE);
+    const drift = past < ease ? (past * past) / (2 * ease) : past - ease / 2;
+    return { entry: start * (1 - eased), along: drift * REEL_DRIFT };
+  };
+
+  const tick = (now: number) => {
+    frame = 0;
+    const dt = Math.min(64, now - last);
+    last = now;
+    const to = target();
+    const k = 1 - Math.exp(-dt / REEL_SETTLE_MS);
+    entry += (to.entry - entry) * k;
+    along += (to.along - along) * k;
+    if (Math.abs(to.entry - entry) < 0.25) entry = to.entry;
+    if (Math.abs(to.along - along) < 0.25) along = to.along;
+    loop.scrolled(entry, along);
+    if (entry !== to.entry || along !== to.along) frame = requestAnimationFrame(tick);
+  };
+  const schedule = () => {
+    if (!started || frame) return;
+    last = performance.now();
+    frame = requestAnimationFrame(tick);
+  };
+
+  const measure = () => {
+    if (!loop.measure()) return;
+    // In from just out of sight at the right of the window.
+    start = loop.span + loop.gap;
+    if (!started) entry = start;
+    loop.scrolled(entry, along);
+    schedule();
+  };
+  measure();
+  window.addEventListener('resize', () => requestAnimationFrame(measure));
+  void document.fonts?.ready.then(measure);
+  for (const img of el.querySelectorAll<HTMLImageElement>('img')) {
+    if (!img.complete) img.addEventListener('load', measure, { once: true });
+  }
+
+  return {
+    still() {
+      entry = along = 0;
+      const still = () => { if (loop.measure()) loop.scrolled(0, 0); };
+      window.addEventListener('resize', () => requestAnimationFrame(still));
+      still();
+    },
+    go(endAt) {
+      if (started) return;
+      started = true;
+      end = endAt;
+      // Arriving down the page (a reload, Back): it stands where the scroll
+      // has it, rather than sliding in from wherever it was left.
+      const to = target();
+      if (to.entry === 0) { entry = 0; along = to.along; loop.scrolled(entry, along); }
+      window.addEventListener('scroll', schedule, { passive: true });
+      schedule();
+    },
+  };
 }
 
 /**
