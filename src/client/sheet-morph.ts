@@ -5,10 +5,11 @@ import { phone, reduceMotion } from './env.ts';
  *
  * Pressing it used to swap one layout for the other in a frame: the
  * photograph gone, the text suddenly twice as wide, the masthead folded. Here
- * the photograph blurs away (or back in), and the text column is drawn
+ * the text column is drawn
  * through every width in between — a real width, not a stretched picture of
  * one — so the lines re-break as it goes, the way a paragraph in a word
- * processor rearranges while its margin is dragged (Frank, 2026-11-22).
+ * processor rearranges while its margin is dragged, and its edge pushes the
+ * photograph off the sheet ahead of it (Frank, 2026-11-22).
  *
  * How: measure where things are, change the layout in one step, measure again.
  * The prose is then given its old width and eased to its new one, so the
@@ -18,11 +19,9 @@ import { phone, reduceMotion } from './env.ts';
  * to their new places as transforms, as the grid's paintings do
  * (`controls.ts`).
  *
- * Every figure here is in one place to tune: how long, how blurred, the curve.
+ * Every figure here is in one place to tune: how long, the curve.
  */
 const FLOW_MS = 1000;   // the margin travelling across
-const FADE_MS = 520;    // the photograph going out or coming in
-const BLUR = 'blur(28px)';
 /* In and out, like a hand that takes hold of the margin and lets go of it. */
 const EASE = 'cubic-bezier(0.65, 0, 0.35, 1)';
 const ID = 'sheet-morph';
@@ -42,7 +41,8 @@ export function morphSheet(sheet: HTMLElement, change: () => void): void {
   const was = held.map((el) => el.getBoundingClientRect());
   const wasTop = text.getBoundingClientRect().top;
   const wasWidth = prose.getBoundingClientRect().width;
-  const wasStage = stage ? Number(getComputedStyle(stage).opacity) : 1;
+  // How far the photograph has already been pushed, if a press catches it moving.
+  const wasShift = stage ? new DOMMatrix(getComputedStyle(stage).transform).m41 : 0;
 
   for (const el of all) for (const a of ours(el)) a.cancel();
   stage?.classList.remove('is-leaving');
@@ -55,10 +55,7 @@ export function morphSheet(sheet: HTMLElement, change: () => void): void {
   const nowTop = text.getBoundingClientRect().top;
   const now = held.map((el) => el.getBoundingClientRect());
 
-  // Widening, the photograph goes first and the text follows a beat behind;
-  // narrowing, the text makes room and the photograph comes into it.
-  const delay = wide ? 120 : 0;
-  const timing: KeyframeAnimationOptions = { id: ID, duration: FLOW_MS, delay, easing: EASE, fill: 'backwards' };
+  const timing: KeyframeAnimationOptions = { id: ID, duration: FLOW_MS, easing: EASE, fill: 'backwards' };
 
   text.style.gridColumn = '1 / -1';
   const flow = prose.animate([{ width: `${wasWidth}px` }, { width: `${nowWidth}px` }], timing);
@@ -76,17 +73,22 @@ export function morphSheet(sheet: HTMLElement, change: () => void): void {
   });
 
   if (!stage) return;
+  /*
+   * The photograph is pushed: it travels right exactly as far, as fast and on
+   * the same curve as the text's right edge, so the growing column shoves it
+   * off the sheet, and a narrowing one draws it back in behind its edge.
+   */
+  const push = nowWidth - wasWidth;
   if (wide) {
-    // Kept on screen (07-sheet.css, `.is-leaving`) for as long as it takes to go.
+    // Kept on screen (07-sheet.css, `.is-leaving`) until it has left it.
     stage.classList.add('is-leaving');
     stage.animate(
-      [{ opacity: wasStage, filter: 'blur(0px)' }, { opacity: 0, filter: BLUR }],
-      { id: ID, duration: FADE_MS, easing: 'ease-in', fill: 'forwards' },
+      [{ transform: `translateX(${wasShift}px)` }, { transform: `translateX(${wasShift + push}px)` }],
+      { ...timing, fill: 'forwards' },
     ).finished.then((a) => { stage.classList.remove('is-leaving'); a.cancel(); }, () => {});
   } else {
-    stage.animate(
-      [{ opacity: wasStage < 1 ? wasStage : 0, filter: BLUR }, { opacity: 1, filter: 'blur(0px)' }],
-      { id: ID, duration: FADE_MS + 280, delay: FLOW_MS * 0.45, easing: 'ease-out', fill: 'backwards' },
-    );
+    // Back from wherever it was: off the right edge, or part way out.
+    const from = wasShift || -push;
+    stage.animate([{ transform: `translateX(${from}px)` }, { transform: 'none' }], timing);
   }
 }
