@@ -151,8 +151,9 @@
    *
    *   --side-top      where the first year's capitals start on the window
    *                   once the opening has ended. It is the first row of
-   *                   paintings: that row lands at --grid-start less the 30vh
-   *                   the pile scrolls beyond one screen (stack.ts, 1.3), so
+   *                   paintings: that row lands at --grid-start less the 45vh
+   *                   the opening scrolls beyond one screen (`motion.span`
+   *                   in client/pile.ts, 1.45), so
    *                   the two start on one line. A number in vh puts it there
    *                   instead.
    *   --type-side     the size of the controls — 25, 50, 100, Equal, To
@@ -164,7 +165,29 @@
    * row and rides up with the paintings as you scroll on, until its last
    * control is a margin above the foot of the window, then stays.
    */
-  --side-top: calc(var(--grid-start) - 30vh);
+  --side-top: calc(var(--grid-start) - 45vh);
+  /*
+   * THE COUNT — the gallery's opening filling up, from no paintings to all of
+   * them (2021 onwards), when the Gallery is opened. client/stack.ts queues
+   * the paintings; everything about the timing is here.
+   *
+   *   --count-delay     the wait before the first painting appears.
+   *   --count-duration  from the first painting to the last. The whole count.
+   *   --count-curve     the pace across it. 1 is steady. Above 1 it rushes
+   *                     first and the last ones trickle in (2 is clearly so);
+   *                     below 1 it starts slowly and ends in a rush (0.5).
+   *   --count-fade      how long each painting takes to appear.
+   *   --count-ease      the curve of that appearance.
+   *
+   * Each appears in its place and nothing else: no growing, no travelling. A
+   * scale here would also scale the distance the opening has moved the
+   * painting from its place in the grid, and it would drift in from below.
+   */
+  --count-delay: 0.2s;
+  --count-duration: 3s;
+  --count-curve: 0.7;
+  --count-fade: 0s;
+  --count-ease: var(--ease);
   --type-side: clamp(0.85rem, 1.5625vw, 2.55rem);
   --controls-gap: 4.7vw;
   /* The gallery's gutters, off the same sheet: 43 between columns and about
@@ -327,11 +350,11 @@ html.is-revealed .grid[data-stack] { animation-name: none; }
 }
 
 /*
- * THE CONTENT RISING — Exhibitions, Commissioned and Artwork (Frank,
- * 2026-11-17). Each time the section is opened from the bar the page's
+ * THE CONTENT RISING — Exhibitions and Commissioned (Frank, 2026-11-17). Each time the section is opened from the bar the page's
  * content comes up from the bottom of the window and settles into place:
  * arriving at the page, and clicking the section again while on it
- * (client/rise.ts, which replays it). On Artwork it is the pile that rises.
+ * (client/rise.ts, which replays it). Not Artwork: its opening is the scatter
+ * filling up (THE COUNT, above), and the two together were one too many.
  *
  * THE KNOBS:
  *
@@ -351,7 +374,7 @@ html.is-revealed .grid[data-stack] { animation-name: none; }
   30% { opacity: 1; }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .xlist, .grid[data-stack] {
+  .xlist {
     animation: content-rise var(--rise-time) var(--rise-ease) var(--rise-delay) backwards;
   }
 }
@@ -681,6 +704,27 @@ html.is-scrolled .scroll-cue { opacity: 0; pointer-events: none; visibility: hid
 @keyframes scroll-cue-fall {
   0%, 100% { transform: translateY(-0.18rem); }
   50% { transform: translateY(0.18rem); }
+}
+
+/*
+ * THE GALLERY'S CUE INSISTS (Frank, 2026-11-20). Over the scattered paintings
+ * nothing says the page goes on, so here the chevron does not nudge, it
+ * knocks: down hard and back, twice, a breath, and again — for as long as
+ * the opening has not been scrolled through (client/scroll-cue.ts).
+ *
+ *   --cue-knock-time  one round: two knocks and the breath after them
+ *   --cue-knock-drop  how far down each knock goes
+ */
+:root {
+  --cue-knock-time: 1.7s;
+  --cue-knock-drop: 0.75rem;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .years ~ .scroll-cue svg { animation: scroll-cue-knock var(--cue-knock-time) cubic-bezier(0.5, 0, 0.3, 1) infinite; }
+}
+@keyframes scroll-cue-knock {
+  0%, 32%, 64%, 100% { transform: translateY(0); }
+  16%, 48% { transform: translateY(var(--cue-knock-drop)); }
 }
 
 /* No room to spare, and a phone's own scrollbar already says the page is long. */

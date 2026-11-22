@@ -36,12 +36,12 @@ import { phone, reduceMotion } from './env.ts';
 
 // ------------------------------------------------------------------ settings
 
-type Num = { kind: 'num'; key: string; label: string; min: number; max: number; step: number; unit?: string; value: number };
-type Pick = { kind: 'pick'; key: string; label: string; options: readonly string[]; value: string };
-type Text = { kind: 'text'; key: string; label: string; value: string };
-type Flag = { kind: 'flag'; key: string; label: string; value: boolean };
-type Colour = { kind: 'colour'; key: string; label: string; value: string };
-type Field = Num | Pick | Text | Flag | Colour;
+export type Num = { kind: 'num'; key: string; label: string; min: number; max: number; step: number; unit?: string; value: number };
+export type Pick = { kind: 'pick'; key: string; label: string; options: readonly string[]; value: string };
+export type Text = { kind: 'text'; key: string; label: string; value: string };
+export type Flag = { kind: 'flag'; key: string; label: string; value: boolean };
+export type Colour = { kind: 'colour'; key: string; label: string; value: string };
+export type Field = Num | Pick | Text | Flag | Colour;
 type Values = Record<string, number | string | boolean>;
 
 const EASES = ['ease-in-out', 'ease', 'ease-out', 'ease-in', 'linear', 'site (expo out)', 'back out', 'snappy'] as const;
@@ -54,11 +54,11 @@ const easeOf = (name: unknown): string => {
   }
 };
 
-const num = (key: string, label: string, value: number, min: number, max: number, step: number, unit = ''): Num =>
+export const num = (key: string, label: string, value: number, min: number, max: number, step: number, unit = ''): Num =>
   ({ kind: 'num', key, label, value, min, max, step, unit });
-const pick = (key: string, label: string, value: string, options: readonly string[]): Pick =>
+export const pick = (key: string, label: string, value: string, options: readonly string[]): Pick =>
   ({ kind: 'pick', key, label, value, options });
-const flag = (key: string, label: string, value: boolean): Flag => ({ kind: 'flag', key, label, value });
+export const flag = (key: string, label: string, value: boolean): Flag => ({ kind: 'flag', key, label, value });
 const text = (key: string, label: string, value: string): Text => ({ kind: 'text', key, label, value });
 const colour = (key: string, label: string, value: string): Colour => ({ kind: 'colour', key, label, value });
 
@@ -775,20 +775,20 @@ function buildPanel(state: State, menuFields: Field[], menuDefaults: Values, hoo
   return panel;
 }
 
-function section(name: string, ...children: Node[]): HTMLElement {
+export function section(name: string, ...children: Node[]): HTMLElement {
   const s = el('section', 'tuner-section');
   s.append(el('h3', '', name), ...children);
   return s;
 }
 
-function el(tag: string, className: string, text?: string): HTMLElement {
+export function el(tag: string, className: string, text?: string): HTMLElement {
   const node = document.createElement(tag);
   if (className) node.className = className;
   if (text !== undefined) node.textContent = text;
   return node;
 }
 
-function button(label: string, onClick: () => void, className = ''): HTMLButtonElement {
+export function button(label: string, onClick: () => void, className = ''): HTMLButtonElement {
   const b = document.createElement('button');
   b.type = 'button';
   if (className) b.className = className;
@@ -798,7 +798,7 @@ function button(label: string, onClick: () => void, className = ''): HTMLButtonE
 }
 
 /** One setting: label, control, and its value. Double-click the label to reset it. */
-function row(field: Field, values: Values, defaults: Values, changed: (key: string) => void): HTMLElement {
+export function row(field: Field, values: Values, defaults: Values, changed: (key: string) => void): HTMLElement {
   const wrap = el('label', 'tuner-row');
   const name = el('span', 'tuner-label', field.label);
   name.title = 'Double-click to reset';

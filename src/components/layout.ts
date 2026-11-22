@@ -70,9 +70,9 @@ const MENU = [
 const HOVER: 'roll' | 'scramble' = 'scramble';
 
 const CLIENT_MODULES = [
-  'env', 'text-roll', 'transitions', 'controls', 'stack', 'years', 'hover-list', 'panels',
+  'env', 'text-roll', 'transitions', 'controls', 'pile', 'stack', 'years', 'hover-list', 'panels',
   'figures', 'lightbox', 'cursor', 'ball', 'ball-tuner', 'film', 'tilt', 'paging', 'views',
-  'scroll-cue', 'about', 'inquiries', 'chart', 'book', 'focus', 'hues', 'current', 'scrollbar', 'scramble', 'hover-tuner', 'rise', 'menu', 'index',
+  'scroll-cue', 'about', 'inquiries', 'chart', 'book', 'focus', 'hues', 'current', 'scrollbar', 'scramble', 'pile-tuner', 'rise', 'menu', 'index',
 ] as const;
 
 /** The loading screen's five lines, set in blue on peach. */
@@ -363,10 +363,6 @@ ${description ? `<meta name="description" content="${description.replace(/"/g, '
 <link rel="stylesheet" href="${withBase('/site.css')}" />
 ${modules.map((m) => `<link rel="modulepreload" href="${m}" />`).join('\n')}
 <script>document.documentElement.classList.add('js');
-// The hover tuner's lettering, laid over the stylesheet before the first paint
-// so that moving between pages with it on does not flash the defaults. Only in
-// a browser that has asked for the tuner (?tune); see client/hover-tuner.ts.
-try { if (localStorage.getItem('cv-tune') === '1') { document.documentElement.setAttribute('data-tune', ''); var tc = localStorage.getItem('cv-tune-css'); if (tc) { var ts = document.createElement('style'); ts.id = 'tune-early'; ts.textContent = tc; document.head.appendChild(ts); } } } catch (e) {}
 // Arriving at What's Color by its link, the page is laid out at the top and
 // moved down to the written sentence by script — so it is kept covered until
 // it has been, and no frame is ever painted in the wrong place. The script

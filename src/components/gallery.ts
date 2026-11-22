@@ -106,10 +106,9 @@ function tile(
   >${responsiveImage({
     image: item.image,
     /*
-     * The paintings at the front of the opening pile are shown at 38% of the
-     * window's height (client/stack.ts, FRONT), far bigger than their tile, so
-     * they ask for a file big enough for that rather than for the tile — or
-     * the heap is the tile's picture blown up (Frank, 2026-11-21).
+     * The paintings at the front of the opening pile are shown far bigger than
+     * their tile, so they ask for a file big enough for that rather than for
+     * the tile, or the heap is the tile's picture blown up (Frank, 2026-11-21).
      */
     sizes: pileFront
       ? `(max-width: 899px) 43vw, max(260px, calc(38vh * ${aspectOf(item.image).toFixed(3)}))`

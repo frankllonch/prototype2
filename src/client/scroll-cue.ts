@@ -71,6 +71,19 @@ export function initScrollCue(): void {
     };
   }
 
+  /*
+   * The gallery's opening is one long "keep going" too (Frank, 2026-11-20):
+   * the cue asks until the scroll has laid every painting into the grid, and
+   * asks again whenever the reader comes back up and they gather (below).
+   * Asked at each scroll, because client/stack.ts takes the hero away on the
+   * arrivals that have no opening.
+   */
+  if (document.querySelector('[data-stack]')) {
+    threshold = () => (document.querySelector('[data-hero]')
+      ? window.innerHeight * SCROLL_SPAN - 2
+      : window.innerHeight * 0.1);
+  }
+
   const update = () => {
     if (gone) return;
     if (window.scrollY < threshold()) return;
@@ -115,10 +128,13 @@ export function initScrollCue(): void {
    * Back on a blank stage — the menu's What's Color? takes the page back to the
    * top of the note to type it again (client/menu.ts) — the cue asks again.
    */
-  document.addEventListener('cueagain', () => {
+  const again = () => {
     if (!gone) return;
     gone = false;
     root.classList.remove('is-scrolled');
     window.addEventListener('scroll', update, { passive: true });
-  });
+  };
+  document.addEventListener('cueagain', again);
+  // The gallery's paintings gathering again (client/stack.ts).
+  document.addEventListener('stackrestart', again);
 }
