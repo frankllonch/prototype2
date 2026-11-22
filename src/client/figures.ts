@@ -114,10 +114,10 @@ export function initFigures(): void {
     for (const button of expanders) {
       button.addEventListener('click', () => {
         const already = button.getAttribute('aria-pressed') === 'true';
-        const next = already ? null : button.dataset.expand ?? null;
+        const which = already ? null : button.dataset.expand ?? null;
         // A sheet moves from one layout to the other (sheet-morph.ts).
-        if (reader.hasAttribute('data-sheet')) morphSheet(reader, () => widen(next));
-        else widen(next);
+        if (reader.hasAttribute('data-sheet')) morphSheet(reader, () => widen(which));
+        else widen(which);
         // The column that was filling the screen has gone; starting anywhere but
         // the top of what replaced it would be landing in the middle of it.
         panel.scrollTop = 0;
