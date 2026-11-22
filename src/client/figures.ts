@@ -15,6 +15,8 @@
  * photograph at full size, which is a worse read but a complete one: nothing
  * here hides anything that cannot be got at without it.
  */
+import { morphSheet } from './sheet-morph.ts';
+
 export function initFigures(): void {
   for (const reader of document.querySelectorAll<HTMLElement>('[data-reader]')) {
     // Panels only; nothing else on the site composes this way any more.
@@ -112,7 +114,10 @@ export function initFigures(): void {
     for (const button of expanders) {
       button.addEventListener('click', () => {
         const already = button.getAttribute('aria-pressed') === 'true';
-        widen(already ? null : button.dataset.expand ?? null);
+        const next = already ? null : button.dataset.expand ?? null;
+        // A sheet moves from one layout to the other (sheet-morph.ts).
+        if (reader.hasAttribute('data-sheet')) morphSheet(reader, () => widen(next));
+        else widen(next);
         // The column that was filling the screen has gone; starting anywhere but
         // the top of what replaced it would be landing in the middle of it.
         panel.scrollTop = 0;
