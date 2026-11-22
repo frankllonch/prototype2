@@ -320,7 +320,7 @@
   grid-template-columns: minmax(0, 1fr);
 }
 .sheet.is-wide-text .sheet-stage { display: none; }
-/* Still there while it blurs away (client/sheet-morph.ts). */
+/* Still there while it is pushed off (client/sheet-morph.ts). */
 .sheet.is-wide-text .sheet-stage.is-leaving { display: block; pointer-events: none; }
 /* The text then starts at 153 — its first baseline at 213 — unless the
    masthead's lines need more. Kept clear of Close and the button on the right. */
