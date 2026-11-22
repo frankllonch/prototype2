@@ -68,7 +68,7 @@ const POP_STAGGER_MS = 260;
 export function initAbout(): void {
   const about = document.getElementById('about');
   if (!about) return;
-  const loop = initReel(about);
+  const loop = initReel(about, about);
   initViewer(about);
   if (reduceMotion.matches) {
     // The reel stands in its place and moves only by hand.
@@ -326,8 +326,8 @@ export function initAbout(): void {
   if (about.classList.contains('is-open')) start();
 }
 
-/** The reel, as About's scroll drives it. */
-interface Loop {
+/** The reel, as a page's scroll drives it: About's, and the Colour Chart's. */
+export interface Loop {
   /** The width the reel is seen through, and the gap between photographs. */
   readonly span: number;
   readonly gap: number;
@@ -362,8 +362,13 @@ const REEL_FLING_MS = 240;
  * are too few to fill it twice over, they are repeated (hidden from assistive
  * technology and the tab order) so that one never shows in two places.
  */
-function initReel(about: HTMLElement): Loop | null {
-  const reel = about.querySelector<HTMLElement>('[data-about-reel]');
+/**
+ * `root` holds the reel; `bounds` is what it is seen through to its edges, and
+ * what says a photograph is up large (`.is-viewing`): About's panel, or the
+ * Colour Chart's page.
+ */
+export function initReel(root: HTMLElement, bounds: HTMLElement): Loop | null {
+  const reel = root.querySelector<HTMLElement>('[data-about-reel]');
   const track = reel?.querySelector<HTMLElement>('[data-about-track]');
   if (!reel || !track) return null;
   const originals = [...track.querySelectorAll<HTMLElement>('.about-reel-item')];
@@ -437,7 +442,7 @@ function initReel(about: HTMLElement): Loop | null {
     // The photographs are seen to the edges of the window, not only within the
     // measure: `lead` is the margin left of the track, `tail` the window's
     // width from the track's left edge.
-    const box = about.getBoundingClientRect();
+    const box = bounds.getBoundingClientRect();
     const left = track.getBoundingClientRect().left;
     const lead = Math.max(0, left - box.left);
     const tail = Math.max(span, box.right - left);
@@ -479,7 +484,7 @@ function initReel(about: HTMLElement): Loop | null {
   reel.addEventListener('keydown', (event) => {
     if (!looped || event.metaKey || event.ctrlKey || event.altKey) return;
     if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
-    if (about.classList.contains('is-viewing')) return;
+    if (bounds.classList.contains('is-viewing')) return;
     event.preventDefault();
     step(event.key === 'ArrowRight' ? 1 : -1);
   });

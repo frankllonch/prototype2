@@ -3,6 +3,9 @@ import { photographs, price, sections, statement, type ChartSection } from '../c
 import { panelShell } from './panels.ts';
 import { plates } from './plates.ts';
 import { ENDPOINT, TURNSTILE_SITE_KEY } from '../content/inquiries.ts';
+import { responsiveImage } from './image.ts';
+import { stepChevron } from './scroll-cue.ts';
+import type { ProjectImage } from '../content/types.ts';
 
 /**
  * The Colour Chart, after the designer's third sheet (COLOR CHART DISSENY III,
@@ -66,6 +69,8 @@ export function colourChart(): Html {
       </div>
     </div>
 
+    ${photographs.length ? chartReel(photographs) : ''}
+
     <!--
       An anchor rather than a button, and to a real section further down the
       document. With scripting the click opens the form over the page; without
@@ -92,14 +97,11 @@ export function colourChart(): Html {
     ${join(set.map(columns))}
 
     <!--
-      Her thanks, and a way of seeing who they are to: the photographs people
-      have sent her of the chart in use.
+      Her thanks. Not a link any more (Frank, 2026-11-22): the photographs
+      are on the page now, in the reel under the statement, and the line only
+      answers the pointer in a colour, as the index rows do.
     -->
-    <p class="chart-thanks chart-in">${
-      photographs.length
-        ? html`<a class="hrow" href="#chart-photographs" data-panel-open="chart-photographs">Thanks to everyone!</a>`
-        : 'Thanks to everyone!'
-    }</p>
+    <p class="chart-thanks chart-in"><span class="hrow">Thanks to everyone!</span></p>
 
     <footer class="chart-footer chart-in"><b>Claudia Valsells</b> &copy; All Rights Reserved</footer>
   </div>
@@ -107,7 +109,46 @@ export function colourChart(): Html {
 }
 
 /**
- * The photographs of the chart in use, as a panel over the page.
+ * The photographs of the chart in use, in a reel between the statement and
+ * Order yours (Frank, 2026-11-22): About's reel, the same loop and the same
+ * big chevrons in the margins, driven in from the right by the scroll once the
+ * statement is typed and carried along as the page goes on
+ * (`client/chart.ts`, which borrows About's loop from `client/about.ts`).
+ *
+ * Each photograph is a link to the panel below, which shows it large; without
+ * scripting the row scrolls sideways and the link walks to the panel.
+ */
+function chartReel(images: readonly ProjectImage[]): Html {
+  return html`<div class="chart-reel about-reel chart-in" data-about-reel data-chart-reel>
+    <div class="about-reel-track" data-about-track>
+      ${join(
+        images.map(
+          (image, i) => html`<a class="about-reel-item" href="#chart-photographs" data-panel-open="chart-photographs" data-chart-photo="${String(i)}" aria-label="Photograph ${String(i + 1)} of ${String(images.length)}">
+            ${responsiveImage({ image, sizes: reelSizes(image) })}
+          </a>`,
+        ),
+      )}
+    </div>
+    ${images.length > 1
+      ? html`<button type="button" class="about-reel-step is-prev" data-about-reel-step="-1" aria-label="Earlier photographs" hidden>
+          ${stepChevron(-1)}
+        </button>
+        <button type="button" class="about-reel-step is-next" data-about-reel-step="1" aria-label="More photographs" hidden>
+          ${stepChevron(1)}
+        </button>`
+      : ''}
+  </div>`;
+}
+
+/** As About's reel: 210 frame pixels tall, so 10.94vw, and 7.5rem below 1097 wide. */
+function reelSizes(image: ProjectImage): string {
+  const ratio = image.width / image.height;
+  return `(max-width: 1097px) ${Math.round(120 * ratio)}px, ${(10.9375 * ratio).toFixed(1)}vw`;
+}
+
+/**
+ * The photographs of the chart in use, as a panel over the page, opened at
+ * the photograph tapped in the reel.
  *
  * The same sheet an exhibition that is photographs and nothing else gets
  * (`components/plates.ts`): the masthead top left, one picture in the middle

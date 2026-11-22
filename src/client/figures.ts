@@ -126,7 +126,13 @@ export function initFigures(): void {
 
     // Opening is always from the same state: first picture, neither column
     // widened, scrolled to the top.
-    panel.addEventListener('panelopen', () => { widen(null); show(0); });
+    // The Colour Chart's reel opens its panel at the photograph tapped
+    // (client/chart.ts); anything else opens at the first.
+    panel.addEventListener('panelopen', () => {
+      widen(null);
+      show(Number(panel.dataset.figureStart) || 0);
+      delete panel.dataset.figureStart;
+    });
     show(0);
   }
 }
