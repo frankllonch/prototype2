@@ -35,14 +35,15 @@ export function morphSheet(sheet: HTMLElement, change: () => void): void {
 
   const stage = sheet.querySelector<HTMLElement>('.sheet-stage');
   const held = [...sheet.querySelectorAll<HTMLElement>('.sheet-title, .sheet-lines, .sheet-when, .sheet-more')];
-  const all = [prose, text, ...held, ...(stage ? [stage] : [])];
+  const all = [prose, text, ...held, ...(stage ? [...stage.querySelectorAll<HTMLElement>('.sheet-frame, .sheet-step')] : [])];
 
   // Measured mid-flight too, so a second press turns back from where it is.
   const was = held.map((el) => el.getBoundingClientRect());
   const wasTop = text.getBoundingClientRect().top;
   const wasWidth = prose.getBoundingClientRect().width;
   // How far the photograph has already been pushed, if a press catches it moving.
-  const wasShift = stage ? new DOMMatrix(getComputedStyle(stage).transform).m41 : 0;
+  const frame = stage?.querySelector<HTMLElement>('.sheet-frame');
+  const wasShift = frame ? new DOMMatrix(getComputedStyle(frame).transform).m41 : 0;
 
   for (const el of all) for (const a of ours(el)) a.cancel();
   stage?.classList.remove('is-leaving');
@@ -79,16 +80,27 @@ export function morphSheet(sheet: HTMLElement, change: () => void): void {
    * off the sheet, and a narrowing one draws it back in behind its edge.
    */
   const push = nowWidth - wasWidth;
+  /*
+   * What moves is the photograph and its arrows, each on its own, rather than
+   * the stage that holds them: a moved stage would be a group of its own, and
+   * the arrows, drawn as the difference of what is under them, would then
+   * have nothing under them but the empty stage and go white on the paper.
+   */
+  const pushed = [...stage.querySelectorAll<HTMLElement>('.sheet-frame, .sheet-step')];
   if (wide) {
     // Kept on screen (07-sheet.css, `.is-leaving`) until it has left it.
     stage.classList.add('is-leaving');
-    stage.animate(
+    const runs = pushed.map((el) => el.animate(
       [{ transform: `translateX(${wasShift}px)` }, { transform: `translateX(${wasShift + push}px)` }],
       { ...timing, fill: 'forwards' },
-    ).finished.then((a) => { stage.classList.remove('is-leaving'); a.cancel(); }, () => {});
+    ));
+    Promise.all(runs.map((a) => a.finished)).then(() => {
+      stage.classList.remove('is-leaving');
+      for (const a of runs) a.cancel();
+    }, () => {});
   } else {
     // Back from wherever it was: off the right edge, or part way out.
     const from = wasShift || -push;
-    stage.animate([{ transform: `translateX(${from}px)` }, { transform: 'none' }], timing);
+    for (const el of pushed) el.animate([{ transform: `translateX(${from}px)` }, { transform: 'none' }], timing);
   }
 }
