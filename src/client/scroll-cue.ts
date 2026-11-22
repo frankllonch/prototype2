@@ -58,17 +58,20 @@ export function initScrollCue(): void {
   }
 
   /*
-   * The Colour Chart's opening is typed by the scroll (client/chart.ts), so
-   * there the cue asks until the run is spent, and a tap on it carries the
-   * page down the run slowly enough to watch the words come.
+   * The Colour Chart's opening is typed by the scroll (client/chart.ts), and
+   * a tap on the cue carries the page down that run slowly enough to watch
+   * the words come. The cue itself stays all the way to the foot of the page
+   * (Frank, 2026-11-22), not only until the statement is typed: past the run,
+   * each tap goes a screen further down. Asked at each scroll, because the
+   * runway and the fade-ins below can change the page's length.
    */
   const chart = document.querySelector<HTMLElement>('[data-chart]');
   const chartEnd = () => Number.parseFloat(chart?.dataset.chartEnd ?? '');
   if (chart) {
-    threshold = () => {
-      const end = chartEnd();
-      return Number.isFinite(end) ? Math.max(end - 2, window.innerHeight * 0.1) : window.innerHeight * 0.1;
-    };
+    threshold = () => Math.max(
+      document.documentElement.scrollHeight - window.innerHeight - 2,
+      window.innerHeight * 0.1,
+    );
   }
 
   /*
