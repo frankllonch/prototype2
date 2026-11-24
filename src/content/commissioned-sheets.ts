@@ -100,7 +100,7 @@ export const SHEETS: Readonly<Record<string, Sheet>> = {
   },
 
   'dada-workshops-2017-2': {
-    title: 'Colour Atlas',
+    title: 'Color Atlas',
     lines: ['FOR LA MURALLA ROJA'],
     when: '2016 - 2020',
     body: `

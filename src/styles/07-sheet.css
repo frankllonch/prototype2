@@ -45,7 +45,7 @@
    the negative of what is under it: on a phone the text scrolls up beneath it.
    The source comes out as the ink over the sheet's paper (255 − 36, 37, 40),
    and the sheet's paper is opaque, so the blend has a true ground to work on. */
-.panel:has(.sheet) .panel-close {
+.panel:is(:has(.sheet), :has(.plates)) .panel-close {
   position: absolute;
   top: calc(var(--f) * 80);
   right: var(--s-pad);
@@ -59,8 +59,8 @@
   mix-blend-mode: difference;
   z-index: 3;
 }
-.panel:has(.sheet) .panel-close:hover,
-.panel:has(.sheet) .panel-close:focus-visible { opacity: 0.55; }
+.panel:is(:has(.sheet), :has(.plates)) .panel-close:hover,
+.panel:is(:has(.sheet), :has(.plates)) .panel-close:focus-visible { opacity: 0.55; }
 
 /* ---------------------------------------------------------------- masthead */
 
@@ -164,6 +164,19 @@
   font-weight: 500;
   text-transform: uppercase;
 }
+/*
+ * A group show's artists, where a solo show has its lede: the names in
+ * capitals, medium, at the text's 40 on 40 (the exhibitions' sheets,
+ * 2026-11-24). The text under them is all body; nothing after the names is
+ * set as a lede.
+ */
+.sheet-prose > p.sheet-artists {
+  font-size: var(--type);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+/* Mira'm's English gloss, on its own lines in italic as her sheet sets it. */
+.sheet-prose .lede-gloss { font-style: italic; font-weight: inherit; }
 /* Some sheets leave a second empty line before a change of voice. */
 .sheet-prose .apart { margin-top: calc(var(--s-lead) * 1em); }
 /*
@@ -290,6 +303,34 @@
     padding-top: calc(var(--f) * 180);
   }
   .sheet .sheet-figure.is-wide img { max-width: calc(var(--f) * 700); }
+}
+
+/*
+ * An exhibition's photograph, as the exhibitions' sheets place it
+ * (UPDATES/exhibitions, 2026-11-24): in a narrower box that ends at 1719 —
+ * 1083 to 1719 across, 134 to 1008 down. A portrait fills its height; a
+ * landscape is set at the box's width with its top at 300, level with the
+ * masthead's date rather than with the text.
+ */
+@media (min-width: 900px) {
+  .sheet.is-show .sheet-stage {
+    left: calc(var(--f) * 1083);
+    width: calc(var(--f) * 636);
+    top: calc(var(--f) * 134);
+    bottom: calc(var(--f) * 72);
+  }
+  .sheet.is-show .is-live .sheet-figure.is-wide { padding-top: calc(var(--f) * 166); }
+  /* The name on one line, as every exhibition's sheet sets it, running past
+     the text's column when it is long (What abstract art means to me). */
+  .sheet.is-show .sheet-title { width: max-content; max-width: calc(var(--f) * 1000); }
+  /* The masthead's lines break where the sheet breaks them (show-sheets.ts). */
+  .sheet.is-show .sheet-lines { width: max-content; white-space: nowrap; }
+}
+/* On a phone the lines run on and turn where the screen turns them. */
+@media (max-width: 899px) {
+  .sheet-br { display: none; }
+  .sheet.is-show .sheet-figure.is-wide img { max-width: 100%; }
+  .sheet.is-show .sheet-next { right: calc(var(--f) * (1870 - 1719) * -1 - var(--f) * 14); }
 }
 
 /* The arrows sit either side of the box, on its middle: the next one on the
@@ -483,14 +524,32 @@ html:not(.js) .sheet-step { display: none; }
   line-height: var(--s-lead);
 }
 
-/* Alone in the top left. 360 wide keeps it clear of the widest photograph,
-   whose box opens at 416. */
+/* Alone in the top left. The name runs on one line, over the photograph if
+   it must, as the sheets set every one of them; what follows it keeps to 360,
+   clear of the widest photograph, whose box opens at 416. */
 .plates-head {
   position: absolute;
   left: calc(var(--f) * 48);
   top: 4.6vh;
-  width: calc(var(--f) * 360);
+  width: max-content;
+  max-width: calc(var(--f) * 1300);
   z-index: 2;
+}
+@media (min-width: 900px) {
+  .plates-head > :not(.sheet-title) { max-width: calc(var(--f) * 352); }
+  /* The sheet's own line breaks, and no others. */
+  .plates-head .sheet-lines { white-space: nowrap; }
+}
+/* El color no existe's caption: capitals at 30 on 30, its top at 550. */
+.plates-note {
+  margin: 2.4em 0 0;
+  font-size: var(--t-30, calc(var(--type) * 0.75));
+  line-height: 1;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+@media (min-width: 900px) {
+  .plates-head > .plates-note { margin-top: calc(var(--f) * 140); max-width: calc(var(--f) * 372); }
 }
 .plates-head .sheet-lines { margin-top: 1em; }
 .plates-head .sheet-when { margin-top: 1.6em; }
@@ -524,6 +583,16 @@ html:not(.js) .sheet-step { display: none; }
   transition: opacity 0.5s var(--ease);
 }
 .plates-figure.is-current { opacity: 1; pointer-events: auto; }
+/* A landscape is set lower than the box: 722 tall on the sheets, on the
+   frame's middle, where a portrait takes the box's whole height. */
+@media (min-width: 900px) {
+  .plates-figure.is-wide {
+    inset: auto 0;
+    top: 50%;
+    height: min(calc(var(--f) * 722), 66.9vh);
+    translate: 0 -50%;
+  }
+}
 .plates-figure picture { display: contents; }
 /*
  * Fitted to the box, not capped by it. A maximum height alone is not enough
@@ -537,6 +606,12 @@ html:not(.js) .sheet-step { display: none; }
   min-width: 0;
   min-height: 0;
   object-fit: contain;
+}
+
+/* El color no existe's caption runs down past the middle of the frame, where
+   the previous arrow would sit on it; the next one goes round all the same. */
+@media (min-width: 900px) {
+  .plates:has(.plates-note) .plates-prev { display: none; }
 }
 
 /* At the frame's margins, as the sheets place them, and level with the middle
