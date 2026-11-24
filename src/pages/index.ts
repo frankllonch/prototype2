@@ -6,6 +6,7 @@ import { panels, panelShell, type PanelItem } from '../components/panels.ts';
 import { exhibitionList } from '../components/exhibitions.ts';
 import { SHOWS, placeOf } from '../content/exhibitions-list.ts';
 import { setThanks, splitOpening } from '../content/shows.ts';
+import { COMMISSION_LEADS, SHOW_SHEETS, applyEdits, leadWith } from '../content/show-sheets.ts';
 import { platesBody } from '../components/plates.ts';
 import { commissionedList } from '../components/commissioned.ts';
 import { sheetBody } from '../components/sheet.ts';
@@ -140,9 +141,10 @@ export function exhibitionsPage(items: readonly Exhibition[], commissioned: read
   // Both kinds of show give the index its hover photograph: the ones that came
   // from the site carry a cover of their own, and the ones from the archive
   // lead with their first photograph.
+  // The row's photograph is the one the show's own sheet opens on.
   const covers = new Map([
-    ...items.flatMap((e) => (e.cover ? [[e.slug, e.cover] as const] : [])),
-    ...[...showPhotos].flatMap(([slug, p]) => (p.cover ? [[slug, p.cover] as const] : [])),
+    ...items.flatMap((e) => (e.cover ? [[e.slug, leadWith(e.images, SHOW_SHEETS[e.slug]?.lead)[0] ?? e.cover] as const] : [])),
+    ...[...showPhotos].flatMap(([slug, p]) => (p.cover ? [[slug, leadWith(p.images, SHOW_SHEETS[slug]?.lead)[0] ?? p.cover] as const] : [])),
   ]);
 
   /*
@@ -177,27 +179,38 @@ export function exhibitionsPage(items: readonly Exhibition[], commissioned: read
     if (!show.slug) return [];
     const derived = bySlug.get(show.slug);
     const archive = showPhotos.get(show.slug);
-    const images = derived?.images.length ? derived.images : archive?.images ?? [];
+    // The designer's sheet for this show, where there is one: its masthead,
+    // the photograph it opens on, and the text Frank sent for it.
+    const design = SHOW_SHEETS[show.slug] ?? {};
+    const images = leadWith(derived?.images.length ? derived.images : archive?.images ?? [], design.lead);
     if (!images.length) return [];
 
     const prose = derived
-      ? setThanks(show.slug, splitOpening(derived.rows.flatMap((r) => r.columns).map((c) => (c.kind === 'text' ? c.html : '')).join('')))
-      : '';
+      ? applyEdits(setThanks(show.slug, splitOpening(derived.rows.flatMap((r) => r.columns).map((c) => (c.kind === 'text' ? c.html : '')).join(''))), design)
+      : design.text ?? '';
 
+    const title = design.title ?? show.title;
     if (!prose.trim()) {
-      return [panelShell('exhibition', show.slug, platesBody(show, images))];
+      return [panelShell('exhibition', show.slug, platesBody(show, images, {
+        title,
+        ...(design.lines ? { lines: design.lines } : {}),
+        ...(design.when ? { when: design.when } : {}),
+        ...(design.note ? { note: design.note } : {}),
+      }))];
     }
 
-    const when = [
+    const when = design.when ?? [
       show.from && show.to ? `From ${show.from} to ${show.to}` : show.from ?? '',
       String(show.year),
     ].filter(Boolean).join(' ');
     return [panelShell('exhibition', show.slug, sheetBody({
-      title: show.title,
-      lines: placeOf(show.venue) ? [placeOf(show.venue)!] : [],
+      title: title.replace(/\n/g, ' '),
+      lines: design.lines ?? (placeOf(show.venue) ? [placeOf(show.venue)!] : []),
       when,
       body: raw(prose),
       images,
+      kind: 'show',
+      ...(design.artists ? { artists: design.artists } : {}),
     }))];
   });
 
@@ -422,7 +435,7 @@ function commissionedSheet(item: GroupedProject): Html {
     lines: drawn?.lines ?? [],
     when: drawn?.when ?? item.when,
     body: raw(drawn?.body ?? own),
-    images: p.images,
+    images: leadWith(p.images, COMMISSION_LEADS[p.slug]),
   }));
 }
 

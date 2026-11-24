@@ -33,14 +33,14 @@ import { placeOf, type Show } from '../content/exhibitions-list.ts';
  * box. On a phone the photographs stand in a column, and a landscape takes
  * its width where a portrait is set narrower (07-sheet.css).
  */
-export function platesBody(show: Show, images: readonly ProjectImage[]): Html {
+export function platesBody(show: Show, images: readonly ProjectImage[], head: Partial<PlatesHead> = {}): Html {
   // As on the index: the kind of show is the group, not the location.
   const place = placeOf(show.venue);
   const when = [
     show.from && show.to ? `From ${show.from} to ${show.to}` : show.from ?? '',
     String(show.year),
   ].filter(Boolean).join(' ');
-  return plates({ title: show.title, place, when }, images);
+  return plates({ title: show.title, place, when, ...head }, images);
 }
 
 /**
@@ -56,16 +56,22 @@ export interface PlatesHead {
   readonly title: string;
   /** Where it was, or who it is of. Left out when there is nothing to say. */
   readonly place?: string;
+  /** The same, as the sheet breaks it into lines; wins over `place`. */
+  readonly lines?: readonly string[];
+  /** A short caption under the date (El color no existe). */
+  readonly note?: string;
   /** When. Likewise. */
   readonly when?: string;
 }
 
-export function plates({ title, place, when }: PlatesHead, images: readonly ProjectImage[]): Html {
+export function plates({ title, place, lines, when, note }: PlatesHead, images: readonly ProjectImage[]): Html {
+  const rows = lines?.length ? lines : place ? [place] : [];
   return html`<div class="plates" data-reader>
     <header class="plates-head">
-      <h2 class="sheet-title">${title}</h2>
-      ${place ? html`<p class="sheet-lines">${place}</p>` : ''}
+      <h2 class="sheet-title">${join(title.split('\n').map((t, i) => (i ? html`<br />${t}` : html`${t}`)))}</h2>
+      ${rows.length ? html`<p class="sheet-lines">${join(rows.map((line, i) => (i ? html`<br />${line}` : html`${line}`)))}</p>` : ''}
       ${when ? html`<p class="sheet-when">${when}</p>` : ''}
+      ${note ? html`<p class="plates-note">${note}</p>` : ''}
     </header>
 
     <div class="plates-stage" data-figures>
