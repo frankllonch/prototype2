@@ -149,17 +149,23 @@
    * THE SIDE COLUMN — the years, in their colours, and the grid's controls
    * under them, down the left margin (the designer's final sheet, 1920 wide).
    *
-   *   --side-top      where the first year's capitals start on the window:
-   *                   the line where Commissioned, Exhibitions and Color Chart
-   *                   begin (--list-top, 07-sheet.css, and the row's own air
-   *                   and cap drop).
-   *   --controls-gap  the space between the years, Inquiries and the controls,
-   *                   in points of the 1920 sheet.
+   *   --side-top      where the first year's capitals start on the window
+   *                   once the opening has ended. It is the first row of
+   *                   paintings: that row lands at --grid-start less the 45vh
+   *                   the opening scrolls beyond one screen (`motion.span`
+   *                   in client/pile.ts, 1.45), so
+   *                   the two start on one line. A number in vh puts it there
+   *                   instead.
+   *   --type-side     the size of the controls — 25, 50, 100, Equal, To
+   *                   scale: 30 of the sheet's 1920. The years are the page's
+   *                   own size, --type.
+   *   --controls-gap  the space between the last year and the first control.
    *
-   * The years are the page's own size, --type, and the rest 30 to their 40,
-   * as far as the height of the window allows: 03-years.css.
+   * The column is taller than a short window. It starts level with the first
+   * row and rides up with the paintings as you scroll on, until its last
+   * control is a margin above the foot of the window, then stays.
    */
-  --side-top: calc(max(calc(var(--bar) + 2rem), 20.745vw) + 0.78125vw + 0.183 * var(--type));
+  --side-top: calc(var(--grid-start) - 45vh);
   /*
    * THE COUNT — the gallery's opening filling up, from no paintings to all of
    * them (2021 onwards), when the Gallery is opened. client/stack.ts queues
@@ -182,7 +188,8 @@
   --count-curve: 0.7;
   --count-fade: 0s;
   --count-ease: var(--ease);
-  --controls-gap: 24;
+  --type-side: clamp(0.85rem, 1.5625vw, 2.55rem);
+  --controls-gap: 4.7vw;
   /* The gallery's gutters, off the same sheet: 43 between columns and about
      23 between rows at 1654 — tighter than the page gap, so the paintings fill
      the screen as they do there. */
@@ -584,14 +591,14 @@ body.is-locked { overflow: hidden; }
  * THE SIDE COLUMN), and drawn the way the bar is: as the negative of whatever
  * is under them. Same colours as the menu — the chosen one bright, the rest a
  * step back — until the script names the chosen one in a colour from the
- * site's list (client/controls.ts). Where the column stands, and its
- * size, is in 03-years.css.
+ * site's list (client/controls.ts). Where the column stands, and how it rides
+ * up with the scroll, is in 03-years.css.
  */
 .controls {
   position: fixed; z-index: 30;
   left: var(--pad);
   display: flex; flex-direction: column; align-items: flex-start;
-  line-height: var(--side-lead);
+  font-size: var(--type-side); line-height: var(--side-lead);
   mix-blend-mode: difference;
   transition: opacity 0.8s var(--ease);
 }
