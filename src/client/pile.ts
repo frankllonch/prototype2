@@ -364,7 +364,7 @@ export function easeOf(m: Values): (p: number) => number {
 /**
  * The grid's own spacing and where it starts, written over the stylesheet —
  * only what differs from the site's, so the stylesheet's clamps stay in force
- * otherwise. `--side-top` follows the scroll span, as 00-base.css explains.
+ * otherwise.
  */
 export function gridCss(p: Pile): string {
   const g = p.grid;
@@ -373,9 +373,6 @@ export function gridCss(p: Pile): string {
   if (g.gapX !== d.gapX) rules.push(`--grid-gap-x: ${g.gapX}vw;`);
   if (g.gapY !== d.gapY) rules.push(`--grid-gap-y: ${g.gapY}vw;`);
   if (g.start !== d.start) rules.push(`--grid-start: ${g.start}vh;`);
-  if (p.motion.span !== SITE.motion.span || g.start !== d.start) {
-    rules.push(`--side-top: calc(var(--grid-start) - ${((Number(p.motion.span) - 1) * 100).toFixed(1)}vh);`);
-  }
   return rules.length ? `@media (min-width: 900px) { :root { ${rules.join(' ')} } }` : '';
 }
 

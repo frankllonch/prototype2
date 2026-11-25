@@ -8,45 +8,48 @@
  * the scroll has unfolded the whole grid. Scrolling back into the pile takes
  * the class away again and the rail goes with it.
  *
- * Off the designer's final sheet at 1920: the years at the page's size, 50
- * apart; then the controls at 30, 40 apart. The knobs are in 00-base.css,
- * under THE SIDE COLUMN, next to --rail.
+ * The knobs are in 00-base.css, under THE SIDE COLUMN, next to --rail.
  *
- * It does not move. The column is drawn where it ends up — as low as
- * --side-top asks, but never so low that its last control leaves the window —
- * and simply fades in there.
+ * It does not move. The column starts on the line where Commissioned,
+ * Exhibitions and Color Chart begin (--side-top) at every size of window. Where
+ * the window is too short for it at full size, its type and spaces all get
+ * smaller together until its last control clears the foot by a margin.
  */
 :root {
-  /* The column's lines. Years medium 40 on 40 (DATA on the typography
-     sheet, 2026-11-17), controls at 40 over 30. */
-  --year-lead: 1;
-  --side-lead: 1.3333;
+  /* The column's lines, set close (Frank, 2026-11-25). */
+  --year-lead: 0.85;
+  --side-lead: 1.0667;
   /* How many years there are: written by client/years.ts, eleven until then. */
   --years-count: 11;
-  --years-height: calc(var(--years-count) * var(--type) * var(--year-lead));
+  /* The column in points of the 1920 sheet: the years at 40, then five
+     controls at 30 — six lines with Inquiries — and the spaces between. */
+  --side-lines: 5;
+  --side-gaps: 1;
+  --side-points: calc(
+    var(--years-count) * 40 * var(--year-lead) + var(--side-lines) * 30 * var(--side-lead) + var(--side-gaps) * var(--controls-gap)
+  );
+  /* One point: the page's own, or less where the window is too short. */
+  --side-pt: min(calc(var(--type) / 40), calc((100vh - var(--pad) - var(--side-top)) / var(--side-points)));
+  --side-size: calc(30 * var(--side-pt));
+  --years-height: calc(var(--years-count) * 40 * var(--year-lead) * var(--side-pt));
   /* Where the first thing under the years stands: Inquiries on the Gallery,
      otherwise the first control. */
-  --under-years: calc(var(--side-top) + var(--years-height) + var(--controls-gap));
+  --under-years: calc(var(--side-top) + var(--years-height) + var(--controls-gap) * var(--side-pt));
   /* The room Inquiries takes between the years and the controls: its line
-     and a line clear. Nothing where there is no Inquiries. */
+     and a space. Nothing where there is no Inquiries. */
   --inq-slot: 0px;
   --controls-top: calc(var(--under-years) + var(--inq-slot));
-  /* Five controls: three sizes, then equal and to scale. */
-  --side-height: calc(var(--years-height) + var(--controls-gap) + var(--inq-slot) + 5 * var(--type-side) * var(--side-lead));
-  /* How far above --side-top the column has to stand for its foot to clear the
-     window's by a margin. */
-  --side-lift: max(0px, calc(var(--side-top) + var(--side-height) + var(--pad) - 100vh));
 }
 
 .years {
   position: fixed;
   left: var(--pad);
-  top: calc(var(--side-top) - var(--side-lift));
+  top: var(--side-top);
   z-index: 30;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  font-size: var(--type);
+  font-size: calc(40 * var(--side-pt));
   font-weight: 500;
   line-height: var(--year-lead);
   /* The capitals, not the line box, start on that line: half the leading less
@@ -56,7 +59,8 @@
 }
 
 .controls {
-  top: calc(var(--controls-top) - var(--side-lift));
+  top: var(--controls-top);
+  font-size: var(--side-size);
   margin-top: calc((0.317 - var(--side-lead) / 2) * 1em);
 }
 
@@ -77,23 +81,25 @@
 
 /*
  * "INQUIRIES" under the years, before the controls (Frank, 2026-11-21; it
- * stood over the years until then): 30 regular in capitals, on the controls'
- * 40 line, where the first control used to start. The controls step down by
- * its line and a line clear (--inq-slot). Its hover is the index rows'
+ * stood over the years until then): the controls' size and line, regular in
+ * capitals, where the first control used to start. The controls step down by
+ * its line and a space (--inq-slot). Its hover is the index rows'
  * (01-grid.css `.hrow`, a new hue each time from client/hover-list.ts), ink
  * without scripting.
  */
 :root:has(.side-inquiries) {
-  --inq-slot: calc(2 * var(--type-side) * var(--side-lead));
+  --side-lines: 6;
+  --side-gaps: 2;
+  --inq-slot: calc((30 * var(--side-lead) + var(--controls-gap)) * var(--side-pt));
 }
 
 .side-inquiries {
   --exh-hover: var(--ink);
   position: fixed;
   left: var(--pad);
-  top: calc(var(--under-years) - var(--side-lift));
+  top: var(--under-years);
   z-index: 30;
-  font-size: var(--type-side);
+  font-size: var(--side-size);
   font-weight: 400;
   line-height: var(--side-lead);
   margin-top: calc((0.317 - var(--side-lead) / 2) * 1em);
