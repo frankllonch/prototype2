@@ -70,7 +70,15 @@
   --m: var(--pad);
   margin-top: var(--chart-reel-gap);
 }
-.chart-reel + .chart-order { margin-top: var(--chart-reel-gap); }
+.chart-hold:has(.chart-reel) + .chart-order { margin-top: var(--chart-reel-gap); }
+
+/*
+ * Once the statement is typed the page goes on until the photographs stand
+ * over the foot of the screen, and is held there while the scroll drives them
+ * sideways, as About's are: client/chart.ts sets `--hold-top` and the run of
+ * scroll after it.
+ */
+.chart-hold.is-held > .chart-held { position: sticky; top: var(--hold-top); }
 
 /*
  * The opening holds still while the statement is typed by the scroll: the
@@ -352,7 +360,7 @@
     line-height: 1;
   }
   .chart-reel { --m: var(--phone-pad); margin-top: var(--chart-phone-reel-gap); }
-  .chart-reel + .chart-order { margin-top: var(--chart-phone-reel-gap); }
+  .chart-hold:has(.chart-reel) + .chart-order { margin-top: var(--chart-phone-reel-gap); }
   .chart-arrow { display: none; }
   .chart-arrow-phone {
     display: block;

@@ -58,8 +58,10 @@ export function colourChart(): Html {
     <!--
       The opening: the title and the statement, held in place while the
       reader scrolls the rest of it into being (client/chart.ts adds the run
-      of scroll behind it). Without the script it is simply the top of the page.
+      of scroll behind it). Then, with the photographs under it, held again
+      while they are driven in. Without the script it is simply the top of the page.
     -->
+    <div class="chart-hold" data-chart-hold><div class="chart-held" data-chart-held>
     <div class="chart-opening" data-chart-opening>
       <div class="chart-stage" data-chart-stage>
         <div class="chart-statement" data-chart-type>
@@ -70,6 +72,7 @@ export function colourChart(): Html {
     </div>
 
     ${photographs.length ? chartReel(photographs) : ''}
+    </div></div>
 
     <!--
       An anchor rather than a button, and to a real section further down the
