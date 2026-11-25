@@ -164,6 +164,7 @@ export function initStack(): void {
       tile.style.transform = '';
       tile.style.zIndex = '';
       tile.style.opacity = '';
+      tile.style.transition = '';
     }
     ordered = false;
   };
@@ -518,7 +519,14 @@ export function initStack(): void {
       }
       const r = t.rot * (1 - e);
       tile.style.transform = `translate3d(${dx.toFixed(1)}px, ${dy.toFixed(1)}px, 0)${r ? ` rotate(${r.toFixed(2)}deg)` : ''} scale(${s.toFixed(4)})`;
-      if (t.op !== 1) tile.style.opacity = (t.op + (1 - t.op) * Math.min(1, Math.max(0, e))).toFixed(3);
+      if (t.op === 0) {
+        // One the pile does not show stays wholly unseen until it is in its
+        // place: part-faded on the way it stood as a ghost behind the others
+        // (Frank, 2026-11-25). It goes at once, and comes in by the tile's own
+        // transition, on a clock, so no scroll position can hold it half there.
+        tile.style.transition = e < 1 ? 'none' : '';
+        tile.style.opacity = e < 1 ? '0' : '';
+      } else if (t.op !== 1) tile.style.opacity = (t.op + (1 - t.op) * Math.min(1, Math.max(0, e))).toFixed(3);
       else if (tile.style.opacity) tile.style.opacity = '';
       // The order is written once per gathering, not every frame: rewriting
       // 181 z-indexes per frame was a style recalculation for nothing.
