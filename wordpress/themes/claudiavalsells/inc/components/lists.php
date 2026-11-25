@@ -159,7 +159,8 @@ function cv_exhibition_row( array $s, int $order ): string {
 	$place = cv_show_place( $venue );
 	$lead  = cv_show_kind( $venue );
 	$note  = (string) ( $s['note'] ?? '' );
-	$cover = (int) ( $s['cover'] ?? 0 );
+	// The row's photograph is the first of the show's reel, never one set apart.
+	$cover = (int) ( $s['images'][0]['id'] ?? 0 );
 
 	$inner = '<span class="exh-name"><span class="exh-title">' . esc_html( $s['title'] ) . '</span>'
 		. ( '' !== $note ? '<span class="exh-note">' . esc_html( $note ) . '</span>' : '' )
@@ -221,10 +222,12 @@ function cv_commissioned_list( array $groups ): string {
 	foreach ( $groups as $group ) {
 		$out .= '<section class="xgroup"><h2 class="xgroup-name">' . esc_html( $group['name'] ) . '</h2><div class="xrows">';
 		foreach ( $group['items'] as $item ) {
-			$out .= '<a class="xrow hrow" href="' . esc_url( $item['url'] ) . '" data-panel-open="' . esc_attr( "commissioned-{$item['slug']}" ) . '">'
+			// The first photograph of the project's reel, never one set apart.
+			$cover = (int) ( $item['images'][0]['id'] ?? 0 );
+			$out  .= '<a class="xrow hrow" href="' . esc_url( $item['url'] ) . '" data-panel-open="' . esc_attr( "commissioned-{$item['slug']}" ) . '">'
 				. '<span class="xrow-title">' . cv_index_title( $item['slug'], $item['title'] ) . '</span>'
 				. '<span class="exh-plate" aria-hidden="true">'
-				. ( $item['cover'] ? cv_image( $item['cover'], '(max-width: 899px) 30vw, 13vw', [ 'alt' => '' ] ) : '' )
+				. ( $cover ? cv_image( $cover, '(max-width: 899px) 30vw, 13vw', [ 'alt' => '' ] ) : '' )
 				. '</span>'
 				. '<span class="xrow-when">' . esc_html( $item['when'] ) . '</span>'
 				. '</a>';
