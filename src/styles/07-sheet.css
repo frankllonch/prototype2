@@ -265,7 +265,12 @@
 .sheet-stage {
   position: absolute;
   left: calc(var(--f) * 1070);
-  width: calc(var(--f) * 770);
+  /* The last term keeps room for the next arrow: gap, chevron, window edge. */
+  width: min(calc(var(--f) * 770), calc(var(--f) * 850 - var(--step-gap) - var(--step-w) - 20px));
+  --step-gap: 14px;                              /* the least between photograph and arrow */
+  --step-w: calc(var(--cue-size) * 16 / 28);     /* the chevron, .step-chevron */
+  --step-pad: calc(var(--f) * 14);
+  --step-next: calc(var(--f) * (1870 - 1840));   /* box to the right margin */
   top: calc(var(--f) * 128);
   bottom: calc(var(--f) * 80);
 }
@@ -320,6 +325,8 @@
     bottom: calc(var(--f) * 72);
   }
   .sheet.is-show .is-live .sheet-figure.is-wide { padding-top: calc(var(--f) * 166); }
+  .sheet.is-show .sheet-figure.is-wide img { max-width: 100%; }
+  .sheet.is-show .sheet-stage { --step-next: calc(var(--f) * (1870 - 1719)); }
   /* The name on one line, as every exhibition's sheet sets it, running past
      the text's column when it is long (What abstract art means to me). */
   .sheet.is-show .sheet-title { width: max-content; max-width: calc(var(--f) * 1000); }
@@ -329,15 +336,16 @@
 /* On a phone the lines run on and turn where the screen turns them. */
 @media (max-width: 899px) {
   .sheet-br { display: none; }
-  .sheet.is-show .sheet-figure.is-wide img { max-width: 100%; }
-  .sheet.is-show .sheet-next { right: calc(var(--f) * (1870 - 1719) * -1 - var(--f) * 14); }
 }
 
-/* The arrows sit either side of the box, on its middle: the next one on the
-   right margin as the sheet draws it, the previous one mirrored on the left. */
+/* The arrows sit either side of the box: the next one on the right margin as
+   the sheet draws it, the previous one mirrored on the left, and neither
+   nearer the box than `--step-gap` however small the window (the chevron is
+   not sized by it). Level with the middle of the photograph showing, which
+   figures.ts measures: a landscape does not stand on the box's middle. */
 .sheet-step {
   position: absolute;
-  top: 50%;
+  top: var(--photo-mid, 50%);
   translate: 0 -50%;
   padding: calc(var(--f) * 24) calc(var(--f) * 14);
   color: rgb(252, 252, 250);
@@ -345,8 +353,8 @@
   transition: opacity var(--hover) var(--ease);
 }
 .sheet-step:hover, .sheet-step:focus-visible { opacity: 0.45; }
-.sheet-next { right: calc(var(--f) * (1870 - 1840) * -1 - var(--f) * 14); }
-.sheet-prev { left: calc(var(--f) * -30 - var(--f) * 14 - var(--f) * 9); }
+.sheet-next { left: calc(100% + max(var(--step-gap), var(--step-next) - var(--step-w)) - var(--step-pad)); }
+.sheet-prev { right: calc(100% + max(var(--step-gap), var(--f) * 39 - var(--step-w)) - var(--step-pad)); }
 
 /* ---------------------------------------------------- the text on its own */
 
@@ -627,7 +635,7 @@ html:not(.js) .sheet-step { display: none; }
    of the picture — so they never meet the masthead in the top left. */
 .plates-step {
   position: absolute;
-  top: 50%;
+  top: var(--photo-mid, 50%);
   translate: 0 -50%;
   padding: calc(var(--f) * 24) calc(var(--f) * 14);
   color: rgb(252, 252, 250);
