@@ -243,7 +243,6 @@ function cv_exhibition( WP_Post $p ): array {
 		'kindKey' => $kind,
 		'kind'    => CV_KIND_LABELS[ $kind ] ?? '',
 		'note'    => (string) cv_meta( $p->ID, '_cv_note' ),
-		'cover'   => $cover,
 		'images'  => $images,
 		'text'    => $parts['text'],
 		// A show with text or pictures opens as a page; one with neither is a line in the list.
@@ -309,7 +308,6 @@ function cv_project( WP_Post $p ): array {
 		'url'    => get_permalink( $p ),
 		'year'   => $year ?: null,
 		'when'   => (string) cv_meta( $p->ID, '_cv_when' ) ?: ( $year ? (string) $year : '' ),
-		'cover'  => $cover,
 		'images' => $images,
 		'text'   => $parts['text'],
 		// The masthead of its own page, where it differs from the index line.
