@@ -255,7 +255,7 @@
 .sheet-more svg { display: block; width: 100%; height: 100%; overflow: visible; }
 .sheet-more circle { fill: none; stroke: currentColor; stroke-width: 2; }
 .sheet-more .sheet-dot { fill: currentColor; stroke: none; }
-.sheet-more:hover, .sheet-more:focus-visible { opacity: 0.55; }
+.sheet-more:focus-visible { opacity: 0.55; }
 /* Pressed, it is filled: the text has the sheet, and pressing again gives it back. */
 .sheet-more[aria-pressed='true'] circle:not(.sheet-dot) { fill: currentColor; }
 .sheet-more[aria-pressed='true'] .sheet-dot { fill: var(--paper); }
