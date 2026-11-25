@@ -381,7 +381,16 @@
   padding-right: calc(var(--f) * 40);
   box-sizing: border-box;
 }
-.sheet.is-wide-text .sheet-lines { margin: 0; }
+/* The place gives way before the date does: an exhibition's is held on its own
+   lines in the narrow masthead, but here the name, place and date share one row
+   and the row has to end short of the button and Close. */
+.sheet.is-wide-text .sheet-lines {
+  flex: 0 1 auto;
+  width: auto;
+  min-width: 0;
+  margin: 0;
+  white-space: normal;
+}
 .sheet.is-wide-text .sheet-when {
   flex: none;
   margin: 0 0 0 calc(var(--f) * 100);
