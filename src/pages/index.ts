@@ -185,9 +185,9 @@ export function exhibitionsPage(items: readonly Exhibition[], commissioned: read
     const images = leadWith(derived?.images.length ? derived.images : archive?.images ?? [], design.lead);
     if (!images.length) return [];
 
-    const prose = derived
+    const prose = design.text ?? (derived
       ? applyEdits(setThanks(show.slug, splitOpening(derived.rows.flatMap((r) => r.columns).map((c) => (c.kind === 'text' ? c.html : '')).join(''))), design)
-      : design.text ?? '';
+      : '');
 
     const title = design.title ?? show.title;
     if (!prose.trim()) {
