@@ -54,14 +54,15 @@ const STAGGER_MS = 260;
  * starting REEL_LEAD of a screen before the typing run ends, so the words
  * finishing and the photographs arriving are one movement. Then, as About's,
  * it goes on round its loop with the scroll: REEL_DRIFT sideways per pixel,
- * reached over the first REEL_DRIFT_EASE of a screen.
+ * the pace it comes in at easing down to that one.
  */
 const REEL_LEAD = 0.1;
 const REEL_RUN = 0.55;
 const REEL_DRIFT = 0.8;
-const REEL_DRIFT_EASE = 0.25;
 /** How quickly the reel catches up with where the scroll has it. */
-const REEL_SETTLE_MS = 110;
+const REEL_SETTLE_MS = 70;
+/** And how gently it comes in for a reader already past it as it starts. */
+const REEL_ARRIVE_MS = 320;
 
 export function initChart(): void {
   const chart = document.querySelector<HTMLElement>('[data-chart]');
@@ -101,11 +102,11 @@ export function initChart(): void {
   // 2026-11-20). Asked from `done`, so whatever is already on screen then
   // comes in at once, column by column.
   let watching = false;
-  const watch = () => {
+  const watch = (landed = false) => {
     if (watching) return;
     watching = true;
     for (const el of pops) seen.observe(el);
-    reel?.go(() => Number.parseFloat(chart.dataset.chartEnd ?? '') || 0);
+    reel?.go(() => Number.parseFloat(chart.dataset.chartEnd ?? '') || 0, landed);
   };
 
   /* ------------------------------------------------------------- the words */
@@ -180,7 +181,7 @@ export function initChart(): void {
     target = shown = words.length;
     for (const w of words) w.classList.add('is-written');
     done();
-    watch();
+    watch(true);
     return;
   }
 
@@ -208,7 +209,7 @@ export function initChart(): void {
  * ends, and round the loop after that. Tapped, a photograph opens the panel of
  * photographs at itself (client/figures.ts reads `figureStart`).
  */
-function initChartReel(chart: HTMLElement): { still(): void; go(end: () => number): void } | null {
+function initChartReel(chart: HTMLElement): { still(): void; go(end: () => number, landed: boolean): void } | null {
   const el = chart.querySelector<HTMLElement>('[data-chart-reel]');
   if (!el) return null;
   const panel = document.getElementById('chart-photographs');
@@ -228,36 +229,38 @@ function initChartReel(chart: HTMLElement): { still(): void; go(end: () => numbe
   let started = false;
   let end = () => 0;
   let start = 0;
-  let entry = 0;
-  let along = 0;
+  // Where the reader's scroll has the reel, eased twice over, so neither its
+  // place nor its pace ever jumps. One number for the whole movement: the reel
+  // is never carried round its loop before it has come all the way in.
+  let eased = 0;
+  let at = 0;
+  let settle = REEL_SETTLE_MS;
   let frame = 0;
   let last = 0;
 
-  const target = () => {
+  const place = () => {
     const h = window.innerHeight;
-    const from = end() - h * REEL_LEAD;
     const run = Math.max(1, h * REEL_RUN);
-    const y = window.scrollY;
-    const p = Math.min(1, Math.max(0, (y - from) / run));
-    const eased = 1 - (1 - p) * (1 - p);
-    const past = Math.max(0, y - from - run);
-    const ease = Math.max(1, h * REEL_DRIFT_EASE);
-    const drift = past < ease ? (past * past) / (2 * ease) : past - ease / 2;
-    return { entry: start * (1 - eased), along: drift * REEL_DRIFT };
+    const past = at - (end() - h * REEL_LEAD);
+    if (past >= run) return loop.scrolled(0, (past - run) * REEL_DRIFT);
+    // In over the run, slowing to exactly the pace it then drifts at.
+    const p = Math.max(0, past / run);
+    const drift = Math.min(start, run * REEL_DRIFT);
+    loop.scrolled(start - (2 * start - drift) * p + (start - drift) * p * p, 0);
   };
 
   const tick = (now: number) => {
     frame = 0;
     const dt = Math.min(64, now - last);
     last = now;
-    const to = target();
-    const k = 1 - Math.exp(-dt / REEL_SETTLE_MS);
-    entry += (to.entry - entry) * k;
-    along += (to.along - along) * k;
-    if (Math.abs(to.entry - entry) < 0.25) entry = to.entry;
-    if (Math.abs(to.along - along) < 0.25) along = to.along;
-    loop.scrolled(entry, along);
-    if (entry !== to.entry || along !== to.along) frame = requestAnimationFrame(tick);
+    const to = window.scrollY;
+    settle += (REEL_SETTLE_MS - settle) * (1 - Math.exp(-dt / REEL_ARRIVE_MS));
+    const k = 1 - Math.exp(-dt / settle);
+    eased += (to - eased) * k;
+    at += (eased - at) * k;
+    if (Math.abs(to - eased) < 0.1 && Math.abs(to - at) < 0.1) eased = at = to;
+    place();
+    if (at !== to) frame = requestAnimationFrame(tick);
   };
   const schedule = () => {
     if (!started || frame) return;
@@ -267,11 +270,9 @@ function initChartReel(chart: HTMLElement): { still(): void; go(end: () => numbe
 
   const measure = () => {
     if (!loop.measure()) return;
-    // In from just out of sight at the right of the window.
-    start = loop.span + loop.gap;
-    if (!started) entry = start;
-    loop.scrolled(entry, along);
-    schedule();
+    start = loop.start;
+    if (!started) return loop.scrolled(start, 0);
+    place();
   };
   measure();
   window.addEventListener('resize', () => requestAnimationFrame(measure));
@@ -282,19 +283,20 @@ function initChartReel(chart: HTMLElement): { still(): void; go(end: () => numbe
 
   return {
     still() {
-      entry = along = 0;
       const still = () => { if (loop.measure()) loop.scrolled(0, 0); };
       window.addEventListener('resize', () => requestAnimationFrame(still));
       still();
     },
-    go(endAt) {
+    go(endAt, landed) {
       if (started) return;
       started = true;
       end = endAt;
       // Arriving down the page (a reload, Back): it stands where the scroll
-      // has it, rather than sliding in from wherever it was left.
-      const to = target();
-      if (to.entry === 0) { entry = 0; along = to.along; loop.scrolled(entry, along); }
+      // has it. Otherwise it sets out from the run's own start, and comes in
+      // gently, however far on the reader is when the typing ends.
+      eased = at = landed ? window.scrollY : Math.min(window.scrollY, end() - window.innerHeight * REEL_LEAD);
+      if (!landed) settle = REEL_ARRIVE_MS;
+      place();
       window.addEventListener('scroll', schedule, { passive: true });
       schedule();
     },

@@ -372,7 +372,6 @@ ${modules.map((m) => `<link rel="modulepreload" href="${m}" />`).join('\n')}
 // makes — so a browser that keeps the plain anchor jump never waits for it.
 try { var nav = performance.getEntriesByType('navigation')[0];
   if (location.hash === '#whats-color' && (!nav || nav.type === 'navigate')
-    && CSS.supports('animation-timeline: view()')
     && !matchMedia('(prefers-reduced-motion: reduce)').matches
     && !matchMedia('(max-width: 899px)').matches) {
     document.documentElement.classList.add('wc-arriving', 'wc-swatch-drop');

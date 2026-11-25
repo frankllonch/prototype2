@@ -1326,10 +1326,18 @@ html:has(body.has-film) {
  *   --wc-lead-measure   the paragraph's width (set with the note's type above).
  *   --wc-ask            the colour behind the question. One of the palette's.
  *
- * Everything below the first rule asks the engine first: without scroll-run
- * animations, or with motion reduced, no word is ever hidden and the section
- * is an ordinary paragraph above the names.
+ * An engine without scroll-run animations has its words put in by
+ * client/write.ts, on the same stage and the same slices. With motion reduced
+ * no word is ever hidden: the note simply stands, in the middle of a screen
+ * of its own.
  */
+@media (prefers-reduced-motion: reduce) and (min-width: 900px) {
+  .wc-write {
+    display: grid;
+    align-items: center;
+    min-height: 100vh;
+  }
+}
 .wc-write {
   margin: 0 0 calc(var(--wc-zoom, 1) * var(--wc-lead-gap, 7vw));
 }
@@ -1379,46 +1387,51 @@ html:has(body.has-film) {
 
 /* From 900 up. A phone held upright has a stage of its own, at the foot of
    this sheet, on the same words and the same timeline (Frank, 2026-11-15). */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) and (min-width: 900px) {
-    .wc-write {
-      height: var(--wc-write-length, 370vh);
-      /*
-       * Pulled up under the film, so the stage pins — and the writing can
-       * begin, at the fixed centre — while the film's last stretch is still
-       * leaving the top of the screen. THE knob for "the words come too
-       * soon / too late": what still shows of the film when the first word
-       * lands is this pull less the page's own top padding, so more is
-       * sooner, less is later, and at the padding's own size the writing
-       * waits for an empty page.
-       */
-      margin-top: calc(-1 * var(--wc-write-early, 30vh));
-      /*
-       * Pulled up by half a screen: while the finished sentence holds the
-       * centre, the names climb the lower half of the view, stop a breath
-       * beneath it — the knob is the breath — and only then does the pin let
-       * go, so the sentence travels up sitting right on top of them.
-       * --wc-write-air is the room left between them when they meet, in the
-       * type's own terms: 6.77vw leaves the sheet's 157 at 1920, about four
-       * lines of the note, from the invitation's ink to the first numeral's.
-       */
-      margin-bottom: calc(var(--wc-write-meet, 12vh) + var(--wc-write-air, 6.77vw) - 50vh);
-      view-timeline: --wc-write block;
-    }
-    .wc-write-pin {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      display: grid;
-      place-items: center;
-      /*
-       * Nothing in here is for pointing at, and the pin is a positioned box:
-       * once the names are pulled up into its empty lower half, a positioned
-       * box sits above them for hit-testing and their links go dead. The
-       * whole stage waves pointers through instead.
-       */
-      pointer-events: none;
-    }
+@media (prefers-reduced-motion: no-preference) and (min-width: 900px) {
+  .wc-write {
+    height: var(--wc-write-length, 370vh);
+    /*
+     * Pulled up under the film, so the stage pins — and the writing can
+     * begin, at the fixed centre — while the film's last stretch is still
+     * leaving the top of the screen. THE knob for "the words come too
+     * soon / too late": what still shows of the film when the first word
+     * lands is this pull less the page's own top padding, so more is
+     * sooner, less is later, and at the padding's own size the writing
+     * waits for an empty page.
+     */
+    margin-top: calc(-1 * var(--wc-write-early, 30vh));
+    /*
+     * Pulled up by half a screen: while the finished sentence holds the
+     * centre, the names climb the lower half of the view, stop a breath
+     * beneath it — the knob is the breath — and only then does the pin let
+     * go, so the sentence travels up sitting right on top of them.
+     * --wc-write-air is the room left between them when they meet, in the
+     * type's own terms: 6.77vw leaves the sheet's 157 at 1920, about four
+     * lines of the note, from the invitation's ink to the first numeral's.
+     */
+    margin-bottom: calc(var(--wc-write-meet, 12vh) + var(--wc-write-air, 6.77vw) - 50vh);
+    view-timeline: --wc-write block;
+  }
+  .wc-write-pin {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: grid;
+    place-items: center;
+    /*
+     * Nothing in here is for pointing at, and the pin is a positioned box:
+     * once the names are pulled up into its empty lower half, a positioned
+     * box sits above them for hit-testing and their links go dead. The
+     * whole stage waves pointers through instead.
+     */
+    pointer-events: none;
+  }
+}
+
+/* The words, hidden until their turn: on the section's own timeline where the
+   engine has one, and by client/write.ts where it has not (Safari before 26). */
+@media (prefers-reduced-motion: no-preference) and (min-width: 900px), (prefers-reduced-motion: no-preference) and (orientation: portrait) {
+  @supports (animation-timeline: view()) {
     .wc-word {
       opacity: 0;
       /* Each word arrives whole, the moment its turn comes: no fade-in, so
@@ -1427,6 +1440,9 @@ html:has(body.has-film) {
       animation-timeline: --wc-write;
       /* Each word's own animation-range rides on the element. */
     }
+  }
+  @supports not (animation-timeline: view()) {
+    html.js .wc-word:not(.is-written) { opacity: 0; }
   }
 }
 
@@ -1757,34 +1773,27 @@ a.wc-bar:focus-visible {
  * be typed below its edge. Placed after the phone block, which it outweighs
  * where both speak.
  */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) and (max-width: 899px) and (orientation: portrait) {
-    #whats-color { padding-top: 0; }
-    .wc-write {
-      /* THE knob for "the typing is too fast / too slow" by hand. More than
-         240svh, or the first word is already there on the blank page. */
-      height: var(--wc-phone-write-length, 370svh);
-      margin: 0 0 var(--wc-phone-note-gap);
-      view-timeline: --wc-write block;
-    }
-    .wc-write-pin {
-      position: sticky;
-      top: 0;
-      padding-top: var(--wc-phone-top);
-      /* Nothing in here is for pointing at, as on the desktop's stage. */
-      pointer-events: none;
-    }
-    .wc-word {
-      opacity: 0;
-      animation: wc-word-in steps(1, jump-start) both;
-      animation-timeline: --wc-write;
-    }
-    /* The cue over the blank page, standing clear of the screen's foot.
-       It overrides the film's place for it and the phone's 'no cue'. */
-    html.js .has-film .scroll-cue {
-      display: block;
-      bottom: calc(24 * var(--p));
-    }
+@media (prefers-reduced-motion: no-preference) and (max-width: 899px) and (orientation: portrait) {
+  #whats-color { padding-top: 0; }
+  .wc-write {
+    /* THE knob for "the typing is too fast / too slow" by hand. More than
+       240svh, or the first word is already there on the blank page. */
+    height: var(--wc-phone-write-length, 370svh);
+    margin: 0 0 var(--wc-phone-note-gap);
+    view-timeline: --wc-write block;
+  }
+  .wc-write-pin {
+    position: sticky;
+    top: 0;
+    padding-top: var(--wc-phone-top);
+    /* Nothing in here is for pointing at, as on the desktop's stage. */
+    pointer-events: none;
+  }
+  /* The cue over the blank page, standing clear of the screen's foot.
+     It overrides the film's place for it and the phone's 'no cue'. */
+  html.js .has-film .scroll-cue {
+    display: block;
+    bottom: calc(24 * var(--p));
   }
 }
 
