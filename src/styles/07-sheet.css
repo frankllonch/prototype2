@@ -154,13 +154,13 @@
  * open with something that is not a paragraph.
  */
 .sheet-prose > p:first-of-type {
-  font-size: var(--t-45);           /* INTRO: medium 45 on 45 */
+  font-size: var(--type);           /* INTRO: medium 40 on 40 (Frank, 2026-11-25) */
   font-weight: 500;
   text-transform: uppercase;
 }
 .sheet-prose p:last-child { margin-bottom: 0; }
 .sheet-prose .is-style-lead {
-  font-size: var(--t-45);
+  font-size: var(--type);
   font-weight: 500;
   text-transform: uppercase;
 }
@@ -694,10 +694,10 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
     --sh-foot: calc(80 * var(--p));          /* under the last block */
     /* The typography sheet's hierarchy at the phone's scale: the text keeps
        the phone frame's size, and the rest stand to it as on the computer —
-       name and lede 45 to its 40, credits 30 (Frank, 2026-11-17). */
+       name 45 to its 40, the lede the text's own size (Frank, 2026-11-25). */
     --sh-type: calc(20 * var(--p));          /* place, dates and text, on a line of the same */
     --sh-name: calc(var(--sh-type) * 1.125); /* the name, likewise */
-    --sh-lede: calc(var(--sh-type) * 1.125); /* the lede, likewise */
+    --sh-lede: var(--sh-type);               /* the lede, at the text's size */
     --sh-note: calc(var(--sh-type) * 0.5);   /* credits, likewise: 20 to the text's 40 */
     --sh-measure: none;                      /* where the lines under the name turn: the column */
     --sh-lines-top: calc(14 * var(--p));     /* name → place */
@@ -717,7 +717,7 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
     --sh-foot: calc(119 * var(--p));
     --sh-type: calc(30 * var(--p));
     --sh-name: calc(var(--sh-type) * 1.125);
-    --sh-lede: calc(var(--sh-type) * 1.125);
+    --sh-lede: var(--sh-type);
     --sh-note: calc(var(--sh-type) * 0.5);
     --sh-measure: calc(261 * var(--p));      /* the lines under the name turn at the photograph's width */
     --sh-lines-top: calc(60 * var(--p));
