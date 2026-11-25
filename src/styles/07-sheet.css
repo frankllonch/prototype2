@@ -59,7 +59,6 @@
   mix-blend-mode: difference;
   z-index: 3;
 }
-.panel:is(:has(.sheet), :has(.plates)) .panel-close:hover,
 .panel:is(:has(.sheet), :has(.plates)) .panel-close:focus-visible { opacity: 0.55; }
 
 /* ---------------------------------------------------------------- masthead */
@@ -114,6 +113,9 @@
   text-transform: uppercase;
   line-height: 1;
 }
+/* Color Palette: FOR SANTA & COLE at the weight of its opening paragraph
+   (Frank, 2026-11-25). */
+#commissioned-santa-cole-color-palette-2023 .sheet-lines { font-weight: 500; }
 .sheet-when {
   margin-top: calc(var(--f) * 1);
   /* Regular italic, 40 on 40: DATA on both typography sheets. */
@@ -154,13 +156,13 @@
  * open with something that is not a paragraph.
  */
 .sheet-prose > p:first-of-type {
-  font-size: var(--t-45);           /* INTRO: medium 45 on 45 */
+  font-size: var(--type);           /* INTRO: medium 40 on 40 (Frank, 2026-11-25) */
   font-weight: 500;
   text-transform: uppercase;
 }
 .sheet-prose p:last-child { margin-bottom: 0; }
 .sheet-prose .is-style-lead {
-  font-size: var(--t-45);
+  font-size: var(--type);
   font-weight: 500;
   text-transform: uppercase;
 }
@@ -255,7 +257,7 @@
 .sheet-more svg { display: block; width: 100%; height: 100%; overflow: visible; }
 .sheet-more circle { fill: none; stroke: currentColor; stroke-width: 2; }
 .sheet-more .sheet-dot { fill: currentColor; stroke: none; }
-.sheet-more:hover, .sheet-more:focus-visible { opacity: 0.55; }
+.sheet-more:focus-visible { opacity: 0.55; }
 /* Pressed, it is filled: the text has the sheet, and pressing again gives it back. */
 .sheet-more[aria-pressed='true'] circle:not(.sheet-dot) { fill: currentColor; }
 .sheet-more[aria-pressed='true'] .sheet-dot { fill: var(--paper); }
@@ -265,7 +267,12 @@
 .sheet-stage {
   position: absolute;
   left: calc(var(--f) * 1070);
-  width: calc(var(--f) * 770);
+  /* The last term keeps room for the next arrow: gap, chevron, window edge. */
+  width: min(calc(var(--f) * 770), calc(var(--f) * 850 - var(--step-gap) - var(--step-w) - 20px));
+  --step-gap: 14px;                              /* the least between photograph and arrow */
+  --step-w: calc(var(--cue-size) * 16 / 28);     /* the chevron, .step-chevron */
+  --step-pad: calc(var(--f) * 14);
+  --step-out: calc(var(--f) * (1870 - 1840));    /* box to an arrow's far edge */
   top: calc(var(--f) * 128);
   bottom: calc(var(--f) * 80);
 }
@@ -307,19 +314,22 @@
 
 /*
  * An exhibition's photograph, as the exhibitions' sheets place it
- * (UPDATES/exhibitions, 2026-11-24): in a narrower box that ends at 1719 —
- * 1083 to 1719 across, 134 to 1008 down. A portrait fills its height; a
+ * (UPDATES/exhibitions, 2026-11-24): in a narrower box, 636 wide and 134 to
+ * 1008 down. The sheets stand it at 1083; it is centred between its arrows
+ * instead, 1139 to 1775 (Frank, 2026-11-25). A portrait fills its height; a
  * landscape is set at the box's width with its top at 300, level with the
  * masthead's date rather than with the text.
  */
 @media (min-width: 900px) {
   .sheet.is-show .sheet-stage {
-    left: calc(var(--f) * 1083);
+    left: calc(var(--f) * 1139);
     width: calc(var(--f) * 636);
     top: calc(var(--f) * 134);
     bottom: calc(var(--f) * 72);
   }
   .sheet.is-show .is-live .sheet-figure.is-wide { padding-top: calc(var(--f) * 166); }
+  .sheet.is-show .sheet-figure.is-wide img { max-width: 100%; }
+  .sheet.is-show .sheet-stage { --step-out: calc(var(--f) * (1870 - 1775)); }
   /* The name on one line, as every exhibition's sheet sets it, running past
      the text's column when it is long (What abstract art means to me). */
   .sheet.is-show .sheet-title { width: max-content; max-width: calc(var(--f) * 1000); }
@@ -329,24 +339,25 @@
 /* On a phone the lines run on and turn where the screen turns them. */
 @media (max-width: 899px) {
   .sheet-br { display: none; }
-  .sheet.is-show .sheet-figure.is-wide img { max-width: 100%; }
-  .sheet.is-show .sheet-next { right: calc(var(--f) * (1870 - 1719) * -1 - var(--f) * 14); }
 }
 
-/* The arrows sit either side of the box, on its middle: the next one on the
-   right margin as the sheet draws it, the previous one mirrored on the left. */
+/* The arrows sit either side of the box: the next one on the right margin as
+   the sheet draws it, the previous one as far out on the left, and neither
+   nearer the box than `--step-gap` however small the window (the chevron is
+   not sized by it). Level with the middle of the photograph showing, which
+   figures.ts measures: a landscape does not stand on the box's middle. */
 .sheet-step {
   position: absolute;
-  top: 50%;
+  top: var(--photo-mid, 50%);
   translate: 0 -50%;
   padding: calc(var(--f) * 24) calc(var(--f) * 14);
   color: rgb(252, 252, 250);
   mix-blend-mode: difference;
   transition: opacity var(--hover) var(--ease);
 }
-.sheet-step:hover, .sheet-step:focus-visible { opacity: 0.45; }
-.sheet-next { right: calc(var(--f) * (1870 - 1840) * -1 - var(--f) * 14); }
-.sheet-prev { left: calc(var(--f) * -30 - var(--f) * 14 - var(--f) * 9); }
+.sheet-step:focus-visible { opacity: 0.45; }
+.sheet-next { left: calc(100% + max(var(--step-gap), var(--step-out) - var(--step-w)) - var(--step-pad)); }
+.sheet-prev { right: calc(100% + max(var(--step-gap), var(--step-out) - var(--step-w)) - var(--step-pad)); }
 
 /* ---------------------------------------------------- the text on its own */
 
@@ -627,14 +638,14 @@ html:not(.js) .sheet-step { display: none; }
    of the picture — so they never meet the masthead in the top left. */
 .plates-step {
   position: absolute;
-  top: 50%;
+  top: var(--photo-mid, 50%);
   translate: 0 -50%;
   padding: calc(var(--f) * 24) calc(var(--f) * 14);
   color: rgb(252, 252, 250);
   mix-blend-mode: difference;
   transition: opacity var(--hover) var(--ease);
 }
-.plates-step:hover, .plates-step:focus-visible { opacity: 0.45; }
+.plates-step:focus-visible { opacity: 0.45; }
 .plates-prev { left: calc(var(--s-pad) - var(--f) * 14); }
 .plates-next { right: calc(var(--s-pad) - var(--f) * 14); }
 
@@ -694,10 +705,10 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
     --sh-foot: calc(80 * var(--p));          /* under the last block */
     /* The typography sheet's hierarchy at the phone's scale: the text keeps
        the phone frame's size, and the rest stand to it as on the computer —
-       name and lede 45 to its 40, credits 30 (Frank, 2026-11-17). */
+       name 45 to its 40, the lede the text's own size (Frank, 2026-11-25). */
     --sh-type: calc(20 * var(--p));          /* place, dates and text, on a line of the same */
     --sh-name: calc(var(--sh-type) * 1.125); /* the name, likewise */
-    --sh-lede: calc(var(--sh-type) * 1.125); /* the lede, likewise */
+    --sh-lede: var(--sh-type);               /* the lede, at the text's size */
     --sh-note: calc(var(--sh-type) * 0.5);   /* credits, likewise: 20 to the text's 40 */
     --sh-measure: none;                      /* where the lines under the name turn: the column */
     --sh-lines-top: calc(14 * var(--p));     /* name → place */
@@ -717,7 +728,7 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
     --sh-foot: calc(119 * var(--p));
     --sh-type: calc(30 * var(--p));
     --sh-name: calc(var(--sh-type) * 1.125);
-    --sh-lede: calc(var(--sh-type) * 1.125);
+    --sh-lede: var(--sh-type);
     --sh-note: calc(var(--sh-type) * 0.5);
     --sh-measure: calc(261 * var(--p));      /* the lines under the name turn at the photograph's width */
     --sh-lines-top: calc(60 * var(--p));

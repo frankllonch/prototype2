@@ -127,6 +127,14 @@ export const exhibitionItem = (e: Exhibition): PanelItem => ({
   ...(e.kind !== undefined ? { kind: e.kind } : {}),
 });
 
+/** The photographs a show's sheet steps through, in order. Its row shows the first. */
+function showReel(slug: string, derived: Exhibition | undefined): readonly ProjectImage[] {
+  return leadWith(derived?.images.length ? derived.images : showPhotos.get(slug)?.images ?? [], SHOW_SHEETS[slug]?.lead);
+}
+
+/** The same for a commissioned project. */
+const commissionReel = (p: Project): readonly ProjectImage[] => leadWith(p.images, COMMISSION_LEADS[p.slug]);
+
 /**
  * Exhibitions: a list rather than a gallery, after the designer's layout. The
  * name and place at the left, the run of dates and the year at the right, a rule
@@ -138,14 +146,11 @@ export function exhibitionsPage(items: readonly Exhibition[], commissioned: read
   // links to.
   // Every show Claudia listed is on the page; the few that came from the source
   // page keep their photograph and their panel, matched by slug.
-  // Both kinds of show give the index its hover photograph: the ones that came
-  // from the site carry a cover of their own, and the ones from the archive
-  // lead with their first photograph.
-  // The row's photograph is the one the show's own sheet opens on.
-  const covers = new Map([
-    ...items.flatMap((e) => (e.cover ? [[e.slug, leadWith(e.images, SHOW_SHEETS[e.slug]?.lead)[0] ?? e.cover] as const] : [])),
-    ...[...showPhotos].flatMap(([slug, p]) => (p.cover ? [[slug, leadWith(p.images, SHOW_SHEETS[slug]?.lead)[0] ?? p.cover] as const] : [])),
-  ]);
+  // A row's hover photograph is always the first of the reel its sheet opens:
+  // both are read from `reels`, so there is no second picture to set.
+  const bySlug = new Map(items.map((e) => [e.slug, e] as const));
+  const reels = new Map(SHOWS.flatMap(({ slug }) => (slug ? [[slug, showReel(slug, bySlug.get(slug))] as const] : [])));
+  const covers = new Map([...reels].flatMap(([slug, reel]) => (reel[0] ? [[slug, reel[0]] as const] : [])));
 
   /*
    * Two sheets, as the designer draws two.
@@ -170,19 +175,17 @@ export function exhibitionsPage(items: readonly Exhibition[], commissioned: read
     return item ? [item] : [];
   });
   for (const item of shared) {
-    const cover = item.project.cover ?? item.project.images[0];
-    if (cover && !covers.has(item.slug)) covers.set(item.slug, cover);
+    const first = commissionReel(item.project)[0];
+    if (first && !covers.has(item.slug)) covers.set(item.slug, first);
   }
 
-  const bySlug = new Map(items.map((e) => [e.slug, e] as const));
   const sheets = SHOWS.flatMap((show) => {
     if (!show.slug) return [];
     const derived = bySlug.get(show.slug);
-    const archive = showPhotos.get(show.slug);
     // The designer's sheet for this show, where there is one: its masthead,
     // the photograph it opens on, and the text Frank sent for it.
     const design = SHOW_SHEETS[show.slug] ?? {};
-    const images = leadWith(derived?.images.length ? derived.images : archive?.images ?? [], design.lead);
+    const images = reels.get(show.slug) ?? [];
     if (!images.length) return [];
 
     const prose = design.text ?? (derived
@@ -435,7 +438,7 @@ function commissionedSheet(item: GroupedProject): Html {
     lines: drawn?.lines ?? [],
     when: drawn?.when ?? item.when,
     body: raw(drawn?.body ?? own),
-    images: leadWith(p.images, COMMISSION_LEADS[p.slug]),
+    images: commissionReel(p),
   }));
 }
 
@@ -459,7 +462,7 @@ export function commissionedPage(items: readonly Project[]): Html {
     overlays: panels('commissioned', [], join(sheets)),
     children: html`
       <h1 class="sr-only">Commissioned</h1>
-      ${commissionedList(groups)}
+      ${commissionedList(groups, commissionReel)}
     `,
   });
 }

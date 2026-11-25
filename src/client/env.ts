@@ -16,7 +16,7 @@ export const portrait = window.matchMedia('(orientation: portrait)');
  * taken away as it is scrolled back up. The one test for scripts; the
  * stylesheets make the same one around each stage.
  *
- * Wherever the engine runs scroll-driven animations and motion is not
+ * Wherever motion is not
  * reduced — and on a phone only when it is held upright (Frank, 2026-11-15):
  * turned on its side the screen is too short for the pinned words, which
  * would be typed below its edge, so there the words simply stand, as they do
@@ -24,12 +24,8 @@ export const portrait = window.matchMedia('(orientation: portrait)');
  * than once, because a phone turned mid-page changes the answer and the
  * stylesheet with it.
  */
-export const scrollWrites = (
-  timeline: 'view()' | 'scroll()' = 'view()',
-  upright: MediaQueryList = portrait,
-): boolean =>
+export const scrollWrites = (upright: MediaQueryList = portrait): boolean =>
   !reduceMotion.matches &&
-  CSS.supports(`animation-timeline: ${timeline}`) &&
   (!phone.matches || upright.matches);
 
 /** True for a plain left click — modified clicks mean "open this elsewhere". */
