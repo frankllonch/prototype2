@@ -114,6 +114,7 @@ export function initChart(): void {
     if (landed) return settle();
     lastY = window.scrollY;
     window.addEventListener('scroll', onReturn, { passive: true });
+    onReturn();
   };
 
   /* ------------------------------------------------------------- the words */
@@ -181,15 +182,16 @@ export function initChart(): void {
     window.clearTimeout(idle);
     window.removeEventListener('scroll', onReturn);
     const was = stage.getBoundingClientRect().top;
+    // Read first: a page made shorter may clamp it.
+    const y = window.scrollY;
     const root = document.documentElement;
     root.style.overflowAnchor = 'none';
     runway.remove();
     holdRun.remove();
     hold?.classList.remove('is-held');
     delete chart.dataset.chartEnd;
-    const y = window.scrollY;
-    window.scrollTo({ top: y + stage.getBoundingClientRect().top - was, behavior: 'instant' });
-    reel?.settled();
+    window.scrollTo({ top: window.scrollY + stage.getBoundingClientRect().top - was, behavior: 'instant' });
+    reel?.settled(y - window.scrollY);
     requestAnimationFrame(() => root.style.removeProperty('overflow-anchor'));
   };
   const onReturn = () => {
@@ -276,7 +278,7 @@ interface ReelRun { from: number; to: number }
  * photograph opens the panel of photographs at itself (client/figures.ts reads
  * `figureStart`).
  */
-function initChartReel(chart: HTMLElement): { still(): void; go(run: () => ReelRun, landed: boolean): void; settled(): void } | null {
+function initChartReel(chart: HTMLElement): { still(): void; go(run: () => ReelRun, landed: boolean): void; settled(removed: number): void } | null {
   const el = chart.querySelector<HTMLElement>('[data-chart-reel]');
   if (!el) return null;
   const panel = document.getElementById('chart-photographs');
@@ -301,15 +303,22 @@ function initChartReel(chart: HTMLElement): { still(): void; go(run: () => ReelR
   // is never carried round its loop before it has come all the way in.
   let eased = 0;
   let at = 0;
-  // The furthest the scroll has had it: it never goes back. `shift` is the
-  // scroll taken out of the page once the runs are gone.
-  let goal = 0;
+  // Once it has come in, it stays in, and moves round its loop one way as the
+  // page goes down and the other as it comes up (Frank, 2026-11-25): `zero` is
+  // the scroll at which it stands in its place, `rest` what is left of its way
+  // in, `shift` the scroll taken out of the page with the runs.
+  let inPlace = false;
+  let landed = false;
+  let zero = 0;
+  let rest = 0;
   let shift = 0;
   let settle = REEL_SETTLE_MS;
   let frame = 0;
   let last = 0;
 
+  const entryAt = (p: number, drift: number) => start - (2 * start - drift) * p + (start - drift) * p * p;
   const place = () => {
+    if (inPlace) return loop.scrolled(rest, (at - zero) * REEL_DRIFT);
     const { from, to } = reelRun();
     const run = Math.max(1, to - from);
     const past = at - from;
@@ -317,21 +326,27 @@ function initChartReel(chart: HTMLElement): { still(): void; go(run: () => ReelR
     // In over the run, slowing to exactly the pace it then drifts at.
     const p = Math.max(0, past / run);
     const drift = Math.min(start, run * REEL_DRIFT);
-    loop.scrolled(start - (2 * start - drift) * p + (start - drift) * p * p, 0);
+    loop.scrolled(entryAt(p, drift), 0);
   };
 
   const tick = (now: number) => {
     frame = 0;
     const dt = Math.min(64, now - last);
     last = now;
-    const to = goal = Math.max(goal, window.scrollY + shift);
+    const to = window.scrollY + shift;
     settle += (REEL_SETTLE_MS - settle) * (1 - Math.exp(-dt / REEL_ARRIVE_MS));
     const k = 1 - Math.exp(-dt / settle);
     eased += (to - eased) * k;
     at += (eased - at) * k;
     if (Math.abs(to - eased) < 0.1 && Math.abs(to - at) < 0.1) eased = at = to;
+    if (rest) {
+      // Turned back before it was in: it finishes coming in first.
+      rest *= Math.exp(-dt / REEL_ARRIVE_MS);
+      if (rest < 0.5) rest = 0;
+      zero = at;
+    }
     place();
-    if (at !== to) frame = requestAnimationFrame(tick);
+    if (at !== to || rest) frame = requestAnimationFrame(tick);
   };
   const schedule = () => {
     if (!started || frame) return;
@@ -358,25 +373,29 @@ function initChartReel(chart: HTMLElement): { still(): void; go(run: () => ReelR
       window.addEventListener('resize', () => requestAnimationFrame(still));
       still();
     },
-    go(run, landed) {
+    go(run, arrived) {
       if (started) return;
       started = true;
       reelRun = run;
+      landed = arrived;
       // Arriving down the page (a reload, Back): it stands in its place.
       // Otherwise it sets out from the run's own start, and comes in
       // gently, however far on the reader is when the typing ends.
       eased = at = landed ? reelRun().to : Math.min(window.scrollY, reelRun().from);
-      goal = at;
       if (!landed) settle = REEL_ARRIVE_MS;
       place();
       window.addEventListener('scroll', schedule, { passive: true });
       schedule();
     },
-    settled() {
-      // Wherever it was on its way in, it goes on to its place by itself, and
-      // round the loop from there as the reader goes further down.
-      goal = Math.max(goal, reelRun().to);
-      shift = goal - window.scrollY;
+    settled(removed) {
+      const { from, to } = reelRun();
+      const run = Math.max(1, to - from);
+      shift = removed;
+      if (landed) eased = at = window.scrollY + shift;
+      zero = landed ? at : Math.min(at, to);
+      rest = landed || at >= to ? 0 : entryAt(Math.max(0, (at - from) / run), Math.min(start, run * REEL_DRIFT));
+      inPlace = true;
+      place();
       schedule();
     },
   };
