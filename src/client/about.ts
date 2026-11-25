@@ -151,7 +151,7 @@ export function initAbout(): void {
 
     if (loop?.measure()) {
       // In from just out of sight at the right of the measure.
-      reelStart = loop.span + loop.gap;
+      reelStart = loop.start;
       reelRun = Math.max(height * REEL_MIN, reelStart);
     } else {
       reelRun = 0;
@@ -331,6 +331,8 @@ export interface Loop {
   /** The width the reel is seen through, and the gap between photographs. */
   readonly span: number;
   readonly gap: number;
+  /** How far right of its place the reel waits, out of sight. */
+  readonly start: number;
   /** Reads the reel again; false while there is nothing to read (About shut). */
   measure(): boolean;
   /** Back to the sheet's order, the first photograph at the left margin. */
@@ -381,6 +383,7 @@ export function initReel(root: HTMLElement, bounds: HTMLElement): Loop | null {
   let gap = 0;
   let length = 0;
   let before = 0;
+  let start = 0;
   let looped = false;
 
   let entry = 0;
@@ -391,10 +394,11 @@ export function initReel(root: HTMLElement, bounds: HTMLElement): Loop | null {
   let last = 0;
 
   // Where a photograph stands in the window at a given distance round the
-  // loop. While the reel is coming in nothing stands left of the first, so it
-  // arrives from empty; at rest one may stand partly out at the left.
+  // loop, always wrapping out of sight to the left: the photograph that rests
+  // partly out at the left comes in with the rest, ahead of the first, so
+  // nothing is moved from one end to the other as the reel comes to its place.
   const wrap = (x: number, from: number) => from + ((((x - from) % length) + length) % length);
-  const xAt = (slot: Slot, offset: number) => (looped ? wrap(slot.at - offset, entry > 0.5 ? 0 : -before) : slot.at);
+  const xAt = (slot: Slot, offset: number) => (looped ? wrap(slot.at - offset, -before) : slot.at);
 
   const place = () => {
     const offset = along + hand;
@@ -447,6 +451,8 @@ export function initReel(root: HTMLElement, bounds: HTMLElement): Loop | null {
     const lead = Math.max(0, left - box.left);
     const tail = Math.max(span, box.right - left);
     before = lead + widest + gap;
+    // Far enough right that even the photograph ahead of the first is unseen.
+    start = tail + (looped ? before : 0);
     // Enough of a loop that what leaves on one side is gone before it comes
     // back on the other.
     const copies = looped ? Math.max(1, Math.ceil((tail + before) / total)) : 1;
@@ -510,6 +516,8 @@ export function initReel(root: HTMLElement, bounds: HTMLElement): Loop | null {
       const dx = event.shiftKey && !event.deltaX ? event.deltaY : event.deltaX;
       if (!dx || Math.abs(dx) < Math.abs(event.shiftKey ? 0 : event.deltaY)) return;
       event.preventDefault();
+      // Still on its way in: the scroll has it.
+      if (entry > 0.5) return;
       handTo += dx * (event.deltaMode === 1 ? 16 : 1);
       hand = handTo;
       place();
@@ -522,7 +530,7 @@ export function initReel(root: HTMLElement, bounds: HTMLElement): Loop | null {
   let press: Press | null = null;
   let draggedAt = -Infinity;
   track.addEventListener('pointerdown', (event) => {
-    if (!looped || event.button !== 0) return;
+    if (!looped || entry > 0.5 || event.button !== 0) return;
     press = { id: event.pointerId, x: event.clientX, y: event.clientY, from: handTo, moved: false, lastX: event.clientX, lastT: event.timeStamp, speed: 0 };
   });
   track.addEventListener('pointermove', (event) => {
@@ -571,6 +579,7 @@ export function initReel(root: HTMLElement, bounds: HTMLElement): Loop | null {
   return {
     get span() { return span; },
     get gap() { return gap; },
+    get start() { return start; },
     measure,
     reset() {
       cancelAnimationFrame(frame);
