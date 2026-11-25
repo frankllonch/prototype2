@@ -10,10 +10,10 @@
  *
  * The knobs are in 00-base.css, under THE SIDE COLUMN, next to --rail.
  *
- * It does not move. The column stands centred on the height of the window: the
- * space above the first year is the space below To scale (Frank, 2026-11-25).
- * Where the window is too short for it at full size, its type and spaces all
- * get smaller together, so that it never reaches the bar.
+ * It does not move. The column starts on the line where Commissioned,
+ * Exhibitions and Color Chart begin (--side-top) at every size of window. Where
+ * the window is too short for it at full size, its type and spaces all get
+ * smaller together until its last control clears the foot by a margin.
  */
 :root {
   /* The column's lines, set close (Frank, 2026-11-25). */
@@ -28,13 +28,8 @@
   --side-points: calc(
     var(--years-count) * 40 * var(--year-lead) + var(--side-lines) * 30 * var(--side-lead) + var(--side-gaps) * var(--controls-gap)
   );
-  /* The same, ending on the last control's baseline: less what its line leaves
-     under its 0.68 em capitals. */
-  --side-ink: calc(var(--side-points) - 30 * (var(--side-lead) - 0.68));
   /* One point: the page's own, or less where the window is too short. */
-  --side-pt: min(calc(var(--type) / 40), calc((100vh - 2 * var(--bar)) / var(--side-ink)));
-  /* Where the first year's capitals start. */
-  --side-top: calc((100vh - var(--side-ink) * var(--side-pt)) / 2);
+  --side-pt: min(calc(var(--type) / 40), calc((100vh - var(--pad) - var(--side-top)) / var(--side-points)));
   --side-size: calc(30 * var(--side-pt));
   --years-height: calc(var(--years-count) * 40 * var(--year-lead) * var(--side-pt));
   /* Where the first thing under the years stands: Inquiries on the Gallery,
@@ -85,8 +80,9 @@
 }
 
 /*
- * "Inquiries" under the years, before the controls (Frank, 2026-11-21; it
- * stood over the years until then): set as the controls are, where the first control used to start. The controls step down by
+ * "INQUIRIES" under the years, before the controls (Frank, 2026-11-21; it
+ * stood over the years until then): the controls' size and line, regular in
+ * capitals, where the first control used to start. The controls step down by
  * its line and a space (--inq-slot). Its hover is the index rows'
  * (01-grid.css `.hrow`, a new hue each time from client/hover-list.ts), ink
  * without scripting.
@@ -107,6 +103,8 @@
   font-weight: 400;
   line-height: var(--side-lead);
   margin-top: calc((0.317 - var(--side-lead) / 2) * 1em);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   white-space: nowrap;
   transition: opacity 0.8s var(--ease), color var(--hover) var(--ease);
 }
