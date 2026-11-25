@@ -14,7 +14,8 @@
  *
  * `artists` is the list of names a group show's sheet sets under the masthead,
  * in place of the lede. `text` is the show's text where the site has none of
- * its own; a show whose text comes from the source page keeps that.
+ * its own, or where Claudia sent one to replace it (Color Dialogues, in
+ * Spanish); any other show keeps the text from its source page.
  *
  * `note` is the short caption a sheet with no text sets under the date
  * (El color no existe).
@@ -64,6 +65,23 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
     lines: ['Solo show at Alzueta Gallery,', 'Madrid'],
     when: 'December 2021 to January 2022',
     lead: 1,
+    // Claudia's Spanish text (UPDATES, "Color Dialogues full sala (esp)"), in
+    // place of the English, set as the English was: two paragraphs, then the
+    // quote with its credit.
+    text:
+      '<p><span>Tras la exposición individual de la artista hace un año en la que se cuestionaba el significado del color ' +
+      'y se presentaba su nueva línea de trabajo sobre lienzo, esta nueva exposición continúa la intensa meditación que ' +
+      'Claudia Valsells tiene sobre el color.</span></p>' +
+      '<p><span>Investigando sobre su significado y los diferentes conceptos que poetas, pensadores, arquitectos y ' +
+      'diseñadores de interiores tienen sobre el significado del color, sus pinturas son diálogos yuxtapuestos sobre el ' +
+      'concepto y la importancia del color como una emoción visual universal, capaz de alcanzar e inspirar a todo ser ' +
+      'humano.</span></p>' +
+      '<p><span>“La verticalidad de lo que empieza y no acaba. Nos representa. Nos convoca.</span><br> ' +
+      '<span>Nos pregunta -qué podrías construir conmigo?- pero también nos contesta -tú eres de los colores del que ' +
+      'construyes-. La relación entre la horizontalidad de los diferentes colores -diferentes conceptos, ' +
+      'individualidades, tiempos, espacios, ideas, islas, casas, mundos, sentimientos, todo y tanto-, colores ' +
+      'interrumpidos -la vida- en sus formas rotas, apoyadas sobre el blanco, que es todos los colores, que es ninguno ' +
+      'y uno.</span><br> <span>Contraste y significación. Contexto.”</span><span>© Flavia Company </span></p>',
   },
   t10: {
     lines: ['Solo exhibition', 'at Alzueta Gallery', 'Barcelona'],
