@@ -113,6 +113,9 @@
   text-transform: uppercase;
   line-height: 1;
 }
+/* Color Palette: FOR SANTA & COLE at the weight of its opening paragraph
+   (Frank, 2026-11-25). */
+#commissioned-santa-cole-color-palette-2023 .sheet-lines { font-weight: 500; }
 .sheet-when {
   margin-top: calc(var(--f) * 1);
   /* Regular italic, 40 on 40: DATA on both typography sheets. */
