@@ -149,17 +149,13 @@
    * THE SIDE COLUMN — the years, in their colours, and the grid's controls
    * under them, down the left margin (the designer's final sheet, 1920 wide).
    *
-   *   --side-top      where the first year's capitals start on the window:
-   *                   the line where Commissioned, Exhibitions and Color Chart
-   *                   begin (--list-top, 07-sheet.css, and the row's own air
-   *                   and cap drop).
    *   --controls-gap  the space between the years, Inquiries and the controls,
    *                   in points of the 1920 sheet.
    *
    * The years are the page's own size, --type, and the rest 30 to their 40,
-   * as far as the height of the window allows: 03-years.css.
+   * as far as the height of the window allows, and the column
+   * is centred on it: 03-years.css.
    */
-  --side-top: calc(max(calc(var(--bar) + 2rem), 20.745vw) + 0.78125vw + 0.183 * var(--type));
   /*
    * THE COUNT — the gallery's opening filling up, from no paintings to all of
    * them (2021 onwards), when the Gallery is opened. client/stack.ts queues
