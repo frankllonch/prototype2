@@ -583,9 +583,6 @@ html:not(.js) .inq-close { display: none; }
   transition: opacity var(--hover) var(--ease);
 }
 .inq-button:focus-visible { opacity: 0.55; }
-/* Only where something hovers: a finger leaves :hover behind it, and Send
-   stayed dimmed after it was pressed. */
-@media (hover: hover) { .inq-button:hover { opacity: 0.55; } }
 .inq-button[disabled] { opacity: 0.35; cursor: default; }
 
 /*

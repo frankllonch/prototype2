@@ -1213,7 +1213,6 @@ html:has(body.has-film) {
   transition: opacity 0.3s ease, visibility 0s linear 0.3s;
 }
 .wc-book-step.is-shown { opacity: 1; visibility: visible; transition-delay: 0s; }
-.wc-book-step.is-shown:hover,
 .wc-book-step.is-shown:focus-visible { opacity: 0.45; }
 .wc-book-step.is-prev { left: max(0.5rem, 2.5vw); }
 .wc-book-step.is-next { right: max(0.5rem, 2.5vw); }
