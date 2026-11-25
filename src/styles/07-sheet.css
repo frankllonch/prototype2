@@ -353,7 +353,7 @@
   mix-blend-mode: difference;
   transition: opacity var(--hover) var(--ease);
 }
-.sheet-step:hover, .sheet-step:focus-visible { opacity: 0.45; }
+.sheet-step:focus-visible { opacity: 0.45; }
 .sheet-next { left: calc(100% + max(var(--step-gap), var(--step-out) - var(--step-w)) - var(--step-pad)); }
 .sheet-prev { right: calc(100% + max(var(--step-gap), var(--step-out) - var(--step-w)) - var(--step-pad)); }
 
@@ -643,7 +643,7 @@ html:not(.js) .sheet-step { display: none; }
   mix-blend-mode: difference;
   transition: opacity var(--hover) var(--ease);
 }
-.plates-step:hover, .plates-step:focus-visible { opacity: 0.45; }
+.plates-step:focus-visible { opacity: 0.45; }
 .plates-prev { left: calc(var(--s-pad) - var(--f) * 14); }
 .plates-next { right: calc(var(--s-pad) - var(--f) * 14); }
 

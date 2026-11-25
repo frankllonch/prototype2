@@ -399,7 +399,6 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .about-reel-step.is-next { right: calc(-1 * var(--m)); justify-items: end; padding-right: calc(var(--m) / 2 - var(--chev-w) / 2); }
 .about-reel { --chev-w: calc(var(--cue-size) * 16 / 28); }
 .about-reel.is-placed .about-reel-step { opacity: 1; visibility: visible; transition-delay: 0s; }
-.about-reel.is-placed .about-reel-step:hover,
 .about-reel.is-placed .about-reel-step:focus-visible { opacity: 0.45; }
 
 /*
@@ -513,7 +512,6 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .about.is-viewing ~ .about-viewer-step { opacity: 1; visibility: visible; transition-delay: 0s; }
 .about-viewer-step.is-prev { left: max(0.5rem, 2.5vw); }
 .about-viewer-step.is-next { right: max(0.5rem, 2.5vw); }
-.about.is-viewing ~ .about-viewer-step:hover,
 .about.is-viewing ~ .about-viewer-step:focus-visible { opacity: 0.45; }
 
 /* ----------------------------------------------------------- the record */
