@@ -111,6 +111,9 @@ export function initChart(): void {
     watching = true;
     for (const el of pops) seen.observe(el);
     reel?.go(() => reelRun, landed);
+    if (landed) return settle();
+    lastY = window.scrollY;
+    window.addEventListener('scroll', onReturn, { passive: true });
   };
 
   /* ------------------------------------------------------------- the words */
@@ -139,7 +142,9 @@ export function initChart(): void {
   let top = 0;
   // The scroll the reel comes in over.
   let reelRun = { from: 0, to: 1 };
+  let settled = false;
   const measure = () => {
+    if (settled) return;
     run = Math.round(Math.max(RUN_MIN, restWords.length * PER_WORD) * window.innerHeight);
     runway.style.height = `${run}px`;
     // A stage taller than the screen is held with its foot on the screen's,
@@ -161,6 +166,39 @@ export function initChart(): void {
   measure();
   window.addEventListener('resize', measure);
   void document.fonts?.ready.then(measure);
+
+  /* ------------------------------------------------------- once, and done */
+
+  // Everything comes in once, on the way down, and then stays as it is
+  // (Frank, 2026-11-25): when the runs are spent, or the reader turns back,
+  // they are taken out of the page, with the scroll moved by as much, so
+  // nothing on screen moves and nothing is held again on the way up.
+  let lastY = 0;
+  let idle = 0;
+  const settle = () => {
+    if (settled) return;
+    settled = true;
+    window.clearTimeout(idle);
+    window.removeEventListener('scroll', onReturn);
+    const was = stage.getBoundingClientRect().top;
+    const root = document.documentElement;
+    root.style.overflowAnchor = 'none';
+    runway.remove();
+    holdRun.remove();
+    hold?.classList.remove('is-held');
+    delete chart.dataset.chartEnd;
+    const y = window.scrollY;
+    window.scrollTo({ top: y + stage.getBoundingClientRect().top - was, behavior: 'instant' });
+    reel?.settled();
+    requestAnimationFrame(() => root.style.removeProperty('overflow-anchor'));
+  };
+  const onReturn = () => {
+    const y = window.scrollY;
+    if (y < lastY - 2) return settle();
+    lastY = y;
+    window.clearTimeout(idle);
+    if (y >= (reel ? reelRun.to : top + run)) idle = window.setTimeout(settle, 200);
+  };
 
   /* ------------------------------------------------------------ the typing */
 
@@ -238,7 +276,7 @@ interface ReelRun { from: number; to: number }
  * photograph opens the panel of photographs at itself (client/figures.ts reads
  * `figureStart`).
  */
-function initChartReel(chart: HTMLElement): { still(): void; go(run: () => ReelRun, landed: boolean): void } | null {
+function initChartReel(chart: HTMLElement): { still(): void; go(run: () => ReelRun, landed: boolean): void; settled(): void } | null {
   const el = chart.querySelector<HTMLElement>('[data-chart-reel]');
   if (!el) return null;
   const panel = document.getElementById('chart-photographs');
@@ -263,6 +301,10 @@ function initChartReel(chart: HTMLElement): { still(): void; go(run: () => ReelR
   // is never carried round its loop before it has come all the way in.
   let eased = 0;
   let at = 0;
+  // The furthest the scroll has had it: it never goes back. `shift` is the
+  // scroll taken out of the page once the runs are gone.
+  let goal = 0;
+  let shift = 0;
   let settle = REEL_SETTLE_MS;
   let frame = 0;
   let last = 0;
@@ -282,7 +324,7 @@ function initChartReel(chart: HTMLElement): { still(): void; go(run: () => ReelR
     frame = 0;
     const dt = Math.min(64, now - last);
     last = now;
-    const to = window.scrollY;
+    const to = goal = Math.max(goal, window.scrollY + shift);
     settle += (REEL_SETTLE_MS - settle) * (1 - Math.exp(-dt / REEL_ARRIVE_MS));
     const k = 1 - Math.exp(-dt / settle);
     eased += (to - eased) * k;
@@ -320,13 +362,21 @@ function initChartReel(chart: HTMLElement): { still(): void; go(run: () => ReelR
       if (started) return;
       started = true;
       reelRun = run;
-      // Arriving down the page (a reload, Back): it stands where the scroll
-      // has it. Otherwise it sets out from the run's own start, and comes in
+      // Arriving down the page (a reload, Back): it stands in its place.
+      // Otherwise it sets out from the run's own start, and comes in
       // gently, however far on the reader is when the typing ends.
-      eased = at = landed ? window.scrollY : Math.min(window.scrollY, reelRun().from);
+      eased = at = landed ? reelRun().to : Math.min(window.scrollY, reelRun().from);
+      goal = at;
       if (!landed) settle = REEL_ARRIVE_MS;
       place();
       window.addEventListener('scroll', schedule, { passive: true });
+      schedule();
+    },
+    settled() {
+      // Wherever it was on its way in, it goes on to its place by itself, and
+      // round the loop from there as the reader goes further down.
+      goal = Math.max(goal, reelRun().to);
+      shift = goal - window.scrollY;
       schedule();
     },
   };
