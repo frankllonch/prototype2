@@ -195,9 +195,6 @@
 /* Semibold, which is the heaviest the sheets go. */
 .sheet-prose strong { font-weight: 600; }
 .sheet-prose em { font-style: italic; font-weight: 500; }
-/* A name marked strong in the opening paragraph is semibold, italic or not:
-   Color Palette's Santa & Cole (Frank, 2026-11-25). */
-.sheet-prose .is-style-lead strong em { font-weight: 600; }
 .sheet-prose a { color: inherit; text-decoration: none; }
 .sheet-prose a:hover,
 .sheet-prose a:focus-visible { text-decoration: underline; text-underline-offset: 0.15em; text-decoration-thickness: 1px; }

@@ -64,7 +64,7 @@ export const SHEETS: Readonly<Record<string, Sheet>> = {
     lines: ['FOR SANTA & COLE'],
     when: '2023 - ON GOING',
     body: `
-      <p class="is-style-lead"><a href="https://www.santacole.com/es/m64/"><strong><em>Santa &amp; Cole</em></strong></a> is a Spanish global editor of design products whose quality is recognizable at the touch of a hand, and that enriches people’s lives.</p>
+      <p class="is-style-lead"><a href="https://www.santacole.com/es/m64/"><strong>Santa &amp; Cole</strong></a> is a Spanish global editor of design products whose quality is recognizable at the touch of a hand, and that enriches people’s lives.</p>
       <p>A while ago I started a collaboration with Santa&amp;cole, a love color story!</p>
       <p class="is-style-lead apart">In their own words the project consisted in:</p>
       <p>Santa &amp; Cole has presented eight new colours for the M64 lamp, result of the chromatic study developed by colourist Claudia Valsells</p>
