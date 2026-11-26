@@ -21,6 +21,7 @@ import { describeImage } from '../content/describe.ts';
 import { displayTitle, workTitle } from '../content/title.ts';
 import { captionFacts, collectionOf, referenceOf, sizeOf, techniqueOf } from '../content/caption.ts';
 import { withBase } from '../content/paths.ts';
+import { REEL_I, REEL_II, type Plate } from '../content/whats-color-sheet.ts';
 import type { Exhibition } from '../content/sections.ts';
 import type { Project, ProjectImage } from '../content/types.ts';
 
@@ -132,7 +133,30 @@ export const exhibitionItem = (e: Exhibition): PanelItem => ({
  * A show with its own set (the official photographs, or the archive's) shows
  * that; one without falls back to the pictures its source page carried.
  */
+/**
+ * What's Color I and II as shows: the same photographs, in the same order, as
+ * the reel under the names on each edition's own page (Frank, 2026-11-26).
+ */
+const plateImage = (plate: Plate): ProjectImage => ({
+  id: plate.name,
+  source: `/img/${plate.name}.jpg`,
+  alt: plate.alt,
+  width: plate.w,
+  height: plate.h,
+  variants: {
+    avif: [],
+    webp: [{ width: plate.w, url: `/img/${plate.name}.webp` }],
+    fallback: `/img/${plate.name}.jpg`,
+  },
+});
+const EDITION_REELS: Readonly<Record<string, readonly ProjectImage[]>> = {
+  'what-s-color-i': REEL_I.map(plateImage),
+  'what-s-color-ii-for-architects-and-designers': REEL_II.map(plateImage),
+};
+
 function showReel(slug: string, derived: Exhibition | undefined): readonly ProjectImage[] {
+  const edition = EDITION_REELS[slug];
+  if (edition) return edition;
   const own = showPhotos.get(slug)?.images ?? [];
   return leadWith(own.length ? own : derived?.images ?? [], SHOW_SHEETS[slug]?.lead);
 }
@@ -272,6 +296,7 @@ export function whatsColorEditionPage(edition: Edition): Html {
   return layout({
     title: `What’s Color? (${edition.numeral})`,
     path: `/whats-color/${edition.numeral.toLowerCase()}/`,
+    foot: false,
     description: (() => {
       const answered = edition.participants.filter((p) => p.answer).length;
       // Everyone who took part — the roster — not only those who answered,
@@ -408,6 +433,7 @@ export function artworkDetailPage(
     description: work.description ?? '',
     // No menu over a painting: its corners say where to go instead.
     bodyClass: 'is-detail',
+    foot: false,
     children: html`<article class="detail">
       ${around.length
         ? html`<div class="detail-ghost" aria-hidden="true">${join(around.map((w) =>

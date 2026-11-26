@@ -86,10 +86,7 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
   // the Download PDF link and the edition note (II). Neither sheet has those.
   // Two slips on the sheets corrected: I's question was never closed, and II's
   // "for this sector. I / n this exhibition" had the I split from its word.
-  // Each opens on the photograph the designer's sheet shows: I on the
-  // diptych, II on the colour sticks against the wall.
   'what-s-color-i': {
-    lead: 1,
     text: p(
       '<span class="lede-open">Throughout the lockdown I was away from my studio and my art form – painting.</span>' +
         'I found great comfort reading pieces by philosophers, historians, thinkers, writers, and other artists. ' +
@@ -102,7 +99,6 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
     ),
   },
   'what-s-color-ii-for-architects-and-designers': {
-    lead: 6,
     text:
       p(
         '‘The memory of one of my architecture teachers taking off one of his reddish-brown English shoes, rolling up ' +

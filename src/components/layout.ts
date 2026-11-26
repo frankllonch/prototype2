@@ -36,6 +36,11 @@ interface LayoutProps {
    * gives a stacking context of its own.
    */
   readonly cue?: 'ink' | 'negative';
+  /**
+   * The contact footer at the foot of the page (Frank, 2026-11-26: on every
+   * page but About and the detail pages). On unless a page says otherwise.
+   */
+  readonly foot?: boolean;
   readonly children: Html;
 }
 
@@ -349,7 +354,24 @@ function lightbox(): Html {
   </div>`;
 }
 
-export function layout({ title, description, path, rail, controls, overlays, cue, bodyClass, children }: LayoutProps): Html {
+/**
+ * The contact footer, after the designer's HOME sheet (2026-11-26): who to
+ * write to, the copyright line About closes on, and the credit, centred at the
+ * foot of the page. The emails are About's own card.
+ */
+function siteFoot(): Html {
+  const [inquiries, other] = ABOUT_CARD.emails;
+  return html`<footer class="site-foot">
+    <p>
+      For inquiries please contact to: <a href="mailto:${inquiries}">${inquiries}</a><br />
+      And any other issues: <a href="mailto:${other}">${other}</a>
+    </p>
+    <p><b>${ABOUT_CARD.name}</b> ${ABOUT_COPYRIGHT}</p>
+    <p>Web design by Frank Llonch &amp; Laia Puig</p>
+  </footer>`;
+}
+
+export function layout({ title, description, path, rail, controls, overlays, cue, bodyClass, foot = true, children }: LayoutProps): Html {
   const fullTitle = title === 'Claudia Valsells' ? title : `${title} — Claudia Valsells`;
   const modules = CLIENT_MODULES.map((m) => withBase(`/js/${m}.js`));
   return raw(`<!doctype html>
@@ -427,6 +449,7 @@ setTimeout(function () { var root = document.documentElement;
 ${topBar(path).__html}
 ${rail ? rail.__html : ''}
 <main id="main">${children.__html}</main>
+${foot ? siteFoot().__html : ''}
 ${overlays ? overlays.__html : ''}
 ${controls ? controls.__html : ''}
 ${cue ? scrollCue(cue).__html : ''}

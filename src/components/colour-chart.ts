@@ -106,7 +106,7 @@ export function colourChart(): Html {
     -->
     <p class="chart-thanks chart-in"><span class="hrow">Thanks to everyone!</span></p>
 
-    <footer class="chart-footer chart-in"><b>Claudia Valsells</b> &copy; All Rights Reserved</footer>
+    <!-- The copyright line is the site footer's now (layout.ts, siteFoot). -->
   </div>
 </div>`;
 }

@@ -1913,7 +1913,13 @@ a.wc-bar:focus-visible {
   .wc-edition-i .wc-names .wc-sep::after { content: '\A'; white-space: pre; }
   /* A name travelled to stops where the numeral stands, clear of the bars. */
   .wc-sheet-page .wc-cell { scroll-margin-top: var(--wc-phone-top); }
-  .wc-edition .wc-back { display: none; }
+  /* The way back to all of What's Color?, at the foot of the edition as on
+     the computer (Frank, 2026-11-26), at the size of her words. */
+  .wc-edition .wc-back {
+    margin: var(--wc-ed-foot-top) 0 0;
+    font-size: var(--wc-ed-say);
+    line-height: var(--wc-ed-say-lead);
+  }
 
   .wc-sheet-page .wc-sheet {
     display: block;
