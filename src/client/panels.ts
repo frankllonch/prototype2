@@ -134,7 +134,7 @@ export function initPanels(): void {
       panel.focus({ preventScroll: true });
       return;
     }
-    closer(panel)?.focus({ preventScroll: true });
+    returnFocus(closer(panel));
   };
 
   for (const trigger of document.querySelectorAll<HTMLAnchorElement>('[data-panel-open]')) {
