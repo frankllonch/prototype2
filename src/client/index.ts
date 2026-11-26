@@ -72,8 +72,7 @@ for (const init of modules) {
   try { init(); } catch (error) { console.error(error); }
 }
 
-// The tuners are development tools, fetched only when asked for with ?pile or ?ball.
+// The ball's tuner is a development tool, fetched only when asked for with ?ball.
 const asked = new URLSearchParams(location.search);
 const stored = (key: string) => { try { return localStorage.getItem(key) === '1'; } catch { return false; } };
-if (asked.has('pile') || stored('cv-pile-on')) void import('./pile-tuner.ts').then((m) => m.initPileTuner());
 if (asked.has('ball') || stored('cv-ball-on')) void import('./ball-tuner.ts').then((m) => m.initBallTuner());

@@ -1,4 +1,4 @@
-import { finePointer, reduceMotion, targetElement } from './env.ts';
+import { finePointer, piling, reduceMotion, targetElement } from './env.ts';
 
 /**
  * The site's pointer: a ball, the negative of whatever is under it, that grows a
@@ -98,13 +98,14 @@ export function initBall(): void {
   // The page can move under a still pointer: look again, once a frame at most.
   let looking = 0;
   const relook = () => {
-    if (!placed || looking) return;
+    if (!placed || looking || piling()) return;
     looking = requestAnimationFrame(() => {
       looking = 0;
       hover(document.elementFromPoint(targetX, targetY));
     });
   };
   window.addEventListener('scroll', relook, { passive: true, capture: true });
+  document.addEventListener('stacksettle', relook);
 
   document.addEventListener('pointerdown', (e) => { if (e.pointerType === 'mouse') ball.classList.add('is-down'); });
   document.addEventListener('pointerup', () => ball.classList.remove('is-down'));

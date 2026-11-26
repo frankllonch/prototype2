@@ -1,6 +1,6 @@
 /* ---------------------------------------------------------- tuner panels */
 
-/* The development tuners' panel (client/tuner-ui.ts). */
+/* The ball tuner's panel (client/ball-tuner.ts, ?ball). */
 .tuner {
   /* Clear of the bar, which it is there to watch. */
   position: fixed; right: 16px; bottom: 16px; z-index: 100000;
@@ -27,7 +27,6 @@
 }
 .tuner button:hover { background: rgb(255 255 255 / 0.14); }
 .tuner button[aria-pressed='true'] { background: #eee; color: #111; border-color: #eee; }
-.tuner-effects { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
 .tuner-note { margin: 8px 0; color: #aaa; }
 .tuner-row { display: grid; grid-template-columns: 1fr 140px 56px; align-items: center; gap: 6px; padding: 3px 0; }
 .tuner-try, .tuner-out { display: flex; gap: 10px; margin-top: 8px; }
@@ -42,38 +41,3 @@
 }
 .tuner-small { margin-top: 6px; font-size: 11px !important; color: #aaa !important; }
 .tuner-copied { color: #9c9; align-self: center; }
-
-/* ------------------------------------------------------------- pile tuner */
-
-/* The gallery opening's panel (client/pile-tuner.ts, ?pile). */
-.tuner-pile .tuner-effects { grid-template-columns: repeat(4, 1fr); }
-.tuner-spread {
-  margin: 6px 0 8px; padding: 6px 8px 8px;
-  border: 1px solid rgb(255 255 255 / 0.22); border-radius: 7px;
-  background: rgb(255 255 255 / 0.05);
-}
-.tuner-kicker { display: block; margin-bottom: 2px; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; font-weight: 600; }
-.tuner-row.is-big { grid-template-columns: 1fr 150px 64px; }
-.tuner-row.is-big .tuner-label { color: #fff; font-weight: 600; }
-.tuner-row.is-big .tuner-value { color: #eee; }
-.tuner-pile .tuner-row { grid-template-columns: 1fr 130px 72px; }
-.tuner-pile .tuner-row.is-big { grid-template-columns: 1fr 140px 64px; }
-
-/* Opaque and flat: no backdrop blur. */
-.tuner-pile {
-  background: #161618; backdrop-filter: none; -webkit-backdrop-filter: none;
-  box-shadow: 0 4px 16px rgb(0 0 0 / 0.3);
-  isolation: isolate; contain: layout paint;
-}
-
-/* The panel holds still: Try it and the tabs at the top, one pane below. */
-.tuner-pile .tuner-body { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: visible; }
-.tuner-pile .tuner-pane { flex: 1; min-height: 0; display: flex; flex-direction: column; }
-.tuner-pile .tuner-pane > .tuner-section { flex: 1; min-height: 0; display: flex; flex-direction: column; }
-.tuner-pile .tuner-pane .tuner-fields { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
-.tuner-pile .tuner-pane > [hidden] { display: none; }
-.tuner-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin: 12px 0 10px; padding-bottom: 10px; border-bottom: 1px solid rgb(255 255 255 / 0.1); padding-top: 10px; border-top: 1px solid rgb(255 255 255 / 0.1); }
-.tuner-pile .tuner-pane .tuner-section h3 { display: none; }
-.tuner-tabs button { font-weight: 600 !important; }
-.tuner-pile .tuner-row { padding: 2px 0; }
-.tuner-pile .tuner-note { margin: 6px 0; }

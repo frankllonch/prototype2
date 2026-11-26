@@ -105,16 +105,25 @@ html.js .hero[data-hero]+.grid[data-stack] {
   object-fit: contain;
 }
 
-/* While the stack is dispersing, tiles move every frame: no size transitions. */
+/* While the stack is dispersing the pictures move every frame (client/stack.ts): no size
+   transitions, and each is its own paint box on its own layer, so moving one repaints nothing. */
 .grid.is-stacked .tile {
   transition: none;
 }
-.grid.is-layered .tile {
+.grid.is-stacked .tile picture {
+  contain: paint;
+}
+.grid.is-layered .tile:not(.is-away) picture {
   will-change: transform;
 }
 /* Safari. */
-.grid.is-webkit.is-layered .tile img {
+.grid.is-webkit.is-layered .tile:not(.is-away) img {
   will-change: transform;
+}
+/* One the opening does not show (client/stack.ts): not drawn, and on no layer, until it is in its place. */
+.tile.is-away {
+  opacity: 0;
+  visibility: hidden;
 }
 
 .grid.is-stacked {
