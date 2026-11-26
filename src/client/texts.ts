@@ -75,26 +75,68 @@ function wordsOf(block: HTMLElement): HTMLElement[] {
   return [...open.querySelectorAll<HTMLElement>('.wc-type')];
 }
 
-function typeOpen(block: HTMLElement): void {
-  stopTyping(block);
-  if (reduceMotion.matches) return;
-  const words = wordsOf(block);
-  let shown = Math.min(teaserWords(block), words.length);
-  words.forEach((w, i) => w.classList.toggle('is-written', i < shown));
-  if (shown >= words.length) return;
+/**
+ * Words written from `from` to `to` (or erased, when `to` is less) over
+ * `total` milliseconds, then `done`.
+ */
+function run(block: HTMLElement, words: HTMLElement[], from: number, to: number, total: number, done?: () => void): void {
   block.classList.add('is-typing');
-  const from = shown;
-  const total = Math.min((words.length - from) * WORD_MS, MAX_MS);
   const start = performance.now();
+  let at = from;
+  const step = to > from ? 1 : -1;
   typing.set(
     block,
     window.setInterval(() => {
       const t = Math.min(1, (performance.now() - start) / total);
-      const upTo = from + Math.ceil(t * (words.length - from));
-      while (shown < upTo) words[shown++]?.classList.add('is-written');
-      if (shown >= words.length) stopTyping(block);
+      const upTo = from + Math.round(t * (to - from));
+      while (at !== upTo) {
+        if (step > 0) words[at++]?.classList.add('is-written');
+        else words[--at]?.classList.remove('is-written');
+      }
+      if (at === to) {
+        stopTyping(block);
+        done?.();
+      }
     }, WORD_MS),
   );
+}
+
+/** How long writing `n` words takes: a beat a word, `MAX_MS` at most. */
+const typeTime = (n: number) => Math.min(n * WORD_MS, MAX_MS);
+
+function typeOpen(block: HTMLElement): void {
+  stopTyping(block);
+  if (reduceMotion.matches) return;
+  const words = wordsOf(block);
+  const from = Math.min(teaserWords(block), words.length);
+  words.forEach((w, i) => w.classList.toggle('is-written', i < from));
+  if (from >= words.length) return;
+  run(block, words, from, words.length, typeTime(words.length - from));
+}
+
+/**
+ * ‘Read less’ undoes it (Frank, 2026-11-26): the words written in are taken
+ * back out, last first, half as fast again as they came — then the block
+ * folds to its cut text.
+ */
+const UNTYPE_SPEED = 1.5;
+
+function typeClose(block: HTMLElement, fold: () => void): void {
+  if (reduceMotion.matches) return fold();
+  const words = wordsOf(block);
+  // Wherever the typing had got to, if it was still going.
+  const from = block.classList.contains('is-typing')
+    ? words.filter((w) => w.classList.contains('is-written')).length
+    : words.length;
+  stopTyping(block);
+  words.forEach((w, i) => w.classList.toggle('is-written', i < from));
+  const to = Math.min(teaserWords(block), from);
+  if (from <= to) return fold();
+  block.classList.add('is-untyping');
+  run(block, words, from, to, typeTime(from - to) / UNTYPE_SPEED, () => {
+    block.classList.remove('is-untyping');
+    fold();
+  });
 }
 
 /**
@@ -127,15 +169,16 @@ export function initWcTexts(): void {
     if (less) {
       event.preventDefault();
       const block = less.closest<HTMLElement>('.wc-text');
-      if (block) {
-        stopTyping(block);
-        block.classList.remove('is-open');
-        block.querySelector('.wc-more')?.setAttribute('aria-expanded', 'false');
-        // Folding a long text can leave the reader staring past its end;
-        // bring the block's head back if it has gone over the top.
-        if (block.getBoundingClientRect().top < 0) {
-          glide(topOf(block));
-        }
+      if (block && !block.classList.contains('is-untyping')) {
+        typeClose(block, () => {
+          block.classList.remove('is-open');
+          block.querySelector('.wc-more')?.setAttribute('aria-expanded', 'false');
+          // Folding a long text can leave the reader staring past its end;
+          // bring the block's head back if it has gone over the top.
+          if (block.getBoundingClientRect().top < 0) {
+            glide(topOf(block));
+          }
+        });
       }
       return;
     }
