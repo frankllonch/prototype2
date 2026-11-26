@@ -409,3 +409,8 @@ html.js .detail.is-ready :is(.detail-stage, .detail-caption) {
   .year-swatch { display: none; }
   .year-label { display: block; margin: 0; color: inherit; }
 }
+
+/* The Gallery's opening scatters the paintings past the right edge of the
+   screen, and those transformed tiles widened the page, so it could be slid
+   sideways while it was still loading. */
+html.stack-running { overflow-x: hidden; overflow-x: clip; }

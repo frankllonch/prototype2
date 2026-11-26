@@ -214,7 +214,7 @@ export function initViews(): void {
       views.forEach((view, i) => view.classList.toggle('is-shown', i === n));
       // Only the cut-out leans.
       if (inner) {
-        inner.classList.toggle('is-photo', !views[n]?.hasAttribute('data-plate'));
+        inner.classList.toggle('is-photo', !views[n]?.hasAttribute('data-plate') || views[n]!.hasAttribute('data-flat'));
         inner.classList.remove('is-tilting');
         inner.style.transform = '';
       }

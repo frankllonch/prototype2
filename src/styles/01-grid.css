@@ -492,9 +492,14 @@ html.js .hero[data-hero]+.grid[data-stack] {
   }
 }
 
+/* Not when the row is only being given focus back by a closing detail
+   (`returnFocus`, client/env.ts). */
 .hrow:focus-visible {
-  color: var(--exh-hover);
   outline: none;
+}
+
+.hrow:focus-visible:not([data-quiet-focus]) {
+  color: var(--exh-hover);
 }
 
 /* The preview is a pointer affordance and stays one. */
