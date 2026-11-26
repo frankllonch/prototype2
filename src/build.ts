@@ -12,6 +12,7 @@ import type { Html } from './components/html.ts';
 import { commissioned, colourChart, exhibitions, works, yearColours } from './content/load.ts';
 import { EDITIONS } from './content/whats-color.ts';
 import { BASE } from './content/paths.ts';
+import { singleQuotes } from './content/quotes.ts';
 import { ENDPOINT as INQUIRIES } from './content/inquiries.ts';
 import {
   artworkDetailPage, artworkPage, commissionedPage, colourChartPage, exhibitionsPage,
@@ -30,7 +31,7 @@ let pagesWritten = 0;
 async function writePage(route: string, page: Html) {
   const dir = path.join(DIST, route);
   await mkdir(dir, { recursive: true });
-  await writeFile(path.join(dir, 'index.html'), page.__html);
+  await writeFile(path.join(dir, 'index.html'), singleQuotes(page.__html));
   pagesWritten++;
 }
 

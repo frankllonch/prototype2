@@ -118,7 +118,7 @@ export function splitOpening(html: string): string {
  */
 const THANKS: Readonly<Record<string, { readonly credit: string; readonly heading: string; readonly names: string }>> = {
   'what-s-color-ii-for-architects-and-designers': {
-    credit: 'photos © Julia Ruiz-Cabello and Gonzalo de Benito',
+    credit: 'Photos © Julia Ruiz-Cabello and Gonzalo de Benito',
     heading: 'THANKS TO:',
     names:
       'Plantea Estudi, Kal-a, Elii, HANGHAR, Nomos arquitectos, Montse Vicens (Int-sight), Isabel Francoy, ' +
