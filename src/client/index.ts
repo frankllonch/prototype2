@@ -12,7 +12,6 @@ import { initSheets } from './sheets.ts';
 import { initLightbox } from './lightbox.ts';
 import { initCursor } from './cursor.ts';
 import { initBall } from './ball.ts';
-import { initBallTuner } from './ball-tuner.ts';
 import { initFilm } from './film.ts';
 import { initCurrent } from './current.ts';
 import { initScrollbar } from './scrollbar.ts';
@@ -30,7 +29,6 @@ import { initGlide } from './glide.ts';
 import { initWrite } from './write.ts';
 import { initMenu } from './menu.ts';
 import { initReveal } from './reveal.ts';
-import { initPileTuner } from './pile-tuner.ts';
 
 // The head stops waiting for these scripts after a few seconds and lets the page stand as it does
 // without them (components/layout.ts).
@@ -75,7 +73,8 @@ initReveal();
 try { localStorage.removeItem('cv-tune'); localStorage.removeItem('cv-tune-css'); } catch { /* private window */ }
 document.getElementById('tune-early')?.remove();
 delete document.documentElement.dataset.tune;
-// The gallery opening's tuner: off unless the page was opened with ?pile (client/pile-tuner.ts).
-initPileTuner();
-// The ball's tuner: off unless the page was opened with ?ball (client/ball-tuner.ts).
-initBallTuner();
+// The tuners are development tools, fetched only once asked for with ?pile or ?ball.
+const asked = new URLSearchParams(location.search);
+const stored = (key: string) => { try { return localStorage.getItem(key) === '1'; } catch { return false; } };
+if (asked.has('pile') || stored('cv-pile-on')) void import('./pile-tuner.ts').then((m) => m.initPileTuner());
+if (asked.has('ball') || stored('cv-ball-on')) void import('./ball-tuner.ts').then((m) => m.initBallTuner());

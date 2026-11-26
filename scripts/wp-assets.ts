@@ -1,8 +1,8 @@
 /** Builds the theme's assets from the same source the static site is built from. */
-import { cp, mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { cp, rm, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
-import ts from 'typescript';
+import { buildAssets } from './assets.ts';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const SRC = path.join(ROOT, 'src');
@@ -11,16 +11,9 @@ const ASSETS = path.join(THEME, 'assets');
 
 async function main() {
   await rm(ASSETS, { recursive: true, force: true });
-  await mkdir(path.join(ASSETS, 'js'), { recursive: true });
 
-  const styles = path.join(SRC, 'styles');
-  const parts = (await readdir(styles)).filter((f) => f.endsWith('.css')).sort();
-  let css = '';
-  for (const part of parts) css += `${await readFile(path.join(styles, part), 'utf8')}\n`;
-  // The stylesheet sits in assets/ and the fonts in assets/fonts/, so the absolute paths the
-  // static site uses become relative ones here.
-  css = css.replaceAll("url('/fonts/", "url('fonts/");
-  await writeFile(path.join(ASSETS, 'site.css'), css);
+  // The stylesheet sits beside its fonts folder, so the font paths are relative.
+  const built = await buildAssets({ outDir: ASSETS, fontsUrl: 'fonts/' });
 
   await cp(path.join(SRC, 'assets', 'fonts'), path.join(ASSETS, 'fonts'), { recursive: true });
   await cp(path.join(SRC, 'assets', 'video'), path.join(ASSETS, 'video'), { recursive: true });
@@ -32,31 +25,11 @@ async function main() {
   }
   for (const dir of ['fonts', 'video', 'about', 'img']) await rm(path.join(ASSETS, dir, '.DS_Store'), { force: true });
 
-  // A stamp the theme reads to version its asset URLs, so a rebuild is a new address and no
-  // browser keeps serving the old one.
-  const stamp = String(Date.now());
-  const client = path.join(SRC, 'client');
-  const files = (await readdir(client)).filter((f) => f.endsWith('.ts'));
-  for (const file of files) {
-    const source = await readFile(path.join(client, file), 'utf8');
-    const { outputText } = ts.transpileModule(source, {
-      compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext },
-    });
-    await writeFile(
-      path.join(ASSETS, 'js', file.replace(/\.ts$/, '.js')),
-      outputText.replace(/from '(\.\/[\w-]+)\.ts'/g, `from '$1.js?v=${stamp}'`),
-    );
-  }
-  await writeFile(path.join(ASSETS, 'version.txt'), stamp);
-
-  // The modules in the order the entry boots them, for the theme's preloads: read off index.ts's
-  // own imports, so a module added there is preloaded in WordPress without anyone remembering to
-  // list it.
-  const entry = await readFile(path.join(client, 'index.ts'), 'utf8');
-  const booted = [...entry.matchAll(/from '\.\/([\w-]+)\.ts'/g)].map((m) => m[1]!);
-  const order = ['env', ...booted.filter((m) => m !== 'env')];
-  const rest = files.map((f) => f.replace(/\.ts$/, '')).filter((m) => m !== 'index' && !order.includes(m));
-  await writeFile(path.join(ASSETS, 'modules.json'), JSON.stringify([...order, ...rest, 'index']));
+  // The theme versions the stylesheet and the entry script with this stamp; the entry's chunks
+  // carry a content hash in their names.
+  await writeFile(path.join(ASSETS, 'version.txt'), String(Date.now()));
+  // What the theme preloads (cv_modules() in inc/setup.php).
+  await writeFile(path.join(ASSETS, 'modules.json'), JSON.stringify(['index']));
 
   // Where everything sits on What's Color's composed sheets, as the static site places it
   // (src/content/whats-color-sheet.ts).
@@ -82,7 +55,7 @@ async function main() {
   }
   await writeFile(path.join(ASSETS, 'index-breaks.json'), JSON.stringify(breaks));
 
-  console.log(`Theme assets: ${parts.length} stylesheets into site.css, ${files.length} modules, fonts, film, About photographs.`);
+  console.log(`Theme assets: ${built.stylesheets} stylesheets into site.css, ${built.scripts.length} scripts, fonts, film, About photographs.`);
 }
 
 await main();

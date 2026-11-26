@@ -1,8 +1,8 @@
 /** Renders the site to dist/ as static HTML. */
-import { cp, mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { cp, mkdir, readdir, rm, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
-import ts from 'typescript';
+import { buildAssets } from '../scripts/assets.ts';
 import type { Html } from './components/html.ts';
 import { commissioned, colourChart, exhibitions, works, yearColours } from './content/load.ts';
 import { EDITIONS } from './content/whats-color.ts';
@@ -18,43 +18,27 @@ const ROOT = path.resolve(import.meta.dirname, '..');
 // DIST_DIR sends the build somewhere else, for trying a change without disturbing the dist/ a
 // preview is being served from.
 const DIST = process.env.DIST_DIR ? path.resolve(process.env.DIST_DIR) : path.join(ROOT, 'dist');
-const CLIENT = path.join(ROOT, 'src', 'client');
 
 let pagesWritten = 0;
+
+/** The entry's preload as layout() prints it, and the same with the entry's chunks beside it. */
+const preload = (file: string) => `<link rel="modulepreload" href="${BASE}/js/${file}" />`;
+const ENTRY_PRELOAD = preload('index.js');
+let preloads = ENTRY_PRELOAD;
 
 async function writePage(route: string, page: Html) {
   const dir = path.join(DIST, route);
   await mkdir(dir, { recursive: true });
-  await writeFile(path.join(dir, 'index.html'), singleQuotes(page.__html));
+  await writeFile(path.join(dir, 'index.html'), singleQuotes(page.__html).replace(ENTRY_PRELOAD, preloads));
   pagesWritten++;
 }
 
-/** One stylesheet from the numbered parts; one JS module per client file. */
-async function buildAssets() {
-  await mkdir(path.join(DIST, 'js'), { recursive: true });
-
-  const styles = path.join(ROOT, 'src', 'styles');
-  const parts = (await readdir(styles)).filter((f) => f.endsWith('.css')).sort();
-  let css = '';
-  for (const part of parts) css += `${await readFile(path.join(styles, part), 'utf8')}\n`;
-  await writeFile(path.join(DIST, 'site.css'), BASE ? css.replaceAll("url('/fonts/", `url('${BASE}/fonts/`) : css);
-  await cp(path.join(ROOT, 'src', 'assets', 'fonts'), path.join(DIST, 'fonts'), { recursive: true });
-  // The opening film, re-encoded for the web from the 168MB original on the live site.
-  await cp(path.join(ROOT, 'src', 'assets', 'video'), path.join(DIST, 'video'), { recursive: true });
-  // Page artwork that is not catalogue work, so it never goes through the image pipeline: the
-  // plate on the first edition's sheet is one of these.
-  await cp(path.join(ROOT, 'src', 'assets', 'img'), path.join(DIST, 'img'), { recursive: true });
-  // The two studio photographs on About, already rendered at their serving sizes from the
-  // originals in content/raw/about.
-  await cp(path.join(ROOT, 'src', 'assets', 'about'), path.join(DIST, 'about'), { recursive: true });
-
-  for (const file of (await readdir(CLIENT)).filter((f) => f.endsWith('.ts'))) {
-    const source = await readFile(path.join(CLIENT, file), 'utf8');
-    const { outputText } = ts.transpileModule(source, {
-      compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext },
-    });
-    // Imports keep their `.ts` extension in source; the browser needs `.js`.
-    await writeFile(path.join(DIST, 'js', file.replace(/\.ts$/, '.js')), outputText.replace(/from '(\.\/[\w-]+)\.ts'/g, "from '$1.js'"));
+/** The stylesheet, the client bundle, and the files copied as they are. */
+async function buildSiteAssets() {
+  const { chunks } = await buildAssets({ outDir: DIST, fontsUrl: `${BASE}/fonts/` });
+  preloads = ['index.js', ...chunks].map(preload).join('\n');
+  for (const dir of ['fonts', 'video', 'img', 'about']) {
+    await cp(path.join(ROOT, 'src', 'assets', dir), path.join(DIST, dir), { recursive: true });
   }
 }
 
@@ -69,7 +53,7 @@ async function main() {
       await rm(path.join(DIST, entry), { recursive: true, force: true });
     }
   }
-  await buildAssets();
+  await buildSiteAssets();
 
   // What's Color?
   await writePage('', whatsColorPage());

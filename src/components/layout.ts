@@ -39,21 +39,8 @@ const MENU = [
   { label: 'About', href: '/#about', panel: 'about', phone: 1 },
 ] as const;
 
-/** Client modules, in boot order. Preloaded so the first interaction is instant. */
-/* Which hover the bar's words wear. */
-/*
- * The scramble since 2026-11-17, Frank's pick from the hover tuner (?tune,
- * client/hover-tuner.ts); its settings are at the head of client/scramble.ts.
- */
+/** Which hover the bar's words wear; settings at the head of client/scramble.ts. */
 const HOVER: 'roll' | 'scramble' = 'scramble';
-
-const CLIENT_MODULES = [
-  'env', 'text-roll', 'transitions', 'controls', 'pile', 'stack', 'years', 'hover-list', 'panels',
-  'figures', 'lightbox', 'cursor', 'ball', 'ball-tuner', 'film', 'tilt', 'paging', 'views',
-  'scroll-cue', 'about', 'inquiries', 'chart', 'book', 'focus', 'hues', 'current', 'scrollbar', 'scramble', 'pile-tuner', 'rise', 'menu', 'index',
-] as const;
-
-/** The loading screen's five lines, set in blue on peach. */
 
 /*
  * The button is the phone's whole bar: three bars at the top right, drawn by the
@@ -295,7 +282,6 @@ function siteFoot(): Html {
 
 export function layout({ title, description, path, rail, controls, overlays, cue, bodyClass, foot = true, children }: LayoutProps): Html {
   const fullTitle = title === 'Claudia Valsells' ? title : `${title} — Claudia Valsells`;
-  const modules = CLIENT_MODULES.map((m) => withBase(`/js/${m}.js`));
   return raw(`<!doctype html>
 <html lang="en" data-hover="${HOVER}"${bodyClass === 'has-film' ? ' data-start' : ''} style="${hueVars()}">
 <head>
@@ -305,7 +291,7 @@ export function layout({ title, description, path, rail, controls, overlays, cue
 ${description ? `<meta name="description" content="${description.replace(/"/g, '&quot;').slice(0, 300)}" />` : ''}
 <link rel="preload" href="${withBase('/fonts/Switzer-Variable.woff2')}" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="${withBase('/site.css')}" />
-${modules.map((m) => `<link rel="modulepreload" href="${m}" />`).join('\n')}
+<link rel="modulepreload" href="${withBase('/js/index.js')}" />
 <script>document.documentElement.classList.add('js');
 // Arriving at What's Color by its link, the page is laid out at the top and
 // moved down to the written sentence by script — so it is kept covered until
