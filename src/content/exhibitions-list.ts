@@ -50,6 +50,7 @@ export const SHOWS: readonly Show[] = [
   { group: 'Solo shows', title: 'Moll de l’Ós', venue: '8 rue des Beaux-Arts, Paris', from: 'May 27', to: 'June 26', year: 2026, slug: 'moll-de-l-os' },
   { group: 'Solo shows', title: 'Mira’m no deixis de mirar-me', venue: 'Solo show, Palau de Casavells', from: 'April', to: 'June', year: 2025, slug: 'mira-m-no-deixis-de-mirar-me' },
   { group: 'Solo shows', title: 'Painting as a gift from color', venue: 'Solo show at Gallery_BR, Tetbury, UK', from: 'May', year: 2024, slug: 'painting-as-a-gift-of-color' },
+  { group: 'Solo shows', title: 'What’s color (III)', venue: 'Solo show, Terranova Bookstore, Barcelona', from: 'April', year: 2024, slug: 'whats-color-iii' },
   { group: 'Solo shows', title: 'Transitions', venue: 'Solo show, Alzueta Gallery, Barcelona', from: 'September', year: 2023, slug: 'transitions' },
   { group: 'Solo shows', title: 'Color dialogues', venue: 'Solo show, Alzueta Gallery, Madrid', from: 'December', to: 'January', year: 2021, slug: 'color-dialogues' },
   { group: 'Solo shows', title: 'What’s color (II)', venue: 'Solo show, Espacio Pavilon, Madrid', from: 'December', year: 2021, slug: 'what-s-color-ii-for-architects-and-designers' },
