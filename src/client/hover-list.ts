@@ -10,7 +10,13 @@ export function initHoverList(): void {
   for (const link of document.querySelectorAll<HTMLElement>('.side-inquiries')) wireRow(link);
   // So does the gallery's name at the foot of About's biography.
   for (const link of document.querySelectorAll<HTMLElement>('.about-link')) wireRow(link);
+  // And every corner control: Close, Next, Previous and the arrows.
+  for (const control of document.querySelectorAll<HTMLElement>(CORNERS)) wireRow(control);
 }
+
+const CORNERS =
+  '.detail-back, .detail-pager a, .panel-close, .about-close, .inq-close, .lightbox-close, .lightbox-nav, ' +
+  '.sheet-step, .plates-step, .wc-book-step, .about-viewer-step';
 
 function wire(list: HTMLElement): void {
   for (const row of list.querySelectorAll<HTMLElement>('.hrow')) wireRow(row);

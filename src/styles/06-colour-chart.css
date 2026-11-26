@@ -370,10 +370,9 @@ html:not(.js) .inq-close { display: none; }
   font-weight: 500;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--ink-soft);
+  color: var(--corner-c);
   transition: color var(--hover) var(--ease);
 }
-.inq-close:hover, .inq-close:focus-visible { color: var(--ink); }
 
 /* Label, rule, label, rule — the reference's four columns. */
 .inq-form {

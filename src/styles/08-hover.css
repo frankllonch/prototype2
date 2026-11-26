@@ -23,3 +23,27 @@
   mask-image: linear-gradient(to bottom, transparent 0, #000 var(--roll-soft), #000 calc(100% - var(--roll-soft)), transparent 100%);
 }
 .roll::before, .roll::after { top: var(--roll-pad); }
+
+/* ------------------------------------------------------ the corner controls */
+
+/* Close, Next, Previous and the arrows, wherever they stand: faint until the
+   pointer is on them, then a colour from the list (`client/hover-list.ts`). */
+:is(.detail-back, .panel-close, .about-close, .inq-close, .lightbox-close, .lightbox-nav,
+    .sheet-step, .plates-step, .wc-book-step, .about-viewer-step),
+.detail-pager a {
+  --corner-c: var(--corner);
+}
+@media (min-width: 900px) {
+  :is(.detail-back, .panel-close, .about-close, .inq-close, .lightbox-close, .lightbox-nav,
+      .sheet-step, .plates-step, .wc-book-step, .about-viewer-step):is(:hover, :focus-visible),
+  .detail-pager a:is(:hover, :focus-visible) {
+    --corner-c: var(--exh-hover, var(--ink));
+  }
+}
+/* Under a thumb there is no pointer to answer, and a photograph can run beneath them. */
+@media (max-width: 899px) {
+  :is(.about-close, .about-viewer-step) { --corner-c: rgb(219, 218, 215); mix-blend-mode: difference; }
+  :is(.sheet-step, .plates-step, .wc-book-step) { --corner-c: rgb(252, 252, 250); mix-blend-mode: difference; }
+  :is(.inq-close, .lightbox-close) { --corner-c: var(--ink-soft); }
+  .detail-back, .detail-pager a { --corner-c: var(--ink); }
+}

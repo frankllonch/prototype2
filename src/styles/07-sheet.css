@@ -33,11 +33,9 @@
   font-weight: 400;
   letter-spacing: 0.071em;
   margin-right: -0.071em;          /* the last letter's tracking hangs past the margin */
-  color: rgb(219, 218, 215);
-  mix-blend-mode: difference;
+  color: var(--corner-c);
   z-index: 3;
 }
-.panel:is(:has(.sheet), :has(.plates)) .panel-close:focus-visible { opacity: 0.55; }
 
 /* ---------------------------------------------------------------- masthead */
 
@@ -275,11 +273,9 @@
   top: 50%;
   translate: 0 -50%;
   padding: calc(var(--f) * 24) calc(var(--f) * 14);
-  color: rgb(252, 252, 250);
-  mix-blend-mode: difference;
-  transition: opacity var(--hover) var(--ease);
+  color: var(--corner-c);
+  transition: color var(--hover) var(--ease);
 }
-.sheet-step:focus-visible { opacity: 0.45; }
 .sheet-next { left: calc(100% + max(var(--step-gap), var(--step-out) - var(--step-w)) - var(--step-pad)); }
 .sheet-prev { right: calc(100% + max(var(--step-gap), var(--step-out) - var(--step-w)) - var(--step-pad)); }
 
@@ -522,11 +518,9 @@ html:not(.js) .sheet-step { display: none; }
   top: 50%;
   translate: 0 -50%;
   padding: calc(var(--f) * 24) calc(var(--f) * 14);
-  color: rgb(252, 252, 250);
-  mix-blend-mode: difference;
-  transition: opacity var(--hover) var(--ease);
+  color: var(--corner-c);
+  transition: color var(--hover) var(--ease);
 }
-.plates-step:focus-visible { opacity: 0.45; }
 .plates-prev { left: calc(var(--s-pad) - var(--f) * 14); }
 .plates-next { right: calc(var(--s-pad) - var(--f) * 14); }
 
