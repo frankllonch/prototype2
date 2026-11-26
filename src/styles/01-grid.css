@@ -703,9 +703,18 @@ html.js .hero[data-hero]+.grid[data-stack] {
   }
 }
 
+/*
+ * Not when the row is only being given focus back by a closing detail
+ * (`returnFocus`, client/env.ts). The browser takes the arrow keys that turned
+ * the reel's photographs as a keyboard's, so the row came back lit in its
+ * colour with the pointer nowhere near it, and stayed so (Frank, 2026-11-26).
+ */
 .hrow:focus-visible {
-  color: var(--exh-hover);
   outline: none;
+}
+
+.hrow:focus-visible:not([data-quiet-focus]) {
+  color: var(--exh-hover);
 }
 
 /*
