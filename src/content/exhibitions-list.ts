@@ -69,7 +69,7 @@ export const SHOWS: readonly Show[] = [
     from: 'April',
     year: 2000,
     slug: 'el-color-no-existe',
-    note: 'Individual exhibition where the interaction of the public with the installation was essential. I tried to demonstrate through personal experimentation that color only exists if there is light.',
+    note: 'Individual exhibition where the interaction of the public with the installation was essential.',
   },
 
   // --------------------------------------------------------- group shows
@@ -111,8 +111,8 @@ export const SHOWS: readonly Show[] = [
   { group: 'Art fairs', title: 'SCOPE BASEL', venue: 'Alzueta Gallery, Basel, Switzerland', year: 2016 },
 
   // -------------------------------------------------- private collections
-  { group: 'Private collections', title: 'Fundació Vilacases', venue: 'Barcelona, SPAIN' },
-  { group: 'Private collections', title: 'Fundació Banc Sabadell', venue: 'Barcelona, SPAIN' },
+  { group: 'Private collections', title: 'Fundació Vilacases', venue: 'Barcelona, Spain' },
+  { group: 'Private collections', title: 'Fundació Banc Sabadell', venue: 'Barcelona, Spain' },
   { group: 'Private collections', title: 'Collection Hayot', venue: 'France' },
   { group: 'Private collections', title: 'Martinez Collection', venue: 'Mexico-US' },
   { group: 'Private collections', title: 'Niederberghaus Collection', venue: 'Germany' },

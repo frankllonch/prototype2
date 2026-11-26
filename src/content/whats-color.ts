@@ -475,13 +475,14 @@ function build(): readonly Edition[] {
           .map((p) =>
             p.replace(
               /(?:<\/?(?:em|strong)>)*‘\*?(WHAT.S COLOR\?)\s*(?:<\/?(?:em|strong)>)*‘(?:<\/?(?:em|strong)>)*/,
-              '<strong class="wc-say-ask">‘$1‘</strong>',
+              '<strong class="wc-say-ask">‘$1’</strong>',
             ),
           ),
         ...SAYS_III_SHEET,
       ],
       opening: (() => {
-        const full = paragraphs(column).slice(1, 2).map(plain);
+        // Without the source's stray asterisk: ‘*WHAT’S COLOR? ‘.
+        const full = paragraphs(column).slice(1, 2).map(plain).map((t) => t.replace('‘*', '‘'));
         return {
           heading: 'WHAT\u2019S COLOR (III)',
           align: 'left' as const,

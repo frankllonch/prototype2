@@ -240,8 +240,8 @@ export const ABOUT_SHOWS: readonly AboutShows[] = [
 ];
 
 export const ABOUT_COLLECTIONS: readonly AboutCollection[] = [
-  { name: 'Fundació Vilacases', place: 'Barcelona, SPAIN' },
-  { name: 'Fundació Banc Sabadell', place: 'Barcelona, SPAIN' },
+  { name: 'Fundació Vilacases', place: 'Barcelona, Spain' },
+  { name: 'Fundació Banc Sabadell', place: 'Barcelona, Spain' },
   { name: 'Collection Hayot', place: 'France' },
   { name: 'Martinez Collection', place: 'Mexico-US' },
   { name: 'Niederberghaus Collection', place: 'Germany' },
