@@ -1,4 +1,5 @@
 import type { ProjectImage } from './types.ts';
+import { SHOWS, rowId } from './exhibitions-list.ts';
 
 /**
  * About, as the designer's sheet sets it: the capitals lead, the studio
@@ -36,6 +37,8 @@ export interface AboutShow {
   readonly lines: readonly string[];
   /** Light weight: where. */
   readonly places?: readonly string[];
+  /** Its row in the Exhibitions list, where the two name it differently. */
+  readonly at?: string;
 }
 
 export interface AboutShows {
@@ -149,33 +152,33 @@ export const ABOUT_SHOWS: readonly AboutShows[] = [
   {
     heading: 'Solo exhibitions',
     shows: [
-      { when: '2026 May - June', title: '‘Moll de l’os’ peintures 2026', lines: ['Alzueta Gallery'] },
-      { when: '2025 April', title: '‘Mira’m no deixis de mirar-me’', lines: ['Solo show with Alzueta Gallery'], places: ['at Palau de Casavells'] },
-      { when: '2024 July', title: 'Painting as a gift from color', lines: ['Solo show'], places: ['Gallery_br, Tetbury, UK'] },
-      { when: '2023 September', title: 'Transitions', lines: ['Solo show'], places: ['Alzueta Gallery Turó'] },
-      { when: '2021 December', title: 'Color Dialogues', lines: ['Solo exhibition'], places: ['Alzueta Gallery Madrid'] },
-      { when: '2021 December', title: 'What’s color?', lines: ['2n edition'], places: ['Espacio Pavillion, Madrid,'] },
-      { when: '2020 December', title: 'What’s color?', lines: ['Solo Exhibition'], places: ['Alzueta Gallery, Barcelona,'] },
-      { when: '2020 February', title: 'Aoo&Claudia Valsells\nSilla8 show', lines: [], places: ['Alzueta Gallery, Barcelona'] },
-      { when: '2019 November', title: 'Almost Perfect', lines: ['Solo Exhibition'], places: ['Tokyo, Japan'] },
-      { when: '2019 October', title: 'Art Élysées-Art & Design', lines: ['Solo Exhibition'] },
-      { when: '2018 November', title: 'solo exhibition', lines: [], places: ['Palau de Casavells,', 'Girona, Spain'] },
-      { when: '2017 February', title: 'Color y forma', lines: ['solo exhibition\nAlzueta Gallery'] },
-      { when: '2007 May', title: 'Solo Exhibition', lines: [], places: ['Palau de Casavells,\nBaix Empordà'] },
-      { when: '2005 March', title: 'Expresions de mur.\nAbstract Informalism Paintings.', lines: ['Solo exhibition,'], places: ['Galeria Miquel Alzueta, Barcelona'] },
-      { when: '2000 April', title: 'El color no existe, existe la luz\nThe color doesn’t exist, just the light', lines: [] },
+      { when: '2026 May - June', title: '‘Moll de l’os’ peintures 2026', at: 'moll-de-l-os', lines: ['Alzueta Gallery'] },
+      { when: '2025 April', title: '‘Mira’m no deixis de mirar-me’', at: 'mira-m-no-deixis-de-mirar-me', lines: ['Solo show with Alzueta Gallery'], places: ['at Palau de Casavells'] },
+      { when: '2024 July', title: 'Painting as a gift from color', at: 'painting-as-a-gift-of-color', lines: ['Solo show'], places: ['Gallery_br, Tetbury, UK'] },
+      { when: '2023 September', title: 'Transitions', at: 'transitions', lines: ['Solo show'], places: ['Alzueta Gallery Turó'] },
+      { when: '2021 December', title: 'Color Dialogues', at: 'color-dialogues', lines: ['Solo exhibition'], places: ['Alzueta Gallery Madrid'] },
+      { when: '2021 December', title: 'What’s color?', at: 'what-s-color-ii-for-architects-and-designers', lines: ['2n edition'], places: ['Espacio Pavillion, Madrid,'] },
+      { when: '2020 December', title: 'What’s color?', at: 'what-s-color-i', lines: ['Solo Exhibition'], places: ['Alzueta Gallery, Barcelona,'] },
+      { when: '2020 February', title: 'Aoo&Claudia Valsells\nSilla8 show', at: 'silla-8-aoo-2019-2020', lines: [], places: ['Alzueta Gallery, Barcelona'] },
+      { when: '2019 November', title: 'Almost Perfect', at: 'almost-perfect-2019', lines: ['Solo Exhibition'], places: ['Tokyo, Japan'] },
+      { when: '2019 October', title: 'Art Élysées-Art & Design', at: 'art-elysees-art-design-2019', lines: ['Solo Exhibition'] },
+      { when: '2018 November', title: 'solo exhibition', at: 'solo-exhibition-2018', lines: [], places: ['Palau de Casavells,', 'Girona, Spain'] },
+      { when: '2017 February', title: 'Color y forma', at: 'color-y-forma', lines: ['solo exhibition\nAlzueta Gallery'] },
+      { when: '2007 May', title: 'Solo Exhibition', at: 'solo-exhibition-2007', lines: [], places: ['Palau de Casavells,\nBaix Empordà'] },
+      { when: '2005 March', title: 'Expresions de mur.\nAbstract Informalism Paintings.', at: 'expresions-de-mur-abstract-in-formalism-paintings-2005', lines: ['Solo exhibition,'], places: ['Galeria Miquel Alzueta, Barcelona'] },
+      { when: '2000 April', title: 'El color no existe, existe la luz\nThe color doesn’t exist, just the light', at: 'el-color-no-existe', lines: [] },
     ],
   },
   {
     heading: 'Group exhibitions',
     shows: [
-      { when: '2026 June - July', title: '‘Shift Towards Coincidence’,', lines: ['Group exhibition'], places: ['Palau de Casavells'] },
-      { when: '2026 June - July', title: 'Abstract Paintings', lines: ['Group Exhibition'], places: ['Scroll Ny, New York'] },
-      { when: '2025 March', title: '‘Marco, límite y lugar’,', lines: ['Group Exhibition,\nwith Alzueta Gallery'], places: ['Madrid'] },
-      { when: '2024 January', title: 'What abstract art means to me?', lines: ['Group exhibition'], places: ['Alzueta Gallery, Séneca'] },
-      { when: '2023 November', title: 'La terre est bleu comme\nune orange', lines: ['Group exhibition'], places: ['Alzueta Gallery Madrid.'] },
-      { when: '2018 November', title: 'T10 at Alzueta Gallery,', lines: [], places: ['Barcelona'] },
-      { when: '2016 December', title: 'Exposición colectiva', lines: [], places: ['Galeria Axel Pairon'] },
+      { when: '2026 June - July', title: '‘Shift Towards Coincidence’,', at: 'shift-towards-coincidence', lines: ['Group exhibition'], places: ['Palau de Casavells'] },
+      { when: '2026 June - July', title: 'Abstract Paintings', at: 'abstract-paintings', lines: ['Group Exhibition'], places: ['Scroll Ny, New York'] },
+      { when: '2025 March', title: '‘Marco, límite y lugar’,', at: 'marco-limite-y-lugar', lines: ['Group Exhibition,\nwith Alzueta Gallery'], places: ['Madrid'] },
+      { when: '2024 January', title: 'What abstract art means to me?', at: 'what-abstract-art-means-to-me', lines: ['Group exhibition'], places: ['Alzueta Gallery, Séneca'] },
+      { when: '2023 November', title: 'La terre est bleu comme\nune orange', at: 'la-terre-est-bleu', lines: ['Group exhibition'], places: ['Alzueta Gallery Madrid.'] },
+      { when: '2018 November', title: 'T10 at Alzueta Gallery,', at: 't10', lines: [], places: ['Barcelona'] },
+      { when: '2016 December', title: 'Exposición colectiva', at: 'galeria-axel-pairon', lines: [], places: ['Galeria Axel Pairon'] },
     ],
   },
   {
@@ -222,5 +225,14 @@ export const ABOUT_COLLECTIONS: readonly AboutCollection[] = [
   { name: 'Collection Richard', place: 'France' },
   { name: 'Smith Collection', place: 'Wyoming, USA' },
 ];
+
+const ROWS: ReadonlySet<string> = new Set(SHOWS.map(rowId));
+
+/** The row of the Exhibitions list a name of the record lives on, if it has one. */
+export function rowOf(title: string, when = '', at?: string): string | undefined {
+  const row = at ? `row-${at}` : rowId({ group: 'Art fairs', title, year: Number.parseInt(when, 10) || undefined });
+  if (at && !ROWS.has(row)) throw new Error(`About points at a row the Exhibitions list does not have: ${at}`);
+  return ROWS.has(row) ? row : undefined;
+}
 
 export const ABOUT_COPYRIGHT = '© All Rights Reserved';

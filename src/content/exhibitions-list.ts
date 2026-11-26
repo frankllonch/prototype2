@@ -95,6 +95,14 @@ export const SHOWS: readonly Show[] = [
   { group: 'Private collections', title: 'Smith Collection', venue: 'Wyoming, USA' },
 ];
 
+/** The anchor of a show's row in the list, which About's record points at. */
+export function rowId(show: Show): string {
+  const named = show.slug ?? show.commission;
+  if (named) return `row-${named}`;
+  const plain = `${show.title} ${show.year ?? ''}`.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  return `row-${plain.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}`;
+}
+
 /**
  * The opening phrase of a location: the kind of show, its comma if it has one,
  * and an "at" if one follows.
