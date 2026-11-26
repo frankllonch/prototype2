@@ -353,11 +353,11 @@
 /* The arrows sit either side of the box: the next one on the right margin as
    the sheet draws it, the previous one as far out on the left, and neither
    nearer the box than `--step-gap` however small the window (the chevron is
-   not sized by it). Level with the middle of the photograph showing, which
-   figures.ts measures: a landscape does not stand on the box's middle. */
+   not sized by it). Level with the middle of the box, the same height for
+   every photograph whatever its shape (Frank, 2026-11-26). */
 .sheet-step {
   position: absolute;
-  top: var(--photo-mid, 50%);
+  top: 50%;
   translate: 0 -50%;
   padding: calc(var(--f) * 24) calc(var(--f) * 14);
   color: rgb(252, 252, 250);
@@ -644,10 +644,10 @@ html:not(.js) .sheet-step { display: none; }
 }
 
 /* At the frame's margins, as the sheets place them, and level with the middle
-   of the picture — so they never meet the masthead in the top left. */
+   of the frame, the same height for every picture (Frank, 2026-11-26). */
 .plates-step {
   position: absolute;
-  top: var(--photo-mid, 50%);
+  top: 50%;
   translate: 0 -50%;
   padding: calc(var(--f) * 24) calc(var(--f) * 14);
   color: rgb(252, 252, 250);
