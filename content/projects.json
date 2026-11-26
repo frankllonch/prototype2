@@ -11924,75 +11924,68 @@
         }
       ],
       "cover": {
-        "id": "64b98136d3b9dcdb",
-        "source": "https://www.claudiavalsells.com/wp-content/uploads/2021/12/3G9A6490-scaled.jpg",
+        "id": "783680f58228bbca",
+        "source": "local/commissioned/trainings_silences/01.png",
         "alt": "",
-        "width": 1707,
-        "height": 2560
+        "width": 650,
+        "height": 975
       },
       "images": [
         {
-          "id": "64b98136d3b9dcdb",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2021/12/3G9A6490-scaled.jpg",
+          "id": "783680f58228bbca",
+          "source": "local/commissioned/trainings_silences/01.png",
           "alt": "",
-          "width": 1707,
-          "height": 2560
+          "width": 650,
+          "height": 975
         },
         {
-          "id": "1055c86e1dcc5761",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2021/12/3G9A6489-scaled.jpg",
+          "id": "0a479de9fb988f91",
+          "source": "local/commissioned/trainings_silences/02.png",
           "alt": "",
-          "width": 1707,
-          "height": 2560
+          "width": 650,
+          "height": 975
         },
         {
-          "id": "ca4b6ebc44b0c1f3",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2021/12/3G9A6495-scaled.jpg",
+          "id": "4b29650d622c75a8",
+          "source": "local/commissioned/trainings_silences/03.png",
           "alt": "",
-          "width": 1707,
-          "height": 2560
+          "width": 650,
+          "height": 975
         },
         {
-          "id": "a772227cd93b760c",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2021/12/3G9A6576-scaled.jpg",
+          "id": "204add114656bd4c",
+          "source": "local/commissioned/trainings_silences/04.png",
           "alt": "",
-          "width": 1707,
-          "height": 2560
+          "width": 650,
+          "height": 975
         },
         {
-          "id": "ddb7376aba9b9ae6",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2021/12/3G9A6563-scaled.jpg",
+          "id": "87d11e349359a516",
+          "source": "local/commissioned/trainings_silences/05.png",
           "alt": "",
-          "width": 1707,
-          "height": 2560
+          "width": 650,
+          "height": 975
         },
         {
-          "id": "390d0c8565c0cd72",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2021/12/3G9A6582-scaled.jpg",
+          "id": "2b33b86955d4c407",
+          "source": "local/commissioned/trainings_silences/06.png",
           "alt": "",
-          "width": 1707,
-          "height": 2560
+          "width": 650,
+          "height": 975
         },
         {
-          "id": "990a0ae5a28aeb0f",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2021/12/3G9A6629-scaled.jpg",
+          "id": "229fc8cb6d140bd1",
+          "source": "local/commissioned/trainings_silences/07.png",
           "alt": "",
-          "width": 1707,
-          "height": 2560
+          "width": 650,
+          "height": 975
         },
         {
-          "id": "cd2127696291d1f4",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2021/12/3G9A6618-scaled.jpg",
+          "id": "cbb444e233b06821",
+          "source": "local/commissioned/trainings_silences/08.png",
           "alt": "",
-          "width": 1707,
-          "height": 2560
-        },
-        {
-          "id": "07a54c2e75242d8f",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2021/12/3G9A6590-scaled.jpg",
-          "alt": "",
-          "width": 1707,
-          "height": 2560
+          "width": 650,
+          "height": 975
         }
       ],
       "metadata": {
@@ -12104,54 +12097,82 @@
         }
       ],
       "cover": {
-        "id": "34b0e9889b103d7c",
-        "source": "https://www.claudiavalsells.com/wp-content/uploads/2020/10/claudia-valsells-artist-colour-chart-.jpeg",
+        "id": "39796ee9c97e60d3",
+        "source": "local/commissioned/dada-workshops-2017-2/01.png",
         "alt": "",
-        "width": 600,
-        "height": 800
+        "width": 797,
+        "height": 799
       },
       "images": [
         {
-          "id": "34b0e9889b103d7c",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2020/10/claudia-valsells-artist-colour-chart-.jpeg",
+          "id": "39796ee9c97e60d3",
+          "source": "local/commissioned/dada-workshops-2017-2/01.png",
           "alt": "",
-          "width": 600,
-          "height": 800
+          "width": 797,
+          "height": 799
         },
         {
-          "id": "83d8c9e2203b6d40",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2020/10/450x800-muralla-1-1.jpeg",
+          "id": "77168e0dfabfa572",
+          "source": "local/commissioned/dada-workshops-2017-2/02.png",
           "alt": "",
-          "width": 600,
-          "height": 800
+          "width": 805,
+          "height": 1075
         },
         {
-          "id": "d685a953c5c5b4b6",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2020/10/ok-muralla-roja-1-1.jpeg",
+          "id": "eb4d276cc1e814cd",
+          "source": "local/commissioned/dada-workshops-2017-2/03.png",
           "alt": "",
-          "width": 600,
-          "height": 800
+          "width": 924,
+          "height": 762
         },
         {
-          "id": "2fb1ff2458dd6739",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2020/10/ok-muralla-roja-final-.jpeg",
+          "id": "0f625eb83102c666",
+          "source": "local/commissioned/dada-workshops-2017-2/04.png",
           "alt": "",
-          "width": 600,
-          "height": 800
+          "width": 917,
+          "height": 688
         },
         {
-          "id": "47b5699bbe64b614",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2020/10/ok-muralla-roja-.jpeg",
+          "id": "aef31e8c93b25241",
+          "source": "local/commissioned/dada-workshops-2017-2/05.png",
           "alt": "",
-          "width": 600,
-          "height": 800
+          "width": 650,
+          "height": 867
         },
         {
-          "id": "ab6af1c66ad57894",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2020/10/ok-muralla-roja-copia.jpeg",
+          "id": "8b51c6b8b405eb2f",
+          "source": "local/commissioned/dada-workshops-2017-2/06.png",
           "alt": "",
-          "width": 600,
-          "height": 800
+          "width": 650,
+          "height": 867
+        },
+        {
+          "id": "de20d7330fb4df3a",
+          "source": "local/commissioned/dada-workshops-2017-2/07.png",
+          "alt": "",
+          "width": 650,
+          "height": 867
+        },
+        {
+          "id": "3df66937fc9537ce",
+          "source": "local/commissioned/dada-workshops-2017-2/08.png",
+          "alt": "",
+          "width": 650,
+          "height": 867
+        },
+        {
+          "id": "a8b2870de5fd3c3b",
+          "source": "local/commissioned/dada-workshops-2017-2/09.png",
+          "alt": "",
+          "width": 650,
+          "height": 867
+        },
+        {
+          "id": "133e692dcb3ec62f",
+          "source": "local/commissioned/dada-workshops-2017-2/10.png",
+          "alt": "",
+          "width": 650,
+          "height": 867
         }
       ],
       "metadata": {
@@ -12336,89 +12357,82 @@
         }
       ],
       "cover": {
-        "id": "eaeaf083949582b7",
-        "source": "https://www.claudiavalsells.com/wp-content/uploads/2020/02/claudia-valsells-aoo-w.jpg",
-        "alt": "Silla 8 - Claudia Valsells",
-        "width": 400,
-        "height": 500
+        "id": "6ecf84d1f57b823b",
+        "source": "local/commissioned/silla-8-aoo-2019-2020/01.png",
+        "alt": "",
+        "width": 650,
+        "height": 813
       },
       "images": [
         {
-          "id": "eaeaf083949582b7",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2020/02/claudia-valsells-aoo-w.jpg",
-          "alt": "Silla 8 - Claudia Valsells",
-          "width": 400,
-          "height": 500
+          "id": "6ecf84d1f57b823b",
+          "source": "local/commissioned/silla-8-aoo-2019-2020/01.png",
+          "alt": "",
+          "width": 650,
+          "height": 813
         },
         {
-          "id": "2feda8882997457d",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2020/02/claudia-valsells-work-in-progress-w.jpg",
-          "alt": "Silla 8 - Claudia Valsells Work in progress",
-          "width": 400,
-          "height": 500
+          "id": "fa3c07df19c12a9d",
+          "source": "local/commissioned/silla-8-aoo-2019-2020/02.png",
+          "alt": "",
+          "width": 650,
+          "height": 813
         },
         {
-          "id": "b6ed0ed8347dddf0",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2020/02/exhibition-barcelona-claudia-valsells-w.jpg",
-          "alt": "Silla 8 - Claudia Valsells",
-          "width": 400,
-          "height": 500
+          "id": "0b5018c9a8c91ac8",
+          "source": "local/commissioned/silla-8-aoo-2019-2020/03.png",
+          "alt": "",
+          "width": 650,
+          "height": 812
         },
         {
-          "id": "cd56ec4ca76f081e",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2020/02/claudia-valsells-in-her-studio-w.jpg",
-          "alt": "Silla 8 - Claudia Valsells in her studio",
-          "width": 400,
-          "height": 500
+          "id": "84ca1f0360cd4e0a",
+          "source": "local/commissioned/silla-8-aoo-2019-2020/04.png",
+          "alt": "",
+          "width": 650,
+          "height": 812
         },
         {
-          "id": "3f20f13f055705d8",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2020/02/PORTADA-SILLA-8-w.jpeg",
-          "alt": "Silla 8 - Claudia Valsells",
-          "width": 400,
-          "height": 500
+          "id": "8d08171548ee8499",
+          "source": "local/commissioned/silla-8-aoo-2019-2020/05.png",
+          "alt": "",
+          "width": 650,
+          "height": 812
         },
         {
-          "id": "9164a19a15fe150b",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2020/02/silla-8-claudia-valsells-w.jpg",
-          "alt": "Silla 8 - Claudia Valsells",
-          "width": 400,
-          "height": 500
+          "id": "9d2335f091fb6902",
+          "source": "local/commissioned/silla-8-aoo-2019-2020/06.png",
+          "alt": "",
+          "width": 650,
+          "height": 813
         },
         {
-          "id": "cddc2d0dbf75357b",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2020/02/silla-8-studio-claudia-valsells-w.jpg",
-          "alt": "Silla 8 - Claudia Valsells Studio",
-          "width": 400,
-          "height": 500
+          "id": "b8b15351dcabbdb1",
+          "source": "local/commissioned/silla-8-aoo-2019-2020/07.png",
+          "alt": "",
+          "width": 650,
+          "height": 813
         },
         {
-          "id": "cc3379e44be1eb4a",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2020/02/show-at-alzueta-gallery-w.jpg",
-          "alt": "Silla 8 - Show at alzueta gallery",
-          "width": 400,
-          "height": 500
+          "id": "80f71e8cef479bef",
+          "source": "local/commissioned/silla-8-aoo-2019-2020/08.png",
+          "alt": "",
+          "width": 650,
+          "height": 813
         },
         {
-          "id": "2cd795bd28c9c571",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2020/02/exhibition-silla-8-w.jpg",
-          "alt": "Silla 8 - Claudia Valsells",
-          "width": 400,
-          "height": 500
+          "id": "33a7aaa381a82038",
+          "source": "local/commissioned/silla-8-aoo-2019-2020/09.png",
+          "alt": "",
+          "width": 650,
+          "height": 812
         },
         {
-          "id": "4f7f0f22ef5e7ff2",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2020/02/claudia-valsells-alzueta-gallery-w.jpg",
-          "alt": "Silla 8 - Claudia Valsells",
-          "width": 1000,
-          "height": 700
-        },
-        {
-          "id": "69180fb7bfaf35cb",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2020/02/exhibition-claudia-valsells-aoo-w.jpg",
-          "alt": "Silla 8 - Exhibition - Claudia Valsells",
-          "width": 1000,
-          "height": 700
+          "id": "ba287f60de5c65fe",
+          "source": "local/commissioned/silla-8-aoo-2019-2020/10.png",
+          "alt": "",
+          "width": 735,
+          "height": 515
         }
       ],
       "metadata": {
@@ -12608,89 +12622,82 @@
         }
       ],
       "cover": {
-        "id": "a4cbef44f968dd42",
-        "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/04/claudia_valsells_process_for_nani_marquina_project-1.jpg",
-        "alt": "Claudia Valsells Marquina Project",
-        "width": 1000,
-        "height": 1100
+        "id": "669e49ed3c0fe639",
+        "source": "local/commissioned/edges-collection-for-within-reach/01.png",
+        "alt": "",
+        "width": 650,
+        "height": 867
       },
       "images": [
         {
-          "id": "a4cbef44f968dd42",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/04/claudia_valsells_process_for_nani_marquina_project-1.jpg",
-          "alt": "Claudia Valsells Marquina Project",
-          "width": 1000,
-          "height": 1100
-        },
-        {
-          "id": "a87978245ebcfd09",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/04/claudia_valsells_at_nani_marquina_studio-1.jpg",
-          "alt": "Claudia Valsells at Marquina Studio",
-          "width": 1000,
-          "height": 1100
-        },
-        {
-          "id": "56b7ae4ded1c6c68",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/04/claudia_valsells_searching_colors-1.jpg",
-          "alt": "Claudia Valsells searching Colors",
-          "width": 1000,
-          "height": 1100
-        },
-        {
-          "id": "b99963774784c78e",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/04/claudia_valsells_design_for_nani_marquina_project.jpg",
-          "alt": "Claudia Valsells design",
-          "width": 1000,
-          "height": 1100
-        },
-        {
-          "id": "d250ecf381f5fd1c",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/04/claudia_valsells_project_for_nani_marquina_creations.jpg",
-          "alt": "Claudia Valsells Creations",
-          "width": 1000,
-          "height": 1100
-        },
-        {
-          "id": "d3d4e904e89cbe49",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/04/claudia_valsells_creations_for_nani_marquina_collections.jpg",
-          "alt": "Claudia Valsells Creations",
-          "width": 1000,
-          "height": 1100
-        },
-        {
-          "id": "95517523df9570f0",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/05/5cdc2e55710b9_nani-marquina-2-ok-.jpg",
+          "id": "669e49ed3c0fe639",
+          "source": "local/commissioned/edges-collection-for-within-reach/01.png",
           "alt": "",
-          "width": 800,
-          "height": 600
+          "width": 650,
+          "height": 867
         },
         {
-          "id": "1b3904e32894dd2b",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/05/5cdc2e1c88e48_nani-marquina-ok-1.jpg",
+          "id": "bb7dee47f8199f4b",
+          "source": "local/commissioned/edges-collection-for-within-reach/02.png",
           "alt": "",
-          "width": 805,
-          "height": 600
+          "width": 650,
+          "height": 867
         },
         {
-          "id": "e7cceeea10806bd7",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/05/5cdc2f7d93228_nani-marquina-5-ok-.jpg",
+          "id": "e316906893eaab08",
+          "source": "local/commissioned/edges-collection-for-within-reach/03.png",
           "alt": "",
-          "width": 600,
-          "height": 800
+          "width": 735,
+          "height": 548
         },
         {
-          "id": "86f04afbcc86e0c9",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/05/5cdc2ebac1c6d_marquina-4-ok-.jpg",
+          "id": "77cb4c0319971871",
+          "source": "local/commissioned/edges-collection-for-within-reach/04.png",
           "alt": "",
-          "width": 600,
-          "height": 800
+          "width": 735,
+          "height": 551
         },
         {
-          "id": "9739b7e88a7d2297",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/05/5cdc2e8eba0bc_marquina-3-ok-.jpg",
+          "id": "3c6dc7bfa9d34744",
+          "source": "local/commissioned/edges-collection-for-within-reach/05.png",
           "alt": "",
-          "width": 600,
-          "height": 800
+          "width": 650,
+          "height": 715
+        },
+        {
+          "id": "64961e2e891be87d",
+          "source": "local/commissioned/edges-collection-for-within-reach/06.png",
+          "alt": "",
+          "width": 650,
+          "height": 715
+        },
+        {
+          "id": "e219c263c7d153f5",
+          "source": "local/commissioned/edges-collection-for-within-reach/07.png",
+          "alt": "",
+          "width": 650,
+          "height": 715
+        },
+        {
+          "id": "59a152d205efb373",
+          "source": "local/commissioned/edges-collection-for-within-reach/08.png",
+          "alt": "",
+          "width": 650,
+          "height": 867
+        },
+        {
+          "id": "7c10b023c4cbdc6a",
+          "source": "local/commissioned/edges-collection-for-within-reach/09.png",
+          "alt": "",
+          "width": 650,
+          "height": 715
+        },
+        {
+          "id": "9cbe6846a3f868ab",
+          "source": "local/commissioned/edges-collection-for-within-reach/10.png",
+          "alt": "",
+          "width": 650,
+          "height": 715
         }
       ],
       "metadata": {
@@ -12845,75 +12852,68 @@
         }
       ],
       "cover": {
-        "id": "0a49db3a087f447a",
-        "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/04/dada-2018-0.jpg",
+        "id": "6f3c392f71c11f9e",
+        "source": "local/commissioned/dada-workshops-2018/01.png",
         "alt": "",
-        "width": 1000,
-        "height": 1000
+        "width": 650,
+        "height": 650
       },
       "images": [
         {
-          "id": "0a49db3a087f447a",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/04/dada-2018-0.jpg",
+          "id": "6f3c392f71c11f9e",
+          "source": "local/commissioned/dada-workshops-2018/01.png",
           "alt": "",
-          "width": 1000,
-          "height": 1000
+          "width": 650,
+          "height": 650
         },
         {
-          "id": "e5a8fb243d8b1a1b",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/04/dada-2018-01.jpg",
+          "id": "7944acae5e1ffa73",
+          "source": "local/commissioned/dada-workshops-2018/02.png",
           "alt": "",
-          "width": 1000,
-          "height": 1000
+          "width": 650,
+          "height": 650
         },
         {
-          "id": "539da9c284708035",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/04/dada-2018-02.jpg",
+          "id": "04b571cd7b49331e",
+          "source": "local/commissioned/dada-workshops-2018/03.png",
           "alt": "",
-          "width": 1000,
-          "height": 1000
+          "width": 650,
+          "height": 650
         },
         {
-          "id": "76f40ce93f4301c7",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/04/dada-2018-03.jpg",
+          "id": "fc17e0612fc1cec0",
+          "source": "local/commissioned/dada-workshops-2018/04.png",
           "alt": "",
-          "width": 1000,
-          "height": 1000
+          "width": 650,
+          "height": 650
         },
         {
-          "id": "4f66e382136502dc",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/04/dada-2018-04.jpg",
+          "id": "dde9d6f8b639716c",
+          "source": "local/commissioned/dada-workshops-2018/05.png",
           "alt": "",
-          "width": 1000,
-          "height": 1000
+          "width": 650,
+          "height": 650
         },
         {
-          "id": "e1164242f298e9bd",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/04/dada-2018-05.jpg",
+          "id": "018f2991b926793c",
+          "source": "local/commissioned/dada-workshops-2018/06.png",
           "alt": "",
-          "width": 1000,
-          "height": 1000
+          "width": 650,
+          "height": 650
         },
         {
-          "id": "fe126fc058504b0f",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/04/dada-2018-06.jpg",
+          "id": "5bb4c523a1cf3634",
+          "source": "local/commissioned/dada-workshops-2018/07.png",
           "alt": "",
-          "width": 1000,
-          "height": 1000
+          "width": 650,
+          "height": 650
         },
         {
-          "id": "8ae8e4391e2f5951",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/04/dada-2018-07.jpg",
+          "id": "7bf8b5cf5467ec6f",
+          "source": "local/commissioned/dada-workshops-2018/08.png",
           "alt": "",
-          "width": 1000,
-          "height": 1000
-        },
-        {
-          "id": "5d10e748ccb1c87c",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/04/dada-2018-08.jpg",
-          "alt": "",
-          "width": 1000,
-          "height": 1000
+          "width": 650,
+          "height": 650
         }
       ],
       "metadata": {
@@ -13077,75 +13077,68 @@
         }
       ],
       "cover": {
-        "id": "eb575e7e8ebe454b",
-        "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/04/artwork_claudia_Valsells_.jpg",
+        "id": "3aaef1f8803724c9",
+        "source": "local/commissioned/uterque-art-essays/01.png",
         "alt": "",
-        "width": 900,
-        "height": 508
+        "width": 735,
+        "height": 415
       },
       "images": [
         {
-          "id": "eb575e7e8ebe454b",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/04/artwork_claudia_Valsells_.jpg",
+          "id": "3aaef1f8803724c9",
+          "source": "local/commissioned/uterque-art-essays/01.png",
           "alt": "",
-          "width": 900,
-          "height": 508
+          "width": 735,
+          "height": 415
         },
         {
-          "id": "17fe0f870a3d0602",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/04/artwork_claudia_valsells_for_uterque_.jpg",
+          "id": "6336c2535343268b",
+          "source": "local/commissioned/uterque-art-essays/02.png",
           "alt": "",
-          "width": 900,
-          "height": 509
+          "width": 735,
+          "height": 416
         },
         {
-          "id": "d0fa19fa8071c30e",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/04/claudia_valsells_details-1.jpg",
+          "id": "3b8d9e9ac626dbde",
+          "source": "local/commissioned/uterque-art-essays/03.png",
           "alt": "",
-          "width": 900,
-          "height": 509
+          "width": 735,
+          "height": 416
         },
         {
-          "id": "a265d7fad12e33b1",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/04/claudia_valsells_mumbai_india_project_uterque.jpg",
+          "id": "b3ab8e0627633d76",
+          "source": "local/commissioned/uterque-art-essays/04.png",
           "alt": "",
-          "width": 1000,
-          "height": 1100
+          "width": 650,
+          "height": 715
         },
         {
-          "id": "b85a5ba1d63f2364",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/04/claudia_valsells_mumbai_india_project_uterque_b.jpg",
+          "id": "1de935980b2a37ab",
+          "source": "local/commissioned/uterque-art-essays/05.png",
           "alt": "",
-          "width": 1000,
-          "height": 1100
+          "width": 650,
+          "height": 715
         },
         {
-          "id": "8599b084b27dbd01",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/04/claudia_valsells_mumbai_india_project_uterque_red.jpg",
+          "id": "c45f2d4396c10ab6",
+          "source": "local/commissioned/uterque-art-essays/06.png",
           "alt": "",
-          "width": 1000,
-          "height": 1100
+          "width": 650,
+          "height": 715
         },
         {
-          "id": "0ec39f0f124b162c",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/05/uterque-claudia-valsells-.jpg",
+          "id": "17008d1d7790a0dd",
+          "source": "local/commissioned/uterque-art-essays/07.png",
           "alt": "",
-          "width": 600,
-          "height": 900
+          "width": 650,
+          "height": 975
         },
         {
-          "id": "91415c562c0daeda",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/05/uterque-ok-2.jpg",
+          "id": "463c3e259f2daada",
+          "source": "local/commissioned/uterque-art-essays/08.png",
           "alt": "",
-          "width": 600,
-          "height": 900
-        },
-        {
-          "id": "4215361d27dc77f8",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/05/uterque-ok-1.jpg",
-          "alt": "",
-          "width": 600,
-          "height": 900
+          "width": 650,
+          "height": 975
         }
       ],
       "metadata": {
@@ -13268,54 +13261,47 @@
         }
       ],
       "cover": {
-        "id": "a2a9a7c14fe4794c",
-        "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/04/dada2.jpg",
+        "id": "8f81c7e97ecd4488",
+        "source": "local/commissioned/dada-workshops-2017/01.png",
         "alt": "",
-        "width": 1000,
-        "height": 668
+        "width": 735,
+        "height": 490
       },
       "images": [
         {
-          "id": "a2a9a7c14fe4794c",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/04/dada2.jpg",
+          "id": "8f81c7e97ecd4488",
+          "source": "local/commissioned/dada-workshops-2017/01.png",
           "alt": "",
-          "width": 1000,
-          "height": 668
+          "width": 735,
+          "height": 490
         },
         {
-          "id": "1626b31021c7dd29",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/04/dada3.jpg",
+          "id": "d56e073c46e8af06",
+          "source": "local/commissioned/dada-workshops-2017/02.png",
           "alt": "",
-          "width": 1000,
-          "height": 668
+          "width": 735,
+          "height": 491
         },
         {
-          "id": "b47e2dd886318d9f",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/04/dada4.jpg",
+          "id": "78a3440c328742b4",
+          "source": "local/commissioned/dada-workshops-2017/03.png",
           "alt": "",
-          "width": 1000,
-          "height": 668
+          "width": 735,
+          "height": 491
         },
         {
-          "id": "f7bd3a3afd21970b",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/04/dada6.jpg",
+          "id": "977c1a1015ac3f47",
+          "source": "local/commissioned/dada-workshops-2017/04.png",
           "alt": "",
-          "width": 1000,
-          "height": 668
+          "width": 735,
+          "height": 491
         },
         {
-          "id": "b7cebd3a0ed3fa84",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2019/04/dada5.jpg",
+          "id": "5680f868f80aad2c",
+          "source": "local/commissioned/dada-workshops-2017/05.png",
           "alt": "",
-          "width": 1000,
-          "height": 668
-        },
-        {
-          "id": "ccf668d3ce220c31",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2022/01/DADA-1.jpg",
-          "alt": "",
-          "width": 1000,
-          "height": 667
+          "width": 735,
+          "height": 491
         }
       ],
       "metadata": {
@@ -13427,54 +13413,47 @@
         }
       ],
       "cover": {
-        "id": "ce9d27fe823c2912",
-        "source": "https://www.claudiavalsells.com/wp-content/uploads/2022/10/artist-residency-img-1.jpg",
+        "id": "fc141d3ed463e589",
+        "source": "local/commissioned/artist-residence-2022/01.png",
         "alt": "",
-        "width": 683,
-        "height": 1024
+        "width": 650,
+        "height": 975
       },
       "images": [
         {
-          "id": "ce9d27fe823c2912",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2022/10/artist-residency-img-1.jpg",
+          "id": "fc141d3ed463e589",
+          "source": "local/commissioned/artist-residence-2022/01.png",
           "alt": "",
-          "width": 683,
-          "height": 1024
+          "width": 650,
+          "height": 975
         },
         {
-          "id": "a2ec09214c4d2186",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2022/10/artist-residency-img-2.jpg",
+          "id": "eb29e5a46547f47a",
+          "source": "local/commissioned/artist-residence-2022/02.png",
           "alt": "",
-          "width": 683,
-          "height": 1024
+          "width": 650,
+          "height": 975
         },
         {
-          "id": "90d724b08d0e7510",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2022/10/artist-residency-img-3.jpg",
+          "id": "c07384c59e89b19c",
+          "source": "local/commissioned/artist-residence-2022/03.png",
           "alt": "",
-          "width": 683,
-          "height": 1024
+          "width": 650,
+          "height": 975
         },
         {
-          "id": "8dac9cb60b7aaf6b",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2022/10/artist-residency-img-4.jpg",
+          "id": "58ce0e349e070969",
+          "source": "local/commissioned/artist-residence-2022/04.png",
           "alt": "",
-          "width": 683,
-          "height": 1024
+          "width": 650,
+          "height": 975
         },
         {
-          "id": "800cc15b71fd85cd",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2022/10/artist-residency-img-5.jpg",
+          "id": "c07b2c5bdac38e82",
+          "source": "local/commissioned/artist-residence-2022/05.png",
           "alt": "",
-          "width": 683,
-          "height": 1024
-        },
-        {
-          "id": "60538712b7b7ea15",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2022/10/artist-residency-img-6.jpg",
-          "alt": "",
-          "width": 683,
-          "height": 1024
+          "width": 650,
+          "height": 975
         }
       ],
       "metadata": {
@@ -13560,40 +13539,33 @@
         }
       ],
       "cover": {
-        "id": "6b987e648d610552",
-        "source": "https://www.claudiavalsells.com/wp-content/uploads/2022/10/kamanar-img-2.jpg",
+        "id": "abdf31856239cc22",
+        "source": "local/commissioned/kamanar-10-chairs-10-artists-2022/01.png",
         "alt": "",
-        "width": 683,
-        "height": 1024
+        "width": 650,
+        "height": 975
       },
       "images": [
         {
-          "id": "6b987e648d610552",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2022/10/kamanar-img-2.jpg",
+          "id": "abdf31856239cc22",
+          "source": "local/commissioned/kamanar-10-chairs-10-artists-2022/01.png",
           "alt": "",
-          "width": 683,
-          "height": 1024
+          "width": 650,
+          "height": 975
         },
         {
-          "id": "c7f5df2ab8130aea",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2022/10/kamanar-img-3.jpg",
+          "id": "33667b09d5f8aeb2",
+          "source": "local/commissioned/kamanar-10-chairs-10-artists-2022/02.png",
           "alt": "",
-          "width": 683,
-          "height": 1024
+          "width": 650,
+          "height": 975
         },
         {
-          "id": "c96abcccab51bdfd",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2022/10/kamanar-img-4.jpg",
+          "id": "c1b3a8699df3ebab",
+          "source": "local/commissioned/kamanar-10-chairs-10-artists-2022/03.png",
           "alt": "",
-          "width": 683,
-          "height": 1024
-        },
-        {
-          "id": "4765fea56056fd0d",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2022/10/kamanar-img-5.jpg",
-          "alt": "",
-          "width": 683,
-          "height": 1024
+          "width": 650,
+          "height": 975
         }
       ],
       "metadata": {
@@ -13705,54 +13677,40 @@
         }
       ],
       "cover": {
-        "id": "8ca81c2fd94d686b",
-        "source": "https://www.claudiavalsells.com/wp-content/uploads/2022/03/Tones-collection-2022-1.jpg",
+        "id": "9f302bb8a1af3b37",
+        "source": "local/commissioned/tones-collection-2022/01.png",
         "alt": "",
-        "width": 683,
-        "height": 1024
+        "width": 650,
+        "height": 975
       },
       "images": [
         {
-          "id": "8ca81c2fd94d686b",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2022/03/Tones-collection-2022-1.jpg",
+          "id": "9f302bb8a1af3b37",
+          "source": "local/commissioned/tones-collection-2022/01.png",
           "alt": "",
-          "width": 683,
-          "height": 1024
+          "width": 650,
+          "height": 975
         },
         {
-          "id": "5849b8fbdeb41d0c",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2022/03/Tones-collection-2022-2.jpg",
+          "id": "f6a4ca1943560942",
+          "source": "local/commissioned/tones-collection-2022/02.png",
           "alt": "",
-          "width": 683,
-          "height": 1024
+          "width": 650,
+          "height": 975
         },
         {
-          "id": "7b3497b19a945f0c",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2022/03/Tones-collection-2022-3.jpg",
+          "id": "20ca540db503a8b6",
+          "source": "local/commissioned/tones-collection-2022/03.png",
           "alt": "",
-          "width": 683,
-          "height": 1024
+          "width": 650,
+          "height": 975
         },
         {
-          "id": "26b9dd6810af488e",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2022/03/Tones-collection-2022-4.jpg",
+          "id": "f7a5f36aa9c8f04f",
+          "source": "local/commissioned/tones-collection-2022/04.png",
           "alt": "",
-          "width": 1024,
-          "height": 677
-        },
-        {
-          "id": "4cd291628f3fe8e5",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2022/03/Tones-collection-2022-5.jpg",
-          "alt": "",
-          "width": 1024,
-          "height": 677
-        },
-        {
-          "id": "4c33baed701287ca",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2022/03/Tones-collection-2022-6.jpg",
-          "alt": "",
-          "width": 1024,
-          "height": 677
+          "width": 735,
+          "height": 486
         }
       ],
       "metadata": {
@@ -14644,47 +14602,40 @@
         }
       ],
       "cover": {
-        "id": "6331e7c1e2c4da66",
-        "source": "https://www.claudiavalsells.com/wp-content/uploads/2025/01/IMAGEN-DESTACADA-1-1.jpeg",
+        "id": "919ee1c18e9c6467",
+        "source": "local/commissioned/terra-rossa-milan-design-week-2024/01.png",
         "alt": "",
-        "width": 1000,
-        "height": 1333
+        "width": 650,
+        "height": 867
       },
       "images": [
         {
-          "id": "6331e7c1e2c4da66",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2025/01/IMAGEN-DESTACADA-1-1.jpeg",
+          "id": "919ee1c18e9c6467",
+          "source": "local/commissioned/terra-rossa-milan-design-week-2024/01.png",
           "alt": "",
-          "width": 1000,
-          "height": 1333
+          "width": 650,
+          "height": 867
         },
         {
-          "id": "d1c1dd258515b23c",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2025/01/07_TERRAROSSA_©Francesco_Stelitano_ok.jpeg",
+          "id": "8a1b2f5530404f5f",
+          "source": "local/commissioned/terra-rossa-milan-design-week-2024/02.png",
           "alt": "",
-          "width": 1000,
-          "height": 1333
+          "width": 650,
+          "height": 867
         },
         {
-          "id": "8ec798532a5378f3",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2025/01/IMG_0688.jpeg",
+          "id": "cf1ea9865e46bac3",
+          "source": "local/commissioned/terra-rossa-milan-design-week-2024/03.png",
           "alt": "",
-          "width": 1000,
-          "height": 1333
+          "width": 650,
+          "height": 867
         },
         {
-          "id": "3e848eb0758a7514",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2025/01/terra-rossa-una-instalacion-colectiva-inspirada-en-la-tierra-como-elemento-primordial-12.jpeg",
+          "id": "54f70d4659c94896",
+          "source": "local/commissioned/terra-rossa-milan-design-week-2024/04.png",
           "alt": "",
-          "width": 1000,
-          "height": 983
-        },
-        {
-          "id": "1e4ff24686d9108f",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2025/01/15_TERRAROSSA__©Francesco_Stelitano_ok.jpeg",
-          "alt": "",
-          "width": 1000,
-          "height": 750
+          "width": 650,
+          "height": 639
         }
       ],
       "metadata": {
@@ -14856,82 +14807,75 @@
         }
       ],
       "cover": {
-        "id": "a91b44178a1d1c6a",
-        "source": "https://www.claudiavalsells.com/wp-content/uploads/2026/03/JPEG-Optimizado-para-Instagram-91.jpg",
+        "id": "1bbececd2e849b65",
+        "source": "local/commissioned/solidary-fulard/01.png",
         "alt": "",
-        "width": 1080,
-        "height": 1620
+        "width": 650,
+        "height": 976
       },
       "images": [
         {
-          "id": "a91b44178a1d1c6a",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2026/03/JPEG-Optimizado-para-Instagram-91.jpg",
+          "id": "1bbececd2e849b65",
+          "source": "local/commissioned/solidary-fulard/01.png",
           "alt": "",
-          "width": 1080,
-          "height": 1620
+          "width": 650,
+          "height": 976
         },
         {
-          "id": "94d79b14fdc298ce",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2026/03/8177e1db-6fb7-4d18-bab5-1338c714b69f-1.jpeg",
+          "id": "84718a29f28fdc79",
+          "source": "local/commissioned/solidary-fulard/02.png",
           "alt": "",
-          "width": 1066,
-          "height": 1600
+          "width": 650,
+          "height": 976
         },
         {
-          "id": "9823737902a60d23",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2026/03/0cf7d164-ef14-456d-ab6c-db874e982f26-1.jpeg",
+          "id": "75945bf49ddc74e6",
+          "source": "local/commissioned/solidary-fulard/03.png",
           "alt": "",
-          "width": 1066,
-          "height": 1600
+          "width": 650,
+          "height": 975
         },
         {
-          "id": "43566dfe91c6398b",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2022/10/SOLIDARY-FULARD-2022-3.jpg",
+          "id": "bd17bacf519a86b0",
+          "source": "local/commissioned/solidary-fulard/04.png",
           "alt": "",
-          "width": 683,
-          "height": 1024
+          "width": 650,
+          "height": 827
         },
         {
-          "id": "b7dcae748f1caaf9",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2022/10/SOLIDARY-FULARD-2022-2.jpg",
+          "id": "0af3a40740786f66",
+          "source": "local/commissioned/solidary-fulard/05.png",
           "alt": "",
-          "width": 683,
-          "height": 1024
+          "width": 650,
+          "height": 827
         },
         {
-          "id": "454afdb9dff8709e",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2022/10/SOLIDARY-FULARD-2022-1.jpg",
+          "id": "457ce054bbd7c67c",
+          "source": "local/commissioned/solidary-fulard/06.png",
           "alt": "",
-          "width": 683,
-          "height": 1024
+          "width": 650,
+          "height": 827
         },
         {
-          "id": "406693fb77b75eb6",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2021/03/CLAUDIA-VALSELLS-DESIGN-.jpeg",
+          "id": "9eb1a2b78f2000a2",
+          "source": "local/commissioned/solidary-fulard/07.png",
           "alt": "",
-          "width": 1500,
-          "height": 1909
+          "width": 650,
+          "height": 497
         },
         {
-          "id": "28c604a32ac15fff",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2021/03/CLAUDIA-VALSELLS-SOLIDARY-FULARD-DESIGN-.jpeg",
+          "id": "19d7571e4982a844",
+          "source": "local/commissioned/solidary-fulard/08.png",
           "alt": "",
-          "width": 1500,
-          "height": 1909
+          "width": 650,
+          "height": 792
         },
         {
-          "id": "2bb38bdcb69fb331",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2021/03/CLAUDIA-VALSELLS-SOLIDARY-FULARD-.jpeg",
+          "id": "c5c4e205f3a9d457",
+          "source": "local/commissioned/solidary-fulard/09.png",
           "alt": "",
-          "width": 1500,
-          "height": 1909
-        },
-        {
-          "id": "e48352413934afda",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2024/07/foto-fulard-valle-hebron-somni-de-colors-natura--scaled.jpg",
-          "alt": "",
-          "width": 2560,
-          "height": 1707
+          "width": 650,
+          "height": 975
         }
       ],
       "metadata": {
@@ -15000,33 +14944,61 @@
         }
       ],
       "cover": {
-        "id": "f085ab2ad0a05b9f",
-        "source": "https://www.claudiavalsells.com/wp-content/uploads/2024/05/work-in-progress-4.jpeg",
+        "id": "6170cd8d70599928",
+        "source": "local/commissioned/color-chart-el-taller-de-arquitectura-rbta/01.png",
         "alt": "",
-        "width": 1000,
-        "height": 1333
+        "width": 650,
+        "height": 907
       },
       "images": [
         {
-          "id": "f085ab2ad0a05b9f",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2024/05/work-in-progress-4.jpeg",
+          "id": "6170cd8d70599928",
+          "source": "local/commissioned/color-chart-el-taller-de-arquitectura-rbta/01.png",
           "alt": "",
-          "width": 1000,
-          "height": 1333
+          "width": 650,
+          "height": 907
         },
         {
-          "id": "50e10a3850436f52",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2024/05/work-in-progress-5.jpeg",
+          "id": "f1eac3a501c50284",
+          "source": "local/commissioned/color-chart-el-taller-de-arquitectura-rbta/02.png",
           "alt": "",
-          "width": 1000,
-          "height": 1333
+          "width": 734,
+          "height": 481
         },
         {
-          "id": "319fd1b5c3123ede",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2024/05/work-in-progress-6.jpeg",
+          "id": "8ae619fcce2a43fe",
+          "source": "local/commissioned/color-chart-el-taller-de-arquitectura-rbta/03.png",
           "alt": "",
-          "width": 1000,
-          "height": 1333
+          "width": 735,
+          "height": 599
+        },
+        {
+          "id": "7a9be8f5daaa110c",
+          "source": "local/commissioned/color-chart-el-taller-de-arquitectura-rbta/04.png",
+          "alt": "",
+          "width": 775,
+          "height": 532
+        },
+        {
+          "id": "31b2548233391b68",
+          "source": "local/commissioned/color-chart-el-taller-de-arquitectura-rbta/05.png",
+          "alt": "",
+          "width": 650,
+          "height": 867
+        },
+        {
+          "id": "8c848fed02cda0b9",
+          "source": "local/commissioned/color-chart-el-taller-de-arquitectura-rbta/06.png",
+          "alt": "",
+          "width": 701,
+          "height": 867
+        },
+        {
+          "id": "8ff1ae741ce92e81",
+          "source": "local/commissioned/color-chart-el-taller-de-arquitectura-rbta/07.png",
+          "alt": "",
+          "width": 650,
+          "height": 867
         }
       ],
       "metadata": {
@@ -15185,75 +15157,110 @@
         }
       ],
       "cover": {
-        "id": "ee8e1757f4c42044",
-        "source": "https://www.claudiavalsells.com/wp-content/uploads/2023/12/M64_Colores_SantaCole_2023_ClaudiaValsells_44-scaled.jpg",
+        "id": "a279890e548abfce",
+        "source": "local/commissioned/santa-cole-color-palette-2023/01.png",
         "alt": "",
-        "width": 2560,
-        "height": 1707
+        "width": 735,
+        "height": 490
       },
       "images": [
         {
-          "id": "ee8e1757f4c42044",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2023/12/M64_Colores_SantaCole_2023_ClaudiaValsells_44-scaled.jpg",
+          "id": "a279890e548abfce",
+          "source": "local/commissioned/santa-cole-color-palette-2023/01.png",
           "alt": "",
-          "width": 2560,
-          "height": 1707
+          "width": 735,
+          "height": 490
         },
         {
-          "id": "3441b25dd60d68b6",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2023/12/Colour_Scheme_Neoserie_Claudia_Valsells_Pol_Renau_05_2023-1-scaled.jpeg",
+          "id": "1a169a0b51621d39",
+          "source": "local/commissioned/santa-cole-color-palette-2023/02.png",
           "alt": "",
-          "width": 1926,
-          "height": 2560
+          "width": 650,
+          "height": 867
         },
         {
-          "id": "2ef59dc3f7b8e402",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2023/12/M64-Valsells_blanco-roto_Jara_Varela_2023_m6429-scaled.jpeg",
+          "id": "2228d8b78135ed1e",
+          "source": "local/commissioned/santa-cole-color-palette-2023/03.png",
           "alt": "",
-          "width": 1920,
-          "height": 2560
+          "width": 650,
+          "height": 867
         },
         {
-          "id": "431b7e8440644ac4",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2023/12/Colour_palette_Claudia_Valsells_M64_Santa_Cole_Jara_Varela_2023_0830-scaled.jpg",
+          "id": "e136f4a0e82ace10",
+          "source": "local/commissioned/santa-cole-color-palette-2023/04.png",
           "alt": "",
-          "width": 1920,
-          "height": 2560
+          "width": 650,
+          "height": 867
         },
         {
-          "id": "a864b4a9a187a7a4",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2023/12/Colour_palette_Claudia_Valsells_M64_Santa_Cole_Jara_Varela_2023_0804-scaled.jpg",
+          "id": "29a4949d76e56aec",
+          "source": "local/commissioned/santa-cole-color-palette-2023/05.png",
           "alt": "",
-          "width": 1920,
-          "height": 2560
+          "width": 650,
+          "height": 867
         },
         {
-          "id": "a98bf1af543c3c3f",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2023/12/Colour_palette_Claudia_Valsells_M64_Santa_Cole_Jara_Varela_2023_0754-scaled.jpg",
+          "id": "efd71b262546379a",
+          "source": "local/commissioned/santa-cole-color-palette-2023/06.png",
           "alt": "",
-          "width": 1920,
-          "height": 2560
+          "width": 650,
+          "height": 867
         },
         {
-          "id": "3e7f3666e8b81f68",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2023/12/Colour_Scheme_Neoserie_Claudia_Valsells_Pol_Renau_02_2023-scaled.jpg",
+          "id": "6a2ea6b80b6dc728",
+          "source": "local/commissioned/santa-cole-color-palette-2023/07.png",
           "alt": "",
-          "width": 1706,
-          "height": 2560
+          "width": 650,
+          "height": 867
         },
         {
-          "id": "0faacaf02af4c0b5",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2023/12/Colour_Scheme_Neoserie_Claudia_Valsells_Pol_Renau_03_2023-scaled.jpg",
+          "id": "aab5cadf1b2c40f4",
+          "source": "local/commissioned/santa-cole-color-palette-2023/08.png",
           "alt": "",
-          "width": 1707,
-          "height": 2560
+          "width": 650,
+          "height": 867
         },
         {
-          "id": "de662b5f549c9e49",
-          "source": "https://www.claudiavalsells.com/wp-content/uploads/2023/12/Colour_Scheme_Neoserie_Claudia_Valsells_Pol_Renau_08_2023-scaled.jpg",
+          "id": "7fb6e3629adadef1",
+          "source": "local/commissioned/santa-cole-color-palette-2023/09.png",
           "alt": "",
-          "width": 1707,
-          "height": 2560
+          "width": 650,
+          "height": 976
+        },
+        {
+          "id": "7caf04674a9d5be4",
+          "source": "local/commissioned/santa-cole-color-palette-2023/10.png",
+          "alt": "",
+          "width": 650,
+          "height": 975
+        },
+        {
+          "id": "ce4d179fe4b62ee5",
+          "source": "local/commissioned/santa-cole-color-palette-2023/11.png",
+          "alt": "",
+          "width": 683,
+          "height": 1024
+        },
+        {
+          "id": "bf56f5f006cef74c",
+          "source": "local/commissioned/santa-cole-color-palette-2023/12.png",
+          "alt": "",
+          "width": 650,
+          "height": 864
+        },
+        {
+          "id": "91909925ccf74429",
+          "source": "local/commissioned/santa-cole-color-palette-2023/13.png",
+          "alt": "",
+          "width": 648,
+          "height": 864
+        },
+        {
+          "id": "101707c194f96992",
+          "source": "local/commissioned/santa-cole-color-palette-2023/14.png",
+          "alt": "",
+          "width": 587,
+          "height": 864
         }
       ],
       "metadata": {
