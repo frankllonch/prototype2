@@ -359,27 +359,29 @@ function plateStage(work: Project, name: string, under: Html = html``): Html {
   const cover = work.cover;
   if (!cover) return html``;
 
+  // The cut-out always comes first, whatever the year, with the photograph it
+  // was cut from beside it in the small pictures (Frank, 2026-11-26: a work
+  // from 2020 opened on the uncropped photograph with nothing to choose from).
   // Only a cut-out leans — a photograph is a flat record of a room, and a room
   // tipping towards the pointer reads as a card, not a painting — and only
-  // from TILT_FROM on. Before that the cut-out is for the gallery alone: the
-  // page shows the photograph it was taken from, and lies flat.
-  const plate = isPlate(cover) && (work.metadata.year ?? 0) >= TILT_FROM;
+  // from TILT_FROM on; an earlier cut-out lies flat (`data-flat`).
+  const plate = isPlate(cover);
+  const tilt = plate && (work.metadata.year ?? 0) >= TILT_FROM;
   const photo = cover.original
     ? { image: { ...cover, width: cover.original.width, height: cover.original.height, variants: cover.original.variants },
         alt: `Photograph of ${name}, uncropped` }
     : null;
 
   const views: { image: ProjectImage; alt: string }[] = [];
-  if (plate) views.push({ image: cover, alt: describeImage(work, cover.alt) });
-  if (photo) views.push(photo);
-  else if (!plate) views.push({ image: cover, alt: describeImage(work, cover.alt) });
+  views.push({ image: cover, alt: describeImage(work, cover.alt) });
+  if (plate && photo) views.push(photo);
   for (const image of work.images.filter((i) => i.id !== cover.id)) {
     views.push({ image, alt: image.alt || `${name}, another view` });
   }
   return html`<div class="detail-stage">
     <figure class="detail-plate" data-tilt>
-      <span class="detail-plate-inner${plate ? '' : ' is-photo'}">
-        ${join(views.map((v, i) => html`<span class="detail-view${i === 0 ? ' is-shown' : ''}" data-view="${String(i)}"${plate && i === 0 ? ' data-plate' : ''}>
+      <span class="detail-plate-inner${tilt ? '' : ' is-photo'}">
+        ${join(views.map((v, i) => html`<span class="detail-view${i === 0 ? ' is-shown' : ''}" data-view="${String(i)}"${plate && i === 0 ? ' data-plate' : ''}${plate && i === 0 && !tilt ? ' data-flat' : ''}>
           ${responsiveImage({ image: v.image, sizes: '(max-width: 900px) 92vw, 54vw', priority: i === 0, alt: v.alt })}
         </span>`))}
       </span>

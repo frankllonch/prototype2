@@ -283,7 +283,7 @@ export function initViews(): void {
       // Only the cut-out leans. Putting a photograph on the plate tells the
       // tilt to stand down, and drops any lean the cut-out was holding.
       if (inner) {
-        inner.classList.toggle('is-photo', !views[n]?.hasAttribute('data-plate'));
+        inner.classList.toggle('is-photo', !views[n]?.hasAttribute('data-plate') || views[n]!.hasAttribute('data-flat'));
         inner.classList.remove('is-tilting');
         inner.style.transform = '';
       }
