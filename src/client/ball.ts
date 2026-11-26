@@ -1,3 +1,4 @@
+import { initOil } from './ball-oil.ts';
 import { finePointer, reduceMotion, targetElement } from './env.ts';
 
 /**
@@ -45,6 +46,7 @@ export function initBall(): void {
   if (webkit) ball.classList.add('is-flat');
   document.body.append(ball);
   root.classList.add('has-ball');
+  const oil = initOil(ball, ball.querySelector<HTMLElement>('.ball-dot')!);
 
   const clickable = [...CLICKABLE, ...pointerRules()].join(', ');
 
@@ -70,10 +72,12 @@ export function initBall(): void {
     const elapsed = tickedAt ? Math.min(time - tickedAt, 100) : 1000 / 120;
     tickedAt = time;
     const ease = reduceMotion.matches || follow >= 1 ? 1 : 1 - Math.pow(1 - follow, elapsed / (1000 / 120));
-    x += (targetX - x) * ease;
-    y += (targetY - y) * ease;
+    const dx = (targetX - x) * ease, dy = (targetY - y) * ease;
+    x += dx;
+    y += dy;
     draw();
     const moving = Math.abs(targetX - x) > 0.1 || Math.abs(targetY - y) > 0.1;
+    if (moving) oil.drag(dx / elapsed, dy / elapsed); else oil.drag(0, 0);
     frame = moving ? requestAnimationFrame(tick) : 0;
     if (!frame) tickedAt = 0;
   };
@@ -106,8 +110,18 @@ export function initBall(): void {
   };
   window.addEventListener('scroll', relook, { passive: true, capture: true });
 
-  document.addEventListener('pointerdown', (e) => { if (e.pointerType === 'mouse') ball.classList.add('is-down'); });
-  document.addEventListener('pointerup', () => ball.classList.remove('is-down'));
+  /** --ball-oil-release: the second, smaller push as the button comes up. */
+  const release = () => parseFloat(getComputedStyle(root).getPropertyValue('--ball-oil-release')) || 0;
+  document.addEventListener('pointerdown', (e) => {
+    if (e.pointerType !== 'mouse') return;
+    ball.classList.add('is-down');
+    oil.kick();
+  });
+  document.addEventListener('pointerup', () => {
+    if (ball.classList.contains('is-down')) oil.kick(release());
+    ball.classList.remove('is-down');
+  });
+  document.addEventListener('ballkick', () => oil.kick());
   // Gone with the pointer when it leaves the window, back when it returns.
   document.documentElement.addEventListener('mouseleave', () => ball.classList.remove('is-on', 'is-down'));
   window.addEventListener('blur', () => ball.classList.remove('is-down'));

@@ -2,17 +2,18 @@ import { finePointer } from './env.ts';
 
 /**
  * The ball tuner: a panel for trying the pointer live — its size, how much it
- * grows over a link, how it trails the mouse, its colour and blend.
+ * grows over a link, how it trails the mouse, its colour and blend, and the
+ * oil-drop wobble of its click.
  */
 
 const ON = 'cv-ball-on';
 const STORE = 'cv-ball';
 
-type Field =
+type Field = { group?: string } & (
   | { kind: 'num'; v: string; label: string; min: number; max: number; step: number; unit: string; def: number }
   | { kind: 'pick'; v: string; label: string; options: [string, string][]; def: string }
   | { kind: 'colour'; v: string; label: string; def: string }
-  | { kind: 'flag'; v: string; label: string; def: boolean };
+  | { kind: 'flag'; v: string; label: string; def: boolean });
 
 const EASES: [string, string][] = [
   ['var(--ease)', 'Site (soft out)'],
@@ -23,17 +24,34 @@ const EASES: [string, string][] = [
 ];
 
 const FIELDS: Field[] = [
-  { kind: 'num', v: '--ball-size', label: 'Size', min: 2, max: 80, step: 1, unit: 'px', def: 14 },
+  { group: 'Ball', kind: 'num', v: '--ball-size', label: 'Size', min: 2, max: 80, step: 1, unit: 'px', def: 14 },
   { kind: 'num', v: '--ball-hover-size', label: 'Size over a link', min: 2, max: 160, step: 1, unit: 'px', def: 30 },
-  { kind: 'num', v: '--ball-press', label: 'Size while pressed', min: 0.2, max: 1.5, step: 0.05, unit: '×', def: 0.8 },
+  { kind: 'num', v: '--ball-press', label: 'Size while pressed', min: 0.2, max: 4, step: 0.05, unit: '×', def: 0.8 },
+  { kind: 'num', v: '--ball-press-time', label: 'Press time', min: 0, max: 1, step: 0.01, unit: 's', def: 0.15 },
   { kind: 'num', v: '--ball-follow', label: 'Follow (1 = glued)', min: 0.02, max: 1, step: 0.01, unit: '', def: 0.4 },
   { kind: 'num', v: '--ball-grow', label: 'Grow time', min: 0, max: 1.5, step: 0.01, unit: 's', def: 0.35 },
   { kind: 'pick', v: '--ball-grow-ease', label: 'Grow curve', options: EASES, def: 'var(--ease)' },
-  { kind: 'colour', v: '--ball-color', label: 'Colour', def: '#ffffff' },
+  { group: 'Look', kind: 'colour', v: '--ball-color', label: 'Colour', def: '#ffffff' },
   { kind: 'pick', v: '--ball-blend', label: 'Blend', options: [
     ['difference', 'Negative (difference)'], ['exclusion', 'Soft negative (exclusion)'], ['normal', 'Plain, no blend'],
   ], def: 'difference' },
+  { kind: 'num', v: '--ball-opacity', label: 'Opacity', min: 0.1, max: 1, step: 0.05, unit: '', def: 1 },
   { kind: 'flag', v: '--ball-over-names', label: 'Keep over painting names', def: false },
+  { group: 'Click: oil in water', kind: 'flag', v: '--ball-oil', label: 'Wobble on click', def: true },
+  { kind: 'num', v: '--ball-oil-expand', label: 'Swell (strength)', min: -0.8, max: 1.5, step: 0.01, unit: '×', def: 0.35 },
+  { kind: 'num', v: '--ball-oil-wobble', label: 'Wobble (out of round)', min: 0, max: 1.2, step: 0.01, unit: '×', def: 0.25 },
+  { kind: 'num', v: '--ball-oil-lobes', label: 'Bumps', min: 1, max: 8, step: 1, unit: '', def: 4 },
+  { kind: 'num', v: '--ball-oil-bounce', label: 'Spring (one swing)', min: 80, max: 2000, step: 10, unit: 'ms', def: 420 },
+  { kind: 'num', v: '--ball-oil-settle', label: 'Settles in (damping)', min: 100, max: 6000, step: 50, unit: 'ms', def: 1100 },
+  { kind: 'num', v: '--ball-oil-tension', label: 'Surface tension', min: 0, max: 1.5, step: 0.05, unit: '', def: 0.6 },
+  { kind: 'num', v: '--ball-oil-release', label: 'Second push on release', min: -1, max: 1.5, step: 0.05, unit: '×', def: 0.4 },
+  { kind: 'num', v: '--ball-oil-speed', label: 'Speed of it all', min: 0.1, max: 3, step: 0.05, unit: '×', def: 1 },
+  { kind: 'num', v: '--ball-oil-swirl', label: 'Swirl', min: -360, max: 360, step: 5, unit: '°/s', def: 0 },
+  { kind: 'num', v: '--ball-oil-stretch', label: 'Stretch when moved fast', min: 0, max: 3, step: 0.05, unit: '', def: 0 },
+  { group: 'Click: ripple ring', kind: 'num', v: '--ball-oil-ring', label: 'Ring opacity (0 = none)', min: 0, max: 1, step: 0.05, unit: '', def: 0 },
+  { kind: 'num', v: '--ball-oil-ring-size', label: 'Ring reach', min: 1.1, max: 2.9, step: 0.05, unit: '×', def: 2.4 },
+  { kind: 'num', v: '--ball-oil-ring-time', label: 'Ring time', min: 100, max: 3000, step: 50, unit: 'ms', def: 600 },
+  { kind: 'num', v: '--ball-oil-ring-width', label: 'Ring line', min: 0.02, max: 0.6, step: 0.01, unit: '', def: 0.12 },
 ];
 
 type Values = Record<string, string | number | boolean>;
@@ -101,11 +119,12 @@ export function initBallTuner(): void {
       <button type="button" data-act="fold">${open ? 'Hide' : 'Show'}</button>
       <button type="button" data-act="off">Off</button></div>
     <div class="tuner-body">
-      <p class="tuner-note">Move over links and buttons to see it grow; hold the mouse down to see it pressed.</p>
+      <p class="tuner-note">Move over links and buttons to see it grow; click anywhere to see the oil drop, or let it replay while you move the sliders.</p>
       <div class="tuner-section" data-fields></div>
       <div class="tuner-out">
         <button type="button" data-act="copy">Copy settings</button>
         <button type="button" data-act="reset">Reset</button>
+        <button type="button" data-act="replay" aria-pressed="false">Replay click</button>
         <span class="tuner-copied" hidden>Copied</span>
       </div>
       <p class="tuner-note tuner-small">Paste the copied lines over :root at the top of src/styles/11-ball.css, or send them to Claude.</p>
@@ -115,6 +134,11 @@ export function initBallTuner(): void {
   const draw = () => {
     list.replaceChildren();
     for (const f of FIELDS) {
+      if (f.group) {
+        const head = document.createElement('h3');
+        head.textContent = f.group;
+        list.append(head);
+      }
       const row = document.createElement('label');
       row.className = 'tuner-row';
       const name = document.createElement('span');
@@ -156,6 +180,7 @@ export function initBallTuner(): void {
   };
 
   const copied = panel.querySelector<HTMLElement>('.tuner-copied')!;
+  let replay = 0;
   panel.addEventListener('click', (event) => {
     const act = (event.target as HTMLElement).closest<HTMLElement>('[data-act]')?.dataset.act;
     if (act === 'fold') {
@@ -167,10 +192,16 @@ export function initBallTuner(): void {
       try { localStorage.removeItem(ON); localStorage.removeItem(STORE); } catch { /* private */ }
       for (const f of FIELDS) root.style.removeProperty(f.v);
       document.dispatchEvent(new Event('ballchange'));
+      clearInterval(replay);
       panel.remove();
     } else if (act === 'reset') {
       values = defaults();
       apply(); save(); draw();
+    } else if (act === 'replay') {
+      const button = (event.target as HTMLElement).closest('button')!;
+      clearInterval(replay);
+      replay = replay ? 0 : window.setInterval(() => document.dispatchEvent(new Event('ballkick')), 1400);
+      button.setAttribute('aria-pressed', String(!!replay));
     } else if (act === 'copy') {
       const text = `:root {\n${FIELDS.map((f) => `  ${f.v}: ${css(f, values[f.v])};`).join('\n')}\n}`;
       void navigator.clipboard?.writeText(text).then(() => {
