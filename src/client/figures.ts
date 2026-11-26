@@ -47,29 +47,6 @@ export function initFigures(): void {
 
     let shown = 0;
 
-    /*
-     * The arrows stand at half the height of the photograph showing
-     * (`--photo-mid`, 07-sheet.css). Measured, because where that falls
-     * depends on the photograph's shape as well as on the window's.
-     * Read off the last arrow: El color no existe hides its previous one.
-     */
-    const steps = [...reader.querySelectorAll<HTMLElement>('[data-figure-step]')];
-    const level = () => {
-      const img = figures[shown]?.querySelector('img')?.getBoundingClientRect();
-      const around = steps.at(-1)?.offsetParent?.getBoundingClientRect();
-      if (!img?.height || !around) return;
-      const mid = `${img.top + img.height / 2 - around.top}px`;
-      for (const step of steps) step.style.setProperty('--photo-mid', mid);
-    };
-    if (stage && steps.length) {
-      const sizes = new ResizeObserver(level);
-      sizes.observe(stage);
-      for (const figure of figures) {
-        const img = figure.querySelector('img');
-        if (img) sizes.observe(img);
-      }
-    }
-
     const show = (index: number) => {
       if (!figures.length) return;
       // Wraps, so the arrows never dead-end on a handful of pictures.
@@ -81,7 +58,6 @@ export function initFigures(): void {
           .replace('{total}', String(figures.length));
       }
       if (visible) visible.textContent = `${shown + 1} / ${figures.length}`;
-      level();
     };
     show(0);
 
