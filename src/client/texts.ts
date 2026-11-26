@@ -11,6 +11,13 @@ import { glide, topOf } from './glide.ts';
  */
 const WORD_MS = 18;
 
+/**
+ * And never longer than this in all (Frank, 2026-11-26): a long text — the
+ * second edition's runs to some 450 words — types several words a beat so it
+ * is written in this time rather than eight seconds. Less is quicker.
+ */
+const MAX_MS = 3000;
+
 /** The typing still running in each block, so ‘Read less’ can stop it. */
 const typing = new WeakMap<HTMLElement, number>();
 
@@ -76,10 +83,15 @@ function typeOpen(block: HTMLElement): void {
   words.forEach((w, i) => w.classList.toggle('is-written', i < shown));
   if (shown >= words.length) return;
   block.classList.add('is-typing');
+  const from = shown;
+  const total = Math.min((words.length - from) * WORD_MS, MAX_MS);
+  const start = performance.now();
   typing.set(
     block,
     window.setInterval(() => {
-      words[shown++]?.classList.add('is-written');
+      const t = Math.min(1, (performance.now() - start) / total);
+      const upTo = from + Math.ceil(t * (words.length - from));
+      while (shown < upTo) words[shown++]?.classList.add('is-written');
       if (shown >= words.length) stopTyping(block);
     }, WORD_MS),
   );
