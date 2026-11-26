@@ -1,16 +1,5 @@
 <?php
-/**
- * The import, from WP-CLI:
- *
- *   wp eval-file wp-content/plugins/claudiavalsells-content/import.php
- *
- * The work itself is in includes/importer.php, which the admin's
- * Tools → Import content runs too, a few entries per request. From here it
- * runs in one go. To overwrite entries edited in WordPress since the last
- * import:
- *
- *   wp --exec='define("CV_IMPORT_OVERWRITE", true);' eval-file …/import.php
- */
+/** The import, from WP-CLI: */
 
 if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
 	exit( "Run with WP-CLI: wp eval-file import.php\n" );
@@ -18,8 +7,8 @@ if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
 
 define( 'WP_IMPORTING', true );
 
-// Entries are written by the site's first administrator, as they would be by
-// whoever runs the import from the admin.
+// Entries are written by the site's first administrator, as they would be by whoever runs the
+// import from the admin.
 $cv_admins = get_users( [ 'role' => 'administrator', 'number' => 1, 'orderby' => 'ID', 'fields' => 'ID' ] );
 wp_set_current_user( $cv_admins ? (int) $cv_admins[0] : 0 );
 

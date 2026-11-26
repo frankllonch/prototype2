@@ -1,37 +1,8 @@
-/**
- * The Colour Chart, as the designer sets it.
- *
- * This file exists because her page is hand-set and the source is not. WordPress
- * holds one run of twenty-nine paragraphs; the sheet makes four things of them —
- * a statement at the top, broken into lines by hand, beside the chart's own
- * colours; Features; six technical notes across a grid; and About a colour
- * chart — with a price in the margin and the same price again at the foot.
- *
- * Everything below is that setting, written down. It is deliberately matched on
- * how each paragraph opens rather than on its whole text: Claudia goes on
- * editing this page in WordPress, and a comma moved should cost the page a line
- * break, not a section. Where a rule stops matching, the paragraph simply falls
- * back to being an ordinary paragraph in the section it is already in — the
- * page gets plainer, never broken.
- *
- * The one thing taken rather than arranged is the price: it is read out of the
- * `cost` paragraph, so the figure still has exactly one source. When she raises
- * it, the margin and the foot both follow.
- */
+/** The Colour Chart, as the designer sets it. */
 import { chartPhotographs, colourChart } from './load.ts';
 import type { ProjectImage } from './types.ts';
 
-/**
- * The chart's colours, measured off the designer's reference at the 1520 it was
- * drawn at — twenty-three bands, read top to bottom, including the near-white
- * fourth, which is a colour in the chart and not a gap in the stack. The sample
- * is the average of the middle of each band rather than a single pixel, so an
- * antialiased boundary cannot stand in for the colour.
- *
- * Not the 142 of the fan deck, and not sampled from the photographs of it: this
- * is the run the designer chose to stand for the chart on the page. Taken as
- * given, in her order.
- */
+/** The chart's colours, measured off the designer's reference at the 1520 it was drawn at. */
 export const BANDS: readonly string[] = [
   '#b15f60', '#fbc644', '#f1d8ae', '#fafafa', '#3b5741', '#8d2530',
   '#e83a41', '#e4630e', '#5aba9f', '#b73933', '#b7b39e', '#fbbe41',
@@ -41,25 +12,10 @@ export const BANDS: readonly string[] = [
 
 /* ------------------------------------------------------------ the setting */
 
-/**
- * What the page says somewhere other than in the body.
- *
- * `cost 60,50€` and `make your order at: claudia@claudiacolor.com` are the
- * margin and the foot now — the price set large beside the chart and again
- * under the last line, the address behind a form. Leaving them in the body
- * would print the price three times and, worse, leave Claudia's address in the
- * markup of a public page for anything that reads HTML to harvest.
- */
+/** What the page says somewhere other than in the body. */
 const MOVED: readonly RegExp[] = [/^cost\b/i, /^make your order\b/i];
 
-/**
- * What the page does not say at all.
- *
- * The date range and the byline stand above the text in WordPress and the sheet
- * opens at the statement instead; the three photographs and their credits are
- * not on the sheet either, and the credits go with the photographs rather than
- * being left pointing at nothing.
- */
+/** What the page does not say at all. */
 const WITHHELD: readonly RegExp[] = [
   /^\d{4}\s*\/\s*\d{4}$/,
   /^artist colour chart\b/i,
@@ -74,34 +30,14 @@ const HEADINGS: readonly { readonly match: RegExp; readonly title: string }[] = 
   { match: /^about a colour chart\b/i, title: 'About a colour chart' },
 ];
 
-/**
- * Paragraphs the sheet runs on from the one before — a new line, not a new
- * paragraph.
- *
- * Three places, and each is a sentence finishing a thought rather than opening
- * one: the chart's two decades after what it is, its timelessness after how it
- * sold, its use in industrial design after what it was designed for. In
- * WordPress they are separate paragraphs because that is how the editor works.
- */
+/** Paragraphs the sheet runs on from the one before — a new line, not a new paragraph. */
 const RUN_ON: readonly RegExp[] = [
   /^this chart is the fruit\b/i,
   /^this reissue confirms\b/i,
   /^it can also be used\b/i,
 ];
 
-/**
- * Where the statement breaks.
- *
- * One break, after the colon, and the rest of the statement wraps as the
- * column gives it. The sheet before this one set all three paragraphs in
- * clauses, a line to a thought; the simplified page keeps only the one that
- * does not survive wrapping — "a source of knowledge, a way of life!" is the
- * answer to the colon and belongs under it, and at this measure it would
- * otherwise be dragged up and left with "life!" on a line of its own.
- *
- * The paragraph carries no markup, so inserting into it cannot land inside a
- * tag. The guard in `broken()` holds that true rather than trusting it.
- */
+/** Where the statement breaks. */
 const LINES: readonly RegExp[] = [
   /\s+(?=a source of knowledge)/i,
 ];
@@ -120,33 +56,13 @@ const paragraphs: readonly string[] = (() => {
   return [...body.matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/g)].map((m) => (m[1] ?? '').trim());
 })();
 
-/**
- * The price, exactly as she wrote it — "60,50€", comma and all. Absent if the
- * `cost` paragraph is ever removed, and the page then simply has no price on
- * it, which is better than a figure this file believes and the page does not.
- */
+/** The price, exactly as she wrote it — "60,50€", comma and all. */
 export const price: string | undefined = (() => {
   const line = paragraphs.map(strip).find((p) => /^cost\b/i.test(p));
   return line?.match(/[\d][\d.,]*\s*€/)?.[0].replace(/\s+/g, '');
 })();
 
-/**
- * "Color", not "colour".
- *
- * WordPress holds the text in British spelling throughout and the page sets it
- * American, which is how the chart itself is lettered and how the sheet reads
- * — COLOR CHART in the bar, on the heading, and in the statement.
- *
- * It is done here, on the way out of the source, rather than at the moment of
- * rendering, so the site and the WordPress bundle say the same thing. The cost
- * is that an import carries the spelling back into WordPress, where Claudia
- * will find it changed; the alternative was the static site and her own site
- * disagreeing over a word, which is worse.
- *
- * The case is kept, so "Colour" opens a sentence and "colour" does not, which
- * matters to nothing on screen — the statement is set in capitals — but keeps
- * the text readable where it is read, in the editor and in the markup.
- */
+/** "Color", not "colour". */
 const spelled = (markup: string): string =>
   markup.replace(/Colour/g, 'Color').replace(/colour/g, 'color');
 
@@ -175,13 +91,7 @@ function joined(items: readonly string[]): readonly string[] {
   }, []);
 }
 
-/**
- * The page, divided.
- *
- * One pass down the paragraphs: anything withheld or moved is dropped, a
- * heading starts a new section, and everything else joins whichever section is
- * open. What falls before the first heading is the statement.
- */
+/** The page, divided. */
 const divided = (() => {
   const statement: string[] = [];
   const sections: { title: string; kind: 'prose' | 'notes'; items: string[] }[] = [];
@@ -216,14 +126,5 @@ export const sections: readonly ChartSection[] = divided.sections.map((s) => ({
   blocks: joined(s.items),
 }));
 
-/**
- * The chart out in the world.
- *
- * Not the three photographs the WordPress page carries — those are of the
- * object, and the sheet has no room for them. These were sent to Claudia by
- * the people using it: fanned on a shelf, on a workbench, in a hand, open on
- * a restaurant table. They hang off "Thanks to everyone!", which is who they
- * are of, and they are registered by `scripts/add-chart-photos.ts` from the
- * folder that is their only record.
- */
+/** The chart out in the world. */
 export const photographs: readonly ProjectImage[] = chartPhotographs?.images ?? [];

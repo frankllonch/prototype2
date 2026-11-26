@@ -1,35 +1,9 @@
 import { isPlainClick, phone } from './env.ts';
 import { keepScroll, stepBack, stepState } from './panels.ts';
 
-/**
- * Ordering a colour chart.
- *
- * The form is already in the page — this raises it over the page, keeps the
- * keyboard inside it, and posts it without leaving. None of that is a defence.
- * Everything here can be read, edited or skipped by whoever is looking at the
- * page, so the three guards it carries (an unfillable field, the time the form
- * was open, and Cloudflare's check) are the handler's guards, prepared here;
- * the handler repeats every one of them and is the only thing that decides.
- *
- * What this file is for is that a person ordering a colour chart should not
- * have to reload a page to find out whether it worked.
- *
- * On a phone the form is the whole screen, and opening it is a step in the
- * history, as a panel's is (client/panels.ts): the phone's Back puts the form
- * away and leaves the page — it used to leave the site, with whatever had been
- * typed — and Close goes back over the same step. What was typed stays in the
- * fields either way. Wider than a phone the address is replaced, as it was.
- */
+/** Ordering a colour chart. */
 
-/*
- * What the person is told, keyed by what the handler says went wrong.
- *
- * A table here rather than the handler's own words on screen: the one thing a
- * page should never do is take a string from the network and show it as its
- * own. The handler answers in codes for that reason, and says no more about why
- * it refused than the sender needs — a spammer tuning against a detailed
- * refusal is the whole reason detailed refusals are a mistake.
- */
+/* What the person is told, keyed by what the handler says went wrong. */
 const SAID: Record<string, string> = {
   ok: 'Thank you — your message is on its way.',
   invalid: 'Something in the form is not right. Please check it over.',
@@ -52,12 +26,6 @@ const focusable = (root: HTMLElement): HTMLElement[] =>
 /**
  * Cloudflare's check, loaded only when a site key is configured and only when
  * someone actually opens the form.
- *
- * It is the one thing on the site served from somewhere else, so it is not
- * fetched until it is about to be needed, and the form still works if it never
- * arrives: a submission without a token is one the handler treats as unverified
- * and rate-limits far harder, rather than one it refuses outright. A person on
- * a train should be able to order a colour chart.
  */
 function turnstile(form: HTMLFormElement, slot: HTMLElement) {
   const key = form.dataset.turnstileKey;
@@ -89,7 +57,6 @@ function turnstile(form: HTMLFormElement, slot: HTMLElement) {
         widget = t.render(slot, {
           sitekey: key,
           // Shown only if this particular visitor has to be asked something.
-          // Nobody ordering a colour chart should have to pick out a bus.
           appearance: 'interaction-only',
           execution: 'execute',
           callback: (token: string) => waiting?.(token),
@@ -102,8 +69,8 @@ function turnstile(form: HTMLFormElement, slot: HTMLElement) {
       return new Promise<string>((resolve) => {
         waiting = resolve;
         t.execute(widget);
-        // However it ends, it ends: an unanswered challenge must not leave the
-        // button disabled and the person with nothing to do.
+        // However it ends, it ends: an unanswered challenge must not leave the button disabled and
+        // the person with nothing to do.
         setTimeout(() => resolve(''), 12_000);
       });
     },
@@ -137,10 +104,7 @@ export function initInquiries(): void {
     opener = from;
     panel.classList.add('is-open');
     document.body.classList.add('is-locked');
-    // When the form was put in front of someone. The handler compares it with
-    // when the message arrived: three seconds is not long enough to have typed
-    // one, and a week is long enough that the page has been sitting open in a
-    // script somewhere.
+    // When the form was put in front of someone.
     started.value = String(Date.now());
     form.querySelector<HTMLInputElement>('.inq-input')?.focus({ preventScroll: true });
   };
@@ -148,8 +112,8 @@ export function initInquiries(): void {
   /** `byHistory`: Back has already left the form's step, and only the form is left to put away. */
   const close = (byHistory = false) => {
     if (!panel.classList.contains('is-open')) return;
-    // Close and Escape go back over the step rather than leaving it behind,
-    // and the `popstate` below does the closing.
+    // Close and Escape go back over the step rather than leaving it behind, and the `popstate`
+    // below does the closing.
     if (stepped && !byHistory && mine()) { stepBack(); return; }
     stepped = false;
     panel.classList.remove('is-open');
@@ -176,7 +140,6 @@ export function initInquiries(): void {
   });
 
   // Back from the form's step puts it away; Forward onto it raises it again.
-  // A form that made no step — a shared #inquiries link — is not touched.
   window.addEventListener('popstate', () => {
     if (mine()) {
       keepScroll();
@@ -191,11 +154,7 @@ export function initInquiries(): void {
   document.addEventListener('keydown', (event) => {
     if (!panel.classList.contains('is-open')) return;
     if (event.key === 'Escape') { close(); return; }
-    /*
-     * The keyboard stays in the form while the form is over the page. Without
-     * this, tabbing past the last field walks into the menu behind the veil —
-     * invisible, unreadable, and still focused.
-     */
+    /* The keyboard stays in the form while the form is over the page. */
     if (event.key !== 'Tab') return;
     const stops = focusable(panel);
     if (!stops.length) return;
@@ -242,8 +201,7 @@ export function initInquiries(): void {
       token: '',
     };
 
-    // Said here only so nobody waits for a round trip to be told they left the
-    // message empty. The handler checks all of this again and trusts none of it.
+    // Said here only so nobody waits for a round trip to be told they left the message empty.
     if (payload.name.length < 2 || payload.message.length < 10) { say('invalid', 'error'); return; }
     if (!LOOKS_LIKE_EMAIL.test(payload.email)) { say('email', 'error'); return; }
 
@@ -257,8 +215,7 @@ export function initInquiries(): void {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(payload),
-        // Nothing of the visitor's travels with this: no cookies, no
-        // credentials. The handler needs the message and nothing else.
+        // Nothing of the visitor's travels with this: no cookies, no credentials.
         credentials: 'omit',
         mode: 'cors',
       });
@@ -281,6 +238,5 @@ export function initInquiries(): void {
   });
 
   // A shared or reloaded #inquiries link opens it, as a shared #about does.
-  // Reloaded on the form's step, the step is still there behind it.
   if (location.hash === '#inquiries') { open(null); stepped = mine(); }
 }

@@ -9,30 +9,18 @@ interface ImageProps {
   /** Above-the-fold images load eagerly; everything else is lazy. */
   readonly priority?: boolean;
   readonly className?: string;
-  /**
-   * Overrides the source alt text. Not one image on the current site has an alt
-   * attribute, so callers that know the artwork supply a factual description
-   * built from its own metadata rather than leaving 370 images unnamed.
-   */
+  /** Overrides the source alt text. */
   readonly alt?: string;
 }
 
 /**
  * The manifest stores every variant at the root (`/media/…`), because that is
- * where they sit on disk. Served from a subdirectory — which is how GitHub Pages
- * serves a project site — each one needs the prefix, exactly as every link and
- * stylesheet does. Missing it here cost the deployed site all 370 of its images
- * while every page around them loaded perfectly.
+ * where they sit on disk.
  */
 const srcset = (variants: readonly { width: number; url: string }[]) =>
   variants.map((v) => `${withBase(v.url)} ${v.width}w`).join(', ');
 
-/**
- * Responsive `<picture>` with AVIF → WebP → JPEG fallbacks.
- *
- * `aspect-ratio` is always set from the measured intrinsic size so the grid holds
- * its shape before any bytes arrive: the page never reflows as images load.
- */
+/** Responsive `<picture>` with AVIF → WebP → JPEG fallbacks. */
 export function responsiveImage({ image, sizes, priority = false, className, alt }: ImageProps): Html {
   const ratio = image.width && image.height ? `${image.width} / ${image.height}` : '3 / 4';
   const altText = alt ?? image.alt;

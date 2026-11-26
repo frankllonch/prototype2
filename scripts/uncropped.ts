@@ -1,21 +1,4 @@
-/**
- * Collects paintings for cropping by hand.
- *
- * By default only the ones still shown as photographs rather than as plates;
- * with --all, every painting, for recropping the archive from scratch.
- *
- * Writes content/raw/uncropped/, one file per painting at full resolution, named
- * with its number, its title and its id. The id is what matters: keep it in the
- * filename and `apply-crops.ts --from-uncropped` can place the crop without
- * having to work out which painting it is. Rename them freely otherwise — if the
- * id is gone, `match-crops.ts` will find the painting by eye instead.
- *
- * Working here rather than in content/raw/media matters: that folder is the only
- * copy of the originals, and both the renderer and the matcher read from it.
- * Cropping over it would destroy what everything else falls back to.
- *
- * A contact sheet comes with them, for seeing the whole job at once.
- */
+/** Collects paintings for cropping by hand. */
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import sharp from 'sharp';

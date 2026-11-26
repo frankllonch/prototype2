@@ -3,12 +3,6 @@
  * The Color Chart — `colourChartPage` in src/pages/index.ts: a page of type,
  * the statement written by the scroll on a desktop and simply standing on a
  * phone.
- *
- * The page opens blank, so the cue says that scrolling is what happens next;
- * the phone stylesheet takes it away again, and `chart-body` is how it knows
- * this page from the others that have one. The photographs behind "Thanks to
- * everyone!" and the order form go in the overlays, outside `main`, so they
- * can rise above the veil.
  */
 $cv_chart = cv_chart( get_queried_object() );
 

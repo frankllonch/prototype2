@@ -1,10 +1,5 @@
 <?php
-/**
- * The chrome every page shares — src/components/layout.ts.
- *
- * The bar, the About overlay, the lightbox and the scroll cue. header.php and
- * footer.php print these around `main`.
- */
+/** The chrome every page shares — src/components/layout.ts. */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -13,10 +8,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Order and wording of the menu, after the designer's mockup — `MENU` in
  * src/components/layout.ts.
- *
- * `phone` is where the item stands on the phone's menu screen, which lists the
- * pages the other way about: About first, Color Chart last. Only the drawing
- * order changes there (the stylesheet's `order`); the document keeps this one.
  */
 function cv_menu(): array {
 	return [
@@ -29,11 +20,10 @@ function cv_menu(): array {
 }
 
 /**
- * A word in the bar, already cut into the roll's letters, as the static
- * site's `rolled` writes it (src/components/layout.ts): the letters for the
- * eye, hidden from a screen reader, and the plain word, which a screen reader
- * reads and the phone shows. Cut here rather than by the script after the
- * first paint, which moved every letter by its kerning on every page.
+ * A word in the bar, already cut into the roll's letters, as the static site's
+ * `rolled` writes it (src/components/layout.ts): the letters for the eye, hidden
+ * from a screen reader, and the plain word, which a screen reader reads and the
+ * phone shows.
  */
 function cv_rolled( string $text ): string {
 	$letters = '';
@@ -47,17 +37,16 @@ function cv_rolled( string $text ): string {
 }
 
 /**
- * The button is the phone's whole bar: three bars at the top right, drawn by
- * the stylesheet, which raise the header below as a screen of its own (the
- * theme's client/menu.js). Above 899px it is not displayed. It stands before
- * the header so that it is reached first and the menu's links follow it.
+ * The button is the phone's whole bar: three bars at the top right, drawn by the
+ * stylesheet, which raise the header below as a screen of its own (the theme's
+ * client/menu.js).
  */
 function cv_top_bar(): string {
 	$path = cv_page()['path'];
 	$out  = '<button type="button" class="menu-toggle" data-menu-toggle aria-label="Menu" aria-expanded="false" aria-controls="site-menu"><span class="menu-line"></span><span class="menu-line"></span><span class="menu-line"></span></button>'
 		. '<header class="top" id="site-menu">'
-		// Decoded before it is uppercased, since the site's name arrives already
-		// escaped and an entity's letters must not be touched; escaped once after.
+		// Decoded before it is uppercased, since the site's name arrives already escaped and an
+		// entity's letters must not be touched; escaped once after.
 		. '<a class="wordmark" href="' . esc_url( home_url( '/' ) ) . '" data-roll>' . cv_rolled( mb_strtoupper( wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) ) ) . '</a>'
 		. '<a class="top-soon" href="' . esc_url( home_url( '/#whats-color' ) ) . '"' . ( '/' === $path || str_starts_with( $path, '/whats-color/' ) ? ' aria-current="page"' : '' ) . ' data-roll>' . cv_rolled( "What\u{2019}s Color?" ) . '</a>'
 		. '<nav class="menu" aria-label="Primary">';
@@ -78,14 +67,9 @@ function cv_top_bar(): string {
  * About opens over whatever page you are on, which stays faintly visible and
  * blurred behind it, and tells itself in four parts as you scroll (the theme's
  * client/about.js): the capitals lead writes itself, the reel of photographs
- * slides in and stops where the designer's sheet sets it, then moves on with
- * the scroll as the rest of the biography writes itself, and the record, the
+ * slides in and stops where the designer's sheet sets it, then moves on with the
+ * scroll as the rest of the biography writes itself, and the record, the
  * collections and how to reach her come in last.
- *
- * The markup is the page at rest and matches the static site's byte for byte
- * (`aboutOverlay` in src/components/layout.ts): the opening paragraph, then
- * every photograph on the About page — Image blocks or a Gallery, wherever
- * they stand — in one row, then the rest of the text.
  */
 function cv_about_overlay( bool $open = false ): string {
 	$a    = cv_about();
@@ -102,8 +86,8 @@ function cv_about_overlay( bool $open = false ): string {
 			$out .= '<button type="button" class="about-reel-item">' . cv_image( $image, cv_about_reel_sizes( $image ) ) . '</button>';
 		}
 		$out .= '</div>';
-		// The reel's own chevrons, back round the loop and on: shown by the
-		// script once the photographs overrun the measure.
+		// The reel's own chevrons, back round the loop and on: shown by the script once the
+		// photographs overrun the measure.
 		if ( count( $a['images'] ) > 1 ) {
 			$out .= '<button type="button" class="about-reel-step is-prev" data-about-reel-step="-1" aria-label="Earlier photographs" hidden>'
 				. cv_step_chevron( -1 ) . '</button>'
@@ -146,8 +130,8 @@ function cv_about_overlay( bool $open = false ): string {
 	}
 	$out .= '</div>';
 
-	// How to reach her, above the copyright: the phone and emails from the
-	// About page's side panel.
+	// How to reach her, above the copyright: the phone and emails from the About page's side
+	// panel.
 	if ( $card['phone'] || $card['emails'] ) {
 		$out .= '<address class="about-contact">';
 		if ( $card['phone'] ) {
@@ -166,17 +150,14 @@ function cv_about_overlay( bool $open = false ): string {
 			. '<p class="sr-only" data-about-count data-template="Photograph {n} of {total}" aria-live="polite"></p>'
 			. '</div>';
 	}
-	// Close and the chevron stand beside the panel, so that they can be drawn as
-	// the bar is, the negative of whatever passes under them: a blend only sees
-	// what shares its stacking context. Served open at /about/, Close leads to
-	// the start page for a reader without scripting, as a served panel's leads
-	// to its index; with scripting the click never leaves the page.
+	// Close and the chevron stand beside the panel, so that they can be drawn as the bar is, the
+	// negative of whatever passes under them: a blend only sees what shares its stacking context.
 	return $out . '</section>'
 		. '<a class="about-close" href="' . ( $open ? esc_url( home_url( '/' ) ) : '#' ) . '" data-panel-close="about">Close</a>'
 		. '<div class="about-cue" data-about-cue aria-hidden="true"><svg viewBox="0 0 28 16" focusable="false">'
 		. '<path d="M1.5 1.5 L14 13 L26.5 1.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" /></svg></div>'
-		// The chevrons for the photographs, beside the panel for the same reason,
-		// and only when there is more than one to step through.
+		// The chevrons for the photographs, beside the panel for the same reason, and only when
+		// there is more than one to step through.
 		. ( count( $a['images'] ) > 1
 			? '<button type="button" class="about-viewer-step is-prev" data-about-step="-1" aria-label="Previous photograph">'
 				. cv_step_chevron( -1 ) . '</button>'
@@ -188,7 +169,7 @@ function cv_about_overlay( bool $open = false ): string {
 /**
  * How wide a photograph stands in the reel, for its `sizes`: 210 frame pixels
  * tall, so 10.94vw of height above 1097px wide and 7.5rem below it, times its
- * own proportion. `reelSizes` in src/components/layout.ts says the same.
+ * own proportion.
  */
 function cv_about_reel_sizes( int $id ): string {
 	$d     = cv_image_data( $id );
@@ -212,9 +193,7 @@ function cv_about_show_list( array $shows ): string {
 /**
  * How many of a two-column list stand in its first column: filled until it is
  * level with the longest of the other columns, and never fewer than would leave
- * the second the taller. Measured as the sheet sets it — a line 20, a separate
- * line under it 22.75 further, a broken one 20, 65.5 between entries. The same
- * arithmetic as `firstColumn` in src/components/layout.ts.
+ * the second the taller.
  */
 function cv_about_first_column( array $shows, array $others ): int {
 	$entry = function ( array $s ): float {
@@ -260,11 +239,7 @@ function cv_lightbox(): string {
 		. '</div>';
 }
 
-/**
- * The hint that there is more below, on the pages that open on a full screen of
- * something. `negative` is drawn as the inverse of the film behind it; `ink` is
- * the gallery's, where there is nothing behind it but paper.
- */
+/** The hint that there is more below, on the pages that open on a full screen of something. */
 /**
  * The start page's chevron on its side, for every viewer's Previous and Next:
  * the cue's drawing, size and weight (components/scroll-cue.ts, stepChevron).

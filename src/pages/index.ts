@@ -41,17 +41,14 @@ const workItem = (p: Project): GridItem => ({
   plate: isPlate(p.cover),
 });
 
-/**
- * The start page. The wordmark, then every painting gathered into one stack;
- * scrolling disperses the stack into the grid, which is where the tiles live.
- */
+/** The start page. */
 export function artworkPage(works: readonly Project[], years: readonly YearColour[]): Html {
   return layout({
     title: 'Artwork',
     description: TAGLINE,
     path: '/artwork/',
-    // Inquiries stands over the years and opens the same form the Colour
-    // Chart's order does, sent to the gallery (Frank, 2026-11-18).
+    // Inquiries stands over the years and opens the same form the Colour Chart's order does, sent
+    // to the gallery.
     rail: html`${sideInquiries()}${yearRail(years)}`,
     overlays: inquiries('gallery'),
     // The pile fills the screen and does not read as the top of a document.
@@ -63,15 +60,7 @@ export function artworkPage(works: readonly Project[], years: readonly YearColou
       ${grid({
         items: works.filter((w) => w.cover).map(workItem),
         basePath: '/artwork',
-        /*
-         * Tiles go to the painting's own page rather than opening over the
-         * gallery. The lightbox intercepted the click and pushed the work's
-         * address into the bar without ever loading it, so the gallery led to
-         * one thing and that same address, opened or reloaded, led to another.
-         * The page is the better of the two and the one that carries the
-         * caption, the lean and the way through the collection, so it is what
-         * a click gets.
-         */
+        /* Tiles go to the painting's own page rather than opening over the gallery. */
         stack: true,
         toScale: true,
       })}
@@ -79,14 +68,7 @@ export function artworkPage(works: readonly Project[], years: readonly YearColou
   });
 }
 
-/**
- * Exhibitions and collaborations: a grid of projects, each tile opening a panel.
- *
- * The two differ in composition. Exhibitions are installation views — rooms,
- * mostly, of varying shape — and read better in the two staggered columns after
- * nachoalegre.com. Commissioned work is a set of objects, and reads better justified
- * into rows, where they line up and can be compared.
- */
+/** Exhibitions and collaborations: a grid of projects, each tile opening a panel. */
 export function panelGridPage(opts: {
   readonly title: string;
   readonly path: string;
@@ -128,14 +110,10 @@ export const exhibitionItem = (e: Exhibition): PanelItem => ({
   ...(e.kind !== undefined ? { kind: e.kind } : {}),
 });
 
-/**
- * The photographs a show's sheet steps through, in order. Its row shows the first.
- * A show with its own set (the official photographs, or the archive's) shows
- * that; one without falls back to the pictures its source page carried.
- */
+/** The photographs a show's sheet steps through, in order. */
 /**
  * What's Color I and II as shows: the same photographs, in the same order, as
- * the reel under the names on each edition's own page (Frank, 2026-11-26).
+ * the reel under the names on each edition's own page.
  */
 const plateImage = (plate: Plate): ProjectImage => ({
   id: plate.name,
@@ -164,38 +142,16 @@ function showReel(slug: string, derived: Exhibition | undefined): readonly Proje
 /** The same for a commissioned project. */
 const commissionReel = (p: Project): readonly ProjectImage[] => leadWith(p.images, COMMISSION_LEADS[p.slug]);
 
-/**
- * Exhibitions: a list rather than a gallery, after the designer's layout. The
- * name and place at the left, the run of dates and the year at the right, a rule
- * between each — and the photograph only when you reach for a row.
- */
+/** Exhibitions: a list rather than a gallery, after the designer's layout. */
 export function exhibitionsPage(items: readonly Exhibition[], commissioned: readonly Project[] = []): Html {
-  // The What’s Color? shows are held for their own section, panels and all: a
-  // row taken off the index whose panel still answered would be a page nothing
-  // links to.
-  // Every show Claudia listed is on the page; the few that came from the source
-  // page keep their photograph and their panel, matched by slug.
-  // A row's hover photograph is always the first of the reel its sheet opens:
-  // both are read from `reels`, so there is no second picture to set.
+  // The What’s Color?
   const bySlug = new Map(items.map((e) => [e.slug, e] as const));
   const reels = new Map(SHOWS.flatMap(({ slug }) => (slug ? [[slug, showReel(slug, bySlug.get(slug))] as const] : [])));
   const covers = new Map([...reels].flatMap(([slug, reel]) => (reel[0] ? [[slug, reel[0]] as const] : [])));
 
-  /*
-   * Two sheets, as the designer draws two.
-   *
-   * A show that came from the site has a press release, and takes the sheet
-   * the commissioned work uses: masthead at the left, text under it, the
-   * photograph holding the right of the screen. A show from the archive has no
-   * text at all, and takes the other one: the masthead alone in the top left
-   * and the photograph centred on the frame.
-   *
-   * Which one a show gets is decided by whether it has anything to read, not
-   * by a list — so a show that gains a press release later moves across on its
-   * own.
-   */
-  // A show that was also a commission opens the commissioned work's own sheet,
-  // the same one the Commissioned page opens, and leads with its photograph.
+  /* Two sheets, as the designer draws two. */
+  // A show that was also a commission opens the commissioned work's own sheet, the same one the
+  // Commissioned page opens, and leads with its photograph.
   const commissions = new Map(
     groupCommissioned(commissioned).flatMap((g) => g.items).map((item) => [item.slug, item] as const),
   );
@@ -211,8 +167,8 @@ export function exhibitionsPage(items: readonly Exhibition[], commissioned: read
   const sheets = SHOWS.flatMap((show) => {
     if (!show.slug) return [];
     const derived = bySlug.get(show.slug);
-    // The designer's sheet for this show, where there is one: its masthead,
-    // the photograph it opens on, and the text Frank sent for it.
+    // The designer's sheet for this show, where there is one: its masthead, the photograph it
+    // opens on, and the text Frank sent for it.
     const design = SHOW_SHEETS[show.slug] ?? {};
     const images = reels.get(show.slug) ?? [];
     if (!images.length) return [];
@@ -257,18 +213,7 @@ export function exhibitionsPage(items: readonly Exhibition[], commissioned: read
   });
 }
 
-/**
- * What's Color?, and the first thing the site shows.
- *
- * It takes the place the gallery used to hold. The project is the one piece of
- * Claudia's work that is about other people — she gives each of them a colour
- * and asks them what colour is — so the page opens on the names and nothing
- * else, and the three editions introduce themselves underneath.
- *
- * Everything here is read out of the source: the rosters, the roles, the
- * colour references and the introductions all come off the pages the site
- * already has for the two exhibitions and the Terranova project.
- */
+/** What's Color?, and the first thing the site shows. */
 export function whatsColorPage(): Html {
   return layout({
     title: 'Claudia Valsells',
@@ -278,7 +223,7 @@ export function whatsColorPage(): Html {
     /*
      * The film changes how the chrome behaves: the bar begins across the middle
      * of it and rises to the top as you scroll, rather than being fixed there
-     * from the start. That is a page-level decision, so it travels on the body.
+     * from the start.
      */
     bodyClass: 'has-film',
     // Drawn as the inverse of the film it crosses, as the bar's type is.
@@ -299,8 +244,8 @@ export function whatsColorEditionPage(edition: Edition): Html {
     foot: false,
     description: (() => {
       const answered = edition.participants.filter((p) => p.answer).length;
-      // Everyone who took part — the roster — not only those who answered,
-      // which is all `participants` holds on these pages.
+      // Everyone who took part — the roster — not only those who answered, which is all
+      // `participants` holds on these pages.
       const n = (edition.roster ?? edition.participants).length;
       return answered
         ? `What’s Color? edition ${edition.numeral} — ${n} people, ${answered} of them on what color is.`
@@ -314,10 +259,6 @@ export function whatsColorEditionPage(edition: Edition): Html {
  * The Color Chart, on the designer's own composition: the price and the way to
  * order held still in the margin, the chart's colours beside them, and only the
  * text moving.
- *
- * The order form goes in `overlays` rather than in the page, for the reason that
- * prop exists: `main` is its own stacking context, and anything that has to rise
- * above the veil has to be outside it.
  */
 export function colourChartPage(): Html {
   return layout({
@@ -326,8 +267,8 @@ export function colourChartPage(): Html {
     description:
       'Claudia Valsells\u2019 artist colour chart for architects and designers \u2014 a fan deck of 142 colours in real paint.',
     /*
-     * The page is longer than a screen, and the first one is the statement,
-     * so the chevron says there is more under it; it goes at the first scroll.
+     * The page is longer than a screen, and the first one is the statement, so
+     * the chevron says there is more under it; it goes at the first scroll.
      */
     cue: 'ink',
     bodyClass: 'chart-body',
@@ -336,22 +277,8 @@ export function colourChartPage(): Html {
   });
 }
 
-/**
- * A painting on its own page — what a shared link opens. From the grid, the
- * same work opens in the lightbox instead; this is the same composition.
- */
-/**
- * Every picture there is of a work, the cut-out first.
- *
- * The cut-out is the work and takes the plate. Behind it, when the painting was
- * cropped, is the photograph it was cut from — the frame, the wall, the light —
- * and after that any further views the source carries. Each gets a small
- * picture under the plate; choosing one puts it on the plate, lean and all,
- * since there is only ever one plate.
- *
- * Nothing is listed twice: the cover is the first image, so the rest begin
- * after it. A work with one picture gets no row of small ones at all.
- */
+/** A painting on its own page — what a shared link opens. */
+/** Every picture there is of a work, the cut-out first. */
 /** The first year whose cut-outs lean towards the pointer; earlier ones lie flat. */
 const TILT_FROM = 2021;
 
@@ -359,10 +286,8 @@ function plateStage(work: Project, name: string, under: Html = html``): Html {
   const cover = work.cover;
   if (!cover) return html``;
 
-  // Only a cut-out leans — a photograph is a flat record of a room, and a room
-  // tipping towards the pointer reads as a card, not a painting — and only
-  // from TILT_FROM on. Before that the cut-out is for the gallery alone: the
-  // page shows the photograph it was taken from, and lies flat.
+  // Only a cut-out leans — a photograph is a flat record of a room, and a room tipping towards the
+  // pointer reads as a card, not a painting — and only from TILT_FROM on.
   const plate = isPlate(cover) && (work.metadata.year ?? 0) >= TILT_FROM;
   const photo = cover.original
     ? { image: { ...cover, width: cover.original.width, height: cover.original.height, variants: cover.original.variants },
@@ -402,19 +327,9 @@ function plateStage(work: Project, name: string, under: Html = html``): Html {
 }
 
 /**
- * After the designer's sheet of 11 November: the painting and the caption
- * side by side and centred on the page together, the caption centred on the
- * painting's middle — the title and the medium, then the size (no year: Frank,
- * 2026-11-18, though the gallery's year list still reads it from the data) —
- * and under the painting its other pictures and the work's place in the
- * archive. The arrangement itself is in the stylesheet (01-grid.css, THE
- * DETAIL PAGE); client/views.ts only sizes the painting by its painted part.
- *
- * `around` is for the phone alone, whose sheet shows the gallery faintly
- * behind the open work: the paintings that stand round this one there, drawn
- * again as a ground with nothing in it to read or to touch (05-artwork.css,
- * THE WORK ON A PHONE). They are lazy and out of the layout on a wide screen,
- * so nothing is fetched for them there.
+ * After the designer's sheet of 11 November: the painting and the caption side
+ * by side and centred on the page together, the caption centred on the
+ * painting's middle.
  */
 export function artworkDetailPage(
   work: Project, previous?: Project, next?: Project, place?: { index: number; total: number },
@@ -475,17 +390,11 @@ function commissionedSheet(item: GroupedProject): Html {
 
 /**
  * Commissioned work: grouped by the kind of job rather than shown as a grid,
- * after the designer's layout. Same index behaviour as the exhibitions page —
- * the row answers in a colour and brings up its photograph.
+ * after the designer's layout.
  */
 export function commissionedPage(items: readonly Project[]): Html {
   const groups = groupCommissioned(items);
-  // Every project on the index opens on the designer's sheet. One drawn by the
-  // designer carries the designer's masthead and text; one added later, with
-  // no sheet yet, is set the same way from what it has — its name on the
-  // index, its dates, its own text — which is what the WordPress theme does
-  // with an entry whose sheet fields are empty. Nothing off the index gets a
-  // panel: one nothing links to would only be found by its address.
+  // Every project on the index opens on the designer's sheet.
   const sheets = groups.flatMap((group) => group.items).map(commissionedSheet);
   return layout({
     title: 'Commissioned',

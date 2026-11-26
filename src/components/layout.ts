@@ -15,31 +15,13 @@ interface LayoutProps {
   readonly rail?: Html;
   /** Grid density control. */
   readonly controls?: Html;
-  /**
-   * Content that must sit above the page: the detail panels. `main` is its own
-   * stacking context — the opening pile gives its tiles a z-index, which would
-   * otherwise compete with the overlays — so anything meant to rise above the
-   * veil has to live outside it.
-   */
-  /**
-   * A class on <body>, for a page that needs the chrome to behave differently.
-   * The opening film is the only user: it makes the bar sticky rather than
-   * fixed so it can begin in the middle of the film and rise to the top.
-   */
+  /** Content that must sit above the page: the detail panels. */
+  /** A class on <body>, for a page that needs the chrome to behave differently. */
   readonly bodyClass?: string;
   readonly overlays?: Html;
-  /**
-   * The hint that there is more below, on the pages that open on a full screen
-   * of something. `negative` draws it as the inverse of the film behind it,
-   * `ink` in the ink. It belongs at body level for the same reason the bar
-   * does: a blend reaches the film only from outside `main`, which the pile
-   * gives a stacking context of its own.
-   */
+  /** The hint that there is more below, on the pages that open on a full screen of something. */
   readonly cue?: 'ink' | 'negative';
-  /**
-   * The contact footer at the foot of the page (Frank, 2026-11-26: on every
-   * page but About and the detail pages). On unless a page says otherwise.
-   */
+  /** The contact footer at the foot of the page. */
   readonly foot?: boolean;
   readonly children: Html;
 }
@@ -47,8 +29,7 @@ interface LayoutProps {
 /** Order and wording of the menu, after the designer's mockup. */
 /*
  * `phone` is where the item stands on the phone's menu screen, which lists the
- * pages the other way about: About first, Exhibitions last. Only the drawing
- * order changes there (the stylesheet's `order`); the document keeps this one.
+ * pages the other way about: About first, Exhibitions last.
  */
 const MENU = [
   { label: 'Exhibitions', href: '/exhibitions/', phone: 5 },
@@ -59,15 +40,7 @@ const MENU = [
 ] as const;
 
 /** Client modules, in boot order. Preloaded so the first interaction is instant. */
-/*
- * Which hover the bar's words wear. The one knob for it.
- *
- *   'roll'     — each letter turns over like a split-flap board
- *   'scramble' — the word churns through nonsense and settles back
- *
- * Only one is ever wired up: the choice is written onto the document and the
- * boot reads it, so the other costs nothing but the file it sits in.
- */
+/* Which hover the bar's words wear. */
 /*
  * The scramble since 2026-11-17, Frank's pick from the hover tuner (?tune,
  * client/hover-tuner.ts); its settings are at the head of client/scramble.ts.
@@ -83,10 +56,9 @@ const CLIENT_MODULES = [
 /** The loading screen's five lines, set in blue on peach. */
 
 /*
- * The button is the phone's whole bar: three bars at the top right, drawn by
- * the stylesheet, which raise the header below as a screen of its own
- * (`client/menu.ts`). Above 899px it is not displayed. It stands before the
- * header so that it is reached first and the menu's links follow it.
+ * The button is the phone's whole bar: three bars at the top right, drawn by the
+ * stylesheet, which raise the header below as a screen of its own
+ * (`client/menu.ts`).
  */
 function topBar(path: string): Html {
   return html`<button type="button" class="menu-toggle" data-menu-toggle aria-label="Menu" aria-expanded="false" aria-controls="site-menu"><span class="menu-line"></span><span class="menu-line"></span><span class="menu-line"></span></button>
@@ -109,23 +81,7 @@ function topBar(path: string): Html {
   </header>`;
 }
 
-/**
- * A word in the bar, already cut into the roll's letters.
- *
- * The cutting used to be done by client/text-roll.ts once the scripts had
- * run, which is after the browser may already have painted the bar: every
- * page then opened on plain, kerned lettering and swapped a beat later to
- * the boxed letters the roll is made of, which do not kern — so on every
- * move between pages the words in the bar shifted by a pixel or two, letter
- * by letter. Written into the page instead, the first frame is the last one.
- *
- * Both drawings are here: the letters for the desktop, shown to the eye and
- * hidden from a screen reader, and the plain word, which a screen reader
- * reads and the phone shows (09-phone.css), since a phone has no hover and
- * its bigger type wants the kerning. The same for either hover: the roll's
- * letters carry two drawings each (00-base.css, "text roll"), the scramble's
- * one box each that the churn writes into (client/scramble.ts).
- */
+/** A word in the bar, already cut into the roll's letters. */
 const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' });
 function rolled(text: string): Html {
   let i = 0;
@@ -138,20 +94,10 @@ function rolled(text: string): Html {
 /**
  * About opens over whatever page you are on, which stays faintly visible and
  * blurred behind it, and tells itself in four parts as you scroll
- * (`client/about.ts`): the capitals lead writes itself, the reel of
- * photographs slides in and stops where the designer's sheet sets it, then
- * moves on with the scroll as the rest of the biography writes itself, and
- * the record, the collections and how to reach her come in last.
- *
- * Close and the chevron stand beside the panel rather than in it, so that they
- * can be drawn as the bar is — the negative of whatever passes under them —
- * which a blend can only do with what shares its stacking context.
- *
- * The markup is the page as it stands at rest — the same with or without the
- * script, which only hides and shows what is already here. Photographs are
- * collected wherever they stand in the biography into one reel straight after
- * the lead, the rule the WordPress theme follows for photographs placed in the
- * editor (`cv_about`), so both sides print the same thing.
+ * (`client/about.ts`): the capitals lead writes itself, the reel of photographs
+ * slides in and stops where the designer's sheet sets it, then moves on with the
+ * scroll as the rest of the biography writes itself, and the record, the
+ * collections and how to reach her come in last.
  */
 function aboutOverlay(): Html {
   const lead = ABOUT_BLOCKS.find((b) => b.kind === 'lead');
@@ -203,16 +149,7 @@ function aboutOverlay(): Html {
   ${images.length > 1 ? aboutSteps() : ''}`;
 }
 
-/**
- * The photographs in a reel, each a button that opens it large
- * (`client/about.ts`). Buttons rather than links: there is nowhere to go, and
- * a link to the file would be followed by the page transitions and differ
- * between the static site and WordPress for no reason.
- *
- * The script turns the row into a loop that the scroll moves on and the two
- * chevrons step through; without it the row scrolls sideways and the chevrons
- * stay hidden. The chevrons stand in the margins, clear of the photographs.
- */
+/** The photographs in a reel, each a button that opens it large (`client/about.ts`). */
 function aboutReel(images: readonly ProjectImage[]): Html {
   return html`<div class="about-reel" data-about-reel>
     <div class="about-reel-track" data-about-track>
@@ -229,9 +166,8 @@ function aboutReel(images: readonly ProjectImage[]): Html {
 }
 
 /**
- * How wide a photograph stands in the reel: 210 frame pixels tall, so 10.94vw
- * of height above 1097px wide and 7.5rem below it, times its own proportion.
- * `cv_about_reel_sizes` in the WordPress theme says the same.
+ * How wide a photograph stands in the reel: 210 frame pixels tall, so 10.94vw of
+ * height above 1097px wide and 7.5rem below it, times its own proportion.
  */
 function reelSizes(image: ProjectImage): string {
   const ratio = image.width / image.height;
@@ -265,11 +201,7 @@ function aboutViewer(): Html {
   </div>`;
 }
 
-/**
- * The exhibitions' chevrons, to step through the photographs while one is up.
- * Beside the panel, like Close, so they too are drawn as the negative of what
- * is under them — on a phone the photograph runs beneath them.
- */
+/** The exhibitions' chevrons, to step through the photographs while one is up. */
 function aboutSteps(): Html {
   return html`<button type="button" class="about-viewer-step is-prev" data-about-step="-1" aria-label="Previous photograph">
       ${stepChevron(-1)}
@@ -307,17 +239,7 @@ function aboutShow(show: AboutShow): Html {
   </li>`;
 }
 
-/**
- * How many of a two-column list stand in its first column. The sheet fills
- * the fairs' first column until it is level with the longest of the others —
- * sixteen, just past the end of the solo shows — and carries the rest to the
- * top of the next; and never fewer than would leave the second column the
- * taller of the two.
- *
- * Measured as the sheet sets it: a line is 20, a separate line under it 22.75
- * further, a line broken in two (`\n`) 20 further, and 65.5 between entries.
- * The WordPress theme uses the same arithmetic (`cv_about_first_column`).
- */
+/** How many of a two-column list stand in its first column. */
 function firstColumn(shows: readonly AboutShow[], others: readonly (readonly AboutShow[])[]): number {
   const entry = (s: AboutShow) =>
     [s.when, s.title, ...s.lines, ...(s.places ?? [])].reduce(
@@ -355,9 +277,9 @@ function lightbox(): Html {
 }
 
 /**
- * The contact footer, after the designer's HOME sheet (2026-11-26): who to
- * write to, the copyright line About closes on, and the credit, centred at the
- * foot of the page. The emails are About's own card.
+ * The contact footer, after the designer's HOME sheet: who to write to, the
+ * copyright line About closes on, and the credit, centred at the foot of the
+ * page.
  */
 function siteFoot(): Html {
   const [inquiries, other] = ABOUT_CARD.emails;

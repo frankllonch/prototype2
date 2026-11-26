@@ -1,11 +1,5 @@
 <?php
-/**
- * The editor as Claudia sees it.
- *
- * A panel of fields beside each entry, and only the blocks a page of this site
- * can use. Everything else the block editor offers — columns, covers, buttons,
- * embeds — would let a page drift from the design, so it is simply not there.
- */
+/** The editor as Claudia sees it. */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -24,10 +18,7 @@ add_action( 'enqueue_block_editor_assets', function () {
 	wp_set_script_translations( 'cvc-editor', 'claudiavalsells', CVC_DIR . 'languages' );
 } );
 
-/**
- * The fields, per kind of entry. Keys are the meta keys registered in
- * post-types.php; the editor script draws a control for each.
- */
+/** The fields, per kind of entry. */
 function cvc_editor_fields(): array {
 	$kinds = [
 		[ 'value' => '', 'label' => __( '— not in the record', 'claudiavalsells' ) ],
@@ -117,15 +108,7 @@ function cvc_editor_fields(): array {
 	];
 }
 
-/**
- * The ways a paragraph can be set, offered in the editor's Styles panel.
- *
- * A project's page opens on a statement in capitals, closes on its credits in
- * a smaller hand, and once in a while asks the reader to do something. These
- * are those three, by name, so Claudia picks one instead of typing a class.
- * The classes they give — is-style-lead, is-style-note, is-style-cta — are
- * the ones the design's stylesheet sets (src/styles/07-sheet.css).
- */
+/** The ways a paragraph can be set, offered in the editor's Styles panel. */
 add_action( 'init', function () {
 	register_block_style( 'core/paragraph', [ 'name' => 'lead', 'label' => __( 'Statement, in capitals', 'claudiavalsells' ) ] );
 	register_block_style( 'core/paragraph', [ 'name' => 'note', 'label' => __( 'Credits, smaller', 'claudiavalsells' ) ] );

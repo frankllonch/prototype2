@@ -1,14 +1,7 @@
 /**
- * The colours of What's Color?, all three editions on one document, laid out
- * the way Claudia's own sheets are: a line for the person, their swatch, and
- * the colour's values under it.
- *
- * It is drawn from the same record the site paints from
- * (src/content/whats-color-colours.ts), so what it shows is what the pages
- * show. This writes the page; a browser prints it:
- *
- *   node --experimental-strip-types scripts/wc-colours-pdf.ts out.html
- *   chromium --headless --no-pdf-header-footer --print-to-pdf=docs/whats-color-colours.pdf out.html
+ * The colours of What's Color?, all three editions on one document, laid out the
+ * way Claudia's own sheets are: a line for the person, their swatch, and the
+ * colour's values under it.
  */
 import fs from 'node:fs';
 import { EDITIONS_ALL, swatchFor } from '../src/content/whats-color.ts';

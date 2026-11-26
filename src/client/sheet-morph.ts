@@ -1,26 +1,6 @@
 import { phone, reduceMotion } from './env.ts';
 
-/**
- * The round button on a sheet, drawn as a move rather than a cut.
- *
- * Pressing it used to swap one layout for the other in a frame: the
- * photograph gone, the text suddenly twice as wide, the masthead folded. Here
- * the text column is drawn
- * through every width in between — a real width, not a stretched picture of
- * one — so the lines re-break as it goes, the way a paragraph in a word
- * processor rearranges while its margin is dragged, and its edge pushes the
- * photograph off the sheet ahead of it (Frank, 2026-11-22).
- *
- * How: measure where things are, change the layout in one step, measure again.
- * The prose is then given its old width and eased to its new one, so the
- * browser re-wraps it at every frame; the text column spans the whole sheet
- * while that runs, so a narrowing column is never cut at its new edge before
- * the lines have come in. The masthead, the button and the text's top travel
- * to their new places as transforms, as the grid's paintings do
- * (`controls.ts`).
- *
- * Every figure here is in one place to tune: how long, the curve.
- */
+/** The round button on a sheet, drawn as a move rather than a cut. */
 const FLOW_MS = 1000;   // the margin travelling across
 /* In and out, like a hand that takes hold of the margin and lets go of it. */
 const EASE = 'cubic-bezier(0.65, 0, 0.35, 1)';
@@ -76,15 +56,15 @@ export function morphSheet(sheet: HTMLElement, change: () => void): void {
   if (!stage) return;
   /*
    * The photograph is pushed: it travels right exactly as far, as fast and on
-   * the same curve as the text's right edge, so the growing column shoves it
-   * off the sheet, and a narrowing one draws it back in behind its edge.
+   * the same curve as the text's right edge, so the growing column shoves it off
+   * the sheet, and a narrowing one draws it back in behind its edge.
    */
   const push = nowWidth - wasWidth;
   /*
    * What moves is the photograph and its arrows, each on its own, rather than
    * the stage that holds them: a moved stage would be a group of its own, and
-   * the arrows, drawn as the difference of what is under them, would then
-   * have nothing under them but the empty stage and go white on the paper.
+   * the arrows, drawn as the difference of what is under them, would then have
+   * nothing under them but the empty stage and go white on the paper.
    */
   const pushed = [...stage.querySelectorAll<HTMLElement>('.sheet-frame, .sheet-step')];
   if (wide) {

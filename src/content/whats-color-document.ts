@@ -1,27 +1,4 @@
-/**
- * What's Color?, as Claudia's own document of the three editions has it.
- *
- * Everything else on this site is read out of WordPress. This is not: it is a
- * document she supplied — "RESPOSTES DE LES 3 EDICIONS WHATS COLOR" — and for
- * this project it outranks the website, because the website never had most of
- * it. The second edition's page names twenty-eight studios in a thank-you
- * sentence and prints not one of their answers; the document has twenty-seven.
- * The third edition's page shows only the seventeen who answered; the document
- * names all twenty-five who were asked.
- *
- * So the roster below is the roster. Anyone the document does not name is not
- * on the page, which is what was asked for and is the only way two sources can
- * be reconciled without picking favourites per name.
- *
- * What is NOT here: the answers for editions I and III. Those are already read
- * out of the site, they agree with the document, and re-typing several thousand
- * words to say the same thing would only create somewhere for the two to drift
- * apart. The second edition's answers are here because they exist nowhere else.
- *
- * `aka` exists because the site spells a few of these differently — Attenborugh
- * for Attenborough, Plantea Estudi for Plantea Estudio — and the two have to be
- * matched before either can be corrected. The document's spelling wins.
- */
+/** What's Color?, as Claudia's own document of the three editions has it. */
 
 export interface DocumentEntry {
   /** As the document writes it. This is the name the page shows. */
@@ -42,15 +19,7 @@ export interface DocumentEntry {
   readonly aka?: readonly string[];
 }
 
-/*
- * December 2020, Barcelona. Twenty-eight guests, fourteen of whom answered.
- * The fourteen answers are on the site already and are not repeated here.
- *
- * One colour name each, in English, because that is how the edition's sheet
- * sets them ("AC011 POWDER RED"). The document sometimes gives two languages
- * — "VERMELL POLS / POWDER RED" — and printed whole they broke the line's
- * pattern, so the English half is kept.
- */
+/* December 2020, Barcelona. */
 export const EDITION_I: readonly DocumentEntry[] = [
   { name: 'Marina Garcés', role: 'Filòsofa / Philosopher', code: 'AC011', colourName: 'Powder red' },
   { name: 'Olafur Eliasson', role: 'Artist', code: 'AC002', colourName: 'Yellow' },
@@ -82,18 +51,7 @@ export const EDITION_I: readonly DocumentEntry[] = [
   { name: 'Francesco Tonucci', role: 'Educator and cartoonist', code: 'AC040' },
 ];
 
-/*
- * March 2024, Llibreria Terranova, Barcelona. Twenty-five guests, seventeen of
- * whom answered. The site holds only those seventeen; the eight without an
- * answer are here for the first time.
- *
- * Five references are not the document's. Claudia's own sheet of the edition
- * (TERCERA ENTREGA, November 2026) marks them in red as wrong on the web and
- * gives the right one: Albert Riera Galcerán AC216 (the document's AC16),
- * Cristina Stolhe AC239 (AC39), Irene Royo AC228 (AC23), Ana Cuba AC380 (AC80)
- * and Julia Ruiz Cabello AC074 (AC075). Hers are the ones written here, and
- * so are her colour names, where her sheet words one differently.
- */
+/* March 2024, Llibreria Terranova, Barcelona. */
 export const EDITION_III: readonly DocumentEntry[] = [
   { name: 'Álvaro Galmés', role: 'Arquitecto, escritor y artista plástico', code: 'AC065', colourName: 'Ocre amarillo' },
   { name: 'Marta D. Riezu', role: 'Escritora', code: 'AC263', colourName: 'Verde', aka: ['Marta D.Riezu'] },

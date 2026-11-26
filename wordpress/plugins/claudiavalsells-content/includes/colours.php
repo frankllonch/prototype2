@@ -1,13 +1,5 @@
 <?php
-/**
- * One colour per year, taken from that year's paintings.
- *
- * The year rail is a column of swatches, each sampled from the work itself.
- * The colours of the years already on the site were sampled by the static
- * site's palette script and arrive with the import; a year that has none yet —
- * the first painting of a new year — is sampled here, from the thumbnails of
- * its works, the first time one is saved.
- */
+/** One colour per year, taken from that year's paintings. */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -19,9 +11,8 @@ function cvc_year_colours(): array {
 	return is_array( $stored ) ? $stored : [];
 }
 
-// On wp_after_insert_post rather than save_post: the block editor saves the
-// entry first and its fields after, and save_post fires between the two, when
-// the year is still the old one. This fires once the fields are written.
+// On wp_after_insert_post rather than save_post: the block editor saves the entry first and
+// its fields after, and save_post fires between the two, when the year is still the old one.
 add_action( 'wp_after_insert_post', function ( int $post_id, WP_Post $post ) {
 	if ( 'artwork' !== $post->post_type || 'publish' !== $post->post_status ) {
 		return;
@@ -41,16 +32,7 @@ add_action( 'wp_after_insert_post', function ( int $post_id, WP_Post $post ) {
 	}
 }, 20, 2 );
 
-/**
- * The commonest vivid hue across a year's paintings.
- *
- * Every thumbnail is read and only actual paint kept — the wall, the glass and
- * the cream ground go by saturation and lightness. What remains is bucketed by
- * hue, weighted by how vivid it is, and the heaviest bucket's average is the
- * year's colour. Simpler than the palette script, which asks which hue a year
- * leans on more than the archive does; good enough for a swatch until that
- * script is run again.
- */
+/** The commonest vivid hue across a year's paintings. */
 function cvc_sample_year( int $year ): ?string {
 	if ( ! function_exists( 'imagecreatefromstring' ) ) {
 		return null;
@@ -71,8 +53,8 @@ function cvc_sample_year( int $year ): ?string {
 		if ( ! $thumb ) {
 			continue;
 		}
-		// The thumbnail and nothing larger: decoding a full-size original in
-		// the middle of a save is what runs a small host out of memory.
+		// The thumbnail and nothing larger: decoding a full-size original in the middle of a save is
+		// what runs a small host out of memory.
 		$file = get_attached_file( $thumb );
 		$meta = wp_get_attachment_metadata( $thumb );
 		if ( ! $file || empty( $meta['sizes']['thumbnail']['file'] ) ) {

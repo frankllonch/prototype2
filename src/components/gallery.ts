@@ -5,11 +5,7 @@ import { realSize, scaleAgainst, type Scaled } from '../content/size.ts';
 import { withBase } from '../content/paths.ts';
 import type { ProjectImage } from '../content/types.ts';
 
-/**
- * One item on a grid. Everything the lightbox caption needs is carried on the
- * tile as data attributes, so opening a work reads straight from the DOM — no
- * second copy of the records is shipped alongside the markup that holds them.
- */
+/** One item on a grid. */
 export interface GridItem {
   readonly slug: string;
   readonly title: string;
@@ -23,10 +19,7 @@ export interface GridItem {
   /** The pointer's label, a line each: reference, size, technique. */
   readonly caption?: readonly string[];
   readonly available?: boolean;
-  /**
-   * The image shows the work alone, rather than hanging in a room. Only then is
-   * the tile a fair stand-in for the painting's size.
-   */
+  /** The image shows the work alone, rather than hanging in a room. */
   readonly plate?: boolean;
 }
 
@@ -40,45 +33,27 @@ interface GridProps {
   readonly panels?: string;
   /** Animate the grid out of a stack on the first scroll. */
   readonly stack?: boolean;
-  /**
-   * Fill the width in justified rows instead of the fixed-height contact sheet.
-   * Used where there are a handful of items rather than 154, and where the size
-   * is not the reader's to choose.
-   */
+  /** Fill the width in justified rows instead of the fixed-height contact sheet. */
   readonly justified?: boolean;
-  /**
-   * Two staggered columns at their natural proportions, after nachoalegre.com.
-   * For the sections that are a handful of projects rather than an archive: the
-   * pictures get to be different shapes and sizes instead of being cut to one
-   * row height, which is the whole point of the composition.
-   */
+  /** Two staggered columns at their natural proportions, after nachoalegre.com. */
   readonly feed?: boolean;
   /**
    * Carry each work's real size, so the reader can switch the grid from one
-   * height to relative scale. Only where the items have catalogued dimensions.
+   * height to relative scale.
    */
   readonly toScale?: boolean;
   /** Leading tiles to load eagerly — the ones visible in the stack. */
   readonly eagerCount?: number;
 }
 
-/**
- * Density levels, after tylermitchell.co's 50 / 200 / 500. `unit` is the row
- * height; the label is roughly how many works fit on a screen at that size, so
- * the control reads as a count rather than a size.
- *
- * The heights are a share of the window's width, so the grid keeps the
- * designer's proportions at any width: in the sheet, exported at 1654, the
- * densest rows are 120 tall, and the two looser steps keep the ratios the old
- * 240 / 150 / 96 pixel steps had.
- */
+/** Density levels, after tylermitchell.co's 50 / 200 / 500. */
 export const DENSITIES = [
-  // Labelled 25 / 50 / 100 (Frank, 2026-11-21); the row heights are unchanged.
+  // Labelled 25 / 50 / 100; the row heights are unchanged.
   { unit: '14.51vw', label: 25 },
   { unit: '9.07vw', label: 50 },
   { unit: '7.26vw', label: 100 },
 ] as const;
-// The Artwork page opens at 25 (Frank, 2026-11-26).
+// The Artwork page opens at 25.
 export const DEFAULT_DENSITY = 0;
 
 function tile(
@@ -86,8 +61,8 @@ function tile(
   panels?: string, anchor?: number, scaled?: Scaled, pileFront = false,
 ): Html {
   const name = item.name ?? displayTitle(item.title, 'work');
-  // A tile that raises a panel points at the panel's own anchor — there is no
-  // page behind it — so the link is real with or without scripting.
+  // A tile that raises a panel points at the panel's own anchor — there is no page behind it — so
+  // the link is real with or without scripting.
   const href = panels ? `#${panels}-${item.slug}` : withBase(`${basePath}/${item.slug}/`);
   return html`<a
     class="tile"
@@ -108,8 +83,8 @@ function tile(
     image: item.image,
     /*
      * The paintings at the front of the opening pile are shown far bigger than
-     * their tile, so they ask for a file big enough for that rather than for
-     * the tile, or the heap is the tile's picture blown up (Frank, 2026-11-21).
+     * their tile, so they ask for a file big enough for that rather than for the
+     * tile, or the heap is the tile's picture blown up.
      */
     sizes: pileFront
       ? `(max-width: 899px) 43vw, max(260px, calc(38vh * ${aspectOf(item.image).toFixed(3)}))`
@@ -121,15 +96,14 @@ function tile(
 
 /**
  * Rows of one height, widths following the pictures, left-aligned with wide
- * gutters — the grid in the designer's mockup. `--unit` (the row height) is the
- * only thing the density control changes; every tile's width is `--unit × --a`.
+ * gutters — the grid in the designer's mockup.
  */
 export function grid({
   items, basePath, lightbox = false, panels, stack = false, justified = false, feed = false,
   toScale = false, eagerCount = 14,
 }: GridProps): Html {
-  // The first tile of each year carries that year's anchor, so the rail can be
-  // plain links and still work with scripting off.
+  // The first tile of each year carries that year's anchor, so the rail can be plain links and
+  // still work with scripting off.
   const seen = new Set<number>();
 
   /*
@@ -139,13 +113,7 @@ export function grid({
    */
   const sizes = items.map((item) => realSize(item.dimensions));
   const scale = scaleAgainst(sizes);
-  /*
-   * A size is claimed only for works photographed alone. Where the cover is an
-   * installation shot the picture is mostly room, so an area set from the
-   * catalogue says nothing true about how big the painting looks — those keep
-   * the unit height, which is what the module already does for a work whose
-   * measurements could not be read, and the honest answer to the same question.
-   */
+  /* A size is claimed only for works photographed alone. */
   const scaleOf = (item: GridItem, i: number) =>
     (toScale && item.plate ? scale(sizes[i], aspectOf(item.image)) : undefined);
 
@@ -183,16 +151,9 @@ export function grid({
  * Density steps and, where the works are catalogued with their measurements, a
  * switch between showing them all at one height and showing them at their
  * relative sizes.
- *
- * Two readings of the same archive rather than one replacing the other: equal
- * heights are a contact sheet, which is what you want to compare colour across
- * 154 works, and relative sizes are a wall, which is what tells you a painting
- * is three metres across. Neither is the truer view, so the reader chooses;
- * the wall is where they start.
  */
 export function gridControls(years: readonly number[] = [], scalable = false, total?: number): Html {
-  // The steps read 25 / 50 / 100 (Frank, 2026-11-21). The densest used to be
-  // labelled with the whole archive's count; `total` is kept for callers.
+  // The steps read 25 / 50 / 100.
   void total;
   const label = (i: number) => DENSITIES[i]!.label;
   return html`<div class="controls" data-controls>

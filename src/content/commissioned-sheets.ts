@@ -1,29 +1,4 @@
-/**
- * The commissioned details as the designer set them.
- *
- * The source pages carry the same words, but not in this order and not in this
- * shape: a heading typed into the first paragraph, credits in the middle, a run
- * of hashtags at the end. The designer read each one and set a masthead — the
- * name of the thing, who it was for, when — and then the text, opening on a
- * statement in capitals and closing on its credits in a smaller hand. That
- * editing is the design, so it is written down here rather than inferred.
- *
- * Where the sheets show only the first screen, the rest of the text is the
- * source's, carried on in the same manner.
- *
- * Classes in the bodies are the paragraph styles the WordPress editor offers
- * (the content plugin registers them), so a paragraph Claudia styles there and
- * one written here come out the same:
- *   `is-style-lead` — the statement, set in capitals.
- *   `is-style-note` — credits and links, smaller, set apart from the text above.
- *   `is-style-cta`  — a call to act, as large as the text and leaning.
- *   `apart`         — a second empty line before it; an extra class, not a style.
- *
- * Dates follow the index where a sheet disagrees with it. Four did (Siete Sillas
- * 2022, Edges "2023 – on going", Silences 2017, Kamanar 2017) and the index is
- * the one that agrees with the source; a reader who clicks "2020" should not
- * land on "2022".
- */
+/** The commissioned details as the designer set them. */
 export interface Sheet {
   readonly title: string;
   /** Who it was for or with — one entry per line, cased as the sheet sets it. */

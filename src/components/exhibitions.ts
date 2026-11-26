@@ -4,23 +4,9 @@ import type { ProjectImage } from '../content/types.ts';
 import { PHONE_MERGED, SHOW_GROUPS, kindOf, phoneOrder, placeOf, type Show, type ShowGroup } from '../content/exhibitions-list.ts';
 
 /**
- * The exhibitions index, after the designer's layout: one line per show — what it
- * was called and where, when it ran, and the year at the right margin — with a
- * rule between them and nothing else. A list, not a gallery.
- *
- * The photograph lives in the gap between the name and the dates and is only
- * shown on hover, so the page reads as a table until you reach for something.
- *
- * Every date and place here is derived from the exhibition's own text
- * (`content/sections.ts`), never retyped, so a correction at the source carries
- * through. A show whose dates could not be read simply shows none; a wrong date
- * on a gallery's page is worse than an absent one.
- *
- * The phone sheet is a different list from the same rows: the solo and the
- * group shows as one run by year, with no heading over them. Nothing is
- * rendered twice for it. Every row and every heading that still shows carries
- * its place in that list as `--phone-order` (`phoneOrder`), and the phone
- * rules lay the rows out by it; the desktop never reads it.
+ * The exhibitions index, after the designer's layout: one line per show — what
+ * it was called and where, when it ran, and the year at the right margin — with
+ * a rule between them and nothing else.
  */
 export function exhibitionList(shows: readonly Show[], covers: ReadonlyMap<string, ProjectImage>): Html {
   const order = phoneOrder(shows);
@@ -31,13 +17,8 @@ export function exhibitionList(shows: readonly Show[], covers: ReadonlyMap<strin
 }
 
 /**
- * A group of the sheet's four, named once at the left with its shows beside
- * it — the same plate the commissioned index uses. A group with nothing in it
- * renders nothing rather than an empty heading.
- *
- * On the phone a merged group (`data-phone="merged"`) loses its heading to the
- * eye, since its rows no longer stand together; the others keep theirs, placed
- * just ahead of their first row.
+ * A group of the sheet's four, named once at the left with its shows beside it —
+ * the same plate the commissioned index uses.
  */
 function group(
   name: ShowGroup,
@@ -56,25 +37,9 @@ function group(
   </section>`;
 }
 
-/**
- * A row: the show's name, what kind it was and where, and the year at the
- * margin. The sheet gives the index years alone — the months belong to the
- * detail's masthead — and a run that crosses a year states both, stacked.
- *
- * Only some have a page behind them. Those are links and open a panel; the
- * rest are plain elements that still answer to the pointer, so the list reads
- * as one thing rather than as two kinds of row. A link to nothing would be a
- * broken link, and making every row a link to keep them looking alike is the
- * same mistake in a nicer coat.
- *
- * No `aria-label`. One was here once and it quietly dropped the dates: a
- * label replaces the whole subtree, so what a sighted reader sees in its own
- * column was never announced.
- */
+/** A row: the show's name, what kind it was and where, and the year at the margin. */
 function row(s: Show, order: number, cover?: ProjectImage): Html {
   // The group above already says what kind of show it was — on the desktop.
-  // The phone has no group above, so the kind (and the "at" after it) is in
-  // the row for the phone rules to show and everything wider to leave hidden.
   const place = placeOf(s.venue);
   const lead = kindOf(s.venue);
   const inner = html`<span class="exh-name">

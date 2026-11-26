@@ -1,75 +1,36 @@
 /* ------------------------------------------------------------ what's color */
 
-/*
- * The opening view: everyone who has answered the question, set as one run of
- * names, with the three editions introduced underneath.
- *
- * This is the first thing the site shows now, in place of the gallery, so it
- * carries the weight the gallery used to. It is a page of names and nothing
- * else above the fold, which is the point — the project is the people in it.
- */
+/* The opening view: everyone who has answered the question, set as one run of
+   names, with the three editions introduced underneath. */
 .wc {
-  /*
-   * How large the whole of What's Color? renders, type and breathing alike:
-   * 1 is the size the sheets are drawn at — every text 40 at 1920 — which
-   * is where the client wants it. The sheet compositions' own internal
-   * ratios ride on the width and do not move with it.
-   */
+  /* How large the whole of What's Color? */
   --wc-zoom: 1;
   /* Past this the type hits its clamp ceiling while a percentage measure keeps
-     widening, which would run the justified columns out to a hundred
-     characters. Freezing the container keeps every proportion on this page. */
+     widening, which would run the justified columns out to a hundred characters. */
   max-width: 2160px;
   margin: 0 auto;
   padding: calc(var(--bar) + var(--wc-zoom, 1) * var(--wc-top, 15.92vw)) var(--pad) 14vh;
 }
 
-/*
- * The names, as a paragraph rather than a list.
- *
- * Centred as a block of text — each line centred within the measure, which is
- * how the sheet sets it: the lines are ragged on both sides and balanced about
- * the middle, not justified. The measure is narrower than the page so the run
- * breaks into the same kind of short lines the sheet has; at full width it
- * would be four very long ones and would read as a credit roll.
- */
+/* The names, as a paragraph rather than a list. */
 .wc-names {
-  /*
-   * Measured off the sheet, which is a 1652px render of a 1565px content
-   * column, so everything transfers as a fraction of that: the widest line
-   * runs 82.4% of it, which puts the measure a shade above that and no more —
-   * wider and the wrap goes slack, narrower and it breaks early.
-   *
-   * The type is the same 40px the rest of the site runs at (cap 24 of 1565
-   * scales to 27.4 of our 1786, and 40px gives 27.2), on 49px of leading:
-   * 43/1565 restated, which is 1.227 against the font.
-   */
+  /* Measured off the sheet, which is a 1652px render of a 1565px content column,
+     so everything transfers as a fraction of that: the widest line runs 82.4% of
+     it, which puts the measure a shade above that and no more. */
   max-width: var(--wc-measure, 68.5%);
   margin: 0 auto;
   text-align: center;
   text-wrap: balance;
   font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.0833vw, 2.75rem));
   font-weight: 500;
-  /* NOMS: medium 40 on 40 (JERARQUIA WHAT'S COLOR, 2026-11-17). */
+  /* NOMS: medium 40 on 40. */
   line-height: 1;
   letter-spacing: 0;
   text-transform: uppercase;
   color: var(--ink);
 }
 
-/*
- * A name, and the colour its answer was given.
- *
- * The swatch sits behind the name with the name knocked out of it, which is
- * how the sheet draws it — rgb(245, 192, 65) behind white there. Measured off
- * that mockup the block runs about 9px to the left of the first glyph and 7 to
- * the right of the last at a 28px cap, so the padding is a fifth of an em
- * either side; the height comes from the line box rather than from padding, or
- * a hovered name would push its own line taller and move the whole paragraph.
- *
- * `box-decoration-break` matters: a name that falls across a line break would
- * otherwise get the swatch's left edge on one line and nothing on the other.
- */
+/* A name, and the colour its answer was given. */
 .wc-name {
   color: inherit;
   text-decoration: none;
@@ -78,17 +39,15 @@
   border-radius: 0;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
-  /* The same thin band as the question in the opening note, not the line's
-     whole height: 0.905em of colour, 0.2em down from the top of the box. */
+  /* The same thin band as the question in the opening note, not the line's whole
+     height: 0.905em of colour, 0.2em down from the top of the box. */
   background: linear-gradient(var(--wc-band), var(--wc-band)) no-repeat 0 0.2em / 100% 0.905em;
   transition: --wc-band var(--hover) var(--ease), color var(--hover) var(--ease);
 }
 @media (hover: hover) {
   .wc-name:hover {
     --wc-band: var(--swatch, var(--ink));
-    /* Knocked out in whichever of paper or ink the swatch can carry. The
-       palette runs to a near-white off-white, and white on that is not faint,
-       it is absent. */
+    /* Knocked out in whichever of paper or ink the swatch can carry. */
     color: var(--swatch-ink, var(--paper));
   }
 }
@@ -108,16 +67,7 @@
    swatches and keeps the ink colour however its neighbours answer. */
 .wc-sep { color: var(--ink); }
 
-/*
- * The three introductions, across the foot of the view.
- *
- * Ordered I, II, III left to right — the opposite of the newest-first the rest
- * of the site keeps, because these are chapters of one project rather than a
- * list of work, and the sheet sets them in that order.
- *
- * Each column is the control for its edition, so the whole thing is a link:
- * what you are pointing at when you decide to read one is the text itself.
- */
+/* The three introductions, across the foot of the view. */
 .wc-intros {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -139,16 +89,13 @@
 }
 /* The answer hovering gives, rather than a ring around it. */
 .wc-intro:focus-visible { opacity: 1; }
-/* Keyboard focus dims the rest the way hovering does. A mouse click's focus
-   must not: the click is a departure, and coming back through the
-   back/forward cache restores the page with that focus still held — which
-   left all three introductions dimmed with nothing pointing at them. */
+/* Keyboard focus dims the rest the way hovering does. */
 .wc-intros:has(.wc-intro:focus-visible) .wc-intro:not(:focus-visible) { opacity: 0.45; }
 
 .wc-intro-title {
   margin: 0 0 var(--wc-title-gap, 0.4em);
-  /* Heading and body are one size on the sheet: cap 17 against the names' 24,
-     so 40 x 17/24 = 28.3px, which is 1.5184vw at the width they were drawn. */
+  /* Heading and body are one size on the sheet: cap 17 against the names' 24, so
+     40 x 17/24 = 28.3px, which is 1.5184vw at the width they were drawn. */
   font-size: calc(var(--wc-zoom, 1) * clamp(0.9rem, 1.5184vw, 1.9rem));
   font-weight: 500;
   letter-spacing: 0;
@@ -172,17 +119,8 @@
 
 /* ------------------------------------------------- what's color, one edition */
 
-/*
- * An edition's own page: its numeral, its names narrowed to the people who
- * answered that time, and their answers below.
- *
- * Measured off the designer's sheet, which is a 1576px render of a 1467px
- * content column, so every figure here is that measurement restated against
- * ours: three columns at 32.79% with a 0.82% gutter, the name at 1.50% cap
- * (which is the same 40px the rest of the site runs at), the role, the colour
- * reference and the answer all at 0.78% cap, which is a shade over half the
- * name.
- */
+/* An edition's own page: its numeral, its names narrowed to the people who
+   answered that time, and their answers below. */
 .wc-numeral {
   margin: 0 0 calc(var(--wc-zoom, 1) * var(--wc-numeral-gap, 2.4vw));
   text-align: center;
@@ -203,45 +141,19 @@
 .wc-edition-intro > * { margin: 0 0 0.9em; }
 .wc-edition-intro > :last-child { margin-bottom: 0; }
 
-/*
- * The answers, flowing down three columns.
- *
- * CSS columns rather than a grid, because the sheet fills each column in turn.
- * Its three columns hold four, four and five entries over the same vertical
- * extent, which no row-aligned grid can do, and every entry's position is
- * predicted by the length of the answer above it rather than by any shared
- * row. The gutter is 0.82% of the content column — 12px of 1467 — which is
- * far tighter than the 4vw first guessed at.
- */
-/*
- * One column, not the sheet's three.
- *
- * The three columns were drawn around type at half this size. Set at the same
- * size as everything else on the site — which is what was asked for, and what
- * the names beside these answers were already at — a third of the width leaves
- * about fifteen characters to a line, which justification turns into gaps and
- * hyphenation turns into a ladder. So the column count follows the type.
- */
+/* The answers, flowing down three columns. */
+/* One column, not the sheet's three. */
 .wc-answers {
   margin-top: var(--wc-answers-gap, 7vw);
   columns: 1;
 }
 
 .wc-answer {
-  /* An entry split across a column boundary would put a name at the foot of
-     one column and its answer at the head of the next. */
+  /* An entry split across a column boundary would put a name at the foot of one
+     column and its answer at the head of the next. */
   break-inside: avoid;
   display: grid;
-  /*
-   * The role track is capped rather than left to size itself.
-   *
-   * At `auto` it took its max-content width, and edition I's roles are
-   * bilingual — "Biòleg especialitzat en neurociència aplicada a l'educació /
-   * biologist, education and neuroscience" — so the name track was squeezed to
-   * nothing and five names printed on top of their own roles at 1866, eleven
-   * at 1100. The name now holds at least 60% of the column and a long role
-   * wraps instead.
-   */
+  /* The role track is capped rather than left to size itself. */
   grid-template-columns: minmax(0, 1fr) minmax(0, 30%);
   align-items: start;
   column-gap: 0.8rem;
@@ -262,14 +174,7 @@
 .wc-answer-alias { font-weight: 400; text-transform: none; }
 .wc-answer-alias::before { content: ', '; }
 
-/*
- * The role and the colour reference, ranged right against the column edge.
- *
- * Cap-top aligned with the name's cap top rather than sitting on its baseline,
- * which is how the sheet places it: the role's caps are half the height of the
- * name's, so a shared baseline would drop it ten pixels. The padding is what
- * carries that alignment, since the two have different line boxes.
- */
+/* The role and the colour reference, ranged right against the column edge. */
 .wc-answer-meta {
   grid-column: 2;
   margin: 0;
@@ -287,24 +192,15 @@
   letter-spacing: 0;
   text-transform: uppercase;
 }
-/*
- * The colour reference wears its colour as the names and the question do: the
- * same thin band behind it, the type knocked out in paper or ink, whichever
- * the colour can carry.
- */
+/* The colour reference wears its colour as the names and the question do: the
+   same thin band behind it, the type knocked out in paper or ink, whichever the
+   colour can carry. */
 .wc-answer-code,
 .wc-sheet-page .wc-cell-code {
   /* The type is knocked out of the band below, in paper or ink. */
   color: var(--swatch-ink, var(--paper));
 }
-/*
- * The band is on a span inside the code, not on the code itself. The code is
- * a grid item, which makes it a block: a long one — AC239 VERDE OSCURO CASI
- * NEGRO — wrapped to two lines under one band laid across both. Inline, the
- * band breaks with the line and each line gets its own, as the names' do.
- * Measured from the top of the type: 0.1725em down puts it where it sat,
- * centred on the capitals.
- */
+/* The band is on a span inside the code, not on the code itself. */
 .wc-code-band {
   padding: 0 0.2em;
   margin: 0 -0.2em;
@@ -322,8 +218,7 @@
   line-height: var(--wc-leading, 1.227);
   letter-spacing: 0;
   /* Justified, as the sheet sets them — its right edges hold to within two
-     pixels over ten separate blocks while the word spacing visibly varies.
-     Never hyphenated: a word is not cut, at the cost of looser spacing. */
+     pixels over ten separate blocks while the word spacing visibly varies. */
   text-align: justify;
   -webkit-hyphens: none;
   hyphens: none;
@@ -367,125 +262,38 @@
 
 /* ------------------------------------------------------- the opening film */
 
-/*
- * The bar does three things in turn, and the whole of it is one `position:
- * sticky` with both offsets set.
- *
- *   1. It holds on the middle line of the screen while the film runs behind it.
- *   2. The film's bottom edge rises to meet it, and from there the bar travels
- *      on that edge — sitting under the film, never over it.
- *   3. It reaches the top and stays there for the rest of the page.
- *
- * Sticky clamps a box between two limits rather than pinning it to one. Give it
- * `top: 0` and `bottom: (100vh - bar) / 2` and its screen position becomes
- * clamp(0, natural, middle): too low and the bottom offset lifts it to the
- * middle, too high and the top offset holds it at zero, and in between it
- * simply travels with the page. Those three clauses are the three phases, and
- * no script is involved.
- *
- * For phase two to land on the film's edge, the bar's position in normal flow
- * has to be that edge: hence the 100vh top margin, which puts it exactly at the
- * film's bottom. `main` is then pulled up by that margin plus the bar's own
- * height, so the film still starts at the top of the page and runs behind it.
- *
- * The bar is a child of <body> and not of the film on purpose. Sticky holds
- * only while its containing block is in view, so inside the film it would come
- * unstuck and leave with it — which is what the reference does and the opposite
- * of what is wanted here.
- */
+/* The bar does three things in turn, and the whole of it is one `position:
+   sticky` with both offsets set. */
 .has-film {
   --film-bar: 4.2rem;
   /* The film's height, and with it every figure below: where the bar rests,
-     where the two states swap, how far the film drifts. One number to change. */
+     where the two states swap, how far the film drifts. */
   --film-h: 100vh;
 
-  /*
-   * How far above the film's bottom edge the bar settles, once it has stopped
-   * travelling with it.
-   *
-   * With this at nil the bar's top sits exactly on that edge, and the type sits
-   * 21px lower still — the room a 67px bar leaves above a 21px line when the
-   * line is centred in it. That 21px is the gap you see between the film and
-   * the words. This lifts the bar by a fifth of it. Raise it to close the gap
-   * further; 21px would put the type's own top on the film's edge, and more
-   * than that would run the words into the picture.
-   */
-  /*
-   * Measured at runtime, with this as the figure to fall back on.
-   *
-   * 50px is right at 1440 and wrong on a wide monitor, because it is a fixed
-   * distance in a bar whose contents are not. The menu is sized in `vw`
-   * (`--type-menu`), so the line it sets grows with the window while the bar's
-   * own 4.2rem and this lift do not — and the line, and the block behind the
-   * current name, slide down the bar until they cross the film's bottom edge
-   * and sit on the white below it. Measured: the block clears the edge by 7px
-   * at 1440, overhangs it by 0.5px at 1920 and by 10.6px at 2560, which is a
-   * pixel and a half for every pixel the type gains.
-   *
-   * Too many coupled parts to express here — the bar's height, the leading,
-   * the rise the block is given, the trim taken off it, each in its own unit
-   * and one of them already measured by a script — so `client/film.ts`
-   * measures where the block actually ends and sets the lift to hold it the
-   * same distance clear at any width. The same arrangement as --bar-rise.
-   */
+  /* How far above the film's bottom edge the bar settles, once it has stopped
+     travelling with it. */
+  /* Measured at runtime, with this as the figure to fall back on. */
   --film-lift: var(--film-lift-measured, 50px);
 
-  /*
-   * How far the film is taken down beneath the bar, and the one number to
-   * change if the menu is hard to read over it.
-   *
-   * It has to be this deep, and a gentler figure makes things worse rather
-   * than better. The bar is a negative — `difference` draws it as |frame −
-   * source| — so it vanishes wherever the frame already sits at half the
-   * source, which is 114 grey for the menu and 126 for the wordmark. Measured
-   * across twenty-three frames, the band the bar crosses averages 132, just
-   * above that dead point, and dimming by a quarter drags the whole of it
-   * down onto it: the median contrast falls from 3.5:1 to 1.5:1 and three
-   * quarters of the band goes under 3:1. Only past 58% does the brightest
-   * pixel under the bar fall below the dead point and the blend become
-   * dependable again. At 65% the film's brightest pixel is 88 of 255, nothing
-   * can cancel, and the share of the band under 3:1 goes from 36% to 1%.
-   */
+  /* How far the film is taken down beneath the bar, and the one number to change
+     if the menu is hard to read over it. */
   --film-dim: 0.65;
 }
 
-/*
- * Phase one: fixed where it rests over the film. Genuinely fixed, so the
- * browser holds it there without anything having to keep putting it back — the
- * earlier version compensated for the scroll with a transform and shook,
- * because a composited scroll outruns script and the bar arrived a frame behind.
- *
- * It rests on the middle line of the screen. The mark below marks the scroll at
- * which the film's bottom edge arrives there, and the two have to be derived
- * from the same figures or the states would disagree about where the bar is at
- * the moment they swap.
- */
+/* Phase one: fixed where it rests over the film. */
 .has-film .top {
   position: fixed;
   top: calc((var(--film-h) - var(--film-bar)) / 2);
   height: var(--film-bar);
-  /*
-   * The line keeps the top padding it has on every other page rather than
-   * being centred in this taller box. Centred, it sat 21px down here against
-   * 25.6 everywhere else, so the menu stepped as you moved between pages. The
-   * height stays — the arithmetic above is built on it — but the type sits
-   * where type sits on the rest of the site.
-   */
+  /* The line keeps the top padding it has on every other page rather than being
+     centred in this taller box. */
   padding-bottom: 0;
   align-content: start;
   margin-top: 0;
 }
 .has-film main { margin-top: 0; }
 
-/*
- * Phases two and three, from the moment the film's bottom edge reaches the
- * middle line. The bar's place in flow is that edge — hence the screen of top
- * margin — so it travels on it and `top: 0` catches it at the top and keeps it.
- *
- * `main` gives back exactly what the bar's margin and height take, so the film
- * occupies the same space in both states and the page is the same height in
- * both. Nothing reflows when they swap and the scroll cannot jump.
- */
+/* Phases two and three, from the moment the film's bottom edge reaches the middle line. */
 .has-film.is-film-past .top {
   position: sticky;
   top: 0;
@@ -493,10 +301,9 @@
 }
 .has-film.is-film-past main { margin-top: calc(-1 * var(--film-h) + var(--film-lift) - var(--film-bar)); }
 
-/* Where the two states agree, and so where the swap happens: the scroll at
-   which the film's bottom edge reaches the bar's resting place, which is the
-   screen height less that resting place. Placed by the stylesheet so the
-   arithmetic lives in one file; the observer only watches. */
+/* Where the two states agree, and so where the swap happens: the scroll at which
+   the film's bottom edge reaches the bar's resting place, which is the screen
+   height less that resting place. */
 .wc-film-mark {
   position: absolute;
   left: 0;
@@ -506,18 +313,7 @@
   pointer-events: none;
 }
 
-/*
- * The scroll cue belongs to the film, not to the screen.
- *
- * It is fixed at the foot of the viewport by default, which is the film's own
- * foot while the film is a full screen tall. Were the film ever made shorter,
- * a cue pinned to the bottom of the window would sit below the picture on
- * white — a negative drawn against nothing, pointing down from the wrong
- * edge. Measured off the film's height instead, it stays on the film's bottom
- * edge at every size; where the film is the whole screen the two are the same
- * number. (A phone has neither film nor cue: the phone rules at the foot of
- * this sheet.)
- */
+/* The scroll cue belongs to the film, not to the screen. */
 .has-film .scroll-cue { bottom: calc(100vh - var(--film-h) + 1.9rem); }
 
 .wc-film {
@@ -531,14 +327,7 @@
   background: var(--ink) var(--film-poster, none) center / cover no-repeat;
 }
 
-/*
- * The ground the bar reads against.
- *
- * Inside the film and over the picture, so the bar — which is outside `main`
- * and blends with everything painted beneath it — meets the film already
- * taken down. Nothing is listening for pointers here, and the poster is dimmed
- * with the film so the two never disagree.
- */
+/* The ground the bar reads against. */
 .wc-film::after {
   content: '';
   position: absolute;
@@ -547,10 +336,8 @@
   pointer-events: none;
 }
 
-/*
- * Taller than the frame it shows through, and hung above it, so there is film
- * to spare when the parallax below slides it down.
- */
+/* Taller than the frame it shows through, and hung above it, so there is film to
+   spare when the parallax below slides it down. */
 .wc-film-video {
   display: block;
   position: absolute;
@@ -561,13 +348,9 @@
   object-fit: cover;
 }
 
-/*
- * Sound on and off, in the film's top left corner: the scroll cue's size and
- * weight, set in from the corner by the cue's own distance from the foot, and
- * like it the negative of whatever frame is behind it. Above the dimming
- * layer, inside the film's own stacking context, so the blend is with the
- * picture.
- */
+/* Sound on and off, in the film's top left corner: the scroll cue's size and
+   weight, set in from the corner by the cue's own distance from the foot, and
+   like it the negative of whatever frame is behind it. */
 .wc-film-sound {
   position: absolute;
   top: 1.9rem;
@@ -599,21 +382,7 @@
   .wc-film-sound { display: none; }
 }
 
-/*
- * The film lags the page, so it reads as sinking beneath it.
- *
- * Over the screen it takes to scroll past, the film is slid down 15vh while the
- * page carries it up 100vh: it travels at 0.85 of the scroll, and the white
- * below appears to draw over it rather than merely follow it. That is the whole
- * effect, and it wants to stay small — at much more than this it stops reading
- * as depth and starts reading as the film being dragged.
- *
- * Driven by the scroll itself rather than by script. A scroll-driven animation
- * is handled where the scrolling is handled, so it cannot fall a frame behind
- * the way the bar did when script was moving it. Browsers without it simply
- * play the film without the drift, which is why the whole thing sits behind a
- * support query and nothing else depends on it.
- */
+/* The film lags the page, so it reads as sinking beneath it. */
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) {
     .wc-film-video {
@@ -629,33 +398,17 @@
   to { transform: translateY(calc(0.15 * var(--film-h))); }
 }
 
-/*
- * No air above the title: its mask has to begin exactly where the film ends.
- *
- * That is what makes the reveal an overlay rather than an effect nearby — the
- * mask's top edge and the film's bottom edge are the same line at every scroll
- * position, because the film is a screen tall and this is the next thing in
- * flow. The title slides down from behind that line, so it emerges from under
- * the film. The air the page wants is below the title instead.
- */
+/* No air above the title: its mask has to begin exactly where the film ends. */
 .has-film .wc {
   padding-top: 0;
 }
 
-/*
- * Someone who has asked for less motion gets the opening frame as a still. The
- * film is hidden rather than removed so the poster behind it stands in place.
- */
+/* Someone who has asked for less motion gets the opening frame as a still. */
 @media (prefers-reduced-motion: reduce) {
   .wc-film-video { display: none; }
 }
 
-/*
- * With scripting off the bar is simply the bar: fixed at the top, as on every
- * other page. The three-phase motion is an enhancement and is written as one —
- * the film still plays and the page still reads, it just opens with the bar
- * where a visitor already expects it rather than across the middle.
- */
+/* With scripting off the bar is simply the bar: fixed at the top, as on every other page. */
 html:not(.js) .has-film .top {
   position: fixed;
   top: 0;
@@ -666,49 +419,18 @@ html:not(.js) .has-film .top {
 }
 html:not(.js) .has-film main { margin-top: 0; }
 
-/*
- * No give at the top of the film.
- *
- * Scrolling up from the top of a page normally rubber-bands, and what shows in
- * the gap is the document's own ground — white — so the film appeared to peel
- * away from a blank sheet. The page is asked not to overscroll instead, which
- * is the only way to refuse it: the gap is drawn by the compositor, outside
- * anything a stylesheet can paint, so there is nothing to colour in.
- *
- * Set through `:has` because it has to land on the scrolling element itself,
- * and what identifies this page is a class on the body. Scoped to this page on
- * purpose — elsewhere the bounce is the platform's own behaviour and there is
- * nothing behind the page to catch anyone out. The one cost is pull-to-refresh
- * on Android, which goes with it.
- */
+/* No give at the top of the film. */
 html:has(body.has-film) {
   overscroll-behavior-y: none;
 }
 
-/*
- * No scroll anchoring across the hand-over.
- *
- * At the moment the bar trades `fixed` for `sticky` it enters the page's flow,
- * and the browser may answer a layout change by shifting the scroll to keep
- * what you were reading still. Here that would be shifting the very thing that
- * caused it, and it is not needed: `main` gives back exactly what the bar's
- * margin and height take, so nothing above or below actually moves. Turning
- * anchoring off removes a correction that can only make things worse.
- */
+/* No scroll anchoring across the hand-over. */
 .has-film,
 .has-film main {
   overflow-anchor: none;
 }
 
-/*
- * The standing note, above the names.
- *
- * Set to the page's own margins rather than the names' measure: the names are
- * pulled in to break into short centred lines, which is right for a roll-call
- * and wrong for a sentence. This runs the full width between the margins and
- * is justified, so three or four lines sit as a block under the film and the
- * names begin below it.
- */
+/* The standing note, above the names. */
 .wc-lead {
   margin: 0 0 calc(var(--wc-zoom, 1) * var(--wc-lead-gap, 7vw));
   font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.0833vw, 2.75rem));
@@ -720,13 +442,10 @@ html:has(body.has-film) {
   hyphens: auto;
 }
 /* The last line of a justified block is set flush left, so on its own it would
-   sit short against a full-width rule of text; centring the remainder is not
-   wanted here — the block reads as a paragraph, not as a plate. */
+   sit short against a full-width rule of text. */
 .wc-lead:last-child { margin-bottom: 0; }
 
-/* Four of the second edition answered with pictures. Said plainly rather than
-   left as a name with nothing under it, which would read as a missing answer
-   rather than as the answer it was. */
+/* Four of the second edition answered with pictures. */
 .wc-answer-images {
   grid-column: 1 / -1;
   margin-top: var(--wc-answer-text-gap, 1.6vw);
@@ -739,18 +458,8 @@ html:has(body.has-film) {
 
 /* ------------------------------------------------- the first edition's sheet */
 
-/*
- * The first edition keeps the setting it was drawn with: three columns of small
- * type under full-size names.
- *
- * That layout is the designer's, measured off her sheet — the gutter is 12px of
- * 1467, the answers are set almost solid at 16.4px of leading on an 11.5px cap,
- * and the three columns hold four, four and five entries over one vertical
- * extent because each is filled in turn. It only works at that size, which is
- * why the other two editions, now set at the page's size, had to give up the
- * columns. This edition was asked to keep it, so everything the larger type
- * changed is put back here and nowhere else.
- */
+/* The first edition keeps the setting it was drawn with: three columns of small
+   type under full-size names. */
 .wc-edition-i .wc-answers {
   columns: 3;
   column-gap: var(--wc-gutter-tight, 0.782vw);
@@ -785,10 +494,7 @@ html:has(body.has-film) {
 
 /* ------------------------------------------- the opening view, by edition */
 
-/*
- * The names are set in three blocks, one per edition, each under its numeral.
- * The gap between them is the only new figure: 33 of 761 in the reference.
- */
+/* The names are set in three blocks, one per edition, each under its numeral. */
 .wc-group + .wc-group {
   margin-top: calc(var(--wc-zoom, 1) * var(--wc-group-gap, 4.34vw));
 }
@@ -798,14 +504,7 @@ html:has(body.has-film) {
 
 /* ------------------------------------------------------------ the title */
 
-/*
- * The name of the project, above the note.
- *
- * It was set as large as the line would hold and is ordinary text now: the
- * page's own size, the same as the names and the note under it, centred over
- * them. Nothing here fits itself to the width any more, so it may wrap, which
- * at this size is what it should do.
- */
+/* The name of the project, above the note. */
 .wc-title {
   margin: 0 0 var(--wc-title-gap, 1.227em);
   font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.0833vw, 2.75rem));
@@ -818,17 +517,9 @@ html:has(body.has-film) {
 
 
 /* The standing note is set medium, the question in it included; only the
-   invitation that closes it is semibold. All of it at 40, as every text on
-   these pages is at the 1920 the sheets are drawn at. */
-/*
- * Set as the three editions' texts at the foot of the view are: the same size
- * and solid leading, justified across the page's own margins, only heavier.
- * The one knob is how far it spreads:
- *
- *   --wc-lead-measure   the paragraph's width, as a share of the page between
- *                       its margins. 100% is the full spread the editions'
- *                       texts take; smaller draws it in, centred.
- */
+   invitation that closes it is semibold. */
+/* Set as the three editions' texts at the foot of the view are: the same size
+   and solid leading, justified across the page's own margins, only heavier. */
 .wc-lead {
   font-size: calc(var(--wc-zoom, 1) * clamp(1.05rem, 2.0833vw, 2.75rem));
   font-weight: 500;
@@ -836,40 +527,12 @@ html:has(body.has-film) {
   text-align: justify;
 }
 
-/*
- * A name on an edition page points at that person's answer further down it, so
- * it travels rather than jumps. Not by `scroll-behavior: smooth` any more: the
- * browser's own smooth scroll cannot be paced, and Safari's is a snap. The
- * links glide by script instead (client/glide.ts), at the site's one speed.
- *
- * Clear of the fixed bar when an answer is travelled to — the glide reads
- * this margin, as the browser would. */
+/* A name on an edition page points at that person's answer further down it, so
+   it travels rather than jumps. */
 .wc-answer,
 .wc-cell { scroll-margin-top: var(--wc-answer-anchor, 7rem); }
 
-/*
- * The opening rides up from under the film.
- *
- * The mask begins exactly where the film ends — a screen of film, then this,
- * with nothing between — so its top edge and the film's bottom edge are the
- * same line at every scroll position. The block inside is held clear of that
- * line until the scroll draws it into place, so the words come out from under
- * the film rather than appearing near it.
- *
- * It is the whole opening that moves now, the project's name and the note
- * together, rather than a display line on its own. They read as one thing, so
- * they arrive as one.
- *
- * The travel runs over exactly the stretch in which the film leaves: from
- * where the bar locks onto the film's bottom edge to where that edge reaches
- * the top of the screen — the same two figures the bar's own two states are
- * divided by, so the two are one movement.
- *
- * Two knobs:
- *   --wc-title-from   where the block comes from. 105% rises from below the
- *                     line; -105% comes down from behind the film instead.
- *   --wc-title-gap    the air between the project's name and the note.
- */
+/* The opening rides up from under the film. */
 .wc-intro-mask {
   overflow: hidden;
   margin: 0 0 calc(var(--wc-zoom, 1) * var(--wc-intro-gap-below, 7vw));
@@ -892,42 +555,15 @@ html:has(body.has-film) {
 
 /* ------------------------------------------ the first edition's sheet */
 
-/*
- * A composition, not a list.
- *
- * Measured off the designer's sheet at the 860px it was drawn at: a content
- * width of 822 holding three columns of 265 with an 8px gutter, entries placed
- * by hand in one column or another, Claudia's own paragraphs set across the
- * full width between them, and a plate of the work partway down.
- *
- * Everything here is a share of that content width rather than a length, so
- * the whole sheet keeps its proportions at any size: the gutter is 0.973% of
- * it, the drop a block takes when it sits below its neighbour is 7.299%, the
- * plate is 86.131% and centred. The type is the same — the name is 2.141% of
- * the width and everything else is a multiple of the name, which is what makes
- * one variable enough to scale the whole sheet.
- */
+/* A composition, not a list. */
 .wc-sheet-page .wc-sheet {
-  /*
-   * The sheet's own width, as a length, because almost nothing here can use a
-   * percentage and mean this.
-   *
-   * A percentage gap on a grid resolves against the grid's height, and a
-   * percentage margin on a grid item resolves against its column — not against
-   * the sheet. Both were quietly wrong: the 7.3% drop came out at 36px instead
-   * of 111 because a third of the width is a third of the figure, and the row
-   * gap came out of the grid's own height, which is thousands of pixels. So
-   * every share of the width below is multiplied by this.
-   */
+  /* The sheet's own width, as a length, because almost nothing here can use a
+     percentage and mean this. */
   --sheet-w: calc(min(100vw, 2160px) - 2 * var(--pad));
-  /* 40px of the 1824 the sheets are drawn at: the site's own size, not a
-     bespoke one — her sheets set everything at 40 or at half of it. */
+  /* 40px of the 1824 the sheets are drawn at: the site's own size, not a bespoke
+     one — her sheets set everything at 40 or at half of it. */
   --sheet: calc(var(--sheet-w) * var(--sheet-type, 0.021930) * var(--wc-zoom, 1));
-  /* The vertical unit. The client has the whole project a quarter smaller
-     than the sheets are drawn, so the air between bands scales with the type
-     it surrounds — otherwise small text would float in full-size gaps and
-     nothing would sit the way the sheets have it. Horizontal measures — the
-     columns, the gutter, the strip — stay true to the width. */
+  /* The vertical unit. */
   --sheet-v: calc(var(--sheet-w) * var(--wc-zoom, 1));
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -943,35 +579,17 @@ html:has(body.has-film) {
 /* A slot is the column a block was put in, and how far it was dropped. */
 .wc-sheet-page .wc-slot {
   grid-column: var(--col, 1);
-  /* The band's measured air, plus this slot's own drop below the band's top.
-     A step is 134 of the sheet's 1824. Both are taken off the width. */
+  /* The band's measured air, plus this slot's own drop below the band's top. */
   margin-top: calc(
     var(--sheet-v) * (var(--lead, 0.09) + var(--drop, 0) * var(--sheet-drop, 0.0732))
   );
   margin-bottom: 0;
 }
 
-/*
- * Her words stand further from the entries under them than from each other.
- *
- * Carried on the paragraph rather than on the entry below it, which is where
- * it was first put and wrong: only the first entry of a row is the paragraph's
- * next sibling, so the gap landed on that one block instead of the row, and it
- * ate into the drop of the block beside it — Marina was pushed down 3.6% and
- * arrived 3.7% above Olafur instead of 7.3%. On the paragraph it moves the
- * whole row and leaves the drops to each other.
- *
- * Not between two paragraphs, where the gap is the row's own.
- */
+/* Her words stand further from the entries under them than from each other. */
 
 
-/*
- * Claudia's words, across the full width.
- *
- * Set a little larger than the names — 1.08 of them on the sheet — in caps and
- * justified, which is how she sets them: the lines hold to both margins and
- * the last one falls short.
- */
+/* Claudia's words, across the full width. */
 .wc-sheet-page .wc-say {
   grid-column: 1 / -1;
   margin-top: calc(var(--sheet-v) * var(--lead, 0.08));
@@ -990,17 +608,15 @@ html:has(body.has-film) {
 }
 .wc-sheet-page .wc-say > * { margin: 0; }
 
-/*
- * An entry: the name down the left of its column, what they do ranged right
- * against the column's other edge with the translation under it, the colour
- * beneath that, and the answer across the whole column below.
- */
+/* An entry: the name down the left of its column, what they do ranged right
+   against the column's other edge with the translation under it, the colour
+   beneath that, and the answer across the whole column below. */
 .wc-sheet-page .wc-cell {
   display: grid;
-  /* The right side holds what they do and their colour, and it wraps at half
-     the cell rather than squeezing the name out of its column: the third
-     edition's roles run long, and on her sheet they break into lines while
-     the names hold their size. */
+  /* The right side holds what they do and their colour, and it wraps at half the
+     cell rather than squeezing the name out of its column: the third edition's
+     roles run long, and on her sheet they break into lines while the names hold
+     their size. */
   grid-template-columns: minmax(0, 1fr) minmax(0, 50%);
   column-gap: 0.6em;
   align-items: start;
@@ -1010,8 +626,7 @@ html:has(body.has-film) {
 .wc-sheet-page .wc-cell-name {
   grid-column: 1;
   margin: 0;
-  /* NOM: medium 20 on 20, the size of the rest of the block — the roster
-     above keeps the 40 (typography sheet; Frank, 2026-11-17). */
+  /* NOM: medium 20 on 20, the size of the rest of the block — the roster above keeps the 40. */
   font-size: 0.5em;
   font-weight: 500;
   line-height: var(--sheet-name-lead, 1);
@@ -1048,12 +663,9 @@ html:has(body.has-film) {
   text-transform: uppercase;
 }
 
-/*
- * The answer, across the column and justified, at a little under half the
- * name's size — which is what makes the sheet read as a sheet rather than as a
- * page of statements. Hyphenated, because a column this narrow opens rivers
- * without it.
- */
+/* The answer, across the column and justified, at a little under half the name's
+   size — which is what makes the sheet read as a sheet rather than as a page of
+   statements. */
 .wc-sheet-page .wc-cell-text {
   grid-column: 1 / -1;
   margin-top: var(--sheet-answer-gap, calc(var(--sheet-v) * 0.0355));
@@ -1066,21 +678,15 @@ html:has(body.has-film) {
   hyphens: none;
 }
 .wc-sheet-page .wc-cell-text > * { margin: 0; }
-/* Paragraphs run on: a new one starts on a new line, with no indent and no
-   air above it. */
+/* Paragraphs run on: a new one starts on a new line, with no indent and no air above it. */
 
-/* On a phone the sheet is one column, set by its own rules at the foot of
-   this file. */
+/* On a phone the sheet is one column, set by its own rules at the foot of this file. */
 
-/*
- * The second edition's sheet opens with its own title — the project and the
- * numeral semibold, who it was for beside them — set at the weight of the writing
- * rather than of a heading, because on her sheet it reads as the first line of
- * the text and not as a masthead.
- */
+/* The second edition's sheet opens with its own title — the project and the
+   numeral semibold, who it was for beside them. */
 /* Doubled up on purpose: the rule that closes the gap between two adjacent
-   statements is one class heavier than a bare `.wc-sheet-title`, and the
-   title is followed by a statement, so without this its gap never applies. */
+   statements is one class heavier than a bare `.wc-sheet-title`, and the title
+   is followed by a statement, so without this its gap never applies. */
 .wc-sheet-page .wc-say.wc-sheet-title {
   font-weight: 400;
   text-align: left;
@@ -1089,13 +695,8 @@ html:has(body.has-film) {
   font-weight: 600;
 }
 
-/*
- * Each sheet opens with its reel, a breath under the roster — the air and the
- * reel's height measured off her sheets, as a share of the sheet's width:
- *
- *   --sheet-top       the air between the roster and the reel
- *   --sheet-strip-h   the reel's height; every photograph is set to it
- */
+/* Each sheet opens with its reel, a breath under the roster — the air and the
+   reel's height measured off her sheets, as a share of the sheet's width: */
 .wc-edition-i .wc-sheet {
   --sheet-top: 0.0705;
   --sheet-strip-h: 0.1059;
@@ -1105,22 +706,18 @@ html:has(body.has-film) {
   --sheet-strip-h: 0.0991;
 }
 .wc-edition-iii .wc-sheet {
-  /* Held to the other two (I 0.0705, II 0.0727) so its reel and its text sit
-     as far under the names as theirs do (Frank, 2026-11-18). */
+  /* Held to the other two (I 0.0705, II 0.0727) so its reel and its text sit as
+     far under the names as theirs do. */
   --sheet-top: 0.0716;
   --sheet-strip-h: 0.1;
 }
 
-/*
- * The reel: one row of photographs, centred, all one height and each whole at
- * the shape of its file — portraits narrow, landscapes wide, as her sheets
- * run them. 0.9% of the width between, measured off all three sheets alike.
- * Height and gap are horizontal measures, true to the width like the
- * columns; only the air above it scales with the type.
- */
+/* The reel: one row of photographs, centred, all one height and each whole at
+   the shape of its file — portraits narrow, landscapes wide, as her sheets run
+   them. */
 .wc-sheet-page .wc-strip {
-  /* A line of 40 more under the reel than the sheets draw, before the
-     writing and the answers begin (--sheet-after-reel). */
+  /* A line of 40 more under the reel than the sheets draw, before the writing
+     and the answers begin (--sheet-after-reel). */
   margin-bottom: calc(var(--sheet-v) * var(--sheet-after-reel, 0.0219));
   grid-column: 1 / -1;
   display: flex;
@@ -1130,13 +727,7 @@ html:has(body.has-film) {
   margin-top: calc(var(--sheet-v) * var(--lead, 0));
 }
 
-/*
- * One photograph. A real link to the picture — the script opens it over the
- * page instead — with a small lift on hover, which is the only thing on the
- * sheet that moves. Each cell carries its file's own shape as an aspect ratio,
- * so its width follows from the reel's height whether or not the picture has
- * arrived: a lazy photograph holds its place, and nothing shifts when it lands.
- */
+/* One photograph. */
 .wc-book {
   display: block;
   flex: none;
@@ -1159,12 +750,7 @@ html:has(body.has-film) {
   transform: translateY(-4%);
 }
 
-/*
- * The clicked photograph, large over the page. The page itself stays where it
- * was, blurred behind a veil; a click anywhere or Escape puts it back. Sized
- * by the viewport and never past the file's own width, so the photograph is
- * shown, not upscaled.
- */
+/* The clicked photograph, large over the page. */
 .wc-book-view {
   position: fixed;
   inset: 0;
@@ -1184,8 +770,7 @@ html:has(body.has-film) {
 .wc-book-view[hidden] {
   display: none;
 }
-/* The sheets' Close. The bar stays above this view, so it sits under the bar
-   rather than on its line, where it would cover the last page's name. */
+/* The sheets' Close. */
 .wc-book-view > .panel-close {
   top: var(--bar);
   color: var(--ink);
@@ -1193,12 +778,7 @@ html:has(body.has-film) {
 .wc-book-plate {
   margin: 0;
 }
-/*
- * The start page's chevron on its side, either side of the photograph, in the
- * negative. The script moves them to the end of the body (client/book.ts) so
- * the blend reaches the photograph and the page rather than only the view's
- * own veil, and shows them (`.is-shown`) only while a photograph is up.
- */
+/* The start page's chevron on its side, either side of the photograph, in the negative. */
 .wc-book-step {
   position: fixed;
   top: 50%;
@@ -1224,13 +804,7 @@ html:has(body.has-film) {
   max-height: 86vh;
 }
 
-/*
- * A chosen answer. Clicking a name travels to the entry and everything that is
- * not the entry — the other answers, the writing, the plates, the roster —
- * falls out of focus behind it, literally: blurred and faded, cleared by the
- * reader's next own movement. The transition rides on the elements themselves
- * so coming back is as quiet as going.
- */
+/* A chosen answer. */
 .wc-sheet-page .wc-sheet > *,
 .wc-sheet-page .wc-names,
 .wc-sheet-page .wc-numeral,
@@ -1259,15 +833,7 @@ html:has(body.has-film) {
   }
 }
 
-/*
- * The opening view's version of the chosen answer. A clicked name is a
- * departure — the edition's page is opening — and the view sees it off: the
- * title and the other groups and the introductions fall back blurred, while
- * inside the chosen group the other names only step back in opacity, because
- * they share lines with the chosen one and blurring part of a line smears all
- * of it. Cleared on arrival back, because the back/forward cache would
- * otherwise restore the farewell.
- */
+/* The opening view's version of the chosen answer. */
 #whats-color .wc-intro-mask,
 #whats-color .wc-intros,
 #whats-color .wc-group,
@@ -1289,8 +855,8 @@ html:has(body.has-film) {
   filter: blur(5px);
   opacity: 0.35;
 }
-/* An introduction can be the thing chosen too; then its neighbours step back
-   the way the hover already takes them, and the rest of the page blurs. */
+/* An introduction can be the thing chosen too; then its neighbours step back the
+   way the hover already takes them, and the rest of the page blurs. */
 #whats-color.wc-focus .wc-intros:has(.wc-focused) .wc-intro:not(.wc-focused) {
   opacity: 0.35;
 }
@@ -1309,27 +875,7 @@ html:has(body.has-film) {
   }
 }
 
-/*
- * The note, written as you scroll.
- *
- * The section is four screens where one is shown: the paragraph rides pinned
- * at the centre while the scroll spends the other three, and each word
- * appears over its own slice of that stretch — the slices are computed where
- * the words are, at build, and arrive on the elements. When the last word has
- * landed the pin holds a beat, lets go, and the page carries the sentence up
- * into the names, which is the only exit this needs: nothing here animates
- * the departure, the scroll simply resumes.
- *
- * Three knobs:
- *   --wc-write-length   how much scroll the writing takes. More is slower.
- *   --wc-lead-measure   the paragraph's width (set with the note's type above).
- *   --wc-ask            the colour behind the question. One of the palette's.
- *
- * An engine without scroll-run animations has its words put in by
- * client/write.ts, on the same stage and the same slices. With motion reduced
- * no word is ever hidden: the note simply stands, in the middle of a screen
- * of its own.
- */
+/* The note, written as you scroll. */
 @media (prefers-reduced-motion: reduce) and (min-width: 900px) {
   .wc-write {
     display: grid;
@@ -1356,18 +902,7 @@ html:has(body.has-film) {
   text-transform: uppercase;
 }
 
-/*
- * The question, under a colour from the palette — a band, not a block. An
- * inline background fills the font's whole height, ascender to descender,
- * which is 1.23em of Switzer; her sheet draws 0.905em, from 0.1em above the
- * capitals to 0.125em below the line. So the colour is a gradient sized to
- * that band and set 0.2em down from the top of the box (Switzer's ascent of
- * 0.98em, less its capitals of 0.68em, less the 0.1em above them). The band
- * runs on past the first letter's ink by 0.175em and past the question mark's
- * by 0.05em, as drawn, overhanging rather than pushing the words apart — the
- * letters' own side bearings counted in, which is why the figures below are
- * smaller than those, and why the end of the band stops short of the box.
- */
+/* The question, under a colour from the palette — a band, not a block. */
 .wc-ask {
   --wc-ask-c: var(--wc-ask, var(--hue-7, #cf303a));
   background: linear-gradient(var(--wc-ask-c), var(--wc-ask-c)) no-repeat 0 0.2em / 100% 0.905em;
@@ -1384,30 +919,16 @@ html:has(body.has-film) {
   background-size: calc(100% - 0.033em) 0.905em;
 }
 
-/* From 900 up. A phone held upright has a stage of its own, at the foot of
-   this sheet, on the same words and the same timeline (Frank, 2026-11-15). */
+/* From 900 up. */
 @media (prefers-reduced-motion: no-preference) and (min-width: 900px) {
   .wc-write {
     height: var(--wc-write-length, 370vh);
-    /*
-     * Pulled up under the film, so the stage pins — and the writing can
-     * begin, at the fixed centre — while the film's last stretch is still
-     * leaving the top of the screen. THE knob for "the words come too
-     * soon / too late": what still shows of the film when the first word
-     * lands is this pull less the page's own top padding, so more is
-     * sooner, less is later, and at the padding's own size the writing
-     * waits for an empty page.
-     */
+    /* Pulled up under the film, so the stage pins — and the writing can begin,
+       at the fixed centre — while the film's last stretch is still leaving the
+       top of the screen. */
     margin-top: calc(-1 * var(--wc-write-early, 30vh));
-    /*
-     * Pulled up by half a screen: while the finished sentence holds the
-     * centre, the names climb the lower half of the view, stop a breath
-     * beneath it — the knob is the breath — and only then does the pin let
-     * go, so the sentence travels up sitting right on top of them.
-     * --wc-write-air is the room left between them when they meet, in the
-     * type's own terms: 6.77vw leaves the sheet's 157 at 1920, about four
-     * lines of the note, from the invitation's ink to the first numeral's.
-     */
+    /* Pulled up by half a screen: while the finished sentence holds the centre,
+       the names climb the lower half of the view, stop a breath beneath it. */
     margin-bottom: calc(var(--wc-write-meet, 12vh) + var(--wc-write-air, 6.77vw) - 50vh);
     view-timeline: --wc-write block;
   }
@@ -1417,12 +938,9 @@ html:has(body.has-film) {
     height: 100vh;
     display: grid;
     place-items: center;
-    /*
-     * Nothing in here is for pointing at, and the pin is a positioned box:
-     * once the names are pulled up into its empty lower half, a positioned
-     * box sits above them for hit-testing and their links go dead. The
-     * whole stage waves pointers through instead.
-     */
+    /* Nothing in here is for pointing at, and the pin is a positioned box: once
+       the names are pulled up into its empty lower half, a positioned box sits
+       above them for hit-testing and their links go dead. */
     pointer-events: none;
   }
 }
@@ -1433,8 +951,8 @@ html:has(body.has-film) {
   @supports (animation-timeline: view()) {
     .wc-word {
       opacity: 0;
-      /* Each word arrives whole, the moment its turn comes: no fade-in, so
-         there is never a half-written word ahead of the reader. */
+      /* Each word arrives whole, the moment its turn comes: no fade-in, so there
+         is never a half-written word ahead of the reader. */
       animation: wc-word-in steps(1, jump-start) both;
       animation-timeline: --wc-write;
       /* Each word's own animation-range rides on the element. */
@@ -1449,16 +967,7 @@ html:has(body.has-film) {
   to { opacity: 1; }
 }
 
-/*
- * The names hold off until the sentence stands written. They already climb
- * the lower half of the view while the pin holds — that is geometry, set by
- * the stage's pull — but they only become visible from the moment the last
- * word's fade is done (0.04 screens past END, 65.6% of the writing's own
- * timeline) to the moment the pin lets go (70.6%). The timeline is the
- * write stage's, reached across the page by scoping it to the view's root;
- * where the scope is not understood the rule never applies, and the names
- * are simply there, which is what every other fallback here does too.
- */
+/* The names hold off until the sentence stands written. */
 @supports (animation-timeline: view()) and (timeline-scope: --wc-write) {
   @media (prefers-reduced-motion: no-preference) and (min-width: 900px) {
     #whats-color {
@@ -1476,18 +985,10 @@ html:has(body.has-film) {
 }
 
 
-/*
- * The three editions' writing at the foot of the opening view, as the
- * start-page sheets set it: full measure, a heading line with a blank line's
- * air under it, the text at the page's own size on solid leading, and each
- * block cut to the sentence the sheet cuts it at until 'Read more' lets the
- * rest down. The sheet justifies the first and sets the other two ragged,
- * which is what the inline alignment carries.
- *
- * The whole block is a doorway to its edition — the heading inside is the
- * real link the script widens — but nothing answers to hovering it: the
- * other blocks stay as they are.
- */
+/* The three editions' writing at the foot of the opening view, as the start-page
+   sheets set it: full measure, a heading line with a blank line's air under it,
+   the text at the page's own size on solid leading, and each block cut to the
+   sentence the sheet cuts it at until 'Read more' lets the rest down. */
 .wc-texts {
   margin-top: calc(var(--wc-zoom, 1) * 9.1%);
 }
@@ -1500,8 +1001,7 @@ html:has(body.has-film) {
   text-align: justify;
   cursor: pointer;
 }
-/* Newest first, III to I. Each gap belongs to the pair it stands between —
-   III and II, II and I — as measured, whichever way round they run. */
+/* Newest first, III to I. */
 .wc-text[data-edition='ii'] {
   margin-top: calc(var(--wc-zoom, 1) * 7.29%);
 }
@@ -1546,8 +1046,8 @@ html.js .wc-text.is-open .wc-text-closed {
 html:not(.js) .wc-text-closed {
   display: none;
 }
-/* 'Read more' writes the rest in (client/texts.ts): a word not yet written
-   keeps its place, so the block stands at its full height from the start. */
+/* 'Read more' writes the rest in (client/texts.ts): a word not yet written keeps
+   its place, so the block stands at its full height from the start. */
 .wc-text.is-typing .wc-type:not(.is-written) {
   visibility: hidden;
 }
@@ -1558,21 +1058,7 @@ html:not(.js) .wc-text-closed {
   }
 }
 
-/*
- * The second edition's colour chart, at the foot of its page.
- *
- * Measured off her sheet at 1920: twenty bars of 61 across the full 1824,
- * spread edge to edge; every bar standing on one line, 0.7 of the width below
- * the top of the names; each name upright, reading down, its capitals to the
- * right against its bar's edge; and the bars' own heights written on them.
- * Horizontal measures stay true to the width like the sheet's columns; the
- * heights scale with the type, as the sheet's air does, so a name and its bar
- * keep the distance she drew between them.
- *
- *   --chart-top   the air above the chart
- *   --bar-gap     the room between a name and its bar; a name too long for
- *                 its room rises above the chart, the bar keeps its height
- */
+/* The second edition's colour chart, at the foot of its page. */
 .wc-chart {
   --sheet-w: calc(min(100vw, 2160px) - 2 * var(--pad));
   --sheet-v: calc(var(--sheet-w) * var(--wc-zoom, 1));
@@ -1595,8 +1081,8 @@ html:not(.js) .wc-text-closed {
 .wc-bar-name {
   align-self: flex-end;
   writing-mode: vertical-rl;
-  /* Every glyph turned with the line, punctuation included: left to the
-     default, an apostrophe stands upright and reads as a stray dash. */
+  /* Every glyph turned with the line, punctuation included: left to the default,
+     an apostrophe stands upright and reads as a stray dash. */
   text-orientation: sideways;
   font-weight: 400;
   line-height: 1;
@@ -1644,20 +1130,7 @@ a.wc-bar:focus-visible {
 
 /* ------------------------------------------- the phone: the opening view */
 
-/*
- * What's Color? on a phone, off the designer's 375 sheets. Every figure is a
- * measurement from them in units of that frame (`--p`, 09-phone.css), and the
- * ones to tune by hand are the first rule's.
- *
- * There is no film here: past the menu the page opens on the note, and the
- * three rosters and the three texts follow it down one column, 20 in from
- * either edge. Held upright, the note is typed by the scroll from a blank
- * page (the block after this one); on its side, or wherever the scroll writes
- * nothing, it is an ordinary paragraph and there is no cue.
- *
- * This block and the editions' after it stay at the foot of the sheet: this
- * one has to come after the rule that sets `.wc-lead` justified a second time.
- */
+/* What's Color? */
 @media (max-width: 899px) {
   .wc {
     /* The note at the head and the three texts at the foot: size, leading. */
@@ -1666,8 +1139,8 @@ a.wc-bar:focus-visible {
     /* The numerals and the names: size, leading. */
     --wc-phone-names: calc(30 * var(--p));
     --wc-phone-names-lead: calc(30 * var(--p));
-    /* From the top of the screen to the note's first line; under the last
-       'Read more' to the foot of the page. */
+    /* From the top of the screen to the note's first line; under the last 'Read
+       more' to the foot of the page. */
     --wc-phone-top: calc(108 * var(--p));
     --wc-phone-foot: calc(110 * var(--p));
     /* The note's width (the column itself is 335), and the air under it. */
@@ -1678,15 +1151,15 @@ a.wc-bar:focus-visible {
     /* A numeral to its names; those names to the next numeral. */
     --wc-phone-numeral-gap: calc(29 * var(--p));
     --wc-phone-group-gap: calc(29 * var(--p));
-    /* The last names to the first text; a text's heading to its first line;
-       one text's 'Read more' to the next text's heading. */
+    /* The last names to the first text; a text's heading to its first line; one
+       text's 'Read more' to the next text's heading. */
     --wc-phone-texts-top: calc(110 * var(--p));
     --wc-phone-head-gap: calc(40 * var(--p));
     --wc-phone-text-gap: calc(98 * var(--p));
   }
 
-  /* With no film there is nothing for the cue to point down from, and no
-     edge for a pull to peel away from: the page may be pulled to reload. */
+  /* With no film there is nothing for the cue to point down from, and no edge
+     for a pull to peel away from: the page may be pulled to reload. */
   .has-film .scroll-cue { display: none; }
   html:has(body.has-film) { overscroll-behavior-y: auto; }
 
@@ -1706,12 +1179,8 @@ a.wc-bar:focus-visible {
   }
   .wc-write .wc-lead + .wc-lead { margin-top: var(--wc-phone-line); }
 
-  /*
-   * ---- the numerals and the names
-   * Set the same on an edition's own page, so neither rule is tied to the
-   * opening view. The names break where the line is full, as the sheet's do,
-   * and are not balanced: balancing re-breaks every line of a block this long.
-   */
+  /* ---- the numerals and the names Set the same on an edition's own page, so
+     neither rule is tied to the opening view. */
   .wc-numeral {
     margin-bottom: var(--wc-phone-numeral-gap);
     font-size: var(--wc-phone-names);
@@ -1747,8 +1216,8 @@ a.wc-bar:focus-visible {
     letter-spacing: 0;
     text-align: left;
   }
-  /* 44 high to press without moving the words: a touch anywhere else on a
-     text leaves for its edition, so a near miss here must not count as one. */
+  /* 44 high to press without moving the words: a touch anywhere else on a text
+     leaves for its edition, so a near miss here must not count as one. */
   .wc-more::before,
   .wc-less::before {
     content: '';
@@ -1757,31 +1226,13 @@ a.wc-bar:focus-visible {
   }
 }
 
-/*
- * The note typed by the scroll on a phone held upright (Frank, 2026-11-15):
- * the page opens blank with the cue asking for the scroll, the note's words
- * step in as it comes, down to the invitation, and step out again as it goes
- * back up. The desktop's stage on the same words — their ranges ride on the
- * elements, computed at build — with the note pinned at its own place under
- * the bar rather than at the centre, and not pulled up under a film, since
- * there is none here.
- *
- * The section spends --wc-phone-write-length of scroll; the pin's height is
- * the note's own, so the names come up from the foot of the screen in the
- * ordinary flow behind it and meet it, the note's gap under it, as the pin
- * lets go. The names pop in as everything else does on a phone
- * (client/reveal.ts), with none of the desktop's held fade.
- *
- * Upright only (client/env.ts, `scrollWrites`, makes the same test): on its
- * side a phone's screen is shorter than the pinned note, and the words would
- * be typed below its edge. Placed after the phone block, which it outweighs
- * where both speak.
- */
+/* The note typed by the scroll on a phone held upright: the page opens blank
+   with the cue asking for the scroll, the note's words step in as it comes, down
+   to the invitation, and step out again as it goes back up. */
 @media (prefers-reduced-motion: no-preference) and (max-width: 899px) and (orientation: portrait) {
   #whats-color { padding-top: 0; }
   .wc-write {
-    /* THE knob for "the typing is too fast / too slow" by hand. More than
-       240svh, or the first word is already there on the blank page. */
+    /* THE knob for "the typing is too fast / too slow" by hand. */
     height: var(--wc-phone-write-length, 370svh);
     margin: 0 0 var(--wc-phone-note-gap);
     view-timeline: --wc-write block;
@@ -1793,8 +1244,7 @@ a.wc-bar:focus-visible {
     /* Nothing in here is for pointing at, as on the desktop's stage. */
     pointer-events: none;
   }
-  /* The cue over the blank page, standing clear of the screen's foot.
-     It overrides the film's place for it and the phone's 'no cue'. */
+  /* The cue over the blank page, standing clear of the screen's foot. */
   html.js .has-film .scroll-cue {
     display: block;
     bottom: calc(24 * var(--p));
@@ -1803,20 +1253,8 @@ a.wc-bar:focus-visible {
 
 /* -------------------------------------- the phone: an edition's own page */
 
-/*
- * The three editions on a phone, off the designer's 375 sheets: (I) and (III)
- * drawn whole, (II) only as far as its names, so it takes (III)'s figures.
- * The type is one system across the three; the air between things was placed
- * by hand on each sheet, which is why the first two rules are all knobs — the
- * figures of (II) and (III), then (I)'s where its sheet differs. The numeral's
- * and the names' size, and the gap between them, are the opening view's knobs
- * above (`--wc-phone-names`, `--wc-phone-numeral-gap`).
- *
- * The sheet's three columns become one, read in the order of the markup, and
- * nothing of the desktop's placement (`--col`, `--drop`, `--lead`) is used.
- * An entry is centred and reads name, what they do, answer, colour — the
- * colour after the answer, by `order`, the markup as it was.
- */
+/* The three editions on a phone, off the designer's 375 sheets: (I) and (III)
+   drawn whole, (II) only as far as its names, so it takes (III)'s figures. */
 
 /* The closing line belongs to the phone sheets alone. */
 .wc-foot { display: none; }
@@ -1838,40 +1276,38 @@ a.wc-bar:focus-visible {
 
     /* From the top of the screen to the numeral. */
     --wc-phone-top: calc(107 * var(--p));
-    /* The names to the photograph; the photograph's height and width (auto:
-       the shape of each file); how far it stands off the centre of the page;
-       the photograph to her first words. */
+    /* The names to the photograph; the photograph's height and width (auto: the
+       shape of each file); how far it stands off the centre of the page; the
+       photograph to her first words. */
     --wc-ed-reel-top: calc(24 * var(--p));
     --wc-ed-reel-h: calc(189 * var(--p));
     --wc-ed-reel-w: auto;
     --wc-ed-reel-shift: 0px;
     --wc-ed-reel-after: calc(22 * var(--p));
-    /* Her words: one paragraph to the next; down to the first entry of the
-       page, and to an entry further on; from an entry down to her words. */
+    /* Her words: one paragraph to the next; down to the first entry of the page,
+       and to an entry further on; from an entry down to her words. */
     --wc-ed-say-para: calc(20 * var(--p));
     --wc-ed-first-entry: calc(60 * var(--p));
     --wc-ed-say-entry: calc(60 * var(--p));
     --wc-ed-entry-say: calc(46 * var(--p));
     /* One entry to the next. */
     --wc-ed-entry-gap: calc(70 * var(--p));
-    /* Inside an entry. The widest a name or a role runs before it breaks,
-       and how it breaks (balance: into lines of a length; wrap: where the
-       line is full). */
+    /* Inside an entry. */
     --wc-ed-measure: calc(230 * var(--p));
     --wc-ed-wrap: balance;
-    /* Name to role; the least room a lone role and an answer are given
-       (0: only their own lines); role to answer; answer to colour. */
+    /* Name to role; the least room a lone role and an answer are given (0: only
+       their own lines); role to answer; answer to colour. */
     --wc-ed-name-role: calc(21 * var(--p));
     --wc-ed-role-min: 0px;
     --wc-ed-role-answer: calc(23 * var(--p));
     --wc-ed-answer-min: 0px;
     --wc-ed-answer-para: var(--wc-ed-small-lead);   /* between an answer's paragraphs: one line */
     --wc-ed-answer-code: calc(20 * var(--p));
-    /* The band of colour behind a colour's name: 1 draws it, 0 sets the
-       name plain, in the ink, as the phone sheets have it. */
+    /* The band of colour behind a colour's name: 1 draws it, 0 sets the name
+       plain, in the ink, as the phone sheets have it. */
     --wc-ed-band: 1;
-    /* The last entry to the colour chart of (II); the last of the page to
-       the closing line; under that line to the foot of the page. */
+    /* The last entry to the colour chart of (II); the last of the page to the
+       closing line; under that line to the foot of the page. */
     --wc-ed-chart-top: calc(70 * var(--p));
     --wc-ed-foot-top: calc(127 * var(--p));
     --wc-ed-foot: calc(98 * var(--p));
@@ -1881,8 +1317,8 @@ a.wc-bar:focus-visible {
     --wc-ed-reel-w: calc(142 * var(--p));
     --wc-ed-reel-shift: calc(-0.5 * var(--p));
   }
-  /* (I): more air throughout, names and roles across the whole column, and
-     two lines' room kept for a role and for an answer however short. */
+  /* (I): more air throughout, names and roles across the whole column, and two
+     lines' room kept for a role and for an answer however short. */
   .wc-edition-i {
     --wc-phone-top: calc(108 * var(--p));
     --wc-phone-numeral-gap: calc(33 * var(--p));
@@ -1908,13 +1344,12 @@ a.wc-bar:focus-visible {
   .wc-edition { padding: var(--wc-phone-top) var(--phone-pad) var(--wc-ed-foot); }
   /* The roster takes the whole column, not the sheet's narrower measure. */
   .wc-sheet-page .wc-names { max-width: none; }
-  /* (I) sets one name to a line: the comma stays with its name and the line
-     ends after it. The other two run on. */
+  /* (I) sets one name to a line: the comma stays with its name and the line ends after it. */
   .wc-edition-i .wc-names .wc-sep::after { content: '\A'; white-space: pre; }
   /* A name travelled to stops where the numeral stands, clear of the bars. */
   .wc-sheet-page .wc-cell { scroll-margin-top: var(--wc-phone-top); }
-  /* The way back to all of What's Color?, at the foot of the edition as on
-     the computer (Frank, 2026-11-26), at the size of her words. */
+  /* The way back to all of What's Color?, at the foot of the edition as on the
+     computer, at the size of her words. */
   .wc-edition .wc-back {
     margin: var(--wc-ed-foot-top) 0 0;
     font-size: var(--wc-ed-say);
@@ -1926,13 +1361,8 @@ a.wc-bar:focus-visible {
     margin-top: var(--wc-ed-reel-top);
   }
 
-  /*
-   * ---- the reel
-   * One photograph at rest, where the sheet draws it; the others are a swipe
-   * to the side. Each is a screen-wide step of the strip with its picture in
-   * the middle, so only one is ever in view and the strip stops on it. The
-   * step itself takes no touch — only the picture opens.
-   */
+  /* ---- the reel One photograph at rest, where the sheet draws it; the others
+     are a swipe to the side. */
   .wc-sheet-page .wc-strip {
     justify-content: flex-start;
     gap: 0;
@@ -1949,8 +1379,7 @@ a.wc-bar:focus-visible {
     scroll-snap-align: center;
     pointer-events: none;
   }
-  /* The shape is the link's own, written on it; the picture borrows it where
-     no width is given. */
+  /* The shape is the link's own, written on it; the picture borrows it where no width is given. */
   .wc-sheet-page .wc-book picture {
     position: relative;
     left: var(--wc-ed-reel-shift);
@@ -1993,11 +1422,10 @@ a.wc-bar:focus-visible {
   /* The other name someone goes by: a second line, set as the first. */
   .wc-sheet-page .wc-cell-alias { display: block; font-weight: inherit; text-transform: inherit; }
   .wc-sheet-page .wc-cell-alias::before { content: none; }
-  /* The role and the colour stand in the entry's own column, each a line of
-     it, so that the colour can be put after the answer. */
+  /* The role and the colour stand in the entry's own column, each a line of it,
+     so that the colour can be put after the answer. */
   .wc-sheet-page .wc-cell-meta { display: contents; text-align: center; }
-  /* What they do: regular, with the same in the other language under it,
-     light and italic. Where there is no other language the role is light. */
+  /* What they do: regular, with the same in the other language under it, light and italic. */
   .wc-sheet-page .wc-cell-role {
     max-width: var(--wc-ed-measure);
     margin-top: var(--wc-ed-name-role);
@@ -2011,11 +1439,11 @@ a.wc-bar:focus-visible {
     min-height: var(--wc-ed-role-min);
     font-weight: 300;
   }
-  /* The answer: centred, ragged both sides, a line of air between its
-     paragraphs as the sheets set them (--wc-ed-answer-para; 0 runs them on). */
+  /* The answer: centred, ragged both sides, a line of air between its paragraphs
+     as the sheets set them (--wc-ed-answer-para; 0 runs them on). */
   .wc-sheet-page .wc-cell-text > * + * { margin-top: var(--wc-ed-answer-para); }
-  /* The large photograph closes on a touch anywhere (client/book.ts); no
-     grey flash from iOS over the whole of it. */
+  /* The large photograph closes on a touch anywhere (client/book.ts); no grey
+     flash from iOS over the whole of it. */
   .wc-book-view { -webkit-tap-highlight-color: transparent; }
   .wc-sheet-page .wc-cell-text {
     order: 1;
@@ -2036,9 +1464,7 @@ a.wc-bar:focus-visible {
     line-height: var(--wc-ed-small-lead);
   }
   /* Its band and the type knocked out of it go to plain ink together as
-     `--wc-ed-band` goes from 1 to 0. Asked of the engine first: one that
-     cannot mix the two colours keeps the band whatever the knob says, rather
-     than lose the band and leave paper-coloured type on paper. */
+     `--wc-ed-band` goes from 1 to 0. */
   @supports (color: color-mix(in srgb, red, blue)) {
     .wc-sheet-page .wc-cell-code {
       color: color-mix(in srgb, var(--swatch-ink, var(--paper)) calc(var(--wc-ed-band) * 100%), var(--ink));

@@ -1,14 +1,7 @@
-/*
- * Beside site.css: only what the WordPress reading of the site needs and the
- * static site does not. site.css is built from src/styles and is not edited
- * here.
- */
+/* Beside site.css: only what the WordPress reading of the site needs and the
+   static site does not. */
 
-/*
- * Signed in, the admin bar takes the top of the window; the chrome moves down
- * under it. Not the bar across the middle of the film, which sets its own
- * `top` — only once it has risen to the top of the window (is-film-past).
- */
+/* Signed in, the admin bar takes the top of the window; the chrome moves down under it. */
 .admin-bar:not(.has-film) .top,
 .admin-bar.has-film.is-film-past .top,
 .admin-bar .about,
@@ -19,15 +12,8 @@
   top: var(--wp-admin--admin-bar--height, 32px);
 }
 
-/*
- * The same on a phone (everything below 900px, 09-phone.css), where the bar
- * is three bars in the corner and a menu that fills the screen. Signed-in
- * editors only; a visitor never has the admin bar.
- *
- * WordPress lets its bar scroll away with the page below 601px. It is pinned
- * here instead, so that what is offset for it — the three bars, the menu, the
- * panels above — is offset for something that is always there.
- */
+/* The same on a phone (everything below 900px, 09-phone.css), where the bar is
+   three bars in the corner and a menu that fills the screen. */
 @media (max-width: 600px) {
   .admin-bar #wpadminbar { position: fixed; }
 }
@@ -35,32 +21,20 @@
   /* The three bars, 20 under the admin bar where they are 20 under the top. */
   .admin-bar .menu-toggle { top: calc(var(--wp-admin--admin-bar--height, 46px) + 20 * var(--p)); }
 
-  /*
-   * The menu screen begins under the admin bar on every page. The rule above
-   * already says so for most; the start page's bar is held at the top by
-   * 09-phone.css in each of the film's states, and this is as heavy as the
-   * heaviest of those (html.wc-arriving body.has-film .top), so it wins by
-   * coming later.
-   */
+  /* The menu screen begins under the admin bar on every page. */
   html body.admin-bar.has-film .top { top: var(--wp-admin--admin-bar--height, 46px); }
-  /* The screen is that much shorter, for the menu's two gaps that give way on
-     a short one. */
+  /* The screen is that much shorter, for the menu's two gaps that give way on a short one. */
   .admin-bar .top { --menu-short: max(0px, calc(811 * var(--p) + var(--wp-admin--admin-bar--height, 46px) - 100svh)); }
 
   /* A sheet's Close, shown only to a keyboard, on the line of the three bars. */
   .admin-bar .panel:has(> .sheet, > .plates) > .panel-close { top: calc(var(--wp-admin--admin-bar--height, 46px) + 20 * var(--p)); }
 
-  /* About's Close, which stands beside its panel and so did not move down
-     with it: at 1.6rem it was under the admin bar, out of a thumb's reach. */
+  /* About's Close, which stands beside its panel and so did not move down with
+     it: at 1.6rem it was under the admin bar, out of a thumb's reach. */
   .admin-bar .about-close { top: calc(var(--wp-admin--admin-bar--height, 46px) + 1.6rem); }
 }
 
-/*
- * A page served with a panel already open — an exhibition's own address,
- * /about/ — must still be a page without scripting: the veil stands down,
- * the body scrolls, and About shows in the flow where the script would have
- * raised it. site.css leaves panels visible without scripting already.
- */
+/* A page served with a panel already open — an exhibition's own address, /about/. */
 html:not(.js) body.is-locked { overflow: visible; }
 html:not(.js) .panel-veil.is-open { opacity: 0; pointer-events: none; }
 html:not(.js) .about.is-open {
@@ -71,34 +45,18 @@ html:not(.js) .about.is-open {
   transform: none;
 }
 
-/*
- * And it shows what its address names. site.css sets every panel in the flow
- * after the list, so the show asked for would be somewhere far below the top;
- * served open, the list and the other panels stand aside and the page is that
- * panel alone (About alone, at /about/). A show's or a project's Close link
- * leads back to its index. Scripted, none of this applies: the panel rises
- * over the list.
- */
+/* And it shows what its address names. */
 html:not(.js) body.is-locked main,
 html:not(.js) body.is-locked .panel:not(.is-open) { display: none; }
 
-/*
- * On a phone without scripting the menu is the head of every page, in the
- * flow (09-phone.css), and site.css stands the bar down while a panel is open
- * — which only a script ever does on the static site. Served open here, that
- * left the menu's whole screen blank above the sheet, and the sheet with no
- * way back to its list: the phone sheets have no Close in view.
- */
+/* On a phone without scripting the menu is the head of every page, in the flow
+   (09-phone.css), and site.css stands the bar down while a panel is open — which
+   only a script ever does on the static site. */
 @media (max-width: 899px) {
   html:not(.js) body:has(.panel.is-open) .top { opacity: 1; pointer-events: auto; }
 }
 
-/*
- * The photographs-only sheet, served open without scripting: its fixed
- * screen — the masthead and one photograph at a time, turned by arrows a
- * script drives — becomes a column, the masthead and then every photograph
- * in the flow, as site.css already does for the reading sheet.
- */
+/* The photographs-only sheet, served open without scripting: its fixed screen. */
 html:not(.js) .panel:has(.plates) { overflow: visible; }
 html:not(.js) .plates { height: auto; padding: calc(var(--bar) * 0.6) var(--pad) var(--gap); }
 html:not(.js) .plates-head { position: static; width: auto; }
@@ -107,11 +65,9 @@ html:not(.js) .plates-frame { height: auto; }
 html:not(.js) .plates-figure { position: static; opacity: 1; margin-bottom: var(--gap); }
 html:not(.js) .plates-figure img { height: auto; }
 
-/*
- * The line under the order form that links the privacy notice: under the
- * message, in the form's own small soft type, so it reads as a footnote to
- * the form rather than one of its fields.
- */
+/* The line under the order form that links the privacy notice: under the
+   message, in the form's own small soft type, so it reads as a footnote to the
+   form rather than one of its fields. */
 .inq-privacy {
   grid-column: 2 / -1;
   margin: 0;

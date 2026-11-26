@@ -1,15 +1,5 @@
 <?php
-/**
- * Tools → Import content: the import, run from the admin.
- *
- * For a host without WP-CLI. The bundle (`npm run wp:export`) is uploaded by
- * SFTP into wp-content/import; this page shows what it holds and runs the
- * import a few entries per request — each request stops well inside the time
- * a shared host allows, the page asks for the next one, and a run interrupted
- * by a closed tab or a dropped connection continues from where it stood.
- *
- * Administrators only. The work is in importer.php, the same as WP-CLI's.
- */
+/** Tools → Import content: the import, run from the admin. */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -51,8 +41,8 @@ function cvc_import_page(): void {
 	$files    = $manifest ? count( glob( CVC_Importer::bundle_dir() . '/files/*' ) ?: [] ) : 0;
 	$people   = $manifest ? array_sum( array_map( fn( $e ) => count( $e['participants'] ), $manifest['editions'] ) ) : 0;
 	$stopped  = $manifest && $run && empty( $run['finished'] );
-	// A run belongs to the bundle it started on; after a new upload, only a
-	// fresh start is offered.
+	// A run belongs to the bundle it started on; after a new upload, only a fresh start is
+	// offered.
 	$stale    = $stopped && ( $run['bundle'] ?? '' ) !== CVC_Importer::bundle_stamp( $manifest );
 	$stopped  = $stopped && ! $stale;
 	?>
@@ -120,11 +110,7 @@ function cvc_import_page(): void {
 	<?php
 }
 
-/**
- * One request's worth of the import. `op` start begins a run, continue
- * carries on the current one; either way the answer says where the run
- * stands and what happened, and the page asks again until it is finished.
- */
+/** One request's worth of the import. */
 function cvc_import_ajax(): void {
 	check_ajax_referer( 'cvc_import', 'nonce' );
 	if ( ! current_user_can( 'manage_options' ) ) {
@@ -135,10 +121,8 @@ function cvc_import_ajax(): void {
 		wp_send_json_error( [ 'message' => __( 'No bundle found.', 'claudiavalsells' ) ], 400 );
 	}
 
-	// One request at a time: a second tab, or a retry while the first request
-	// is still working, waits rather than importing the same entries twice.
-	// add_option() is the lock because it either makes the row or fails, in
-	// one statement; a lock older than any request can run is a dead one.
+	// One request at a time: a second tab, or a retry while the first request is still working,
+	// waits rather than importing the same entries twice.
 	$held = (int) get_option( 'cvc_import_lock', 0 );
 	if ( $held && time() - $held > 300 ) {
 		delete_option( 'cvc_import_lock' );
@@ -163,8 +147,7 @@ function cvc_import_ajax(): void {
 	require_once ABSPATH . 'wp-admin/includes/file.php';
 	require_once ABSPATH . 'wp-admin/includes/media.php';
 
-	// Stop well inside what the host allows: half its time limit, at most
-	// twenty seconds. A picture already started is always finished.
+	// Stop well inside what the host allows: half its time limit, at most twenty seconds.
 	$limit  = (int) ini_get( 'max_execution_time' );
 	$budget = $limit > 0 ? min( 20, max( 5, $limit / 2 ) ) : 20;
 	if ( function_exists( 'set_time_limit' ) ) {
@@ -192,7 +175,10 @@ function cvc_import_ajax(): void {
 	] );
 }
 
-/** The page's script: asks for the next step until the run is finished. No build step, no dependencies. */
+/**
+ * The page's script: asks for the next step until the run is finished. No build
+ * step, no dependencies.
+ */
 function cvc_import_script(): void {
 	$data = [
 		'ajax'     => admin_url( 'admin-ajax.php' ),

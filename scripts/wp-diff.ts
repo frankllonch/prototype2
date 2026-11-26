@@ -1,73 +1,4 @@
-/**
- * Does the WordPress theme still draw what the static site draws?
- *
- *   npm run build && npm run wp:diff            every page below
- *   npm run wp:diff -- /whats-color/ii/ --show  one page, with the differences
- *   npm run wp:diff -- --all                    About's record included
- *
- * The theme's PHP components are ports of the TypeScript ones and are meant
- * to emit the same markup, so that the one stylesheet and the one set of
- * scripts serve both. This reads a page from dist/ and the same page from the
- * local WordPress (http://localhost:8888), sets aside what differs on purpose,
- * and diffs the rest. A design change made in src/ shows up here as a
- * difference until its PHP component is brought along.
- *
- * The body and the head are compared apart and reported apart, each in its
- * own pair of files under wordpress/.diff/.
- *
- * Set aside in the body, because intended:
- *   - the WordPress classes on <body>;
- *   - asset addresses (the theme serves them from its assets folder, stamped);
- *   - About at /about/ in WordPress, /#about on the static site, and the
- *     data-panel-url attributes only WordPress has, since there a panel is a
- *     page of its own;
- *   - pictures: WordPress serves its own sizes from uploads/, the static site
- *     the pipeline's renditions, so src, srcset, sizes and dimensions are
- *     dropped and only class and the element itself are compared — and the
- *     alt text, which WordPress has from the media library and the static
- *     site's dataset does not;
- *   - the links of a panel's row: to the panel's own page in WordPress, to
- *     its id on the static site;
- *   - bare <div> wrappers the source HTML left in the static pages, which the
- *     import did not keep; the way each side writes an ampersand;
- *   - HTML comments, whitespace, trailing spaces inside tags, and the
- *     precision of fractions in inline custom properties.
- *
- * The head is compared as a list of what it says rather than as markup, in a
- * fixed order: the <html> element's attributes, charset and viewport, the
- * title, the description, the canonical link, robots, Open Graph and Twitter
- * tags, icons, manifest, theme colour, JSON-LD, the preloads, the stylesheets,
- * the inline script's code (not its comments) and anything else printed there
- * — so a tag WordPress or a plugin adds shows up. Addresses lose their host
- * and version stamp as in the body. Set aside, because intended:
- *   - a robots meta saying only noindex, nofollow — the local site and staging
- *     keep search engines out (Settings → Reading) — or max-image-preview:large,
- *     which WordPress adds once they are let in;
- *   - the canonical link, which only WordPress prints, as long as it names the
- *     page's own address: the static build does not know where it is served;
- *   - a description WordPress gives a page the static site leaves without one
- *     (the two indexes, a work with no text of its own; header.php falls back
- *     to the site's tagline everywhere else);
- *   - module preloads beyond the static site's: the theme's list is read off
- *     src/client/index.ts by wp:assets, the static one is kept by hand in
- *     layout.ts, so WordPress may preload more but never fewer, and in any order;
- *   - wp.css, the theme's own stylesheet beside site.css;
- *   - which file an Open Graph or Twitter picture is, and its size: each side
- *     serves its own renditions, so only that there is one is compared;
- *   - Open Graph and Twitter tags altogether while the static site has none:
- *     the link previews the old site's Yoast gave are WordPress's alone
- *     (cv_share_tags), since the static site is not the one that goes live.
- *
- * Expected to differ until decided otherwise (docs/wordpress-migration.md):
- *   - About's record of exhibitions, which the static site types out and
- *     WordPress reads off the exhibition entries — set aside unless --all;
- *   - the heading of an exhibition's or a project's panel: the static site
- *     shows the title and venue of the source page it was derived from,
- *     WordPress the entry's own title and venue, which are what the row shows;
- *   - the text inside the panels, where the static site renders the source
- *     HTML as it came, nested wrappers and all, and the import normalised it
- *     into paragraphs. Same words, different wrapping.
- */
+/** Does the WordPress theme still draw what the static site draws? */
 import { readdirSync, readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
@@ -94,8 +25,8 @@ const DEFAULT_ROUTES = [
   '/exhibitions/',
   `/exhibitions/${firstDir(path.join(DIST, 'exhibitions')) ?? ''}/`,
   '/commissioned/',
-  // About is an overlay on every page of the static site, so it is compared
-  // on each of them rather than at an address of its own.
+  // About is an overlay on every page of the static site, so it is compared on each of them rather
+  // than at an address of its own.
   '/color-chart/',
   '/whats-color/i/',
   '/whats-color/ii/',
@@ -125,10 +56,9 @@ function normalise(html: string, origin: 'static' | 'wp'): string {
   } else {
     s = s.replace(/\?v=[\w-]+/g, '');
   }
-  // Pictures: keep the <img> and its class; drop the renditions, the <source>
-  // elements, whose number depends on which formats each side has, and the
-  // alt text, which WordPress has from the media library and the static
-  // site's dataset does not.
+  // Pictures: keep the <img> and its class; drop the renditions, the <source> elements, whose
+  // number depends on which formats each side has, and the alt text, which WordPress has from the
+  // media library and the static site's dataset does not.
   s = s.replace(/<picture\b[^>]*>([\s\S]*?)<\/picture>/g, (m, inner: string) => {
     const open = m.match(/<picture\b[^>]*>/)?.[0] ?? '<picture>';
     return `${open}${inner.match(/<img\b[^>]*>/)?.[0] ?? ''}</picture>`;
@@ -137,23 +67,20 @@ function normalise(html: string, origin: 'static' | 'wp'): string {
     const kept = [...attrs.matchAll(/\s(class|loading|decoding)="[^"]*"/g)].map((m) => m[0]).join('');
     return `<img${kept}>`;
   });
-  // A <div> with no attributes, or an empty <i>, <em>, <span>, is a wrapper
-  // the source HTML left behind, not a hook anything styles; the import drops
-  // them, the static build keeps them.
+  // A <div> with no attributes, or an empty <i>, <em>, <span>, is a wrapper the source HTML left
+  // behind, not a hook anything styles; the import drops them, the static build keeps them.
   s = s.replace(/<\/?div>/g, '');
   for (let i = 0; i < 4; i++) s = s.replace(/<(i|em|b|strong|span)>\s*<\/\1>/g, '');
-  // About's record of shows: typed out on the static site, read off the
-  // exhibition entries in WordPress — set aside until that is decided
-  // (docs/wordpress-migration.md), unless --all asks for it.
+  // About's record of shows: typed out on the static site, read off the exhibition entries in
+  // WordPress — set aside until that is decided (docs/wordpress-migration.md), unless --all asks
+  // for it.
   if (!all) s = s.replace(/<section class="about-shows[^"]*">[\s\S]*?<\/section>/g, '<section class="about-shows"></section>');
-  // Fractions in inline custom properties, to three places: a tile's aspect
-  // computed from the crop's pixels on one side and the upload's on the other
-  // can differ in the fourth.
+  // Fractions in inline custom properties, to three places: a tile's aspect computed from the
+  // crop's pixels on one side and the upload's on the other can differ in the fourth.
   s = s.replace(/style="[^"]*"/g, (m) => m.replace(/(\d+\.\d{3})\d+/g, '$1'));
   s = s.replace(/\s+/g, ' ').replace(/\s+>/g, '>').replace(/\s+\/>/g, ' />').replace(/>\s+/g, '>').replace(/\s+</g, '<').trim();
-  // The order form posts to the plugin's endpoint; the static build to
-  // whatever INQUIRIES_ENDPOINT was set to, or nowhere. After the whitespace
-  // pass, so a tag the template wrote across several lines is one tag here.
+  // The order form posts to the plugin's endpoint; the static build to whatever INQUIRIES_ENDPOINT
+  // was set to, or nowhere.
   s = s.replace(/(<form class="inq-form"[^>]*?) action="[^"]*"/g, '$1');
   return `${s.replace(/></g, '>\n<')}\n`;
 }
@@ -185,8 +112,8 @@ function attributes(tag: string): Map<string, string> {
 
 /**
  * The order the head's lines are written in: by what each says, not where it
- * stands, since WordPress prints its title and stylesheets from wp_head(),
- * after the theme's own lines, and the static site before them.
+ * stands, since WordPress prints its title and stylesheets from wp_head(), after
+ * the theme's own lines, and the static site before them.
  */
 const HEAD_ORDER = [
   'html', 'charset', 'viewport', 'title', 'description', 'canonical', 'robots', 'social', 'icon',
@@ -204,8 +131,8 @@ function headLines(html: string, origin: 'static' | 'wp'): string[] {
     } else {
       s = s.replace(/\?v=[\w-]+/g, '');
     }
-    // An address written in full, with the domain it is meant for, compares
-    // with the other side's by its path.
+    // An address written in full, with the domain it is meant for, compares with the other side's
+    // by its path.
     return s.replace(/^https?:\/\/[^/]+/, '');
   };
   const text = (s: string) => decode(s).replace(/\s+/g, ' ').trim();
@@ -261,12 +188,15 @@ function headLines(html: string, origin: 'static' | 'wp'): string[] {
     .map((l) => l.line);
 }
 
-/** Both heads as lines, with what WordPress says on purpose set aside (see the top of this file). */
+/**
+ * Both heads as lines, with what WordPress says on purpose set aside (see the
+ * top of this file).
+ */
 function heads(staticHtml: string, wpHtml: string, route: string): [string, string] {
   const a = headLines(staticHtml, 'static');
   const has = (kind: string) => a.some((l) => l.startsWith(`${kind} `));
-  // What is set aside is set aside once: a second description, or a second
-  // og:title from a plugin printing its own set, is a fault and is reported.
+  // What is set aside is set aside once: a second description, or a second og:title from a plugin
+  // printing its own set, is a fault and is reported.
   const seen = new Map<string, number>();
   const again = (key: string) => {
     const n = (seen.get(key) ?? 0) + 1;
@@ -283,8 +213,8 @@ function heads(staticHtml: string, wpHtml: string, route: string): [string, stri
       case 'description': return has('description');
       case 'modulepreload': return a.includes(l);
       case 'stylesheet': return value !== '/wp-content/themes/claudiavalsells/wp.css';
-      // The sharing tags are WordPress's own (cv_share_tags in inc/setup.php);
-      // compared only once the static site has some too.
+      // The sharing tags are WordPress's own (cv_share_tags in inc/setup.php); compared only once
+      // the static site has some too.
       case 'social': return has('social');
       default: return true;
     }

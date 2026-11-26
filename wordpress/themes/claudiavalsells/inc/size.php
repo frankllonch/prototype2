@@ -1,12 +1,5 @@
 <?php
-/**
- * How big each painting really is, and how big to draw it — src/content/size.ts.
- *
- * The grid can show the works at one height, which is a contact sheet, or at
- * their relative sizes, which is a wall. This works out the second from the
- * catalogued dimensions, written every which way: "162 × 130 cm", "110x153cm",
- * "31X25,5CM", "60 X 50".
- */
+/** How big each painting really is, and how big to draw it — src/content/size.ts. */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -27,8 +20,8 @@ function cv_real_size( ?string $dimensions ): ?float {
 
 /**
  * Per-work drawing scale against the median of the set, compressed (GAMMA) so
- * the smallest works are still pictures and the largest still the biggest
- * thing on the wall. Returns a closure: `(size, aspect) => height | null`.
+ * the smallest works are still pictures and the largest still the biggest thing
+ * on the wall.
  */
 function cv_scale_against( array $sizes ): callable {
 	$gamma = 0.6;

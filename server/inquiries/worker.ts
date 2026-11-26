@@ -1,39 +1,9 @@
-/**
- * The order desk.
- *
- * claudiavalsells.com is files on a static host, so the one thing the site
- * cannot do by itself is send mail. This is the whole of what it adds: a single
- * endpoint that takes one message from the Colour Chart's form, satisfies
- * itself that a person sent it, and hands it to a mail provider addressed to
- * Claudia.
- *
- * It is written on the assumption that the page in front of it is hostile —
- * because whoever is looking at a page can edit it, and because most of what
- * will ever reach this URL will never have loaded the page at all. Every check
- * the form makes is made again here. Nothing the request says about itself is
- * believed: not the origin, not the elapsed time, not the length of a field.
- *
- * What it refuses to do is as important as what it checks:
- *
- *   — It never says why it refused in any detail. A sender who is told which
- *     check caught them tunes against it; one who is told "no" has to guess.
- *   — It never echoes the message back, so it cannot be used to bounce content
- *     at a third party.
- *   — It holds no address. Claudia's is in the environment, so the public
- *     repository and the public page both offer to write to her without either
- *     of them saying where.
- *
- * Deploying it: see README.md beside this file.
- */
+/** The order desk. */
 
 export interface Env {
   /** Where the mail goes. Claudia's address, and the only place it appears. */
   INQUIRY_TO: string;
-  /**
-   * Where the Gallery's inquiries go: the Alzueta gallery (Frank, 2026-11-18).
-   * Set the same way as INQUIRY_TO. Until it is set they go to INQUIRY_TO, so
-   * an inquiry is never dropped for want of an address.
-   */
+  /** Where the Gallery's inquiries go: the Alzueta gallery. */
   INQUIRY_TO_GALLERY?: string;
   /** A sender the mail provider has verified for the site's own domain. */
   INQUIRY_FROM: string;
@@ -43,26 +13,13 @@ export interface Env {
   RESEND_API_KEY: string;
   /** Turnstile's secret key, if the form carries the matching site key. */
   TURNSTILE_SECRET?: string;
-  /**
-   * A secret the sender's address is hashed with before it is used as a key.
-   * Without it the rate-limit store would be a plain list of the IP addresses
-   * of everyone who has ever written to Claudia, which is not something this
-   * endpoint has any business keeping.
-   */
+  /** A secret the sender's address is hashed with before it is used as a key. */
   IP_PEPPER: string;
   /** The counters. Eventually consistent, which is discussed below. */
   RATE: Counters;
 }
 
-/**
- * The slice of a Cloudflare KV namespace this file uses, written out rather
- * than imported.
- *
- * `@cloudflare/workers-types` would give the whole of it, and the whole of it
- * is a dependency the site does not otherwise have for the sake of two methods.
- * Named for what it holds here, so that nothing reads as though the rest of KV
- * were in play.
- */
+/** The slice of a Cloudflare KV namespace this file uses, written out rather than imported. */
 export interface Counters {
   get(key: string): Promise<string | null>;
   put(key: string, value: string, options?: { expirationTtl?: number }): Promise<void>;
@@ -74,17 +31,8 @@ export interface Counters {
 const MAX_BODY = 16_384;
 
 /**
- * How many messages one sender may send, and how many the endpoint will carry
- * in a day whoever sends them.
- *
- * Two sets, because a submission that passed Turnstile cost something to make
- * and one that did not cost nothing. The second set is deliberately mean: a
- * request with no token is either someone with scripting off — rare, and one
- * message is enough for them — or a robot, which is the ordinary case.
- *
- * The daily ceiling is the one that matters most. The per-sender limits are
- * defeated by anyone with a list of addresses to send from; this one is not,
- * and it is the difference between a bad morning and an inbox nobody can use.
+ * How many messages one sender may send, and how many the endpoint will carry in
+ * a day whoever sends them.
  */
 const LIMITS = {
   verified: { hour: 3, day: 8 },
@@ -116,15 +64,7 @@ const json = (status: number, body: Record<string, unknown>, origin: string | nu
     },
   });
 
-/**
- * Who may post here, stated exactly.
- *
- * A browser will not let a page post to this endpoint unless the answer names
- * that page's origin, so this is a real limit on what a page somewhere else can
- * do with somebody's browser. It is not a limit on what a script can do — a
- * request made outside a browser carries whatever origin it likes, or none —
- * which is why it is the least of the checks here rather than the first.
- */
+/** Who may post here, stated exactly. */
 function cors(origin: string | null): Record<string, string> {
   if (!origin) return {};
   return {
@@ -142,14 +82,7 @@ const allowed = (origin: string | null, env: Env): string | null => {
   return list.includes(origin) ? origin : null;
 };
 
-/**
- * One line, safe to put in a mail header.
- *
- * Carriage returns and newlines in a subject or a reply-to are how a header is
- * split in two and a second recipient added — the oldest trick there is against
- * a form that sends mail. They do not survive this, and neither does anything
- * else below a space.
- */
+/** One line, safe to put in a mail header. */
 const oneLine = (value: string, max: number): string =>
   value.replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, max);
 
@@ -167,24 +100,13 @@ async function senderKey(ip: string, pepper: string): Promise<string> {
   return [...new Uint8Array(hash)].slice(0, 12).map((b) => b.toString(16).padStart(2, '0')).join('');
 }
 
-/**
- * Counts, with a window that expires on its own.
- *
- * KV is eventually consistent, so two requests arriving in the same instant at
- * two edges can both read the same count and both be allowed. That is a real
- * hole and it is a small one: it lets a flood through at the rate the edges can
- * agree, not at the rate it is sent, and the daily ceiling catches what gets
- * past. The alternative is a Durable Object, which is strongly consistent and
- * costs a round trip to one place in the world on every submission — worth it
- * if this is ever actually attacked, and over-built until then. The shape of
- * the call is the same either way, so it is one function to change.
- */
+/** Counts, with a window that expires on its own. */
 async function overLimit(kv: Counters, key: string, allowance: number, seconds: number): Promise<boolean> {
   const window = `${key}:${Math.floor(Date.now() / 1000 / seconds)}`;
   const count = Number(await kv.get(window)) || 0;
   if (count >= allowance) return true;
-  // Twice the window, so a counter cannot expire out from under the window it
-  // belongs to while a request is in flight.
+  // Twice the window, so a counter cannot expire out from under the window it belongs to while a
+  // request is in flight.
   await kv.put(window, String(count + 1), { expirationTtl: Math.max(60, seconds * 2) });
   return false;
 }
@@ -202,28 +124,15 @@ async function verified(token: string, ip: string, secret: string | undefined): 
     const body = (await response.json()) as { success?: boolean };
     return body.success === true;
   } catch {
-    // The check being unreachable is not the sender's fault. They fall to the
-    // unverified allowance, which is one message, rather than being refused.
+    // The check being unreachable is not the sender's fault.
     return false;
   }
 }
 
 /* ---------------------------------------------------------------- the send */
 
-/**
- * Handed to Resend, as plain text.
- *
- * Text and not HTML, so nothing a sender writes can become markup in the window
- * Claudia reads it in. The reply-to is the sender's address, so answering an
- * order is a reply and not a copy-and-paste; the from is the site's own
- * verified address, because mail claiming to be from an address the site does
- * not control is mail that lands in a spam folder.
- */
-/**
- * The two forms the site has, and what each one's mail says it is. Anything the
- * request names that is not one of these is the Colour Chart's, which is what
- * every message was before there were two.
- */
+/** Handed to Resend, as plain text. */
+/** The two forms the site has, and what each one's mail says it is. */
 const DESKS = {
   chart: { label: 'Colour chart', untitled: 'order', form: 'the Colour Chart order form' },
   gallery: { label: 'Gallery inquiry', untitled: 'inquiry', form: 'the Gallery inquiries form' },
@@ -277,13 +186,7 @@ export default {
     if (request.method !== 'POST') {
       return json(405, { ok: false, error: 'blocked' }, origin);
     }
-    /*
-     * A browser cannot reach here from anywhere but the site. A script can
-     * reach here from anywhere, with no origin header at all — so a missing
-     * origin is allowed through to the checks below rather than refused, and a
-     * *wrong* one is refused outright, because the only thing that sends a
-     * wrong origin is a page somewhere else trying to use someone's browser.
-     */
+    /* A browser cannot reach here from anywhere but the site. */
     if (request.headers.get('origin') && !origin) {
       return json(403, { ok: false, error: 'blocked' }, null);
     }
@@ -303,14 +206,7 @@ export default {
 
     const str = (key: string): string => (typeof body[key] === 'string' ? (body[key] as string) : '');
 
-    /*
-     * The two cheap ones, first and silently.
-     *
-     * A filled honeypot and an instant submission both answer 200 and send
-     * nothing. Answering truthfully would tell a sender which of the two
-     * tripped, and a sender that is told nothing went wrong has no reason to
-     * come back and try it differently.
-     */
+    /* The two cheap ones, first and silently. */
     if (str('website').trim() !== '') return json(200, { ok: true }, origin);
     const elapsed = Date.now() - (Number(body.started) || 0);
     if (!(elapsed > TYPING.atLeast && elapsed < TYPING.atMost)) {

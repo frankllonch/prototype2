@@ -1,31 +1,7 @@
 import { isPlainClick, phone, returnFocus } from './env.ts';
 import { keepScroll, stepBack, stepState } from './panels.ts';
 
-/**
- * The photographs of the book open over the page.
- *
- * Each strip item is a real link to its picture, so this only steps in on a
- * plain click: the same picture opens in place, large over the blurred page,
- * and a click anywhere or Escape puts the page back. Modified clicks and
- * middle clicks keep their meaning, and with scripting off the links simply
- * open the file, which is the fallback the markup promises.
- *
- * The picture is the strip's own markup cloned — the same sources, the same
- * alt — eagerly loaded at the larger size rather than fetched twice.
- *
- * Once open, the arrow keys walk the strip: left and right step to the
- * neighbouring photograph and wrap at the ends, since eight spreads of one
- * book read as a loop rather than a list with a dead end. The swap happens in
- * place with no fade, so holding a key flips through the book. Leaving
- * returns focus to whichever photograph was showing last, not the one first
- * clicked, so the strip keeps the reader's place.
- *
- * On a phone the open view is the whole screen, with nothing on it that says
- * Close, and the first thing a hand does there is the phone's own Back. So
- * opening is a step in the history, as a panel's is (client/panels.ts): Back
- * closes the view and leaves the page, a tap closes it by going back over the
- * step, and Forward — or a reload on the step — shows the photograph again.
- */
+/** The photographs of the book open over the page. */
 export function initBook(): void {
   const view = document.querySelector<HTMLElement>('[data-book-view]');
   if (!view) return;
@@ -34,10 +10,8 @@ export function initBook(): void {
 
   let opener: HTMLAnchorElement | null = null;
 
-  // The view's two chevrons are drawn in the negative, and the page's <main>
-  // is a group of its own (isolation), so a blend inside it would only reach
-  // the view's pale veil and come out grey. Out at the end of the body they
-  // blend with the photograph and the page as the start page's cue does.
+  // The view's two chevrons are drawn in the negative, and the page's <main> is a group of its own
+  // (isolation), so a blend inside it would only reach the view's pale veil and come out grey.
   const turns = [...document.querySelectorAll<HTMLElement>('[data-book-step]')];
   document.body.append(...turns);
   const showTurns = (on: boolean) => { for (const t of turns) t.classList.toggle('is-shown', on); };
@@ -64,16 +38,18 @@ export function initBook(): void {
     if (next) show(next);
   };
 
-  /** `byHistory`: the step is there already — Forward landed on it, or the page was reloaded on it. */
+  /**
+   * `byHistory`: the step is there already — Forward landed on it, or the page
+   * was reloaded on it.
+   */
   const open = (link: HTMLAnchorElement, byHistory = false) => {
     if (!show(link)) return;
     // The step says which photograph, for whoever comes back to it.
     if (phone.matches && !byHistory) history.pushState({ view: 'book', at: books().indexOf(link) }, '');
     stepped = byHistory || phone.matches;
     view.hidden = false;
-    // A forced layout between showing and fading, instead of waiting a frame:
-    // a background pane may never be granted one, and a reflow is owed either
-    // way. The fade then starts from a state the engine has actually built.
+    // A forced layout between showing and fading, instead of waiting a frame: a background pane
+    // may never be granted one, and a reflow is owed either way.
     void view.offsetWidth;
     view.classList.add('is-open');
     showTurns(true);
@@ -85,8 +61,8 @@ export function initBook(): void {
   /** `byHistory`: Back has already left the view's step, and only the view is left to put away. */
   const close = (byHistory = false) => {
     if (view.hidden) return;
-    // The tap goes back over the step rather than leaving it behind, and the
-    // `popstate` below does the closing.
+    // The tap goes back over the step rather than leaving it behind, and the `popstate` below does
+    // the closing.
     if (stepped && !byHistory && stepState().view === 'book') { stepBack(); return; }
     stepped = false;
     view.classList.remove('is-open');
@@ -97,9 +73,9 @@ export function initBook(): void {
     opener = null;
   };
 
-  // In the capture phase, ahead of the page-transition module's own click
-  // listener: that one politely yields to a defaulted-prevented event, but it
-  // was registered first, so the yielding only works if this runs earlier.
+  // In the capture phase, ahead of the page-transition module's own click listener: that one
+  // politely yields to a defaulted-prevented event, but it was registered first, so the yielding
+  // only works if this runs earlier.
   document.addEventListener(
     'click',
     (event) => {
@@ -111,8 +87,8 @@ export function initBook(): void {
       }
       if (!view.hidden) {
         event.preventDefault();
-        // Its two chevrons (beside the view, components/whats-color.ts) turn
-        // the book rather than closing it.
+        // Its two chevrons (beside the view, components/whats-color.ts) turn the book rather than
+        // closing it.
         const turn = (event.target as Element).closest<HTMLElement>('[data-book-step]');
         if (turn) {
           event.stopPropagation();
@@ -125,9 +101,8 @@ export function initBook(): void {
     { capture: true },
   );
 
-  // A phone's Safari sends a tap's click on to the document only when the
-  // thing tapped answers clicks itself, which a plain veil does not; with a
-  // listener of its own the open view does, and the tap that closes it arrives.
+  // A phone's Safari sends a tap's click on to the document only when the thing tapped answers
+  // clicks itself, which a plain veil does not.
   view.addEventListener('click', () => close());
 
   /** The photograph a step of this view's names. */

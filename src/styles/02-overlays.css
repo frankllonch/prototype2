@@ -1,7 +1,4 @@
-/*
- * Overlays. One veil, shared by About and the detail panels, blurring the page
- * behind them lightly enough that the work stays visible.
- */
+/* Overlays. */
 .panel-veil {
   position: fixed; inset: 0; z-index: 60;
   background: color-mix(in srgb, var(--paper) 55%, transparent);
@@ -28,16 +25,9 @@
   -webkit-overflow-scrolling: touch;
 }
 .panel.is-open, .about.is-open { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
-/*
- * A panel that is closing still fills the screen for the length of its fade,
- * and took every tap meant for the page coming back under it: on a phone, the
- * next row tapped after Back opened nothing for most of a second. The taps go
- * with the opacity, as on the veil above. What is inside is named as well, and
- * above its own rules, because a sheet's current photograph asks for its taps
- * back by name (07-sheet.css). Only where the script is in charge: without it
- * a panel is never `is-open` and stands in the page. On the phone only, where
- * Back is how a sheet is left; the desktop keeps its fade as it was.
- */
+/* A panel that is closing still fills the screen for the length of its fade, and
+   took every tap meant for the page coming back under it: on a phone, the next
+   row tapped after Back opened nothing for most of a second. */
 @media (max-width: 899px) {
   html.js .panel:not(.is-open), html.js .panel:not(.is-open) *,
   html.js .about:not(.is-open), html.js .about:not(.is-open) * { pointer-events: none !important; }
@@ -47,12 +37,7 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 
 /* ----------------------------------------------------------------- reader */
 
-/*
- * The reading composition, used by the detail panels.
- *
- * The panel carries no box of its own — an edge-to-edge sheet with a soft ground
- * and nothing that reads as a floating card over the blurred page behind it.
- */
+/* The reading composition, used by the detail panels. */
 .panel { background: color-mix(in srgb, var(--paper) 90%, transparent); padding: 0 0 var(--gap); }
 .panel-close { position: fixed; top: var(--bar-top); right: var(--pad); z-index: 2; color: var(--ink-soft); }
 .panel-close:hover, .panel-close:focus-visible { color: var(--ink); }
@@ -67,21 +52,7 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   padding: calc(var(--bar) + var(--gap)) var(--pad) 0;
 }
 
-/*
- * The head pins to the top and the words run underneath it.
- *
- * This was tried once before and taken out: pinned, with no ground of its own
- * to hide what passed beneath, the prose scrolled straight through the title
- * and the two were legible at once. The blend is what makes it work. With
- * `difference`, whatever passes under the head is inverted rather than
- * crowded, so the two are never competing to be read — the head is always the
- * negative of the page behind it. It is the trick the menu bar plays over the
- * paintings, turned on the one place that most needed it.
- *
- * The colour is the inverse, not the colour: over the near-white panel
- * rgb(219,218,215) resolves to the ink and rgb(105,105,103) to its quieter
- * tint. Change `--ink` and both have to be recomputed, as in the bar.
- */
+/* The head pins to the top and the words run underneath it. */
 .reader-head {
   position: sticky;
   top: 0;
@@ -105,32 +76,13 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .reader-text .prose { max-width: 36rem; font-size: var(--type); line-height: var(--lead); }
 .reader-text .prose p { margin: 0 0 1.1em; }
 
-/*
- * The figure column is given scroll of its own, and this is the whole trick.
- *
- * `position: sticky` only engages once there is more than a viewport to scroll
- * through: below that the panel simply scrolls, and the photograph travels up
- * the screen with the words — which is exactly what was wrong before. Most of
- * these texts are a paragraph or two, well under a screen, so the runway has to
- * be guaranteed here rather than left to the text's length.
- *
- * Hence a floor, not just a ceiling: at least 170vh so the picture is certainly
- * pinned, a slot per photograph beyond that, and a cap so a project with
- * twenty-seven of them does not become a corridor. Only where there is more than
- * one photograph — a single one has nothing to move through and the text can
- * govern.
- */
+/* The figure column is given scroll of its own, and this is the whole trick. */
 .reader-figures { --slot: 30vh; }
 .reader-figure { margin: 0; }
 .reader-figure figcaption { color: var(--ink-soft); margin-top: 0.4rem; font-size: var(--type); }
 .reader-figure img { width: 100%; height: auto; }
 
-/*
- * The figure column stretches to the height of the text beside it. Without
- * this the column ends where its own content does, the sticky releases, and the
- * picture scrolls away for the last part of the text — which is the one place
- * you would most notice it moving.
- */
+/* The figure column stretches to the height of the text beside it. */
 .reader-figures.is-live { align-self: stretch; }
 .reader-figures.is-live .reader-sticky { position: sticky; top: var(--bar); }
 .reader-figures.is-live .reader-stage { position: relative; height: calc(100vh - var(--bar) - 3rem); }
@@ -158,32 +110,8 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 
 /* ------------------------------------------------------------------ about */
 
-/*
- * About opens over whatever page you are on: the page stays there behind it,
- * blurred by the veil and faint through the panel's own ground.
- *
- * Set from the designer's About frame, which is 1920 wide, measured off the
- * export to the pixel (the figures are in the comments). Every length is the
- * frame's own number times `--u`, one frame pixel: a 1920th of the sheet's
- * width. The sheet is a container and `--u` is in container units, so the
- * panel's scrollbar, which the viewport units would count, cannot push the
- * page sideways.
- *
- * The sheet and not the panel, though the panel would be the obvious place:
- * Safari before 18.? and Chrome before 129 give a container layout
- * containment, which makes it the containing block of anything fixed inside
- * it. On the panel that took the Close link with it — it scrolled away with
- * the page. The Close link, the cue and the viewer are the sheet's siblings,
- * so they stay put.
- *
- * Inside a block of type the lengths are in ems of that type instead, so that
- * on a phone, where each size stops shrinking at a floor, the gaps keep their
- * proportion to the words rather than collapsing around them.
- *
- * Switzer's metrics, which every vertical figure below depends on: ascent
- * 0.98, descent 0.25. At 45 on 50 the baseline is 41.425 below the top of the
- * line box; at a line-height of 1 it is 0.865em below.
- */
+/* About opens over whatever page you are on: the page stays there behind it,
+   blurred by the veil and faint through the panel's own ground. */
 .about {
   background: color-mix(in srgb, var(--paper) 64%, transparent);
   color: var(--ink);
@@ -196,37 +124,22 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   --u: calc(100cqw / 1920);
   /* The frame's margin: 48 at the sides. */
   --m: max(1.25rem, calc(48 * var(--u)));
-  /* The sizes on the frame: 45 for the lead, 40 for the biography (below),
-     20 for the record, the labels, the contact and the copyright. */
-  /* The lead: medium 40 on 45 (JERARQUIA ABOUT, 2026-11-17). */
+  /* The sizes on the frame: 45 for the lead, 40 for the biography (below), 20
+     for the record, the labels, the contact and the copyright. */
+  /* The lead: medium 40 on 45. */
   --about-body: max(0.9375rem, calc(40 * var(--u)));
   --about-small: max(0.6875rem, calc(20 * var(--u)));
   /* Every line on the frame is set at 0, and the site's small type is not. */
   letter-spacing: 0;
 }
 
-/*
- * The margin is on each block rather than on the sheet: a container's own
- * padding would be measured against the window, not against itself.
- */
+/* The margin is on each block rather than on the sheet: a container's own
+   padding would be measured against the window, not against itself. */
 .about-sheet > * { margin-inline: var(--m); }
 
-/*
- * Close, where and as the detail pages set theirs (`07-sheet.css`): the size
- * of the text, upright and spaced, its baseline 80 down the 1920 frame and its
- * last letter at the right margin, 50 in.
- *
- * Drawn as the bar is: the negative of whatever passes under it, so the text
- * and the photographs scrolling up beneath it never cover it. The source is
- * the colour that comes out as the ink over paper (255 − the ink's 36, 37, 40),
- * as on the detail panels' heads.
- *
- * Beside the panel rather than in it (components/layout.ts). A blend only sees
- * what shares its stacking context, and inside the panel that is a ground of
- * 64% paper, against which the ink comes out a mid grey. Out here it sees the
- * whole screen. It is also out of reach of the panel's rise and of its scroll,
- * so it stands still: it fades in and out with the panel instead.
- */
+/* Close, where and as the detail pages set theirs (`07-sheet.css`): the size of
+   the text, upright and spaced, its baseline 80 down the 1920 frame and its last
+   letter at the right margin, 50 in. */
 .about-close {
   --f: calc(100vw / 1920);
   position: fixed;
@@ -255,21 +168,7 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 
 /* -------------------------------------------------------------- the text */
 
-/*
- * From the designer's About of 10 and 12 November, at 1920 (figures in frame
- * pixels).
- *
- * The lead keeps the old sheet's capitals: 45 on 50 at 500, ragged, its first
- * line box 309 down — below the bar on a phone. Then the photographs, 46
- * under it and 210 tall; then the biography, 70.5 under them, at 40 on 40 and
- * 400, justified, a blank line between paragraphs.
- *
- * At rest that is the whole of it. `client/about.ts` adds `.is-staged` to the
- * panel and the parts below that class turn it into the four-part opening:
- * the lead held in place while it is written, the photographs driven in from
- * the side, the rest written as it rises, the record brought in last. Without
- * the script, with motion reduced, or before it runs, the page simply stands.
- */
+/* From the designer's About of 10 and 12 November, at 1920 (figures in frame pixels). */
 .about-sheet { --about-text-size: max(0.9375rem, calc(40 * var(--u))); }
 
 .about-text {
@@ -294,30 +193,18 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 }
 .about-opening + p { margin-top: calc(70.5em / 40); }
 .about-text > p + p { margin-top: 1em; }
-/*
- * The gallery's name at the end of the biography: set as the text is, and
- * lit like the Exhibitions and Commissioned rows (its `.hrow` takes their
- * hover and focus colour from 01-grid.css, a new hue each time from
- * hover-list.ts; ink without scripting).
- */
+/* The gallery's name at the end of the biography: set as the text is, and lit
+   like the Exhibitions and Commissioned rows (its `.hrow` takes their hover and
+   focus colour from 01-grid.css, a new hue each time from hover-list.ts. */
 .about-link {
   --exh-hover: var(--ink);
   color: inherit;
   transition: color var(--hover) var(--ease);
 }
 
-/*
- * The photographs: a reel 210 tall, each at its own proportion, 53 apart,
- * from the left margin, 46 under the lead — the designer's sheet of
- * 12 November, where the first eight fill the measure. On a phone it stops
- * shrinking at 7.5rem and the gaps keep their proportion to it.
- *
- * Without the script it is a row that scrolls sideways. With it
- * (`.is-looped`, `client/about.ts`) the row becomes a loop seen through the
- * text's measure: each photograph placed by the script, the ones that do not
- * fit waiting round the loop, reached by the chevrons in the margins, by
- * dragging, or by scrolling on, which carries the reel along.
- */
+/* The photographs: a reel 210 tall, each at its own proportion, 53 apart, from
+   the left margin, 46 under the lead — the designer's sheet of 12 November,
+   where the first eight fill the measure. */
 .about-reel {
   --reel-h: max(7.5rem, calc(210 * var(--u)));
   --reel-gap: calc(var(--reel-h) * 53 / 210);
@@ -351,8 +238,8 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   display: block;
   width: auto;
   height: var(--reel-h);
-  /* The photographs run on past the margins to the edges of the window,
-     where the panel (`.about`, overflow-x hidden) cuts them off. */
+  /* The photographs run on past the margins to the edges of the window, where
+     the panel (`.about`, overflow-x hidden) cuts them off. */
   overflow: visible;
   /* Sideways is the reel's; up and down is still the page's. */
   touch-action: pan-y;
@@ -368,10 +255,8 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .about-reel.is-looped .about-reel-item img { -webkit-user-drag: none; }
 .about-reel.is-dragging .about-reel-item { cursor: grabbing; }
 
-/*
- * The chevrons: one in each margin, level with the middle of the reel, faint
- * until the pointer is on them. They wait for the reel to come to rest.
- */
+/* The chevrons: one in each margin, level with the middle of the reel, faint
+   until the pointer is on them. */
 .about-reel-step {
   position: absolute;
   top: 50%;
@@ -400,24 +285,15 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .about-reel.is-placed .about-reel-step { opacity: 1; visibility: visible; transition-delay: 0s; }
 .about-reel.is-placed .about-reel-step:focus-visible { opacity: 0.45; }
 
-/*
- * The four parts.
- *
- * The stage — lead and photographs — is pinned where it stands while the
- * runway under it (`.about-opening`, made tall by the script) scrolls past:
- * the first stretch writes the lead, the second drives the reel in. Words are
- * hidden and appear whole, with no fade, as on the start page.
- */
+/* The four parts. */
 .about.is-staged { overflow-anchor: none; }
 .about.is-staged .about-stage { position: sticky; top: var(--stage-top, 0px); }
 .about.is-staged .about-word { opacity: 0; }
 .about.is-staged .about-word.is-written { opacity: 1; }
 
-/*
- * The last part comes in rather than being written: each heading, entry and
- * line rises a little out of a blur as it reaches the screen, in order down
- * the page and a beat later from column to column.
- */
+/* The last part comes in rather than being written: each heading, entry and line
+   rises a little out of a blur as it reaches the screen, in order down the page
+   and a beat later from column to column. */
 .about.is-staged .about-pop {
   opacity: 0;
   filter: blur(10px);
@@ -430,8 +306,7 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .about.is-staged .about-pop.is-in { opacity: 1; filter: none; transform: none; }
 
 /* The start page's chevron, for About's own scroll: shown from the moment About
-   opens until the end of the panel. Beside the panel and drawn in the
-   negative, like Close, since text and photographs pass under it all the way. */
+   opens until the end of the panel. */
 .about-cue {
   position: fixed;
   left: 50%;
@@ -458,13 +333,9 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   .about-cue { bottom: 1.1rem; width: 1.3rem; margin-left: -0.65rem; }
 }
 
-/*
- * A photograph large over the page, as the book's are on What's Color: a pale
- * blur behind it, a click anywhere or Escape to put it away, and the plain
- * pointers the rest of the site uses rather than zoom marks. The exhibitions'
- * chevrons either side (below) step through the row, and so do the arrow keys and a
- * swipe. The panel stops scrolling while it is up (`.is-viewing`).
- */
+/* A photograph large over the page, as the book's are on What's Color: a pale
+   blur behind it, a click anywhere or Escape to put it away, and the plain
+   pointers the rest of the site uses rather than zoom marks. */
 .about.is-viewing { overflow: hidden; }
 .about-viewer {
   position: fixed;
@@ -490,11 +361,9 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   max-width: min(82vw, 1600px);
   max-height: 84vh;
 }
-/*
- * The chevrons stand beside the panel, like Close, and are drawn the same way:
- * the negative of what is under them, so the photograph can run beneath them
- * on a phone. There only while a photograph is up.
- */
+/* The chevrons stand beside the panel, like Close, and are drawn the same way:
+   the negative of what is under them, so the photograph can run beneath them on
+   a phone. */
 .about-viewer-step {
   position: fixed;
   top: 50%;
@@ -515,15 +384,8 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 
 /* ----------------------------------------------------------- the record */
 
-/*
- * Five columns at 20: solo, group, the fairs across two narrower ones, and
- * the private collections — starting at 48, 443, 838, 1099 and 1494. Each
- * entry its date in italic, its title at 600, what kind of show at 400 and
- * where at 300; the entries stacked 65.5 apart, line box to line box. The
- * headings sit 234.7 under the biography's last line, the first entries 117
- * under the headings. The fairs break into their second column level with
- * the end of the solo shows (`firstColumn` in components/layout.ts).
- */
+/* Five columns at 20: solo, group, the fairs across two narrower ones, and the
+   private collections — starting at 48, 443, 838, 1099 and 1494. */
 .about-record {
   display: grid;
   grid-template-columns:
@@ -573,10 +435,8 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .about-collection-name { font-weight: 600; text-transform: uppercase; }
 .about-collection-place { margin-top: calc(1em / 20); font-weight: 300; }
 
-/*
- * How to reach her, centred above the copyright: the record's size, its
- * two emails in a row, 192 under the record.
- */
+/* How to reach her, centred above the copyright: the record's size, its two
+   emails in a row, 192 under the record. */
 .about-contact {
   display: flex;
   flex-wrap: wrap;
@@ -604,26 +464,20 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 }
 .about-foot b { font-weight: 600; }
 
-/*
- * Narrower than the frame can hold five columns at the record's smallest
- * size, the record goes to two — solo beside group, the fairs in their own
- * two beneath, then the collections — and on a phone to one, where justified
- * lines of a few words would open rivers, so the biography is set ragged.
- */
+/* Narrower than the frame can hold five columns at the record's smallest size,
+   the record goes to two. */
 @media (max-width: 899px) {
-  /* On a phone the lead and the biography are both 20 on 20, the size of
-     Color Charts' statement (--chart-phone-text). The record keeps its own. */
+  /* On a phone the lead and the biography are both 20 on 20, the size of Color
+     Charts' statement (--chart-phone-text). */
   .about-lead, .about-text > p { font-size: calc(20 * var(--p)); line-height: 1; }
   /* The lead keeps the computer's 45 over 40, at the phone's size. */
   .about-lead { line-height: calc(45 / 40); }
   .about-record { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 3.5em; }
   .about-show-columns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-/*
- * On a phone too the record stays in two columns, solo beside group and the
- * fairs in their own two (Frank, 2026-11-15: one column ran too long), set
- * smaller to fit: --about-record-type is the size there.
- */
+/* On a phone too the record stays in two columns, solo beside group and the
+   fairs in their own two, set smaller to fit: --about-record-type is the size
+   there. */
 @media (max-width: 559px) {
   .about-text > p { text-align: left; }
   .about-record {
@@ -645,10 +499,8 @@ html:not(.js) .about:target ~ .about-close { opacity: 1; visibility: visible; }
 
 /* --------------------------------------------------------------- lightbox */
 
-/*
- * Five columns, mirrored: nav, a column the width of the caption, the plate,
- * the caption, nav — so the painting sits on the exact centre of the screen.
- */
+/* Five columns, mirrored: nav, a column the width of the caption, the plate, the
+   caption, nav — so the painting sits on the exact centre of the screen. */
 .lightbox {
   --caption: minmax(12rem, 17rem);
   position: fixed; inset: 0; z-index: 80;
@@ -657,13 +509,7 @@ html:not(.js) .about:target ~ .about-close { opacity: 1; visibility: visible; }
   align-items: center; gap: var(--pad);
   padding: var(--bar) var(--pad) var(--pad);
   /* Opening a painting is the same kind of move as opening a panel, and was a
-     third of the length of one. Matched to it, so nothing on the site arrives
-     faster than anything else.
-
-     `pointer-events` goes with the opacity, as on the veil above: a fading
-     lightbox still fills the screen, and while it fades it would take every
-     click meant for the sheet behind it. At a fifth of a second that was barely
-     noticeable; at six tenths it is a dead page. */
+     third of the length of one. */
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.6s var(--ease);
@@ -705,10 +551,8 @@ html:not(.js) .about:target ~ .about-close { opacity: 1; visibility: visible; }
 
 /* ------------------------------------------------- exhibition detail panel */
 
-/*
- * An exhibition opens on its own facts, set as the index sets them, so the row
- * you clicked and the page it opens read as the same object.
- */
+/* An exhibition opens on its own facts, set as the index sets them, so the row
+   you clicked and the page it opens read as the same object. */
 .reader-venue {
   margin: 0.15rem 0 0;
   font-size: var(--type);
@@ -749,19 +593,10 @@ html:not(.js) .about:target ~ .about-close { opacity: 1; visibility: visible; }
 }
 .reader-stated .reader-text, [data-panel] .reader-text { padding-top: 0; }
 
-/*
- * More of the page shows through than for a painting. The exhibition you opened
- * came from a list, and keeping that list legible underneath — blurred, but
- * plainly still there — is what makes the panel read as something raised over it
- * rather than as a different page you have been taken to.
- */
+/* More of the page shows through than for a painting. */
 .panel:has(.reader-stated) { background: color-mix(in srgb, var(--paper) 78%, transparent); }
-/*
- * While a detail panel is open its own head is the bar, so the site's stands
- * down rather than sitting behind it. Two bars at the top, both blending, were
- * reading as one crowded line. The About panel keeps the menu: it is a
- * different element (`.about`), so it is not matched here.
- */
+/* While a detail panel is open its own head is the bar, so the site's stands
+   down rather than sitting behind it. */
 body:has(.panel.is-open) .top { opacity: 0; pointer-events: none; }
 @supports not selector(:has(*)) {
   .panel { background: color-mix(in srgb, var(--paper) 86%, transparent); }
@@ -779,10 +614,7 @@ body:has(.panel.is-open) .top { opacity: 0; pointer-events: none; }
 /* Kept as the positioning context for the arrows and the expand controls. */
 .reader { position: relative; }
 
-/*
- * Turning the pictures. Under them, quiet, in the colour of the text — the
- * arrows are for when you want them, not a thing the page is about.
- */
+/* Turning the pictures. */
 .reader-nav {
   display: flex;
   align-items: center;
@@ -801,13 +633,7 @@ body:has(.panel.is-open) .top { opacity: 0; pointer-events: none; }
 .reader-step:hover, .reader-step:focus-visible { opacity: 1; }
 .reader-nav .reader-counter { margin: 0; min-width: 4.5rem; text-align: center; }
 
-/*
- * Giving a column the whole sheet.
- *
- * Two brackets facing apart, which close toward each other once the column has
- * the screen — the mark says what the next press will do, rather than what the
- * state currently is.
- */
+/* Giving a column the whole sheet. */
 .reader-expand {
   position: absolute;
   top: calc(var(--bar) + 2.4rem);
@@ -819,11 +645,7 @@ body:has(.panel.is-open) .top { opacity: 0; pointer-events: none; }
   transition: opacity var(--hover) var(--ease);
 }
 .reader-expand:hover, .reader-expand:focus-visible { opacity: 1; }
-/*
- * Three dots in a thin ring, which is the mark the sheet uses. It was two
- * corner brackets before — a crop mark, which says 'frame this' rather than
- * 'there is more here'.
- */
+/* Three dots in a thin ring, which is the mark the sheet uses. */
 .reader-expand > span {
   position: relative;
   display: block;
@@ -899,23 +721,8 @@ body:has(.panel.is-open) .top { opacity: 0; pointer-events: none; }
   .reader-text { padding-right: 2rem; }
 }
 
-/*
- * The phrases the designer sets in an italic serif — the studio, the chart, the
- * enquiry, the project, the practice. Against the sans they read as the subject
- * of their paragraph lifted out of it.
- *
- * Times New Roman italic, which the type sheet names, and which ships with
- * macOS and Windows — so on most machines the literal face renders. It cannot
- * be served from the site, though: Monotype licenses it with the operating
- * system, not for the web. Tinos behind it is Steve Matteson's metric
- * compatible cut under the SIL Open Font License, self-hosted, so a visitor
- * without Times New Roman gets the same widths rather than whatever their
- * browser calls a serif.
- *
- * Sized up a little: at the same point size Times sits visually smaller than
- * Switzer beside it, and the phrase should read as emphasis rather than a drop.
- * This is an adjustment, not the sheet, which gives both at 45px.
- */
+/* The phrases the designer sets in an italic serif — the studio, the chart, the
+   enquiry, the project, the practice. */
 .ink-accent {
   font-family: 'Times New Roman', Times, 'Tinos', 'Liberation Serif', serif;
   font-style: italic;

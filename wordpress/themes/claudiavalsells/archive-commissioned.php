@@ -1,8 +1,7 @@
 <?php
 /**
  * Commissioned work: grouped by the kind of job rather than shown as a grid,
- * after the designer's layout. The row answers in a colour and brings up its
- * photograph; each opens as a panel.
+ * after the designer's layout.
  */
 $cv_open  = $args['open'] ?? '';
 $cv_title = $args['title'] ?? 'Commissioned';
@@ -16,17 +15,17 @@ foreach ( function_exists( 'cvc_commissioned_groups' ) ? cvc_commissioned_groups
 	$cv_items    = array_merge( $cv_items, $items );
 }
 
-// The project at its own address joins the panels when no group carries it
-// yet — a draft being previewed — and a panel that is not on the page is not
-// opened: a veil locked over nothing would be the whole page.
+// The project at its own address joins the panels when no group carries it yet — a draft
+// being previewed — and a panel that is not on the page is not opened: a veil locked over
+// nothing would be the whole page.
 if ( ! empty( $args['project'] ) && ! in_array( $args['project']['id'], array_column( $cv_items, 'id' ), true ) ) {
 	$cv_items[] = $args['project'];
 }
 if ( $cv_open && ! in_array( $cv_open, array_map( fn( $i ) => "commissioned-{$i['slug']}", $cv_items ), true ) ) {
 	$cv_open = '';
 }
-// Where a served panel closes to: the bar's address once the script closes
-// it, and its Close link's for a reader without scripting.
+// Where a served panel closes to: the bar's address once the script closes it, and its Close
+// link's for a reader without scripting.
 $cv_root = $cv_open ? home_url( '/commissioned/' ) : '';
 
 cv_page( [

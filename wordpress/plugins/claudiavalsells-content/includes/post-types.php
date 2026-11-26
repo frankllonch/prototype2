@@ -1,11 +1,5 @@
 <?php
-/**
- * What the site is made of.
- *
- * Five kinds of entry and two pages. Each kind carries the few facts the design
- * sets beside it — a year, a size, where a show was — as fields rather than as
- * text in a title, which is what the old site had to do.
- */
+/** What the site is made of. */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -133,8 +127,8 @@ function cvc_register_post_types(): void {
 	] );
 
 	register_taxonomy( 'commissioned_group', [ 'commissioned' ], [
-		// Every label the editor's panel and the Groups screen show, or WordPress
-		// fills the gaps with its own words for categories ("Add Category").
+		// Every label the editor's panel and the Groups screen show, or WordPress fills the gaps
+		// with its own words for categories ("Add Category").
 		'labels'            => [
 			'name'              => __( 'Groups', 'claudiavalsells' ),
 			'singular_name'     => __( 'Group', 'claudiavalsells' ),
@@ -184,10 +178,9 @@ function cvc_register_post_types(): void {
 		'show_admin_column' => true,
 		'show_in_rest'      => true,
 		'rewrite'           => false,
-		// An edition's term is made with the edition itself (below), and a
-		// person shows only under an edition whose term it is; one made by hand
-		// would match no edition and hide whoever was filed under it. So terms
-		// are the administrator's to touch, and anyone who edits can file.
+		// An edition's term is made with the edition itself (below), and a person shows only under
+		// an edition whose term it is; one made by hand would match no edition and hide whoever was
+		// filed under it.
 		'capabilities'      => [
 			'manage_terms' => 'manage_options',
 			'edit_terms'   => 'manage_options',
@@ -197,10 +190,7 @@ function cvc_register_post_types(): void {
 	] );
 }
 
-/**
- * One field. Every field is a single value, readable by the editor, and only
- * writable by someone who may edit the entry.
- */
+/** One field. */
 function cvc_field( string $type, string $key, string $kind, $default = '', ?callable $sanitize = null ): void {
 	register_post_meta( $type, $key, [
 		'single'            => true,
@@ -244,9 +234,7 @@ function cvc_register_meta(): void {
 	cvc_field( 'artwork', '_cv_source_url', 'string' );
 	cvc_field( 'artwork', '_cv_source_title', 'string' );
 
-	// Commissioned work. The last three are the masthead of its own page, which
-	// the designer words apart from its line on the index: "Color Chart" over
-	// "Bofill Taller d’Arquitectura" there, one line on the index.
+	// Commissioned work.
 	cvc_field( 'commissioned', '_cv_year', 'integer', 0 );
 	cvc_field( 'commissioned', '_cv_when', 'string' );
 	cvc_field( 'commissioned', '_cv_client', 'string' );
@@ -288,9 +276,7 @@ function cvc_register_meta(): void {
 	cvc_field( 'page', '_cv_bands', 'string', '', 'cvc_sanitize_lines' );
 }
 
-/**
- * The year beside each entry in the admin lists, so a list of 181 works reads.
- */
+/** The year beside each entry in the admin lists, so a list of 181 works reads. */
 add_filter( 'manage_artwork_posts_columns', 'cvc_year_column' );
 add_filter( 'manage_exhibition_posts_columns', 'cvc_year_column' );
 add_filter( 'manage_commissioned_posts_columns', 'cvc_year_column' );
@@ -325,9 +311,7 @@ add_action( 'pre_get_posts', function ( WP_Query $q ) {
 /**
  * Every published edition has its term — the one its people are filed under,
  * with the edition's own address as its slug, which is how the edition finds
- * them (cvc_answers). Made here so that a fourth edition added in the admin
- * is ready to receive people the moment it is published, with nothing to set
- * up by hand.
+ * them (cvc_answers).
  */
 add_action( 'wp_after_insert_post', function ( int $post_id, WP_Post $post, bool $update, ?WP_Post $before ) {
 	if ( 'wc_edition' !== $post->post_type || 'publish' !== $post->post_status || '' === $post->post_name ) {
@@ -336,8 +320,8 @@ add_action( 'wp_after_insert_post', function ( int $post_id, WP_Post $post, bool
 	if ( term_exists( $post->post_name, 'cv_edition' ) ) {
 		return;
 	}
-	// The edition's address changed: its term follows, with everyone filed
-	// under it, rather than a new and empty one taking its place.
+	// The edition's address changed: its term follows, with everyone filed under it, rather than
+	// a new and empty one taking its place.
 	if ( $before && '' !== $before->post_name && $before->post_name !== $post->post_name ) {
 		$old = get_term_by( 'slug', $before->post_name, 'cv_edition' );
 		if ( $old instanceof WP_Term ) {
@@ -345,8 +329,8 @@ add_action( 'wp_after_insert_post', function ( int $post_id, WP_Post $post, bool
 			return;
 		}
 	}
-	// Named by its numeral: the field, or the "(IV)" at the end of its title
-	// (the field may not be saved yet when this runs), or else its title.
+	// Named by its numeral: the field, or the "(IV)" at the end of its title (the field may not
+	// be saved yet when this runs), or else its title.
 	$numeral = trim( (string) get_post_meta( $post_id, '_cv_numeral', true ) );
 	if ( '' === $numeral && preg_match( '/\(\s*([IVXLC]+)\s*\)\s*$/i', $post->post_title, $m ) ) {
 		$numeral = strtoupper( $m[1] );

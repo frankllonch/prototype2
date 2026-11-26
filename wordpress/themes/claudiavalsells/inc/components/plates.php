@@ -1,14 +1,5 @@
 <?php
-/**
- * The second sheet — src/components/plates.ts.
- *
- * A show that is photographs and nothing else: no reading column, the
- * masthead alone in the top left, the photograph taking the middle of the
- * frame. Same type classes as the reading sheet (sheet.php), so the two kinds
- * of detail are set identically and only their placing differs. The markup
- * reuses data-reader, data-figures, .reader-figure and data-figure-step, which
- * the shared client code drives.
- */
+/** The second sheet — src/components/plates.ts. */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -22,14 +13,7 @@ function cv_show_when( array $show ): string {
 	return trim( $run . ' ' . ( $show['year'] ? (string) $show['year'] : '' ) );
 }
 
-/**
- * `$show`: an exhibition as cv_exhibition() reads it.
- *
- * A landscape is marked `is-wide`, by the same test the other sheet makes
- * (cv_sheet_wide() in sheet.php). Nothing on a desktop reads it: there every
- * photograph is fitted to the one box. On a phone the photographs stand in a
- * column, and a landscape takes its width where a portrait is set narrower.
- */
+/** `$show`: an exhibition as cv_exhibition() reads it. */
 function cv_plates_body( array $show ): string {
 	$images = $show['images'];
 	$out    = '<div class="plates" data-reader>'
@@ -56,12 +40,10 @@ function cv_plates_body( array $show ): string {
 /**
  * An exhibition's detail, on whichever of the designer's two sheets it takes:
  * the reading sheet when it has a text, the plates when it is only pictures.
- * Decided by what the entry holds, not by a list, so a show that gains a
- * press release moves across on its own.
  */
 function cv_exhibition_body( array $show ): string {
-	// Nothing at all to read, as the static site decides it: a text that is
-	// only an embed — a film of the opening — still opens on the reading sheet.
+	// Nothing at all to read, as the static site decides it: a text that is only an embed — a
+	// film of the opening — still opens on the reading sheet.
 	if ( '' === trim( $show['text'] ) ) {
 		return cv_plates_body( $show );
 	}

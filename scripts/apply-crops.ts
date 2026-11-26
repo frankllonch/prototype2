@@ -1,21 +1,6 @@
 /**
  * Puts the hand-made crops in content/raw/recortadas into the site, in place of
  * the ones the cropping script worked out for itself.
- *
- * It changes nothing about how images are built. `images.ts` already prefers
- * content/raw/crops/<id>.jpg over the catalogue photograph whenever that id is
- * listed in crops.final.json, so a hand-made crop only has to be written where a
- * generated one would have gone. Everything downstream — sizes, formats, the
- * `c` suffix that keeps cropped and uncropped variants apart — carries on
- * unchanged.
- *
- * Anything it replaces is kept in content/raw/crops-generated/, so this is
- * reversible. Reads content/recortadas.json for the matches; pass --exclude with
- * a comma-separated list of indices to leave particular ones alone.
- *
- * With --from-uncropped it takes content/raw/uncropped/ instead, where each file
- * carries its painting's id in its name and so needs no matching at all. That is
- * the path for the ones cropped by hand from `uncropped.ts`.
  */
 import { copyFile, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
@@ -38,11 +23,6 @@ const MEDIA = path.join(ROOT, 'content', 'raw', 'media');
 /**
  * The hand-cropped files from `uncropped.ts`, which carry their painting's id in
  * the filename and so need no matching.
- *
- * A file the same size as the photograph it came from has not been cropped yet,
- * and writing it would replace a painting's image with the very photograph we are
- * trying to get away from — quietly, and looking like success. Those are skipped
- * unless asked for explicitly.
  */
 async function fromUncropped(force: boolean) {
   if (!existsSync(UNCROPPED)) return { rows: [] as any[], untouched: [] as string[] };
@@ -86,8 +66,8 @@ async function main() {
     sourceDir = UNCROPPED;
   } else {
     const report = JSON.parse(await readFile(REPORT, 'utf8'));
-    // The review sheets are numbered by ascending score, so an exclusion given as
-    // a sheet index means the same crop here.
+    // The review sheets are numbered by ascending score, so an exclusion given as a sheet index
+    // means the same crop here.
     byScore = [...report.crops].filter((c: any) => c.id).sort((a: any, b: any) => a.score - b.score);
   }
 
@@ -114,13 +94,13 @@ async function main() {
     const target = path.join(CROPS, `${crop.id}.jpg`);
 
     if (!dryRun) {
-      // Keep whatever was there, once: a second run must not overwrite the
-      // original backup with a hand-made crop written by the first.
+      // Keep whatever was there, once: a second run must not overwrite the original backup with a
+      // hand-made crop written by the first.
       const backup = path.join(KEEP, `${crop.id}.jpg`);
       if (existsSync(target) && !existsSync(backup)) { await copyFile(target, backup); kept++; }
 
-      // Written as JPEG on white, which is what the rest of the pipeline expects;
-      // the screenshots carry an alpha channel that would otherwise go black.
+      // Written as JPEG on white, which is what the rest of the pipeline expects; the screenshots
+      // carry an alpha channel that would otherwise go black.
       await sharp(source).flatten({ background: '#ffffff' }).jpeg({ quality: 94 }).toFile(target);
     }
     written++;

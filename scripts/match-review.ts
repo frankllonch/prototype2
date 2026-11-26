@@ -1,10 +1,6 @@
 /**
  * Side-by-side proof for every match `match-crops.ts` made: the hand-made crop
  * on the left, the catalogue image it was matched to on the right.
- *
- * Scoring says two pictures are alike; only looking says they are the same work.
- * One file per pair so a reviewer can be given a batch, and contact sheets for
- * reading the whole set quickly.
  */
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -41,8 +37,8 @@ async function main() {
   const report = JSON.parse(await readFile(path.join(ROOT, 'content', 'recortadas.json'), 'utf8'));
   const crops = report.crops.filter((c: any) => c.id);
 
-  // Weakest first: the ones most worth a reviewer's attention come first in the
-  // numbering, so a partial review is still the useful part of one.
+  // Weakest first: the ones most worth a reviewer's attention come first in the numbering, so a
+  // partial review is still the useful part of one.
   const ordered = [...crops].sort((a: any, b: any) => a.score - b.score);
 
   const thumbs: Buffer[] = [];

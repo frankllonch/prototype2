@@ -1,8 +1,8 @@
 <?php
 /**
  * Everything after `main` — the second half of `layout()`: the page's own
- * overlays and controls, the cue, the cursor, the veil, About, the lightbox,
- * and the one script that boots the rest.
+ * overlays and controls, the cue, the cursor, the veil, About, the lightbox, and
+ * the one script that boots the rest.
  */
 $cv_page = cv_page();
 ?>

@@ -7,22 +7,9 @@ import { responsiveImage } from './image.ts';
 import { stepChevron } from './scroll-cue.ts';
 import type { ProjectImage } from '../content/types.ts';
 
-/**
- * The Colour Chart, after the designer's third sheet (COLOR CHART DISSENY III,
- * Frank, 2026-11-19).
- *
- * An ordinary page that scrolls, as About does: no pinned screen and no run
- * behind it. The title and the statement are typed in on arrival
- * (`client/chart.ts`): the title and the first paragraph by themselves, the
- * rest by the reader's scroll, forwards only; everything under them — Order yours, the cost, the two
- * sections in three columns, the thanks and the line at the foot — comes in
- * out of a blur as it reaches the screen.
- *
- * The markup is the finished page. The words are split into spans by the
- * script, and nothing is hidden unless the script is there to bring it back.
- */
+/** The Colour Chart, after the designer's third sheet. */
 
-/** The page's title (Frank, 2026-11-18), semibold 45 in capitals. */
+/** The page's title, semibold 45 in capitals. */
 const TITLE = 'Artist colour chart for architects and designers';
 
 /** The sections the sheet sets, in three columns; About a colour chart is not on it. */
@@ -30,10 +17,8 @@ const SET = ['Features', 'Technical characteristics'];
 
 /**
  * A section's blocks dealt into three columns, left to right and then down
- * again, as the sheet deals them: the six technical notes are 1 and 4, 2 and
- * 5, 3 and 6. Each column runs down on its own, not in rows across, so a short
- * note does not leave a gap beside a long one. `--n` is the block's place in
- * the text, which is the order a phone reads them in (06-colour-chart.css).
+ * again, as the sheet deals them: the six technical notes are 1 and 4, 2 and 5,
+ * 3 and 6.
  */
 function columns(section: ChartSection): Html {
   const cols = [0, 1, 2].map((c) => section.blocks.map((b, n) => ({ b, n })).filter(({ n }) => n % 3 === c));
@@ -112,14 +97,11 @@ export function colourChart(): Html {
 }
 
 /**
- * The photographs of the chart in use, in a reel between the statement and
- * Order yours (Frank, 2026-11-22): About's reel, the same loop and the same
- * big chevrons in the margins, driven in from the right by the scroll once the
- * statement is typed and carried along as the page goes on
- * (`client/chart.ts`, which borrows About's loop from `client/about.ts`).
- *
- * Each photograph is a link to the panel below, which shows it large; without
- * scripting the row scrolls sideways and the link walks to the panel.
+ * The photographs of the chart in use, in a reel between the statement and Order
+ * yours: About's reel, the same loop and the same big chevrons in the margins,
+ * driven in from the right by the scroll once the statement is typed and carried
+ * along as the page goes on (`client/chart.ts`, which borrows About's loop from
+ * `client/about.ts`).
  */
 function chartReel(images: readonly ProjectImage[]): Html {
   return html`<div class="chart-reel about-reel chart-in" data-about-reel data-chart-reel>
@@ -150,15 +132,8 @@ function reelSizes(image: ProjectImage): string {
 }
 
 /**
- * The photographs of the chart in use, as a panel over the page, opened at
- * the photograph tapped in the reel.
- *
- * The same sheet an exhibition that is photographs and nothing else gets
- * (`components/plates.ts`): the masthead top left, one picture in the middle
- * of the frame, an arrow either side. It is raised and put away by
- * `client/panels.ts` and stepped through by `client/figures.ts`, both of which
- * already drive every other detail on the site — there is no new mechanism
- * here, which is the point of it reading the same.
+ * The photographs of the chart in use, as a panel over the page, opened at the
+ * photograph tapped in the reel.
  */
 export function chartPhotographs(): Html {
   if (!photographs.length) return html``;
@@ -167,36 +142,7 @@ export function chartPhotographs(): Html {
   </div>`;
 }
 
-/**
- * The order form, over the page.
- *
- * Every field is here in the markup and the form has a real `action` and
- * `method`, so it is a working form before a line of script runs: without
- * scripting it is a section at the foot of the page that posts to the handler
- * and gets a plain page back. The script's job is to raise it over the page,
- * hold the keyboard inside it, and post it without leaving the page.
- *
- * Three things in this markup are defences rather than design, and all three
- * are only the first word on the subject — the handler repeats every one of
- * them, because anything decided in a page can be edited by whoever is looking
- * at it:
- *
- *   `website`   a field no person can see and no person can tab to. Anything
- *               that fills it filled it by reading the markup, which is what
- *               most form spam is.
- *   `started`   when the form was opened, written by the script. A submission
- *               three seconds after the form appeared was not typed.
- *   Turnstile   Cloudflare's check, when a site key is configured. It asks
- *               nothing of a person and is the only one of the three that a
- *               determined sender cannot simply read and work around.
- *
- * The address it sends to is not here. It is in the handler's environment, so
- * the page that offers to write to Claudia never says where to.
- *
- * `desk` says which form this is, and so where the handler sends it: the
- * Colour Chart's orders go to Claudia, the Gallery's inquiries to the Alzueta
- * gallery (Frank, 2026-11-18). Both addresses are the handler's alone.
- */
+/** The order form, over the page. */
 export type InquiryDesk = 'chart' | 'gallery';
 
 export function inquiries(desk: InquiryDesk = 'chart'): Html {

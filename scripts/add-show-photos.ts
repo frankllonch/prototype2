@@ -1,23 +1,4 @@
-/**
- * Puts the official photographs on the exhibition sheets.
- *
- * Frank sent a set for each exhibition (claudiastuff/finalfotosexhibitions,
- * 2026-11-26), exported from the designer's file in the order each sheet steps
- * through them. They replace both the archive's pictures (add-shows.ts) and the
- * ones the old site's page carried: a show with a folder here shows exactly
- * that folder, in its order, and nothing else.
- *
- * The folder is the source, as for the commissioned sheets: drop the pictures
- * into content/raw/local/exhibitions/<slug>/ named so that they sort in reading
- * order (01.png, 02.png …), run this, and they are in. The slug is the one the
- * exhibitions list (src/content/exhibitions-list.ts) gives the row. They were
- * sent rather than published, so the files are the record, kept out of git with
- * the rest of content/raw. A show with no folder keeps what it had.
- *
- * Re-runnable: it rewrites each show's images from whatever is in its folder.
- *
- *   npm run add-show-photos && npm run images && npm run build
- */
+/** Puts the official photographs on the exhibition sheets. */
 import { readFile, writeFile, readdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';

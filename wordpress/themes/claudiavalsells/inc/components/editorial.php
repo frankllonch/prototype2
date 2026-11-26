@@ -2,10 +2,6 @@
 /**
  * The reading composition and the panels that hold it —
  * src/components/editorial.ts and src/components/panels.ts.
- *
- * The text runs down one column and the photographs hold the other, turned by
- * hand with arrows under them. Shared by the exhibition and commissioned
- * panels, so everything that is read rather than browsed is read the same way.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -34,9 +30,9 @@ function cv_editorial_body( array $item ): string {
 	if ( $venue ) {
 		$out .= '<p class="reader-venue">' . esc_html( $venue ) . '</p>';
 	}
-	// The kind on its own line, unless the venue already says it — the list
-	// writes "Solo show, Palau de Casavells" as one phrase, and the About page
-	// still needs the kind as a fact of its own.
+	// The kind on its own line, unless the venue already says it — the list writes "Solo show,
+	// Palau de Casavells" as one phrase, and the About page still needs the kind as a fact of its
+	// own.
 	if ( $kind && ( '' === $venue || false === stripos( $venue, $kind ) ) ) {
 		$out .= '<p class="reader-kind">' . esc_html( $kind ) . '</p>';
 	}
@@ -86,17 +82,7 @@ function cv_editorial_body( array $item ): string {
 
 /**
  * Detail bodies for exhibitions and commissioned work, rendered once into the
- * page and raised over it on demand. Each carries its own address
- * (`data-panel-url`), which is what the bar shows while it is open; `$open`
- * names the one served open when that address was loaded directly, and
- * `$root` the index it closes to.
- *
- * The served panel's Close link leads to that index, so it closes without
- * scripting too; with it, client/panels.ts takes the click and the link goes
- * nowhere. The others are closed already and keep `#`, as on the static site.
- *
- * A commissioned project opens on the designer's sheet (sheet.php); an
- * exhibition on that sheet or on the plates, by what it holds (plates.php).
+ * page and raised over it on demand.
  */
 function cv_panels( string $kind, array $items, string $open = '', string $root = '' ): string {
 	$out = '<div class="panels">';

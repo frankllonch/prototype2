@@ -1,14 +1,6 @@
 /**
  * THE OPENING'S SHAPE — where each painting starts before the scroll lays it
  * into the grid, and how it travels there.
- *
- * client/stack.ts runs the opening; this file only says what it looks like.
- * Everything here is a setting, and every setting can be tried live on the
- * gallery with the pile tuner (`?pile`, client/pile-tuner.ts), whose "Copy
- * settings" is what gets pasted back to make a choice permanent in SITE below.
- *
- * Each layout places one painting: an offset from the pile's centre, a height
- * on the window, a turn and an opacity. The grid is always where they end.
  */
 
 export type Values = Record<string, number | string | boolean>;
@@ -227,21 +219,12 @@ export interface Pile {
   freeze: number | null;
 }
 
-/*
- * THE SITE'S SETTINGS. What everyone sees. Change these to make a tuner
- * choice permanent.
- */
+/* THE SITE'S SETTINGS. */
 export const SITE: Pile = {
   effect: 'scatter',
   effects: {
     pile: { size: 0.38, depth: 0.006, spreadX: 1, spreadY: 1, count: 12, rot: 0, turnFront: false, rest: 'behind' },
-    /*
-     * The site's opening. `since` keeps the scatter to paintings of that year
-     * and later (older ones wait unseen and arrive with the scroll); `count`
-     * is a ceiling on how many of those are thrown, and 9999 means all of
-     * them, however many there are by now. Nothing here is a number of
-     * paintings: client/stack.ts counts them on the page.
-     */
+    /* The site's opening. */
     scatter: { spreadX: 1.2, spreadY: 0.95, shape: 'box', hole: 0, size: 0.24, jitter: 0, rot: 0, count: 9999, rest: 'invisible', since: 2021 },
     spiral: { gap: 0.075, stretch: 1.5, twist: 137.5, size: 0.22, shrink: 0.4, rot: 0, align: false, count: 70, rest: 'behind' },
     ring: { radiusX: 0.34, radiusY: 0.3, rings: 2, ringGap: 0.45, ringShrink: 0.85, spin: -90, size: 0.2, rot: 0, tangent: false, count: 36, rest: 'behind' },
@@ -258,35 +241,8 @@ export const SITE: Pile = {
 };
 
 /*
- * THE WATER — how the paintings float while they wait at the top of the
- * gallery, before the scroll takes them to the grid (client/stack.ts).
- *
- * They lie on water and the cursor is a finger in it: moving it drags the
- * water, and the paintings near it, along; it nudges them aside as it comes;
- * and one it rests on slips slowly out from under it. Each is moored to its
- * own place: it gives only so far, and when the cursor has gone it swings
- * back, a little past, and settles. None can be driven off the window.
- *
- *   reach   how far from the cursor the water is felt, in screen heights.
- *   drag    how firmly a moving cursor carries the paintings with it.
- *   push    how hard it parts them, in px/s² at the cursor.
- *   still   how much of that push a cursor at rest still has (0 to 1): what
- *           makes a painting slide away from under a cursor that only hovers.
- *   fast    the cursor speed, px/s, at which the push is at its full.
- *   thick   how thick the water is: higher stops a pushed painting sooner.
- *   home    how strongly each is drawn back to its own place. With `thick`
- *           it is the recoil: 14 against a thickness of 3 swings back in
- *           about a second and overshoots once. Lower is lazier; raise
- *           `thick` towards 7 and it returns without the overshoot. 0 leaves
- *           them wherever they were pushed.
- *   limit   the furthest a painting can be carried from its place, in screen
- *           heights.
- *   wall    the window's edge. A painting's centre pushed past it is pressed
- *           back, harder the further out it is: px/s² for each px outside.
- *           One the scatter itself throws past the edge may stay where it
- *           was thrown, but go no further.
- *   bob     how far each sways on its own, in px, and `sway` how slowly
- *           (seconds for one sway). bob 0 holds them still until touched.
+ * THE WATER — how the paintings float while they wait at the top of the gallery,
+ * before the scroll takes them to the grid (client/stack.ts).
  */
 export const WATER = {
   on: true,
@@ -362,9 +318,9 @@ export function easeOf(m: Values): (p: number) => number {
 }
 
 /**
- * The grid's own spacing and where it starts, written over the stylesheet —
- * only what differs from the site's, so the stylesheet's clamps stay in force
- * otherwise. `--side-top` follows the scroll span, as 00-base.css explains.
+ * The grid's own spacing and where it starts, written over the stylesheet — only
+ * what differs from the site's, so the stylesheet's clamps stay in force
+ * otherwise.
  */
 export function gridCss(p: Pile): string {
   const g = p.grid;

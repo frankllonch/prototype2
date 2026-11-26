@@ -2,36 +2,18 @@ import { phone, reduceMotion } from './env.ts';
 import { scrollSpan } from './pile.ts';
 import { glide } from './glide.ts';
 
-/*
- * THE JOURNEY TO A YEAR — the number to change is here.
- *
- *   JUMP_MS   how long the page takes to travel to a chosen year. Driven by
- *             the site's own glide (glide.ts) rather than the browser's smooth
- *             scroll, which this page abandoned — stalled by the rail's
- *             transitions, killed outright by the click. Fixed rather than
- *             distance-based, so every year arrives on the same beat; half
- *             again as long as the 900 it was, with the rest of the site.
- */
+/* THE JOURNEY TO A YEAR — the number to change is here. */
 const JUMP_MS = 1350;
 
-/**
- * The year rail. Clicking a swatch brings that year to the middle of the screen;
- * the swatch of the year you are looking at stays marked as you scroll.
- *
- * The links are plain anchors to ids in the grid, so this only adds the smooth
- * scroll and the current-year marking. It also never runs while the opening
- * pile is still moving: the rail is revealed by `stackdone`, and the marking
- * observer is only wired up then, so a mid-animation measurement can never
- * reach it.
- */
+/** The year rail. */
 export function initYears(): void {
   const rail = document.querySelector<HTMLElement>('[data-years]');
   if (!rail) return;
 
   const links = [...rail.querySelectorAll<HTMLAnchorElement>('.year')];
   if (!links.length) return;
-  // The controls stand under the last year, and the stylesheet cannot count
-  // them: a new year added in WordPress moves the controls down a line.
+  // The controls stand under the last year, and the stylesheet cannot count them: a new year added
+  // in WordPress moves the controls down a line.
   document.documentElement.style.setProperty('--years-count', String(links.length));
 
   const grid = document.querySelector<HTMLElement>('[data-grid]');
@@ -40,8 +22,7 @@ export function initYears(): void {
   /*
    * Changing the density animates every tile's size for half a second, so
    * anything measured inside that window is an interpolated position rather than
-   * where the year is going to be — and the rail would scroll to it. The same
-   * allowance the pile gives itself for the same transition.
+   * where the year is going to be.
    */
   let settledAt = 0;
   grid?.addEventListener('gridchange', () => { settledAt = performance.now() + 560; });
@@ -58,8 +39,7 @@ export function initYears(): void {
 
   /**
    * Focusing a year dims every painting from another one, so the year you asked
-   * for is the only thing in focus. Choosing the same year again clears it, as
-   * does Escape.
+   * for is the only thing in focus.
    */
   let focused = '';
   /** True while a chosen year is being travelled to, pile and all. */
@@ -71,26 +51,14 @@ export function initYears(): void {
     rail.classList.toggle('is-focused', Boolean(year));
   };
 
-  /**
-   * Where to scroll so a year sits in the middle of the screen.
-   *
-   * Two things stop it being simply "half a viewport above the year". The pile
-   * only lets go after `scrollSpan()` (client/pile.ts) of scrolling, so anything above that would
-   * gather the paintings back up — and take the year selection with it, since
-   * that is what `stackrestart` is for. And the last years have nothing much
-   * below them, so the page runs out before they reach the middle.
-   *
-   * Both are clamps rather than failures: the year comes as close to the centre
-   * as the page allows. `scrollIntoView` could do neither, which is why this is
-   * worked out by hand.
-   */
+  /** Where to scroll so a year sits in the middle of the screen. */
   const centreOn = (target: HTMLElement): number => {
     const box = target.getBoundingClientRect();
     const wanted = box.top + window.scrollY + box.height / 2 - window.innerHeight / 2;
-    // Keyed on the hero, not on `data-stack`: the attribute is still there when
-    // the pile is turned off for reduced motion, but `stack.ts` removes the hero,
-    // and a floor held against an opening that never runs would scroll straight
-    // past the newest year and put it out of reach altogether.
+    // Keyed on the hero, not on `data-stack`: the attribute is still there when the pile is turned
+    // off for reduced motion, but `stack.ts` removes the hero, and a floor held against an opening
+    // that never runs would scroll straight past the newest year and put it out of reach
+    // altogether.
     const floor = document.querySelector('[data-hero]') ? window.innerHeight * scrollSpan() + 8 : 0;
     const ceiling = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
     return Math.max(0, Math.min(Math.max(floor, wanted), ceiling));
@@ -107,28 +75,19 @@ export function initYears(): void {
 
       if (focused === year) { focus(''); return; }
 
-      /*
-       * The year's paintings start loading now, not when the journey reaches
-       * them. They are lazy, so left alone they would only be asked for as
-       * they came near the screen — at the very end of the trip — and the
-       * page arrived on empty frames that filled in one by one.
-       */
+      /* The year's paintings start loading now, not when the journey reaches them. */
       const first = tiles.indexOf(target);
       for (const tile of tiles.slice(Math.max(0, first - 12), first + 40)) {
         const img = tile.querySelector('img');
         if (img?.loading === 'lazy') img.loading = 'eager';
       }
-      // On a phone the row itself says which year, and it moves with every
-      // scroll: the other years' paintings are not dimmed there. The chosen
-      // year is held in the middle while the paintings travel to it.
+      // On a phone the row itself says which year, and it moves with every scroll: the other
+      // years' paintings are not dimmed there.
       if (!phone.matches) focus(year);
       else { chosen = link; chosenUntil = performance.now() + JUMP_MS + 400; }
       /*
-       * A jump that starts from the folded pile scrolls down through it, and
-       * the pile is still `running` for the whole of that journey — which the
-       * guard below reads as the reader going back up to the heap, and it threw
-       * away the very year just asked for. That is why the dimming came and
-       * went and a second click was needed. Held until the tiles settle.
+       * A jump that starts from the folded pile scrolls down through it, and the
+       * pile is still `running` for the whole of that journey.
        */
       jumping = true;
 
@@ -137,13 +96,8 @@ export function initYears(): void {
 
       /*
        * While the pile is still folded, the newest rows are behind it and
-       * `centreOn` holds the scroll at the floor rather than letting it land
-       * on a row that is not where it will end up. That first move is what
-       * unfolds the pile — it is a function of the scroll — so once the tiles
-       * have come to rest the journey is finished to the row's real position.
-       *
-       * Without this the first click only opened the pile and a second was
-       * needed to arrive, which read as the rail ignoring the first one.
+       * `centreOn` holds the scroll at the floor rather than letting it land on
+       * a row that is not where it will end up.
        */
       if (document.documentElement.classList.contains('stack-running')) {
         document.addEventListener('stackdone', () => { go(); jumping = false; }, { once: true });
@@ -158,12 +112,7 @@ export function initYears(): void {
     if (event.key === 'Escape' && focused) focus('');
   });
 
-  /*
-   * Clicking away drops the year — the most natural way out. A click that lands
-   * on a painting is left alone: that one is opening the work, not dismissing
-   * the selection. Bound on pointerdown so it settles before the tile's own
-   * click handler runs.
-   */
+  /* Clicking away drops the year — the most natural way out. */
   document.addEventListener('pointerdown', (event) => {
     if (!focused) return;
     const target = event.target as Element | null;
@@ -171,9 +120,8 @@ export function initYears(): void {
     focus('');
   });
 
-  // Scrolling back to the opening gathers the paintings again; a year held in
-  // focus from before would otherwise still be dimming most of them when the
-  // grid comes back.
+  // Scrolling back to the opening gathers the paintings again; a year held in focus from before
+  // would otherwise still be dimming most of them when the grid comes back.
   document.addEventListener('stackrestart', () => { if (focused) focus(''); });
 
   // Mark the year currently under the top of the viewport.
@@ -186,31 +134,21 @@ export function initYears(): void {
     /** The year last marked, so the bar is only moved when it changes. */
     let marked: HTMLAnchorElement | null = null;
     const update = () => {
-      /*
-       * Nothing is in the middle of a heap.
-       *
-       * While the pile is folded every row is transformed to the same place,
-       * and `getBoundingClientRect` reports where a thing is drawn, not where
-       * it is laid out — so every year read as being above the middle and the
-       * loop below settled on whichever came last. That is the stray colour
-       * that appeared on the oldest year whenever the paintings gathered back
-       * up. There is no current year until they have come to rest.
-       */
+      /* Nothing is in the middle of a heap. */
       if (document.documentElement.classList.contains('stack-running')) {
         for (const { link } of anchors) link.classList.remove('is-current');
         return;
       }
 
-      // Measured at the middle of the screen, which is where choosing a year now
-      // puts it — probing near the top would mark a different year than the one
-      // the click just centred.
+      // Measured at the middle of the screen, which is where choosing a year now puts it — probing
+      // near the top would mark a different year than the one the click just centred.
       const probe = window.innerHeight * 0.5;
       let current = anchors[0]!;
       for (const anchor of anchors) {
         if (anchor.el.getBoundingClientRect().top <= probe) current = anchor;
       }
-      // A year just chosen stays the year until the paintings have got there:
-      // the row does not run through the years passed on the way and back.
+      // A year just chosen stays the year until the paintings have got there: the row does not run
+      // through the years passed on the way and back.
       if (chosen && performance.now() < chosenUntil) {
         current = anchors.find((a) => a.link === chosen) ?? current;
       } else {
@@ -219,10 +157,7 @@ export function initYears(): void {
       for (const { link } of anchors) link.classList.toggle('is-current', link === current.link);
       /*
        * On a phone the rail is a bar along the foot of the screen, and with
-       * enough years it is wider than the screen. The year being looked at is
-       * brought to the middle of it, once each time it changes. A rail that
-       * fits — every desktop, and a phone with today's eleven years — has
-       * nowhere to scroll and is left alone.
+       * enough years it is wider than the screen.
        */
       if (current.link !== marked) {
         marked = current.link;
@@ -235,12 +170,7 @@ export function initYears(): void {
       }
     };
 
-    /*
-     * The phone's row of years (THE YEAR WHEEL in 05-artwork.css). A swipe
-     * along it — a finger that actually moves it, not a tap and not the turns
-     * `update` makes to follow the page — takes the paintings to the year it
-     * comes to rest on, by that year's own link.
-     */
+    /* The phone's row of years (THE YEAR WHEEL in 05-artwork.css). */
     if (phone.matches) {
       let turning = false;
       let restTimer = 0;
@@ -276,10 +206,7 @@ export function initYears(): void {
     window.addEventListener('scrollend', update);
     /*
      * Scrolling back up gathers the paintings into the pile again, and a year
-     * still marked against a heap is marking nothing. `stackrestart` covers
-     * the moment they re-form, but only that moment; this covers being up
-     * there at all, which is what you see after coming back to the top by any
-     * other route.
+     * still marked against a heap is marking nothing.
      */
     window.addEventListener('scroll', () => {
       if (jumping) return;
@@ -287,28 +214,17 @@ export function initYears(): void {
     }, { passive: true });
     /*
      * The grid can change shape under a reader who is sitting still — a density
-     * step, or the sizing switch, which moves the rows by a third of a page. No
-     * scroll follows, so nothing above would re-mark the rail, and it would go
-     * on naming a year that is no longer anywhere near the middle of the screen
-     * until the reader happened to move. Re-read once the sizes have settled.
+     * step, or the sizing switch, which moves the rows by a third of a page.
      */
     grid?.addEventListener('gridchange', () => afterRelayout(update));
     /*
-     * The pile moves the paintings without moving the layout under them, so
-     * the rail can be read and used while it runs. It only has to be told to
-     * look again once the tiles have come to rest, because what is in the
-     * middle of the screen by then is not what was there at the start.
+     * The pile moves the paintings without moving the layout under them, so the
+     * rail can be read and used while it runs.
      */
     document.addEventListener('stackdone', () => afterRelayout(update));
     update();
   };
 
-  /*
-   * Started at once rather than on `stackdone`. The rail is visible from the
-   * first frame now, so it has to answer from the first frame too — and a year
-   * clicked while the paintings are still in a heap simply scrolls there,
-   * which is what unfolds them: the pile is a function of the scroll position,
-   * so travelling to the year plays the opening on the way.
-   */
+  /* Started at once rather than on `stackdone`. */
   start();
 }

@@ -1,33 +1,9 @@
-/*
- * The Colour Chart (COLOR CHART DISSENY III, Frank, 2026-11-19).
- *
- * An ordinary page that scrolls, as About does: the title, the statement
- * across the full width, the way to order one and the price, Features and
- * Technical characteristics in three columns each, her thanks, and the
- * site's line at the foot.
- *
- * The title and the statement are typed in on arrival and everything under
- * them comes in out of a blur as it reaches the screen (`client/chart.ts`).
- *
- * The type of what was on the page before this sheet is unchanged: only the
- * room between the parts follows the new sheet. The two sections are the new
- * text, 20 on 20 with their titles semibold.
- *
- *     --pt  =  --type / 40        one point of the 1920 sheets
- */
+/* The Colour Chart. */
 
 .chart {
   --pt: calc(var(--type) / 40);
 
-  /*
-   * Where the title stands: on the line where Commissioned and Exhibitions
-   * begin. Their first heading's line box is the list's top (`--list-top`,
-   * 07-sheet.css, held below the bar by the same max as 01-grid.css) plus the
-   * row's own air (`--row-top`), and its capitals are 40. The title's are
-   * 45, so its line box is raised by the five points' share of the cap's drop
-   * in a line set solid — 0.165 of the size in Switzer — which puts the tops
-   * of the two sets of capitals on the same pixel.
-   */
+  /* Where the title stands: on the line where Commissioned and Exhibitions begin. */
   --chart-top: calc(
     max(calc(var(--bar) + 2rem), 20.745vw) + 0.78125vw - var(--pt) * 5 * 0.165
   );
@@ -55,16 +31,12 @@
   padding: 0 var(--pad) var(--chart-end);
 }
 
-/* The reel's photographs run on to the window's edges, and no further: the
-   page is never reached sideways. `clip` rather than `hidden`, which would
-   make the page a scroll box and let go of the sticky opening. */
+/* The reel's photographs run on to the window's edges, and no further: the page
+   is never reached sideways. */
 .chart { overflow-x: clip; }
 
-/*
- * The photographs (Frank, 2026-11-22): About's reel (02-overlays.css), the
- * same height, gaps and chevrons in the margins, between the statement and
- * Order yours. Driven in and along by client/chart.ts.
- */
+/* The photographs: About's reel (02-overlays.css), the same height, gaps and
+   chevrons in the margins, between the statement and Order yours. */
 .chart-reel {
   --u: calc(100vw / 1920);
   --m: var(--pad);
@@ -72,23 +44,16 @@
 }
 .chart-hold:has(.chart-reel) + .chart-order { margin-top: var(--chart-reel-gap); }
 
-/*
- * Once the statement is typed the page goes on until the photographs stand
- * over the foot of the screen, and is held there while the scroll drives them
- * sideways, as About's are: client/chart.ts sets `--hold-top` and the run of
- * scroll after it.
- */
+/* Once the statement is typed the page goes on until the photographs stand over
+   the foot of the screen, and is held there while the scroll drives them
+   sideways, as About's are: client/chart.ts sets `--hold-top` and the run of
+   scroll after it. */
 .chart-hold.is-held > .chart-held { position: sticky; top: var(--hold-top); }
 
-/*
- * The opening holds still while the statement is typed by the scroll: the
- * stage is stuck to the top of the screen and a run of empty height under it
- * (`.chart-runway`, made by client/chart.ts, which also sets the stage's
- * `top` so a stage taller than the screen shows its foot) is what the reader
- * travels. When the run is spent the stage lets go and the page goes on.
- * The page's top margin is the stage's, so it is pinned exactly where it
- * stood: the title on Commissioned's line.
- */
+/* The opening holds still while the statement is typed by the scroll: the stage
+   is stuck to the top of the screen and a run of empty height under it
+   (`.chart-runway`, made by client/chart.ts, which also sets the stage's `top`
+   so a stage taller than the screen shows its foot) is what the reader travels. */
 .chart-stage {
   position: sticky;
   top: 0;
@@ -97,10 +62,8 @@
 
 /* ----------------------------------------------------------- the statement */
 
-/*
- * What the chart is, in her own words, across the whole width of the page:
- * 40 medium in capitals, set solid, one clear line between paragraphs.
- */
+/* What the chart is, in her own words, across the whole width of the page: 40
+   medium in capitals, set solid, one clear line between paragraphs. */
 .chart-statement {
   font-size: calc(var(--pt) * 40);
   font-weight: 500;
@@ -109,7 +72,7 @@
   letter-spacing: 0;
 }
 
-/* The title over it (Frank, 2026-11-18): semibold 45 in capitals. */
+/* The title over it: semibold 45 in capitals. */
 .chart-title {
   margin: 0 0 var(--chart-title-gap);
   font-size: calc(var(--pt) * 45);
@@ -124,13 +87,9 @@
 
 /* ------------------------------------------------------------- the typing */
 
-/*
- * Typed in by the script, a word at a time: the statement is hidden only
- * where there is a script to type it, and the words it has written are shown
- * one by one. `.is-typed` shows everything, however far the typing got.
- * `visibility` rather than opacity, so the lines are laid out from the start
- * and nothing reflows as the words arrive.
- */
+/* Typed in by the script, a word at a time: the statement is hidden only where
+   there is a script to type it, and the words it has written are shown one by
+   one. */
 @media (prefers-reduced-motion: no-preference) {
   html.js .chart:not(.is-typed) .chart-statement { visibility: hidden; }
   html.js .chart:not(.is-typed) .chart-word.is-written { visibility: visible; }
@@ -152,11 +111,7 @@
 
 /* ------------------------------------------------------------- the ordering */
 
-/*
- * The way to get one, and what it costs. ORDER YOURS is semibold 45 on a
- * line of 40, its arrow drawn the size a 50 would set it; "Cost:" is regular
- * 40 and the figure semibold 40 (JERARQUIA, 2026-11-17).
- */
+/* The way to get one, and what it costs. */
 .chart-order {
   display: inline-flex;
   align-items: center;
@@ -170,22 +125,7 @@
   color: var(--ink);
 }
 
-/*
- * The arrow turns, slowly, all the way over.
- *
- * Half a turn and nothing else: no colour change, no movement of the words, no
- * travel across the page. It is the one piece of movement on a page that has
- * none, so it is given more than twice the site's usual hover to make it —
- * long enough that the turn is something you watch rather than something that
- * has already happened.
- *
- * Eased at both ends rather than with the site's `--ease`, which decelerates
- * into place from a fast start. That is right for something arriving; a thing
- * turning on its own centre should start as gently as it stops.
- *
- * The viewBox is square and the arrow sits in the middle of it, so the turn has
- * nothing to drift against.
- */
+/* The arrow turns, slowly, all the way over. */
 .chart-arrow {
   /* 0.68 of a 50, against the words' 45. */
   width: calc(0.68em * 50 / 45);
@@ -194,31 +134,17 @@
   transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-/* The phone sheet draws an arrow of its own — longer arms, a heavier line —
-   and it stands in for this one below 900 (the phone block below). */
+/* The phone sheet draws an arrow of its own — longer arms, a heavier line — and
+   it stands in for this one below 900 (the phone block below). */
 .chart-arrow-phone { display: none; }
 
-/*
- * Only where there is a pointer to hover with, and only on hover.
- *
- * A tap on a touch screen leaves `:hover` standing on what was tapped until
- * something else is tapped, so on a phone the arrow turned once and stayed
- * turned — pointing down for the life of the page. `(hover: hover) and
- * (pointer: fine)` is the test the site already uses for the pointer label,
- * and it keeps the whole gesture to the machines that can actually make it.
- *
- * `:focus-visible` is not in here either, and that is the other half of the
- * same complaint. Closing the form puts focus back on the control it was
- * opened from; after a key that counts as a visible focus, so the arrow was
- * left turned by a form the reader had finished with. Focus is shown by the
- * underline below, which does not pretend to be a gesture.
- */
+/* Only where there is a pointer to hover with, and only on hover. */
 @media (hover: hover) and (pointer: fine) {
   .chart-order:hover .chart-arrow { transform: rotate(90deg); }
 }
 
-/* The site shows focus the way it shows hover; this one also underlines, since
-   a keyboard arriving on a control that opens a form should be unmistakable. */
+/* The site shows focus the way it shows hover; this one also underlines, since a
+   keyboard arriving on a control that opens a form should be unmistakable. */
 .chart-order:focus-visible { text-decoration: underline; text-underline-offset: 0.3em; }
 
 .chart-price {
@@ -233,11 +159,8 @@
 
 /* ------------------------------------------------------------ the sections */
 
-/*
- * Features and Technical characteristics: the new text, 20 on 20, regular,
- * its titles semibold in capitals at the same size. Three columns, each
- * running down on its own, a clear line between the blocks in a column.
- */
+/* Features and Technical characteristics: the new text, 20 on 20, regular, its
+   titles semibold in capitals at the same size. */
 .chart-section {
   margin-top: var(--chart-section-next);
   font-size: var(--chart-small);
@@ -271,12 +194,9 @@
 /* ---------------------------------------------------------------- the close */
 
 /* Her thanks, down the middle: 45pt, the same size as Order yours. */
-/*
- * The link in it lights up the way the Exhibitions and Commissioned rows do
- * (Frank, 2026-11-18): it carries their `.hrow`, so it takes their hover and
- * focus colour from 01-grid.css and a new hue each time from hover-list.ts.
- * Ink is the fallback without scripting, as it is for the lists.
- */
+/* The link in it lights up the way the Exhibitions and Commissioned rows do: it
+   carries their `.hrow`, so it takes their hover and focus colour from
+   01-grid.css and a new hue each time from hover-list.ts. */
 .chart-thanks {
   --exh-hover: var(--ink);
   margin: var(--chart-thanks-gap) 0 var(--chart-foot-gap);
@@ -288,10 +208,7 @@
   text-transform: uppercase;
 }
 
-/*
- * The site's line, at the foot. Small, centred, and the name set apart from
- * the notice by weight alone — there is no second size for it to use.
- */
+/* The site's line, at the foot. */
 .chart-footer {
   text-align: center;
   font-size: calc(var(--pt) * 18);
@@ -305,17 +222,8 @@
 
 /* ------------------------------------------------------------------- phone */
 
-/*
- * The phone sheet ("COLOR CHART PHONE", 375 wide), every figure in units of
- * its frame (`--p`, 09-phone.css), the side margin the phone's own.
- *
- * The title stands where Commissioned's first heading does on a phone
- * (`--com-top`, 07-sheet.css): the same 106, at the same 30 semibold.
- *
- * The two sections run in one column here, their blocks back in the order
- * they are written in (`--n`). Their text is 14 on 16, the step under the
- * statement's 20 that a phone can still read.
- */
+/* The phone sheet ("COLOR CHART PHONE", 375 wide), every figure in units of its
+   frame (`--p`, 09-phone.css), the side margin the phone's own. */
 @media (max-width: 899px) {
   .chart {
     --chart-phone-top: calc(106 * var(--p));          /* top of the page to the title */
@@ -408,16 +316,7 @@
 
 /* --------------------------------------------------------------- inquiries */
 
-/*
- * The order form, over the page.
- *
- * It is drawn the way the designer drew it: the page still there underneath,
- * blurred and all but washed out, with the form's rules and labels the only
- * things at full ink. The site's own veil is 55% paper over an 8px blur, which
- * is right for a panel you read; here the page behind is a backdrop and not a
- * second thing to look at, so the paper goes up to where its colour is gone and
- * its type is a grey ghost — which is exactly what the reference shows.
- */
+/* The order form, over the page. */
 .inq {
   position: fixed;
   inset: 0;
@@ -449,10 +348,8 @@
   .inq { background: color-mix(in srgb, var(--paper) 97%, transparent); }
 }
 
-/*
- * Without scripting it is a section at the foot of the page, reached by its
- * anchor and posting the ordinary way. The same bargain the panels make.
- */
+/* Without scripting it is a section at the foot of the page, reached by its
+   anchor and posting the ordinary way. */
 html:not(.js) .inq {
   position: static;
   opacity: 1;
@@ -478,23 +375,14 @@ html:not(.js) .inq-close { display: none; }
 }
 .inq-close:hover, .inq-close:focus-visible { color: var(--ink); }
 
-/*
- * Label, rule, label, rule — the reference's four columns. Both labels size to
- * their own words and the two rules share what is left equally, which is what
- * puts Country's rule and Contact name's rule at the same width on the sheet
- * even though the words above them are not.
- */
+/* Label, rule, label, rule — the reference's four columns. */
 .inq-form {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: baseline;
-  /*
-   * One figure for both: on the sheet the gap between a label and its rule and
-   * the gap between one row and the next are the same 59px at this width, and
-   * that is what sets the rules at 350 — equal to each other, and to a third of
-   * the form. Any other gap and the two rules come out wider than she drew
-   * them, because what the labels do not take the rules do.
-   */
+  /* One figure for both: on the sheet the gap between a label and its rule and
+     the gap between one row and the next are the same 59px at this width, and
+     that is what sets the rules at 350. */
   column-gap: clamp(1.5rem, 3.9vw, 3.7rem);
   row-gap: clamp(1.6rem, 3.9vw, 3.7rem);
 }
@@ -511,11 +399,7 @@ html:not(.js) .inq-close { display: none; }
 
 .inq-field { display: contents; }
 
-/*
- * The empty row before the message. Two and a half lines, which is what puts
- * the message's rule one whole row below where the next row would have been —
- * the skip the sheet draws between who is writing and what they have to say.
- */
+/* The empty row before the message. */
 .inq-form { --inq-skip: calc(var(--type) * var(--lead) * 2.5); }
 
 .inq-label {
@@ -525,11 +409,7 @@ html:not(.js) .inq-close { display: none; }
   white-space: nowrap;
 }
 
-/*
- * A rule, not a box. The field carries its own line and nothing else — no
- * border, no ground, no inset — so an empty form reads as the sheet does: a
- * question and a space to answer it in.
- */
+/* A rule, not a box. */
 .inq-input {
   width: 100%;
   font: inherit;
@@ -565,11 +445,7 @@ html:not(.js) .inq-close { display: none; }
 .inq-country .inq-label, .inq-subject .inq-label { grid-column: 3; }
 .inq-country .inq-input, .inq-subject .inq-input { grid-column: 4; }
 
-/*
- * The message is the width of both, and it sits a row lower than it has to.
- * That gap is the reference's and it is doing something: it separates who is
- * writing from what they have to say.
- */
+/* The message is the width of both, and it sits a row lower than it has to. */
 .inq-message .inq-label { grid-column: 1; margin-top: var(--inq-skip); }
 .inq-message .inq-input { grid-column: 2 / -1; margin-top: var(--inq-skip); }
 
@@ -593,11 +469,7 @@ html:not(.js) .inq-close { display: none; }
 .inq-button:focus-visible { opacity: 0.55; }
 .inq-button[disabled] { opacity: 0.35; cursor: default; }
 
-/*
- * What happened, in a line, beside the button. It is `role="status"`, so a
- * screen reader is told without the focus being taken from the field the
- * person is in.
- */
+/* What happened, in a line, beside the button. */
 .inq-status {
   margin: 0;
   font-size: var(--type);
@@ -608,11 +480,7 @@ html:not(.js) .inq-close { display: none; }
 .inq-status[data-state='error'] { color: var(--ink); }
 .inq-status[data-state='sent'] { color: var(--ink); }
 
-/*
- * The honeypot. Taken out of the layout, out of the tab order and out of the
- * accessibility tree, but not `display: none` — some senders skip anything
- * their parser can see is hidden that way, and this one is meant to be filled.
- */
+/* The honeypot. */
 .inq-trap {
   position: absolute;
   left: -9999px;
@@ -626,22 +494,12 @@ html:not(.js) .inq-close { display: none; }
 .inq-check { grid-column: 2 / -1; }
 .inq-check:empty { display: none; }
 
-/*
- * One column, and every field a block of its own.
- *
- * The four explicit placements have to be undone along with the template, not
- * just the template. A `grid-column: 2 / -1` left standing against a one-column
- * grid does not fall back to that column — it conjures a second one, and the
- * form came out in two ragged columns with the fields alternating between them.
- */
-/*
- * On a phone it is set on the page's own scale, so that it reads as the same
- * page: the phone's margin, the title where the statement begins, the two
- * controls at the size and weight of Order yours, labels and fields at the
- * statement's 20 (which also keeps a field above the 16px under which iOS
- * zooms in on it). There is no sheet for this one; the figures are the Colour
- * Chart's phone sheet carried over, in the same unit (`--p`, 09-phone.css).
- */
+/* One column, and every field a block of its own. */
+/* On a phone it is set on the page's own scale, so that it reads as the same
+   page: the phone's margin, the title where the statement begins, the two
+   controls at the size and weight of Order yours, labels and fields at the
+   statement's 20 (which also keeps a field above the 16px under which iOS zooms
+   in on it). */
 @media (max-width: 899px) {
   .inq {
     --inq-phone-top: calc(105.5 * var(--p));      /* top of the screen to Inquiries */
@@ -668,17 +526,17 @@ html:not(.js) .inq-close { display: none; }
   .inq-field { display: block; }
   .inq-label { display: block; margin: 0; font-size: var(--inq-phone-text); line-height: 1; letter-spacing: 0; }
   .inq-input {
-    /* Stated, because a one-line field will not be set solid: a browser
-       holds its line at the face's own leading whatever is asked for, and
-       the four of them came out 7 taller than the message under them. */
+    /* Stated, because a one-line field will not be set solid: a browser holds
+       its line at the face's own leading whatever is asked for, and the four of
+       them came out 7 taller than the message under them. */
     height: var(--inq-phone-field);
     font-size: var(--inq-phone-text);
     line-height: 1;
     letter-spacing: 0;
     padding: var(--inq-phone-field-top) 0 var(--inq-phone-field-foot);
   }
-  /* The doubled rule takes its second pixel out of the room above it, as it
-     does on the desktop, so the field does not change height under a thumb. */
+  /* The doubled rule takes its second pixel out of the room above it, as it does
+     on the desktop, so the field does not change height under a thumb. */
   .inq-input:focus-visible { padding-bottom: calc(var(--inq-phone-field-foot) - 1px); }
   /* The message starts as one line like the rest and grows from there
      (`client/inquiries.ts` writes its height as it is typed in). */
@@ -686,8 +544,7 @@ html:not(.js) .inq-close { display: none; }
   .inq-message .inq-label, .inq-message .inq-input { margin-top: 0; }
   .inq-check, .inq-send { grid-column: 1; }
 
-  /* The line of news takes a line; Send stands under it, at the left edge
-     with everything else. */
+  /* The line of news takes a line; Send stands under it, at the left edge with everything else. */
   .inq-send { flex-wrap: wrap; justify-content: flex-start; gap: var(--inq-phone-news); margin-top: var(--inq-phone-row); }
   .inq-status { flex: 1 0 100%; font-size: var(--inq-phone-text); line-height: 1; letter-spacing: 0; }
   .inq-button { font-size: var(--inq-phone-large); line-height: 1; letter-spacing: 0; }

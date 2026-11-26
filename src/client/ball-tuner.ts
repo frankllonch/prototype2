@@ -3,13 +3,6 @@ import { finePointer } from './env.ts';
 /**
  * The ball tuner: a panel for trying the pointer live — its size, how much it
  * grows over a link, how it trails the mouse, its colour and blend.
- *
- * Off unless asked for. Open any page with `?ball` and the panel appears in the
- * bottom left; it stays on (this browser remembers, settings included) until
- * `?ball=off` or the panel's Off button. Nobody else ever sees it.
- *
- * "Copy settings" puts the choice on the clipboard as CSS, to be pasted over
- * the :root block at the head of styles/11-ball.css.
  */
 
 const ON = 'cv-ball-on';
@@ -51,9 +44,8 @@ const css = (f: Field, value: Values[string] | undefined): string =>
     : String(value);
 
 /**
- * What the stylesheet says now (styles/11-ball.css), so Reset goes back to
- * the site's own settings even after they have been changed there. Read
- * before the panel puts anything of its own on the page.
+ * What the stylesheet says now (styles/11-ball.css), so Reset goes back to the
+ * site's own settings even after they have been changed there.
  */
 function fromSheet(): Values {
   const style = getComputedStyle(document.documentElement);

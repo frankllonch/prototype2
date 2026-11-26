@@ -1,7 +1,5 @@
-/*
- * The editor, in the site's own hand: its typeface, its ink, a column the width
- * the pages give the text. What Claudia types looks like what the page shows.
- */
+/* The editor, in the site's own hand: its typeface, its ink, a column the width
+   the pages give the text. */
 @font-face {
   font-family: 'Switzer';
   src: url('assets/fonts/Switzer-Variable.woff2') format('woff2-variations');
@@ -39,8 +37,8 @@
   font-size: 0.95rem;
 }
 
-/* The paragraph styles a project's page uses (the content plugin offers them
-   in the Styles panel), drawn here as the page draws them. */
+/* The paragraph styles a project's page uses (the content plugin offers them in
+   the Styles panel), drawn here as the page draws them. */
 .editor-styles-wrapper .is-style-lead {
   font-weight: 500;
   text-transform: uppercase;

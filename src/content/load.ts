@@ -1,7 +1,6 @@
 /**
- * Reads the extracted dataset, merges in the rendered image variants, and exposes
- * the collections the pages need. The only module that touches disk, so every
- * component stays a pure function of its props.
+ * Reads the extracted dataset, merges in the rendered image variants, and
+ * exposes the collections the pages need.
  */
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -24,16 +23,16 @@ const readJson = <T,>(file: string): T => JSON.parse(readFileSync(path.join(ROOT
 function withVariants(image: ProjectImage, manifest: Record<string, ManifestEntry>): ProjectImage {
   const entry = manifest[image.id];
   if (!entry) return image;
-  // The pipeline's measured size wins: it is the size of what is actually served,
-  // which for a cropped painting is the canvas, not the photograph.
+  // The pipeline's measured size wins: it is the size of what is actually served, which for a
+  // cropped painting is the canvas, not the photograph.
   const o = entry.original;
   return {
     ...image,
     width: entry.width,
     height: entry.height,
     variants: { avif: entry.avif, webp: entry.webp, fallback: entry.fallback },
-    // The photograph behind a cut-out, carried as its own sized set so a page
-    // can show the record of the work beside the work.
+    // The photograph behind a cut-out, carried as its own sized set so a page can show the record
+    // of the work beside the work.
     ...(o ? { original: { width: o.width, height: o.height, variants: { avif: o.avif, webp: o.webp, fallback: o.fallback } } } : {}),
   };
 }
@@ -61,16 +60,7 @@ const manifest = readJson<Record<string, ManifestEntry>>('content/images.json');
 /** One colour per year, sampled from that year's paintings by scripts/palette.ts. */
 export const yearColours: readonly YearColour[] = readJson<YearColour[]>('content/years.json');
 
-/**
- * Covers that are a crop of the painting rather than a photograph of a room it
- * is hanging in.
- *
- * It matters wherever the tile is taken to stand for the work itself. Drawing
- * the grid to scale is the clear case: the tile's area is set from the
- * catalogue, but if the picture inside it is a gallery wall then the painting
- * occupies some unknown fraction of that area, and a 2-metre canvas can end up
- * reading smaller than a sheet of paper beside it.
- */
+/** Covers that are a crop of the painting rather than a photograph of a room it is hanging in. */
 const plates = new Set<string>(readJson<string[]>('content/crops.final.json'));
 
 /** Whether this image shows the work alone. */
@@ -99,14 +89,7 @@ export const colourChart: Project | undefined = longform('colour-chart');
 export const chartPhotographs: Project | undefined = longform('chart-photographs');
 
 
-/**
- * The photographs Claudia sent from her archive, by exhibition slug.
- *
- * These shows have no page on the old site and so no prose — a record here is
- * a title and a set of pictures. `add-shows.ts` files them as projects of kind
- * `show` purely so the image pipeline treats them like everything else; this
- * is where the rest of the site asks for them.
- */
+/** The photographs Claudia sent from her archive, by exhibition slug. */
 export const showPhotos: ReadonlyMap<string, Project> = new Map(
   by('show').map((p) => [p.slug, p] as const),
 );

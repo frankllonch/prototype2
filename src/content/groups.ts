@@ -1,20 +1,7 @@
 import { displayTitle } from './title.ts';
 import type { Project } from './types.ts';
 
-/**
- * How the commissioned work is grouped, and when each piece ran.
- *
- * The grouping is the one place on the site that is not derived. Nothing in the
- * source says that the dadàbarcelona workshops are teaching and Kamanar is a
- * charitable project — that is a reading of the work, and the designer supplied
- * it, so it is written down here rather than inferred from something it does not
- * follow from.
- *
- * Anything not named falls into the first group rather than disappearing. A new
- * project added in WordPress should turn up on the page in the wrong section,
- * where it will be noticed and moved; the alternative is that it is silently
- * absent and nobody finds out.
- */
+/** How the commissioned work is grouped, and when each piece ran. */
 const GROUPS: ReadonlyArray<{ name: string; slugs: readonly string[] }> = [
   {
     name: 'Commissioned',
@@ -40,30 +27,10 @@ const GROUPS: ReadonlyArray<{ name: string; slugs: readonly string[] }> = [
   },
 ];
 
-/**
- * Projects belonging to the What's Color? series, which has a section of its own
- * coming. They are held out of this index rather than filed under a heading they
- * do not belong to; the section being built is where they will be shown.
- *
- * Named here rather than deleted anywhere, so when that page lands it has the
- * list already and nothing has to be remembered.
- */
+/** Projects belonging to the What's Color? */
 export const WHATS_COLOR = new Set(['whats-color-3rd-edition-llibreria-terranova-abril-2024']);
 
-/**
- * Titles as the designer set them for the index.
- *
- * The derived titles are accurate but inherit the catalogue's unevenness — a
- * client's name missing from one, a bracketed abbreviation left in another. An
- * index is read down a column at a glance, so the wording is worth settling.
- * One of the designer's has been corrected where it is plainly a slip: the
- * index says "Kanamar", and the school, the source and the designer's own
- * detail for it all say Kamanar. The heading over the list is spelt
- * Commissioned for the same reason, where the sheet has "Comissioned".
- *
- * Nothing else is overridden. Anything absent falls back to the derived title,
- * so a project added later is named from the source rather than going untitled.
- */
+/** Titles as the designer set them for the index. */
 const NAMES: Readonly<Record<string, string>> = {
   'terra-rossa-milan-design-week-2024': 'Terra Rossa',
   'color-chart-el-taller-de-arquitectura-rbta': 'Color Chart T Bofill, Taller d’Arquitectura',
@@ -81,27 +48,14 @@ const NAMES: Readonly<Record<string, string>> = {
   'solidary-fulard': 'Solidary Fulard Design',
 };
 
-/**
- * Where the phone sheet turns a name onto its second line by hand.
- *
- * Every other two-line name on that sheet breaks where a 335-wide column
- * breaks it anyway. This one does not: left alone it reads COLOR PALETTE
- * SANTA & / COLE, and the designer set COLOR PALETTE / SANTA & COLE. So the
- * break is written down, as the part of the name it comes after — never a
- * second spelling of the name, and dropped if the name no longer begins that
- * way (`breakOf`). The desktop sets these names on one line and ignores it.
- */
+/** Where the phone sheet turns a name onto its second line by hand. */
 const BREAK_AFTER: Readonly<Record<string, string>> = {
   'santa-cole-color-palette-2023': 'Color Palette',
 };
 
 /**
  * The run of each project as the designer's index states it, spacing and all —
- * "2016-2020" closed up, "2017 - 2026" and "2023 - Currently" spaced. Three of
- * these say something the source does not (Silla 8 is 2020 rather than
- * 2019–2020, Kamanar 2024 rather than 2022), and the index is the designer's
- * reading of the work, so it wins; anything not named here is still read off
- * the source by `whenOf`.
+ * "2016-2020" closed up, "2017 - 2026" and "2023 - Currently" spaced.
  */
 const WHEN: Readonly<Record<string, string>> = {
   'terra-rossa-milan-design-week-2024': '2024',
@@ -134,14 +88,7 @@ export interface ProjectGroup {
   readonly items: readonly GroupedProject[];
 }
 
-/**
- * The run of a project, as its own title states it.
- *
- * The titles carry the dates and the metadata carries only the opening year, so
- * a project that ran across several is read from the title or it is not read at
- * all — "2016-2020" and "2023-on going" are both there, and both say more than
- * "2016" and "2023" do.
- */
+/** The run of a project, as its own title states it. */
 function whenOf(project: Project): string {
   const title = project.title;
   const year = project.metadata.year;
@@ -167,7 +114,10 @@ function nameOf(project: Project): string {
     .trim();
 }
 
-/** The recorded break for a project, only while its title still opens with those words and goes on. */
+/**
+ * The recorded break for a project, only while its title still opens with those
+ * words and goes on.
+ */
 function breakOf(slug: string, title: string): string | undefined {
   const lead = BREAK_AFTER[slug];
   return lead && title.startsWith(`${lead} `) && title.length > lead.length + 1 ? lead : undefined;
@@ -194,8 +144,8 @@ export function groupCommissioned(projects: readonly Project[]): readonly Projec
     });
   }
 
-  // In the order the designer listed them; anything unlisted goes last, in the
-  // source's own order, where it will be noticed.
+  // In the order the designer listed them; anything unlisted goes last, in the source's own order,
+  // where it will be noticed.
   const rank = (slug: string) => {
     for (const group of GROUPS) {
       const i = group.slugs.indexOf(slug);

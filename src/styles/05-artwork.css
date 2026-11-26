@@ -1,57 +1,25 @@
 /* --------------------------------------------- the lean on a single work */
 
-/*
- * THE HOVER — the numbers to change are all here.
- *
- * The painting leans towards the pointer as it crosses it. Every figure the
- * effect uses is a custom property on `.detail-plate`, read by the script
- * rather than written into it, so this block is the whole of the tuning and
- * nothing has to be touched in JavaScript.
- *
- *   --tilt-max      how far it leans at the very edge. 0deg turns the lean off
- *                   and leaves the lift and the shadow.
- *   --tilt-depth    the perspective. Smaller is a stronger, more wide-angle
- *                   lean for the same number of degrees; larger is flatter.
- *   --tilt-lift     how much it grows while the pointer is on it. 1 is none.
- *   --tilt-settle   how long it takes to come back to rest once the pointer
- *                   leaves. It does not apply while the pointer is on it,
- *                   because the painting has to track the hand without lag.
- *
- * Set --tilt-max to 0deg and --tilt-lift to 1 to switch the whole thing off.
- *
- * No shadow. The paintings sit on the paper as they are; a shadow under a
- * cut-out read as a box around it, and under a photograph as a card.
- */
+/* THE HOVER — the numbers to change are all here. */
 .detail-plate {
   --tilt-max: 6deg;
   --tilt-depth: 1100px;
   --tilt-lift: 1.015;
   --tilt-settle: 620ms;
-  /* How closely the lean follows the pointer: the time it takes to cover
-     about two thirds of the way to where the pointer is. Smaller is tighter. */
+  /* How closely the lean follows the pointer: the time it takes to cover about
+     two thirds of the way to where the pointer is. */
   --tilt-follow: 110ms;
 
   perspective: var(--tilt-depth);
 }
 
-/*
- * The transform goes on an inner element, not on the figure: the figure holds
- * the perspective, and an element cannot be both the perspective and the thing
- * seen through it.
- */
-/*
- * Sized to the painting, not to the column: the figure is a grid cell as wide
- * as its track, and the lean is bound to this, so the hover begins where the
- * picture does rather than anywhere in the empty half of the page.
- */
-/*
- * No standing `will-change` and no 3D context of its own. A layer promoted
- * for good is drawn once and then scaled as a bitmap, and Safari scales those
- * with a cheaper filter than Chromium: the painting sat softened at rest even
- * when nothing was moving. Promoted only while it actually leans; at rest it
- * is an ordinary image, drawn sharp. `preserve-3d` bought nothing — there is
- * one plane here — and costs Safari a 3D rendering context.
- */
+/* The transform goes on an inner element, not on the figure: the figure holds
+   the perspective, and an element cannot be both the perspective and the thing
+   seen through it. */
+/* Sized to the painting, not to the column: the figure is a grid cell as wide as
+   its track, and the lean is bound to this, so the hover begins where the
+   picture does rather than anywhere in the empty half of the page. */
+/* No standing `will-change` and no 3D context of its own. */
 .detail-plate-inner {
   display: block;
   width: fit-content;
@@ -59,40 +27,27 @@
 }
 
 /* The script moves it every frame while the pointer is on it; the settle
-   transition is only for coming back. The class is on the picture, not the
-   figure — the selector that used to look for it on the figure never matched. */
+   transition is only for coming back. */
 .detail-plate-inner.is-tilting {
   transition: none;
   will-change: transform;
 }
 
-/*
- * No lean for anyone who has asked for less motion. Done here rather than in
- * the script, so the one place these are decided stays the one place.
- */
+/* No lean for anyone who has asked for less motion. */
 @media (prefers-reduced-motion: reduce) {
   .detail-plate { --tilt-max: 0deg; --tilt-lift: 1; }
 }
 
-/* Nor anywhere but the computer layout, mouse or not: the lean is the
-   desktop's, and the phone and tablet layouts are still (Frank, 2026-11-15). */
+/* Nor anywhere but the computer layout, mouse or not: the lean is the desktop's,
+   and the phone and tablet layouts are still. */
 @media (max-width: 899px) {
   .detail-plate, [data-tilt] { --tilt-max: 0deg; --tilt-lift: 1; }
 }
 
 /* --------------------------------- ONE WORK, SHOWN WHEN IT IS READY */
 
-/*
- * The painting, its caption and its small pictures stay out of sight until
- * client/views.ts has them at their final size, then come up together. Before
- * this the browser showed the cut-out's whole transparent canvas first, so
- * the painting arrived small and grew, and the caption beside it moved.
- *
- *   --ready-fade   how long they take to come up once ready.
- *
- * Only with scripting (html.js). Should the script never get there, the hold
- * lets go by itself after 4s: nothing here can leave the page blank.
- */
+/* The painting, its caption and its small pictures stay out of sight until
+   client/views.ts has them at their final size, then come up together. */
 .detail { --ready-fade: 0.45s; }
 html.js .detail:not(.is-ready) :is(.detail-stage, .detail-caption) {
   opacity: 0;
@@ -109,15 +64,9 @@ html.js .detail.is-ready :is(.detail-stage, .detail-caption) {
 
 /* ------------------------------------------------- the other pictures */
 
-/*
- * The small pictures stand in a row under the painting, centred on it. Their
- * size, the gaps and where the row stands are with the rest of the detail page
- * in 01-grid.css (THE DETAIL PAGE).
- */
+/* The small pictures stand in a row under the painting, centred on it. */
 
-/* Only one picture is ever on the plate. The rest are kept out of layout, not
-   merely hidden, so a lazy one does not load until it is asked for and the
-   plate's box — which the lean measures — is the box of what is shown. */
+/* Only one picture is ever on the plate. */
 .detail-view { display: none; }
 .detail-view.is-shown { display: block; }
 /* Fitted to the painted part of a cut-out by client/views.ts: the transparent
@@ -157,55 +106,14 @@ html.js .detail.is-ready :is(.detail-stage, .detail-caption) {
 
 /* ---------------------------------------------- one work, on a phone */
 
-/*
- * THE WORK ON A PHONE — the numbers to change are all here.
- *
- * Off the designer's phone sheet, 375 wide: every figure is so many of `--p`
- * (09-phone.css). One centred column and nothing else on the paper — the
- * title and the medium, the size and the year, then the painting, its small
- * pictures and its place in the archive.
- *
- * No bar and no corners are drawn. ARTWORK, CLOSE, PREVIOUS and NEXT stay in
- * the page for a keyboard or a screen reader, out of sight; a touch on the
- * empty ground closes, and a swipe across goes to the work either side
- * (client/paging.ts).
- *
- *   --work-top     from the top of the screen to the title's line: 188.
- *   --work-type    the size of every line, the counter's too: 20,
- *   --work-lead    on lines of 25.
- *   --work-pair    between the two lines of a pair — title and medium, size
- *                  and year: 8.
- *   --work-break   between the two pairs: 51.
- *   --work-plate   from the year's line to the painting: 56.5.
- *   --edge         how far the painting stands in from each side: 32.85,
- *                  which leaves it 309 wide and the cut-out's own file the
- *                  full 375, as it lies on the sheet. The sheet's painting
- *                  measures 308 by 260; a cut-out's edge is soft, and the eye
- *                  puts it a fraction inside the cut these figures are
- *                  counted from. client/views.ts brings the result to whole
- *                  pixels of the screen, so a hundredth here may do nothing
- *                  and the next one move the painting by a pixel.
- *   --plate-max    the most height the painting may take. An upright work
- *                  needs about 380 to keep that full width; anything taller
- *                  is held to this and comes out narrower.
- *   --under-gap    from the painting's foot to the small pictures: 45.5
- *                  from the cut, which is the sheet's 46.5 to the eye.
- *   --thumb-h      the small pictures' height: 39.5.
- *   --thumb-gap    between the small pictures: 7.5.
- *   --work-count   from the small pictures to the line of "38 of 181": 48.5.
- *                  With no small pictures it stands that far under the
- *                  painting instead.
- *   --work-foot    the paper left under the counter: 60.
- *   --work-ghost   how strongly the gallery shows behind the work, 0 to 1:
- *                  0.05, a twentieth, on the sheet. 0 leaves the paper bare.
- */
+/* THE WORK ON A PHONE — the numbers to change are all here. */
 
 /* The gallery behind an open work is the phone's alone. */
 .detail-ghost { display: none; }
 
 @media (max-width: 899px) {
-  /* The whole page answers a touch (client/paging.ts), and iOS would flash
-     its grey over all of it. */
+  /* The whole page answers a touch (client/paging.ts), and iOS would flash its
+     grey over all of it. */
   .detail { -webkit-tap-highlight-color: transparent; }
   .detail {
     --work-top: calc(188 * var(--p));
@@ -222,16 +130,16 @@ html.js .detail.is-ready :is(.detail-stage, .detail-caption) {
     --work-count: calc(48.5 * var(--p));
     --work-foot: calc(60 * var(--p));
     --work-ghost: 0.05;
-    /* Read by client/views.ts: the sheet's own width less the two margins,
-       and no caption beside the painting to share it with. */
+    /* Read by client/views.ts: the sheet's own width less the two margins, and
+       no caption beside the painting to share it with. */
     --plate-room: calc(375 * var(--p) - 2 * var(--edge));
     --caption-beside: 0;
 
     isolation: isolate;                  /* the gallery behind stays behind */
     display: flex;
     flex-direction: column;
-    /* From the top, not about the middle of a tall screen as the desktop's
-       one row is: the sheet's 188 is from the top edge. */
+    /* From the top, not about the middle of a tall screen as the desktop's one
+       row is: the sheet's 188 is from the top edge. */
     justify-content: flex-start;
     align-items: center;
     height: auto;
@@ -243,14 +151,9 @@ html.js .detail.is-ready :is(.detail-stage, .detail-caption) {
     letter-spacing: 0;
   }
 
-  /*
-   * The gallery, faintly, behind the work: the dozen paintings round this
-   * one, in the two columns the phone's gallery stands in (its figures, the
-   * --wall-* further down, are shared). The sheet's own ghost is a piece of
-   * the desktop gallery pasted in, so only its strength is a measurement.
-   * Nothing in it is read out or answers a touch: a touch goes through to
-   * the ground, which closes.
-   */
+  /* The gallery, faintly, behind the work: the dozen paintings round this one,
+     in the two columns the phone's gallery stands in (its figures, the --wall-*
+     further down, are shared). */
   .detail-ghost {
     position: absolute;
     inset: 0;
@@ -293,8 +196,8 @@ html.js .detail.is-ready :is(.detail-stage, .detail-caption) {
   .detail-under { position: static; width: auto; margin-top: var(--under-gap); translate: none; }
   /* More small pictures than the sheet is wide go on to a second row. */
   .detail-thumbs { flex-wrap: wrap; max-width: calc(375 * var(--p) - 2 * var(--thumb-gap)); }
-  /* All at full strength on the sheet: nothing marks the one on the plate,
-     and a touch leaves no hover behind on another. */
+  /* All at full strength on the sheet: nothing marks the one on the plate, and a
+     touch leaves no hover behind on another. */
   .detail-thumb.is-shown,
   .detail-thumb:not(.is-shown):hover,
   .detail-thumb:not(.is-shown):focus-visible { opacity: 1; }
@@ -306,11 +209,8 @@ html.js .detail.is-ready :is(.detail-stage, .detail-caption) {
   }
   .detail-index:first-child { margin-top: calc(var(--work-count) - var(--under-gap)); }
 
-  /*
-   * Out of sight, not out of the page — and only once the script that closes
-   * on a touch of the ground and pages on a swipe is there to stand in for
-   * them. Without it they are the page's only way out, so they stay.
-   */
+  /* Out of sight, not out of the page — and only once the script that closes on
+     a touch of the ground and pages on a swipe is there to stand in for them. */
   html.js .detail-back,
   html.js .detail-pager {
     position: absolute;
@@ -321,8 +221,8 @@ html.js .detail.is-ready :is(.detail-stage, .detail-caption) {
     clip-path: inset(50%);
     white-space: nowrap;
   }
-  /* A keyboard still reaches them, and the one it is on shows itself at the
-     top left, on the line the three bars keep elsewhere. */
+  /* A keyboard still reaches them, and the one it is on shows itself at the top
+     left, on the line the three bars keep elsewhere. */
   html.js .detail-pager:focus-within { width: auto; height: auto; margin: 0; overflow: visible; clip-path: none; }
   html.js .detail-back:focus-visible,
   html.js .detail-pager a:focus-visible {
@@ -336,16 +236,9 @@ html.js .detail.is-ready :is(.detail-stage, .detail-caption) {
   }
 }
 
-/*
- * A WORK ON A PHONE, ON ONE SCREEN (Frank, 2026-11-15): plain white, nothing
- * scrolls, the painting first and as big as what is left allows, the words
- * compact under it, the count at the foot and Close at the top left where the
- * sheets keep theirs. Swipe still pages; a touch of the ground still closes.
- *
- *   --work-chrome   everything on the screen that is not the painting: the
- *                   top, the small pictures, the caption and the count. The
- *                   painting takes the screen's height less this.
- */
+/* A WORK ON A PHONE, ON ONE SCREEN: plain white, nothing scrolls, the painting
+   first and as big as what is left allows, the words compact under it, the count
+   at the foot and Close at the top left where the sheets keep theirs. */
 @media (max-width: 899px) {
   .detail {
     --work-top: calc(64 * var(--p));
@@ -400,28 +293,7 @@ html.js .detail.is-ready :is(.detail-stage, .detail-caption) {
 
 /* ------------------------------------------- the gallery, on a phone */
 
-/*
- * THE GALLERY ON A PHONE — the numbers to change are all here.
- *
- * No sheet was drawn for it. Two columns of paintings, each a column wide at
- * its own shape, and the years along the foot of the screen. No pile to open
- * it (client/stack.ts stands down below 900px), no sizes to choose, nothing
- * that answers a pointer. In so many of `--p`, as the rest of the phone is.
- *
- *   --wall-top      from the top of the screen to the first row: 96, which
- *                   puts the first painting's edge about 108 down, clear of
- *                   the three bars.
- *   --wall-pad      the margin either side: the phone's 20.
- *   --wall-gutter   between the two columns: 15.
- *   --wall-row      between one row and the next: 10. A cut-out carries its
- *                   own paper round the painting, so the paintings stand
- *                   further apart than this.
- *   --wall-foot     the paper under the last row, so the years do not cover
- *                   it: 120.
- *
- * The years are a wheel along the foot of the screen (Frank, 2026-11-15):
- * see THE YEAR WHEEL below for its knobs.
- */
+/* THE GALLERY ON A PHONE — the numbers to change are all here. */
 @media (max-width: 899px) {
   /* The ghost of the gallery behind an open work stands on the same grid. */
   .grid[data-stack],
@@ -457,33 +329,14 @@ html.js .detail.is-ready :is(.detail-stage, .detail-caption) {
   .grid[data-stack] .tile:hover img,
   .grid[data-stack] .tile:focus-visible img { filter: none; opacity: 1; }
 
-  /* Sizes and scale mean nothing in two fixed columns, and the chevron
-     announced the pile. */
+  /* Sizes and scale mean nothing in two fixed columns, and the chevron announced the pile. */
   .controls { display: none; }
   .years ~ .scroll-cue { display: none; }
 
 }
 
-/*
- * ============================================================================
- * THE YEAR WHEEL — the phone's years, every knob here (Frank, 2026-11-15).
- *
- * The years in a flat row along the foot of the screen, newest on the left,
- * evenly spaced, in the desktop's type. No bar behind them: they sit on the
- * paintings and are drawn as their negative, as the three bars are, each year
- * coming out in its own colour over white paper. The year whose paintings are
- * on screen stands in the middle, a little larger. Scrolling the paintings
- * moves the row; a swipe along it, or a tap on a year, takes the paintings
- * there (client/years.ts).
- *
- *   --wheel-type    the years' size
- *   --wheel-gap     the space between two years
- *   --wheel-foot    from the foot of the screen to the years' baseline
- *   --wheel-zoom    how much larger the middle year is: 1.25 is a quarter
- *   --wheel-motion  how long the middle year takes to grow, and the others
- *                   to shrink back
- * ============================================================================
- */
+/* ============================================================================
+   THE YEAR WHEEL — the phone's years, every knob here. */
 @media (max-width: 899px) {
   .years {
     --wheel-type: calc(28 * var(--p));
@@ -499,8 +352,7 @@ html.js .detail.is-ready :is(.detail-stage, .detail-caption) {
     box-sizing: border-box;
     height: calc(var(--wheel-foot) * 2 + var(--wheel-type) * var(--wheel-zoom) + env(safe-area-inset-bottom, 0px));
     margin-top: 0;
-    /* Half the screen either side, so the first and last years can come to
-       the middle too. */
+    /* Half the screen either side, so the first and last years can come to the middle too. */
     padding: 0 50vw env(safe-area-inset-bottom, 0px);
     flex-direction: row;
     align-items: center;
@@ -525,8 +377,8 @@ html.js .detail.is-ready :is(.detail-stage, .detail-caption) {
   .year {
     flex: none;
     scroll-snap-align: center;
-    /* The negative of the year's colour, so that over white it comes out as
-       the colour itself; over a painting, as the bars do, its negative. */
+    /* The negative of the year's colour, so that over white it comes out as the
+       colour itself; over a painting, as the bars do, its negative. */
     color: rgb(from var(--c) calc(255 - r) calc(255 - g) calc(255 - b));
     transform: scale(1);
     transition: transform var(--wheel-motion) var(--ease);
@@ -535,8 +387,7 @@ html.js .detail.is-ready :is(.detail-stage, .detail-caption) {
   .year.is-current { transform: scale(var(--wheel-zoom)); }
 
   /* "Inquiries" on the phone: over the wheel, in the middle where the current
-     year stands, at 30 to the years' 40 as on a wide screen. Drawn as the
-     years are, as its negative, so it reads black over white paper. */
+     year stands, at 30 to the years' 40 as on a wide screen. */
   .side-inquiries,
   html.js .side-inquiries {
     top: auto;

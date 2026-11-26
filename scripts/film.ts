@@ -1,25 +1,4 @@
-/**
- * Prepares the opening film for serving, and makes its poster.
- *
- * Run after replacing `src/assets/video/whats-color.mp4` with a new cut:
- *
- *   npm run film
- *
- * Two jobs, both cheap and both easy to forget by hand.
- *
- * The first is faststart. An MP4 carries an index — the `moov` atom — and most
- * editors leave it at the end of the file, after the frames. A browser cannot
- * begin playing until it has read that index, so with it at the end the whole
- * file has to arrive before the first frame appears: seven megabytes of wait on
- * the first thing anyone sees. Moving it to the front is a remux, not a
- * re-encode — the frames are copied across untouched, so nothing is lost and
- * nothing is spent on quality.
- *
- * The second is the poster, which is simply the film's own first frame. Doing
- * it here rather than by hand is the point: a poster that was right for an
- * earlier cut is worse than none at all, because it shows a frame the film no
- * longer opens on. Re-cut the film, run this, and the two cannot disagree.
- */
+/** Prepares the opening film for serving, and makes its poster. */
 import { execFile } from 'node:child_process';
 import { rename, stat } from 'node:fs/promises';
 import path from 'node:path';

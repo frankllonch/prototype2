@@ -1,14 +1,4 @@
-/**
- * The one way of drawing a colour from the site's list.
- *
- * The list itself is on the document as `--hue-0` … `--hue-N` (and the
- * negatives the bar needs as `--neg-N`), written there by content/palette.ts;
- * this hands out an index into it. The page's first colour is drawn at random
- * in the head, before the first paint, for the block in the bar
- * (components/layout.ts, `data-hue`); every draw after walks the list from
- * there, so two in a row are never the same colour — which chance alone would
- * not promise.
- */
+/** The one way of drawing a colour from the site's list. */
 let count = -1;
 let at = -1;
 

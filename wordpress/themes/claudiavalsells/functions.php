@@ -1,14 +1,5 @@
 <?php
-/**
- * Claudia Valsells — the theme.
- *
- * The design has one source: the TypeScript components, stylesheets and client
- * scripts under src/ in the repository. This theme is their WordPress reading.
- * The stylesheet and the scripts are copied in as they are (`npm run wp:assets`);
- * each component under inc/components/ is the PHP of one TypeScript component,
- * emitting the same markup, so the stylesheet and the scripts need know nothing
- * about which of the two is drawing.
- */
+/** Claudia Valsells — the theme. */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

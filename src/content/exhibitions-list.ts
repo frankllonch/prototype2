@@ -1,29 +1,4 @@
-/**
- * The exhibitions, as the designer's final sheet classifies them.
- *
- * This is the one list on the site that is not read out of WordPress. The
- * source page carries six shows; the record goes back to 2000, and the rest of
- * it only exists because Claudia wrote it out and the designer set it. So it
- * is kept here, verbatim — including the spellings the sheet uses, which the
- * stylesheet uppercases rather than this file correcting.
- *
- * Four groups, in the sheet's order. The grouping is the sheet's and is not
- * derivable from anything else here: nothing in a title says whether a show
- * was solo, collective or a fair.
- *
- * `slug` names the derived exhibition a row opens, where there is one. Those
- * rows open a panel and carry a photograph; the rest have neither yet and are
- * rendered as plain rows that still answer to the pointer.
- *
- * `commission` is for a show that was also a commission: the row opens the
- * commissioned work's own sheet, the same one the Commissioned page opens.
- * The repetition is intended — the show belongs on both lists.
- *
- * `from` and `to` are the months, which the detail's masthead states and the
- * index does not — the sheet gives the index years alone. `yearEnd` is for the
- * one run that crosses a year, and `note` for the one show the sheet describes
- * on the list itself.
- */
+/** The exhibitions, as the designer's final sheet classifies them. */
 export type ShowGroup = 'Solo shows' | 'Group shows' | 'Art fairs' | 'Private collections';
 
 /** The sheet's order, which is not alphabetical and not by size. */
@@ -120,43 +95,20 @@ export const SHOWS: readonly Show[] = [
   { group: 'Private collections', title: 'Smith Collection', venue: 'Wyoming, USA' },
 ];
 
-/** The opening phrase of a location: the kind of show, its comma if it has one, and an "at" if one follows. */
+/**
+ * The opening phrase of a location: the kind of show, its comma if it has one,
+ * and an "at" if one follows.
+ */
 const KIND = /^\s*((?:solo|solow|group)\s*(?:show|exhibition)s?\b,?)[\s,]*(at\s+)?/i;
 
-/**
- * The place a show was, with the kind of show taken off the front.
- *
- * The sheet writes the location as "Solo show, Alzueta Gallery, Barcelona" —
- * but the group it sits under already says "Solo shows", so the page states it
- * twice, once as the divider and once under every title. This drops the
- * opening phrase and leaves the place.
- *
- * Taken off at render rather than edited out of the records above, so what is
- * stored stays the sheet's own wording and the rule is visible in one place.
- * A location that is only the kind of show — Galeria Axel Pairon's "Group
- * exhibition" — is left with nothing, and the row renders no line at all.
- *
- * `solow` is in the pattern because the sheet spells it that way once, and a
- * typo should not be the reason a line keeps its prefix.
- */
+/** The place a show was, with the kind of show taken off the front. */
 export function placeOf(venue: string | undefined): string | undefined {
   if (!venue) return venue;
   const place = venue.replace(KIND, '').trim();
   return place || undefined;
 }
 
-/**
- * What `placeOf` takes off, for the one layout that shows it.
- *
- * The phone sheet runs the solo and the group shows together as one list with
- * no heading over either, so there each row says what kind it was on a line of
- * its own above the place — and keeps the "at" where the record has one
- * ("Solo show at Gallery_BR" reads SOLO SHOW / AT GALLERY_BR…).
- *
- * The record's own words, comma or none, never a phrase made up from the
- * group: a location that opens with no kind (8 rue des Beaux-Arts) gets no
- * such line.
- */
+/** What `placeOf` takes off, for the one layout that shows it. */
 export function kindOf(venue: string | undefined): { readonly kind: string; readonly at: boolean } | undefined {
   const lead = venue ? KIND.exec(venue) : null;
   return lead ? { kind: lead[1]!, at: Boolean(lead[2]) } : undefined;
@@ -165,18 +117,7 @@ export function kindOf(venue: string | undefined): { readonly kind: string; read
 /** The groups the phone sheet runs together, in the order they take within a year. */
 export const PHONE_MERGED: readonly ShowGroup[] = ['Solo shows', 'Group shows'];
 
-/**
- * Where each show stands on the phone, counted from 1.
- *
- * The phone sheet is one list where the desktop's is four groups: the solo and
- * the group shows together, latest year first, a solo show before a group show
- * of the same year, and otherwise in the order they are written above. The
- * other groups follow whole, in the sheet's order, each still under its name.
- *
- * The markup stays grouped — it is the desktop's, and the one a reader of the
- * source gets — and each row carries its place as `--phone-order`, which only
- * the phone rules read (01-grid.css).
- */
+/** Where each show stands on the phone, counted from 1. */
 export function phoneOrder(shows: readonly Show[]): ReadonlyMap<Show, number> {
   const merged = (s: Show) => PHONE_MERGED.indexOf(s.group);
   const run = shows

@@ -1,30 +1,5 @@
 <?php
-/**
- * Brings the site's content in from the bundle `npm run wp:export` writes.
- *
- * The bundle — a manifest and a folder of files — goes into wp-content/import
- * (wp-env mounts it there; on a server, upload it there by SFTP). Two ways to
- * run it, the same work either way:
- *
- *   - WP-CLI, where the host has it:
- *       wp eval-file wp-content/plugins/claudiavalsells-content/import.php
- *   - The admin, where it has not: Tools → Import content (import-admin.php),
- *     which runs the import in short steps, each one request, because a
- *     shared host stops any request that runs longer than half a minute or so
- *     and bringing in five hundred photographs takes several minutes.
- *
- * So the work is cut into steps — the site's settings, then the works, the
- * commissioned projects, the exhibitions, the editions, the two pages, the
- * clean-up, the finish — and every step into items that can be done a few at
- * a time and picked up again where the last request stopped.
- *
- * Runs again safely: an entry is found by its address (or by the key the
- * first run stamped on it) and updated, a picture by the id the bundle gave it
- * and reused. An entry edited in WordPress since the last run is kept as it is,
- * unless the run is told to overwrite. Every photograph goes into the uploads
- * folder of the month it was first published, under its original filename, so
- * the addresses the old site gave its pictures keep resolving.
- */
+/** Brings the site's content in from the bundle `npm run wp:export` writes. */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -71,8 +46,7 @@ final class CVC_Importer {
 
 	/**
 	 * A new run: when it started, whether it overwrites entries edited in
-	 * WordPress, whether the site has ever been imported into. Kept in an option
-	 * so the admin's next request knows where it is.
+	 * WordPress, whether the site has ever been imported into.
 	 */
 	public static function begin( bool $overwrite, array $manifest ): array {
 		$run = [
@@ -88,11 +62,7 @@ final class CVC_Importer {
 		return $run;
 	}
 
-	/**
-	 * Which bundle a run was started on. A run is a position in one bundle's
-	 * lists; carried on against another — a new bundle uploaded in between —
-	 * it would skip whatever the new one has before that position.
-	 */
+	/** Which bundle a run was started on. */
 	public static function bundle_stamp( array $manifest ): string {
 		return (string) ( $manifest['generatedAt'] ?? '' ) . '/' . count( $manifest['works'] ?? [] ) . '/' . count( $manifest['exhibitions'] ?? [] );
 	}
@@ -118,9 +88,8 @@ final class CVC_Importer {
 	}
 
 	/**
-	 * Does as much as fits before `$deadline` (a microtime; 0 for no limit),
-	 * from where the run stands, and returns where it stands after. Always
-	 * finishes at least one item, so every request moves the run forward.
+	 * Does as much as fits before `$deadline` (a microtime; 0 for no limit), from
+	 * where the run stands, and returns where it stands after.
 	 */
 	public function advance( float $deadline = 0.0 ): array {
 		$totals = $this->totals();
@@ -196,12 +165,7 @@ final class CVC_Importer {
 
 	/* --------------------------------------------------------------- steps */
 
-	/**
-	 * The site itself — its settings on the first run only. After that these
-	 * are settings someone may have changed on purpose: the tagline, the note
-	 * on What's Color?, and above all whether search engines are kept out,
-	 * which a run after go-live must not switch back on.
-	 */
+	/** The site itself — its settings on the first run only. */
 	private function site(): void {
 		$m = $this->m;
 		$this->say( 'Importing from the bundle of ' . ( $m['generatedAt'] ?? '?' ) . ( $this->run['first'] ? ' (first import: setting up the site)' : '' ) );
@@ -219,9 +183,9 @@ final class CVC_Importer {
 			// Not on a test site, and not until go-live: nobody indexes a rehearsal.
 			update_option( 'blog_public', 0 );
 			update_option( 'cv_lead', $m['lead'] ?? '' );
-			// Modern Image Formats, installed now or later: WebP, with the JPEG or
-			// PNG kept beside it for the few browsers without — the way the theme
-			// serves pictures, and the way the static site did.
+			// Modern Image Formats, installed now or later: WebP, with the JPEG or PNG kept beside it
+			// for the few browsers without — the way the theme serves pictures, and the way the
+			// static site did.
 			update_option( 'perflab_modern_image_format', 'webp' );
 			update_option( 'perflab_generate_webp_and_jpeg', '1' );
 		}
@@ -270,8 +234,8 @@ final class CVC_Importer {
 		if ( $cover ) {
 			set_post_thumbnail( $id, $cover );
 		} elseif ( ! has_post_thumbnail( $id ) ) {
-			// A painting without its picture is an empty tile in the grid: kept as
-			// a draft, where it is noticed, until the picture is there.
+			// A painting without its picture is an empty tile in the grid: kept as a draft, where it is
+			// noticed, until the picture is there.
 			wp_update_post( [ 'ID' => $id, 'post_status' => 'draft' ] );
 			$this->warn( "{$w['slug']}: no picture in the bundle, left as a draft" );
 		}
@@ -306,8 +270,8 @@ final class CVC_Importer {
 	}
 
 	private function exhibition( array $e ): void {
-		// Midsummer of its year, but never later than now: a show listed for next
-		// year dated in the future would be scheduled rather than published.
+		// Midsummer of its year, but never later than now: a show listed for next year dated in the
+		// future would be scheduled rather than published.
 		$date = min( sprintf( '%04d-%02d-01 12:00:00', (int) $e['year'], 6 ), current_time( 'mysql' ) );
 		$id   = $this->post( 'exhibition', $e['slug'], [
 			'post_title'    => $e['title'],
@@ -352,8 +316,8 @@ final class CVC_Importer {
 		if ( $id ) {
 			$this->stamp( $id );
 		}
-		// The people are filed under the edition's term whether or not the
-		// edition's own entry was kept as Claudia left it.
+		// The people are filed under the edition's term whether or not the edition's own entry was
+		// kept as Claudia left it.
 		$term = term_exists( $ed['slug'], 'cv_edition' );
 		if ( ! $term ) {
 			$term = wp_insert_term( $ed['numeral'], 'cv_edition', [ 'slug' => $ed['slug'] ] );
@@ -362,8 +326,8 @@ final class CVC_Importer {
 			$this->warn( 'edition term: ' . $term->get_error_message() );
 			return;
 		}
-		// Named by its numeral, as the Answers list and the editor show it —
-		// the term the edition's own save made may carry its title instead.
+		// Named by its numeral, as the Answers list and the editor show it — the term the
+		// edition's own save made may carry its title instead.
 		$named = get_term( (int) $term['term_id'], 'cv_edition' );
 		if ( $named instanceof WP_Term && $named->name !== $ed['numeral'] ) {
 			wp_update_term( $named->term_id, 'cv_edition', [ 'name' => $ed['numeral'] ] );
@@ -426,12 +390,9 @@ final class CVC_Importer {
 	}
 
 	/**
-	 * Entries an earlier run brought in that the bundle no longer names — a
-	 * show whose address changed, a person taken off an edition — go to the
-	 * bin, where they can be restored. Only entries this importer made, and only
-	 * ones left as it made them: anything created or edited in WordPress stays.
-	 * What this run touched is known by its stamp, which is no older than the
-	 * run's start.
+	 * Entries an earlier run brought in that the bundle no longer names — a show
+	 * whose address changed, a person taken off an edition — go to the bin, where
+	 * they can be restored.
 	 */
 	private function retire(): void {
 		$m     = $this->m;
@@ -454,9 +415,9 @@ final class CVC_Importer {
 				'posts_per_page' => -1,
 				'meta_key'       => '_cv_import_slug',
 			] );
-			// A bundle naming far fewer entries than the import has made reads
-			// as one cut short — a failed export, a half-copied folder — rather
-			// than as the site losing a fifth of its works: nothing is binned.
+			// A bundle naming far fewer entries than the import has made reads as one cut short — a
+			// failed export, a half-copied folder — rather than as the site losing a fifth of its
+			// works: nothing is binned.
 			if ( count( $stamped ) > 10 && count( $slugs ) < 0.8 * count( $stamped ) ) {
 				$this->warn( sprintf( '%s: the bundle names %d, the site has %d from earlier imports — nothing moved to the bin; check the bundle', $type, count( $slugs ), count( $stamped ) ) );
 				continue;
@@ -490,12 +451,7 @@ final class CVC_Importer {
 
 	/* ------------------------------------------------------------- pictures */
 
-	/**
-	 * One attachment per picture in the bundle, found again by the bundle's id.
-	 * A source outside the bundle's folder is refused: the manifest decides
-	 * which files are copied into the public uploads, and only the bundle's own
-	 * files may be.
-	 */
+	/** One attachment per picture in the bundle, found again by the bundle's id. */
 	private function attachment( ?array $ref, int $parent ): int {
 		if ( ! $ref || empty( $ref['id'] ) ) {
 			return 0;
@@ -522,8 +478,8 @@ final class CVC_Importer {
 				wp_update_post( [ 'ID' => $id, 'post_parent' => $parent ] );
 			}
 			if ( get_post_meta( $id, '_cv_import_pending', true ) ) {
-				// Left by a request that stopped while making or replacing it:
-				// finished now — its file put back first if it had gone.
+				// Left by a request that stopped while making or replacing it: finished now — its file
+				// put back first if it had gone.
 				$file = get_attached_file( $id );
 				if ( $file && ! is_file( $file ) && $inside ) {
 					wp_mkdir_p( dirname( $file ) );
@@ -545,21 +501,15 @@ final class CVC_Importer {
 		$folder = preg_match( '#^\d{4}/\d{2}$#', $ref['folder'] ?? '' ) ? $ref['folder'] : null;
 		$upload = wp_upload_dir( $folder );
 		wp_mkdir_p( $upload['path'] );
-		// The old site's filename, kept as it is while nothing else has it:
-		// wp_unique_filename() would rename every file ending in -scaled or
-		// -WxH on sight, and those are the addresses the old site published.
-		// Not passed through sanitize_file_name() either, which folds a double
-		// hyphen into one and drops a © — the old site served those names, so
-		// they are safe names; only one that is not (a path, a control
-		// character, a leading dot) is cleaned.
+		// The old site's filename, kept as it is while nothing else has it: wp_unique_filename()
+		// would rename every file ending in -scaled or -WxH on sight, and those are the addresses
+		// the old site published.
 		$base = wp_basename( (string) $ref['name'] );
 		if ( '' === $base || '.' === $base[0] || preg_match( '/[\x00-\x1f\x7f\/\\\\<>:"|?*]/', $base ) ) {
 			$base = sanitize_file_name( $base );
 		}
-		// Except where the name reads as one of another picture's sizes in the
-		// same folder (foo-1024x768.jpg beside foo.jpg): the other picture's
-		// resizing could write over it. WordPress's own numbering takes over
-		// there, as it would on an upload.
+		// Except where the name reads as one of another picture's sizes in the same folder
+		// (foo-1024x768.jpg beside foo.jpg): the other picture's resizing could write over it.
 		$stem   = pathinfo( $base, PATHINFO_FILENAME );
 		$shadow = preg_match( '/^(.+)-(?:\d+x\d+|scaled|rotated)$/', $stem, $sm )
 			&& array_filter( (array) glob( $upload['path'] . '/*' ), fn( $f ) => pathinfo( (string) $f, PATHINFO_FILENAME ) === $sm[1] );
@@ -591,9 +541,9 @@ final class CVC_Importer {
 			$this->warn( "attachment failed for {$ref['src']}: " . $id->get_error_message() );
 			return 0;
 		}
-		// Tagged the moment it exists, and marked as not yet resized: if the
-		// request stops during the slow part below, the retry finds this
-		// picture and finishes it, rather than bringing it in a second time.
+		// Tagged the moment it exists, and marked as not yet resized: if the request stops during
+		// the slow part below, the retry finds this picture and finishes it, rather than bringing it
+		// in a second time.
 		update_post_meta( $id, '_cv_import_id', $ref['id'] );
 		update_post_meta( $id, '_cv_import_hash', sha1_file( $source ) );
 		update_post_meta( $id, '_wp_attachment_image_alt', $ref['alt'] ?? '' );
@@ -620,15 +570,8 @@ final class CVC_Importer {
 	/**
 	 * A picture imported before whose file in the bundle has changed since — a
 	 * painting re-cut at a better resolution, say — is replaced in place: the
-	 * same attachment, the same filename, every size made again, so every page
-	 * and every link that shows it shows the new one.
-	 *
-	 * Changed means the bundle's file is not the one this picture was made
-	 * from: its fingerprint is kept from the import that made it, and for a
-	 * picture imported before fingerprints were kept, it is taken from the
-	 * original still in the uploads folder. A picture edited in WordPress's own
-	 * media editor (cropped, rotated) is left as it is, whatever the bundle
-	 * says — the edit is Claudia's.
+	 * same attachment, the same filename, every size made again, so every page and
+	 * every link that shows it shows the new one.
 	 */
 	private function refresh( int $id, string $source, array $ref ): void {
 		$hash = sha1_file( $source );
@@ -657,9 +600,8 @@ final class CVC_Importer {
 		$dir  = dirname( $file );
 		$path = $dir . '/' . wp_basename( wp_get_original_image_path( $id ) ?: $file );
 
-		// The new file is copied in beside the old ones first; only once it is
-		// safely there do the old ones go. A full disk or a failed copy leaves
-		// the picture as it was, not without a file.
+		// The new file is copied in beside the old ones first; only once it is safely there do the
+		// old ones go.
 		$tmp = $dir . '/.cv-import-' . $id . '-' . wp_basename( $path );
 		if ( is_file( $tmp ) ) {
 			wp_delete_file( $tmp ); // left by a request that stopped here before
@@ -670,8 +612,8 @@ final class CVC_Importer {
 			return;
 		}
 
-		// Every file the old version left: its sizes, its scaled copy, and the
-		// WebP made beside each (Modern Image Formats lists them as sources).
+		// Every file the old version left: its sizes, its scaled copy, and the WebP made beside each
+		// (Modern Image Formats lists them as sources).
 		$old = [ $file, $path ];
 		foreach ( $meta['sizes'] ?? [] as $size ) {
 			$old[] = $dir . '/' . $size['file'];
@@ -682,9 +624,8 @@ final class CVC_Importer {
 		foreach ( $meta['sources'] ?? [] as $s ) {
 			$old[] = $dir . '/' . $s['file'];
 		}
-		// From here until the sizes are made again the picture is unfinished;
-		// marked so, a request that stops in between leaves it for the next run
-		// to complete rather than skip.
+		// From here until the sizes are made again the picture is unfinished; marked so, a request
+		// that stops in between leaves it for the next run to complete rather than skip.
 		update_post_meta( $id, '_cv_import_pending', 1 );
 		foreach ( array_unique( $old ) as $f ) {
 			if ( is_file( $f ) && $f !== $tmp ) {
@@ -759,13 +700,7 @@ final class CVC_Importer {
 
 	/* ---------------------------------------------------------------- posts */
 
-	/**
-	 * An entry the bundle names, found again on a later run.
-	 *
-	 * By the key the first run stamped on it, so a permalink changed in the
-	 * editor does not make a second copy; by its address before that, in any
-	 * state — one in the bin stays there, one made private stays private.
-	 */
+	/** An entry the bundle names, found again on a later run. */
 	private function find( string $type, string $slug ): ?WP_Post {
 		$states = [ 'publish', 'draft', 'pending', 'private', 'future', 'trash' ];
 		$found  = get_posts( [
@@ -784,15 +719,7 @@ final class CVC_Importer {
 		return $found ? $found[0] : null;
 	}
 
-	/**
-	 * One entry, brought in or brought up to date — or left alone.
-	 *
-	 * An entry edited in WordPress since the last run is kept as it is and
-	 * reported, because what Claudia typed outranks what the bundle says, unless
-	 * the run was started to overwrite. An entry in the bin is left there. The
-	 * state an existing entry is in — published, draft, private — is hers and
-	 * stays.
-	 */
+	/** One entry, brought in or brought up to date — or left alone. */
 	private function post( string $type, string $slug, array $args, array $meta = [] ): int {
 		$existing = $this->find( $type, $slug );
 		if ( $existing && 'trash' === $existing->post_status ) {
@@ -802,16 +729,15 @@ final class CVC_Importer {
 		if ( $existing && ! $this->run['overwrite'] ) {
 			$imported = (int) get_post_meta( $existing->ID, '_cv_imported_at', true );
 			$modified = (int) strtotime( $existing->post_modified_gmt . ' UTC' );
-			// An entry the import itself was still working on when a request
-			// stopped (marked open until stamped) changed by the import's own
-			// hand, not Claudia's: it is finished, not kept.
+			// An entry the import itself was still working on when a request stopped (marked open until
+			// stamped) changed by the import's own hand, not Claudia's: it is finished, not kept.
 			$open = (bool) get_post_meta( $existing->ID, '_cv_import_open', true );
 			if ( $imported && $modified > $imported + 5 && ! $open ) {
 				$this->say( "$type/$slug: edited in WordPress since the last import, kept" );
 				return 0;
 			}
-			// One the import never touched — made by hand in WordPress, at an
-			// address the bundle also has — is hers too, and is kept.
+			// One the import never touched — made by hand in WordPress, at an address the bundle also
+			// has — is hers too, and is kept.
 			if ( ! $imported && '' === (string) get_post_meta( $existing->ID, '_cv_import_slug', true ) ) {
 				$this->say( "$type/$slug: made in WordPress, at the same address as an entry in the bundle — kept" );
 				return 0;
@@ -838,8 +764,8 @@ final class CVC_Importer {
 	}
 
 	/**
-	 * Marks an entry as the import left it, once everything about it is done,
-	 * so a later run can tell an edit made in WordPress since from its own.
+	 * Marks an entry as the import left it, once everything about it is done, so a
+	 * later run can tell an edit made in WordPress since from its own.
 	 */
 	private function stamp( int $id ): void {
 		update_post_meta( $id, '_cv_imported_at', time() );

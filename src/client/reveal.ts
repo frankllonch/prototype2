@@ -3,16 +3,7 @@ import { phone, reduceMotion } from './env.ts';
 /** Matches About's own: a beat later from one column to the next. */
 const STAGGER_MS = 260;
 
-/**
- * What's Color? on a phone, brought in as About brings in
- * its record (client/about.ts): each block rises a little out of a blur as it
- * reaches the screen, in order down the page (Frank, 2026-11-15). The look is
- * About's, in 09-phone.css under `.phone-pop`.
- *
- * Phone only, and only for a page that loads as one: the desktop has its own
- * scroll-run scenes on these pages. Without scripting, or with motion
- * reduced, nothing is hidden in the first place.
- */
+/** What's Color? */
 const BLOCKS = [
   // What's Color? on the start page
   '.wc-rise .wc-numeral', '.wc-rise .wc-names', '.wc-text-head', '.wc-text p:not(.wc-text-head)',

@@ -5,17 +5,6 @@ import { ON, SITE, STORE, gridCss, pile, scrollSpan, type Values } from './pile.
 /**
  * The pile tuner: a panel for trying the gallery's opening live — where the
  * paintings start, how far apart, and how they travel into the grid.
- *
- * Off unless asked for. Open the gallery with `?pile` and the panel appears in
- * the bottom right; it stays on (this browser remembers) until `?pile=off` or
- * the panel's Off button. Nobody else ever sees it.
- *
- * Seven openings, each with its own settings — the spreading ones first in
- * each list — plus the motion they share and the grid they land in. "Copy
- * settings" puts the choice on the clipboard, to be pasted back and written
- * into SITE in client/pile.ts.
- *
- * Desktop only, like the pile itself.
  */
 
 type Effect = { id: string; name: string; note: string; fields: Field[]; spread: readonly string[] };
@@ -189,8 +178,7 @@ export function initPileTuner(): void {
     } else {
       /*
        * Changed while the grid is at rest, the change would be invisible: the
-       * opening has already happened. So the page goes back to the top, where
-       * the new start shows and scrolling down plays it.
+       * opening has already happened.
        */
       if (pile.freeze === null && window.scrollY >= window.innerHeight * scrollSpan() - 2) {
         window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
@@ -335,15 +323,14 @@ export function initPileTuner(): void {
   show(first in panes ? first : 'Opening');
 
   /*
-   * The wheel over the panel scrolls the page, exactly as if the panel were
-   * not there — the opening is scroll-driven, and the panel sits over a third
-   * of the window. Only a pane taller than a short window keeps its own
-   * scrollbar, which can still be dragged.
+   * The wheel over the panel scrolls the page, exactly as if the panel were not
+   * there — the opening is scroll-driven, and the panel sits over a third of the
+   * window.
    */
   panel.addEventListener('wheel', (e) => {
     if ((e.target as Element).closest?.('select')) return;
-    // A pane too tall for a short window scrolls its own knobs while it can;
-    // the tabs and buttons above it stay where they are.
+    // A pane too tall for a short window scrolls its own knobs while it can; the tabs and buttons
+    // above it stay where they are.
     const list = (e.target as Element).closest?.<HTMLElement>('.tuner-fields');
     const down = e.deltaY > 0;
     const room = list && (down ? list.scrollHeight - list.clientHeight - list.scrollTop > 1 : list.scrollTop > 0);

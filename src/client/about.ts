@@ -1,44 +1,10 @@
 import { reduceMotion, returnFocus } from './env.ts';
 
-/**
- * About, told in four parts as you scroll down it.
- *
- * 1. Opening it scrolls itself down the lead's stretch, so the capitals lead is
- *    written word by word in front of you and stands complete. The start
- *    page's chevron asks for more from the moment it opens until the end. The lead holds its place throughout,
- *    and is written by the scroll, not by a clock: scrolling back up unwrites
- *    it, and down again writes it again.
- * 2. Still held, the reel of photographs is driven in from the right and comes
- *    to rest under the lead, from the left margin, as the designer's sheet
- *    sets it.
- * 3. The hold lets go and the biography is written as it rises: a word appears
- *    when its place on the page reaches the writing line, so the writing keeps
- *    pace with the reader rather than with a clock. The reel moves on round
- *    its loop as the page goes up — slowly at first — and back as it comes
- *    down. The chevrons in the margins, a drag or a swipe move it by hand.
- * 4. The record, the collections and the contact come in out of a blur as they
- *    reach the screen, in order down the page.
- *
- * About scrolls in its own box (`.about`, fixed, over the blurred page), so
- * everything here reads that box's scroll and never the window's, which does
- * not move while it is open.
- *
- * All of it is an enhancement of a page that already stands: the words are
- * split into spans here, the hold is a runway made here, and `.is-staged`,
- * which hides anything, is only set here. With motion reduced, the page is
- * left as it is; the reel still steps round by hand, without gliding, and the
- * photographs still open large.
- *
- * Word by word, and appearing whole, as on the start page — there the writing
- * is in CSS on a timeline fixed at build; here it is measured, because what it
- * has to fit (how many photographs, how long Claudia's text is in WordPress)
- * is only known in the page.
- */
+/** About, told in four parts as you scroll down it. */
 
 /**
  * The glide down the lead on opening: after the panel has begun to rise, and
- * long enough to watch the sentence form. Eased at both ends, as glide.ts
- * eases the window's own.
+ * long enough to watch the sentence form.
  */
 const GLIDE_DELAY_MS = 420;
 const GLIDE_MS = 1900;
@@ -52,9 +18,9 @@ const LEAD_MAX = 1.6;
 const REEL_MIN = 0.7;
 
 /**
- * Past its place the reel goes on with the scroll, this much sideways for
- * each pixel up or down — reaching that pace over the first quarter screen,
- * so it stands in place before it starts moving.
+ * Past its place the reel goes on with the scroll, this much sideways for each
+ * pixel up or down — reaching that pace over the first quarter screen, so it
+ * stands in place before it starts moving.
  */
 const REEL_DRIFT = 0.8;
 const REEL_DRIFT_EASE = 0.25;
@@ -133,16 +99,13 @@ export function initAbout(): void {
     if (!about.classList.contains('is-open')) return;
     const height = about.clientHeight;
     const width = about.clientWidth;
-    // Wherever the reader is now, they are there again when this is done: a
-    // new runway changes the page's length, and the browser would otherwise
-    // clamp or re-anchor the scroll.
+    // Wherever the reader is now, they are there again when this is done: a new runway changes the
+    // page's length, and the browser would otherwise clamp or re-anchor the scroll.
     const y = about.scrollTop;
     const top = about.getBoundingClientRect().top - y;
     const contentY = (el: Element) => el.getBoundingClientRect().top - top;
 
-    // The stage holds where it stands, or as high as it must to fit. Where it
-    // stands is the runway's top — the stage is the runway's first child —
-    // which, unlike the stage, does not move while the stage is held.
+    // The stage holds where it stands, or as high as it must to fit.
     const stageTop = contentY(opening);
     const stageHeight = stage.offsetHeight;
     stage.style.setProperty('--stage-top', `${Math.min(stageTop, height - stageHeight)}px`);
@@ -160,9 +123,7 @@ export function initAbout(): void {
     opening.style.height = `${stageHeight + leadRun + reelRun}px`;
     if (about.scrollTop !== y) about.scrollTop = y;
 
-    // The biography: each word's turn comes when its place reaches the writing
-    // line — a line's first word as the line does, its last a line-height
-    // later — so the writing runs along each line and down the paragraph.
+    // The biography: each word's turn comes when its place reaches the writing line.
     const column = sheet.querySelector<HTMLElement>('.about-text');
     const box = column?.getBoundingClientRect();
     const colLeft = box?.left ?? 0;
@@ -182,20 +143,20 @@ export function initAbout(): void {
     frame = 0;
     const y = about.scrollTop;
     setLead(Math.round(Math.min(1, Math.max(0, y / leadRun)) * lead.length));
-    // The chevron asks for more from the moment About opens until there is no
-    // more: it goes only at the end of the panel, and comes back on the way up.
+    // The chevron asks for more from the moment About opens until there is no more: it goes only
+    // at the end of the panel, and comes back on the way up.
     const end = y >= about.scrollHeight - about.clientHeight - 2;
     cue?.classList.toggle('is-shown', !end);
-    // At the end of the panel, whatever has not come in yet comes in: the last
-    // lines can stop short of where they would otherwise be called.
+    // At the end of the panel, whatever has not come in yet comes in: the last lines can stop
+    // short of where they would otherwise be called.
     if (end) {
       for (const el of pops) if (!el.classList.contains('is-in')) { el.classList.add('is-in'); pops$?.unobserve(el); }
     }
     if (loop && reelRun) {
       const p = Math.min(1, Math.max(0, (y - reelFrom) / reelRun));
       const eased = 1 - (1 - p) * (1 - p);
-      // Past its place, carried along: from standing to its full pace over
-      // the first stretch, so the pace never jumps.
+      // Past its place, carried along: from standing to its full pace over the first stretch, so
+      // the pace never jumps.
       const past = Math.max(0, y - reelFrom - reelRun);
       const ease = Math.max(1, about.clientHeight * REEL_DRIFT_EASE);
       const along = past < ease ? (past * past) / (2 * ease) : past - ease / 2;
@@ -223,8 +184,7 @@ export function initAbout(): void {
     glide = 0;
     glided = true;
   };
-  // The panel carried to a scroll of its own, gently: the opening's glide and
-  // the chevron's. A hand on the panel stops it where it is.
+  // The panel carried to a scroll of its own, gently: the opening's glide and the chevron's.
   const glideTo = (to: number, ms: number) => {
     endGlide();
     glided = false;
@@ -235,8 +195,8 @@ export function initAbout(): void {
     const began = performance.now();
     let placed = from;
     const step = (now: number) => {
-      // Moved by anything but the glide — the scrollbar dragged, a key, a
-      // script — and the glide gives way rather than pulling it back.
+      // Moved by anything but the glide — the scrollbar dragged, a key, a script — and the glide
+      // gives way rather than pulling it back.
       if (Math.abs(about.scrollTop - placed) > 2) return endGlide();
       const t = Math.min(1, (now - began) / ms);
       const e = t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2;
@@ -248,16 +208,16 @@ export function initAbout(): void {
     glide = requestAnimationFrame(step);
   };
   const runGlide = () => {
-    // Already moved — a jump, a restored position — and there is nothing to
-    // glide to: the reader is somewhere of their own choosing.
+    // Already moved — a jump, a restored position — and there is nothing to glide to: the reader
+    // is somewhere of their own choosing.
     if (about.scrollTop > 2) return endGlide();
     glideTo(leadRun, GLIDE_MS);
   };
 
   /*
-   * The chevron takes the reader on, as well as asking them to go (Frank,
-   * 2026-11-18): to the next of the panel's own stops — the lead written, the
-   * photographs in — and after those a screen at a time, to the end.
+   * The chevron takes the reader on, as well as asking them to go: to the next
+   * of the panel's own stops — the lead written, the photographs in — and after
+   * those a screen at a time, to the end.
    */
   cue?.addEventListener('click', () => {
     const y = about.scrollTop;
@@ -279,8 +239,7 @@ export function initAbout(): void {
     loop?.reset();
     setLead(0);
     setBody(0);
-    // The photographs are lazy, and off to the side they would only be asked
-    // for as they slide in. Asked for now.
+    // The photographs are lazy, and off to the side they would only be asked for as they slide in.
     for (const img of about.querySelectorAll<HTMLImageElement>('.about-reel img')) img.loading = 'eager';
     for (const el of pops) {
       el.classList.remove('is-in');
@@ -321,8 +280,8 @@ export function initAbout(): void {
   new MutationObserver(() => {
     if (!about.classList.contains('is-open')) endGlide();
   }).observe(about, { attributes: true, attributeFilter: ['class'] });
-  // Served open — a #about arrival, or WordPress's /about/ — the panel was
-  // raised before this ran, and its `panelopen` has already gone by.
+  // Served open — a #about arrival, or WordPress's /about/ — the panel was raised before this ran,
+  // and its `panelopen` has already gone by.
   if (about.classList.contains('is-open')) start();
 }
 
@@ -338,8 +297,8 @@ export interface Loop {
   /** Back to the sheet's order, the first photograph at the left margin. */
   reset(): void;
   /**
-   * Where the scroll has the reel: `entry`, how far right of its place the
-   * whole reel stands; `along`, how far round the loop it has carried it.
+   * Where the scroll has the reel: `entry`, how far right of its place the whole
+   * reel stands; `along`, how far round the loop it has carried it.
    */
   scrolled(entry: number, along: number): void;
 }
@@ -353,16 +312,8 @@ const REEL_FLING_MS = 240;
 
 /**
  * The reel of photographs as a loop: the photographs stand in a row from the
- * left of the measure, and whatever does not fit waits to their right and
- * comes round again after the last. Each is placed on its own, so the row
- * never has an end to run into.
- *
- * Moved by About's scroll (`scrolled`), and by hand: the chevrons bring the
- * next or the previous photograph to the left margin, and a drag, a swipe or a
- * sideways scroll pull it along. Tabbing to a photograph out of sight brings it
- * into view. Only a loop if the photographs overrun the measure; and if there
- * are too few to fill it twice over, they are repeated (hidden from assistive
- * technology and the tab order) so that one never shows in two places.
+ * left of the measure, and whatever does not fit waits to their right and comes
+ * round again after the last.
  */
 /**
  * `root` holds the reel; `bounds` is what it is seen through to its edges, and
@@ -393,10 +344,10 @@ export function initReel(root: HTMLElement, bounds: HTMLElement): Loop | null {
   let frame = 0;
   let last = 0;
 
-  // Where a photograph stands in the window at a given distance round the
-  // loop, always wrapping out of sight to the left: the photograph that rests
-  // partly out at the left comes in with the rest, ahead of the first, so
-  // nothing is moved from one end to the other as the reel comes to its place.
+  // Where a photograph stands in the window at a given distance round the loop, always wrapping
+  // out of sight to the left: the photograph that rests partly out at the left comes in with the
+  // rest, ahead of the first, so nothing is moved from one end to the other as the reel comes to
+  // its place.
   const wrap = (x: number, from: number) => from + ((((x - from) % length) + length) % length);
   const xAt = (slot: Slot, offset: number) => (looped ? wrap(slot.at - offset, -before) : slot.at);
 
@@ -443,9 +394,8 @@ export function initReel(root: HTMLElement, bounds: HTMLElement): Loop | null {
     const widest = Math.max(...widths);
     const wasLength = length;
     looped = total - gap > span + 1;
-    // The photographs are seen to the edges of the window, not only within the
-    // measure: `lead` is the margin left of the track, `tail` the window's
-    // width from the track's left edge.
+    // The photographs are seen to the edges of the window, not only within the measure: `lead` is
+    // the margin left of the track, `tail` the window's width from the track's left edge.
     const box = bounds.getBoundingClientRect();
     const left = track.getBoundingClientRect().left;
     const lead = Math.max(0, left - box.left);
@@ -453,8 +403,7 @@ export function initReel(root: HTMLElement, bounds: HTMLElement): Loop | null {
     before = lead + widest + gap;
     // Far enough right that even the photograph ahead of the first is unseen.
     start = tail + (looped ? before : 0);
-    // Enough of a loop that what leaves on one side is gone before it comes
-    // back on the other.
+    // Enough of a loop that what leaves on one side is gone before it comes back on the other.
     const copies = looped ? Math.max(1, Math.ceil((tail + before) / total)) : 1;
     for (const clone of track.querySelectorAll('[data-clone]')) clone.remove();
     slots = [];
@@ -594,12 +543,7 @@ export function initReel(root: HTMLElement, bounds: HTMLElement): Loop | null {
   };
 }
 
-/**
- * The keys that scroll a page, scrolling the panel. Focus opens on the Close
- * link, which stands outside the panel, so the keys would go to the window —
- * which is locked while About is up — rather than to the panel.
- * Not while a field, a button or the photograph viewer has the keys.
- */
+/** The keys that scroll a page, scrolling the panel. */
 function keyScroll(about: HTMLElement, event: KeyboardEvent): void {
   if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey) return;
   if (about.classList.contains('is-viewing')) return;
@@ -618,9 +562,9 @@ function keyScroll(about: HTMLElement, event: KeyboardEvent): void {
 }
 
 /**
- * Every word in an element wrapped in a span, wherever it stands — inside a
- * link or an emphasis just as well — so the text keeps its markup, its spaces
- * and its justification, and only gains handles.
+ * Every word in an element wrapped in a span, wherever it stands — inside a link
+ * or an emphasis just as well — so the text keeps its markup, its spaces and its
+ * justification, and only gains handles.
  */
 function splitWords(root: HTMLElement): HTMLElement[] {
   const words: HTMLElement[] = [];
@@ -651,9 +595,7 @@ function splitWords(root: HTMLElement): HTMLElement[] {
 /**
  * The photographs open large over the page, one at a time: a click anywhere or
  * Escape puts them away, the chevrons, the arrow keys and a swipe step through
- * them and wrap. Escape is caught before the panel hears it, so putting a
- * photograph away does not close About as well; and the panel holds still
- * while one is up. Focus goes back to the photograph last shown.
+ * them and wrap.
  */
 function initViewer(about: HTMLElement): void {
   const viewer = about.querySelector<HTMLElement>('[data-about-viewer]');
@@ -661,8 +603,8 @@ function initViewer(about: HTMLElement): void {
   const items = [...about.querySelectorAll<HTMLButtonElement>('.about-reel-item:not([data-clone])')];
   if (!viewer || !plate || !items.length) return;
   const count = viewer.querySelector<HTMLElement>('[data-about-count]');
-  // The chevrons stand beside the panel (components/layout.ts), and are only
-  // there when there is more than one photograph to step through.
+  // The chevrons stand beside the panel (components/layout.ts), and are only there when there is
+  // more than one photograph to step through.
   const steps = [...document.querySelectorAll<HTMLElement>('[data-about-step]')];
 
   let at = -1;
@@ -716,8 +658,8 @@ function initViewer(about: HTMLElement): void {
       else if (event.key === 'ArrowRight') draw(at + 1);
       else if (event.key === 'ArrowLeft') draw(at - 1);
       else if (event.key === 'Tab') {
-        // Kept to the viewer: its two chevrons, or itself when there is one
-        // photograph and so nothing to step to.
+        // Kept to the viewer: its two chevrons, or itself when there is one photograph and so
+        // nothing to step to.
         const stops = steps.length ? steps : [viewer];
         const i = stops.indexOf(document.activeElement as HTMLElement);
         stops[(i + (event.shiftKey ? -1 : 1) + stops.length) % stops.length]?.focus();
@@ -740,8 +682,8 @@ function initViewer(about: HTMLElement): void {
     draw(at + (dx < 0 ? 1 : -1));
   });
 
-  // Closing About with a photograph up puts the photograph away too — without
-  // taking focus back into the panel that is closing.
+  // Closing About with a photograph up puts the photograph away too — without taking focus back
+  // into the panel that is closing.
   new MutationObserver(() => {
     if (!about.classList.contains('is-open')) close(false);
   }).observe(about, { attributes: true, attributeFilter: ['class'] });

@@ -18,33 +18,9 @@ export interface SheetProps {
 }
 
 /**
- * A detail that is read and looked at, on the designer's sheet: the masthead
- * at the top left, the text under it, the photograph holding the right of the
+ * A detail that is read and looked at, on the designer's sheet: the masthead at
+ * the top left, the text under it, the photograph holding the right of the
  * screen with an arrow either side.
- *
- * It is the same sheet as the exhibitions that have a text to read — Moll de
- * l’Ós is drawn exactly so — and is written to serve both: nothing in here
- * knows what kind of thing it is showing.
- *
- * Nothing on it scrolls but the text. The panel is the window's height, the
- * masthead and the photograph are held where they are, and the text runs in
- * its own column underneath; a wheel turned anywhere on the sheet moves the
- * text (`client/sheets.ts`), since that is the only thing there is to move.
- *
- * The round button beside the text gives it the whole sheet: the masthead
- * folds into one line across the top and the photograph is put away until the
- * button is pressed again.
- *
- * On a phone the same markup is a page that scrolls from top to bottom, with
- * no button and no arrows: the stylesheet takes the text's and the
- * photographs' boxes apart and puts each paragraph and picture where the
- * phone sheets draw it (the foot of 07-sheet.css). Nothing here changes for
- * that; the order below stays the order it is read out in.
- *
- * The markup reuses `data-reader`, `data-figures`, `.reader-figure`,
- * `data-figure-step` and `data-expand`, which is what `client/figures.ts`
- * already drives — the arrows, the arrow keys and the widening all come from
- * there, the same as on every other detail.
  */
 export function sheetBody({ title, lines, when, body, images, artists, kind }: SheetProps): Html {
   return html`<div class="sheet${kind ? ` is-${kind}` : ''}" data-reader data-sheet>
@@ -95,11 +71,6 @@ export function sheetBody({ title, lines, when, body, images, artists, kind }: S
   </div>`;
 }
 
-/**
- * A photograph clearly wider than it is tall. The sheets hang those from the
- * line the text starts on, at a reading size, rather than filling the frame;
- * portraits and squares fill it. Decided here from the picture's own size, so
- * WordPress (sheet.php) decides it the same way from the same picture.
- */
+/** A photograph clearly wider than it is tall. */
 export const wide = (image: ProjectImage): boolean => image.width > image.height * 1.1;
 

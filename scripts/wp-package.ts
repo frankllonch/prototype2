@@ -1,19 +1,4 @@
-/**
- * The site, packed for a server.
- *
- *   npm run wp:package                 the theme and the plugin, the theme's
- *                                      assets built fresh from src/ first
- *   npm run wp:package -- --bundle     …and the content bundle as one zip
- *   npm run wp:package -- --skip-assets   the theme's assets as they stand
- *
- * Writes wordpress/package/ (not committed): the two zips WordPress installs
- * from its own screens (Plugins → Add New → Upload, Appearance → Themes → Add
- * New → Upload), the bundle the importer reads, a list of checksums, and
- * INSTALL.txt — the steps, in order, for a fresh WordPress at the host.
- *
- * The same files are what the rehearsal installs (wordpress/rehearsal/), so a
- * package is only handed over after it has gone onto a clean WordPress once.
- */
+/** The site, packed for a server. */
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync, statSync } from 'node:fs';
@@ -41,7 +26,10 @@ const size = (file: string): string => {
 const sha256 = async (file: string): Promise<string> =>
   createHash('sha256').update(await readFile(file)).digest('hex');
 
-/** zip, run from `cwd`, storing `entry` and everything under it; `store` skips compression (photographs gain nothing). */
+/**
+ * zip, run from `cwd`, storing `entry` and everything under it; `store` skips
+ * compression (photographs gain nothing).
+ */
 function zip(cwd: string, out: string, entry: string, store = false): void {
   execFileSync('zip', ['-r', '-X', '-q', ...(store ? ['-0'] : []), out, entry, '-x', '*.DS_Store', '*/.DS_Store'], { cwd, stdio: 'inherit' });
 }
@@ -60,9 +48,9 @@ for (const lang of ['es_ES', 'ca']) {
   }
 }
 
-// Emptied, not removed: the rehearsal WordPress (wordpress/rehearsal/) has
-// this folder mounted, and a folder deleted and made again is a different
-// folder to a container that already holds the old one.
+// Emptied, not removed: the rehearsal WordPress (wordpress/rehearsal/) has this folder mounted,
+// and a folder deleted and made again is a different folder to a container that already holds the
+// old one.
 await mkdir(OUT, { recursive: true });
 for (const entry of await readdir(OUT)) await rm(path.join(OUT, entry), { recursive: true, force: true });
 
@@ -81,8 +69,8 @@ if (withBundle) {
   bundleNote = 'claudiavalsells-import.zip is the content bundle: unzip it on the server so that wp-content/import/manifest.json exists.';
 }
 
-// The bundle is optional to the package: without one exported, say so rather
-// than stop with half the package written.
+// The bundle is optional to the package: without one exported, say so rather than stop with half
+// the package written.
 const manifestFile = path.join(WP, 'import', 'manifest.json');
 const manifest = (existsSync(manifestFile) ? JSON.parse(readFileSync(manifestFile, 'utf8')) : {}) as { generatedAt?: string };
 if (!manifest.generatedAt) bundleNote = 'No content bundle exported yet: run npm run wp:export, then upload wordpress/import.';

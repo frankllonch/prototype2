@@ -1,14 +1,5 @@
 <?php
-/**
- * The two indexes — src/components/exhibitions.ts and
- * src/components/commissioned.ts.
- *
- * Exhibitions: the sheet's four groups, one line per show — what it was
- * called and where, the year at the right margin, a rule between them. The
- * photograph lives in the gap and is only shown on hover, so the page reads
- * as a table until you reach for something. Commissioned: the kind of work
- * named once at the left, its projects beside it.
- */
+/** The two indexes — src/components/exhibitions.ts and src/components/commissioned.ts. */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -17,11 +8,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * The sheet's four groups, in its order: the key a row is filed under, and the
  * name over it — SHOW_GROUPS in src/content/exhibitions-list.ts.
- *
- * The first three are an exhibition's "In the record as" (solo, group, fair).
- * The fourth is not a kind of exhibition: a private collection is a place, and
- * WordPress keeps those on the About page (its "Private collections" field,
- * one per line), so the list is read from there and typed once.
  */
 const CV_SHOW_GROUPS = [
 	'solo'       => 'Solo shows',
@@ -30,43 +16,29 @@ const CV_SHOW_GROUPS = [
 	'collection' => 'Private collections',
 ];
 
-/** The groups the phone sheet runs together, in the order they take within a year (PHONE_MERGED). */
+/**
+ * The groups the phone sheet runs together, in the order they take within a year
+ * (PHONE_MERGED).
+ */
 const CV_PHONE_MERGED = [ 'solo', 'group' ];
 
-/** The opening phrase of a location: the kind of show, its comma if it has one, and an "at" if one follows (KIND). */
+/**
+ * The opening phrase of a location: the kind of show, its comma if it has one,
+ * and an "at" if one follows (KIND).
+ */
 const CV_SHOW_KIND = '/^\s*((?:solo|solow|group)\s*(?:show|exhibition)s?\b,?)[\s,]*(at\s+)?/iu';
 
-/**
- * The place a show was, with the kind of show taken off the front — placeOf().
- *
- * "Solo show, Alzueta Gallery, Barcelona" sits under a group that already
- * says Solo shows, so the opening phrase is dropped at render and the entry
- * keeps its own wording. A location that is only the kind of show is left
- * with nothing, and the row renders no line at all.
- */
+/** The place a show was, with the kind of show taken off the front — placeOf(). */
 function cv_show_place( string $venue ): string {
 	return (string) preg_replace( '/^\s+|\s+$/u', '', (string) preg_replace( CV_SHOW_KIND, '', $venue ) );
 }
 
-/**
- * What cv_show_place() takes off, for the phone, which shows it — kindOf().
- * The entry's own words, comma or none, never a phrase made up from the
- * group: `[ 'kind' => 'Solo show,', 'at' => false ]`, or null when the
- * location opens with no kind.
- */
+/** What cv_show_place() takes off, for the phone, which shows it — kindOf(). */
 function cv_show_kind( string $venue ): ?array {
 	return preg_match( CV_SHOW_KIND, $venue, $lead ) ? [ 'kind' => $lead[1], 'at' => ! empty( $lead[2] ) ] : null;
 }
 
-/**
- * Where each row stands on the phone, counted from 1, by its index in
- * `$rows` — phoneOrder().
- *
- * The phone sheet is one list where the desktop's is four groups: the solo
- * and the group shows together, latest year first, a solo show before a group
- * show of the same year, and otherwise in the order they are listed. The
- * other groups follow whole, in the sheet's order.
- */
+/** Where each row stands on the phone, counted from 1, by its index in `$rows` — phoneOrder(). */
 function cv_show_phone_order( array $rows ): array {
 	$run = [];
 	foreach ( $rows as $i => $row ) {
@@ -94,22 +66,7 @@ function cv_show_phone_order( array $rows ): array {
 	return $order;
 }
 
-/**
- * `$shows`: exhibitions as cv_exhibition() reads them, in their listed order.
- * `$collections`: [{name, place}], as cv_about() reads them off the About page.
- *
- * Four groups, each named once at the left with its rows beside it; a group
- * with nothing in it renders nothing rather than an empty heading. An
- * exhibition filed under none of the three kinds ("— not in the record") goes
- * into the first group rather than disappearing: it turns up on the page,
- * where it will be noticed and given its kind.
- *
- * The phone sheet is a different list from the same rows: the solo and the
- * group shows as one run by year, with no heading over them. Nothing is
- * rendered twice for it. Every row and every heading that still shows carries
- * its place in that list as `--phone-order`, and the phone rules lay the rows
- * out by it; the desktop never reads it.
- */
+/** `$shows`: exhibitions as cv_exhibition() reads them, in their listed order. */
 function cv_exhibition_list( array $shows, array $collections = [] ): string {
 	$rows = [];
 	foreach ( $shows as $s ) {
@@ -129,9 +86,8 @@ function cv_exhibition_list( array $shows, array $collections = [] ): string {
 		if ( ! $mine ) {
 			continue;
 		}
-		// On the phone a merged group loses its heading to the eye, since its
-		// rows no longer stand together; the others keep theirs, placed just
-		// ahead of their first row.
+		// On the phone a merged group loses its heading to the eye, since its rows no longer stand
+		// together; the others keep theirs, placed just ahead of their first row.
 		$merged = in_array( $group, CV_PHONE_MERGED, true );
 		$first  = min( array_intersect_key( $order, $mine ) );
 		$out   .= '<section class="xgroup" data-group="' . esc_attr( $name ) . '"' . ( $merged ? ' data-phone="merged"' : '' ) . '>'
@@ -145,15 +101,7 @@ function cv_exhibition_list( array $shows, array $collections = [] ): string {
 	return $out . '</div>';
 }
 
-/**
- * A row: the show's name, what kind it was and where, and the year at the
- * margin. The index gives years alone — the months belong to the detail's
- * masthead — and a run that crosses a year states both, stacked.
- *
- * The group above already says what kind of show it was, on the desktop. The
- * phone has no group above, so the kind (and the "at" after it) is in the row
- * for the phone rules to show and everything wider to leave hidden.
- */
+/** A row: the show's name, what kind it was and where, and the year at the margin. */
 function cv_exhibition_row( array $s, int $order ): string {
 	$venue = (string) ( $s['venue'] ?? '' );
 	$place = cv_show_place( $venue );
@@ -175,21 +123,17 @@ function cv_exhibition_row( array $s, int $order ): string {
 		. ( ! empty( $s['yearEnd'] ) ? '<span>' . (int) $s['yearEnd'] . '</span>' : '' )
 		. '</span>';
 
-	// Only a show with a page behind it is a link; the rest are plain rows
-	// that still answer to the pointer, so the list reads as one thing.
+	// Only a show with a page behind it is a link; the rest are plain rows that still answer to
+	// the pointer, so the list reads as one thing.
 	return ! empty( $s['hasPage'] )
 		? '<a class="xrow hrow" href="' . esc_url( $s['url'] ) . '" data-panel-open="' . esc_attr( "exhibition-{$s['slug']}" ) . '" style="--phone-order:' . $order . '">' . $inner . '</a>'
 		: '<div class="xrow hrow" style="--phone-order:' . $order . '">' . $inner . '</div>';
 }
 
 /**
- * Where the phone sheet turns a project's name onto its second line by hand,
- * as the words it comes after, by the project's slug — BREAK_AFTER in
+ * Where the phone sheet turns a project's name onto its second line by hand, as
+ * the words it comes after, by the project's slug — BREAK_AFTER in
  * src/content/groups.ts.
- *
- * Layout, owned by the design, like What's Color's sheet placements: the
- * theme reads the copy `npm run wp:assets` writes beside them rather than
- * keeping one of its own, and nobody fills a field in for it.
  */
 function cv_index_breaks(): array {
 	static $breaks = null;
@@ -204,9 +148,6 @@ function cv_index_breaks(): array {
  * A project's name, escaped, with the one designed break offered where it is
  * recorded — title() in src/components/commissioned.ts, with breakOf()'s
  * guard: only while the name still opens with those words and goes on.
- *
- * The space before the `<br>` stays: from 900px up the break is not displayed
- * (`.xrow-br`), and the name must read there exactly as it does without it.
  */
 function cv_index_title( string $slug, string $title ): string {
 	$lead = cv_index_breaks()[ $slug ] ?? '';

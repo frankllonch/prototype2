@@ -1,17 +1,4 @@
-/**
- * One quotation mark across the site: a single ‘ to open and ’ to close.
- *
- * The designer's notes (2026-11-26) ask for every « », “ ” and " in the text
- * to become a single mark, and point out closing marks the source set the
- * wrong way round (‘gozo. ‘). The texts come from many places — the
- * WordPress extract, the sheets transcribed here, the What's Color documents —
- * so the rule is applied once, to every page as it is written, rather than
- * by hand in each source: a text added later is set the same way.
- *
- * Only text is touched, never markup: tags, comments, scripts and styles pass
- * through as they are. Inch marks on artwork sizes (27,5" x 23,6") are not
- * quotes and are left alone, as are apostrophes (What’s, Mira’m).
- */
+/** One quotation mark across the site: a single ‘ to open and ’ to close. */
 
 const INLINE = new Set([
   'a', 'abbr', 'b', 'bdi', 'bdo', 'cite', 'code', 'data', 'dfn', 'em', 'i', 'kbd', 'mark', 'q', 's', 'samp',
@@ -60,8 +47,8 @@ export function singleQuotes(page: string): string {
   // The character before the next one read, across inline tags.
   let prev = '';
 
-  // The text after position `i` of token `k`, up to the next block boundary
-  // (a little of it: enough to look ahead a few characters).
+  // The text after position `i` of token `k`, up to the next block boundary (a little of it:
+  // enough to look ahead a few characters).
   const ahead = (k: number, text: string, i: number): string => {
     let rest = text.slice(i + 1);
     for (let j = k + 1; j < tokens.length && rest.length < 12; j++) {
@@ -103,8 +90,8 @@ export function singleQuotes(page: string): string {
       const before = out.replace(/[\s ]+$/, '');
       const lastSeen = before.at(-1) ?? (SPACE.test(prev) ? '' : prev);
 
-      // Inch marks: a double mark (or ″, or two singles) right after a number
-      // and followed by the rest of a size. Kept exactly as written.
+      // Inch marks: a double mark (or ″, or two singles) right after a number and followed by the
+      // rest of a size.
       if ((c === '"' || width === 2) && /\d/.test(lastSeen) && /^[\s ]?$/.test(out.slice(before.length)) && AFTER_INCH.test(rest)) {
         out += text.slice(i, i + width);
         prev = text[i + width - 1]!;
@@ -125,8 +112,8 @@ export function singleQuotes(page: string): string {
       if (spaceBefore && !spaceAfter) opens = true;
       else if (!spaceBefore && spaceAfter) opens = false;
       else if (!spaceBefore && !spaceAfter) opens = !open && OPENING.has(c) && !/[.,;:!?]/.test(prev);
-      // Loose on both sides (‘ Colour…, …gozo. ‘): it closes the quotation
-      // that is open, or opens one; either way it is set tight to its words.
+      // Loose on both sides (‘ Colour…, …gozo. ‘): it closes the quotation that is open, or opens
+      // one; either way it is set tight to its words.
       else opens = !open;
 
       if (opens) {

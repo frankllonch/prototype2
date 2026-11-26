@@ -1,24 +1,4 @@
-/**
- * The colour of each person in What's Color?, as Claudia signed them off.
- *
- * Two sources, and an order between them. Claudia's own three sheets
- * (PRIMERA, SEGONA and TERCERA ENTREGA, November 2026) give a swatch and its
- * HEX for the people whose colour she corrected, and they rule: each value
- * here marked `client` is the HEX printed under her swatch, checked against
- * the swatch's own pixels. Everyone her sheets leave out had already been
- * guessed right on the designer's sheet (WHATS COLOR COLORS), so theirs is
- * the fill of the designer's bar, read from the drawing itself: `designer`.
- *
- * Two values are not the sheet's letter for letter. María Prats is printed
- * #000000F4 — black at 96% — which on the white page is #0a0a0a, the colour
- * of her swatch; Carlota Guerrero's #F7E9B200 carries a stray alpha of zero
- * on a swatch that is plainly opaque, so it is #f7e9b2.
- *
- * Cierto Estudio is on neither sheet. Its colour came later, on a sheet of
- * its own (CIERTO STUDIO, ARQUITECTES, AC097 VERD GRIS / LIGHT GREEN,
- * HEX #CDDDCB, 17 November 2026). The code is not shown on the page, because
- * no one else in edition II has one.
- */
+/** The colour of each person in What's Color?, as Claudia signed them off. */
 export interface FinalColour {
   readonly edition: 'I' | 'II' | 'III';
   /** The name as the site's roster writes it. */

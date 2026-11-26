@@ -1,36 +1,8 @@
 import type { DocumentEntry } from './whats-color-document.ts';
 
-/**
- * December 2021, Madrid. Twenty-eight studios and people, twenty-seven of whom
- * answered.
- *
- * This edition is the reason the document exists as a source at all. Its page
- * on the site names everyone in a single thank-you sentence and prints not one
- * answer, so until now the edition appeared as a list and the page said so in
- * as many words. These are those answers, transcribed from Claudia's document
- * and set down in the language each was given in — Spanish, Catalan, one in
- * both — because translating them would be putting words in their mouths.
- *
- * Four answered in pictures rather than words. They are marked rather than
- * dropped: having answered in images is a fact about the edition, and leaving
- * them out would make twenty-seven look like twenty-three.
- *
- * Cierto Estudio was invited and is named in the roster, but the document
- * carries no answer, which is why the count is twenty-seven of twenty-eight.
- * Its colour name (Light green) is recorded below; with no answer it has no
- * entry on the page.
- *
- * Paragraphs are separated by a blank line and the component splits on it.
- */
+/** December 2021, Madrid. */
 
-/*
- * Colour names, no codes. Claudia's sheet for this edition (SEGONA EDICIO AMB
- * NOMS COLORS, November 2026) names the colour of fourteen of these guests, in
- * English, and gives no AC reference, so the page shows the name in its
- * highlight and nothing else. Her "Corail" is set as Coral and her
- * "ULTTRAMARINE" as Ultramarine, at Frank's ask. The rest are named on the
- * designer's sheet (WHATS COLOR COLORS), spelt as it spells them.
- */
+/* Colour names, no codes. */
 export const EDITION_II: readonly DocumentEntry[] = [
   {
     name: 'Plantea Estudio',

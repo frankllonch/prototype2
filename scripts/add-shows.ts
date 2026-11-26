@@ -1,24 +1,4 @@
-/**
- * Brings the exhibition photographs in from Claudia's archive.
- *
- * The archive is a folder per show, named the way she names them — a year, a
- * title, sometimes a place, sometimes a stray apostrophe. Those names are no
- * use as identifiers, so the mapping to a slug is written down here rather
- * than guessed from the folder: a guess that goes wrong files a show's
- * pictures under another show, which is the one mistake that is hard to see.
- *
- * Each photograph is copied to content/raw/local/shows/<slug>/ and recorded as
- * a project of kind `show`. That is only so the existing pipeline picks them
- * up: `npm run images` walks every project in the dataset, so these get the
- * same AVIF and WebP treatment as everything else without the pipeline needing
- * to know exhibitions exist. `load.ts` keeps them out of the works and the
- * commissioned indexes by filtering on kind.
- *
- * Re-runnable. A photograph already imported is left alone, so the script can
- * be run again after Claudia adds to the archive.
- *
- *   npm run add-shows && npm run images && npm run build
- */
+/** Brings the exhibition photographs in from Claudia's archive. */
 import { readFile, writeFile, readdir, mkdir, copyFile, stat } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
@@ -76,8 +56,8 @@ async function main(): Promise<void> {
 
     const images: ProjectImage[] = [];
     for (const [i, file] of files.entries()) {
-      // Numbered on the way in: the archive's own names carry spaces, accents
-      // and the odd apostrophe, none of which belong in a URL.
+      // Numbered on the way in: the archive's own names carry spaces, accents and the odd
+      // apostrophe, none of which belong in a URL.
       const ext = path.extname(file).toLowerCase() === '.jpeg' ? '.jpg' : path.extname(file).toLowerCase();
       const name = `${String(i + 1).padStart(2, '0')}${ext}`;
       const dest = path.join(outDir, name);

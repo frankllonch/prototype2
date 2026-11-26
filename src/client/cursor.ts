@@ -1,24 +1,16 @@
 import { finePointer, phone, reduceMotion } from './env.ts';
 
 /**
- * Over a painting the pointer *becomes* its name — title and year, read from
- * the tile's own data attributes, drawn where the arrow would be. The arrow is
- * hidden for as long as the label stands in for it.
- *
- * It is decoration, never the only way to learn what a painting is: the same
- * title is the tile's accessible name, so a keyboard or screen-reader user gets
- * it without this, and coarse pointers never see it at all.
+ * Over a painting the pointer *becomes* its name — title and year, read from the
+ * tile's own data attributes, drawn where the arrow would be.
  */
 export function initCursor(): void {
   const cursor = document.querySelector<HTMLElement>('[data-cursor]');
   const label = cursor?.querySelector<HTMLElement>('.cursor-label');
   if (!cursor || !label || !finePointer.matches) return;
 
-  // Only now is it safe to take the arrow away over a tile: without this class
-  // a browser that never runs the script would leave people with no pointer.
-  // Not below 900px: the phone's gallery answers no pointer, even where a
-  // narrow window happens to have one. That is the window as it stands and not
-  // as it was when the page loaded, so the class follows it (`follow`, below).
+  // Only now is it safe to take the arrow away over a tile: without this class a browser that
+  // never runs the script would leave people with no pointer.
   const root = document.documentElement;
   root.classList.toggle('has-cursor', !phone.matches);
 
@@ -29,9 +21,7 @@ export function initCursor(): void {
   let tickedAt = 0;
 
   const tick = (time: number) => {
-    // Lerp toward the pointer; the lag is what gives it weight. A fifth of
-    // the way per frame at 120fps — the pace it was approved at — applied by
-    // elapsed time, so the weight is the same in Safari, which draws at 60.
+    // Lerp toward the pointer; the lag is what gives it weight.
     const elapsed = tickedAt ? Math.min(time - tickedAt, 100) : 1000 / 120;
     tickedAt = time;
     const ease = reduceMotion.matches ? 1 : 1 - Math.pow(0.8, elapsed / (1000 / 120));
@@ -47,15 +37,15 @@ export function initCursor(): void {
   /** Decide what the pointer is over, given the element under it. */
   const refresh = (target: Element | null) => {
     const tile = target?.closest<HTMLElement>('.tile');
-    // A tile piled up in the opening animation, or dimmed by a year filter, is
-    // not really under the pointer.
+    // A tile piled up in the opening animation, or dimmed by a year filter, is not really under
+    // the pointer.
     const usable = tile && !tile.closest('.is-stacked') && !tile.classList.contains('is-dimmed')
       ? tile : null;
     const title = usable?.dataset.title ?? '';
 
     if (usable && title) {
-      // A painting's label is its reference (and collection code), size and
-      // technique (content/caption.ts); without any, its name and year.
+      // A painting's label is its reference (and collection code), size and technique
+      // (content/caption.ts); without any, its name and year.
       const year = usable.dataset.year;
       const text = usable.dataset.caption || (year ? `${title}, ${year}` : title);
       if (label.textContent !== text) label.textContent = text;
@@ -78,12 +68,8 @@ export function initCursor(): void {
     refresh(event.target as Element | null);
   }, { passive: true });
 
-  // The page can move under a pointer that has not: a scroll carries a tile
-  // away, or gathers the grid back into the pile, and the label would stay on
-  // as the name of nothing. Look again at what is under the pointer now —
-  // once a frame at most. A scroll can fire several times a frame, and each
-  // look is a synchronous hit test of the whole page; Chromium shrugs that
-  // off, Safari pays for every one, which it felt during the opening's unfold.
+  // The page can move under a pointer that has not: a scroll carries a tile away, or gathers the
+  // grid back into the pile, and the label would stay on as the name of nothing.
   let looking = 0;
   const relook = () => {
     if (!placed || looking || phone.matches) return;
@@ -95,9 +81,9 @@ export function initCursor(): void {
   window.addEventListener('scroll', relook, { passive: true });
   document.addEventListener('stackrestart', relook);
 
-  // Coming back to the gallery restores it from the cache exactly as it was
-  // left — with the name of the painting just clicked still on the pointer,
-  // which then blinked off on the first movement. Arrive with it off.
+  // Coming back to the gallery restores it from the cache exactly as it was left — with the name
+  // of the painting just clicked still on the pointer, which then blinked off on the first
+  // movement.
   const clear = () => { active = false; cursor.classList.remove('is-visible'); };
   window.addEventListener('pageshow', clear);
   window.addEventListener('pagehide', clear);

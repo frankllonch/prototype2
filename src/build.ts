@@ -1,9 +1,4 @@
-/**
- * Renders the site to dist/ as static HTML.
- *
- * Seven pages and the artwork details. Every route is a pure function of the
- * dataset, so the build is deterministic: same content in, same pages out.
- */
+/** Renders the site to dist/ as static HTML. */
 import { cp, mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
@@ -20,9 +15,8 @@ import {
 } from './pages/index.ts';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
-// DIST_DIR sends the build somewhere else, for trying a change without
-// disturbing the dist/ a preview is being served from. The rendered images are
-// not rebuilt, so point a `media` link in that folder at dist/media.
+// DIST_DIR sends the build somewhere else, for trying a change without disturbing the dist/ a
+// preview is being served from.
 const DIST = process.env.DIST_DIR ? path.resolve(process.env.DIST_DIR) : path.join(ROOT, 'dist');
 const CLIENT = path.join(ROOT, 'src', 'client');
 
@@ -45,14 +39,13 @@ async function buildAssets() {
   for (const part of parts) css += `${await readFile(path.join(styles, part), 'utf8')}\n`;
   await writeFile(path.join(DIST, 'site.css'), BASE ? css.replaceAll("url('/fonts/", `url('${BASE}/fonts/`) : css);
   await cp(path.join(ROOT, 'src', 'assets', 'fonts'), path.join(DIST, 'fonts'), { recursive: true });
-  // The opening film, re-encoded for the web from the 168MB original on the
-  // live site. Copied rather than processed: it is already at its serving size.
+  // The opening film, re-encoded for the web from the 168MB original on the live site.
   await cp(path.join(ROOT, 'src', 'assets', 'video'), path.join(DIST, 'video'), { recursive: true });
-  // Page artwork that is not catalogue work, so it never goes through the image
-  // pipeline: the plate on the first edition's sheet is one of these.
+  // Page artwork that is not catalogue work, so it never goes through the image pipeline: the
+  // plate on the first edition's sheet is one of these.
   await cp(path.join(ROOT, 'src', 'assets', 'img'), path.join(DIST, 'img'), { recursive: true });
-  // The two studio photographs on About, already rendered at their serving
-  // sizes from the originals in content/raw/about.
+  // The two studio photographs on About, already rendered at their serving sizes from the
+  // originals in content/raw/about.
   await cp(path.join(ROOT, 'src', 'assets', 'about'), path.join(DIST, 'about'), { recursive: true });
 
   for (const file of (await readdir(CLIENT)).filter((f) => f.endsWith('.ts'))) {
@@ -69,12 +62,6 @@ async function main() {
   /*
    * Everything is regenerated except the rendered images, which cost minutes to
    * make and never change unless `npm run images` is run.
-   *
-   * Swept rather than named one by one. A list of routes to delete looks tidier
-   * and is quietly wrong the first time a route is renamed: the old directory is
-   * not on the list, so nothing removes it, and it sits in dist being deployed
-   * long after the page that made it is gone. Renaming Collaborations to
-   * Commissioned left exactly that behind.
    */
   if (existsSync(DIST)) {
     for (const entry of await readdir(DIST)) {
@@ -84,8 +71,7 @@ async function main() {
   }
   await buildAssets();
 
-  // What's Color? is the start page; the gallery has a route of its own, which
-  // coexists with the 154 artwork/<slug> routes because writePage mkdirs deep.
+  // What's Color?
   await writePage('', whatsColorPage());
   await writePage('artwork', artworkPage(works, yearColours));
   for (const edition of EDITIONS) {
@@ -95,9 +81,8 @@ async function main() {
   await writePage('commissioned', commissionedPage(commissioned));
   if (colourChart) await writePage('color-chart', colourChartPage());
 
-  // Behind an open work the phone shows the gallery, faintly: the twelve
-  // paintings round it on the gallery's two columns — its own row, the two
-  // rows above and the three below, or the nearest twelve at either end.
+  // Behind an open work the phone shows the gallery, faintly: the twelve paintings round it on the
+  // gallery's two columns.
   const wall = works.filter((w) => w.cover);
   const AROUND = 12;
   for (const [i, work] of works.entries()) {
@@ -114,12 +99,7 @@ async function main() {
     `exhibitions (${exhibitions.length}), commissioned (${commissioned.length}), color chart.` +
     (BASE ? `\nBase path: ${BASE}` : ''),
   );
-  /*
-   * Said out loud, because the one way to ship this broken is quietly. The
-   * Colour Chart's order form is the only part of the site that needs anything
-   * beyond these files, and a build that forgot to say where it sends produces
-   * a form that renders perfectly and cannot send a thing.
-   */
+  /* Said out loud, because the one way to ship this broken is quietly. */
   if (!INQUIRIES) {
     console.warn('! INQUIRIES_ENDPOINT is not set — the colour chart order form will not send (server/inquiries/)');
   }

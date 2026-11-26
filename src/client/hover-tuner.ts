@@ -3,35 +3,6 @@ import { phone, reduceMotion } from './env.ts';
 /**
  * The hover tuner: a panel for trying the bar's hover and the bar's lettering
  * live, on the real pages, on a computer.
- *
- * Off unless asked for. Open any page with `?tune` and the panel appears in
- * the bottom right corner; it stays on from page to page (the browser keeps
- * the choice) until `?tune=off` or the panel's Off button. Nobody who does not
- * ask for it ever sees it or pays for more than this file's download.
- *
- * Six hovers to choose from, each with its own settings:
- *
- *   roll       the one the site wears: each letter turns over like a
- *              split-flap board (00-base.css, "text roll")
- *   scramble   the other one in the code: the letters under the pointer
- *              churn (client/scramble.ts)
- *   colour     no motion, only the change of colour every hover already has
- *   underline  a line drawn under the word
- *   wave       the letters lift one after another and settle
- *   retype     the word is taken back and typed again, as What's Color and the
- *              Colour Chart type themselves
- *
- * and the bar's own lettering: size, tracking, weights, colours, spacing.
- *
- * Nothing here changes the site for anyone else. What is chosen lives in this
- * browser only; "Copy settings" puts it on the clipboard to be made permanent
- * in the code. The head of every page (components/layout.ts) lays the stored
- * lettering over the stylesheet before the first paint, so moving between
- * pages with the panel on does not flash the defaults.
- *
- * Not below 900px: there is no hover on a phone, and the phone's bar is
- * written differently (09-phone.css). Narrowed past that, the bar's words go
- * back to exactly what the page arrived with.
  */
 
 // ------------------------------------------------------------------ settings
@@ -439,12 +410,7 @@ ${v.current ? `[aria-current='page'] .tune-line::after { transform: scaleX(1); }
 
 // ----------------------------------------------------------------- lettering
 
-/*
- * The bar's lettering. Colours are given as they come out over white paper —
- * the colour you see on a white page — because the bar draws itself as the
- * negative of what is under it (`mix-blend-mode: difference`, 00-base.css,
- * "top bar"): the stylesheet holds the inverse, and this works it out.
- */
+/* The bar's lettering. */
 const MENU_FIELDS = (): Field[] => [
   num('size', 'Size', px(getComputedStyle(document.querySelector('.menu') ?? document.body).fontSize, 18), 8, 40, 0.5, 'px'),
   num('tracking', 'Letter spacing', 0.1, -0.05, 0.4, 0.005, 'em'),
@@ -464,10 +430,8 @@ const MENU_FIELDS = (): Field[] => [
 ];
 
 /**
- * Every selector put behind `html[data-tune]`, which is one attribute more
- * than the stylesheet's own rules carry, so these win without `!important`.
- * Rules are written one to a line, or with the selector alone on its first
- * line; at-rules are left as they are.
+ * Every selector put behind `html[data-tune]`, which is one attribute more than
+ * the stylesheet's own rules carry, so these win without `!important`.
  */
 function scope(css: string): string {
   return css.split('\n').map((line) => {
@@ -507,8 +471,8 @@ function menuCss(v: Values, defaults: Values): string {
   const rest = negative ? inverse(String(v.rest)) : String(v.rest);
   const hover = negative ? inverse(String(v.hover)) : String(v.hover);
   const rules: string[] = [];
-  // Only what has been moved is written, so the stylesheet's own fluid sizes
-  // stay in charge of everything left alone.
+  // Only what has been moved is written, so the stylesheet's own fluid sizes stay in charge of
+  // everything left alone.
   if (changed('size')) rules.push(`.top :is(.wordmark, .top-soon, .menu) { font-size: ${v.size}px; }`);
   if (changed('tracking')) rules.push(`.top :is(.wordmark, .top-soon, .menu) { letter-spacing: ${v.tracking}em; }`);
   if (changed('nameWeight')) rules.push(`.top :is(.wordmark, .top-soon) { font-weight: ${v.nameWeight}; }`);
@@ -518,8 +482,8 @@ function menuCss(v: Values, defaults: Values): string {
   if (changed('gap')) rules.push(`.top .menu { gap: ${v.gap}px; }`);
   if (changed('top')) rules.push(`.top { --bar-top: ${v.top}px; }`);
   if (!negative) rules.push(`.top { mix-blend-mode: normal; }`);
-  // Both or neither: the rest colour's rule outranks the stylesheet's hover,
-  // so once it is written the hover has to be written above it again.
+  // Both or neither: the rest colour's rule outranks the stylesheet's hover, so once it is written
+  // the hover has to be written above it again.
   if (changed('rest') || changed('hover') || !negative) {
     rules.push(`.top :is(.menu a, .top-soon):not([aria-current='page']) { color: ${rest}; --roll-color: ${rest}; }`);
     rules.push(`.top { --bar-ink: ${hover}; }`);
@@ -570,17 +534,14 @@ export function initHoverTuner(): void {
   const roots = [...document.querySelectorAll<HTMLElement>('.top [data-roll]')];
   if (!roots.length) return;
   // Exactly what the page arrived with, to put back.
-  // On the opening page the current name may be drawn twice, in two spans of
-  // its own (client/current.ts); each of those then takes the letters.
   const original = roots.map((root) => {
     const faces = [...root.querySelectorAll<HTMLElement>('.top-face, .top-echo')];
     const word = root.querySelector('.roll-text')?.textContent ?? root.textContent ?? '';
     return { root, html: root.innerHTML, word: faces.length ? (faces[0]?.querySelector('.roll-text')?.textContent ?? faces[0]?.textContent ?? word) : word, targets: faces.length ? faces : [root] };
   });
 
-  // The lettering's defaults are read off the page as the stylesheet draws it,
-  // so the copy the head laid down first is taken away before they are read.
-  // The live copy goes in within the same task, before anything is painted.
+  // The lettering's defaults are read off the page as the stylesheet draws it, so the copy the
+  // head laid down first is taken away before they are read.
   document.getElementById('tune-early')?.remove();
   const menuFields = MENU_FIELDS();
   const menuDefaults = valuesOf(menuFields);

@@ -1,7 +1,5 @@
 <?php
-/**
- * Nothing at this address.
- */
+/** Nothing at this address. */
 cv_page( [ 'title' => 'Not found', 'path' => '' ] );
 status_header( 404 );
 get_header();

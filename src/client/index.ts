@@ -1,7 +1,4 @@
-/**
- * Boot. Every module is an enhancement: the pages are complete and navigable
- * with scripting off — tiles are real links, panels are real anchors.
- */
+/** Boot. */
 import { initTextRoll } from './text-roll.ts';
 import { initScramble } from './scramble.ts';
 import { initTransitions } from './transitions.ts';
@@ -35,16 +32,14 @@ import { initMenu } from './menu.ts';
 import { initReveal } from './reveal.ts';
 import { initPileTuner } from './pile-tuner.ts';
 
-// The head stops waiting for these scripts after a few seconds and lets the
-// page stand as it does without them (components/layout.ts). Arriving later
-// than that, they take it back before anything below reads the document.
+// The head stops waiting for these scripts after a few seconds and lets the page stand as it does
+// without them (components/layout.ts).
 document.documentElement.classList.add('js');
-// The menu first: on a phone it is the only way from one page to another, so
-// nothing that fails further down may leave its button unanswered. And before
-// the panels: it gets out of About's way on the click that opens it.
+// The menu first: on a phone it is the only way from one page to another, so nothing that fails
+// further down may leave its button unanswered.
 initMenu();
-// One hover or the other, never both: the document says which, and
-// components/layout.ts is where that is decided.
+// One hover or the other, never both: the document says which, and components/layout.ts is where
+// that is decided.
 if (document.documentElement.dataset.hover === 'scramble') initScramble();
 else initTextRoll();
 initTransitions();
@@ -75,15 +70,12 @@ initWcTexts();
 initGlide();
 initWrite();
 initReveal();
-// The menu hover tuner (client/hover-tuner.ts) is retired from the page
-// (Frank, 2026-11-18): whatever it left in this browser is cleared so the bar
-// is drawn exactly as the stylesheet says.
+// The menu hover tuner (client/hover-tuner.ts) is retired from the page: whatever it left in this
+// browser is cleared so the bar is drawn exactly as the stylesheet says.
 try { localStorage.removeItem('cv-tune'); localStorage.removeItem('cv-tune-css'); } catch { /* private window */ }
 document.getElementById('tune-early')?.remove();
 delete document.documentElement.dataset.tune;
-// The gallery opening's tuner: off unless the page was opened with ?pile
-// (client/pile-tuner.ts).
+// The gallery opening's tuner: off unless the page was opened with ?pile (client/pile-tuner.ts).
 initPileTuner();
-// The ball's tuner: off unless the page was opened with ?ball
-// (client/ball-tuner.ts).
+// The ball's tuner: off unless the page was opened with ?ball (client/ball-tuner.ts).
 initBallTuner();

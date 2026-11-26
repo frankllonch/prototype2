@@ -1,23 +1,11 @@
 <?php
-/**
- * The sheet — src/components/sheet.ts.
- *
- * A detail that is read and looked at: the masthead at the top left, the text
- * under it, the photograph holding the right of the screen with an arrow
- * either side. Nothing on it scrolls but the text, and the round button beside
- * the text gives it the whole sheet. The markup reuses data-reader,
- * data-figures, .reader-figure, data-figure-step and data-expand, which the
- * shared client code already drives.
- */
+/** The sheet — src/components/sheet.ts. */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-/**
- * `$item`: title, lines (list of strings), when, text (html), images
- * ([{id, caption}]).
- */
+/** `$item`: title, lines (list of strings), when, text (html), images ([{id, caption}]). */
 function cv_sheet_body( array $item ): string {
 	$images = $item['images'];
 	$n      = count( $images );

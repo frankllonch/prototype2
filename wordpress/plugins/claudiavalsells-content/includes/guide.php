@@ -3,16 +3,6 @@
  * Claudia's guide: the things she does most, a few steps each — first on the
  * dashboard, and on a page of its own (Dashboard → Guide) that prints as the
  * handover's PDF.
- *
- * Every name the steps give to something of this site's — a menu, a panel, a
- * field, a button the plugin labels — is read from where the admin reads it:
- * the post types, the fields of includes/editor.php, the paragraph styles. So
- * the guide says what the screen says, in whichever language the admin is in,
- * and a field renamed there is renamed here. WordPress's own menus come from
- * WordPress's own translations, by the same calls its menu makes. The editor's
- * buttons (Publish, Save draft, Preview in new tab…) live in its scripts, out
- * of reach from here, so they are written into the sentences in bold, for each
- * translation to give as the editor does in that language.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -107,9 +97,8 @@ function cvc_guide_intro(): array {
 }
 
 /**
- * The tasks, each with the steps that do it and, where it helps, a word
- * before (what to have ready) or after (what the site then does with it). A
- * task only shows to someone who can do it.
+ * The tasks, each with the steps that do it and, where it helps, a word before
+ * (what to have ready) or after (what the site then does with it).
  */
 function cvc_guide_sections(): array {
 	$tasks = [];
@@ -387,8 +376,8 @@ function cvc_guide_sections(): array {
 		];
 	}
 
-	// About and the Colour Chart are pages: their tasks need the page, and
-	// someone who may edit it.
+	// About and the Colour Chart are pages: their tasks need the page, and someone who may edit
+	// it.
 	$about = get_page_by_path( 'about' );
 	if ( $about && current_user_can( 'edit_post', $about->ID ) ) {
 		$tasks[] = [
@@ -452,10 +441,8 @@ function cvc_guide_sections(): array {
 		];
 	}
 
-	// Settings → Site texts is an administrator's page (settings.php); anyone
-	// else is told where the messages go and who can change it. The names
-	// below are that page's own strings, so they translate as they do there.
-	// WordPress's own name for the Settings menu, from WordPress's translations.
+	// Settings → Site texts is an administrator's page (settings.php); anyone else is told
+	// where the messages go and who can change it.
 	$settings = __( 'Settings' );
 	$texts    = __( 'Site texts', 'claudiavalsells' );
 	if ( current_user_can( 'manage_options' ) ) {
@@ -535,8 +522,8 @@ function cvc_guide_sections(): array {
 		];
 	}
 
-	// A step whose every sentence fell away (see cvc_guide_say) goes, and a
-	// task left with no steps goes with it.
+	// A step whose every sentence fell away (see cvc_guide_say) goes, and a task left with no
+	// steps goes with it.
 	$kept = [];
 	foreach ( $tasks as $task ) {
 		$task['steps'] = array_values( array_filter( $task['steps'], fn( string $s ) => '' !== $s ) );
@@ -551,7 +538,10 @@ function cvc_guide_sections(): array {
 
 /* ---------------------------------------------------------- the sentences */
 
-/** "In the menu on the left, go to Artwork → Add a new work", the item a link to the screen it opens. */
+/**
+ * "In the menu on the left, go to Artwork → Add a new work", the item a link
+ * to the screen it opens.
+ */
 function cvc_guide_go( string $menu, string $item, string $url ): string {
 	return cvc_guide_say(
 		/* translators: 1: a menu in the column on the left of the admin, 2: one of its items, a link to the screen it opens. */
@@ -586,7 +576,10 @@ function cvc_guide_save(): string {
 	);
 }
 
-/** The main photograph of a show or a project: the one the list brings up, and the first its page shows. */
+/**
+ * The main photograph of a show or a project: the one the list brings up, and
+ * the first its page shows.
+ */
 function cvc_guide_main_photograph( string $button ): string {
 	return cvc_guide_say(
 		/* translators: %s: the button for the entry's main photograph, at the top of the editor's side panel. */
@@ -608,8 +601,7 @@ function cvc_guide_step( string ...$sentences ): string {
 /**
  * One sentence, safe to print: the translation keeps only <strong> and links,
  * and the pieces it is given — bold labels and links, escaped already — go
- * into its placeholders. A piece that comes back empty means the field or
- * screen it names has gone, so the sentence goes too rather than read wrong.
+ * into its placeholders.
  */
 function cvc_guide_say( string $sentence, string ...$pieces ): string {
 	foreach ( $pieces as $piece ) {
@@ -624,8 +616,8 @@ function cvc_guide_say( string $sentence, string ...$pieces ): string {
 	try {
 		return vsprintf( $sentence, $pieces );
 	} catch ( ValueError $e ) {
-		// A translation asking for more pieces than its sentence has: the
-		// sentence without them is better than a dashboard that stops here.
+		// A translation asking for more pieces than its sentence has: the sentence without them is
+		// better than a dashboard that stops here.
 		return $sentence;
 	}
 }
@@ -642,7 +634,10 @@ function cvc_guide_a( string $label, string $url ): string {
 
 /* ------------------------------------------------------------- the labels */
 
-/** A label of one of the site's kinds of entry, as the admin shows it: menu_name, add_new_item, singular_name (the editor's tab)… */
+/**
+ * A label of one of the site's kinds of entry, as the admin shows it: menu_name,
+ * add_new_item, singular_name (the editor's tab)…
+ */
 function cvc_guide_type( string $type, string $label ): string {
 	$object = get_post_type_object( $type );
 	return isset( $object->labels->$label ) ? (string) $object->labels->$label : '';
@@ -654,16 +649,19 @@ function cvc_guide_taxonomy( string $taxonomy ): string {
 	return isset( $object->labels->menu_name ) ? (string) $object->labels->menu_name : '';
 }
 
-/** A taxonomy's terms, by name, as a list in the language's own way of writing one: "I, II, III". */
+/**
+ * A taxonomy's terms, by name, as a list in the language's own way of writing
+ * one: "I, II, III".
+ */
 function cvc_guide_terms( string $taxonomy ): string {
 	$names = get_terms( [ 'taxonomy' => $taxonomy, 'hide_empty' => false, 'fields' => 'names' ] );
 	return is_array( $names ) ? implode( wp_get_list_item_separator(), $names ) : '';
 }
 
 /**
- * A label from the fields panel (includes/editor.php): with no key the
- * panel's own title, with a key that field's label, and with an option the
- * label of that one choice.
+ * A label from the fields panel (includes/editor.php): with no key the panel's
+ * own title, with a key that field's label, and with an option the label of that
+ * one choice.
  */
 function cvc_guide_field( string $group, string $key = '', ?string $option = null ): string {
 	static $fields = null;
@@ -695,12 +693,7 @@ function cvc_guide_field( string $group, string $key = '', ?string $option = nul
 
 /* -------------------------------------------------------------- the look */
 
-/**
- * The guide's few rules, inline. On its page, the tasks fill the width in
- * columns a line can be read across, and printing leaves the admin around
- * them out — rules that reach outside the guide, so they are only ever on
- * that page, under the body class WordPress gives it.
- */
+/** The guide's few rules, inline. */
 function cvc_guide_style( bool $page ): string {
 	$css = '.cvc-guide{color:#1d2327}'
 		. '.cvc-guide p{margin:0 0 8px}'

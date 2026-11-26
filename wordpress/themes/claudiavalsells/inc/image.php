@@ -1,13 +1,5 @@
 <?php
-/**
- * Responsive pictures from the media library — src/components/image.ts.
- *
- * A `<picture>` with one `<source>` per modern format the library holds for the
- * image (AVIF, WebP, when a plugin such as Modern Image Formats makes them) and
- * the JPEG as the `<img>`, with every size WordPress made in its srcset.
- * `aspect-ratio` is always set from the measured size so the grid holds its
- * shape before any bytes arrive.
- */
+/** Responsive pictures from the media library — src/components/image.ts. */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -112,8 +104,8 @@ function cv_image( int $id, string $sizes, array $o = [] ): string {
 			$sources .= sprintf( '<source type="%s" srcset="%s" sizes="%s" />', $type, cv_srcset( $d['by'][ $type ] ), esc_attr( $sizes ) );
 		}
 	}
-	// The `src` is the widest of the rendered sizes rather than the full file,
-	// so a browser without srcset is not handed the largest thing there is.
+	// The `src` is the widest of the rendered sizes rather than the full file, so a browser
+	// without srcset is not handed the largest thing there is.
 	$widths  = array_keys( $fallback );
 	$chosen  = null;
 	foreach ( $widths as $w ) {
@@ -139,11 +131,7 @@ function cv_image( int $id, string $sizes, array $o = [] ): string {
 	);
 }
 
-/**
- * The theme's own sizes get WebP too. The Modern Image Formats plugin writes
- * a second format only for WordPress's core sizes unless told otherwise, and
- * the sizes the pictures are actually served at are these three.
- */
+/** The theme's own sizes get WebP too. */
 add_filter( 'webp_uploads_image_sizes_with_additional_mime_type_support', function ( array $sizes ): array {
 	foreach ( [ 'cv-400', 'cv-800', 'cv-1600' ] as $size ) {
 		$sizes[ $size ] = true;

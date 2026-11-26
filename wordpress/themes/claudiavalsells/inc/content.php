@@ -1,12 +1,5 @@
 <?php
-/**
- * Reading the entries — the theme's one layer over WordPress's data.
- *
- * Each function hands a component a plain array shaped like the TypeScript
- * props it was written for, so the components below need know nothing about
- * post meta, taxonomies or blocks. Lists come from the content plugin
- * (cvc_works and friends), which owns the order things come in.
- */
+/** Reading the entries — the theme's one layer over WordPress's data. */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -20,7 +13,7 @@ function cv_meta( int $id, string $key, $default = '' ) {
 /**
  * A post's content rendered block by block, with every picture handed to
  * `$image` — `(int $attachment, string $caption) => string` — instead of
- * being drawn where it stands. Text blocks render as the editor saved them.
+ * being drawn where it stands.
  */
 function cv_render_content( WP_Post $post, callable $image ): string {
 	$out  = '';
@@ -53,16 +46,7 @@ function cv_render_content( WP_Post $post, callable $image ): string {
 	return trim( $out );
 }
 
-/**
- * A rendered block without the class the editor stamps on it.
- *
- * WordPress marks each paragraph, heading and list it renders with
- * `wp-block-paragraph` and the like, a hook for themes styled through
- * theme.json. This theme is styled by the design's own stylesheet, written
- * against bare elements, and its pages are meant to be the static site's
- * markup to the byte — so the stamp comes off, and a class the editor was
- * given for a block (about-lead, say) stays.
- */
+/** A rendered block without the class the editor stamps on it. */
 function cv_bare_block( string $html ): string {
 	return (string) preg_replace_callback(
 		'/\sclass="([^"]*)"/',
@@ -74,7 +58,10 @@ function cv_bare_block( string $html ): string {
 	);
 }
 
-/** The text of an entry on one side, its pictures (ids, with any caption typed in the editor) on the other. */
+/**
+ * The text of an entry on one side, its pictures (ids, with any caption typed in
+ * the editor) on the other.
+ */
 function cv_content_parts( WP_Post $post ): array {
 	static $cache = [];
 	if ( isset( $cache[ $post->ID ] ) ) {
@@ -82,8 +69,8 @@ function cv_content_parts( WP_Post $post ): array {
 	}
 	$images = [];
 	$text   = cv_render_content( $post, function ( int $id, string $caption ) use ( &$images ) {
-		// A picture deleted from the library leaves its id behind in the block;
-		// it is not a figure any more, and not counted as one.
+		// A picture deleted from the library leaves its id behind in the block; it is not a figure
+		// any more, and not counted as one.
 		if ( ! isset( $images[ $id ] ) && 'attachment' === get_post_type( $id ) ) {
 			$images[ $id ] = [ 'id' => $id, 'caption' => $caption ];
 		}
@@ -139,11 +126,11 @@ function cv_work( WP_Post $p ): array {
 }
 
 /**
- * A painting's name on the site (Frank, 2026-11-16), as `workTitle` in
- * src/content/title.ts: its reference (the Inventory reference field, "L569")
- * when it has one; else its own title if that is a real name; and in place of
- * "Untitled", or of a title that only says what it is made of, its year and
- * size until a reference is given.
+ * A painting's name on the site, as `workTitle` in src/content/title.ts: its
+ * reference (the Inventory reference field, "L569") when it has one; else its
+ * own title if that is a real name; and in place of "Untitled", or of a title
+ * that only says what it is made of, its year and size until a reference is
+ * given.
  */
 function cv_work_title( string $title, string $reference, int $year, string $dimensions ): string {
 	if ( '' !== $reference ) {
@@ -157,8 +144,8 @@ function cv_work_title( string $title, string $reference, int $year, string $dim
 }
 
 /**
- * A painting's caption as Claudia wrote it, line for line and in her order:
- * a line per paragraph or break of the work's text (`captionLines` in
+ * A painting's caption as Claudia wrote it, line for line and in her order: a
+ * line per paragraph or break of the work's text (`captionLines` in
  * src/content/caption.ts).
  */
 function cv_caption_lines( string $html ): array {
@@ -182,13 +169,7 @@ function cv_describe( array $work, string $alt ): string {
 	return $facts ? "{$work['title']} — " . implode( ', ', $facts ) . ". $by" : "{$work['title']}. $by";
 }
 
-/**
- * The years with works in them, newest first, each with its colour.
- *
- * The colours were sampled from the paintings (content/years.json, carried in by
- * the import, and the plugin for a year that has none yet). A year with no
- * colour at all is given a grey, which is visibly the absence of one.
- */
+/** The years with works in them, newest first, each with its colour. */
 function cv_years(): array {
 	static $years = null;
 	if ( null !== $years ) {
@@ -253,26 +234,14 @@ function cv_exhibition( WP_Post $p ): array {
 /**
  * A show's text with its opening paragraph broken after a title and its
  * translation — splitOpening() in src/content/shows.ts.
- *
- * Mira'm opens on its own name and then an English gloss of it, and only then
- * says what the show is, all in one paragraph; the sheet sets the name apart
- * and leaves an empty line under it. The split is found rather than written:
- * the paragraph has to open on a quotation mark and carry a bracketed gloss
- * near the front, and the break goes after the closing bracket, which goes
- * (with its opening one, where the text still has it). Nothing is reworded,
- * and the entry in the editor stays as it was typed.
- *
- * One paragraph still, with the opening as a block inside it. A text that
- * does not have that shape is returned untouched — and so is one already
- * split, which has no bracket left to find.
  */
 function cv_show_opening( string $html ): string {
 	if ( ! preg_match( '#^(\s*<p>)(.*?)(</p>)#su', $html, $first ) ) {
 		return $html;
 	}
 	$body = $first[2];
-	// Only an opening that is a quoted name: a bracket anywhere else in a
-	// paragraph is an aside, not a heading.
+	// Only an opening that is a quoted name: a bracket anywhere else in a paragraph is an aside,
+	// not a heading.
 	if ( ! preg_match( '/^\s*(<[^>]+>\s*)*[“"\']/u', $body ) ) {
 		return $html;
 	}
@@ -329,16 +298,14 @@ function cv_edition( WP_Post $p ): array {
 	$statement = cv_content_parts( $p )['text'];
 	$intro     = (string) cv_meta( $p->ID, '_cv_intro' );
 
-	// Claudia's paragraphs one at a time, for the composed sheets, which set
-	// them between the entries by position. The same text as `statement`,
-	// read back out of its rendered paragraphs; a heading or anything else in
-	// the entry is not one of them.
+	// Claudia's paragraphs one at a time, for the composed sheets, which set them between the
+	// entries by position.
 	preg_match_all( '#<p\b[^>]*>(.*?)</p>#su', $statement, $m );
 	$says = array_values( array_filter( array_map( 'trim', $m[1] ), fn( $s ) => '' !== wp_strip_all_tags( $s ) ) );
 
-	// Everyone filed under the edition is on its roster, the names across the
-	// top of its page; only the ones who answered have an entry below, and so
-	// only they get an id for a name to point at.
+	// Everyone filed under the edition is on its roster, the names across the top of its page;
+	// only the ones who answered have an entry below, and so only they get an id for a name to
+	// point at.
 	$people  = [];
 	$roster  = [];
 	$answers = function_exists( 'cvc_answers' ) ? cvc_answers( $p ) : [];
@@ -365,11 +332,8 @@ function cv_edition( WP_Post $p ): array {
 		}
 	}
 
-	// The edition's text as the opening view sets it: the writing in full,
-	// shown cut after the words in "cut" until the reader asks for more.
-	// The introduction field when there is one, the edition's own text when not.
-	// The field is plain text in the side panel: typed as lines rather than as
-	// paragraph blocks, it still reads as paragraphs.
+	// The edition's text as the opening view sets it: the writing in full, shown cut after the
+	// words in "cut" until the reader asks for more.
 	$source = '' !== trim( $intro ) ? cv_bare_block( do_blocks( $intro ) ) : $statement;
 	if ( '' !== trim( $intro ) && ! preg_match( '#<p\b#i', $source ) ) {
 		$source = wpautop( $source );
@@ -379,9 +343,8 @@ function cv_edition( WP_Post $p ): array {
 	$cut    = trim( (string) cv_meta( $p->ID, '_cv_opening_cut' ) );
 	$teaser = [];
 	foreach ( $full as $para ) {
-		// Searched in the paragraph's text as read, entities decoded; the
-		// opening texts are plain, and a paragraph with markup in it is kept
-		// whole rather than cut through a tag.
+		// Searched in the paragraph's text as read, entities decoded; the opening texts are plain,
+		// and a paragraph with markup in it is kept whole rather than cut through a tag.
 		$text = html_entity_decode( wp_strip_all_tags( $para ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
 		$at   = '' !== $cut ? mb_strpos( $text, $cut ) : false;
 		if ( false === $at ) {
@@ -425,37 +388,36 @@ function cv_editions(): array {
 /* ------------------------------------------------------------ about, chart */
 
 /**
- * About: the card, the biography with its photographs, the record of shows
- * read out of the exhibitions, the collections and the closing line.
+ * About: the card, the biography with its photographs, the record of shows read
+ * out of the exhibitions, the collections and the closing line.
  */
 function cv_about(): array {
 	static $about = null;
 	if ( null !== $about ) {
 		return $about;
 	}
-	// The page as it is being looked at when it is the one being previewed;
-	// otherwise only as published — a draft of About is not on every page.
+	// The page as it is being looked at when it is the one being previewed; otherwise only as
+	// published — a draft of About is not on every page.
 	$page = is_page( 'about' ) ? get_queried_object() : get_page_by_path( 'about' );
 	if ( $page && 'publish' !== $page->post_status && ! is_preview() ) {
 		$page = null;
 	}
 	$id = $page ? $page->ID : 0;
 
-	// Every photograph on the page goes into one row after the opening
-	// paragraph, wherever it stands in the editor — Image blocks or a Gallery,
-	// in their order. The text is the page without them.
+	// Every photograph on the page goes into one row after the opening paragraph, wherever it
+	// stands in the editor — Image blocks or a Gallery, in their order.
 	$images = [];
 	$text   = $page ? cv_render_content( $page, function ( int $image ) use ( &$images ): string {
-		// A picture deleted from the media library leaves its id behind in the
-		// block, and the same picture placed twice is one photograph.
+		// A picture deleted from the media library leaves its id behind in the block, and the same
+		// picture placed twice is one photograph.
 		if ( 'attachment' === get_post_type( $image ) && cv_image_data( $image ) && ! in_array( $image, $images, true ) ) {
 			$images[] = $image;
 		}
 		return '';
 	} ) : '';
-	// The opening paragraph is the lead, set in capitals: the first paragraph,
-	// whether or not it was given the class in the editor, and wherever it
-	// stands — anything put before it (a heading, say) follows the photographs.
+	// The opening paragraph is the lead, set in capitals: the first paragraph, whether or not it
+	// was given the class in the editor, and wherever it stands — anything put before it (a
+	// heading, say) follows the photographs.
 	$lead = '';
 	$rest = $text;
 	if ( preg_match( '#^(.*?)(<p\b[^>]*>.*?</p>)(.*)$#s', $text, $m ) ) {
@@ -518,7 +480,10 @@ function cv_about(): array {
 	];
 }
 
-/** The chart's twenty-three bands, as the designer measured them, unless the page says otherwise. */
+/**
+ * The chart's twenty-three bands, as the designer measured them, unless the page
+ * says otherwise.
+ */
 const CV_BANDS = [
 	'#b15f60', '#fbc644', '#f1d8ae', '#fafafa', '#3b5741', '#8d2530',
 	'#e83a41', '#e4630e', '#5aba9f', '#b73933', '#b7b39e', '#fbbe41',
@@ -529,23 +494,6 @@ const CV_BANDS = [
 /**
  * The Colour Chart page as the designer's sheet sets it — the reading
  * src/content/colour-chart.ts makes of its source, made here of the page.
- *
- * The statement is the page's own paragraphs, which is what Claudia edits; the
- * price is the page's Price field; the photographs behind "Thanks to
- * everyone!" are every picture on the page — Image blocks or a Gallery,
- * wherever they stand — and none of them is drawn in the text.
- *
- * The paragraphs are read by the static site's rules, so the page as the old
- * site had it, pasted back whole, still comes out as the sheet: the date
- * range, the byline and the picture credits are withheld; `cost …` and `make
- * your order at: …` are said elsewhere (the price, the form) and her address
- * stays out of the markup; and the statement ends at the first heading —
- * Features, Technical characteristics, About a colour chart — whether it was
- * typed as a paragraph or as a Heading block. Matched on how a paragraph
- * opens, not on its whole text: a comma moved costs the page nothing.
- *
- * `bands` is the chart's colours, still kept on the page (The bands); the
- * sheet no longer sets them, so nothing draws them today.
  */
 function cv_chart( ?WP_Post $page = null ): array {
 	$page  = $page ?: get_page_by_path( 'color-chart' );
@@ -573,9 +521,8 @@ function cv_chart( ?WP_Post $page = null ): array {
 	$withheld = [ '#^\d{4}\s*/\s*\d{4}$#', '/^artist colou?r chart\b/i', '/^images:/i', '/^\#\d/' ];
 	$headings = [ '/^features\b/i', '/^technical characteristics\b/i', '/^about a colou?r chart\b/i' ];
 
-	// The price as she wrote it in the text, "60,50€", comma and all, wherever
-	// its `cost` paragraph stands: the figure the page falls back on when the
-	// Price field is empty.
+	// The price as she wrote it in the text, "60,50€", comma and all, wherever its `cost`
+	// paragraph stands: the figure the page falls back on when the Price field is empty.
 	$cost = '';
 	preg_match_all( '#<p\b[^>]*>(.*?)</p>#s', $parts['text'], $found );
 	foreach ( $found[1] as $paragraph ) {
@@ -586,8 +533,8 @@ function cv_chart( ?WP_Post $page = null ): array {
 		}
 	}
 
-	// The statement: what stands before the first Heading block, paragraph by
-	// paragraph, until one of them is a heading.
+	// The statement: what stands before the first Heading block, paragraph by paragraph, until
+	// one of them is a heading.
 	$statement = [];
 	preg_match_all( '#<p\b[^>]*>(.*?)</p>#s', (string) preg_split( '/<h[1-6]\b/i', $parts['text'], 2 )[0], $found );
 	foreach ( $found[1] as $paragraph ) {
@@ -599,15 +546,13 @@ function cv_chart( ?WP_Post $page = null ): array {
 		if ( $opens( $text, $headings ) ) {
 			break;
 		}
-		// The designer's one line break, after the colon: "a source of
-		// knowledge, a way of life!" is the answer to it and belongs under it.
-		// Markup in the paragraph vetoes the break — one she put in herself
-		// included, so it is never there twice.
+		// The designer's one line break, after the colon: "a source of knowledge, a way of life!" is
+		// the answer to it and belongs under it.
 		if ( ! str_contains( $paragraph, '<' ) ) {
 			$paragraph = (string) preg_replace( '/\s+(?=a source of knowledge)/i', '<br />', $paragraph, 1 );
 		}
-		// "Color", not "colour": the page is set American, as the chart itself
-		// is lettered, however the text was typed. The case is kept.
+		// "Color", not "colour": the page is set American, as the chart itself is lettered, however
+		// the text was typed.
 		$statement[] = str_replace( [ 'Colour', 'colour' ], [ 'Color', 'color' ], $paragraph );
 	}
 
@@ -615,8 +560,8 @@ function cv_chart( ?WP_Post $page = null ): array {
 		'statement'   => $statement,
 		'price'       => (string) cv_meta( $id, '_cv_price' ) ?: $cost,
 		'bands'       => $bands ?: CV_BANDS,
-		// Only pictures the library can still draw: one deleted since, or never
-		// measured, is not a photograph to open a sheet on.
+		// Only pictures the library can still draw: one deleted since, or never measured, is not a
+		// photograph to open a sheet on.
 		'photographs' => array_values( array_filter( $parts['images'], fn( array $image ): bool => null !== cv_image_data( $image['id'] ) ) ),
 	];
 }

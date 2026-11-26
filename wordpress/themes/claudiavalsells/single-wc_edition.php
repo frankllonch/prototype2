@@ -1,12 +1,10 @@
 <?php
-/**
- * One edition of What's Color?, with its own names and the answers beneath.
- */
+/** One edition of What's Color?, with its own names and the answers beneath. */
 $cv_edition = cv_edition( get_queried_object() );
 $cv_n       = count( $cv_edition['participants'] );
 
-// The static site's two sentences (whatsColorEditionPage in
-// src/pages/index.ts): how many answered, or, where nobody did, who took part.
+// The static site's two sentences (whatsColorEditionPage in src/pages/index.ts): how many
+// answered, or, where nobody did, who took part.
 cv_page( [
 	'title'       => "What’s Color? ({$cv_edition['numeral']})",
 	'description' => $cv_n

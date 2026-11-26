@@ -12,10 +12,7 @@ import {
   type SheetSlot,
 } from '../content/whats-color-sheet.ts';
 
-/**
- * The editions with a colour chart at their foot, by numeral. Edition II had
- * one (CHART_II in whats-color-sheet.ts) until Frank took it off, 18 Nov 2026.
- */
+/** The editions with a colour chart at their foot, by numeral. */
 const CHARTS: Record<string, readonly ChartBar[] | undefined> = {};
 
 /** The editions the designer composed by hand, by numeral. */
@@ -26,31 +23,15 @@ const SHEETS: Record<string, readonly SheetSlot[] | undefined> = {
 };
 
 /**
- * The opening view of What's Color?: everyone who has answered, in one run,
- * and the three editions introduced beneath.
- *
- * The names are set as a paragraph because that is what they are — a sentence
- * of people, read across rather than down. They are links all the same, so a
- * keyboard reaches every one in reading order, but they are not a list: a
- * screen reader announcing seventy-three list items would be describing a
- * structure the page does not have.
- *
- * Hovering a name brings up the colour that person's answer was given. The
- * colour rides on the element as a custom property so the stylesheet owns how
- * it is used, and the hover is pure CSS — deliberately not the `hover-list`
- * mechanism the two indexes share, which assigns a rotating colour on
- * pointerenter and would overwrite a fixed one.
+ * The opening view of What's Color?: everyone who has answered, in one run, and
+ * the three editions introduced beneath.
  */
 export function whatsColorNames(
   participants: readonly Participant[],
   within?: string,
 ): Html {
-  // On an edition's own page a name goes to that person's answer further down
-  // it; on the opening view it goes to the edition they answered in. Every one
-  // of them used to point at `#whats-color`, an id nothing on the site has.
-  // On an edition's own page, straight to the answer; on the opening view,
-  // to the answer on its edition's page — the address carries the person, so
-  // arriving can travel down to them the way an on-page click does.
+  // On an edition's own page a name goes to that person's answer further down it; on the opening
+  // view it goes to the edition they answered in.
   const target = (p: Participant) =>
     within && p.id
       ? `#${p.id}`
@@ -60,9 +41,7 @@ export function whatsColorNames(
       participants.map((p, i) => {
         const sep = i > 0 ? raw('<span class="wc-sep">, </span>') : '';
         const paint = `--swatch: ${swatchFor(p)}; --swatch-ink: var(--${inkOn(swatchFor(p))})`;
-        // A name with no answer has no entry to point at. On its edition's own
-        // page it stands in the sentence as a name rather than a link; on the
-        // opening view it still leads into that edition, to its top.
+        // A name with no answer has no entry to point at.
         if (within && !p.id) {
           return html`${sep}<span class="wc-name" style="${paint}">${p.name}</span>`;
         }
@@ -72,18 +51,7 @@ export function whatsColorNames(
   </p>`;
 }
 
-/**
- * The three introductions, across the foot of the view.
- *
- * Ordered I, II, III left to right, which is the designer's order here and the
- * opposite of the newest-first the rest of the site keeps: these are chapters
- * of one project rather than a list of work, and chapters are read forwards.
- *
- * Each column is the handle for its edition — clicking one narrows the names
- * above to that edition's and brings up the answers — so the whole column is
- * the control rather than a link tacked under it. What you are pointing at
- * when you decide to read one is the writing itself.
- */
+/** The three introductions, across the foot of the view. */
 export function whatsColorIntros(editions: readonly Edition[]): Html {
   const forwards = [...editions].reverse();
   return html`<div class="wc-intros">
@@ -124,16 +92,7 @@ export function whatsColorOpening(editions: readonly Edition[]): Html {
 
 /**
  * The three editions' writing, at the foot of the opening view, the way the
- * start-page sheets set it: each a full-width block — a heading line, a blank
- * line, the text — cut to the sentence the sheet cuts it at, with the rest
- * behind ‘Read more’. Newest first, III to I, in the order of the rosters
- * above, so each edition's writing stands in the same place as its names.
- *
- * Each block is a doorway to its edition as well as a text: the heading is a
- * real link, and the script widens the click to the whole block. Without
- * scripting there is nothing to expand with, so the whole text stands open
- * and the link still works — the stylesheet swaps which half shows by the
- * `js` class, so neither state flashes.
+ * start-page sheets set it: each a full-width block.
  */
 function whatsColorTexts(editions: readonly Edition[]): Html {
   return html`<section class="wc-texts" aria-label="About the three editions">
@@ -177,57 +136,9 @@ function openingText(edition: Edition): Html {
   </div>`;
 }
 
-/**
- * One edition's people, under its numeral.
- *
- * The opening view used to be a single run of everyone, deduplicated, which
- * read as one long credit roll and said nothing about which edition anyone
- * answered in. Three blocks say it without a word. Newest first, which is the
- * order the editions are built in and the order the reference sets them in —
- * and the opposite of the introductions at the foot, which run forwards
- * because they are chapters rather than a list.
- *
- * No name is in two blocks: nobody has answered in more than one edition.
- * Should that change, they would appear under each, which is the truth.
- */
+/** One edition's people, under its numeral. */
 
-/**
- * The note, written as you scroll.
- *
- * The section is given more height than it shows; the paragraph rides pinned
- * at the centre of the view while the scroll spends that height, and each
- * word is revealed over its own slice of the passage. The slices live on the
- * timeline that covers the section's whole travel, so the writing can begin
- * before the pin does — the first words appear while the film's last quarter
- * is still leaving the top of the screen, and the sentence is done at 85% of
- * the pinned stretch, with the rest held so it can be read whole.
- *
- * Three decisions ride in the numbers. The question the project is named
- * after is given almost three times any other word's share of the scroll, so
- * the pace falls as it arrives and picks back up after. Every word fades over
- * roughly two slots rather than one, because a mouse wheel moves in coarse
- * steps and overlapping fades keep one step from popping a clutch of words at
- * once. And the slices are fractions of the cover timeline, computed at build
- * on SCREENS, while the stylesheet's --wc-write-length (and on a phone held
- * upright --wc-phone-write-length) sets the travel they are fractions of: at
- * the 370 it has now against a SCREENS of 2.4, each word lands later in the
- * stage than the figures below say, and the written point (client/write.ts)
- * is measured against the stylesheet's length.
- *
- * Every word occupies its place from the start and only becomes visible, so
- * nothing reflows as the sentence appears. The question is marked and takes a
- * colour from the palette, its punctuation kept inside the mark — a question
- * mark is part of a question in a way a full stop is not part of a sentence —
- * and its words are joined, the space between them inside the colour, so the
- * band runs unbroken across the phrase and the phrase never splits a line.
- *
- * A blank line in the text starts a new paragraph; the last of several is the
- * invitation, which the stylesheet sets semibold in capitals. The schedule
- * runs across all of them as one sentence.
- *
- * Without scroll-driven animations, or with motion reduced, the stylesheet
- * never hides a word and the section is an ordinary paragraph.
- */
+/** The note, written as you scroll. */
 function writeOn(text: string): Html {
   const paragraphs = text
     .trim()
@@ -239,21 +150,15 @@ function writeOn(text: string): Html {
   /** The cover timeline's whole travel, in screens of scroll. */
   const COVER = SCREENS + 1;
   /**
-   * The writing starts the moment the stage pins — never before, so the
-   * sentence only ever exists at the fixed centre of the view and no word
-   * appears while the paragraph is still travelling. How soon that moment
-   * comes while the film is still leaving is the stylesheet's business:
-   * --wc-write-early pulls the stage up under the film, and is now the knob
-   * for "the words come too soon / too late".
+   * The writing starts the moment the stage pins — never before, so the sentence
+   * only ever exists at the fixed centre of the view and no word appears while
+   * the paragraph is still travelling.
    */
   const START = 1;
   /** And ends at 85% of the pinned stretch; the last 15% is the held beat. */
   const END = 1 + 0.85 * (SCREENS - 1);
   const marked = (w: string) => w.length > 1 && /[A-Z]/.test(w) && w === w.toUpperCase();
-  // The question arrives a little slower than any other word — and then the
-  // writing stops dead. PAUSE is empty runway after the question's last
-  // word: fourteen words' worth of scroll in which nothing new appears, so
-  // the reader is genuinely held on the phrase before the rest resumes.
+  // The question arrives a little slower than any other word — and then the writing stops dead.
   const weights: number[] = words.map((w) => (marked(w) ? 3 : 1));
   const ask = words.findIndex(marked);
   if (ask > 0) weights[ask - 1] = 2;
@@ -290,9 +195,9 @@ function writeOn(text: string): Html {
               ws.map((w, k) => {
                 const last = k === ws.length - 1;
                 const joinedOn = marked(w) && !last && marked(ws[k + 1] ?? '');
-                // The last two words are held together, so a paragraph never
-                // ends on one word stranded at the left of a justified block;
-                // joined words already carry their space inside the colour.
+                // The last two words are held together, so a paragraph never ends on one word
+                // stranded at the left of a justified block; joined words already carry their
+                // space inside the colour.
                 const gap = last || joinedOn ? '' : k === ws.length - 2 ? raw('&nbsp;') : ' ';
                 return html`${word(w, last)}${gap}`;
               }),
@@ -305,11 +210,8 @@ function writeOn(text: string): Html {
 }
 
 function namesOfEdition(edition: Edition): Html {
-  // Everyone the edition names, answered or not — the roster, as each
-  // edition's own page sets it — so the opening view shows the same people.
-  // The inner wrapper is the thing that fades in once the note stands
-  // written: the group itself belongs to the farewell, and an animation's
-  // fill would hold its opacity against the farewell's hand.
+  // Everyone the edition names, answered or not — the roster, as each edition's own page sets it —
+  // so the opening view shows the same people.
   return html`<section class="wc-group">
     <div class="wc-rise">
       <!-- The numeral is a doorway to its edition, dressed as a name: the
@@ -333,14 +235,8 @@ const colourLine = (p: Participant): string => [p.code, p.colourName].filter(Boo
 
 /**
  * One participant's answer, as the sheet sets it: the name large, what they do
- * ranged right beside it, the colour their answer was given underneath that,
- * and the answer itself below.
- *
- * The colour reference is set in the colour it names — "AC 002 RED BROWN" in a
- * red brown — which is the one place on the site where the swatch is the type
- * rather than behind it. Where the source gives no answer, and for fourteen of
- * edition I's twenty-eight it gives none, the entry is the name and the colour
- * and nothing else. That is what the page has to say.
+ * ranged right beside it, the colour their answer was given underneath that, and
+ * the answer itself below.
  */
 function answer(p: Participant, index: number): Html {
   const swatch = swatchFor(p);
@@ -362,18 +258,7 @@ function answer(p: Participant, index: number): Html {
   </article>`;
 }
 
-/**
- * One edition: its numeral, its own names, and its answers.
- *
- * The names run across the top exactly as they do on the opening view, only
- * narrowed to this edition — the same object, filtered, so moving between the
- * two reads as the list closing in rather than as a different page.
- *
- * The answers flow down three columns independently rather than sitting in a
- * row-aligned grid, which is how the sheet lays them out: entries in adjacent
- * columns begin at unrelated heights there, which only happens when each
- * column is filled in turn.
- */
+/** One edition: its numeral, its own names, and its answers. */
 export function whatsColorEdition(edition: Edition): Html {
   const table = SHEETS[edition.numeral];
   return html`<div class="wc wc-edition wc-edition-${edition.numeral.toLowerCase()}${table ? ' wc-sheet-page' : ''}">
@@ -401,10 +286,7 @@ export function whatsColorEdition(edition: Edition): Html {
 
 /**
  * The edition's colour chart, at the very foot of its page: a bar of each
- * person's colour, standing on one line, the name upright above it. A bar
- * leads to that person's answer the way their name in the roster does —
- * travelling down to it and bringing it forward — and someone who never
- * answered has a bar that is only a bar.
+ * person's colour, standing on one line, the name upright above it.
  */
 function chart(edition: Edition): Html {
   const bars = CHARTS[edition.numeral];
@@ -427,32 +309,6 @@ function chart(edition: Edition): Html {
 /**
  * The opening film: the documentation of edition I, full screen, with the bar
  * sitting across the middle of it.
- *
- * Muted, looping and `playsinline`, which is what every browser requires before
- * it will start a video by itself. The poster is the film's own first frame, so
- * the still that shows while it loads is the one the film opens on and there is
- * no jump when it starts.
- *
- * `preload="metadata"` rather than `auto`: the file streams as it plays, so the
- * page does not wait on three minutes of video to become usable. With scripting
- * or autoplay refused, the poster stands in its place and the page below is
- * unaffected — nothing here is load-bearing.
- *
- * The poster's address is printed as `data-poster`, not `poster`: a phone does
- * not show the film, and a `poster` is fetched all the same. The line of
- * script after the video makes it the poster where the window is wide enough
- * for the film, there and then, so the still is in place before anything is
- * painted; client/film.ts does the same for a window that is widened later.
- * It is not left to that module alone because the section's background, which
- * is the same picture and is the still with scripting off, is cut to the
- * section, and the video is taller than the section (the parallax's spare):
- * the still would change size when the module arrived.
- *
- * With scripting off there is no poster, and Chromium then draws the video
- * black under the controls it puts on any video when scripts are off, which
- * hid that background until the first frame came. The controls are taken off
- * there, so the background is the still; nothing is lost, since the film
- * starts, mutes and loops by itself.
  */
 export function whatsColorFilm(): Html {
   const poster = withBase('/video/whats-color-poster.jpg');
@@ -502,26 +358,13 @@ function editionList(edition: Edition): Html {
         </p>`}`;
 }
 
-/**
- * The first edition's sheet.
- *
- * A composition rather than a list: a reel of photographs, then three
- * columns, with each entry placed in one of them by the designer and
- * Claudia's own paragraphs set across the full width between them. The
- * placement is in `whats-color-sheet.ts`, because none of it follows from the
- * content.
- *
- * Entries are looked up by name. One that does not match simply does not
- * appear, which is the failure that gets noticed — a page short of a person is
- * visible in a way that a silently mis-placed one is not.
- */
+/** The first edition's sheet. */
 function sheet(edition: Edition, table: readonly SheetSlot[]): Html {
   const byName = new Map(edition.participants.map((p) => [p.name, p]));
   /*
-   * A band's lead is written once, on its first slot, and carried to the rest
-   * of its row here: grid items sit at the top of their row, so a band only
-   * moves as one if every slot in it wears the same margin. Anything spanning
-   * the full width ends the band.
+   * A band's lead is written once, on its first slot, and carried to the rest of
+   * its row here: grid items sit at the top of their row, so a band only moves
+   * as one if every slot in it wears the same margin.
    */
   let band: number | undefined;
   const air = (lead: number | undefined) =>
@@ -557,10 +400,8 @@ function sheet(edition: Edition, table: readonly SheetSlot[]): Html {
 }
 
 /**
- * An edition's reel: a row of its photographs under the roster, all one
- * height, each whole at the shape of its file. Each one is a real link to the
- * photograph, so without scripting a click still shows the picture; with it,
- * the script opens the same picture over the page instead.
+ * An edition's reel: a row of its photographs under the roster, all one height,
+ * each whole at the shape of its file.
  */
 function strip(plates: readonly Plate[], lead?: number): Html {
   return html`<div class="wc-strip" style="${lead === undefined ? '' : `--lead: ${String(lead)}`}">
@@ -591,9 +432,8 @@ function strip(plates: readonly Plate[], lead?: number): Html {
 
 /**
  * Where a clicked photograph opens: the picture large over the page, the page
- * blurred behind it, closed by Close (the sheets' own), a click anywhere or Escape. Empty and hidden
- * until the script fills it; without scripting it never shows and the links
- * above stand on their own.
+ * blurred behind it, closed by Close (the sheets' own), a click anywhere or
+ * Escape.
  */
 function bookView(): Html {
   return html`<div class="wc-book-view" data-book-view hidden>
@@ -606,12 +446,8 @@ function bookView(): Html {
 
 /**
  * The edition's own title, where its sheet carries one: the project and the
- * numeral set semibold, and whatever the source title says after that beside it in
- * the ordinary weight. Split rather than retyped, so the words stay the ones
- * WordPress holds.
- *
- * Hidden from the reading order because the page already opens with the same
- * heading; this is the designer's printed restatement of it.
+ * numeral set semibold, and whatever the source title says after that beside it
+ * in the ordinary weight.
  */
 function sheetTitle(edition: Edition, lead?: number): Html {
   const tail = edition.sourceTitle
@@ -650,12 +486,7 @@ function sheetEntry(p: Participant): Html {
   </article>`;
 }
 
-/**
- * The role as the sheet sets it: what they do, then the same in the other
- * language beneath it. The roster keeps the pair in one string separated by a
- * slash, which is how the source writes it; a role with no translation simply
- * has no second line.
- */
+/** The role as the sheet sets it: what they do, then the same in the other language beneath it. */
 function splitRole(role: string | undefined): [string, string] {
   if (!role) return ['', ''];
   const at = role.indexOf(' / ');

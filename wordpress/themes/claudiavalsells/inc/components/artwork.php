@@ -1,13 +1,5 @@
 <?php
-/**
- * A painting on its own page — the detail in src/pages/index.ts.
- *
- * The cut-out takes the plate; behind it, when the painting was cropped, is the
- * photograph it was cut from, and after that any further views. Each gets a
- * small picture under the plate. The caption follows the designer's sheet: the
- * title and the medium at the painting's top edge, the year and the size part
- * way down, the work's place in the archive at its bottom edge.
- */
+/** A painting on its own page — the detail in src/pages/index.ts. */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -24,9 +16,7 @@ function cv_plate_stage( array $work, string $under = '' ): string {
 	if ( ! $work['image'] ) {
 		return '';
 	}
-	// Only a cut-out leans, and only from CV_TILT_FROM on. Before that the
-	// cut-out is for the gallery alone: the page shows the photograph it was
-	// taken from, and lies flat.
+	// Only a cut-out leans, and only from CV_TILT_FROM on.
 	$plate = $work['plate'] && ( $work['year'] ?? 0 ) >= CV_TILT_FROM;
 	$cover = cv_image_data( $work['image'] );
 	$alt   = cv_describe( $work, $cover ? $cover['alt'] : '' );
@@ -70,15 +60,9 @@ function cv_plate_stage( array $work, string $under = '' ): string {
 }
 
 /**
- * The page: the plate with the work's place in the archive under it, the
- * caption — title and medium, then size and year — and the way through the
- * collection. The arrangement is the stylesheet's (01-grid.css).
- *
- * The ghost is for the phone alone, whose sheet shows the gallery faintly
- * behind the open work: the paintings that stand round this one there, drawn
- * again as a ground with nothing in it to read or to touch (05-artwork.css,
- * THE WORK ON A PHONE). They are lazy and out of the layout on a wide screen,
- * so nothing is fetched for them there.
+ * The page: the plate with the work's place in the archive under it, the caption
+ * — title and medium, then size and year — and the way through the
+ * collection.
  */
 function cv_artwork_detail( WP_Post $post ): string {
 	$work  = cv_work( $post );

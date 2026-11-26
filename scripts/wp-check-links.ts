@@ -1,36 +1,4 @@
-/**
- * Does every address the old site published still lead somewhere?
- *
- *   npm run wp:check-links                                    the pages, against http://localhost:8888
- *   npm run wp:check-links -- https://nova.claudiavalsells.com --images
- *   npm run wp:check-links -- --csv wordpress/redirects.csv   the list for the host
- *   npm run wp:check-links -- --snapshot                      take wordpress/old-urls.txt again
- *
- * wordpress/old-urls.txt is every address the old site (www.claudiavalsells.com,
- * the WordPress the new one replaces) published: what its sitemaps list, the
- * pages and pictures the dataset was extracted from, and the one-offs the
- * redirect rules name. It is a snapshot, so the check does not need the old
- * site, which is gone once the new one is live.
- *
- * Each address is asked of the site under test without following redirects,
- * and the redirects are then followed by hand, five at most, so the whole
- * chain is seen. An address passes when it ends on a 200 and, if one of the
- * redirect rules matches it, ends where that rule sends it, by a permanent
- * redirect; if no rule matches, it must answer 200 itself, with no redirect at
- * all. The rules are read out of redirects.php with a regular expression rather
- * than typed again here, so the check and the plugin cannot drift apart.
- *
- *   --images          the pictures as well, and the other files the old pages linked
- *   --concurrency N   requests at a time, 6 by default: this is run against shared hosting too
- *   --delay MS        a pause before each request, for a host that limits requests a minute
- *   --csv <file>      old path, final path and outcome (301, unchanged, FAIL) of every
- *                     address checked: the list for Toni at hubsfera
- *   --snapshot        read the old site's sitemaps again, one at a time, and rewrite
- *                     old-urls.txt; refused once the old address answers with the new site
- *
- * A site behind a server password, as the staging is, is given with it:
- * https://user:password@nova.claudiavalsells.com.
- */
+/** Does every address the old site published still lead somewhere? */
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import type { Dataset, ProjectImage } from '../src/content/types.ts';
@@ -64,8 +32,8 @@ const snapshot = args.includes('--snapshot');
 const csv = option('--csv');
 const concurrency = Number(option('--concurrency') ?? 6);
 if (!Number.isInteger(concurrency) || concurrency < 1) fail('--concurrency takes a whole number, 1 or more.');
-// A pause before each request, in milliseconds, for a host that limits how
-// many a visitor may make a minute: --concurrency 1 --delay 500 is two a second.
+// A pause before each request, in milliseconds, for a host that limits how many a visitor may make
+// a minute: --concurrency 1 --delay 500 is two a second.
 const delay = Number(option('--delay') ?? 0);
 if (!Number.isInteger(delay) || delay < 0) fail('--delay takes a whole number of milliseconds.');
 // An address as printed: never with the server password it may carry.
@@ -77,10 +45,7 @@ const site = sites[0] ?? (snapshot ? OLD_SITE : 'http://localhost:8888');
 const BASE_URL = URL.canParse(site) && /^https?:$/.test(new URL(site).protocol)
   ? new URL(site)
   : fail(`${shown(site)} is not a web address. A password with # / ? or @ in it has to be written percent-encoded.`);
-// The staging sits behind a password at the server door. Given in the address
-// (https://user:password@nova.claudiavalsells.com), it goes with every request
-// to that site, and nowhere else: nothing is followed off it, nor to another
-// scheme or port of it, where the password would travel unencrypted.
+// The staging sits behind a password at the server door.
 const AUTH = BASE_URL.username
   ? `Basic ${Buffer.from(`${decodeURIComponent(BASE_URL.username)}:${decodeURIComponent(BASE_URL.password)}`).toString('base64')}`
   : undefined;
@@ -94,16 +59,15 @@ const HEADERS: Record<string, string> = { 'user-agent': USER_AGENT, ...(AUTH ? {
 type Rule = { pattern: string; re: RegExp; target: string };
 
 /**
- * The redirect rules, read out of redirects.php with a regular expression
- * rather than typed again here, so the check and the plugin cannot drift
- * apart: each [ '#pattern#', '/target/$1/' ] pair of cvc_redirect_rules(), in
- * their order, since the first that matches is the one the plugin follows.
+ * The redirect rules, read out of redirects.php with a regular expression rather
+ * than typed again here, so the check and the plugin cannot drift apart: each [
+ * '#pattern#', '/target/$1/' ] pair of cvc_redirect_rules(), in their order,
+ * since the first that matches is the one the plugin follows.
  */
 function readRules(): Rule[] {
   const php = readFileSync(RULES, 'utf8');
   const body = /function cvc_redirect_rules\(\)[^{]*\{([\s\S]*?)\n\}/.exec(php)?.[1] ?? '';
-  // A PHP string in single quotes, where only \\ and \' are escapes. Comment
-  // lines go first, so a pair quoted in one is not taken for a rule.
+  // A PHP string in single quotes, where only \\ and \' are escapes.
   const quoted = String.raw`'((?:[^'\\]|\\.)*)'`;
   const pairs = body.replace(/^\s*(?:\/\/|\/\*|\*).*$/gm, '').matchAll(new RegExp(String.raw`\[\s*${quoted}\s*,\s*${quoted}\s*\]`, 'g'));
   const unquote = (s: string) => s.replace(/\\([\\'])/g, '$1');
@@ -170,8 +134,7 @@ function readList(): Entry[] {
 
 /**
  * An address on the old site as the path a browser sends for it, so that the
- * sitemaps' spelling and the dataset's meet; undefined for one elsewhere, or
- * for a picture the dataset took from a folder rather than from the site.
+ * sitemaps' spelling and the dataset's meet.
  */
 function oldPath(address: string): string | undefined {
   if (!/^(?:https?:)?\//.test(address) || !URL.canParse(address, OLD_SITE)) return undefined;
@@ -181,8 +144,8 @@ function oldPath(address: string): string | undefined {
 
 /**
  * What the dataset knows of the old site: each record's own address, its
- * pictures' uploads, and what its texts link there — a page, or a file such
- * as a video or a PDF.
+ * pictures' uploads, and what its texts link there — a page, or a file such as a
+ * video or a PDF.
  */
 function fromDataset(): { pages: Set<string>; files: Set<string>; extractedAt?: string } {
   const pages = new Set<string>();
@@ -223,8 +186,8 @@ function locs(xml: string, tag: 'loc' | 'image:loc'): string[] {
 /**
  * One of the old site's sitemaps, asked without following redirects: once the
  * new site answers at the old address, /sitemap_index.xml is sent on to
- * WordPress's own sitemap, and a snapshot taken then would list the new
- * site's addresses as the old ones.
+ * WordPress's own sitemap, and a snapshot taken then would list the new site's
+ * addresses as the old ones.
  */
 async function sitemap(address: string): Promise<string> {
   const res = await fetch(address, { redirect: 'manual', headers: { 'user-agent': USER_AGENT }, signal: AbortSignal.timeout(30_000) });
@@ -308,9 +271,9 @@ async function ask(url: URL): Promise<Response> {
       await pause(2000);
       continue;
     }
-    // Told to slow down — by the host or by Wordfence — it waits as long as it
-    // is asked to (up to a minute) and asks again, three times at most, rather
-    // than record every address after the limit as a failure.
+    // Told to slow down — by the host or by Wordfence — it waits as long as it is asked to (up to
+    // a minute) and asks again, three times at most, rather than record every address after the
+    // limit as a failure.
     if ((res.status === 429 || res.status === 503) && attempt <= 3) {
       const after = Number(res.headers.get('retry-after'));
       await pause(Math.min(60_000, Number.isFinite(after) && after > 0 ? after * 1000 : 5000 * attempt));
@@ -336,10 +299,9 @@ async function check(rules: Rule[], entry: Entry): Promise<Result> {
       if (res.status < 300 || res.status > 399 || !location) break;
       if (chain.length > MAX_HOPS) return result('FAIL', `still redirecting after ${MAX_HOPS} hops`);
       const next = new URL(location, url);
-      // Never followed off the site — nor to another scheme or port of it, where
-      // the server password would go out unencrypted: whatever answers there is
-      // not this check's to ask, and an https site sending a visitor to http is
-      // a fault in itself.
+      // Never followed off the site — nor to another scheme or port of it, where the server
+      // password would go out unencrypted: whatever answers there is not this check's to ask, and
+      // an https site sending a visitor to http is a fault in itself.
       if (next.origin !== BASE_URL.origin) return result('FAIL', `sent off the site, to ${shown(next.href)}`);
       url = next;
     }
@@ -379,8 +341,8 @@ async function pool<T, R>(items: readonly T[], limit: number, worker: (item: T) 
 }
 
 function report(results: Result[]): void {
-  // A picture the dataset does not name was never imported: expected on the
-  // local site; on the host it has to come across from the old uploads folder.
+  // A picture the dataset does not name was never imported: expected on the local site; on the
+  // host it has to come across from the old uploads folder.
   const imported = fromDataset().files;
   const notImported = (r: Result) => r.kind === 'images' && !imported.has(r.path);
   for (const kind of ['pages', 'images'] as const) {
@@ -396,9 +358,9 @@ function report(results: Result[]): void {
   }
   for (const r of results.filter((r) => r.outcome === 'FAIL')) {
     const hops = r.chain.map((h, i) => `${i ? '→ ' : ''}${local(h.url)} ${h.status}`).join(' ') || r.path;
-    // WordPress has no sitemap while it asks search engines to stay away, as the
-    // local site and the staging do until go-live; and a host, or Wordfence,
-    // may slow down a visitor asking this much this fast.
+    // WordPress has no sitemap while it asks search engines to stay away, as the local site and
+    // the staging do until go-live; and a host, or Wordfence, may slow down a visitor asking this
+    // much this fast.
     const status = r.chain.at(-1)?.status;
     const note = notImported(r)
       ? ' (not in the dataset, so not imported)'

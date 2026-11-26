@@ -1,14 +1,4 @@
-/**
- * Downloads every image referenced by the dataset and renders a responsive set.
- *
- * Output: dist/media/<id>-<width>.<avif|webp|jpg>, plus content/images.json mapping
- * image id -> variants. Both the download and each encode are skipped when the
- * output already exists, so re-runs are cheap.
- *
- * sharp is the one non-trivial dependency in this project. It earns its place:
- * the source site ships 14.5 MB of unoptimised JPEG on a single page, and AVIF at
- * three widths is the single largest performance win available here.
- */
+/** Downloads every image referenced by the dataset and renders a responsive set. */
 import { mkdir, readFile, writeFile, stat } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
@@ -40,8 +30,7 @@ interface ImageManifestEntry {
 }
 
 async function download(image: ProjectImage): Promise<string | null> {
-  // A painting that was never on the site has nothing to download: its file is
-  // the source.
+  // A painting that was never on the site has nothing to download: its file is the source.
   const local = localFile(image.source);
   if (local) {
     if (existsSync(local)) return local;
@@ -78,12 +67,7 @@ async function render(image: ProjectImage, file: string, key: string): Promise<I
   // Never upscale: drop any target wider than the source, but always keep one size.
   const targets: number[] = WIDTHS.filter((w) => w <= srcWidth);
   if (targets.length === 0) targets.push(WIDTHS[0]);
-  /*
-   * And never throw pixels away either. A source between two steps — the
-   * 683 px cut-outs were the case — used to be served at the step below it,
-   * 400, which is what a detail page on a 2× screen then stretched to twice
-   * its size. Its own width is offered as the largest size instead.
-   */
+  /* And never throw pixels away either. */
   if (srcWidth < WIDTHS[WIDTHS.length - 1]! && srcWidth > targets[targets.length - 1]!) targets.push(srcWidth);
 
   for (const width of targets) {
@@ -135,29 +119,18 @@ async function main() {
       while (cursor < images.length) {
         const image = images[cursor++]!;
         const original = await download(image);
-        // A crop that passed review replaces the photograph everywhere the image
-        // is shown. Its variants get their own key, so nothing rendered from the
-        // uncropped file is ever reused by mistake.
+        // A crop that passed review replaces the photograph everywhere the image is shown.
         /*
          * A cut-out has no background and must keep it that way, so it is held
-         * as PNG; AVIF and WebP carry the transparency through and only the
-         * JPEG fallback has to be given a ground. The crops from the earlier
-         * pass are flat JPEGs and still work, so both are looked for.
+         * as PNG; AVIF and WebP carry the transparency through and only the JPEG
+         * fallback has to be given a ground.
          */
         const cutout = path.join(CROPS, `${image.id}.png`);
         const flat = path.join(CROPS, `${image.id}.jpg`);
         const crop = existsSync(cutout) ? cutout : flat;
         const useCrop = cropped.has(image.id) && existsSync(crop);
         const file = useCrop ? crop : original;
-        /*
-         * A crop's variants are named after what is in it, not just which image
-         * it belongs to. They used to be keyed `<id>c`, which never changed, so
-         * recropping a painting rewrote the file behind a URL that every browser
-         * and every cache already held — the site served the old picture and
-         * looked as though nothing had been done. Eight characters of the crop's
-         * own hash means a new crop is a new address and a stale one cannot be
-         * served.
-         */
+        /* A crop's variants are named after what is in it, not just which image it belongs to. */
         const key = useCrop
           ? `${image.id}c${createHash('sha1').update(await readFile(crop)).digest('hex').slice(0, 8)}`
           : image.id;
@@ -168,9 +141,7 @@ async function main() {
               /*
                * A cropped painting keeps its photograph too, rendered under the
                * plain id exactly as it was before the crop existed — so for most
-               * this costs nothing, the files being already on disk. The
-               * cut-out is the work; the photograph is the record of it, and the
-               * only place the frame, the wall and the light survive.
+               * this costs nothing, the files being already on disk.
                */
               if (useCrop && original) {
                 const photo = await render(image, original, image.id);

@@ -1,16 +1,5 @@
 <?php
-/**
- * The Colour Chart and its order form — src/components/colour-chart.ts.
- *
- * A page of type, after the designer's sheet: what the chart is, in her own
- * words; the way to order one; what it costs; her thanks; and the site's own
- * line at the foot. On a desktop the page holds still on one screen and the
- * scroll writes the statement, a word to a slice of the run behind it
- * (`.chart-runway`), which is why every word and each of the four things under
- * them carries its own `animation-range`, and its slice as bare fractions
- * (`--w0`, `--w1`) that a phone held upright multiplies by its own run
- * (06-colour-chart.css), as colour-chart.ts writes them.
- */
+/** The Colour Chart and its order form — src/components/colour-chart.ts. */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -27,11 +16,7 @@ function cv_chart_pc( float $share ): string {
 	return sprintf( '%.2F', $share * 100 );
 }
 
-/**
- * Where each of the four comes in, as a slice of the run. The slices overlap
- * by half, and the last finishes on the last pixel — `arriving` in
- * colour-chart.ts, the same sums in the same order.
- */
+/** Where each of the four comes in, as a slice of the run. */
 function cv_chart_arriving( int $i ): string {
 	$step = ( 1 - CV_CHART_WRITTEN_BY ) / ( CV_CHART_ARRIVING + 1 );
 	$from = CV_CHART_WRITTEN_BY + $i * $step;
@@ -39,27 +24,13 @@ function cv_chart_arriving( int $i ): string {
 	return 'animation-range: ' . cv_chart_pc( $from ) . '% ' . cv_chart_pc( $to ) . '%';
 }
 
-/**
- * The words of one line of the statement. A line is text: whatever the editor
- * wrapped round a word (bold, a link) comes off, since a word is written whole
- * and a tag cannot be split across the spans that write it.
- */
+/** The words of one line of the statement. */
 function cv_chart_words( string $markup ): array {
 	$text = html_entity_decode( wp_strip_all_tags( $markup ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
 	return preg_split( '/[\s\p{Z}]+/u', $text, -1, PREG_SPLIT_NO_EMPTY ) ?: [];
 }
 
-/**
- * The statement, written by the scroll — `written` in colour-chart.ts.
- *
- * `$paragraphs` is cv_chart()'s statement: the inner markup of each paragraph,
- * which may carry a line break. The break is split out and put back between
- * the halves rather than run through the word splitter. The words are shared
- * out over one more slice than there are words and each takes the one after
- * the first, so the page at rest is blank. `reveal` is where the page travels
- * to on its own (client/chart.ts): the middle of the slice after the first
- * paragraph's last word.
- */
+/** The statement, written by the scroll — `written` in colour-chart.ts. */
 function cv_chart_written( array $paragraphs ): array {
 	$lines = [];
 	foreach ( $paragraphs as $paragraph ) {
@@ -91,25 +62,19 @@ function cv_chart_written( array $paragraphs ): array {
 	return [ 'block' => $block, 'reveal' => ( ( $opening + 0.5 ) / ( $total + 1 ) ) * CV_CHART_WRITTEN_BY ];
 }
 
-/**
- * The page — `colourChart` in colour-chart.ts. `$chart` is cv_chart(): the
- * statement, the price and the photographs, all read from the Color Chart page.
- */
+/** The page — `colourChart` in colour-chart.ts. */
 function cv_colour_chart( array $chart ): string {
 	$written = cv_chart_written( $chart['statement'] );
 	$about   = cv_about();
 
 	$out = '<div class="chart" data-chart-reveal="' . sprintf( '%.4F', $written['reveal'] ) . '" data-chart-written="' . CV_CHART_WRITTEN_BY . '">'
 		. '<div class="chart-page">'
-		// The bar names the page; the heading is here for the document's
-		// structure and for anything reading the page rather than looking at it.
+		// The bar names the page; the heading is here for the document's structure and for anything
+		// reading the page rather than looking at it.
 		. '<h1 class="sr-only">Color Chart</h1>'
 		. $written['block']
-		// An anchor to a real section further down the document: with scripting
-		// the click opens the form over the page; without it the same href walks
-		// to it. Two arrows, both drawn rather than typed: the desktop sheet's,
-		// which turns on hover, and the phone sheet's, which is not the same one
-		// made smaller. The stylesheet shows one or the other.
+		// An anchor to a real section further down the document: with scripting the click opens the
+		// form over the page; without it the same href walks to it.
 		. '<a class="chart-order chart-in" style="' . cv_chart_arriving( 0 ) . '" href="#inquiries" data-inquiries-open> Order yours '
 		. '<svg class="chart-arrow" viewBox="0 0 12 12" aria-hidden="true" focusable="false"><path d="M2.4 9.6 9.4 2.6M4.3 2.6h5.1v5.1" fill="none" stroke="currentColor" stroke-width="1.2" /></svg> '
 		. '<svg class="chart-arrow-phone" viewBox="0 0 22.5 22" aria-hidden="true" focusable="false"><path d="M1.5 1.5H21V22M1.2 20.97 20.6 1.57" fill="none" stroke="currentColor" stroke-width="3" /></svg> '
@@ -117,20 +82,19 @@ function cv_colour_chart( array $chart ): string {
 	if ( '' !== $chart['price'] ) {
 		$out .= '<p class="chart-price chart-in" style="' . cv_chart_arriving( 1 ) . '">Cost: <b>' . esc_html( $chart['price'] ) . '</b></p>';
 	}
-	// Her thanks, and a way of seeing who they are to: the photographs people
-	// have sent her of the chart in use. An anchor to a real panel, as About and
-	// every exhibition are; plain words while the page holds no photographs.
+	// Her thanks, and a way of seeing who they are to: the photographs people have sent her of
+	// the chart in use.
 	$out .= '<p class="chart-thanks chart-in" style="' . cv_chart_arriving( 2 ) . '">'
 		. ( $chart['photographs'] ? '<a href="#chart-photographs" data-panel-open="chart-photographs">Thanks to everyone!</a>' : 'Thanks to everyone!' )
 		. '</p>'
-		// The site's own line, the one at the foot of the About sheet, read from
-		// where that one is; its sign written as the static page writes it.
+		// The site's own line, the one at the foot of the About sheet, read from where that one is;
+		// its sign written as the static page writes it.
 		. '<footer class="chart-footer chart-in" style="' . cv_chart_arriving( 3 ) . '"><b>' . esc_html( $about['card']['name'] ) . '</b> '
 		. str_replace( '©', '&copy;', esc_html( $about['copyright'] ) ) . '</footer>'
 		. '</div>'
-		// The run the writing is divided over: a strip of nothing behind the
-		// page, there to be scrolled through, and in the markup so the page can
-		// be read by the scroll on its first paint.
+		// The run the writing is divided over: a strip of nothing behind the page, there to be
+		// scrolled through, and in the markup so the page can be read by the scroll on its first
+		// paint.
 		. '<div class="chart-runway" aria-hidden="true"></div>'
 		. '</div>';
 	return $out;
@@ -138,12 +102,7 @@ function cv_colour_chart( array $chart ): string {
 
 /**
  * The photographs of the chart in use, as a panel over the page —
- * `chartPhotographs` in colour-chart.ts. The same sheet an exhibition that is
- * photographs and nothing else gets (plates.php), under her thanks for a
- * title, with no place and no dates; raised and put away by client/panels.ts
- * like every other detail. It has no address of its own, so no
- * `data-panel-url`: open, the bar shows `#chart-photographs`, as on the static
- * site. Nothing at all when the page holds no photographs.
+ * `chartPhotographs` in colour-chart.ts.
  */
 function cv_chart_photographs( array $chart ): string {
 	if ( ! $chart['photographs'] ) {
@@ -157,8 +116,8 @@ function cv_chart_photographs( array $chart ): string {
 		'year'   => 0,
 		'images' => $chart['photographs'],
 	] );
-	// A show always has a year under its name; these have nothing to say there,
-	// and the line is left out rather than left empty.
+	// A show always has a year under its name; these have nothing to say there, and the line is
+	// left out rather than left empty.
 	$plates = str_replace( '<p class="sheet-when"></p>', '', $plates );
 	return '<div class="panels"><article class="panel" id="chart-photographs" data-panel>'
 		. '<a class="panel-close" href="#" data-panel-close>Close</a>'
@@ -166,12 +125,7 @@ function cv_chart_photographs( array $chart ): string {
 		. '</article></div>';
 }
 
-/**
- * The order form, over the page. Every field is in the markup and the form has
- * a real action and method, so it is a working form before a line of script
- * runs. The honeypot and the `started` stamp are the handler's guards, prepared
- * here; the handler (the content plugin's order desk) decides.
- */
+/** The order form, over the page. */
 function cv_inquiries(): string {
 	$field = fn( string $id, string $label, string $input ) =>
 		'<div class="inq-field inq-' . $id . '"><label class="inq-label" for="inq-' . $id . '">' . esc_html( $label ) . '</label>' . $input . '</div>';
@@ -196,11 +150,9 @@ function cv_inquiries(): string {
 }
 
 /**
- * One line under the form, linking the privacy notice: the form takes a name
- * and an email address, and data-protection law asks for a notice wherever
- * that happens. The page is WordPress's own (Settings → Privacy); the line
- * appears once that page is published, and not before, so the form never
- * links to a notice nobody has written.
+ * One line under the form, linking the privacy notice: the form takes a name and
+ * an email address, and data-protection law asks for a notice wherever that
+ * happens.
  */
 function cv_inquiries_privacy(): string {
 	$url = get_privacy_policy_url();
