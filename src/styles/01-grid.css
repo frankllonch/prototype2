@@ -498,6 +498,10 @@ html.js .hero[data-hero]+.grid[data-stack] {
   color: var(--exh-hover);
 }
 
+/* Reached from About's record (`client/locate.ts`): the name answers once, in a colour from the list. */
+@keyframes row-pulse { 40% { color: var(--row-pulse, var(--ink)); } }
+.xrow.is-located :is(.exh-title, .xrow-title) { animation: row-pulse 1s ease-in-out both; }
+
 /* The preview is a pointer affordance and stays one. */
 
 /* ------------------------------------------------------- exhibitions list */

@@ -29,6 +29,7 @@ import { initGlide } from './glide.ts';
 import { initWrite } from './write.ts';
 import { initMenu } from './menu.ts';
 import { initReveal } from './reveal.ts';
+import { initLocate } from './locate.ts';
 
 const root = document.documentElement;
 // The head removes this class if the scripts are late (components/layout.ts); put back here.
@@ -67,6 +68,7 @@ const modules: readonly (() => void)[] = [
   initGlide,
   initWrite,
   initReveal,
+  initLocate,
 ];
 for (const init of modules) {
   try { init(); } catch (error) { console.error(error); }
