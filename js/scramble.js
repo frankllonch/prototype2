@@ -82,11 +82,39 @@ export function initScramble() {
         measure(cells);
         wire(root, cells);
     }
+    let settling = 0;
+    window.addEventListener('resize', () => {
+        clearTimeout(settling);
+        settling = window.setTimeout(remeasure, 150);
+    });
 }
-/** Measured once, while the word is still itself, and held from then on. */
+/*
+ * Measured while the word is still itself, and held as a share of the
+ * letter's own size rather than in pixels. The bar's type is sized off the
+ * window (--type-menu, 00-base.css), so a box held in pixels stayed the size
+ * of the window the page loaded in: going from a small window to full screen
+ * left every letter cut down to a sliver of itself, until the page was loaded
+ * again. In em the box grows and shrinks with its letter.
+ */
 function measure(cells) {
-    const widths = cells.map((cell) => cell.getBoundingClientRect().width.toFixed(2));
-    cells.forEach((cell, i) => cell.style.setProperty('--w', `${widths[i]}px`));
+    const widths = cells.map((cell) => {
+        const size = parseFloat(getComputedStyle(cell).fontSize) || 1;
+        return (cell.getBoundingClientRect().width / size).toFixed(4);
+    });
+    cells.forEach((cell, i) => cell.style.setProperty('--w', `${widths[i]}em`));
+}
+/*
+ * And measured again once a resize has settled, because type does not scale
+ * quite in step with itself at every size (hinting, rounding) and a box a
+ * hair too narrow clips. Each box is let go to its letter's own width first;
+ * one caught mid-churn is left as it is and taken next time.
+ */
+function remeasure() {
+    const still = [...document.querySelectorAll('[data-roll] .scram')]
+        .filter((cell) => cell.textContent === cell.dataset.ch);
+    for (const cell of still)
+        cell.style.removeProperty('--w');
+    measure(still);
 }
 /*
  * On the opening page the current name is drawn twice (client/current.ts),
@@ -101,13 +129,76 @@ function boxes(root, count) {
         sets.push(all.slice(i, i + count));
     return sets;
 }
+/*
+ * Writes a box's character into the text it already holds rather than handing
+ * it new text. Setting textContent throws the old text away and puts a fresh
+ * one in its place, and Safari keeps the very piece of text the button went
+ * down on to decide whether a click happened: swapped for another before the
+ * button came up, ten times a second while the churn ran, and the click was
+ * simply dropped (Frank, 2026-11-21). Chrome looks at the element and never
+ * minded. The same text, rewritten, is the same piece of text.
+ */
+function write(cell, ch) {
+    const text = cell.firstChild;
+    if (text && text.nodeType === Node.TEXT_NODE && !text.nextSibling) {
+        if (text.data !== ch)
+            text.data = ch;
+    }
+    else {
+        cell.textContent = ch;
+    }
+}
+/*
+ * Where the pointer last was, for every word at once, and whether it is still
+ * in the window at all. Safari keeps a word :hover after the pointer has gone
+ * — out of the window over the top, where the bar is, or with the bar carried
+ * away from under a pointer that has stood still — so that alone kept the
+ * word churning with nothing on it. Chrome clears it in both cases.
+ */
+const at = { x: -1, y: -1, inside: false };
+let tracking = false;
+function track() {
+    if (tracking)
+        return;
+    tracking = true;
+    document.addEventListener('pointermove', (e) => { at.x = e.clientX; at.y = e.clientY; at.inside = true; }, { passive: true, capture: true });
+    document.addEventListener('pointerover', (e) => { at.x = e.clientX; at.y = e.clientY; at.inside = true; }, { passive: true, capture: true });
+    document.addEventListener('mouseout', (e) => { if (!e.relatedTarget)
+        at.inside = false; }, { passive: true });
+    document.documentElement.addEventListener('mouseleave', () => { at.inside = false; });
+    window.addEventListener('blur', () => { at.inside = false; });
+}
+/** Whether the last known pointer is on the box, give or take a pixel. */
+function over(root) {
+    if (!at.inside)
+        return false;
+    const box = root.getBoundingClientRect();
+    return at.x >= box.left - 2 && at.x <= box.right + 2 && at.y >= box.top - 2 && at.y <= box.bottom + 2;
+}
 function wire(root, cells) {
+    track();
     let frame = 0;
     let pointer = 0;
     let centres = [];
     // The hover tuner (?tune, client/hover-tuner.ts) writes the bar's words
     // itself while it is on; this stands aside for it.
     const tuning = () => 'tune' in document.documentElement.dataset;
+    /*
+     * Whether anything still asks for the churn: the pointer on the word, or a
+     * keyboard's focus on it. Asked on every piece, not trusted to the leave and
+     * blur events alone, because those go missing — About opening over the bar
+     * takes the bar out from under the pointer without a leave, and closing it
+     * hands focus back to the link it came from (env.ts, returnFocus), which is
+     * a focus nobody's keyboard made. Whatever the events miss, the word puts
+     * itself right on the next piece.
+     */
+    const keyed = () => root === document.activeElement && root.matches(':focus-visible') && !('quietFocus' in root.dataset);
+    const wanted = () => (root.matches(':hover') && over(root)) || keyed();
+    /*
+     * Still while the button is held: what is pressed is the word, and a word
+     * that keeps changing under a press is the one place a click can go astray.
+     */
+    let pressed = false;
     const settle = () => {
         if (frame)
             cancelAnimationFrame(frame);
@@ -116,7 +207,7 @@ function wire(root, cells) {
             return;
         for (const set of boxes(root, cells.length))
             for (const cell of set)
-                cell.textContent = cell.dataset.ch ?? '';
+                write(cell, cell.dataset.ch ?? '');
     };
     /*
      * Where each letter is, taken when the pointer arrives rather than kept from
@@ -139,6 +230,14 @@ function wire(root, cells) {
             return;
         let piece = -1;
         const tick = () => {
+            if (!wanted()) {
+                settle();
+                return;
+            }
+            if (pressed) {
+                frame = requestAnimationFrame(tick);
+                return;
+            }
             const now = Math.floor(performance.now() / STEP);
             if (now !== piece) {
                 piece = now;
@@ -155,7 +254,7 @@ function wire(root, cells) {
                     for (const set of sets) {
                         const box = set[i];
                         if (box)
-                            box.textContent = shown;
+                            write(box, shown);
                     }
                 });
             }
@@ -167,17 +266,45 @@ function wire(root, cells) {
     const move = (event) => { pointer = event.clientX; };
     root.addEventListener('pointerenter', enter);
     root.addEventListener('pointermove', move);
-    root.addEventListener('pointerleave', settle);
+    root.addEventListener('pointerleave', () => { pressed = false; settle(); });
+    root.addEventListener('pointerdown', () => {
+        pressed = true;
+        // The word as itself for the press, in every copy of it.
+        if (!tuning())
+            for (const set of boxes(root, cells.length))
+                for (const cell of set)
+                    write(cell, cell.dataset.ch ?? '');
+    });
+    const release = () => {
+        if (!pressed)
+            return;
+        pressed = false;
+        if (wanted()) {
+            locate();
+            run();
+        }
+    };
+    document.addEventListener('pointerup', release);
+    document.addEventListener('pointercancel', release);
     /*
      * A keyboard reaches these too and has no pointer to follow, so focus churns
      * the middle of the word and leaves the ends alone, which is the same effect
      * standing still.
      */
     root.addEventListener('focus', () => {
+        // Focus put back by a script, or left by a click, is not a keyboard's.
+        if (!keyed())
+            return;
         const box = root.getBoundingClientRect();
         pointer = box.left + box.width / 2;
         locate();
         run();
     });
     root.addEventListener('blur', settle);
+    // Leaving the window or the page, or coming back to one kept in the back
+    // and forward cache, leaves every word as itself.
+    window.addEventListener('blur', settle);
+    window.addEventListener('pagehide', settle);
+    window.addEventListener('pageshow', settle);
+    document.addEventListener('visibilitychange', settle);
 }

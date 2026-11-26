@@ -1,4 +1,7 @@
-import { chartWrites, phone, scrollWrites } from './env.js';
+import { scrollWrites } from './env.js';
+import { glide, topOf } from './glide.js';
+import { SCROLL_SPAN } from './stack.js';
+import { WRITE_MS, writtenPoint } from './write.js';
 /**
  * The scroll hint goes once it has been taken.
  *
@@ -24,32 +27,15 @@ import { chartWrites, phone, scrollWrites } from './env.js';
  * shows the cue at all — the first `update` runs before any scrolling of its
  * own.
  */
+/** The tap down the Colour Chart's run: long enough to watch it type. */
+const CHART_TYPE_MS = 2600;
 export function initScrollCue() {
-    if (!document.querySelector('[data-scroll-cue]'))
+    const cue = document.querySelector('[data-scroll-cue]');
+    if (!cue)
         return;
     const root = document.documentElement;
     let gone = false;
     let threshold = () => window.innerHeight * 0.1;
-    /*
-     * The Colour Chart's whole page is written by the document's own scroll, so
-     * the question the cue asks is answered only when the sentence stands: the
-     * share of the scroll the words are spread over, which the page states.
-     * It is also the moment before the line at the foot arrives, so the cue is
-     * gone by the time anything else wants the bottom of the screen.
-     */
-    // On a phone held upright the share is of the run alone, not of the whole
-    // document, which there carries the page's foot too (Frank, 2026-11-15), so
-    // the cue is gone before Order yours comes up under it.
-    const chart = document.querySelector('[data-chart-written]');
-    if (chart) {
-        const written = Number.parseFloat(chart.dataset.chartWritten ?? '');
-        const runway = chart.querySelector('.chart-runway');
-        if (Number.isFinite(written) && written > 0) {
-            threshold = () => Math.max(phone.matches && chartWrites() && runway
-                ? runway.offsetHeight // the runway is the words' share of the run already
-                : (document.documentElement.scrollHeight - window.innerHeight) * written, window.innerHeight * 0.1);
-        }
-    }
     // Asked at each scroll rather than once: a phone turned upright mid-page
     // starts writing, and one turned on its side stops.
     const write = document.querySelector('.wc-write');
@@ -66,6 +52,31 @@ export function initScrollCue() {
         window.addEventListener('resize', measure);
         threshold = () => (scrollWrites() ? Math.max(end, window.innerHeight * 0.1) : window.innerHeight * 0.1);
     }
+    /*
+     * The Colour Chart's opening is typed by the scroll (client/chart.ts), and
+     * a tap on the cue carries the page down that run slowly enough to watch
+     * the words come. The cue itself stays all the way to the foot of the page
+     * (Frank, 2026-11-22), not only until the statement is typed: past the run,
+     * each tap goes a screen further down. Asked at each scroll, because the
+     * runway and the fade-ins below can change the page's length.
+     */
+    const chart = document.querySelector('[data-chart]');
+    const chartEnd = () => Number.parseFloat(chart?.dataset.chartEnd ?? '');
+    if (chart) {
+        threshold = () => Math.max(document.documentElement.scrollHeight - window.innerHeight - 2, window.innerHeight * 0.1);
+    }
+    /*
+     * The gallery's opening is one long "keep going" too (Frank, 2026-11-20):
+     * the cue asks until the scroll has laid every painting into the grid, and
+     * asks again whenever the reader comes back up and they gather (below).
+     * Asked at each scroll, because client/stack.ts takes the hero away on the
+     * arrivals that have no opening.
+     */
+    if (document.querySelector('[data-stack]')) {
+        threshold = () => (document.querySelector('[data-hero]')
+            ? window.innerHeight * SCROLL_SPAN - 2
+            : window.innerHeight * 0.1);
+    }
     const update = () => {
         if (gone)
             return;
@@ -78,14 +89,51 @@ export function initScrollCue() {
     update();
     window.addEventListener('scroll', update, { passive: true });
     /*
+     * Clicked, the cue goes where it points (Frank, 2026-11-18): on to the next
+     * part of the page, by the site's own glide.
+     *
+     *   The start page: the sentence written first, then the names.
+     *   The gallery: the pile spread into the grid.
+     *   The Colour Chart: the statement typed to its end.
+     *
+     * Anywhere else, or past every stop, a screen further down.
+     */
+    cue.addEventListener('click', () => {
+        const y = window.scrollY;
+        const h = window.innerHeight;
+        const stops = [];
+        if (write) {
+            const written = writtenPoint();
+            if (written !== null)
+                stops.push([written, WRITE_MS]);
+            const names = document.getElementById('whats-color');
+            if (names)
+                stops.push([topOf(names)]);
+        }
+        else if (chart && Number.isFinite(chartEnd())) {
+            stops.push([chartEnd(), CHART_TYPE_MS]);
+        }
+        else if (document.querySelector('[data-hero]')) {
+            stops.push([h * SCROLL_SPAN]);
+        }
+        const next = stops.find(([at]) => at > y + h * 0.05);
+        if (next)
+            glide(next[0], next[1]);
+        else
+            glide(y + h * 0.9);
+    });
+    /*
      * Back on a blank stage — the menu's What's Color? takes the page back to the
      * top of the note to type it again (client/menu.ts) — the cue asks again.
      */
-    document.addEventListener('cueagain', () => {
+    const again = () => {
         if (!gone)
             return;
         gone = false;
         root.classList.remove('is-scrolled');
         window.addEventListener('scroll', update, { passive: true });
-    });
+    };
+    document.addEventListener('cueagain', again);
+    // The gallery's paintings gathering again (client/stack.ts).
+    document.addEventListener('stackrestart', again);
 }

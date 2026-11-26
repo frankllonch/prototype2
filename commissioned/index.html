@@ -11,6 +11,7 @@
 <link rel="modulepreload" href="/prototype2/js/text-roll.js" />
 <link rel="modulepreload" href="/prototype2/js/transitions.js" />
 <link rel="modulepreload" href="/prototype2/js/controls.js" />
+<link rel="modulepreload" href="/prototype2/js/pile.js" />
 <link rel="modulepreload" href="/prototype2/js/stack.js" />
 <link rel="modulepreload" href="/prototype2/js/years.js" />
 <link rel="modulepreload" href="/prototype2/js/hover-list.js" />
@@ -18,6 +19,8 @@
 <link rel="modulepreload" href="/prototype2/js/figures.js" />
 <link rel="modulepreload" href="/prototype2/js/lightbox.js" />
 <link rel="modulepreload" href="/prototype2/js/cursor.js" />
+<link rel="modulepreload" href="/prototype2/js/ball.js" />
+<link rel="modulepreload" href="/prototype2/js/ball-tuner.js" />
 <link rel="modulepreload" href="/prototype2/js/film.js" />
 <link rel="modulepreload" href="/prototype2/js/tilt.js" />
 <link rel="modulepreload" href="/prototype2/js/paging.js" />
@@ -32,15 +35,11 @@
 <link rel="modulepreload" href="/prototype2/js/current.js" />
 <link rel="modulepreload" href="/prototype2/js/scrollbar.js" />
 <link rel="modulepreload" href="/prototype2/js/scramble.js" />
-<link rel="modulepreload" href="/prototype2/js/hover-tuner.js" />
+<link rel="modulepreload" href="/prototype2/js/pile-tuner.js" />
 <link rel="modulepreload" href="/prototype2/js/rise.js" />
 <link rel="modulepreload" href="/prototype2/js/menu.js" />
 <link rel="modulepreload" href="/prototype2/js/index.js" />
 <script>document.documentElement.classList.add('js');
-// The hover tuner's lettering, laid over the stylesheet before the first paint
-// so that moving between pages with it on does not flash the defaults. Only in
-// a browser that has asked for the tuner (?tune); see client/hover-tuner.ts.
-try { if (localStorage.getItem('cv-tune') === '1') { document.documentElement.setAttribute('data-tune', ''); var tc = localStorage.getItem('cv-tune-css'); if (tc) { var ts = document.createElement('style'); ts.id = 'tune-early'; ts.textContent = tc; document.head.appendChild(ts); } } } catch (e) {}
 // Arriving at What's Color by its link, the page is laid out at the top and
 // moved down to the written sentence by script — so it is kept covered until
 // it has been, and no frame is ever painted in the wrong place. The script
@@ -50,13 +49,20 @@ try { if (localStorage.getItem('cv-tune') === '1') { document.documentElement.se
 // makes — so a browser that keeps the plain anchor jump never waits for it.
 try { var nav = performance.getEntriesByType('navigation')[0];
   if (location.hash === '#whats-color' && (!nav || nav.type === 'navigate')
-    && CSS.supports('animation-timeline: view()')
     && !matchMedia('(prefers-reduced-motion: reduce)').matches
     && !matchMedia('(max-width: 899px)').matches) {
     document.documentElement.classList.add('wc-arriving', 'wc-swatch-drop');
     setTimeout(function () { document.documentElement.classList.remove('wc-arriving') }, 1500);
     setTimeout(function () { document.documentElement.classList.remove('wc-swatch-drop') }, 700);
   } } catch (e) {}
+// Trying the ways the start page's film can go and come back (THE WAY OUT
+// OF THE START PAGE, 00-base.css): ?film=wipe, fade, cut or blur holds for
+// the visit; ?film=off goes back to the stylesheet's own setting.
+try { var film = new URLSearchParams(location.search).get('film');
+  if (film === 'off') sessionStorage.removeItem('cv-film');
+  else if (film && /^(fade|cut|wipe|blur)$/.test(film)) sessionStorage.setItem('cv-film', film);
+  film = sessionStorage.getItem('cv-film');
+  if (film) document.documentElement.style.setProperty('--start-film-style', 'film-' + film); } catch (e) {}
 // The page's colour, drawn here rather than by client/current.ts so that the
 // block in the bar is the right colour on the first frame. Drawn by the scripts,
 // it was painted once in the list's first colour and then changed, on every
@@ -101,16 +107,10 @@ setTimeout(function () { var root = document.documentElement;
     <a class="top-soon" href="/prototype2/#whats-color"  data-roll><span class="roll-word" aria-hidden="true" style="--n: 12"><span class="scram" data-ch="W" style="--i: 0">W</span><span class="scram" data-ch="h" style="--i: 1">h</span><span class="scram" data-ch="a" style="--i: 2">a</span><span class="scram" data-ch="t" style="--i: 3">t</span><span class="scram" data-ch="’" style="--i: 4">’</span><span class="scram" data-ch="s" style="--i: 5">s</span> <span class="scram" data-ch="C" style="--i: 6">C</span><span class="scram" data-ch="o" style="--i: 7">o</span><span class="scram" data-ch="l" style="--i: 8">l</span><span class="scram" data-ch="o" style="--i: 9">o</span><span class="scram" data-ch="r" style="--i: 10">r</span><span class="scram" data-ch="?" style="--i: 11">?</span></span><span class="roll-text">What’s Color?</span></a>
     <nav class="menu" aria-label="Primary">
       <a
-            href="/prototype2/color-chart/"
-            
-            
-            style="--menu-phone: 5"
-            data-roll
-          ><span class="roll-word" aria-hidden="true" style="--n: 10"><span class="scram" data-ch="C" style="--i: 0">C</span><span class="scram" data-ch="o" style="--i: 1">o</span><span class="scram" data-ch="l" style="--i: 2">l</span><span class="scram" data-ch="o" style="--i: 3">o</span><span class="scram" data-ch="r" style="--i: 4">r</span> <span class="scram" data-ch="C" style="--i: 5">C</span><span class="scram" data-ch="h" style="--i: 6">h</span><span class="scram" data-ch="a" style="--i: 7">a</span><span class="scram" data-ch="r" style="--i: 8">r</span><span class="scram" data-ch="t" style="--i: 9">t</span></span><span class="roll-text">Color Chart</span></a><a
             href="/prototype2/exhibitions/"
             
             
-            style="--menu-phone: 3"
+            style="--menu-phone: 5"
             data-roll
           ><span class="roll-word" aria-hidden="true" style="--n: 11"><span class="scram" data-ch="E" style="--i: 0">E</span><span class="scram" data-ch="x" style="--i: 1">x</span><span class="scram" data-ch="h" style="--i: 2">h</span><span class="scram" data-ch="i" style="--i: 3">i</span><span class="scram" data-ch="b" style="--i: 4">b</span><span class="scram" data-ch="i" style="--i: 5">i</span><span class="scram" data-ch="t" style="--i: 6">t</span><span class="scram" data-ch="i" style="--i: 7">i</span><span class="scram" data-ch="o" style="--i: 8">o</span><span class="scram" data-ch="n" style="--i: 9">n</span><span class="scram" data-ch="s" style="--i: 10">s</span></span><span class="roll-text">Exhibitions</span></a><a
             href="/prototype2/commissioned/"
@@ -122,9 +122,15 @@ setTimeout(function () { var root = document.documentElement;
             href="/prototype2/artwork/"
             
             
-            style="--menu-phone: 2"
+            style="--menu-phone: 3"
             data-roll
           ><span class="roll-word" aria-hidden="true" style="--n: 7"><span class="scram" data-ch="A" style="--i: 0">A</span><span class="scram" data-ch="r" style="--i: 1">r</span><span class="scram" data-ch="t" style="--i: 2">t</span><span class="scram" data-ch="w" style="--i: 3">w</span><span class="scram" data-ch="o" style="--i: 4">o</span><span class="scram" data-ch="r" style="--i: 5">r</span><span class="scram" data-ch="k" style="--i: 6">k</span></span><span class="roll-text">Artwork</span></a><a
+            href="/prototype2/color-chart/"
+            
+            
+            style="--menu-phone: 2"
+            data-roll
+          ><span class="roll-word" aria-hidden="true" style="--n: 10"><span class="scram" data-ch="C" style="--i: 0">C</span><span class="scram" data-ch="o" style="--i: 1">o</span><span class="scram" data-ch="l" style="--i: 2">l</span><span class="scram" data-ch="o" style="--i: 3">o</span><span class="scram" data-ch="r" style="--i: 4">r</span> <span class="scram" data-ch="C" style="--i: 5">C</span><span class="scram" data-ch="h" style="--i: 6">h</span><span class="scram" data-ch="a" style="--i: 7">a</span><span class="scram" data-ch="r" style="--i: 8">r</span><span class="scram" data-ch="t" style="--i: 9">t</span></span><span class="roll-text">Color Chart</span></a><a
             href="/prototype2/#about"
             data-panel-open="about"
             
@@ -236,10 +242,10 @@ setTimeout(function () { var root = document.documentElement;
             <span class="xrow-title">Tones Collection of Nani Marquina</span>
             <span class="exh-plate" aria-hidden="true">
               <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/8ca81c2fd94d686b-400.avif 400w, /prototype2/media/8ca81c2fd94d686b-683.avif 683w" sizes="(max-width: 899px) 30vw, 13vw" />
-      <source type="image/webp" srcset="/prototype2/media/8ca81c2fd94d686b-400.webp 400w, /prototype2/media/8ca81c2fd94d686b-683.webp 683w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/avif" srcset="/prototype2/media/5849b8fbdeb41d0c-400.avif 400w, /prototype2/media/5849b8fbdeb41d0c-683.avif 683w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/webp" srcset="/prototype2/media/5849b8fbdeb41d0c-400.webp 400w, /prototype2/media/5849b8fbdeb41d0c-683.webp 683w" sizes="(max-width: 899px) 30vw, 13vw" />
       <img
-        src="/prototype2/media/8ca81c2fd94d686b-683.jpg"
+        src="/prototype2/media/5849b8fbdeb41d0c-683.jpg"
         alt=""
         width="683"
         height="1024"
@@ -258,10 +264,10 @@ setTimeout(function () { var root = document.documentElement;
             <span class="xrow-title">Color Atlas for La Muralla Roja</span>
             <span class="exh-plate" aria-hidden="true">
               <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/34b0e9889b103d7c-400.avif 400w, /prototype2/media/34b0e9889b103d7c-600.avif 600w" sizes="(max-width: 899px) 30vw, 13vw" />
-      <source type="image/webp" srcset="/prototype2/media/34b0e9889b103d7c-400.webp 400w, /prototype2/media/34b0e9889b103d7c-600.webp 600w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/avif" srcset="/prototype2/media/d685a953c5c5b4b6-400.avif 400w, /prototype2/media/d685a953c5c5b4b6-600.avif 600w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/webp" srcset="/prototype2/media/d685a953c5c5b4b6-400.webp 400w, /prototype2/media/d685a953c5c5b4b6-600.webp 600w" sizes="(max-width: 899px) 30vw, 13vw" />
       <img
-        src="/prototype2/media/34b0e9889b103d7c-600.jpg"
+        src="/prototype2/media/d685a953c5c5b4b6-600.jpg"
         alt=""
         width="600"
         height="800"
@@ -280,10 +286,10 @@ setTimeout(function () { var root = document.documentElement;
             <span class="xrow-title">Silla 8 AOO</span>
             <span class="exh-plate" aria-hidden="true">
               <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/eaeaf083949582b7-400.avif 400w" sizes="(max-width: 899px) 30vw, 13vw" />
-      <source type="image/webp" srcset="/prototype2/media/eaeaf083949582b7-400.webp 400w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/avif" srcset="/prototype2/media/3f20f13f055705d8-400.avif 400w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/webp" srcset="/prototype2/media/3f20f13f055705d8-400.webp 400w" sizes="(max-width: 899px) 30vw, 13vw" />
       <img
-        src="/prototype2/media/eaeaf083949582b7-400.jpg"
+        src="/prototype2/media/3f20f13f055705d8-400.jpg"
         alt=""
         width="400"
         height="500"
@@ -302,14 +308,14 @@ setTimeout(function () { var root = document.documentElement;
             <span class="xrow-title">Edges Collection</span>
             <span class="exh-plate" aria-hidden="true">
               <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/a4cbef44f968dd42-400.avif 400w, /prototype2/media/a4cbef44f968dd42-800.avif 800w, /prototype2/media/a4cbef44f968dd42-1000.avif 1000w" sizes="(max-width: 899px) 30vw, 13vw" />
-      <source type="image/webp" srcset="/prototype2/media/a4cbef44f968dd42-400.webp 400w, /prototype2/media/a4cbef44f968dd42-800.webp 800w, /prototype2/media/a4cbef44f968dd42-1000.webp 1000w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/avif" srcset="/prototype2/media/9739b7e88a7d2297-400.avif 400w, /prototype2/media/9739b7e88a7d2297-600.avif 600w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/webp" srcset="/prototype2/media/9739b7e88a7d2297-400.webp 400w, /prototype2/media/9739b7e88a7d2297-600.webp 600w" sizes="(max-width: 899px) 30vw, 13vw" />
       <img
-        src="/prototype2/media/a4cbef44f968dd42-1000.jpg"
+        src="/prototype2/media/9739b7e88a7d2297-600.jpg"
         alt=""
-        width="1000"
-        height="1100"
-        style="aspect-ratio:1000 / 1100"
+        width="600"
+        height="800"
+        style="aspect-ratio:600 / 800"
         loading="lazy"
         decoding="async"
       />
@@ -351,10 +357,10 @@ setTimeout(function () { var root = document.documentElement;
             <span class="xrow-title">Training Silences</span>
             <span class="exh-plate" aria-hidden="true">
               <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/64b98136d3b9dcdb-400.avif 400w, /prototype2/media/64b98136d3b9dcdb-800.avif 800w, /prototype2/media/64b98136d3b9dcdb-1600.avif 1600w" sizes="(max-width: 899px) 30vw, 13vw" />
-      <source type="image/webp" srcset="/prototype2/media/64b98136d3b9dcdb-400.webp 400w, /prototype2/media/64b98136d3b9dcdb-800.webp 800w, /prototype2/media/64b98136d3b9dcdb-1600.webp 1600w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/avif" srcset="/prototype2/media/a772227cd93b760c-400.avif 400w, /prototype2/media/a772227cd93b760c-800.avif 800w, /prototype2/media/a772227cd93b760c-1600.avif 1600w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/webp" srcset="/prototype2/media/a772227cd93b760c-400.webp 400w, /prototype2/media/a772227cd93b760c-800.webp 800w, /prototype2/media/a772227cd93b760c-1600.webp 1600w" sizes="(max-width: 899px) 30vw, 13vw" />
       <img
-        src="/prototype2/media/64b98136d3b9dcdb-1600.jpg"
+        src="/prototype2/media/a772227cd93b760c-1600.jpg"
         alt=""
         width="1707"
         height="2560"
@@ -373,10 +379,10 @@ setTimeout(function () { var root = document.documentElement;
             <span class="xrow-title">Dadà Barcelona</span>
             <span class="exh-plate" aria-hidden="true">
               <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/0a49db3a087f447a-400.avif 400w, /prototype2/media/0a49db3a087f447a-800.avif 800w, /prototype2/media/0a49db3a087f447a-1000.avif 1000w" sizes="(max-width: 899px) 30vw, 13vw" />
-      <source type="image/webp" srcset="/prototype2/media/0a49db3a087f447a-400.webp 400w, /prototype2/media/0a49db3a087f447a-800.webp 800w, /prototype2/media/0a49db3a087f447a-1000.webp 1000w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/avif" srcset="/prototype2/media/76f40ce93f4301c7-400.avif 400w, /prototype2/media/76f40ce93f4301c7-800.avif 800w, /prototype2/media/76f40ce93f4301c7-1000.avif 1000w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/webp" srcset="/prototype2/media/76f40ce93f4301c7-400.webp 400w, /prototype2/media/76f40ce93f4301c7-800.webp 800w, /prototype2/media/76f40ce93f4301c7-1000.webp 1000w" sizes="(max-width: 899px) 30vw, 13vw" />
       <img
-        src="/prototype2/media/0a49db3a087f447a-1000.jpg"
+        src="/prototype2/media/76f40ce93f4301c7-1000.jpg"
         alt=""
         width="1000"
         height="1000"
@@ -395,14 +401,14 @@ setTimeout(function () { var root = document.documentElement;
             <span class="xrow-title">Dadà Barcelona</span>
             <span class="exh-plate" aria-hidden="true">
               <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/a2a9a7c14fe4794c-400.avif 400w, /prototype2/media/a2a9a7c14fe4794c-800.avif 800w, /prototype2/media/a2a9a7c14fe4794c-1000.avif 1000w" sizes="(max-width: 899px) 30vw, 13vw" />
-      <source type="image/webp" srcset="/prototype2/media/a2a9a7c14fe4794c-400.webp 400w, /prototype2/media/a2a9a7c14fe4794c-800.webp 800w, /prototype2/media/a2a9a7c14fe4794c-1000.webp 1000w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/avif" srcset="/prototype2/media/ccf668d3ce220c31-400.avif 400w, /prototype2/media/ccf668d3ce220c31-800.avif 800w, /prototype2/media/ccf668d3ce220c31-1000.avif 1000w" sizes="(max-width: 899px) 30vw, 13vw" />
+      <source type="image/webp" srcset="/prototype2/media/ccf668d3ce220c31-400.webp 400w, /prototype2/media/ccf668d3ce220c31-800.webp 800w, /prototype2/media/ccf668d3ce220c31-1000.webp 1000w" sizes="(max-width: 899px) 30vw, 13vw" />
       <img
-        src="/prototype2/media/a2a9a7c14fe4794c-1000.jpg"
+        src="/prototype2/media/ccf668d3ce220c31-1000.jpg"
         alt=""
         width="1000"
-        height="668"
-        style="aspect-ratio:1000 / 668"
+        height="667"
+        style="aspect-ratio:1000 / 667"
         loading="lazy"
         decoding="async"
       />
@@ -470,7 +476,7 @@ setTimeout(function () { var root = document.documentElement;
     <div class="sheet" data-reader data-sheet>
     <header class="sheet-head">
       <h2 class="sheet-title">Terra Rossa</h2>
-      <p class="sheet-lines">CURATED BY JÚLIA ESQUÉ WITH A<br />CONCEPT BY APARTAMENTO STUDIOS</p>
+      <p class="sheet-lines">CURATED BY JÚLIA ESQUÉ WITH A <br class="sheet-br" />CONCEPT BY APARTAMENTO STUDIOS</p>
       <p class="sheet-when">2024</p>
     </header>
 
@@ -569,10 +575,10 @@ setTimeout(function () { var root = document.documentElement;
                 </figure>
           </div>
           <button type="button" class="sheet-step sheet-prev" data-figure-step="-1" aria-label="Previous photograph">
-                <svg viewBox="0 0 9 16" aria-hidden="true"><path d="M8 1 1 8l7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M14.5 1.5 L3 14 L14.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
               </button>
               <button type="button" class="sheet-step sheet-next" data-figure-step="1" aria-label="Next photograph">
-                <svg viewBox="0 0 9 16" aria-hidden="true"><path d="m1 1 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M1.5 1.5 L13 14 L1.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
               </button>
               <p class="sr-only" data-figure-count data-template="Photograph {n} of {total}" aria-live="polite"></p>
         </div>
@@ -652,10 +658,10 @@ setTimeout(function () { var root = document.documentElement;
                 </figure>
           </div>
           <button type="button" class="sheet-step sheet-prev" data-figure-step="-1" aria-label="Previous photograph">
-                <svg viewBox="0 0 9 16" aria-hidden="true"><path d="M8 1 1 8l7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M14.5 1.5 L3 14 L14.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
               </button>
               <button type="button" class="sheet-step sheet-next" data-figure-step="1" aria-label="Next photograph">
-                <svg viewBox="0 0 9 16" aria-hidden="true"><path d="m1 1 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M1.5 1.5 L13 14 L1.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
               </button>
               <p class="sr-only" data-figure-count data-template="Photograph {n} of {total}" aria-live="polite"></p>
         </div>
@@ -671,7 +677,7 @@ setTimeout(function () { var root = document.documentElement;
 
     <div class="sheet-text" data-sheet-text tabindex="-1">
       <div class="sheet-prose">
-      <p class="is-style-lead"><a href="https://www.santacole.com/es/m64/"><strong><em>Santa &amp; Cole</em></strong></a> is a Spanish global editor of design products whose quality is recognizable at the touch of a hand, and that enriches people’s lives.</p>
+      <p class="is-style-lead"><a href="https://www.santacole.com/es/m64/"><strong>Santa &amp; Cole</strong></a> is a Spanish global editor of design products whose quality is recognizable at the touch of a hand, and that enriches people’s lives.</p>
       <p>A while ago I started a collaboration with Santa&amp;cole, a love color story!</p>
       <p class="is-style-lead apart">In their own words the project consisted in:</p>
       <p>Santa &amp; Cole has presented eight new colours for the M64 lamp, result of the chromatic study developed by colourist Claudia Valsells</p>
@@ -825,10 +831,10 @@ setTimeout(function () { var root = document.documentElement;
                 </figure>
           </div>
           <button type="button" class="sheet-step sheet-prev" data-figure-step="-1" aria-label="Previous photograph">
-                <svg viewBox="0 0 9 16" aria-hidden="true"><path d="M8 1 1 8l7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M14.5 1.5 L3 14 L14.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
               </button>
               <button type="button" class="sheet-step sheet-next" data-figure-step="1" aria-label="Next photograph">
-                <svg viewBox="0 0 9 16" aria-hidden="true"><path d="m1 1 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M1.5 1.5 L13 14 L1.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
               </button>
               <p class="sr-only" data-figure-count data-template="Photograph {n} of {total}" aria-live="polite"></p>
         </div>
@@ -844,8 +850,7 @@ setTimeout(function () { var root = document.documentElement;
 
     <div class="sheet-text" data-sheet-text tabindex="-1">
       <div class="sheet-prose">
-      <p>At @brava_arts<br>With @alzuetagallery</p>
-      <p>BRAVA! is where @alzueta_gallery has its creation center where develops its artistic residency program to support the creativity and work of contemporary artist of our time. I was so glad to be there, 500m industrial building to work in the heart of Costa Brava.</p>
+      <p>BRAVA! is where <a class="about-link hrow" href="https://alzuetagallery.com" target="_blank" rel="noopener">ALZUETA GALLERY</a> has its creation center where develops its artistic residency program to support the creativity and work of contemporary artist of our time. I was so glad to be there, 500m industrial building to work in the heart of Costa Brava.</p>
       <p class="is-style-note">Photography by <a href="https://www.juditbou.com"><b>JUDIT BOU</b></a></p></div>
     </div>
 
@@ -948,10 +953,10 @@ setTimeout(function () { var root = document.documentElement;
                 </figure>
           </div>
           <button type="button" class="sheet-step sheet-prev" data-figure-step="-1" aria-label="Previous photograph">
-                <svg viewBox="0 0 9 16" aria-hidden="true"><path d="M8 1 1 8l7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M14.5 1.5 L3 14 L14.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
               </button>
               <button type="button" class="sheet-step sheet-next" data-figure-step="1" aria-label="Next photograph">
-                <svg viewBox="0 0 9 16" aria-hidden="true"><path d="m1 1 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M1.5 1.5 L13 14 L1.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
               </button>
               <p class="sr-only" data-figure-count data-template="Photograph {n} of {total}" aria-live="polite"></p>
         </div>
@@ -989,10 +994,10 @@ setTimeout(function () { var root = document.documentElement;
           <div class="sheet-frame">
             <figure class="reader-figure sheet-figure is-current">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/8ca81c2fd94d686b-400.avif 400w, /prototype2/media/8ca81c2fd94d686b-683.avif 683w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/8ca81c2fd94d686b-400.webp 400w, /prototype2/media/8ca81c2fd94d686b-683.webp 683w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/5849b8fbdeb41d0c-400.avif 400w, /prototype2/media/5849b8fbdeb41d0c-683.avif 683w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/5849b8fbdeb41d0c-400.webp 400w, /prototype2/media/5849b8fbdeb41d0c-683.webp 683w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/8ca81c2fd94d686b-683.jpg"
+        src="/prototype2/media/5849b8fbdeb41d0c-683.jpg"
         alt=""
         width="683"
         height="1024"
@@ -1003,10 +1008,10 @@ setTimeout(function () { var root = document.documentElement;
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/5849b8fbdeb41d0c-400.avif 400w, /prototype2/media/5849b8fbdeb41d0c-683.avif 683w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/5849b8fbdeb41d0c-400.webp 400w, /prototype2/media/5849b8fbdeb41d0c-683.webp 683w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/8ca81c2fd94d686b-400.avif 400w, /prototype2/media/8ca81c2fd94d686b-683.avif 683w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/8ca81c2fd94d686b-400.webp 400w, /prototype2/media/8ca81c2fd94d686b-683.webp 683w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/5849b8fbdeb41d0c-683.jpg"
+        src="/prototype2/media/8ca81c2fd94d686b-683.jpg"
         alt=""
         width="683"
         height="1024"
@@ -1074,10 +1079,10 @@ setTimeout(function () { var root = document.documentElement;
                 </figure>
           </div>
           <button type="button" class="sheet-step sheet-prev" data-figure-step="-1" aria-label="Previous photograph">
-                <svg viewBox="0 0 9 16" aria-hidden="true"><path d="M8 1 1 8l7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M14.5 1.5 L3 14 L14.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
               </button>
               <button type="button" class="sheet-step sheet-next" data-figure-step="1" aria-label="Next photograph">
-                <svg viewBox="0 0 9 16" aria-hidden="true"><path d="m1 1 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M1.5 1.5 L13 14 L1.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
               </button>
               <p class="sr-only" data-figure-count data-template="Photograph {n} of {total}" aria-live="polite"></p>
         </div>
@@ -1086,7 +1091,7 @@ setTimeout(function () { var root = document.documentElement;
     <a class="panel-close" href="#" data-panel-close>Close</a>
     <div class="sheet" data-reader data-sheet>
     <header class="sheet-head">
-      <h2 class="sheet-title">Colour Atlas</h2>
+      <h2 class="sheet-title">Color Atlas</h2>
       <p class="sheet-lines">FOR LA MURALLA ROJA</p>
       <p class="sheet-when">2016 - 2020</p>
     </header>
@@ -1114,10 +1119,10 @@ setTimeout(function () { var root = document.documentElement;
           <div class="sheet-frame">
             <figure class="reader-figure sheet-figure is-current">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/34b0e9889b103d7c-400.avif 400w, /prototype2/media/34b0e9889b103d7c-600.avif 600w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/34b0e9889b103d7c-400.webp 400w, /prototype2/media/34b0e9889b103d7c-600.webp 600w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/d685a953c5c5b4b6-400.avif 400w, /prototype2/media/d685a953c5c5b4b6-600.avif 600w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/d685a953c5c5b4b6-400.webp 400w, /prototype2/media/d685a953c5c5b4b6-600.webp 600w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/34b0e9889b103d7c-600.jpg"
+        src="/prototype2/media/d685a953c5c5b4b6-600.jpg"
         alt=""
         width="600"
         height="800"
@@ -1128,10 +1133,10 @@ setTimeout(function () { var root = document.documentElement;
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/83d8c9e2203b6d40-400.avif 400w, /prototype2/media/83d8c9e2203b6d40-600.avif 600w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/83d8c9e2203b6d40-400.webp 400w, /prototype2/media/83d8c9e2203b6d40-600.webp 600w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/34b0e9889b103d7c-400.avif 400w, /prototype2/media/34b0e9889b103d7c-600.avif 600w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/34b0e9889b103d7c-400.webp 400w, /prototype2/media/34b0e9889b103d7c-600.webp 600w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/83d8c9e2203b6d40-600.jpg"
+        src="/prototype2/media/34b0e9889b103d7c-600.jpg"
         alt=""
         width="600"
         height="800"
@@ -1142,10 +1147,10 @@ setTimeout(function () { var root = document.documentElement;
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
                   <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/d685a953c5c5b4b6-400.avif 400w, /prototype2/media/d685a953c5c5b4b6-600.avif 600w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/d685a953c5c5b4b6-400.webp 400w, /prototype2/media/d685a953c5c5b4b6-600.webp 600w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/avif" srcset="/prototype2/media/83d8c9e2203b6d40-400.avif 400w, /prototype2/media/83d8c9e2203b6d40-600.avif 600w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/83d8c9e2203b6d40-400.webp 400w, /prototype2/media/83d8c9e2203b6d40-600.webp 600w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
-        src="/prototype2/media/d685a953c5c5b4b6-600.jpg"
+        src="/prototype2/media/83d8c9e2203b6d40-600.jpg"
         alt=""
         width="600"
         height="800"
@@ -1199,10 +1204,10 @@ setTimeout(function () { var root = document.documentElement;
                 </figure>
           </div>
           <button type="button" class="sheet-step sheet-prev" data-figure-step="-1" aria-label="Previous photograph">
-                <svg viewBox="0 0 9 16" aria-hidden="true"><path d="M8 1 1 8l7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M14.5 1.5 L3 14 L14.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
               </button>
               <button type="button" class="sheet-step sheet-next" data-figure-step="1" aria-label="Next photograph">
-                <svg viewBox="0 0 9 16" aria-hidden="true"><path d="m1 1 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M1.5 1.5 L13 14 L1.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
               </button>
               <p class="sr-only" data-figure-count data-template="Photograph {n} of {total}" aria-live="polite"></p>
         </div>
@@ -1212,7 +1217,7 @@ setTimeout(function () { var root = document.documentElement;
     <div class="sheet" data-reader data-sheet>
     <header class="sheet-head">
       <h2 class="sheet-title">Siete Sillas 8</h2>
-      <p class="sheet-lines">an AOO EXERCISE IN “COLORING”<br />WITH CLAUDIA VALSELLS</p>
+      <p class="sheet-lines">an AOO EXERCISE IN “COLORING” <br class="sheet-br" />WITH CLAUDIA VALSELLS</p>
       <p class="sheet-when">2020</p>
     </header>
 
@@ -1240,6 +1245,20 @@ setTimeout(function () { var root = document.documentElement;
           <div class="sheet-frame">
             <figure class="reader-figure sheet-figure is-current">
                   <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/3f20f13f055705d8-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/3f20f13f055705d8-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <img
+        src="/prototype2/media/3f20f13f055705d8-400.jpg"
+        alt="Silla 8 - Claudia Valsells"
+        width="400"
+        height="500"
+        style="aspect-ratio:400 / 500"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </picture>
+                </figure><figure class="reader-figure sheet-figure">
+                  <picture class="">
       <source type="image/avif" srcset="/prototype2/media/eaeaf083949582b7-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
       <source type="image/webp" srcset="/prototype2/media/eaeaf083949582b7-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
@@ -1248,8 +1267,8 @@ setTimeout(function () { var root = document.documentElement;
         width="400"
         height="500"
         style="aspect-ratio:400 / 500"
-        loading="eager"
-        fetchpriority="high"
+        loading="lazy"
+        decoding="async"
       />
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
@@ -1287,20 +1306,6 @@ setTimeout(function () { var root = document.documentElement;
       <img
         src="/prototype2/media/cd56ec4ca76f081e-400.jpg"
         alt="Silla 8 - Claudia Valsells in her studio"
-        width="400"
-        height="500"
-        style="aspect-ratio:400 / 500"
-        loading="lazy"
-        decoding="async"
-      />
-    </picture>
-                </figure><figure class="reader-figure sheet-figure">
-                  <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/3f20f13f055705d8-400.avif 400w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/3f20f13f055705d8-400.webp 400w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <img
-        src="/prototype2/media/3f20f13f055705d8-400.jpg"
-        alt="Silla 8 - Claudia Valsells"
         width="400"
         height="500"
         style="aspect-ratio:400 / 500"
@@ -1395,10 +1400,10 @@ setTimeout(function () { var root = document.documentElement;
                 </figure>
           </div>
           <button type="button" class="sheet-step sheet-prev" data-figure-step="-1" aria-label="Previous photograph">
-                <svg viewBox="0 0 9 16" aria-hidden="true"><path d="M8 1 1 8l7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M14.5 1.5 L3 14 L14.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
               </button>
               <button type="button" class="sheet-step sheet-next" data-figure-step="1" aria-label="Next photograph">
-                <svg viewBox="0 0 9 16" aria-hidden="true"><path d="m1 1 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M1.5 1.5 L13 14 L1.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
               </button>
               <p class="sr-only" data-figure-count data-template="Photograph {n} of {total}" aria-live="polite"></p>
         </div>
@@ -1414,7 +1419,8 @@ setTimeout(function () { var root = document.documentElement;
 
     <div class="sheet-text" data-sheet-text tabindex="-1">
       <div class="sheet-prose">
-      <p class="is-style-lead">An exclusive collection I designed for Design Within Reach, edited by Nani Marquina<br>«The abstract forms of this piece ‘Edges’ have significant value, a dichotomy between structure and form, a singular balance.» Claudia Valsells</p>
+      <p class="is-style-lead">An exclusive collection I designed for Design Within Reach, edited by Nani Marquina</p>
+      <p class="is-quote">“The abstract forms of this piece ‘Edges’ have significant value, a dichotomy between structure and form, a singular balance.” Claudia Valsells</p>
       <p class="is-style-note">To discover the collection link <a href="https://nanimarquina.com/es/"><em>Nani Marquina</em></a></p></div>
     </div>
 
@@ -1432,6 +1438,20 @@ setTimeout(function () { var root = document.documentElement;
           <div class="sheet-frame">
             <figure class="reader-figure sheet-figure is-current">
                   <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/9739b7e88a7d2297-400.avif 400w, /prototype2/media/9739b7e88a7d2297-600.avif 600w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/9739b7e88a7d2297-400.webp 400w, /prototype2/media/9739b7e88a7d2297-600.webp 600w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <img
+        src="/prototype2/media/9739b7e88a7d2297-600.jpg"
+        alt=""
+        width="600"
+        height="800"
+        style="aspect-ratio:600 / 800"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </picture>
+                </figure><figure class="reader-figure sheet-figure">
+                  <picture class="">
       <source type="image/avif" srcset="/prototype2/media/a4cbef44f968dd42-400.avif 400w, /prototype2/media/a4cbef44f968dd42-800.avif 800w, /prototype2/media/a4cbef44f968dd42-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <source type="image/webp" srcset="/prototype2/media/a4cbef44f968dd42-400.webp 400w, /prototype2/media/a4cbef44f968dd42-800.webp 800w, /prototype2/media/a4cbef44f968dd42-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
@@ -1440,8 +1460,8 @@ setTimeout(function () { var root = document.documentElement;
         width="1000"
         height="1100"
         style="aspect-ratio:1000 / 1100"
-        loading="eager"
-        fetchpriority="high"
+        loading="lazy"
+        decoding="async"
       />
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
@@ -1570,27 +1590,13 @@ setTimeout(function () { var root = document.documentElement;
         decoding="async"
       />
     </picture>
-                </figure><figure class="reader-figure sheet-figure">
-                  <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/9739b7e88a7d2297-400.avif 400w, /prototype2/media/9739b7e88a7d2297-600.avif 600w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/9739b7e88a7d2297-400.webp 400w, /prototype2/media/9739b7e88a7d2297-600.webp 600w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <img
-        src="/prototype2/media/9739b7e88a7d2297-600.jpg"
-        alt=""
-        width="600"
-        height="800"
-        style="aspect-ratio:600 / 800"
-        loading="lazy"
-        decoding="async"
-      />
-    </picture>
                 </figure>
           </div>
           <button type="button" class="sheet-step sheet-prev" data-figure-step="-1" aria-label="Previous photograph">
-                <svg viewBox="0 0 9 16" aria-hidden="true"><path d="M8 1 1 8l7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M14.5 1.5 L3 14 L14.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
               </button>
               <button type="button" class="sheet-step sheet-next" data-figure-step="1" aria-label="Next photograph">
-                <svg viewBox="0 0 9 16" aria-hidden="true"><path d="m1 1 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M1.5 1.5 L13 14 L1.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
               </button>
               <p class="sr-only" data-figure-count data-template="Photograph {n} of {total}" aria-live="polite"></p>
         </div>
@@ -1754,10 +1760,10 @@ setTimeout(function () { var root = document.documentElement;
                 </figure>
           </div>
           <button type="button" class="sheet-step sheet-prev" data-figure-step="-1" aria-label="Previous photograph">
-                <svg viewBox="0 0 9 16" aria-hidden="true"><path d="M8 1 1 8l7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M14.5 1.5 L3 14 L14.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
               </button>
               <button type="button" class="sheet-step sheet-next" data-figure-step="1" aria-label="Next photograph">
-                <svg viewBox="0 0 9 16" aria-hidden="true"><path d="m1 1 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M1.5 1.5 L13 14 L1.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
               </button>
               <p class="sr-only" data-figure-count data-template="Photograph {n} of {total}" aria-live="polite"></p>
         </div>
@@ -1800,6 +1806,20 @@ setTimeout(function () { var root = document.documentElement;
           <div class="sheet-frame">
             <figure class="reader-figure sheet-figure is-current">
                   <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/a772227cd93b760c-400.avif 400w, /prototype2/media/a772227cd93b760c-800.avif 800w, /prototype2/media/a772227cd93b760c-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/a772227cd93b760c-400.webp 400w, /prototype2/media/a772227cd93b760c-800.webp 800w, /prototype2/media/a772227cd93b760c-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <img
+        src="/prototype2/media/a772227cd93b760c-1600.jpg"
+        alt=""
+        width="1707"
+        height="2560"
+        style="aspect-ratio:1707 / 2560"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </picture>
+                </figure><figure class="reader-figure sheet-figure">
+                  <picture class="">
       <source type="image/avif" srcset="/prototype2/media/64b98136d3b9dcdb-400.avif 400w, /prototype2/media/64b98136d3b9dcdb-800.avif 800w, /prototype2/media/64b98136d3b9dcdb-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 40vw" />
       <source type="image/webp" srcset="/prototype2/media/64b98136d3b9dcdb-400.webp 400w, /prototype2/media/64b98136d3b9dcdb-800.webp 800w, /prototype2/media/64b98136d3b9dcdb-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
@@ -1808,8 +1828,8 @@ setTimeout(function () { var root = document.documentElement;
         width="1707"
         height="2560"
         style="aspect-ratio:1707 / 2560"
-        loading="eager"
-        fetchpriority="high"
+        loading="lazy"
+        decoding="async"
       />
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
@@ -1832,20 +1852,6 @@ setTimeout(function () { var root = document.documentElement;
       <source type="image/webp" srcset="/prototype2/media/ca4b6ebc44b0c1f3-400.webp 400w, /prototype2/media/ca4b6ebc44b0c1f3-800.webp 800w, /prototype2/media/ca4b6ebc44b0c1f3-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
         src="/prototype2/media/ca4b6ebc44b0c1f3-1600.jpg"
-        alt=""
-        width="1707"
-        height="2560"
-        style="aspect-ratio:1707 / 2560"
-        loading="lazy"
-        decoding="async"
-      />
-    </picture>
-                </figure><figure class="reader-figure sheet-figure">
-                  <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/a772227cd93b760c-400.avif 400w, /prototype2/media/a772227cd93b760c-800.avif 800w, /prototype2/media/a772227cd93b760c-1600.avif 1600w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/a772227cd93b760c-400.webp 400w, /prototype2/media/a772227cd93b760c-800.webp 800w, /prototype2/media/a772227cd93b760c-1600.webp 1600w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <img
-        src="/prototype2/media/a772227cd93b760c-1600.jpg"
         alt=""
         width="1707"
         height="2560"
@@ -1927,10 +1933,10 @@ setTimeout(function () { var root = document.documentElement;
                 </figure>
           </div>
           <button type="button" class="sheet-step sheet-prev" data-figure-step="-1" aria-label="Previous photograph">
-                <svg viewBox="0 0 9 16" aria-hidden="true"><path d="M8 1 1 8l7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M14.5 1.5 L3 14 L14.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
               </button>
               <button type="button" class="sheet-step sheet-next" data-figure-step="1" aria-label="Next photograph">
-                <svg viewBox="0 0 9 16" aria-hidden="true"><path d="m1 1 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M1.5 1.5 L13 14 L1.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
               </button>
               <p class="sr-only" data-figure-count data-template="Photograph {n} of {total}" aria-live="polite"></p>
         </div>
@@ -1940,7 +1946,7 @@ setTimeout(function () { var root = document.documentElement;
     <div class="sheet" data-reader data-sheet>
     <header class="sheet-head">
       <h2 class="sheet-title">Dadà Barcelona</h2>
-      <p class="sheet-lines">Art to build<br />Idea &amp; project<br />Esther Rovira Carbonell</p>
+      <p class="sheet-lines">Art to build <br class="sheet-br" />Idea &amp; project <br class="sheet-br" />Esther Rovira Carbonell</p>
       <p class="sheet-when">2018</p>
     </header>
 
@@ -1967,6 +1973,20 @@ setTimeout(function () { var root = document.documentElement;
           <div class="sheet-frame">
             <figure class="reader-figure sheet-figure is-current">
                   <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/76f40ce93f4301c7-400.avif 400w, /prototype2/media/76f40ce93f4301c7-800.avif 800w, /prototype2/media/76f40ce93f4301c7-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/76f40ce93f4301c7-400.webp 400w, /prototype2/media/76f40ce93f4301c7-800.webp 800w, /prototype2/media/76f40ce93f4301c7-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <img
+        src="/prototype2/media/76f40ce93f4301c7-1000.jpg"
+        alt=""
+        width="1000"
+        height="1000"
+        style="aspect-ratio:1000 / 1000"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </picture>
+                </figure><figure class="reader-figure sheet-figure">
+                  <picture class="">
       <source type="image/avif" srcset="/prototype2/media/0a49db3a087f447a-400.avif 400w, /prototype2/media/0a49db3a087f447a-800.avif 800w, /prototype2/media/0a49db3a087f447a-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <source type="image/webp" srcset="/prototype2/media/0a49db3a087f447a-400.webp 400w, /prototype2/media/0a49db3a087f447a-800.webp 800w, /prototype2/media/0a49db3a087f447a-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
@@ -1975,8 +1995,8 @@ setTimeout(function () { var root = document.documentElement;
         width="1000"
         height="1000"
         style="aspect-ratio:1000 / 1000"
-        loading="eager"
-        fetchpriority="high"
+        loading="lazy"
+        decoding="async"
       />
     </picture>
                 </figure><figure class="reader-figure sheet-figure">
@@ -1999,20 +2019,6 @@ setTimeout(function () { var root = document.documentElement;
       <source type="image/webp" srcset="/prototype2/media/539da9c284708035-400.webp 400w, /prototype2/media/539da9c284708035-800.webp 800w, /prototype2/media/539da9c284708035-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
         src="/prototype2/media/539da9c284708035-1000.jpg"
-        alt=""
-        width="1000"
-        height="1000"
-        style="aspect-ratio:1000 / 1000"
-        loading="lazy"
-        decoding="async"
-      />
-    </picture>
-                </figure><figure class="reader-figure sheet-figure">
-                  <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/76f40ce93f4301c7-400.avif 400w, /prototype2/media/76f40ce93f4301c7-800.avif 800w, /prototype2/media/76f40ce93f4301c7-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/76f40ce93f4301c7-400.webp 400w, /prototype2/media/76f40ce93f4301c7-800.webp 800w, /prototype2/media/76f40ce93f4301c7-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <img
-        src="/prototype2/media/76f40ce93f4301c7-1000.jpg"
         alt=""
         width="1000"
         height="1000"
@@ -2094,10 +2100,10 @@ setTimeout(function () { var root = document.documentElement;
                 </figure>
           </div>
           <button type="button" class="sheet-step sheet-prev" data-figure-step="-1" aria-label="Previous photograph">
-                <svg viewBox="0 0 9 16" aria-hidden="true"><path d="M8 1 1 8l7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M14.5 1.5 L3 14 L14.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
               </button>
               <button type="button" class="sheet-step sheet-next" data-figure-step="1" aria-label="Next photograph">
-                <svg viewBox="0 0 9 16" aria-hidden="true"><path d="m1 1 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M1.5 1.5 L13 14 L1.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
               </button>
               <p class="sr-only" data-figure-count data-template="Photograph {n} of {total}" aria-live="polite"></p>
         </div>
@@ -2107,7 +2113,7 @@ setTimeout(function () { var root = document.documentElement;
     <div class="sheet" data-reader data-sheet>
     <header class="sheet-head">
       <h2 class="sheet-title">Dadà Barcelona</h2>
-      <p class="sheet-lines">Idea &amp; Project<br />Esther Rovira Carbonell</p>
+      <p class="sheet-lines">Idea &amp; Project <br class="sheet-br" />Esther Rovira Carbonell</p>
       <p class="sheet-when">2017</p>
     </header>
 
@@ -2133,6 +2139,20 @@ setTimeout(function () { var root = document.documentElement;
           <div class="sheet-frame">
             <figure class="reader-figure sheet-figure is-wide is-current">
                   <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/ccf668d3ce220c31-400.avif 400w, /prototype2/media/ccf668d3ce220c31-800.avif 800w, /prototype2/media/ccf668d3ce220c31-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <source type="image/webp" srcset="/prototype2/media/ccf668d3ce220c31-400.webp 400w, /prototype2/media/ccf668d3ce220c31-800.webp 800w, /prototype2/media/ccf668d3ce220c31-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
+      <img
+        src="/prototype2/media/ccf668d3ce220c31-1000.jpg"
+        alt=""
+        width="1000"
+        height="667"
+        style="aspect-ratio:1000 / 667"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </picture>
+                </figure><figure class="reader-figure sheet-figure is-wide">
+                  <picture class="">
       <source type="image/avif" srcset="/prototype2/media/a2a9a7c14fe4794c-400.avif 400w, /prototype2/media/a2a9a7c14fe4794c-800.avif 800w, /prototype2/media/a2a9a7c14fe4794c-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <source type="image/webp" srcset="/prototype2/media/a2a9a7c14fe4794c-400.webp 400w, /prototype2/media/a2a9a7c14fe4794c-800.webp 800w, /prototype2/media/a2a9a7c14fe4794c-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
       <img
@@ -2141,8 +2161,8 @@ setTimeout(function () { var root = document.documentElement;
         width="1000"
         height="668"
         style="aspect-ratio:1000 / 668"
-        loading="eager"
-        fetchpriority="high"
+        loading="lazy"
+        decoding="async"
       />
     </picture>
                 </figure><figure class="reader-figure sheet-figure is-wide">
@@ -2201,27 +2221,13 @@ setTimeout(function () { var root = document.documentElement;
         decoding="async"
       />
     </picture>
-                </figure><figure class="reader-figure sheet-figure is-wide">
-                  <picture class="">
-      <source type="image/avif" srcset="/prototype2/media/ccf668d3ce220c31-400.avif 400w, /prototype2/media/ccf668d3ce220c31-800.avif 800w, /prototype2/media/ccf668d3ce220c31-1000.avif 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <source type="image/webp" srcset="/prototype2/media/ccf668d3ce220c31-400.webp 400w, /prototype2/media/ccf668d3ce220c31-800.webp 800w, /prototype2/media/ccf668d3ce220c31-1000.webp 1000w" sizes="(max-width: 899px) 92vw, 40vw" />
-      <img
-        src="/prototype2/media/ccf668d3ce220c31-1000.jpg"
-        alt=""
-        width="1000"
-        height="667"
-        style="aspect-ratio:1000 / 667"
-        loading="lazy"
-        decoding="async"
-      />
-    </picture>
                 </figure>
           </div>
           <button type="button" class="sheet-step sheet-prev" data-figure-step="-1" aria-label="Previous photograph">
-                <svg viewBox="0 0 9 16" aria-hidden="true"><path d="M8 1 1 8l7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M14.5 1.5 L3 14 L14.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
               </button>
               <button type="button" class="sheet-step sheet-next" data-figure-step="1" aria-label="Next photograph">
-                <svg viewBox="0 0 9 16" aria-hidden="true"><path d="m1 1 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M1.5 1.5 L13 14 L1.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
               </button>
               <p class="sr-only" data-figure-count data-template="Photograph {n} of {total}" aria-live="polite"></p>
         </div>
@@ -2316,10 +2322,10 @@ setTimeout(function () { var root = document.documentElement;
                 </figure>
           </div>
           <button type="button" class="sheet-step sheet-prev" data-figure-step="-1" aria-label="Previous photograph">
-                <svg viewBox="0 0 9 16" aria-hidden="true"><path d="M8 1 1 8l7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M14.5 1.5 L3 14 L14.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
               </button>
               <button type="button" class="sheet-step sheet-next" data-figure-step="1" aria-label="Next photograph">
-                <svg viewBox="0 0 9 16" aria-hidden="true"><path d="m1 1 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M1.5 1.5 L13 14 L1.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
               </button>
               <p class="sr-only" data-figure-count data-template="Photograph {n} of {total}" aria-live="polite"></p>
         </div>
@@ -2495,10 +2501,10 @@ setTimeout(function () { var root = document.documentElement;
                 </figure>
           </div>
           <button type="button" class="sheet-step sheet-prev" data-figure-step="-1" aria-label="Previous photograph">
-                <svg viewBox="0 0 9 16" aria-hidden="true"><path d="M8 1 1 8l7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M14.5 1.5 L3 14 L14.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
               </button>
               <button type="button" class="sheet-step sheet-next" data-figure-step="1" aria-label="Next photograph">
-                <svg viewBox="0 0 9 16" aria-hidden="true"><path d="m1 1 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M1.5 1.5 L13 14 L1.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
               </button>
               <p class="sr-only" data-figure-count data-template="Photograph {n} of {total}" aria-live="polite"></p>
         </div>
@@ -2772,15 +2778,15 @@ setTimeout(function () { var root = document.documentElement;
           </button>
     </div>
     <button type="button" class="about-reel-step is-prev" data-about-reel-step="-1" aria-label="Earlier photographs" hidden>
-      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="M8 1 1 8l7 7" /></svg>
+      <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M14.5 1.5 L3 14 L14.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
     </button>
     <button type="button" class="about-reel-step is-next" data-about-reel-step="1" aria-label="More photographs" hidden>
-      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="m1 1 7 7-7 7" /></svg>
+      <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M1.5 1.5 L13 14 L1.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
     </button>
   </div>
           </div>
         </div>
-        <p>Based on her reflections as an artist, her experience in color prediction and mural painting, brings to all her work, with color as a primary tool, an identifiable language.</p><p>She began her artistic career painting and soon realized that she had a natural ability with color. In her own words, ‘All I have done throughout my career has been to cultivate this natural gift. First as a mural painter, then designing color charts and prescribing color and finally as an artist’.</p><p>The tireless search for the reason of color and its form has obsessed artists throughout history, from the very creation of pictorial expression. Claudia Valsells knows about this and she aims to portray this into her artwork.</p><p>In her beginnings as a colorist she worked on commissions, for architects, and on projects of different scales advising and prescribing color. Soon she founded her own Studio, under the name of ‘Arts&amp;Claus’, in allegory to the ‘Arts&amp;Craft’ movement where she always found a lot of inspiration. She specialized in mural painting, color applied to architecture, and interior design for 20 years on projects in Spain and abroad. Her role was to convey the value of color and its texture in the decoration of interior spaces working closely with professionals in the fields of art, design, and architecture. It was in this context, working close with architects and designers, that she found out the communication between professionals was based by the painting companies, relegated the work of the colorist to the background due to ignorance or fear clients to make a mistake or be branded as eccentric. It was then when Claudia Valsells created a specific chromatic selection, a COLOUR CHART, with more than 200 references, which have been used as color communication tools by Spain’s best architects.</p><p>Her work has two very defined characteristics: on the one hand her chromatic instinct, a gift of colors and on the other her ability to select, group and interact colors creating a chromatic language of her own.</p>
+        <p>Based on her reflections as an artist, her experience in color prediction and mural painting, brings to all her work, with color as a primary tool, an identifiable language.</p><p>She began her artistic career painting and soon realized that she had a natural ability with color. In her own words, ‘All I have done throughout my career has been to cultivate this natural gift. First as a mural painter, then designing color charts and prescribing color and finally as an artist’.</p><p>The tireless search for the reason of color and its form has obsessed artists throughout history, from the very creation of pictorial expression. Claudia Valsells knows about this and she aims to portray this into her artwork.</p><p>In her beginnings as a colorist she worked on commissions, for architects, and on projects of different scales advising and prescribing color. Soon she founded her own Studio, under the name of ‘Arts&amp;Claus’, in allegory to the ‘Arts&amp;Craft’ movement where she always found a lot of inspiration. She specialized in mural painting, color applied to architecture, and interior design for 20 years on projects in Spain and abroad. Her role was to convey the value of color and its texture in the decoration of interior spaces working closely with professionals in the fields of art, design, and architecture. It was in this context, working close with architects and designers, that she found out the communication between professionals was based by the painting companies, relegated the work of the colorist to the background due to ignorance or fear clients to make a mistake or be branded as eccentric. It was then when Claudia Valsells created a specific chromatic selection, a COLOUR CHART, with more than 200 references, which have been used as color communication tools by Spain’s best architects.</p><p>Her work has two very defined characteristics: on the one hand her chromatic instinct, a gift of colors and on the other her ability to select, group and interact colors creating a chromatic language of her own.</p><p>Currently she combines her activity as an artist with colour prescription in the areas of design and architecture.</p><p>Her work is represented, in Spain and abroad, by the Barcelona gallery owner Miquel Alzueta. <a class="about-link hrow" href="https://alzuetagallery.com" target="_blank" rel="noopener">ALZUETA GALLERY</a></p>
       </div>
       <div class="about-record">
         <section class="about-shows">
@@ -2903,136 +2909,141 @@ setTimeout(function () { var root = document.documentElement;
     <h3 class="about-label">Art fairs</h3>
     <div class="about-show-columns">
       <ul class="about-show-list"><li class="about-show">
-    <span class="about-show-when">2026 February</span>
-    <span class="about-show-title">Zona Maco CDMX</span>
-    <span class="about-show-line">with Alzueta Gallery</span>
-    <span class="about-show-place">Mexico</span>
+    <span class="about-show-when">2026</span>
+    <span class="about-show-title">ART COLOGNE</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Cologne, Germany</span>
   </li><li class="about-show">
-    <span class="about-show-when">2025 October</span>
-    <span class="about-show-title">Estampa contemporary<br />art fair,</span>
-    <span class="about-show-line">with Alzueta Gallery</span>
-    <span class="about-show-place">Madrid</span>
+    <span class="about-show-when">2026</span>
+    <span class="about-show-title">THE ARMORY SHOW</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">New York, USA</span>
   </li><li class="about-show">
-    <span class="about-show-when">2024 February</span>
+    <span class="about-show-when">2026</span>
     <span class="about-show-title">ZONA MACO</span>
-    <span class="about-show-line">with Alzueta Gallery</span>
-    
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Mexico City, Mexico</span>
   </li><li class="about-show">
-    <span class="about-show-when">2024 November</span>
-    <span class="about-show-title">Luxemburg art week</span>
-    <span class="about-show-line">with Alzueta Gallery</span>
-    <span class="about-show-place">Luxemburg</span>
+    <span class="about-show-when">2025</span>
+    <span class="about-show-title">ESTAMPA</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
   </li><li class="about-show">
-    <span class="about-show-when">2023 February</span>
-    <span class="about-show-title">Contemporary Art Fair</span>
-    <span class="about-show-line">Art Rotterdam</span>
-    <span class="about-show-place">Rotterdam</span>
+    <span class="about-show-when">2025</span>
+    <span class="about-show-title">THE ARMORY SHOW</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">New York, USA</span>
   </li><li class="about-show">
-    <span class="about-show-when">2021 October</span>
-    <span class="about-show-title">Estampa Contemporary Art Fair</span>
-    
-    <span class="about-show-place">Alzueta Gallery, Madrid</span>
+    <span class="about-show-when">2024</span>
+    <span class="about-show-title">LUXEMBOURG ART WEEK</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Luxembourg, Luxembourg</span>
   </li><li class="about-show">
-    <span class="about-show-when">2021 September</span>
-    <span class="about-show-title">Art Paris Fair</span>
-    
-    <span class="about-show-place">Alzueta Gallery, Paris</span>
+    <span class="about-show-when">2024</span>
+    <span class="about-show-title">ZONAMACO</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Mexico City, Mexico</span>
   </li><li class="about-show">
-    <span class="about-show-when">2021 June</span>
-    <span class="about-show-title">Art Madrid Feria</span>
-    
-    <span class="about-show-place">Alzueta Gallery, Madrid</span>
+    <span class="about-show-when">2023</span>
+    <span class="about-show-title">ART ROTTERDAM</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Rotterdam, The Netherlands</span>
   </li><li class="about-show">
-    <span class="about-show-when">2019 March</span>
-    <span class="about-show-title">AFF Art Fair</span>
-    
-    <span class="about-show-place">Brussels</span>
+    <span class="about-show-when">2022</span>
+    <span class="about-show-title">ART PARIS</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Paris, France</span>
   </li><li class="about-show">
-    <span class="about-show-when">2019 March</span>
-    <span class="about-show-title">Art Madrid</span>
-    
-    <span class="about-show-place">Madrid</span>
+    <span class="about-show-when">2021</span>
+    <span class="about-show-title">ESTAMPA ART FAIR</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
   </li><li class="about-show">
-    <span class="about-show-when">2018</span>
-    <span class="about-show-title">Art fair</span>
-    
-    <span class="about-show-place">Hamburg</span>
+    <span class="about-show-when">2021</span>
+    <span class="about-show-title">ART PARIS</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Paris, France</span>
   </li><li class="about-show">
-    <span class="about-show-when">2018</span>
-    <span class="about-show-title">Art Elysees</span>
-    
-    <span class="about-show-place">París</span>
+    <span class="about-show-when">2021</span>
+    <span class="about-show-title">ART MADRID</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
   </li><li class="about-show">
-    <span class="about-show-when">2018</span>
-    <span class="about-show-title">Art Fair</span>
-    
-    <span class="about-show-place">Stockholm</span>
+    <span class="about-show-when">2019</span>
+    <span class="about-show-title">ART ÉLYSÉES-ART &amp; DESIGN</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Paris, France</span>
   </li><li class="about-show">
-    <span class="about-show-when">2018</span>
-    <span class="about-show-title">Contemporary Art Fair<br />Just LX,</span>
-    
-    <span class="about-show-place">Portugal</span>
+    <span class="about-show-when">2019</span>
+    <span class="about-show-title">ART PARIS GRAND PALAIS</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Paris, France</span>
   </li><li class="about-show">
-    <span class="about-show-when">2018</span>
-    <span class="about-show-title">Almoneda Antik Passion</span>
-    
-    <span class="about-show-place">Madrid</span>
-  </li><li class="about-show">
-    <span class="about-show-when">2019 April</span>
-    <span class="about-show-title">Almoneda, Ifema<br />Feria de Madrid</span>
-    
-    <span class="about-show-place">Palau de Casavells, Madrid.</span>
+    <span class="about-show-when">2019</span>
+    <span class="about-show-title">ALMONEDA</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
   </li></ul>
       <ul class="about-show-list"><li class="about-show">
-    <span class="about-show-when">2018</span>
-    <span class="about-show-title">Art Fair Grand Palais</span>
-    
-    <span class="about-show-place">Paris</span>
+    <span class="about-show-when">2019</span>
+    <span class="about-show-title">ART MADRID</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
   </li><li class="about-show">
     <span class="about-show-when">2018</span>
-    <span class="about-show-title">Eurantica Art Fair</span>
-    
-    <span class="about-show-place">Brussels</span>
-  </li><li class="about-show">
-    <span class="about-show-when">2019 April</span>
-    <span class="about-show-title">Art Paris Grand Palais</span>
-    
-    <span class="about-show-place">París</span>
+    <span class="about-show-title">THE AFFORDABLE ART FAIR HAMBURG</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Hamburg, Germany</span>
   </li><li class="about-show">
     <span class="about-show-when">2018</span>
-    <span class="about-show-title">Art Madrid,</span>
-    
-    <span class="about-show-place">Madrid</span>
+    <span class="about-show-title">STOCKHOLM INDEPENDENT ART FAIR</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Stockholm, Sweden</span>
   </li><li class="about-show">
-    <span class="about-show-when">2017 July</span>
-    <span class="about-show-title">Uterqüe Art Essays</span>
-    <span class="about-show-line">AW 2017</span>
-    
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">JUST LX</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Lisbon, Portugal</span>
   </li><li class="about-show">
-    <span class="about-show-when">2017 March</span>
-    <span class="about-show-title">International Art Fair,<br />Art Paris</span>
-    
-    <span class="about-show-place">París</span>
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">ALMONEDA</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
   </li><li class="about-show">
-    <span class="about-show-when">2017 February</span>
-    <span class="about-show-title">Art Madrid</span>
-    
-    <span class="about-show-place">Madrid</span>
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">ART FAIR GRAND PALAIS</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Paris, France</span>
   </li><li class="about-show">
-    <span class="about-show-when">2016 November</span>
-    <span class="about-show-title">Antica Namur,</span>
-    
-    <span class="about-show-place">Belgium</span>
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">EURANTICA ART FAIR</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Brussels, Belgium</span>
   </li><li class="about-show">
-    <span class="about-show-when">2016 October</span>
-    <span class="about-show-title">Art Élysées,<br />International Art Fair,</span>
-    
-    <span class="about-show-place">París</span>
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">ART MADRID</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
   </li><li class="about-show">
-    <span class="about-show-when">2016 June</span>
-    <span class="about-show-title">Scope Basel,</span>
-    
-    <span class="about-show-place">Basel art fair</span>
+    <span class="about-show-when">2017</span>
+    <span class="about-show-title">ART PARIS</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Paris, France</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2017</span>
+    <span class="about-show-title">ART MADRID</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2016</span>
+    <span class="about-show-title">ANTICA NAMUR</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Namur, Belgium</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2016</span>
+    <span class="about-show-title">SCOPE BASEL</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Basel, Switzerland</span>
   </li></ul>
     </div>
   </section>
@@ -3041,28 +3052,30 @@ setTimeout(function () { var root = document.documentElement;
           <ul class="about-collection-list">
             <li class="about-collection">
                   <span class="about-collection-name">Fundació Vilacases</span>
-                  <span class="about-collection-place">Barcelona</span>
+                  <span class="about-collection-place">Barcelona, SPAIN</span>
                 </li><li class="about-collection">
                   <span class="about-collection-name">Fundació Banc Sabadell</span>
-                  <span class="about-collection-place">Barcelona</span>
+                  <span class="about-collection-place">Barcelona, SPAIN</span>
                 </li><li class="about-collection">
                   <span class="about-collection-name">Collection Hayot</span>
                   <span class="about-collection-place">France</span>
                 </li><li class="about-collection">
+                  <span class="about-collection-name">Martinez Collection</span>
+                  <span class="about-collection-place">Mexico-US</span>
+                </li><li class="about-collection">
                   <span class="about-collection-name">Niederberghaus Collection</span>
-                  <span class="about-collection-place">Mexico - US</span>
+                  <span class="about-collection-place">Germany</span>
                 </li><li class="about-collection">
                   <span class="about-collection-name">Collection Richard</span>
                   <span class="about-collection-place">France</span>
                 </li><li class="about-collection">
                   <span class="about-collection-name">Smith Collection</span>
-                  <span class="about-collection-place">Wyoming</span>
+                  <span class="about-collection-place">Wyoming, USA</span>
                 </li>
           </ul>
         </section>
       </div>
       <address class="about-contact">
-        <a href="tel:+34609769186">+34 609 76 91 86</a>
         <a href="mailto:editorial@alzuetagallery.com">editorial@alzuetagallery.com</a><a href="mailto:claudia@claudiacolor.com">claudia@claudiacolor.com</a>
       </address>
       <p class="about-foot"><b>Claudia Valsells</b> © All Rights Reserved</p>
@@ -3073,16 +3086,16 @@ setTimeout(function () { var root = document.documentElement;
   </div>
   </section>
   <a class="about-close" href="#" data-panel-close="about">Close</a>
-  <div class="about-cue" data-about-cue aria-hidden="true">
-    <svg viewBox="0 0 28 16" focusable="false">
+  <button type="button" class="about-cue" data-about-cue aria-label="Scroll down">
+    <svg viewBox="0 0 28 16" aria-hidden="true" focusable="false">
       <path d="M1.5 1.5 L14 13 L26.5 1.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
     </svg>
-  </div>
+  </button>
   <button type="button" class="about-viewer-step is-prev" data-about-step="-1" aria-label="Previous photograph">
-      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="M8 1 1 8l7 7" /></svg>
+      <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M14.5 1.5 L3 14 L14.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
     </button>
     <button type="button" class="about-viewer-step is-next" data-about-step="1" aria-label="Next photograph">
-      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="m1 1 7 7-7 7" /></svg>
+      <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M1.5 1.5 L13 14 L1.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
     </button>
 <div class="lightbox" data-lightbox data-available-label="Available" hidden>
     <div class="lightbox-veil" data-lightbox-veil></div>

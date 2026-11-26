@@ -61,7 +61,7 @@ export function initAbout() {
     const about = document.getElementById('about');
     if (!about)
         return;
-    const loop = initReel(about);
+    const loop = initReel(about, about);
     initViewer(about);
     if (reduceMotion.matches) {
         // The reel stands in its place and moves only by hand.
@@ -143,7 +143,7 @@ export function initAbout() {
         leadRun = height * Math.min(LEAD_MAX, Math.max(LEAD_MIN, lead.length * LEAD_PER_WORD));
         if (loop?.measure()) {
             // In from just out of sight at the right of the measure.
-            reelStart = loop.span + loop.gap;
+            reelStart = loop.start;
             reelRun = Math.max(height * REEL_MIN, reelStart);
         }
         else {
@@ -221,13 +221,19 @@ export function initAbout() {
         glide = 0;
         glided = true;
     };
-    const runGlide = () => {
+    // The panel carried to a scroll of its own, gently: the opening's glide and
+    // the chevron's. A hand on the panel stops it where it is.
+    const glideTo = (to, ms) => {
+        endGlide();
+        glided = false;
         const from = about.scrollTop;
-        // Already moved — a jump, a restored position — and there is nothing to
-        // glide to: the reader is somewhere of their own choosing.
-        if (from > 2)
+        to = Math.max(0, Math.min(to, about.scrollHeight - about.clientHeight));
+        if (Math.abs(to - from) < 1)
             return endGlide();
-        const to = leadRun;
+        if (reduceMotion.matches) {
+            about.scrollTop = to;
+            return endGlide();
+        }
         const began = performance.now();
         let placed = from;
         const step = (now) => {
@@ -235,7 +241,7 @@ export function initAbout() {
             // script — and the glide gives way rather than pulling it back.
             if (Math.abs(about.scrollTop - placed) > 2)
                 return endGlide();
-            const t = Math.min(1, (now - began) / GLIDE_MS);
+            const t = Math.min(1, (now - began) / ms);
             const e = t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2;
             about.scrollTop = from + (to - from) * e;
             placed = about.scrollTop;
@@ -246,6 +252,24 @@ export function initAbout() {
         };
         glide = requestAnimationFrame(step);
     };
+    const runGlide = () => {
+        // Already moved — a jump, a restored position — and there is nothing to
+        // glide to: the reader is somewhere of their own choosing.
+        if (about.scrollTop > 2)
+            return endGlide();
+        glideTo(leadRun, GLIDE_MS);
+    };
+    /*
+     * The chevron takes the reader on, as well as asking them to go (Frank,
+     * 2026-11-18): to the next of the panel's own stops — the lead written, the
+     * photographs in — and after those a screen at a time, to the end.
+     */
+    cue?.addEventListener('click', () => {
+        const y = about.scrollTop;
+        const h = about.clientHeight;
+        const stops = [leadRun, reelFrom + reelRun].filter((at) => at > y + h * 0.05);
+        glideTo(stops[0] ?? y + h * 0.8, GLIDE_MS);
+    });
     for (const kind of ['wheel', 'touchstart', 'pointerdown']) {
         about.addEventListener(kind, () => { if (!glided)
             endGlide(); }, { passive: true });
@@ -329,8 +353,13 @@ const REEL_FLING_MS = 240;
  * are too few to fill it twice over, they are repeated (hidden from assistive
  * technology and the tab order) so that one never shows in two places.
  */
-function initReel(about) {
-    const reel = about.querySelector('[data-about-reel]');
+/**
+ * `root` holds the reel; `bounds` is what it is seen through to its edges, and
+ * what says a photograph is up large (`.is-viewing`): About's panel, or the
+ * Colour Chart's page.
+ */
+export function initReel(root, bounds) {
+    const reel = root.querySelector('[data-about-reel]');
     const track = reel?.querySelector('[data-about-track]');
     if (!reel || !track)
         return null;
@@ -343,6 +372,7 @@ function initReel(about) {
     let gap = 0;
     let length = 0;
     let before = 0;
+    let start = 0;
     let looped = false;
     let entry = 0;
     let along = 0;
@@ -351,10 +381,11 @@ function initReel(about) {
     let frame = 0;
     let last = 0;
     // Where a photograph stands in the window at a given distance round the
-    // loop. While the reel is coming in nothing stands left of the first, so it
-    // arrives from empty; at rest one may stand partly out at the left.
+    // loop, always wrapping out of sight to the left: the photograph that rests
+    // partly out at the left comes in with the rest, ahead of the first, so
+    // nothing is moved from one end to the other as the reel comes to its place.
     const wrap = (x, from) => from + ((((x - from) % length) + length) % length);
-    const xAt = (slot, offset) => (looped ? wrap(slot.at - offset, entry > 0.5 ? 0 : -before) : slot.at);
+    const xAt = (slot, offset) => (looped ? wrap(slot.at - offset, -before) : slot.at);
     const place = () => {
         const offset = along + hand;
         for (const slot of slots) {
@@ -404,11 +435,13 @@ function initReel(about) {
         // The photographs are seen to the edges of the window, not only within the
         // measure: `lead` is the margin left of the track, `tail` the window's
         // width from the track's left edge.
-        const box = about.getBoundingClientRect();
+        const box = bounds.getBoundingClientRect();
         const left = track.getBoundingClientRect().left;
         const lead = Math.max(0, left - box.left);
         const tail = Math.max(span, box.right - left);
         before = lead + widest + gap;
+        // Far enough right that even the photograph ahead of the first is unseen.
+        start = tail + (looped ? before : 0);
         // Enough of a loop that what leaves on one side is gone before it comes
         // back on the other.
         const copies = looped ? Math.max(1, Math.ceil((tail + before) / total)) : 1;
@@ -451,7 +484,7 @@ function initReel(about) {
             return;
         if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight')
             return;
-        if (about.classList.contains('is-viewing'))
+        if (bounds.classList.contains('is-viewing'))
             return;
         event.preventDefault();
         step(event.key === 'ArrowRight' ? 1 : -1);
@@ -478,6 +511,9 @@ function initReel(about) {
         if (!dx || Math.abs(dx) < Math.abs(event.shiftKey ? 0 : event.deltaY))
             return;
         event.preventDefault();
+        // Still on its way in: the scroll has it.
+        if (entry > 0.5)
+            return;
         handTo += dx * (event.deltaMode === 1 ? 16 : 1);
         hand = handTo;
         place();
@@ -485,7 +521,7 @@ function initReel(about) {
     let press = null;
     let draggedAt = -Infinity;
     track.addEventListener('pointerdown', (event) => {
-        if (!looped || event.button !== 0)
+        if (!looped || entry > 0.5 || event.button !== 0)
             return;
         press = { id: event.pointerId, x: event.clientX, y: event.clientY, from: handTo, moved: false, lastX: event.clientX, lastT: event.timeStamp, speed: 0 };
     });
@@ -538,6 +574,7 @@ function initReel(about) {
     return {
         get span() { return span; },
         get gap() { return gap; },
+        get start() { return start; },
         measure,
         reset() {
             cancelAnimationFrame(frame);

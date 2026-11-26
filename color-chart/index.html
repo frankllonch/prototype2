@@ -11,6 +11,7 @@
 <link rel="modulepreload" href="/prototype2/js/text-roll.js" />
 <link rel="modulepreload" href="/prototype2/js/transitions.js" />
 <link rel="modulepreload" href="/prototype2/js/controls.js" />
+<link rel="modulepreload" href="/prototype2/js/pile.js" />
 <link rel="modulepreload" href="/prototype2/js/stack.js" />
 <link rel="modulepreload" href="/prototype2/js/years.js" />
 <link rel="modulepreload" href="/prototype2/js/hover-list.js" />
@@ -18,6 +19,8 @@
 <link rel="modulepreload" href="/prototype2/js/figures.js" />
 <link rel="modulepreload" href="/prototype2/js/lightbox.js" />
 <link rel="modulepreload" href="/prototype2/js/cursor.js" />
+<link rel="modulepreload" href="/prototype2/js/ball.js" />
+<link rel="modulepreload" href="/prototype2/js/ball-tuner.js" />
 <link rel="modulepreload" href="/prototype2/js/film.js" />
 <link rel="modulepreload" href="/prototype2/js/tilt.js" />
 <link rel="modulepreload" href="/prototype2/js/paging.js" />
@@ -32,15 +35,11 @@
 <link rel="modulepreload" href="/prototype2/js/current.js" />
 <link rel="modulepreload" href="/prototype2/js/scrollbar.js" />
 <link rel="modulepreload" href="/prototype2/js/scramble.js" />
-<link rel="modulepreload" href="/prototype2/js/hover-tuner.js" />
+<link rel="modulepreload" href="/prototype2/js/pile-tuner.js" />
 <link rel="modulepreload" href="/prototype2/js/rise.js" />
 <link rel="modulepreload" href="/prototype2/js/menu.js" />
 <link rel="modulepreload" href="/prototype2/js/index.js" />
 <script>document.documentElement.classList.add('js');
-// The hover tuner's lettering, laid over the stylesheet before the first paint
-// so that moving between pages with it on does not flash the defaults. Only in
-// a browser that has asked for the tuner (?tune); see client/hover-tuner.ts.
-try { if (localStorage.getItem('cv-tune') === '1') { document.documentElement.setAttribute('data-tune', ''); var tc = localStorage.getItem('cv-tune-css'); if (tc) { var ts = document.createElement('style'); ts.id = 'tune-early'; ts.textContent = tc; document.head.appendChild(ts); } } } catch (e) {}
 // Arriving at What's Color by its link, the page is laid out at the top and
 // moved down to the written sentence by script — so it is kept covered until
 // it has been, and no frame is ever painted in the wrong place. The script
@@ -50,13 +49,20 @@ try { if (localStorage.getItem('cv-tune') === '1') { document.documentElement.se
 // makes — so a browser that keeps the plain anchor jump never waits for it.
 try { var nav = performance.getEntriesByType('navigation')[0];
   if (location.hash === '#whats-color' && (!nav || nav.type === 'navigate')
-    && CSS.supports('animation-timeline: view()')
     && !matchMedia('(prefers-reduced-motion: reduce)').matches
     && !matchMedia('(max-width: 899px)').matches) {
     document.documentElement.classList.add('wc-arriving', 'wc-swatch-drop');
     setTimeout(function () { document.documentElement.classList.remove('wc-arriving') }, 1500);
     setTimeout(function () { document.documentElement.classList.remove('wc-swatch-drop') }, 700);
   } } catch (e) {}
+// Trying the ways the start page's film can go and come back (THE WAY OUT
+// OF THE START PAGE, 00-base.css): ?film=wipe, fade, cut or blur holds for
+// the visit; ?film=off goes back to the stylesheet's own setting.
+try { var film = new URLSearchParams(location.search).get('film');
+  if (film === 'off') sessionStorage.removeItem('cv-film');
+  else if (film && /^(fade|cut|wipe|blur)$/.test(film)) sessionStorage.setItem('cv-film', film);
+  film = sessionStorage.getItem('cv-film');
+  if (film) document.documentElement.style.setProperty('--start-film-style', 'film-' + film); } catch (e) {}
 // The page's colour, drawn here rather than by client/current.ts so that the
 // block in the bar is the right colour on the first frame. Drawn by the scripts,
 // it was painted once in the list's first colour and then changed, on every
@@ -101,16 +107,10 @@ setTimeout(function () { var root = document.documentElement;
     <a class="top-soon" href="/prototype2/#whats-color"  data-roll><span class="roll-word" aria-hidden="true" style="--n: 12"><span class="scram" data-ch="W" style="--i: 0">W</span><span class="scram" data-ch="h" style="--i: 1">h</span><span class="scram" data-ch="a" style="--i: 2">a</span><span class="scram" data-ch="t" style="--i: 3">t</span><span class="scram" data-ch="’" style="--i: 4">’</span><span class="scram" data-ch="s" style="--i: 5">s</span> <span class="scram" data-ch="C" style="--i: 6">C</span><span class="scram" data-ch="o" style="--i: 7">o</span><span class="scram" data-ch="l" style="--i: 8">l</span><span class="scram" data-ch="o" style="--i: 9">o</span><span class="scram" data-ch="r" style="--i: 10">r</span><span class="scram" data-ch="?" style="--i: 11">?</span></span><span class="roll-text">What’s Color?</span></a>
     <nav class="menu" aria-label="Primary">
       <a
-            href="/prototype2/color-chart/"
-            
-            aria-current="page"
-            style="--menu-phone: 5"
-            data-roll
-          ><span class="roll-word" aria-hidden="true" style="--n: 10"><span class="scram" data-ch="C" style="--i: 0">C</span><span class="scram" data-ch="o" style="--i: 1">o</span><span class="scram" data-ch="l" style="--i: 2">l</span><span class="scram" data-ch="o" style="--i: 3">o</span><span class="scram" data-ch="r" style="--i: 4">r</span> <span class="scram" data-ch="C" style="--i: 5">C</span><span class="scram" data-ch="h" style="--i: 6">h</span><span class="scram" data-ch="a" style="--i: 7">a</span><span class="scram" data-ch="r" style="--i: 8">r</span><span class="scram" data-ch="t" style="--i: 9">t</span></span><span class="roll-text">Color Chart</span></a><a
             href="/prototype2/exhibitions/"
             
             
-            style="--menu-phone: 3"
+            style="--menu-phone: 5"
             data-roll
           ><span class="roll-word" aria-hidden="true" style="--n: 11"><span class="scram" data-ch="E" style="--i: 0">E</span><span class="scram" data-ch="x" style="--i: 1">x</span><span class="scram" data-ch="h" style="--i: 2">h</span><span class="scram" data-ch="i" style="--i: 3">i</span><span class="scram" data-ch="b" style="--i: 4">b</span><span class="scram" data-ch="i" style="--i: 5">i</span><span class="scram" data-ch="t" style="--i: 6">t</span><span class="scram" data-ch="i" style="--i: 7">i</span><span class="scram" data-ch="o" style="--i: 8">o</span><span class="scram" data-ch="n" style="--i: 9">n</span><span class="scram" data-ch="s" style="--i: 10">s</span></span><span class="roll-text">Exhibitions</span></a><a
             href="/prototype2/commissioned/"
@@ -122,9 +122,15 @@ setTimeout(function () { var root = document.documentElement;
             href="/prototype2/artwork/"
             
             
-            style="--menu-phone: 2"
+            style="--menu-phone: 3"
             data-roll
           ><span class="roll-word" aria-hidden="true" style="--n: 7"><span class="scram" data-ch="A" style="--i: 0">A</span><span class="scram" data-ch="r" style="--i: 1">r</span><span class="scram" data-ch="t" style="--i: 2">t</span><span class="scram" data-ch="w" style="--i: 3">w</span><span class="scram" data-ch="o" style="--i: 4">o</span><span class="scram" data-ch="r" style="--i: 5">r</span><span class="scram" data-ch="k" style="--i: 6">k</span></span><span class="roll-text">Artwork</span></a><a
+            href="/prototype2/color-chart/"
+            
+            aria-current="page"
+            style="--menu-phone: 2"
+            data-roll
+          ><span class="roll-word" aria-hidden="true" style="--n: 10"><span class="scram" data-ch="C" style="--i: 0">C</span><span class="scram" data-ch="o" style="--i: 1">o</span><span class="scram" data-ch="l" style="--i: 2">l</span><span class="scram" data-ch="o" style="--i: 3">o</span><span class="scram" data-ch="r" style="--i: 4">r</span> <span class="scram" data-ch="C" style="--i: 5">C</span><span class="scram" data-ch="h" style="--i: 6">h</span><span class="scram" data-ch="a" style="--i: 7">a</span><span class="scram" data-ch="r" style="--i: 8">r</span><span class="scram" data-ch="t" style="--i: 9">t</span></span><span class="roll-text">Color Chart</span></a><a
             href="/prototype2/#about"
             data-panel-open="about"
             
@@ -134,346 +140,207 @@ setTimeout(function () { var root = document.documentElement;
     </nav>
   </header>
 
-<main id="main"><div class="chart" data-chart-reveal="0.1303" data-chart-written="0.8">
+<main id="main"><div class="chart" data-chart>
   <div class="chart-page">
     <!--
-      The bar names the page, so the heading would be the same words twice. It
-      is here for the document's structure and for anything reading the page
-      rather than looking at it.
+      The opening: the title and the statement, held in place while the
+      reader scrolls the rest of it into being (client/chart.ts adds the run
+      of scroll behind it). Then, with the photographs under it, held again
+      while they are driven in. Without the script it is simply the top of the page.
     -->
-    <h1 class="sr-only">Color Chart</h1>
+    <div class="chart-hold" data-chart-hold><div class="chart-held" data-chart-held>
+    <div class="chart-opening" data-chart-opening>
+      <div class="chart-stage" data-chart-stage>
+        <div class="chart-statement" data-chart-type>
+          <h1 class="chart-title">Artist colour chart for architects and designers</h1>
+          <p data-chart-auto>Color has always been my inspiration:<br />a source of knowledge, a way of life!</p><p>Because of my devotion to color, 20 years ago, as a colorist specializing in interior design and architecture, I selected, gathered, and synthesized the colors I considered fundamental for these fields and made a color chart for their reference.</p><p>Few years ago, I decided to update that color chart and want to share it, this time, as a color artist, because I believe it all to be fruit of my artistic and personal research.</p>
+        </div>
+      </div>
+    </div>
 
-    <div class="chart-statement">
-    <p><span
-      class="chart-word"
-      style="--w0:0.0090;--w1:0.0180;animation-range: 0.90% 1.80%"
-    >Color</span> <span
-      class="chart-word"
-      style="--w0:0.0180;--w1:0.0270;animation-range: 1.80% 2.70%"
-    >has</span> <span
-      class="chart-word"
-      style="--w0:0.0270;--w1:0.0360;animation-range: 2.70% 3.60%"
-    >always</span> <span
-      class="chart-word"
-      style="--w0:0.0360;--w1:0.0449;animation-range: 3.60% 4.49%"
-    >been</span> <span
-      class="chart-word"
-      style="--w0:0.0449;--w1:0.0539;animation-range: 4.49% 5.39%"
-    >my</span> <span
-      class="chart-word"
-      style="--w0:0.0539;--w1:0.0629;animation-range: 5.39% 6.29%"
-    >inspiration:</span><br /><span
-      class="chart-word"
-      style="--w0:0.0629;--w1:0.0719;animation-range: 6.29% 7.19%"
-    >a</span> <span
-      class="chart-word"
-      style="--w0:0.0719;--w1:0.0809;animation-range: 7.19% 8.09%"
-    >source</span> <span
-      class="chart-word"
-      style="--w0:0.0809;--w1:0.0899;animation-range: 8.09% 8.99%"
-    >of</span> <span
-      class="chart-word"
-      style="--w0:0.0899;--w1:0.0989;animation-range: 8.99% 9.89%"
-    >knowledge,</span> <span
-      class="chart-word"
-      style="--w0:0.0989;--w1:0.1079;animation-range: 9.89% 10.79%"
-    >a</span> <span
-      class="chart-word"
-      style="--w0:0.1079;--w1:0.1169;animation-range: 10.79% 11.69%"
-    >way</span> <span
-      class="chart-word"
-      style="--w0:0.1169;--w1:0.1258;animation-range: 11.69% 12.58%"
-    >of</span> <span
-      class="chart-word"
-      style="--w0:0.1258;--w1:0.1348;animation-range: 12.58% 13.48%"
-    >life!</span></p><p><span
-      class="chart-word"
-      style="--w0:0.1348;--w1:0.1438;animation-range: 13.48% 14.38%"
-    >Because</span> <span
-      class="chart-word"
-      style="--w0:0.1438;--w1:0.1528;animation-range: 14.38% 15.28%"
-    >of</span> <span
-      class="chart-word"
-      style="--w0:0.1528;--w1:0.1618;animation-range: 15.28% 16.18%"
-    >my</span> <span
-      class="chart-word"
-      style="--w0:0.1618;--w1:0.1708;animation-range: 16.18% 17.08%"
-    >devotion</span> <span
-      class="chart-word"
-      style="--w0:0.1708;--w1:0.1798;animation-range: 17.08% 17.98%"
-    >to</span> <span
-      class="chart-word"
-      style="--w0:0.1798;--w1:0.1888;animation-range: 17.98% 18.88%"
-    >color,</span> <span
-      class="chart-word"
-      style="--w0:0.1888;--w1:0.1978;animation-range: 18.88% 19.78%"
-    >20</span> <span
-      class="chart-word"
-      style="--w0:0.1978;--w1:0.2067;animation-range: 19.78% 20.67%"
-    >years</span> <span
-      class="chart-word"
-      style="--w0:0.2067;--w1:0.2157;animation-range: 20.67% 21.57%"
-    >ago,</span> <span
-      class="chart-word"
-      style="--w0:0.2157;--w1:0.2247;animation-range: 21.57% 22.47%"
-    >as</span> <span
-      class="chart-word"
-      style="--w0:0.2247;--w1:0.2337;animation-range: 22.47% 23.37%"
-    >a</span> <span
-      class="chart-word"
-      style="--w0:0.2337;--w1:0.2427;animation-range: 23.37% 24.27%"
-    >colorist</span> <span
-      class="chart-word"
-      style="--w0:0.2427;--w1:0.2517;animation-range: 24.27% 25.17%"
-    >specializing</span> <span
-      class="chart-word"
-      style="--w0:0.2517;--w1:0.2607;animation-range: 25.17% 26.07%"
-    >in</span> <span
-      class="chart-word"
-      style="--w0:0.2607;--w1:0.2697;animation-range: 26.07% 26.97%"
-    >interior</span> <span
-      class="chart-word"
-      style="--w0:0.2697;--w1:0.2787;animation-range: 26.97% 27.87%"
-    >design</span> <span
-      class="chart-word"
-      style="--w0:0.2787;--w1:0.2876;animation-range: 27.87% 28.76%"
-    >and</span> <span
-      class="chart-word"
-      style="--w0:0.2876;--w1:0.2966;animation-range: 28.76% 29.66%"
-    >architecture,</span> <span
-      class="chart-word"
-      style="--w0:0.2966;--w1:0.3056;animation-range: 29.66% 30.56%"
-    >I</span> <span
-      class="chart-word"
-      style="--w0:0.3056;--w1:0.3146;animation-range: 30.56% 31.46%"
-    >selected,</span> <span
-      class="chart-word"
-      style="--w0:0.3146;--w1:0.3236;animation-range: 31.46% 32.36%"
-    >gathered,</span> <span
-      class="chart-word"
-      style="--w0:0.3236;--w1:0.3326;animation-range: 32.36% 33.26%"
-    >and</span> <span
-      class="chart-word"
-      style="--w0:0.3326;--w1:0.3416;animation-range: 33.26% 34.16%"
-    >synthesized</span> <span
-      class="chart-word"
-      style="--w0:0.3416;--w1:0.3506;animation-range: 34.16% 35.06%"
-    >the</span> <span
-      class="chart-word"
-      style="--w0:0.3506;--w1:0.3596;animation-range: 35.06% 35.96%"
-    >colors</span> <span
-      class="chart-word"
-      style="--w0:0.3596;--w1:0.3685;animation-range: 35.96% 36.85%"
-    >I</span> <span
-      class="chart-word"
-      style="--w0:0.3685;--w1:0.3775;animation-range: 36.85% 37.75%"
-    >considered</span> <span
-      class="chart-word"
-      style="--w0:0.3775;--w1:0.3865;animation-range: 37.75% 38.65%"
-    >fundamental</span> <span
-      class="chart-word"
-      style="--w0:0.3865;--w1:0.3955;animation-range: 38.65% 39.55%"
-    >for</span> <span
-      class="chart-word"
-      style="--w0:0.3955;--w1:0.4045;animation-range: 39.55% 40.45%"
-    >these</span> <span
-      class="chart-word"
-      style="--w0:0.4045;--w1:0.4135;animation-range: 40.45% 41.35%"
-    >fields</span> <span
-      class="chart-word"
-      style="--w0:0.4135;--w1:0.4225;animation-range: 41.35% 42.25%"
-    >and</span> <span
-      class="chart-word"
-      style="--w0:0.4225;--w1:0.4315;animation-range: 42.25% 43.15%"
-    >made</span> <span
-      class="chart-word"
-      style="--w0:0.4315;--w1:0.4404;animation-range: 43.15% 44.04%"
-    >a</span> <span
-      class="chart-word"
-      style="--w0:0.4404;--w1:0.4494;animation-range: 44.04% 44.94%"
-    >color</span> <span
-      class="chart-word"
-      style="--w0:0.4494;--w1:0.4584;animation-range: 44.94% 45.84%"
-    >chart</span> <span
-      class="chart-word"
-      style="--w0:0.4584;--w1:0.4674;animation-range: 45.84% 46.74%"
-    >for</span> <span
-      class="chart-word"
-      style="--w0:0.4674;--w1:0.4764;animation-range: 46.74% 47.64%"
-    >their</span> <span
-      class="chart-word"
-      style="--w0:0.4764;--w1:0.4854;animation-range: 47.64% 48.54%"
-    >reference.</span></p><p><span
-      class="chart-word"
-      style="--w0:0.4854;--w1:0.4944;animation-range: 48.54% 49.44%"
-    >Few</span> <span
-      class="chart-word"
-      style="--w0:0.4944;--w1:0.5034;animation-range: 49.44% 50.34%"
-    >years</span> <span
-      class="chart-word"
-      style="--w0:0.5034;--w1:0.5124;animation-range: 50.34% 51.24%"
-    >ago,</span> <span
-      class="chart-word"
-      style="--w0:0.5124;--w1:0.5213;animation-range: 51.24% 52.13%"
-    >I</span> <span
-      class="chart-word"
-      style="--w0:0.5213;--w1:0.5303;animation-range: 52.13% 53.03%"
-    >decided</span> <span
-      class="chart-word"
-      style="--w0:0.5303;--w1:0.5393;animation-range: 53.03% 53.93%"
-    >to</span> <span
-      class="chart-word"
-      style="--w0:0.5393;--w1:0.5483;animation-range: 53.93% 54.83%"
-    >update</span> <span
-      class="chart-word"
-      style="--w0:0.5483;--w1:0.5573;animation-range: 54.83% 55.73%"
-    >that</span> <span
-      class="chart-word"
-      style="--w0:0.5573;--w1:0.5663;animation-range: 55.73% 56.63%"
-    >color</span> <span
-      class="chart-word"
-      style="--w0:0.5663;--w1:0.5753;animation-range: 56.63% 57.53%"
-    >chart</span> <span
-      class="chart-word"
-      style="--w0:0.5753;--w1:0.5843;animation-range: 57.53% 58.43%"
-    >and</span> <span
-      class="chart-word"
-      style="--w0:0.5843;--w1:0.5933;animation-range: 58.43% 59.33%"
-    >want</span> <span
-      class="chart-word"
-      style="--w0:0.5933;--w1:0.6022;animation-range: 59.33% 60.22%"
-    >to</span> <span
-      class="chart-word"
-      style="--w0:0.6022;--w1:0.6112;animation-range: 60.22% 61.12%"
-    >share</span> <span
-      class="chart-word"
-      style="--w0:0.6112;--w1:0.6202;animation-range: 61.12% 62.02%"
-    >it,</span> <span
-      class="chart-word"
-      style="--w0:0.6202;--w1:0.6292;animation-range: 62.02% 62.92%"
-    >this</span> <span
-      class="chart-word"
-      style="--w0:0.6292;--w1:0.6382;animation-range: 62.92% 63.82%"
-    >time,</span> <span
-      class="chart-word"
-      style="--w0:0.6382;--w1:0.6472;animation-range: 63.82% 64.72%"
-    >as</span> <span
-      class="chart-word"
-      style="--w0:0.6472;--w1:0.6562;animation-range: 64.72% 65.62%"
-    >a</span> <span
-      class="chart-word"
-      style="--w0:0.6562;--w1:0.6652;animation-range: 65.62% 66.52%"
-    >color</span> <span
-      class="chart-word"
-      style="--w0:0.6652;--w1:0.6742;animation-range: 66.52% 67.42%"
-    >artist,</span> <span
-      class="chart-word"
-      style="--w0:0.6742;--w1:0.6831;animation-range: 67.42% 68.31%"
-    >because</span> <span
-      class="chart-word"
-      style="--w0:0.6831;--w1:0.6921;animation-range: 68.31% 69.21%"
-    >I</span> <span
-      class="chart-word"
-      style="--w0:0.6921;--w1:0.7011;animation-range: 69.21% 70.11%"
-    >believe</span> <span
-      class="chart-word"
-      style="--w0:0.7011;--w1:0.7101;animation-range: 70.11% 71.01%"
-    >it</span> <span
-      class="chart-word"
-      style="--w0:0.7101;--w1:0.7191;animation-range: 71.01% 71.91%"
-    >all</span> <span
-      class="chart-word"
-      style="--w0:0.7191;--w1:0.7281;animation-range: 71.91% 72.81%"
-    >to</span> <span
-      class="chart-word"
-      style="--w0:0.7281;--w1:0.7371;animation-range: 72.81% 73.71%"
-    >be</span> <span
-      class="chart-word"
-      style="--w0:0.7371;--w1:0.7461;animation-range: 73.71% 74.61%"
-    >fruit</span> <span
-      class="chart-word"
-      style="--w0:0.7461;--w1:0.7551;animation-range: 74.61% 75.51%"
-    >of</span> <span
-      class="chart-word"
-      style="--w0:0.7551;--w1:0.7640;animation-range: 75.51% 76.40%"
-    >my</span> <span
-      class="chart-word"
-      style="--w0:0.7640;--w1:0.7730;animation-range: 76.40% 77.30%"
-    >artistic</span> <span
-      class="chart-word"
-      style="--w0:0.7730;--w1:0.7820;animation-range: 77.30% 78.20%"
-    >and</span> <span
-      class="chart-word"
-      style="--w0:0.7820;--w1:0.7910;animation-range: 78.20% 79.10%"
-    >personal</span> <span
-      class="chart-word"
-      style="--w0:0.7910;--w1:0.8000;animation-range: 79.10% 80.00%"
-    >research.</span></p>
+    <div class="chart-reel about-reel chart-in" data-about-reel data-chart-reel>
+    <div class="about-reel-track" data-about-track>
+      <a class="about-reel-item" href="#chart-photographs" data-panel-open="chart-photographs" data-chart-photo="0" aria-label="Photograph 1 of 9">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/372fb344c1f2e244-400.avif 400w, /prototype2/media/372fb344c1f2e244-638.avif 638w" sizes="(max-width: 1097px) 121px, 11.1vw" />
+      <source type="image/webp" srcset="/prototype2/media/372fb344c1f2e244-400.webp 400w, /prototype2/media/372fb344c1f2e244-638.webp 638w" sizes="(max-width: 1097px) 121px, 11.1vw" />
+      <img
+        src="/prototype2/media/372fb344c1f2e244-638.jpg"
+        alt="Claudia Valsells’ artist colour chart in use"
+        width="638"
+        height="631"
+        style="aspect-ratio:638 / 631"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </a><a class="about-reel-item" href="#chart-photographs" data-panel-open="chart-photographs" data-chart-photo="1" aria-label="Photograph 2 of 9">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/b48aef56cb053b83-400.avif 400w, /prototype2/media/b48aef56cb053b83-591.avif 591w" sizes="(max-width: 1097px) 90px, 8.2vw" />
+      <source type="image/webp" srcset="/prototype2/media/b48aef56cb053b83-400.webp 400w, /prototype2/media/b48aef56cb053b83-591.webp 591w" sizes="(max-width: 1097px) 90px, 8.2vw" />
+      <img
+        src="/prototype2/media/b48aef56cb053b83-591.jpg"
+        alt="Claudia Valsells’ artist colour chart in use"
+        width="591"
+        height="788"
+        style="aspect-ratio:591 / 788"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </a><a class="about-reel-item" href="#chart-photographs" data-panel-open="chart-photographs" data-chart-photo="2" aria-label="Photograph 3 of 9">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/9c3370caf20fb57d-400.avif 400w, /prototype2/media/9c3370caf20fb57d-597.avif 597w" sizes="(max-width: 1097px) 90px, 8.2vw" />
+      <source type="image/webp" srcset="/prototype2/media/9c3370caf20fb57d-400.webp 400w, /prototype2/media/9c3370caf20fb57d-597.webp 597w" sizes="(max-width: 1097px) 90px, 8.2vw" />
+      <img
+        src="/prototype2/media/9c3370caf20fb57d-597.jpg"
+        alt="Claudia Valsells’ artist colour chart in use"
+        width="597"
+        height="796"
+        style="aspect-ratio:597 / 796"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </a><a class="about-reel-item" href="#chart-photographs" data-panel-open="chart-photographs" data-chart-photo="3" aria-label="Photograph 4 of 9">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/6035b446ac06c295-400.avif 400w, /prototype2/media/6035b446ac06c295-638.avif 638w" sizes="(max-width: 1097px) 150px, 13.7vw" />
+      <source type="image/webp" srcset="/prototype2/media/6035b446ac06c295-400.webp 400w, /prototype2/media/6035b446ac06c295-638.webp 638w" sizes="(max-width: 1097px) 150px, 13.7vw" />
+      <img
+        src="/prototype2/media/6035b446ac06c295-638.jpg"
+        alt="Claudia Valsells’ artist colour chart in use"
+        width="638"
+        height="510"
+        style="aspect-ratio:638 / 510"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </a><a class="about-reel-item" href="#chart-photographs" data-panel-open="chart-photographs" data-chart-photo="4" aria-label="Photograph 5 of 9">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/dea4fedb8ce88727-400.avif 400w, /prototype2/media/dea4fedb8ce88727-637.avif 637w" sizes="(max-width: 1097px) 96px, 8.8vw" />
+      <source type="image/webp" srcset="/prototype2/media/dea4fedb8ce88727-400.webp 400w, /prototype2/media/dea4fedb8ce88727-637.webp 637w" sizes="(max-width: 1097px) 96px, 8.8vw" />
+      <img
+        src="/prototype2/media/dea4fedb8ce88727-637.jpg"
+        alt="Claudia Valsells’ artist colour chart in use"
+        width="637"
+        height="796"
+        style="aspect-ratio:637 / 796"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </a><a class="about-reel-item" href="#chart-photographs" data-panel-open="chart-photographs" data-chart-photo="5" aria-label="Photograph 6 of 9">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/44964273ffd3710b-400.avif 400w, /prototype2/media/44964273ffd3710b-597.avif 597w" sizes="(max-width: 1097px) 90px, 8.2vw" />
+      <source type="image/webp" srcset="/prototype2/media/44964273ffd3710b-400.webp 400w, /prototype2/media/44964273ffd3710b-597.webp 597w" sizes="(max-width: 1097px) 90px, 8.2vw" />
+      <img
+        src="/prototype2/media/44964273ffd3710b-597.jpg"
+        alt="Claudia Valsells’ artist colour chart in use"
+        width="597"
+        height="796"
+        style="aspect-ratio:597 / 796"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </a><a class="about-reel-item" href="#chart-photographs" data-panel-open="chart-photographs" data-chart-photo="6" aria-label="Photograph 7 of 9">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/8a431570bf012cb5-400.avif 400w, /prototype2/media/8a431570bf012cb5-637.avif 637w" sizes="(max-width: 1097px) 96px, 8.8vw" />
+      <source type="image/webp" srcset="/prototype2/media/8a431570bf012cb5-400.webp 400w, /prototype2/media/8a431570bf012cb5-637.webp 637w" sizes="(max-width: 1097px) 96px, 8.8vw" />
+      <img
+        src="/prototype2/media/8a431570bf012cb5-637.jpg"
+        alt="Claudia Valsells’ artist colour chart in use"
+        width="637"
+        height="796"
+        style="aspect-ratio:637 / 796"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </a><a class="about-reel-item" href="#chart-photographs" data-panel-open="chart-photographs" data-chart-photo="7" aria-label="Photograph 8 of 9">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/dab2e9ebc96aec45-400.avif 400w, /prototype2/media/dab2e9ebc96aec45-597.avif 597w" sizes="(max-width: 1097px) 90px, 8.2vw" />
+      <source type="image/webp" srcset="/prototype2/media/dab2e9ebc96aec45-400.webp 400w, /prototype2/media/dab2e9ebc96aec45-597.webp 597w" sizes="(max-width: 1097px) 90px, 8.2vw" />
+      <img
+        src="/prototype2/media/dab2e9ebc96aec45-597.jpg"
+        alt="Claudia Valsells’ artist colour chart in use"
+        width="597"
+        height="796"
+        style="aspect-ratio:597 / 796"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </a><a class="about-reel-item" href="#chart-photographs" data-panel-open="chart-photographs" data-chart-photo="8" aria-label="Photograph 9 of 9">
+            <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/f7a48149496fee9f-400.avif 400w, /prototype2/media/f7a48149496fee9f-638.avif 638w" sizes="(max-width: 1097px) 96px, 8.8vw" />
+      <source type="image/webp" srcset="/prototype2/media/f7a48149496fee9f-400.webp 400w, /prototype2/media/f7a48149496fee9f-638.webp 638w" sizes="(max-width: 1097px) 96px, 8.8vw" />
+      <img
+        src="/prototype2/media/f7a48149496fee9f-638.jpg"
+        alt="Claudia Valsells’ artist colour chart in use"
+        width="638"
+        height="796"
+        style="aspect-ratio:638 / 796"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+          </a>
+    </div>
+    <button type="button" class="about-reel-step is-prev" data-about-reel-step="-1" aria-label="Earlier photographs" hidden>
+          <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M14.5 1.5 L3 14 L14.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
+        </button>
+        <button type="button" class="about-reel-step is-next" data-about-reel-step="1" aria-label="More photographs" hidden>
+          <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M1.5 1.5 L13 14 L1.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
+        </button>
   </div>
+    </div></div>
 
     <!--
       An anchor rather than a button, and to a real section further down the
       document. With scripting the click opens the form over the page; without
       it the same href simply walks to the form, which is standing open at the
-      foot of the page. The site makes this bargain everywhere — About and each
-      exhibition are plain anchors too — so nothing here is reachable only by
-      way of a script.
+      foot of the page.
     -->
-    <a class="chart-order chart-in" style="animation-range: 80.00% 88.00%" href="#inquiries" data-inquiries-open>
+    <a class="chart-order chart-in" href="#inquiries" data-inquiries-open>
       Order yours
       <!--
-        The arrow is drawn rather than typed. An upward-right arrow is a
-        character Switzer may or may not carry, and a missing glyph would be
-        answered with whatever fallback face the machine has, at a weight
-        nothing here chose. Drawn, it is the designer's arrow at the designer's
-        weight — lighter than the stems beside it — everywhere.
-
-        Drawn about its own centre, too, because it turns: the viewBox is
-        square and the arrow is set in the middle of it, so a rotation has
-        nothing to drift against.
+        The arrow is drawn rather than typed, about its own centre, because it
+        turns on hover.
       -->
       <svg class="chart-arrow" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
         <path d="M2.4 9.6 9.4 2.6M4.3 2.6h5.1v5.1" fill="none" stroke="currentColor" stroke-width="1.2" />
       </svg>
-      <!--
-        And the phone sheet's arrow, which is not the one above made smaller:
-        its arms run the full size of its box and its line is 3 of a box 22.5
-        by 22, drawn here in the sheet's own units from the top left of the
-        ink. The stylesheet shows one or the other (06-colour-chart.css); this
-        one does not turn, there being no hover on a phone to turn it.
-      -->
+      <!-- The phone sheet's own arrow; the stylesheet shows one or the other. -->
       <svg class="chart-arrow-phone" viewBox="0 0 22.5 22" aria-hidden="true" focusable="false">
         <path d="M1.5 1.5H21V22M1.2 20.97 20.6 1.57" fill="none" stroke="currentColor" stroke-width="3" />
       </svg>
     </a>
 
-    <p class="chart-price chart-in" style="animation-range: 84.00% 92.00%">Cost: <b>60,50€</b></p>
+    <p class="chart-price chart-in">Cost: <b>60,50€</b></p>
+
+    <section class="chart-section">
+    <h2 class="chart-section-title chart-in">Features</h2>
+    <div class="chart-cols">
+      <div class="chart-col"><p class="chart-in" style="--n:0">Designed and self-published in 1999 with the idea of facilitating the communication of colour in the world of architecture, interior design and industrial design.<br />This chart is the fruit of more than two decades of close collaboration with architects and designers, defining colours so as to find the most appropriate, sharpest and most luminous tone. It is precisely in making such fine adjustments that the colourist must show her natural skill and chromatic instinct, so that the chosen tone is ideal for the place for which it is intended, thus demonstrating her “gift of colours”.</p></div><div class="chart-col"><p class="chart-in" style="--n:1">Faced with the infinite variety now offered by the chemical paint and colour industry and prompted by my day-to-day experience working with architects and designers, I detected the need to create a range of colours specifically for these professionals. This entailed a minutely detailed effort of synthesis, drawing on my personal appreciation of the world of colour, and a painstaking selection, combination and grouping of tones and hues.</p></div><div class="chart-col"><p class="chart-in" style="--n:2">The chart was received with enthusiasm and sold well for 15 years. It has been used in very many projects and is still in use in almost all Barcelona’s architecture and design studios.<br />This reissue confirms my initial intention that it be conceived as essentially timeless.</p></div>
+    </div>
+  </section><section class="chart-section">
+    <h2 class="chart-section-title chart-in">Technical characteristics</h2>
+    <div class="chart-cols">
+      <div class="chart-col"><p class="chart-in" style="--n:0">Fan deck with <strong>142 colours </strong>using real paint, so that the user can see each colour reproduced exactly as it will appear once applied to a surface.</p><p class="chart-in" style="--n:3">The reference number printed on the back of each card is the name of the colour, regardless of the material from which the colour is manufactured.</p></div><div class="chart-col"><p class="chart-in" style="--n:1">The acetate of the cover can be placed over each card to see the colour in gloss finish.</p><p class="chart-in" style="--n:4">Some colours may not be able to be manufactured in all kinds of materials or by all manufacturers.</p></div><div class="chart-col"><p class="chart-in" style="--n:2">The range of colours has been designed for use in architecture, on both exterior and interior surfaces.<br />It can also be used in industrial design works.</p><p class="chart-in" style="--n:5">In any event, the accuracy of reproduction of a colour will be directly proportional to the quality of the raw material with which it is manufactured.</p></div>
+    </div>
+  </section>
 
     <!--
-      Her thanks, and a way of seeing who they are to: the photographs people
-      have sent her of the chart in use. An anchor to a real panel, as About
-      and every exhibition are, so without scripting it walks to them instead
-      of opening them over the page.
+      Her thanks. Not a link any more (Frank, 2026-11-22): the photographs
+      are on the page now, in the reel under the statement, and the line only
+      answers the pointer in a colour, as the index rows do.
     -->
-    <p class="chart-thanks chart-in" style="animation-range: 88.00% 96.00%"><a href="#chart-photographs" data-panel-open="chart-photographs">Thanks to everyone!</a></p>
+    <p class="chart-thanks chart-in"><span class="hrow">Thanks to everyone!</span></p>
 
-    <!--
-      The site's own line, not the chart's: the same one stands at the foot of
-      the About sheet. It is here rather than in components/layout.ts because
-      this is the only page of the new set that is built; when the others land
-      it belongs in the layout, once, for all of them.
-    -->
-    <footer class="chart-footer chart-in" style="animation-range: 92.00% 100.00%"><b>Claudia Valsells</b> &copy; All Rights Reserved</footer>
+    <footer class="chart-footer chart-in"><b>Claudia Valsells</b> &copy; All Rights Reserved</footer>
   </div>
-
-  <!--
-    And the run the writing is divided over: a strip of nothing behind the
-    page, there to be scrolled through. It carries no text and nothing can be
-    done with it, so it is out of the reading order entirely; it is in the
-    markup rather than made by script because the page has to be able to be
-    read by the scroll on its first paint, before anything has run.
-  -->
-  <div class="chart-runway" aria-hidden="true"></div>
 </div></main>
 <div class="panels">
     <article class="panel" id="chart-photographs" data-panel>
@@ -481,6 +348,7 @@ setTimeout(function () { var root = document.documentElement;
     <div class="plates" data-reader>
     <header class="plates-head">
       <h2 class="sheet-title">Thanks to everyone!</h2>
+      
       
       
     </header>
@@ -618,10 +486,10 @@ setTimeout(function () { var root = document.documentElement;
     </div>
 
     <button type="button" class="plates-step plates-prev" data-figure-step="-1" aria-label="Previous photograph">
-          <svg viewBox="0 0 9 16" aria-hidden="true"><path d="M8 1 1 8l7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M14.5 1.5 L3 14 L14.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
         </button>
         <button type="button" class="plates-step plates-next" data-figure-step="1" aria-label="Next photograph">
-          <svg viewBox="0 0 9 16" aria-hidden="true"><path d="m1 1 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M1.5 1.5 L13 14 L1.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
         </button>
         <p class="sr-only" data-figure-count data-template="Photograph {n} of {total}" aria-live="polite"></p>
   </div>
@@ -691,6 +559,7 @@ setTimeout(function () { var root = document.documentElement;
         <input id="inq-website" name="website" type="text" tabindex="-1" autocomplete="off" />
       </div>
       <input type="hidden" name="started" value="" data-inquiries-started />
+      <input type="hidden" name="desk" value="chart" />
 
       <!-- Cloudflare's widget is rendered in here, and only if a key is set. -->
       <div class="inq-check" data-inquiries-check></div>
@@ -702,8 +571,8 @@ setTimeout(function () { var root = document.documentElement;
     </form>
   </section>
 
-<div class="scroll-cue scroll-cue-ink" data-scroll-cue aria-hidden="true">
-    <svg viewBox="0 0 28 16" focusable="false">
+<button type="button" class="scroll-cue scroll-cue-ink" data-scroll-cue aria-label="Scroll down">
+    <svg viewBox="0 0 28 16" aria-hidden="true" focusable="false">
       <path
         d="M1.5 1.5 L14 13 L26.5 1.5"
         fill="none"
@@ -712,7 +581,7 @@ setTimeout(function () { var root = document.documentElement;
         stroke-linecap="square"
       />
     </svg>
-  </div>
+  </button>
 <div class="cursor" data-cursor aria-hidden="true"><span class="cursor-label"></span></div>
 <div class="panel-veil" data-panel-veil></div>
 <section class="about" id="about" data-panel aria-label="About">
@@ -978,15 +847,15 @@ setTimeout(function () { var root = document.documentElement;
           </button>
     </div>
     <button type="button" class="about-reel-step is-prev" data-about-reel-step="-1" aria-label="Earlier photographs" hidden>
-      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="M8 1 1 8l7 7" /></svg>
+      <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M14.5 1.5 L3 14 L14.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
     </button>
     <button type="button" class="about-reel-step is-next" data-about-reel-step="1" aria-label="More photographs" hidden>
-      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="m1 1 7 7-7 7" /></svg>
+      <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M1.5 1.5 L13 14 L1.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
     </button>
   </div>
           </div>
         </div>
-        <p>Based on her reflections as an artist, her experience in color prediction and mural painting, brings to all her work, with color as a primary tool, an identifiable language.</p><p>She began her artistic career painting and soon realized that she had a natural ability with color. In her own words, ‘All I have done throughout my career has been to cultivate this natural gift. First as a mural painter, then designing color charts and prescribing color and finally as an artist’.</p><p>The tireless search for the reason of color and its form has obsessed artists throughout history, from the very creation of pictorial expression. Claudia Valsells knows about this and she aims to portray this into her artwork.</p><p>In her beginnings as a colorist she worked on commissions, for architects, and on projects of different scales advising and prescribing color. Soon she founded her own Studio, under the name of ‘Arts&amp;Claus’, in allegory to the ‘Arts&amp;Craft’ movement where she always found a lot of inspiration. She specialized in mural painting, color applied to architecture, and interior design for 20 years on projects in Spain and abroad. Her role was to convey the value of color and its texture in the decoration of interior spaces working closely with professionals in the fields of art, design, and architecture. It was in this context, working close with architects and designers, that she found out the communication between professionals was based by the painting companies, relegated the work of the colorist to the background due to ignorance or fear clients to make a mistake or be branded as eccentric. It was then when Claudia Valsells created a specific chromatic selection, a COLOUR CHART, with more than 200 references, which have been used as color communication tools by Spain’s best architects.</p><p>Her work has two very defined characteristics: on the one hand her chromatic instinct, a gift of colors and on the other her ability to select, group and interact colors creating a chromatic language of her own.</p>
+        <p>Based on her reflections as an artist, her experience in color prediction and mural painting, brings to all her work, with color as a primary tool, an identifiable language.</p><p>She began her artistic career painting and soon realized that she had a natural ability with color. In her own words, ‘All I have done throughout my career has been to cultivate this natural gift. First as a mural painter, then designing color charts and prescribing color and finally as an artist’.</p><p>The tireless search for the reason of color and its form has obsessed artists throughout history, from the very creation of pictorial expression. Claudia Valsells knows about this and she aims to portray this into her artwork.</p><p>In her beginnings as a colorist she worked on commissions, for architects, and on projects of different scales advising and prescribing color. Soon she founded her own Studio, under the name of ‘Arts&amp;Claus’, in allegory to the ‘Arts&amp;Craft’ movement where she always found a lot of inspiration. She specialized in mural painting, color applied to architecture, and interior design for 20 years on projects in Spain and abroad. Her role was to convey the value of color and its texture in the decoration of interior spaces working closely with professionals in the fields of art, design, and architecture. It was in this context, working close with architects and designers, that she found out the communication between professionals was based by the painting companies, relegated the work of the colorist to the background due to ignorance or fear clients to make a mistake or be branded as eccentric. It was then when Claudia Valsells created a specific chromatic selection, a COLOUR CHART, with more than 200 references, which have been used as color communication tools by Spain’s best architects.</p><p>Her work has two very defined characteristics: on the one hand her chromatic instinct, a gift of colors and on the other her ability to select, group and interact colors creating a chromatic language of her own.</p><p>Currently she combines her activity as an artist with colour prescription in the areas of design and architecture.</p><p>Her work is represented, in Spain and abroad, by the Barcelona gallery owner Miquel Alzueta. <a class="about-link hrow" href="https://alzuetagallery.com" target="_blank" rel="noopener">ALZUETA GALLERY</a></p>
       </div>
       <div class="about-record">
         <section class="about-shows">
@@ -1109,136 +978,141 @@ setTimeout(function () { var root = document.documentElement;
     <h3 class="about-label">Art fairs</h3>
     <div class="about-show-columns">
       <ul class="about-show-list"><li class="about-show">
-    <span class="about-show-when">2026 February</span>
-    <span class="about-show-title">Zona Maco CDMX</span>
-    <span class="about-show-line">with Alzueta Gallery</span>
-    <span class="about-show-place">Mexico</span>
+    <span class="about-show-when">2026</span>
+    <span class="about-show-title">ART COLOGNE</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Cologne, Germany</span>
   </li><li class="about-show">
-    <span class="about-show-when">2025 October</span>
-    <span class="about-show-title">Estampa contemporary<br />art fair,</span>
-    <span class="about-show-line">with Alzueta Gallery</span>
-    <span class="about-show-place">Madrid</span>
+    <span class="about-show-when">2026</span>
+    <span class="about-show-title">THE ARMORY SHOW</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">New York, USA</span>
   </li><li class="about-show">
-    <span class="about-show-when">2024 February</span>
+    <span class="about-show-when">2026</span>
     <span class="about-show-title">ZONA MACO</span>
-    <span class="about-show-line">with Alzueta Gallery</span>
-    
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Mexico City, Mexico</span>
   </li><li class="about-show">
-    <span class="about-show-when">2024 November</span>
-    <span class="about-show-title">Luxemburg art week</span>
-    <span class="about-show-line">with Alzueta Gallery</span>
-    <span class="about-show-place">Luxemburg</span>
+    <span class="about-show-when">2025</span>
+    <span class="about-show-title">ESTAMPA</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
   </li><li class="about-show">
-    <span class="about-show-when">2023 February</span>
-    <span class="about-show-title">Contemporary Art Fair</span>
-    <span class="about-show-line">Art Rotterdam</span>
-    <span class="about-show-place">Rotterdam</span>
+    <span class="about-show-when">2025</span>
+    <span class="about-show-title">THE ARMORY SHOW</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">New York, USA</span>
   </li><li class="about-show">
-    <span class="about-show-when">2021 October</span>
-    <span class="about-show-title">Estampa Contemporary Art Fair</span>
-    
-    <span class="about-show-place">Alzueta Gallery, Madrid</span>
+    <span class="about-show-when">2024</span>
+    <span class="about-show-title">LUXEMBOURG ART WEEK</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Luxembourg, Luxembourg</span>
   </li><li class="about-show">
-    <span class="about-show-when">2021 September</span>
-    <span class="about-show-title">Art Paris Fair</span>
-    
-    <span class="about-show-place">Alzueta Gallery, Paris</span>
+    <span class="about-show-when">2024</span>
+    <span class="about-show-title">ZONAMACO</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Mexico City, Mexico</span>
   </li><li class="about-show">
-    <span class="about-show-when">2021 June</span>
-    <span class="about-show-title">Art Madrid Feria</span>
-    
-    <span class="about-show-place">Alzueta Gallery, Madrid</span>
+    <span class="about-show-when">2023</span>
+    <span class="about-show-title">ART ROTTERDAM</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Rotterdam, The Netherlands</span>
   </li><li class="about-show">
-    <span class="about-show-when">2019 March</span>
-    <span class="about-show-title">AFF Art Fair</span>
-    
-    <span class="about-show-place">Brussels</span>
+    <span class="about-show-when">2022</span>
+    <span class="about-show-title">ART PARIS</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Paris, France</span>
   </li><li class="about-show">
-    <span class="about-show-when">2019 March</span>
-    <span class="about-show-title">Art Madrid</span>
-    
-    <span class="about-show-place">Madrid</span>
+    <span class="about-show-when">2021</span>
+    <span class="about-show-title">ESTAMPA ART FAIR</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
   </li><li class="about-show">
-    <span class="about-show-when">2018</span>
-    <span class="about-show-title">Art fair</span>
-    
-    <span class="about-show-place">Hamburg</span>
+    <span class="about-show-when">2021</span>
+    <span class="about-show-title">ART PARIS</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Paris, France</span>
   </li><li class="about-show">
-    <span class="about-show-when">2018</span>
-    <span class="about-show-title">Art Elysees</span>
-    
-    <span class="about-show-place">París</span>
+    <span class="about-show-when">2021</span>
+    <span class="about-show-title">ART MADRID</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
   </li><li class="about-show">
-    <span class="about-show-when">2018</span>
-    <span class="about-show-title">Art Fair</span>
-    
-    <span class="about-show-place">Stockholm</span>
+    <span class="about-show-when">2019</span>
+    <span class="about-show-title">ART ÉLYSÉES-ART &amp; DESIGN</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Paris, France</span>
   </li><li class="about-show">
-    <span class="about-show-when">2018</span>
-    <span class="about-show-title">Contemporary Art Fair<br />Just LX,</span>
-    
-    <span class="about-show-place">Portugal</span>
+    <span class="about-show-when">2019</span>
+    <span class="about-show-title">ART PARIS GRAND PALAIS</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Paris, France</span>
   </li><li class="about-show">
-    <span class="about-show-when">2018</span>
-    <span class="about-show-title">Almoneda Antik Passion</span>
-    
-    <span class="about-show-place">Madrid</span>
-  </li><li class="about-show">
-    <span class="about-show-when">2019 April</span>
-    <span class="about-show-title">Almoneda, Ifema<br />Feria de Madrid</span>
-    
-    <span class="about-show-place">Palau de Casavells, Madrid.</span>
+    <span class="about-show-when">2019</span>
+    <span class="about-show-title">ALMONEDA</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
   </li></ul>
       <ul class="about-show-list"><li class="about-show">
-    <span class="about-show-when">2018</span>
-    <span class="about-show-title">Art Fair Grand Palais</span>
-    
-    <span class="about-show-place">Paris</span>
+    <span class="about-show-when">2019</span>
+    <span class="about-show-title">ART MADRID</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
   </li><li class="about-show">
     <span class="about-show-when">2018</span>
-    <span class="about-show-title">Eurantica Art Fair</span>
-    
-    <span class="about-show-place">Brussels</span>
-  </li><li class="about-show">
-    <span class="about-show-when">2019 April</span>
-    <span class="about-show-title">Art Paris Grand Palais</span>
-    
-    <span class="about-show-place">París</span>
+    <span class="about-show-title">THE AFFORDABLE ART FAIR HAMBURG</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Hamburg, Germany</span>
   </li><li class="about-show">
     <span class="about-show-when">2018</span>
-    <span class="about-show-title">Art Madrid,</span>
-    
-    <span class="about-show-place">Madrid</span>
+    <span class="about-show-title">STOCKHOLM INDEPENDENT ART FAIR</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Stockholm, Sweden</span>
   </li><li class="about-show">
-    <span class="about-show-when">2017 July</span>
-    <span class="about-show-title">Uterqüe Art Essays</span>
-    <span class="about-show-line">AW 2017</span>
-    
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">JUST LX</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Lisbon, Portugal</span>
   </li><li class="about-show">
-    <span class="about-show-when">2017 March</span>
-    <span class="about-show-title">International Art Fair,<br />Art Paris</span>
-    
-    <span class="about-show-place">París</span>
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">ALMONEDA</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
   </li><li class="about-show">
-    <span class="about-show-when">2017 February</span>
-    <span class="about-show-title">Art Madrid</span>
-    
-    <span class="about-show-place">Madrid</span>
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">ART FAIR GRAND PALAIS</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Paris, France</span>
   </li><li class="about-show">
-    <span class="about-show-when">2016 November</span>
-    <span class="about-show-title">Antica Namur,</span>
-    
-    <span class="about-show-place">Belgium</span>
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">EURANTICA ART FAIR</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Brussels, Belgium</span>
   </li><li class="about-show">
-    <span class="about-show-when">2016 October</span>
-    <span class="about-show-title">Art Élysées,<br />International Art Fair,</span>
-    
-    <span class="about-show-place">París</span>
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">ART MADRID</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
   </li><li class="about-show">
-    <span class="about-show-when">2016 June</span>
-    <span class="about-show-title">Scope Basel,</span>
-    
-    <span class="about-show-place">Basel art fair</span>
+    <span class="about-show-when">2017</span>
+    <span class="about-show-title">ART PARIS</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Paris, France</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2017</span>
+    <span class="about-show-title">ART MADRID</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2016</span>
+    <span class="about-show-title">ANTICA NAMUR</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Namur, Belgium</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2016</span>
+    <span class="about-show-title">SCOPE BASEL</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Basel, Switzerland</span>
   </li></ul>
     </div>
   </section>
@@ -1247,28 +1121,30 @@ setTimeout(function () { var root = document.documentElement;
           <ul class="about-collection-list">
             <li class="about-collection">
                   <span class="about-collection-name">Fundació Vilacases</span>
-                  <span class="about-collection-place">Barcelona</span>
+                  <span class="about-collection-place">Barcelona, SPAIN</span>
                 </li><li class="about-collection">
                   <span class="about-collection-name">Fundació Banc Sabadell</span>
-                  <span class="about-collection-place">Barcelona</span>
+                  <span class="about-collection-place">Barcelona, SPAIN</span>
                 </li><li class="about-collection">
                   <span class="about-collection-name">Collection Hayot</span>
                   <span class="about-collection-place">France</span>
                 </li><li class="about-collection">
+                  <span class="about-collection-name">Martinez Collection</span>
+                  <span class="about-collection-place">Mexico-US</span>
+                </li><li class="about-collection">
                   <span class="about-collection-name">Niederberghaus Collection</span>
-                  <span class="about-collection-place">Mexico - US</span>
+                  <span class="about-collection-place">Germany</span>
                 </li><li class="about-collection">
                   <span class="about-collection-name">Collection Richard</span>
                   <span class="about-collection-place">France</span>
                 </li><li class="about-collection">
                   <span class="about-collection-name">Smith Collection</span>
-                  <span class="about-collection-place">Wyoming</span>
+                  <span class="about-collection-place">Wyoming, USA</span>
                 </li>
           </ul>
         </section>
       </div>
       <address class="about-contact">
-        <a href="tel:+34609769186">+34 609 76 91 86</a>
         <a href="mailto:editorial@alzuetagallery.com">editorial@alzuetagallery.com</a><a href="mailto:claudia@claudiacolor.com">claudia@claudiacolor.com</a>
       </address>
       <p class="about-foot"><b>Claudia Valsells</b> © All Rights Reserved</p>
@@ -1279,16 +1155,16 @@ setTimeout(function () { var root = document.documentElement;
   </div>
   </section>
   <a class="about-close" href="#" data-panel-close="about">Close</a>
-  <div class="about-cue" data-about-cue aria-hidden="true">
-    <svg viewBox="0 0 28 16" focusable="false">
+  <button type="button" class="about-cue" data-about-cue aria-label="Scroll down">
+    <svg viewBox="0 0 28 16" aria-hidden="true" focusable="false">
       <path d="M1.5 1.5 L14 13 L26.5 1.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
     </svg>
-  </div>
+  </button>
   <button type="button" class="about-viewer-step is-prev" data-about-step="-1" aria-label="Previous photograph">
-      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="M8 1 1 8l7 7" /></svg>
+      <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M14.5 1.5 L3 14 L14.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
     </button>
     <button type="button" class="about-viewer-step is-next" data-about-step="1" aria-label="Next photograph">
-      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="m1 1 7 7-7 7" /></svg>
+      <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M1.5 1.5 L13 14 L1.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
     </button>
 <div class="lightbox" data-lightbox data-available-label="Available" hidden>
     <div class="lightbox-veil" data-lightbox-veil></div>

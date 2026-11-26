@@ -11,6 +11,7 @@
 <link rel="modulepreload" href="/prototype2/js/text-roll.js" />
 <link rel="modulepreload" href="/prototype2/js/transitions.js" />
 <link rel="modulepreload" href="/prototype2/js/controls.js" />
+<link rel="modulepreload" href="/prototype2/js/pile.js" />
 <link rel="modulepreload" href="/prototype2/js/stack.js" />
 <link rel="modulepreload" href="/prototype2/js/years.js" />
 <link rel="modulepreload" href="/prototype2/js/hover-list.js" />
@@ -18,6 +19,8 @@
 <link rel="modulepreload" href="/prototype2/js/figures.js" />
 <link rel="modulepreload" href="/prototype2/js/lightbox.js" />
 <link rel="modulepreload" href="/prototype2/js/cursor.js" />
+<link rel="modulepreload" href="/prototype2/js/ball.js" />
+<link rel="modulepreload" href="/prototype2/js/ball-tuner.js" />
 <link rel="modulepreload" href="/prototype2/js/film.js" />
 <link rel="modulepreload" href="/prototype2/js/tilt.js" />
 <link rel="modulepreload" href="/prototype2/js/paging.js" />
@@ -32,15 +35,11 @@
 <link rel="modulepreload" href="/prototype2/js/current.js" />
 <link rel="modulepreload" href="/prototype2/js/scrollbar.js" />
 <link rel="modulepreload" href="/prototype2/js/scramble.js" />
-<link rel="modulepreload" href="/prototype2/js/hover-tuner.js" />
+<link rel="modulepreload" href="/prototype2/js/pile-tuner.js" />
 <link rel="modulepreload" href="/prototype2/js/rise.js" />
 <link rel="modulepreload" href="/prototype2/js/menu.js" />
 <link rel="modulepreload" href="/prototype2/js/index.js" />
 <script>document.documentElement.classList.add('js');
-// The hover tuner's lettering, laid over the stylesheet before the first paint
-// so that moving between pages with it on does not flash the defaults. Only in
-// a browser that has asked for the tuner (?tune); see client/hover-tuner.ts.
-try { if (localStorage.getItem('cv-tune') === '1') { document.documentElement.setAttribute('data-tune', ''); var tc = localStorage.getItem('cv-tune-css'); if (tc) { var ts = document.createElement('style'); ts.id = 'tune-early'; ts.textContent = tc; document.head.appendChild(ts); } } } catch (e) {}
 // Arriving at What's Color by its link, the page is laid out at the top and
 // moved down to the written sentence by script — so it is kept covered until
 // it has been, and no frame is ever painted in the wrong place. The script
@@ -50,13 +49,20 @@ try { if (localStorage.getItem('cv-tune') === '1') { document.documentElement.se
 // makes — so a browser that keeps the plain anchor jump never waits for it.
 try { var nav = performance.getEntriesByType('navigation')[0];
   if (location.hash === '#whats-color' && (!nav || nav.type === 'navigate')
-    && CSS.supports('animation-timeline: view()')
     && !matchMedia('(prefers-reduced-motion: reduce)').matches
     && !matchMedia('(max-width: 899px)').matches) {
     document.documentElement.classList.add('wc-arriving', 'wc-swatch-drop');
     setTimeout(function () { document.documentElement.classList.remove('wc-arriving') }, 1500);
     setTimeout(function () { document.documentElement.classList.remove('wc-swatch-drop') }, 700);
   } } catch (e) {}
+// Trying the ways the start page's film can go and come back (THE WAY OUT
+// OF THE START PAGE, 00-base.css): ?film=wipe, fade, cut or blur holds for
+// the visit; ?film=off goes back to the stylesheet's own setting.
+try { var film = new URLSearchParams(location.search).get('film');
+  if (film === 'off') sessionStorage.removeItem('cv-film');
+  else if (film && /^(fade|cut|wipe|blur)$/.test(film)) sessionStorage.setItem('cv-film', film);
+  film = sessionStorage.getItem('cv-film');
+  if (film) document.documentElement.style.setProperty('--start-film-style', 'film-' + film); } catch (e) {}
 // The page's colour, drawn here rather than by client/current.ts so that the
 // block in the bar is the right colour on the first frame. Drawn by the scripts,
 // it was painted once in the list's first colour and then changed, on every
@@ -101,16 +107,10 @@ setTimeout(function () { var root = document.documentElement;
     <a class="top-soon" href="/prototype2/#whats-color" aria-current="page" data-roll><span class="roll-word" aria-hidden="true" style="--n: 12"><span class="scram" data-ch="W" style="--i: 0">W</span><span class="scram" data-ch="h" style="--i: 1">h</span><span class="scram" data-ch="a" style="--i: 2">a</span><span class="scram" data-ch="t" style="--i: 3">t</span><span class="scram" data-ch="’" style="--i: 4">’</span><span class="scram" data-ch="s" style="--i: 5">s</span> <span class="scram" data-ch="C" style="--i: 6">C</span><span class="scram" data-ch="o" style="--i: 7">o</span><span class="scram" data-ch="l" style="--i: 8">l</span><span class="scram" data-ch="o" style="--i: 9">o</span><span class="scram" data-ch="r" style="--i: 10">r</span><span class="scram" data-ch="?" style="--i: 11">?</span></span><span class="roll-text">What’s Color?</span></a>
     <nav class="menu" aria-label="Primary">
       <a
-            href="/prototype2/color-chart/"
-            
-            
-            style="--menu-phone: 5"
-            data-roll
-          ><span class="roll-word" aria-hidden="true" style="--n: 10"><span class="scram" data-ch="C" style="--i: 0">C</span><span class="scram" data-ch="o" style="--i: 1">o</span><span class="scram" data-ch="l" style="--i: 2">l</span><span class="scram" data-ch="o" style="--i: 3">o</span><span class="scram" data-ch="r" style="--i: 4">r</span> <span class="scram" data-ch="C" style="--i: 5">C</span><span class="scram" data-ch="h" style="--i: 6">h</span><span class="scram" data-ch="a" style="--i: 7">a</span><span class="scram" data-ch="r" style="--i: 8">r</span><span class="scram" data-ch="t" style="--i: 9">t</span></span><span class="roll-text">Color Chart</span></a><a
             href="/prototype2/exhibitions/"
             
             
-            style="--menu-phone: 3"
+            style="--menu-phone: 5"
             data-roll
           ><span class="roll-word" aria-hidden="true" style="--n: 11"><span class="scram" data-ch="E" style="--i: 0">E</span><span class="scram" data-ch="x" style="--i: 1">x</span><span class="scram" data-ch="h" style="--i: 2">h</span><span class="scram" data-ch="i" style="--i: 3">i</span><span class="scram" data-ch="b" style="--i: 4">b</span><span class="scram" data-ch="i" style="--i: 5">i</span><span class="scram" data-ch="t" style="--i: 6">t</span><span class="scram" data-ch="i" style="--i: 7">i</span><span class="scram" data-ch="o" style="--i: 8">o</span><span class="scram" data-ch="n" style="--i: 9">n</span><span class="scram" data-ch="s" style="--i: 10">s</span></span><span class="roll-text">Exhibitions</span></a><a
             href="/prototype2/commissioned/"
@@ -122,9 +122,15 @@ setTimeout(function () { var root = document.documentElement;
             href="/prototype2/artwork/"
             
             
-            style="--menu-phone: 2"
+            style="--menu-phone: 3"
             data-roll
           ><span class="roll-word" aria-hidden="true" style="--n: 7"><span class="scram" data-ch="A" style="--i: 0">A</span><span class="scram" data-ch="r" style="--i: 1">r</span><span class="scram" data-ch="t" style="--i: 2">t</span><span class="scram" data-ch="w" style="--i: 3">w</span><span class="scram" data-ch="o" style="--i: 4">o</span><span class="scram" data-ch="r" style="--i: 5">r</span><span class="scram" data-ch="k" style="--i: 6">k</span></span><span class="roll-text">Artwork</span></a><a
+            href="/prototype2/color-chart/"
+            
+            
+            style="--menu-phone: 2"
+            data-roll
+          ><span class="roll-word" aria-hidden="true" style="--n: 10"><span class="scram" data-ch="C" style="--i: 0">C</span><span class="scram" data-ch="o" style="--i: 1">o</span><span class="scram" data-ch="l" style="--i: 2">l</span><span class="scram" data-ch="o" style="--i: 3">o</span><span class="scram" data-ch="r" style="--i: 4">r</span> <span class="scram" data-ch="C" style="--i: 5">C</span><span class="scram" data-ch="h" style="--i: 6">h</span><span class="scram" data-ch="a" style="--i: 7">a</span><span class="scram" data-ch="r" style="--i: 8">r</span><span class="scram" data-ch="t" style="--i: 9">t</span></span><span class="roll-text">Color Chart</span></a><a
             href="/prototype2/#about"
             data-panel-open="about"
             
@@ -277,7 +283,7 @@ setTimeout(function () { var root = document.documentElement;
     <p class="wc-cell-meta">
       
       
-      
+      <span class="wc-cell-code" style="--swatch: #8d4c3b; --swatch-ink: var(--paper)"><span class="wc-code-band">Terracotta</span></span>
     </p>
     <div class="wc-cell-text">
           <p>“…opté por un amarillo dorado y un rojo vivo oscuro, y como tercer color un pardo. Se tejió la alfombra, pero con gran sorpresa mía, la fuerte y cálida vecindad del amarillo y el rojo transformó por completo el color pardo en un azul” Carl Petersen, “Colores”, 1923.</p><p>Para nosotros, como para Petersen, el color es sorprendente, innombrable, efímero, inaprensible… es el puente que se tiende entre el mundo real y nuestra imaginación. También perseguimos colores a los que no llegamos y encontramos otros que no habíamos imaginado.</p>
@@ -290,7 +296,7 @@ setTimeout(function () { var root = document.documentElement;
     <p class="wc-cell-meta">
       
       
-      
+      <span class="wc-cell-code" style="--swatch: #779fbf; --swatch-ink: var(--paper)"><span class="wc-code-band">Light ultramarine blue</span></span>
     </p>
     <div class="wc-cell-text">
           <p>En mi formación en Milán como arquitecto y diseñador a final de los 80, principios de los 90 el uso del color no estaba bien visto. Se utilizaba habitualmente el blanco u otros tonos claros y muy neutros como manifiesto de modernidad. Se iba acercando al minimalismo justo después del postmodernismo. La ausencia de colores en los espacios era un recurso común y fácil, sin compromisos diría. Asimismo durante años los arquitectos más modernos y elegantes no vestían nunca con colores: solo con negro y gris. Otra vez la negación del color, qué fácil. Nadie se atrevía a buscar la elegancia y la belleza en el color.</p><p>Solo recientemente he descubierto el color y su gran eficacia como herramienta y recurso para diseñar interiores. Gracias al encargo de un proyecto de pintura y revestimientos para los colegios públicos de Barcelona, he descubierto definitivamente lo potente que puede llegar a ser el uso del color para redefinir un espacio. En este proyecto solo podíamos pintar y puntualmente cambiar algún revestimiento. Aprovechando una acción de mantenimiento ordinario teníamos el compromiso y la oportunidad enorme de recalificar estos lugares, de caracterizarlos. Mejorar la percepción arquitectónica de sus usuarios ha sido mi principal objetivo. Con solo pintar se puede hacer arquitectura, se puede construir. He descubierto que con la luz (existente) y el color se pueden construir muchas emociones; se puede llegar a lo más importante de las personas, las emociones.</p>
@@ -303,7 +309,7 @@ setTimeout(function () { var root = document.documentElement;
     <p class="wc-cell-meta">
       
       
-      
+      <span class="wc-cell-code" style="--swatch: #134270; --swatch-ink: var(--paper)"><span class="wc-code-band">Dark ultramarine blue</span></span>
     </p>
     <div class="wc-cell-text">
           <p>A menudo nos preguntan por qué empleamos color en nuestros proyectos. Es una pregunta que no comprendemos. La arquitectura siempre tiene color. Es curioso comprobar cómo algunos asocian el color blanco a la ausencia de color o a la neutralidad. El famoso “cubo blanco” moderno es todo menos “neutro”. Y la idea de que la arquitectura puede ser neutral es una ficción. La arquitectura nunca es “neutral” porque nuestros cuerpos siempre están interactuando con el espacio.</p><p>Preferimos pensar cada proyecto de manera específica, tanto en su dimensión espacial, material y, también, cromática. Es decir, pensar los espacios como ambientes, desde el deseo. El objetivo no es hacerlos “neutrales” (cosa imposible) sino deseables para sus habitantes. El color es un recurso más para definir estas atmósferas.</p>
@@ -316,7 +322,7 @@ setTimeout(function () { var root = document.documentElement;
     <p class="wc-cell-meta">
       
       
-      
+      <span class="wc-cell-code" style="--swatch: #bf7d19; --swatch-ink: var(--paper)"><span class="wc-code-band">Red ocher</span></span>
     </p>
     <div class="wc-cell-text">
           <p>Mi vida en sí es toda una experiencia “prosaica” en torno al color. En todos los sentidos y en todos los campos. En tercero de arquitectura no encontraba mi creatividad; me sentía muy perdida así que empecé paralelamente a estudiar Arte y Diseño. Fue mi renacimiento. No era todo tan cuadriculado; había más allá de la estructura, la distribución y la orientación… había color. Justo en este momento de introspección conmigo misma, me enseñaron el color, su construcción y deconstrucción. Un lenguaje que entendía y me hacía sentir cómoda, y que era aplicable literalmente a todo.</p><p>Aquí mi vida empezó a ser una carta de colores. Con el tiempo, el color se ha convertido en mi séptimo sentido, con una paleta de colores generada de manera natural tras años de observación y obsesión por el color. Al contrario que a la mayoría, para mí el negro no representa ni tristeza ni muerte, sin embargo, y espacialmente hablando, la falta de luz, la oscuridad. Por eso, cuando tengo que pensar en el color desde el punto de vista arquitectónico, es todo un reto ya que el color ejerce un papel importante en el estado anímico de las personas que lo habitan siendo cada persona única (sin generalizar). La arquitectura despierta estados de ánimo en las personas, por lo que es tarea del arquitecto dar a esos estados de ánimo una expresión concreta. Una habitación debe parecer agradable, confortable para vivir. Un vicio secreto debe parecer un gesto de amenaza para los tribunales de justicia… Un banco está obligado a decir: “aquí su dinero está seguro, en manos de gente honesta”. Un arquitecto sólo puede conseguirlo volviendo una vez más a esos edificios del pasado que despertaron estados de ánimo en la gente. Para los chinos, el blanco es el color del luto, para nosotros, el negro. Por tanto, a nuestros arquitectos les resultaría imposible crear esos alegres estados de ánimo con pintura negra.</p>
@@ -329,7 +335,7 @@ setTimeout(function () { var root = document.documentElement;
     <p class="wc-cell-meta">
       
       
-      
+      <span class="wc-cell-code" style="--swatch: #411e1f; --swatch-ink: var(--paper)"><span class="wc-code-band">Brown</span></span>
     </p>
     <div class="wc-cell-text">
           <p>“Siento el color como un vehículo de transmisión vibracional, una herramienta perceptiva de gran poder y potencia transformadora, en cualquier espacio o persona. El color es indisociable del fenómeno físico de la luz. La luz y el color son las materias de mayor carga poética y reveladora de un lugar o de un objeto, que existen en el diseño y la arquitectura, así como en la naturaleza. El color y la luz son siempre, siempre, parte del proyecto. Sin luz no hay color, o sí… el color negro: la oscuridad.</p><p>Todos tenemos un color asociado a nuestra persona, a nuestro cuerpo, a nuestra vibración. El color es energía, es la expresión perceptiva de la energía de la luz. La energía ni se crea ni se destruye, se transforma. Está en nuestras manos, en nuestros dedos, hacer el mejor uso posible de su poder de transformación en los espacios y objetos que creamos y proyectamos, mediante las prácticas artísticas y del diseño.”</p>
@@ -342,7 +348,7 @@ setTimeout(function () { var root = document.documentElement;
     <p class="wc-cell-meta">
       
       
-      
+      <span class="wc-cell-code" style="--swatch: #763027; --swatch-ink: var(--paper)"><span class="wc-code-band">Burnt siena</span></span>
     </p>
     <div class="wc-cell-text">
           <p>Envueltas en una neutralidad casi característica en nosotras, solemos darle un punto de fuerza al proyecto asociándolo a un solo color. En un solo espacio. Y ese es nuestro hilo conductor para guiarnos en el resto del proyecto. A esa mezcla de colores le ponemos el nombre del proyecto. Color “Elisa”, color “Narcís Oller”…</p>
@@ -355,7 +361,7 @@ setTimeout(function () { var root = document.documentElement;
     <p class="wc-cell-meta">
       
       
-      
+      <span class="wc-cell-code" style="--swatch: #829ba4; --swatch-ink: var(--paper)"><span class="wc-code-band">Light grey blue</span></span>
     </p>
     <div class="wc-cell-text">
           <p>Hace unos años, a raíz de la rehabilitación integral, urbanización y fachadas, de una plaza del núcleo histórico de Olot, propusimos al estudio Gabinete del Color el encargo del plan del color para el casco antiguo de la ciudad. La propuesta cromática resultante se basaba en el estudio y análisis de los revestimientos antiguos de distintas casas del barrio. Nuestra imaginación nos traicionó al llevarnos a pensar, equivocadamente, que la propuesta cromática estaría inspirada en el paisaje natural volcánico de la zona. Cuando conocimos la carta, la sorpresa fue descubrir la gran variedad y vivacidad de los colores antiguos que predominaban en el paisaje urbano olotense. Contrastaban perfectamente con la gama de grises, azules y rojizos, la mayoría de tonos oscuros, procedentes de los áridos y las piedras volcánicas que constituyen la base de esas construcciones. ¡Ay, a veces, qué ilusos llegamos a ser!</p>
@@ -368,7 +374,7 @@ setTimeout(function () { var root = document.documentElement;
     <p class="wc-cell-meta">
       
       
-      
+      <span class="wc-cell-code" style="--swatch: #ac6758; --swatch-ink: var(--paper)"><span class="wc-code-band">Red siena</span></span>
     </p>
     <div class="wc-cell-text">
           <p>La Lover’s House es una vivienda en Santa María, de un llamativo color que flota entre el rojo, el rosa y el naranja, según le de la luz, que hace que la casa se funda con el terreno, una tierra fértil de viñedos en el Plà de Mallorca. La fachada rugosa de mortero pigmentado, los suelos, exteriores e interiores, y el resto de piezas de hormigón coloreado en el mismo tono, y los propios muros que encapsulan los patios semi abiertos, hacen que la luz que entra en la casa tenga esa misma calidez y adquiera cuerpo y densidad.</p><p>En la búsqueda del color probamos con diferentes tonos —terrosos, ocres, sienas…— y diferentes rugosidades, hasta que un día el promotor propuso si probábamos algo más rojizo. La muestra convenció a todos. De ahí se sacó el tono de las piezas de hormigón y los suelos, fabricados localmente en Mallorca. Con todas esas piezas ya encargadas o en fabricación, justo antes de que el albañil comenzase a atarracar la primera fachada, al promotor le dio un breve arrebato de inseguridad y susurró: “¿De verdad vamos a hacerlo todo rojo?”.</p><p>El resultado convenció a todos. Las fotos que hizo Luis no necesitaron retoque porque todas tenían esa luz espesa que lo bañaba todo, enfatizada por una ligerísima neblina que suavizaba el sol aquel día de julio. En febrero, un lector de un popular blog dejaba un comentario en el que se preguntaba cómo alguien querría vivir en una casa monocroma. En octubre, una familia sueca decidía comprar la casa y venirse a vivir todo el año a ella, aunque eso no estaba en ninguno de sus planes. Por Zoom, en la reunión que tuvimos para conocernos, nos exclamó: “Who the f*** wouldn’t want to live in this monochromatic interior!!!!”</p>
@@ -381,7 +387,7 @@ setTimeout(function () { var root = document.documentElement;
     <p class="wc-cell-meta">
       
       
-      
+      <span class="wc-cell-code" style="--swatch: #a55117; --swatch-ink: var(--paper)"><span class="wc-code-band">Toasted siena</span></span>
     </p>
     <div class="wc-cell-text">
           <p>Parets Mèxic. Recopilació fotogràfica, 2009 – actualitat. El més interessant d’aquest treball: veure-hi reflectida la idiosincràsia de cada poble en els colors pintats en les façanes.</p>
@@ -394,7 +400,7 @@ setTimeout(function () { var root = document.documentElement;
     <p class="wc-cell-meta">
       
       
-      
+      <span class="wc-cell-code" style="--swatch: #d7943b; --swatch-ink: var(--paper)"><span class="wc-code-band">Ochre</span></span>
     </p>
     <div class="wc-cell-text">
           <p>“El blanc per ampliar espais, els verds per recordar la natura, el blau per fer desaparèixer amb el cel, els vermells han de ser continguts de dia o descarats de nit junt amb els daurats. El meu preferit, el color torrat de la fusta quan li dona el sol.”</p>
@@ -407,7 +413,7 @@ setTimeout(function () { var root = document.documentElement;
     <p class="wc-cell-meta">
       
       
-      
+      <span class="wc-cell-code" style="--swatch: #c29a97; --swatch-ink: var(--paper)"><span class="wc-code-band">Off pink</span></span>
     </p>
     <div class="wc-cell-text">
           <p>“Para mí, que recibí una formación arquitectónica donde el color estaba casi proscrito, ha resultado difícil amarlo y reconozco que todavía no me siento cómoda al utilizarlo. Lo que más me atrae del color son las emociones que evoca, cómo hace vibrar las superficies y cómo, junto a la luz, las proporciones, las texturas, los sonidos… conforma la manera de sentir el espacio.”</p>
@@ -420,7 +426,7 @@ setTimeout(function () { var root = document.documentElement;
     <p class="wc-cell-meta">
       
       
-      
+      <span class="wc-cell-code" style="--swatch: #4b4e5a; --swatch-ink: var(--paper)"><span class="wc-code-band">Purple grey</span></span>
     </p>
     <div class="wc-cell-text">
           <p>Generalmente el color se educa y se concibe como un matiz plano sin profundidad pero a veces los materiales definen su procedencia en función de su tonalidad. Los diferentes aceros reflejan con diversas tonalidades, así como la madera define su procedencia y la capacidad de identificarla por un matiz específico. Una de las cuestiones que más nos preocupa es la autenticidad, que sin duda tiene una vinculación indisociable con el color.</p><p>En otro orden de cosas, el color surge a veces en lo espontáneo y mutable como es el simple estado espumoso del té verde tras su preparación. Los esmaltes en la cerámica mutan de tonalidad tras la cocción y los esmaltes atenúan el contenido. El color es una percepción en tránsito, quizá definido por el instante que cada uno elegimos.</p>
@@ -433,7 +439,7 @@ setTimeout(function () { var root = document.documentElement;
     <p class="wc-cell-meta">
       
       
-      
+      <span class="wc-cell-code" style="--swatch: #592222; --swatch-ink: var(--paper)"><span class="wc-code-band">Red dark brown</span></span>
     </p>
     <div class="wc-cell-text">
           <p>Quatre divagacions sobre el color: Mai no hem entès els arquitectes que no utilitzen més que el blanc, el gris i/o el negre. Si tenim tots els colors possibles a la nostra disposició, per què no fer-los servir? Serà la por d’equivocar-se? A fer un pas en fals?</p><p>Efectivament, hi ha projectes que requereixen una absència total de color, però no tenir-los mai en compte seria equivalent a no utilitzar materials com la pedra, la fusta o la ceràmica, a favor d’altres materials. Ells s’ho perden. El color és un conglomerat de llengües minoritàries que, quan es regiren contra el seu Goliath, i vencen, poden donar lloc a espais inesperats.</p><p>Què és el color sinó un altre material de construcció més?</p>
@@ -446,7 +452,7 @@ setTimeout(function () { var root = document.documentElement;
     <p class="wc-cell-meta">
       
       
-      
+      <span class="wc-cell-code" style="--swatch: #be8e88; --swatch-ink: var(--paper)"><span class="wc-code-band">Off pink</span></span>
     </p>
     <div class="wc-cell-text">
           <p>La gama cromática que le des a un proyecto es la parte más emocional. Un mismo proyecto te provocará muy distintas sensaciones según la opción que eliges, es ahí donde se refleja la personalidad de quien vive. El color es el traje a medida de la personalidad de quién te encarga un proyecto sea del tipo que sea… por eso respeto muchísimo las preferencias de los clientes porque cada uno sabe en dónde se siente mejor. Soy partidaria del color que cuesta definir, que no es plano, que tiene valores y no suele surgir a la primera, por eso nunca puedo compartir un color cuando me lo preguntan… porque no es ninguno concreto, es la mezcla de varios la que suele convencerme. Ni tan siquiera el negro o el blanco los hago tal cual, como dicen los de mi equipo: “Tú cocinas con los colores”.</p>
@@ -459,7 +465,7 @@ setTimeout(function () { var root = document.documentElement;
     <p class="wc-cell-meta">
       
       
-      
+      <span class="wc-cell-code" style="--swatch: #e05f09; --swatch-ink: var(--paper)"><span class="wc-code-band">Orange</span></span>
     </p>
     <div class="wc-cell-text">
           <p>Como interiorista uso el color en mi vida. Mi cabeza es un color constante que cambia según el sentimiento que me transmite cada uno de mis proyectos. Con el color hago de un espacio algo especial que despierte una sensación para todo aquel que viva en él. El color es vida. Creo que los espacios transmiten el alma de las personas. Nosotros en el estudio siempre trabajamos desde el “tú cómo quieres vivir”, y este “cómo quieres vivir” no es técnicamente un espacio, es un sueño, es un feeling, son unas ganas de cómo quieres vivir las cosas. Entonces, el color ayuda a traducir esos sentimientos en el concepto de hogar que te imaginas, dotando de alma esos espacios. Me apasiona el mundo del arte y podría decir que es de donde obtengo más información a nivel de color.</p>
@@ -472,7 +478,7 @@ setTimeout(function () { var root = document.documentElement;
     <p class="wc-cell-meta">
       
       
-      
+      <span class="wc-cell-code" style="--swatch: #2250b3; --swatch-ink: var(--paper)"><span class="wc-code-band">Ultramarine blue</span></span>
     </p>
     <div class="wc-cell-text">
           <p>Quan un color em crida l’atenció, penso en la llum que en aquell instant hi ha a l’escena. M’agrada veure i pensar les dues coses alhora.</p><p>El color que més utilitzo a la meva paleta es el blau ultramar.</p>
@@ -485,7 +491,7 @@ setTimeout(function () { var root = document.documentElement;
     <p class="wc-cell-meta">
       
       
-      
+      <span class="wc-cell-code" style="--swatch: #87222c; --swatch-ink: var(--paper)"><span class="wc-code-band">Bordeaux</span></span>
     </p>
     <div class="wc-cell-text">
           <p>El color es información. Lo usamos para describir nuestras sensaciones, nuestras emociones y las situaciones. Para mí es vida. Es luz. Es hogar.</p>
@@ -498,7 +504,7 @@ setTimeout(function () { var root = document.documentElement;
     <p class="wc-cell-meta">
       
       
-      
+      <span class="wc-cell-code" style="--swatch: #eb7373; --swatch-ink: var(--paper)"><span class="wc-code-band">Coral</span></span>
     </p>
     <div class="wc-cell-text">
           <p>¿Qué es el color? El color es luz. Muy evidente e inmediato, pero tan cierto y científico como poético y romántico. Una vida en blanco y negro, más allá de algo del pasado, se asocia a lo lúgubre, lo triste, lo apagado; sin embargo, la vida en color es alegría, despertar, es vida en sí misma.</p><p>Así que como arquitectos decimos sí, totalmente sí al color, a espacios llenos de vida. El color es complejo y difícil de aprender, de controlar, de trabajar, pero una vez te liberas y experimentas es un aliado maravilloso para crear. ¡Viva el color!</p>
@@ -511,7 +517,7 @@ setTimeout(function () { var root = document.documentElement;
     <p class="wc-cell-meta">
       
       
-      
+      <span class="wc-cell-code" style="--swatch: #7a6e7d; --swatch-ink: var(--paper)"><span class="wc-code-band">Dark purple</span></span>
     </p>
     <div class="wc-cell-text">
           <p>Para mí el color de un proyecto es el de los múltiples cuerpos que aloja.</p>
@@ -524,7 +530,7 @@ setTimeout(function () { var root = document.documentElement;
     <p class="wc-cell-meta">
       
       
-      
+      <span class="wc-cell-code" style="--swatch: #a8a691; --swatch-ink: var(--paper)"><span class="wc-code-band">Grey stone</span></span>
     </p>
     <div class="wc-cell-text">
           <p>El color es materia. El color es yeso y agua. El color es barro cocido. El color es aceite y serrín. El color es metal extruido. El color es reflejos en un espejo. El color es luz en nuestros ojos.</p>
@@ -537,7 +543,7 @@ setTimeout(function () { var root = document.documentElement;
     <p class="wc-cell-meta">
       
       
-      
+      <span class="wc-cell-code" style="--swatch: #fff0db; --swatch-ink: var(--ink)"><span class="wc-code-band">Off white</span></span>
     </p>
     <div class="wc-cell-text">
           <p>Para gustos emociones, los colores.</p>
@@ -550,7 +556,7 @@ setTimeout(function () { var root = document.documentElement;
     <p class="wc-cell-meta">
       
       
-      
+      <span class="wc-cell-code" style="--swatch: #155472; --swatch-ink: var(--paper)"><span class="wc-code-band">Petroleum blue</span></span>
     </p>
     <div class="wc-cell-text">
           <p>“El color es materia.”</p>
@@ -563,7 +569,7 @@ setTimeout(function () { var root = document.documentElement;
     <p class="wc-cell-meta">
       
       
-      
+      <span class="wc-cell-code" style="--swatch: #97432c; --swatch-ink: var(--paper)"><span class="wc-code-band">Oxid red</span></span>
     </p>
     <div class="wc-cell-text">
           <p>“Rojo imprimación.”</p>
@@ -574,6 +580,8 @@ setTimeout(function () { var root = document.documentElement;
     <button type="button" class="panel-close">Close</button>
     <figure class="wc-book-plate" data-book-plate></figure>
   </div>
+  <button type="button" class="wc-book-step is-prev" data-book-step="-1" aria-label="Previous photograph"><svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M14.5 1.5 L3 14 L14.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></button>
+  <button type="button" class="wc-book-step is-next" data-book-step="1" aria-label="Next photograph"><svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M1.5 1.5 L13 14 L1.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></button>
 
     <!--
       The names, not the film. The root of this page is the opening film, and
@@ -582,9 +590,7 @@ setTimeout(function () { var root = document.documentElement;
       does.
     -->
     <p class="wc-back"><a href="/prototype2/#whats-color">All of What&rsquo;s Color?</a></p>
-    <section class="wc-chart" aria-label="Their colours">
-    <a class="wc-bar" href="#wc-gema-sach" style="--bar-h: 0.5255; --bar-c: #be8e88"><span class="wc-bar-name">Gema Sach</span><span class="wc-bar-fill"></span></a><a class="wc-bar" href="#wc-marc-morro" style="--bar-h: 0.4953; --bar-c: #97432c"><span class="wc-bar-name">Marc Morro</span><span class="wc-bar-fill"></span></a><span class="wc-bar" style="--bar-h: 0.2892; --bar-c: #be8e88"><span class="wc-bar-name">Andrea Batlló y Adrià Escolano</span><span class="wc-bar-fill"></span></span><a class="wc-bar" href="#wc-escobedo-soliz" style="--bar-h: 0.4953; --bar-c: #155472"><span class="wc-bar-name">Escobedo Soliz</span><span class="wc-bar-fill"></span></a><a class="wc-bar" href="#wc-montse-vicens" style="--bar-h: 0.5694; --bar-c: #fff0db"><span class="wc-bar-name">Montse Vicens</span><span class="wc-bar-fill"></span></a><span class="wc-bar" style="--bar-h: 0.5907; --bar-c: #3e1912"><span class="wc-bar-name">Nomos</span><span class="wc-bar-fill"></span></span><a class="wc-bar" href="#wc-kal-a" style="--bar-h: 0.6187; --bar-c: #4b4e5a"><span class="wc-bar-name">Kal-a</span><span class="wc-bar-fill"></span></a><a class="wc-bar" href="#wc-amoo" style="--bar-h: 0.6061; --bar-c: #592222"><span class="wc-bar-name">AMOO</span><span class="wc-bar-fill"></span></a><a class="wc-bar" href="#wc-isabel-sendra" style="--bar-h: 0.5085; --bar-c: #c29a97"><span class="wc-bar-name">Isabel Sendra</span><span class="wc-bar-fill"></span></a><a class="wc-bar" href="#wc-laura-castanya" style="--bar-h: 0.4937; --bar-c: #d7943b"><span class="wc-bar-name">Laura Castanya</span><span class="wc-bar-fill"></span></a><a class="wc-bar" href="#wc-antoni-arola" style="--bar-h: 0.52; --bar-c: #a55117"><span class="wc-bar-name">Antoni Arola</span><span class="wc-bar-fill"></span></a><a class="wc-bar" href="#wc-isla-arquitectos" style="--bar-h: 0.4449; --bar-c: #ac6758"><span class="wc-bar-name">Isla arquitectos</span><span class="wc-bar-fill"></span></a><a class="wc-bar" href="#wc-un-parell-d-arquitectes" style="--bar-h: 0.3999; --bar-c: #829ba4"><span class="wc-bar-name">Un parell d’arquitectes</span><span class="wc-bar-fill"></span></a><a class="wc-bar" href="#wc-isabel-francoy" style="--bar-h: 0.497; --bar-c: #bf7d19"><span class="wc-bar-name">Isabel Francoy</span><span class="wc-bar-fill"></span></a><a class="wc-bar" href="#wc-tomas-lopez-amat" style="--bar-h: 0.4531; --bar-c: #411e1f"><span class="wc-bar-name">Tomás López Amat</span><span class="wc-bar-fill"></span></a><a class="wc-bar" href="#wc-conticert" style="--bar-h: 0.548; --bar-c: #763027"><span class="wc-bar-name">ContiCert</span><span class="wc-bar-fill"></span></a><a class="wc-bar" href="#wc-elii" style="--bar-h: 0.634; --bar-c: #134270"><span class="wc-bar-name">Elii</span><span class="wc-bar-fill"></span></a><a class="wc-bar" href="#wc-stefano-colli" style="--bar-h: 0.5134; --bar-c: #779fbf"><span class="wc-bar-name">Stefano Colli</span><span class="wc-bar-fill"></span></a><a class="wc-bar" href="#wc-plantea-estudio" style="--bar-h: 0.497; --bar-c: #8d4c3b"><span class="wc-bar-name">Plantea Estudio</span><span class="wc-bar-fill"></span></a>
-  </section>
+    
     <!--
       The line the phone sheets close an edition on. Shown on a phone only,
       where the link above is not; the words are About's own.
@@ -859,15 +865,15 @@ setTimeout(function () { var root = document.documentElement;
           </button>
     </div>
     <button type="button" class="about-reel-step is-prev" data-about-reel-step="-1" aria-label="Earlier photographs" hidden>
-      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="M8 1 1 8l7 7" /></svg>
+      <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M14.5 1.5 L3 14 L14.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
     </button>
     <button type="button" class="about-reel-step is-next" data-about-reel-step="1" aria-label="More photographs" hidden>
-      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="m1 1 7 7-7 7" /></svg>
+      <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M1.5 1.5 L13 14 L1.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
     </button>
   </div>
           </div>
         </div>
-        <p>Based on her reflections as an artist, her experience in color prediction and mural painting, brings to all her work, with color as a primary tool, an identifiable language.</p><p>She began her artistic career painting and soon realized that she had a natural ability with color. In her own words, ‘All I have done throughout my career has been to cultivate this natural gift. First as a mural painter, then designing color charts and prescribing color and finally as an artist’.</p><p>The tireless search for the reason of color and its form has obsessed artists throughout history, from the very creation of pictorial expression. Claudia Valsells knows about this and she aims to portray this into her artwork.</p><p>In her beginnings as a colorist she worked on commissions, for architects, and on projects of different scales advising and prescribing color. Soon she founded her own Studio, under the name of ‘Arts&amp;Claus’, in allegory to the ‘Arts&amp;Craft’ movement where she always found a lot of inspiration. She specialized in mural painting, color applied to architecture, and interior design for 20 years on projects in Spain and abroad. Her role was to convey the value of color and its texture in the decoration of interior spaces working closely with professionals in the fields of art, design, and architecture. It was in this context, working close with architects and designers, that she found out the communication between professionals was based by the painting companies, relegated the work of the colorist to the background due to ignorance or fear clients to make a mistake or be branded as eccentric. It was then when Claudia Valsells created a specific chromatic selection, a COLOUR CHART, with more than 200 references, which have been used as color communication tools by Spain’s best architects.</p><p>Her work has two very defined characteristics: on the one hand her chromatic instinct, a gift of colors and on the other her ability to select, group and interact colors creating a chromatic language of her own.</p>
+        <p>Based on her reflections as an artist, her experience in color prediction and mural painting, brings to all her work, with color as a primary tool, an identifiable language.</p><p>She began her artistic career painting and soon realized that she had a natural ability with color. In her own words, ‘All I have done throughout my career has been to cultivate this natural gift. First as a mural painter, then designing color charts and prescribing color and finally as an artist’.</p><p>The tireless search for the reason of color and its form has obsessed artists throughout history, from the very creation of pictorial expression. Claudia Valsells knows about this and she aims to portray this into her artwork.</p><p>In her beginnings as a colorist she worked on commissions, for architects, and on projects of different scales advising and prescribing color. Soon she founded her own Studio, under the name of ‘Arts&amp;Claus’, in allegory to the ‘Arts&amp;Craft’ movement where she always found a lot of inspiration. She specialized in mural painting, color applied to architecture, and interior design for 20 years on projects in Spain and abroad. Her role was to convey the value of color and its texture in the decoration of interior spaces working closely with professionals in the fields of art, design, and architecture. It was in this context, working close with architects and designers, that she found out the communication between professionals was based by the painting companies, relegated the work of the colorist to the background due to ignorance or fear clients to make a mistake or be branded as eccentric. It was then when Claudia Valsells created a specific chromatic selection, a COLOUR CHART, with more than 200 references, which have been used as color communication tools by Spain’s best architects.</p><p>Her work has two very defined characteristics: on the one hand her chromatic instinct, a gift of colors and on the other her ability to select, group and interact colors creating a chromatic language of her own.</p><p>Currently she combines her activity as an artist with colour prescription in the areas of design and architecture.</p><p>Her work is represented, in Spain and abroad, by the Barcelona gallery owner Miquel Alzueta. <a class="about-link hrow" href="https://alzuetagallery.com" target="_blank" rel="noopener">ALZUETA GALLERY</a></p>
       </div>
       <div class="about-record">
         <section class="about-shows">
@@ -990,136 +996,141 @@ setTimeout(function () { var root = document.documentElement;
     <h3 class="about-label">Art fairs</h3>
     <div class="about-show-columns">
       <ul class="about-show-list"><li class="about-show">
-    <span class="about-show-when">2026 February</span>
-    <span class="about-show-title">Zona Maco CDMX</span>
-    <span class="about-show-line">with Alzueta Gallery</span>
-    <span class="about-show-place">Mexico</span>
+    <span class="about-show-when">2026</span>
+    <span class="about-show-title">ART COLOGNE</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Cologne, Germany</span>
   </li><li class="about-show">
-    <span class="about-show-when">2025 October</span>
-    <span class="about-show-title">Estampa contemporary<br />art fair,</span>
-    <span class="about-show-line">with Alzueta Gallery</span>
-    <span class="about-show-place">Madrid</span>
+    <span class="about-show-when">2026</span>
+    <span class="about-show-title">THE ARMORY SHOW</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">New York, USA</span>
   </li><li class="about-show">
-    <span class="about-show-when">2024 February</span>
+    <span class="about-show-when">2026</span>
     <span class="about-show-title">ZONA MACO</span>
-    <span class="about-show-line">with Alzueta Gallery</span>
-    
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Mexico City, Mexico</span>
   </li><li class="about-show">
-    <span class="about-show-when">2024 November</span>
-    <span class="about-show-title">Luxemburg art week</span>
-    <span class="about-show-line">with Alzueta Gallery</span>
-    <span class="about-show-place">Luxemburg</span>
+    <span class="about-show-when">2025</span>
+    <span class="about-show-title">ESTAMPA</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
   </li><li class="about-show">
-    <span class="about-show-when">2023 February</span>
-    <span class="about-show-title">Contemporary Art Fair</span>
-    <span class="about-show-line">Art Rotterdam</span>
-    <span class="about-show-place">Rotterdam</span>
+    <span class="about-show-when">2025</span>
+    <span class="about-show-title">THE ARMORY SHOW</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">New York, USA</span>
   </li><li class="about-show">
-    <span class="about-show-when">2021 October</span>
-    <span class="about-show-title">Estampa Contemporary Art Fair</span>
-    
-    <span class="about-show-place">Alzueta Gallery, Madrid</span>
+    <span class="about-show-when">2024</span>
+    <span class="about-show-title">LUXEMBOURG ART WEEK</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Luxembourg, Luxembourg</span>
   </li><li class="about-show">
-    <span class="about-show-when">2021 September</span>
-    <span class="about-show-title">Art Paris Fair</span>
-    
-    <span class="about-show-place">Alzueta Gallery, Paris</span>
+    <span class="about-show-when">2024</span>
+    <span class="about-show-title">ZONAMACO</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Mexico City, Mexico</span>
   </li><li class="about-show">
-    <span class="about-show-when">2021 June</span>
-    <span class="about-show-title">Art Madrid Feria</span>
-    
-    <span class="about-show-place">Alzueta Gallery, Madrid</span>
+    <span class="about-show-when">2023</span>
+    <span class="about-show-title">ART ROTTERDAM</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Rotterdam, The Netherlands</span>
   </li><li class="about-show">
-    <span class="about-show-when">2019 March</span>
-    <span class="about-show-title">AFF Art Fair</span>
-    
-    <span class="about-show-place">Brussels</span>
+    <span class="about-show-when">2022</span>
+    <span class="about-show-title">ART PARIS</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Paris, France</span>
   </li><li class="about-show">
-    <span class="about-show-when">2019 March</span>
-    <span class="about-show-title">Art Madrid</span>
-    
-    <span class="about-show-place">Madrid</span>
+    <span class="about-show-when">2021</span>
+    <span class="about-show-title">ESTAMPA ART FAIR</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
   </li><li class="about-show">
-    <span class="about-show-when">2018</span>
-    <span class="about-show-title">Art fair</span>
-    
-    <span class="about-show-place">Hamburg</span>
+    <span class="about-show-when">2021</span>
+    <span class="about-show-title">ART PARIS</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Paris, France</span>
   </li><li class="about-show">
-    <span class="about-show-when">2018</span>
-    <span class="about-show-title">Art Elysees</span>
-    
-    <span class="about-show-place">París</span>
+    <span class="about-show-when">2021</span>
+    <span class="about-show-title">ART MADRID</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
   </li><li class="about-show">
-    <span class="about-show-when">2018</span>
-    <span class="about-show-title">Art Fair</span>
-    
-    <span class="about-show-place">Stockholm</span>
+    <span class="about-show-when">2019</span>
+    <span class="about-show-title">ART ÉLYSÉES-ART &amp; DESIGN</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Paris, France</span>
   </li><li class="about-show">
-    <span class="about-show-when">2018</span>
-    <span class="about-show-title">Contemporary Art Fair<br />Just LX,</span>
-    
-    <span class="about-show-place">Portugal</span>
+    <span class="about-show-when">2019</span>
+    <span class="about-show-title">ART PARIS GRAND PALAIS</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Paris, France</span>
   </li><li class="about-show">
-    <span class="about-show-when">2018</span>
-    <span class="about-show-title">Almoneda Antik Passion</span>
-    
-    <span class="about-show-place">Madrid</span>
-  </li><li class="about-show">
-    <span class="about-show-when">2019 April</span>
-    <span class="about-show-title">Almoneda, Ifema<br />Feria de Madrid</span>
-    
-    <span class="about-show-place">Palau de Casavells, Madrid.</span>
+    <span class="about-show-when">2019</span>
+    <span class="about-show-title">ALMONEDA</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
   </li></ul>
       <ul class="about-show-list"><li class="about-show">
-    <span class="about-show-when">2018</span>
-    <span class="about-show-title">Art Fair Grand Palais</span>
-    
-    <span class="about-show-place">Paris</span>
+    <span class="about-show-when">2019</span>
+    <span class="about-show-title">ART MADRID</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
   </li><li class="about-show">
     <span class="about-show-when">2018</span>
-    <span class="about-show-title">Eurantica Art Fair</span>
-    
-    <span class="about-show-place">Brussels</span>
-  </li><li class="about-show">
-    <span class="about-show-when">2019 April</span>
-    <span class="about-show-title">Art Paris Grand Palais</span>
-    
-    <span class="about-show-place">París</span>
+    <span class="about-show-title">THE AFFORDABLE ART FAIR HAMBURG</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Hamburg, Germany</span>
   </li><li class="about-show">
     <span class="about-show-when">2018</span>
-    <span class="about-show-title">Art Madrid,</span>
-    
-    <span class="about-show-place">Madrid</span>
+    <span class="about-show-title">STOCKHOLM INDEPENDENT ART FAIR</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Stockholm, Sweden</span>
   </li><li class="about-show">
-    <span class="about-show-when">2017 July</span>
-    <span class="about-show-title">Uterqüe Art Essays</span>
-    <span class="about-show-line">AW 2017</span>
-    
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">JUST LX</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Lisbon, Portugal</span>
   </li><li class="about-show">
-    <span class="about-show-when">2017 March</span>
-    <span class="about-show-title">International Art Fair,<br />Art Paris</span>
-    
-    <span class="about-show-place">París</span>
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">ALMONEDA</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
   </li><li class="about-show">
-    <span class="about-show-when">2017 February</span>
-    <span class="about-show-title">Art Madrid</span>
-    
-    <span class="about-show-place">Madrid</span>
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">ART FAIR GRAND PALAIS</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Paris, France</span>
   </li><li class="about-show">
-    <span class="about-show-when">2016 November</span>
-    <span class="about-show-title">Antica Namur,</span>
-    
-    <span class="about-show-place">Belgium</span>
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">EURANTICA ART FAIR</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Brussels, Belgium</span>
   </li><li class="about-show">
-    <span class="about-show-when">2016 October</span>
-    <span class="about-show-title">Art Élysées,<br />International Art Fair,</span>
-    
-    <span class="about-show-place">París</span>
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">ART MADRID</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
   </li><li class="about-show">
-    <span class="about-show-when">2016 June</span>
-    <span class="about-show-title">Scope Basel,</span>
-    
-    <span class="about-show-place">Basel art fair</span>
+    <span class="about-show-when">2017</span>
+    <span class="about-show-title">ART PARIS</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Paris, France</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2017</span>
+    <span class="about-show-title">ART MADRID</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2016</span>
+    <span class="about-show-title">ANTICA NAMUR</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Namur, Belgium</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2016</span>
+    <span class="about-show-title">SCOPE BASEL</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Basel, Switzerland</span>
   </li></ul>
     </div>
   </section>
@@ -1128,28 +1139,30 @@ setTimeout(function () { var root = document.documentElement;
           <ul class="about-collection-list">
             <li class="about-collection">
                   <span class="about-collection-name">Fundació Vilacases</span>
-                  <span class="about-collection-place">Barcelona</span>
+                  <span class="about-collection-place">Barcelona, SPAIN</span>
                 </li><li class="about-collection">
                   <span class="about-collection-name">Fundació Banc Sabadell</span>
-                  <span class="about-collection-place">Barcelona</span>
+                  <span class="about-collection-place">Barcelona, SPAIN</span>
                 </li><li class="about-collection">
                   <span class="about-collection-name">Collection Hayot</span>
                   <span class="about-collection-place">France</span>
                 </li><li class="about-collection">
+                  <span class="about-collection-name">Martinez Collection</span>
+                  <span class="about-collection-place">Mexico-US</span>
+                </li><li class="about-collection">
                   <span class="about-collection-name">Niederberghaus Collection</span>
-                  <span class="about-collection-place">Mexico - US</span>
+                  <span class="about-collection-place">Germany</span>
                 </li><li class="about-collection">
                   <span class="about-collection-name">Collection Richard</span>
                   <span class="about-collection-place">France</span>
                 </li><li class="about-collection">
                   <span class="about-collection-name">Smith Collection</span>
-                  <span class="about-collection-place">Wyoming</span>
+                  <span class="about-collection-place">Wyoming, USA</span>
                 </li>
           </ul>
         </section>
       </div>
       <address class="about-contact">
-        <a href="tel:+34609769186">+34 609 76 91 86</a>
         <a href="mailto:editorial@alzuetagallery.com">editorial@alzuetagallery.com</a><a href="mailto:claudia@claudiacolor.com">claudia@claudiacolor.com</a>
       </address>
       <p class="about-foot"><b>Claudia Valsells</b> © All Rights Reserved</p>
@@ -1160,16 +1173,16 @@ setTimeout(function () { var root = document.documentElement;
   </div>
   </section>
   <a class="about-close" href="#" data-panel-close="about">Close</a>
-  <div class="about-cue" data-about-cue aria-hidden="true">
-    <svg viewBox="0 0 28 16" focusable="false">
+  <button type="button" class="about-cue" data-about-cue aria-label="Scroll down">
+    <svg viewBox="0 0 28 16" aria-hidden="true" focusable="false">
       <path d="M1.5 1.5 L14 13 L26.5 1.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
     </svg>
-  </div>
+  </button>
   <button type="button" class="about-viewer-step is-prev" data-about-step="-1" aria-label="Previous photograph">
-      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="M8 1 1 8l7 7" /></svg>
+      <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M14.5 1.5 L3 14 L14.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
     </button>
     <button type="button" class="about-viewer-step is-next" data-about-step="1" aria-label="Next photograph">
-      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="m1 1 7 7-7 7" /></svg>
+      <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M1.5 1.5 L13 14 L1.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
     </button>
 <div class="lightbox" data-lightbox data-available-label="Available" hidden>
     <div class="lightbox-veil" data-lightbox-veil></div>

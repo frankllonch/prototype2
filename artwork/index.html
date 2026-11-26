@@ -11,6 +11,7 @@
 <link rel="modulepreload" href="/prototype2/js/text-roll.js" />
 <link rel="modulepreload" href="/prototype2/js/transitions.js" />
 <link rel="modulepreload" href="/prototype2/js/controls.js" />
+<link rel="modulepreload" href="/prototype2/js/pile.js" />
 <link rel="modulepreload" href="/prototype2/js/stack.js" />
 <link rel="modulepreload" href="/prototype2/js/years.js" />
 <link rel="modulepreload" href="/prototype2/js/hover-list.js" />
@@ -18,6 +19,8 @@
 <link rel="modulepreload" href="/prototype2/js/figures.js" />
 <link rel="modulepreload" href="/prototype2/js/lightbox.js" />
 <link rel="modulepreload" href="/prototype2/js/cursor.js" />
+<link rel="modulepreload" href="/prototype2/js/ball.js" />
+<link rel="modulepreload" href="/prototype2/js/ball-tuner.js" />
 <link rel="modulepreload" href="/prototype2/js/film.js" />
 <link rel="modulepreload" href="/prototype2/js/tilt.js" />
 <link rel="modulepreload" href="/prototype2/js/paging.js" />
@@ -32,15 +35,11 @@
 <link rel="modulepreload" href="/prototype2/js/current.js" />
 <link rel="modulepreload" href="/prototype2/js/scrollbar.js" />
 <link rel="modulepreload" href="/prototype2/js/scramble.js" />
-<link rel="modulepreload" href="/prototype2/js/hover-tuner.js" />
+<link rel="modulepreload" href="/prototype2/js/pile-tuner.js" />
 <link rel="modulepreload" href="/prototype2/js/rise.js" />
 <link rel="modulepreload" href="/prototype2/js/menu.js" />
 <link rel="modulepreload" href="/prototype2/js/index.js" />
 <script>document.documentElement.classList.add('js');
-// The hover tuner's lettering, laid over the stylesheet before the first paint
-// so that moving between pages with it on does not flash the defaults. Only in
-// a browser that has asked for the tuner (?tune); see client/hover-tuner.ts.
-try { if (localStorage.getItem('cv-tune') === '1') { document.documentElement.setAttribute('data-tune', ''); var tc = localStorage.getItem('cv-tune-css'); if (tc) { var ts = document.createElement('style'); ts.id = 'tune-early'; ts.textContent = tc; document.head.appendChild(ts); } } } catch (e) {}
 // Arriving at What's Color by its link, the page is laid out at the top and
 // moved down to the written sentence by script — so it is kept covered until
 // it has been, and no frame is ever painted in the wrong place. The script
@@ -50,13 +49,20 @@ try { if (localStorage.getItem('cv-tune') === '1') { document.documentElement.se
 // makes — so a browser that keeps the plain anchor jump never waits for it.
 try { var nav = performance.getEntriesByType('navigation')[0];
   if (location.hash === '#whats-color' && (!nav || nav.type === 'navigate')
-    && CSS.supports('animation-timeline: view()')
     && !matchMedia('(prefers-reduced-motion: reduce)').matches
     && !matchMedia('(max-width: 899px)').matches) {
     document.documentElement.classList.add('wc-arriving', 'wc-swatch-drop');
     setTimeout(function () { document.documentElement.classList.remove('wc-arriving') }, 1500);
     setTimeout(function () { document.documentElement.classList.remove('wc-swatch-drop') }, 700);
   } } catch (e) {}
+// Trying the ways the start page's film can go and come back (THE WAY OUT
+// OF THE START PAGE, 00-base.css): ?film=wipe, fade, cut or blur holds for
+// the visit; ?film=off goes back to the stylesheet's own setting.
+try { var film = new URLSearchParams(location.search).get('film');
+  if (film === 'off') sessionStorage.removeItem('cv-film');
+  else if (film && /^(fade|cut|wipe|blur)$/.test(film)) sessionStorage.setItem('cv-film', film);
+  film = sessionStorage.getItem('cv-film');
+  if (film) document.documentElement.style.setProperty('--start-film-style', 'film-' + film); } catch (e) {}
 // The page's colour, drawn here rather than by client/current.ts so that the
 // block in the bar is the right colour on the first frame. Drawn by the scripts,
 // it was painted once in the list's first colour and then changed, on every
@@ -101,16 +107,10 @@ setTimeout(function () { var root = document.documentElement;
     <a class="top-soon" href="/prototype2/#whats-color"  data-roll><span class="roll-word" aria-hidden="true" style="--n: 12"><span class="scram" data-ch="W" style="--i: 0">W</span><span class="scram" data-ch="h" style="--i: 1">h</span><span class="scram" data-ch="a" style="--i: 2">a</span><span class="scram" data-ch="t" style="--i: 3">t</span><span class="scram" data-ch="’" style="--i: 4">’</span><span class="scram" data-ch="s" style="--i: 5">s</span> <span class="scram" data-ch="C" style="--i: 6">C</span><span class="scram" data-ch="o" style="--i: 7">o</span><span class="scram" data-ch="l" style="--i: 8">l</span><span class="scram" data-ch="o" style="--i: 9">o</span><span class="scram" data-ch="r" style="--i: 10">r</span><span class="scram" data-ch="?" style="--i: 11">?</span></span><span class="roll-text">What’s Color?</span></a>
     <nav class="menu" aria-label="Primary">
       <a
-            href="/prototype2/color-chart/"
-            
-            
-            style="--menu-phone: 5"
-            data-roll
-          ><span class="roll-word" aria-hidden="true" style="--n: 10"><span class="scram" data-ch="C" style="--i: 0">C</span><span class="scram" data-ch="o" style="--i: 1">o</span><span class="scram" data-ch="l" style="--i: 2">l</span><span class="scram" data-ch="o" style="--i: 3">o</span><span class="scram" data-ch="r" style="--i: 4">r</span> <span class="scram" data-ch="C" style="--i: 5">C</span><span class="scram" data-ch="h" style="--i: 6">h</span><span class="scram" data-ch="a" style="--i: 7">a</span><span class="scram" data-ch="r" style="--i: 8">r</span><span class="scram" data-ch="t" style="--i: 9">t</span></span><span class="roll-text">Color Chart</span></a><a
             href="/prototype2/exhibitions/"
             
             
-            style="--menu-phone: 3"
+            style="--menu-phone: 5"
             data-roll
           ><span class="roll-word" aria-hidden="true" style="--n: 11"><span class="scram" data-ch="E" style="--i: 0">E</span><span class="scram" data-ch="x" style="--i: 1">x</span><span class="scram" data-ch="h" style="--i: 2">h</span><span class="scram" data-ch="i" style="--i: 3">i</span><span class="scram" data-ch="b" style="--i: 4">b</span><span class="scram" data-ch="i" style="--i: 5">i</span><span class="scram" data-ch="t" style="--i: 6">t</span><span class="scram" data-ch="i" style="--i: 7">i</span><span class="scram" data-ch="o" style="--i: 8">o</span><span class="scram" data-ch="n" style="--i: 9">n</span><span class="scram" data-ch="s" style="--i: 10">s</span></span><span class="roll-text">Exhibitions</span></a><a
             href="/prototype2/commissioned/"
@@ -122,9 +122,15 @@ setTimeout(function () { var root = document.documentElement;
             href="/prototype2/artwork/"
             
             aria-current="page"
-            style="--menu-phone: 2"
+            style="--menu-phone: 3"
             data-roll
           ><span class="roll-word" aria-hidden="true" style="--n: 7"><span class="scram" data-ch="A" style="--i: 0">A</span><span class="scram" data-ch="r" style="--i: 1">r</span><span class="scram" data-ch="t" style="--i: 2">t</span><span class="scram" data-ch="w" style="--i: 3">w</span><span class="scram" data-ch="o" style="--i: 4">o</span><span class="scram" data-ch="r" style="--i: 5">r</span><span class="scram" data-ch="k" style="--i: 6">k</span></span><span class="roll-text">Artwork</span></a><a
+            href="/prototype2/color-chart/"
+            
+            
+            style="--menu-phone: 2"
+            data-roll
+          ><span class="roll-word" aria-hidden="true" style="--n: 10"><span class="scram" data-ch="C" style="--i: 0">C</span><span class="scram" data-ch="o" style="--i: 1">o</span><span class="scram" data-ch="l" style="--i: 2">l</span><span class="scram" data-ch="o" style="--i: 3">o</span><span class="scram" data-ch="r" style="--i: 4">r</span> <span class="scram" data-ch="C" style="--i: 5">C</span><span class="scram" data-ch="h" style="--i: 6">h</span><span class="scram" data-ch="a" style="--i: 7">a</span><span class="scram" data-ch="r" style="--i: 8">r</span><span class="scram" data-ch="t" style="--i: 9">t</span></span><span class="roll-text">Color Chart</span></a><a
             href="/prototype2/#about"
             data-panel-open="about"
             
@@ -133,7 +139,7 @@ setTimeout(function () { var root = document.documentElement;
           ><span class="roll-word" aria-hidden="true" style="--n: 5"><span class="scram" data-ch="A" style="--i: 0">A</span><span class="scram" data-ch="b" style="--i: 1">b</span><span class="scram" data-ch="o" style="--i: 2">o</span><span class="scram" data-ch="u" style="--i: 3">u</span><span class="scram" data-ch="t" style="--i: 4">t</span></span><span class="roll-text">About</span></a>
     </nav>
   </header>
-<nav class="years" data-years aria-label="Jump to year">
+<a class="side-inquiries hrow" href="#inquiries" data-inquiries-open>Inquiries</a><nav class="years" data-years aria-label="Jump to year">
     <a class="year" href="#year-2026" data-year="2026" style="--c:#0f4f4b">
           <span class="year-swatch" aria-hidden="true"></span>
           <span class="year-label">2026</span>
@@ -178,7 +184,7 @@ setTimeout(function () { var root = document.documentElement;
     
     data-stack
     data-scalable
-    style="--unit:7.26vw"
+    style="--unit:14.51vw"
   ><a
     class="tile"
     href="/prototype2/artwork/untitled-2026-162x130cm/"
@@ -197,8 +203,8 @@ Acrylic on canvas"
     data-index="0"
     aria-label="L585, 2026"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/prototype2/media/aee21b9ab19a1dd1ca332c167-400.avif 400w, /prototype2/media/aee21b9ab19a1dd1ca332c167-800.avif 800w, /prototype2/media/aee21b9ab19a1dd1ca332c167-1378.avif 1378w" sizes="(max-width: 899px) 43vw, 260px" />
-      <source type="image/webp" srcset="/prototype2/media/aee21b9ab19a1dd1ca332c167-400.webp 400w, /prototype2/media/aee21b9ab19a1dd1ca332c167-800.webp 800w, /prototype2/media/aee21b9ab19a1dd1ca332c167-1378.webp 1378w" sizes="(max-width: 899px) 43vw, 260px" />
+      <source type="image/avif" srcset="/prototype2/media/aee21b9ab19a1dd1ca332c167-400.avif 400w, /prototype2/media/aee21b9ab19a1dd1ca332c167-800.avif 800w, /prototype2/media/aee21b9ab19a1dd1ca332c167-1378.avif 1378w" sizes="(max-width: 899px) 43vw, max(260px, calc(38vh * 0.840))" />
+      <source type="image/webp" srcset="/prototype2/media/aee21b9ab19a1dd1ca332c167-400.webp 400w, /prototype2/media/aee21b9ab19a1dd1ca332c167-800.webp 800w, /prototype2/media/aee21b9ab19a1dd1ca332c167-1378.webp 1378w" sizes="(max-width: 899px) 43vw, max(260px, calc(38vh * 0.840))" />
       <img
         src="/prototype2/media/aee21b9ab19a1dd1ca332c167-1378.jpg"
         alt=""
@@ -226,8 +232,8 @@ Acrylic on linen"
     data-index="1"
     aria-label="L586, 2026"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/prototype2/media/1da5360011314c99ca9e3a3f9-400.avif 400w, /prototype2/media/1da5360011314c99ca9e3a3f9-800.avif 800w, /prototype2/media/1da5360011314c99ca9e3a3f9-1309.avif 1309w" sizes="(max-width: 899px) 43vw, 260px" />
-      <source type="image/webp" srcset="/prototype2/media/1da5360011314c99ca9e3a3f9-400.webp 400w, /prototype2/media/1da5360011314c99ca9e3a3f9-800.webp 800w, /prototype2/media/1da5360011314c99ca9e3a3f9-1309.webp 1309w" sizes="(max-width: 899px) 43vw, 260px" />
+      <source type="image/avif" srcset="/prototype2/media/1da5360011314c99ca9e3a3f9-400.avif 400w, /prototype2/media/1da5360011314c99ca9e3a3f9-800.avif 800w, /prototype2/media/1da5360011314c99ca9e3a3f9-1309.avif 1309w" sizes="(max-width: 899px) 43vw, max(260px, calc(38vh * 0.840))" />
+      <source type="image/webp" srcset="/prototype2/media/1da5360011314c99ca9e3a3f9-400.webp 400w, /prototype2/media/1da5360011314c99ca9e3a3f9-800.webp 800w, /prototype2/media/1da5360011314c99ca9e3a3f9-1309.webp 1309w" sizes="(max-width: 899px) 43vw, max(260px, calc(38vh * 0.840))" />
       <img
         src="/prototype2/media/1da5360011314c99ca9e3a3f9-1309.jpg"
         alt=""
@@ -255,8 +261,8 @@ Acrylic on linen"
     data-index="2"
     aria-label="L584, 2026"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/prototype2/media/e526231ae1110f7fc8474e039-400.avif 400w, /prototype2/media/e526231ae1110f7fc8474e039-800.avif 800w, /prototype2/media/e526231ae1110f7fc8474e039-1382.avif 1382w" sizes="(max-width: 899px) 43vw, 260px" />
-      <source type="image/webp" srcset="/prototype2/media/e526231ae1110f7fc8474e039-400.webp 400w, /prototype2/media/e526231ae1110f7fc8474e039-800.webp 800w, /prototype2/media/e526231ae1110f7fc8474e039-1382.webp 1382w" sizes="(max-width: 899px) 43vw, 260px" />
+      <source type="image/avif" srcset="/prototype2/media/e526231ae1110f7fc8474e039-400.avif 400w, /prototype2/media/e526231ae1110f7fc8474e039-800.avif 800w, /prototype2/media/e526231ae1110f7fc8474e039-1382.avif 1382w" sizes="(max-width: 899px) 43vw, max(260px, calc(38vh * 0.840))" />
+      <source type="image/webp" srcset="/prototype2/media/e526231ae1110f7fc8474e039-400.webp 400w, /prototype2/media/e526231ae1110f7fc8474e039-800.webp 800w, /prototype2/media/e526231ae1110f7fc8474e039-1382.webp 1382w" sizes="(max-width: 899px) 43vw, max(260px, calc(38vh * 0.840))" />
       <img
         src="/prototype2/media/e526231ae1110f7fc8474e039-1382.jpg"
         alt=""
@@ -284,8 +290,8 @@ Acrylic on linen"
     data-index="3"
     aria-label="L587, 2026"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/prototype2/media/aac27f8277f78f77ca54d92f9-400.avif 400w, /prototype2/media/aac27f8277f78f77ca54d92f9-800.avif 800w, /prototype2/media/aac27f8277f78f77ca54d92f9-1600.avif 1600w" sizes="(max-width: 899px) 43vw, 260px" />
-      <source type="image/webp" srcset="/prototype2/media/aac27f8277f78f77ca54d92f9-400.webp 400w, /prototype2/media/aac27f8277f78f77ca54d92f9-800.webp 800w, /prototype2/media/aac27f8277f78f77ca54d92f9-1600.webp 1600w" sizes="(max-width: 899px) 43vw, 260px" />
+      <source type="image/avif" srcset="/prototype2/media/aac27f8277f78f77ca54d92f9-400.avif 400w, /prototype2/media/aac27f8277f78f77ca54d92f9-800.avif 800w, /prototype2/media/aac27f8277f78f77ca54d92f9-1600.avif 1600w" sizes="(max-width: 899px) 43vw, max(260px, calc(38vh * 0.840))" />
+      <source type="image/webp" srcset="/prototype2/media/aac27f8277f78f77ca54d92f9-400.webp 400w, /prototype2/media/aac27f8277f78f77ca54d92f9-800.webp 800w, /prototype2/media/aac27f8277f78f77ca54d92f9-1600.webp 1600w" sizes="(max-width: 899px) 43vw, max(260px, calc(38vh * 0.840))" />
       <img
         src="/prototype2/media/aac27f8277f78f77ca54d92f9-1600.jpg"
         alt=""
@@ -313,8 +319,8 @@ Acrylic on linen"
     data-index="4"
     aria-label="M615, 2026"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/prototype2/media/aeda149a83200cbecc6d0794d-400.avif 400w, /prototype2/media/aeda149a83200cbecc6d0794d-800.avif 800w, /prototype2/media/aeda149a83200cbecc6d0794d-1600.avif 1600w" sizes="(max-width: 899px) 43vw, 260px" />
-      <source type="image/webp" srcset="/prototype2/media/aeda149a83200cbecc6d0794d-400.webp 400w, /prototype2/media/aeda149a83200cbecc6d0794d-800.webp 800w, /prototype2/media/aeda149a83200cbecc6d0794d-1600.webp 1600w" sizes="(max-width: 899px) 43vw, 260px" />
+      <source type="image/avif" srcset="/prototype2/media/aeda149a83200cbecc6d0794d-400.avif 400w, /prototype2/media/aeda149a83200cbecc6d0794d-800.avif 800w, /prototype2/media/aeda149a83200cbecc6d0794d-1600.avif 1600w" sizes="(max-width: 899px) 43vw, max(260px, calc(38vh * 0.840))" />
+      <source type="image/webp" srcset="/prototype2/media/aeda149a83200cbecc6d0794d-400.webp 400w, /prototype2/media/aeda149a83200cbecc6d0794d-800.webp 800w, /prototype2/media/aeda149a83200cbecc6d0794d-1600.webp 1600w" sizes="(max-width: 899px) 43vw, max(260px, calc(38vh * 0.840))" />
       <img
         src="/prototype2/media/aeda149a83200cbecc6d0794d-1600.jpg"
         alt=""
@@ -342,8 +348,8 @@ Acrylic on linen"
     data-index="5"
     aria-label="L583, 2026"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/prototype2/media/7bdf301917192f76c9f2d94c2-400.avif 400w, /prototype2/media/7bdf301917192f76c9f2d94c2-800.avif 800w, /prototype2/media/7bdf301917192f76c9f2d94c2-1576.avif 1576w" sizes="(max-width: 899px) 43vw, 260px" />
-      <source type="image/webp" srcset="/prototype2/media/7bdf301917192f76c9f2d94c2-400.webp 400w, /prototype2/media/7bdf301917192f76c9f2d94c2-800.webp 800w, /prototype2/media/7bdf301917192f76c9f2d94c2-1576.webp 1576w" sizes="(max-width: 899px) 43vw, 260px" />
+      <source type="image/avif" srcset="/prototype2/media/7bdf301917192f76c9f2d94c2-400.avif 400w, /prototype2/media/7bdf301917192f76c9f2d94c2-800.avif 800w, /prototype2/media/7bdf301917192f76c9f2d94c2-1576.avif 1576w" sizes="(max-width: 899px) 43vw, max(260px, calc(38vh * 0.840))" />
+      <source type="image/webp" srcset="/prototype2/media/7bdf301917192f76c9f2d94c2-400.webp 400w, /prototype2/media/7bdf301917192f76c9f2d94c2-800.webp 800w, /prototype2/media/7bdf301917192f76c9f2d94c2-1576.webp 1576w" sizes="(max-width: 899px) 43vw, max(260px, calc(38vh * 0.840))" />
       <img
         src="/prototype2/media/7bdf301917192f76c9f2d94c2-1576.jpg"
         alt=""
@@ -371,8 +377,8 @@ Acrylic on linen"
     data-index="6"
     aria-label="M607, 2026"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/prototype2/media/28de0b648ad00d1bce3e5987a-400.avif 400w, /prototype2/media/28de0b648ad00d1bce3e5987a-800.avif 800w, /prototype2/media/28de0b648ad00d1bce3e5987a-1600.avif 1600w" sizes="(max-width: 899px) 43vw, 260px" />
-      <source type="image/webp" srcset="/prototype2/media/28de0b648ad00d1bce3e5987a-400.webp 400w, /prototype2/media/28de0b648ad00d1bce3e5987a-800.webp 800w, /prototype2/media/28de0b648ad00d1bce3e5987a-1600.webp 1600w" sizes="(max-width: 899px) 43vw, 260px" />
+      <source type="image/avif" srcset="/prototype2/media/28de0b648ad00d1bce3e5987a-400.avif 400w, /prototype2/media/28de0b648ad00d1bce3e5987a-800.avif 800w, /prototype2/media/28de0b648ad00d1bce3e5987a-1600.avif 1600w" sizes="(max-width: 899px) 43vw, max(260px, calc(38vh * 0.840))" />
+      <source type="image/webp" srcset="/prototype2/media/28de0b648ad00d1bce3e5987a-400.webp 400w, /prototype2/media/28de0b648ad00d1bce3e5987a-800.webp 800w, /prototype2/media/28de0b648ad00d1bce3e5987a-1600.webp 1600w" sizes="(max-width: 899px) 43vw, max(260px, calc(38vh * 0.840))" />
       <img
         src="/prototype2/media/28de0b648ad00d1bce3e5987a-1600.jpg"
         alt=""
@@ -400,8 +406,8 @@ Acrylic on canvas"
     data-index="7"
     aria-label="L582, 2026"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/prototype2/media/8023468c6dc31e11ce66d0560-400.avif 400w, /prototype2/media/8023468c6dc31e11ce66d0560-800.avif 800w, /prototype2/media/8023468c6dc31e11ce66d0560-1598.avif 1598w" sizes="(max-width: 899px) 43vw, 260px" />
-      <source type="image/webp" srcset="/prototype2/media/8023468c6dc31e11ce66d0560-400.webp 400w, /prototype2/media/8023468c6dc31e11ce66d0560-800.webp 800w, /prototype2/media/8023468c6dc31e11ce66d0560-1598.webp 1598w" sizes="(max-width: 899px) 43vw, 260px" />
+      <source type="image/avif" srcset="/prototype2/media/8023468c6dc31e11ce66d0560-400.avif 400w, /prototype2/media/8023468c6dc31e11ce66d0560-800.avif 800w, /prototype2/media/8023468c6dc31e11ce66d0560-1598.avif 1598w" sizes="(max-width: 899px) 43vw, max(260px, calc(38vh * 0.840))" />
+      <source type="image/webp" srcset="/prototype2/media/8023468c6dc31e11ce66d0560-400.webp 400w, /prototype2/media/8023468c6dc31e11ce66d0560-800.webp 800w, /prototype2/media/8023468c6dc31e11ce66d0560-1598.webp 1598w" sizes="(max-width: 899px) 43vw, max(260px, calc(38vh * 0.840))" />
       <img
         src="/prototype2/media/8023468c6dc31e11ce66d0560-1598.jpg"
         alt=""
@@ -429,8 +435,8 @@ Acrylic on linen"
     data-index="8"
     aria-label="M612, 2026"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/prototype2/media/38ecab8ef56b6232c56205ab5-400.avif 400w, /prototype2/media/38ecab8ef56b6232c56205ab5-683.avif 683w" sizes="(max-width: 899px) 43vw, 260px" />
-      <source type="image/webp" srcset="/prototype2/media/38ecab8ef56b6232c56205ab5-400.webp 400w, /prototype2/media/38ecab8ef56b6232c56205ab5-683.webp 683w" sizes="(max-width: 899px) 43vw, 260px" />
+      <source type="image/avif" srcset="/prototype2/media/38ecab8ef56b6232c56205ab5-400.avif 400w, /prototype2/media/38ecab8ef56b6232c56205ab5-683.avif 683w" sizes="(max-width: 899px) 43vw, max(260px, calc(38vh * 0.840))" />
+      <source type="image/webp" srcset="/prototype2/media/38ecab8ef56b6232c56205ab5-400.webp 400w, /prototype2/media/38ecab8ef56b6232c56205ab5-683.webp 683w" sizes="(max-width: 899px) 43vw, max(260px, calc(38vh * 0.840))" />
       <img
         src="/prototype2/media/38ecab8ef56b6232c56205ab5-683.jpg"
         alt=""
@@ -458,8 +464,8 @@ Acrylic on linen"
     data-index="9"
     aria-label="M613, 2026"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/prototype2/media/8e2cfbd9625e5763c489fe797-400.avif 400w, /prototype2/media/8e2cfbd9625e5763c489fe797-683.avif 683w" sizes="(max-width: 899px) 43vw, 260px" />
-      <source type="image/webp" srcset="/prototype2/media/8e2cfbd9625e5763c489fe797-400.webp 400w, /prototype2/media/8e2cfbd9625e5763c489fe797-683.webp 683w" sizes="(max-width: 899px) 43vw, 260px" />
+      <source type="image/avif" srcset="/prototype2/media/8e2cfbd9625e5763c489fe797-400.avif 400w, /prototype2/media/8e2cfbd9625e5763c489fe797-683.avif 683w" sizes="(max-width: 899px) 43vw, max(260px, calc(38vh * 0.840))" />
+      <source type="image/webp" srcset="/prototype2/media/8e2cfbd9625e5763c489fe797-400.webp 400w, /prototype2/media/8e2cfbd9625e5763c489fe797-683.webp 683w" sizes="(max-width: 899px) 43vw, max(260px, calc(38vh * 0.840))" />
       <img
         src="/prototype2/media/8e2cfbd9625e5763c489fe797-683.jpg"
         alt=""
@@ -487,8 +493,8 @@ Acrylic on linen"
     data-index="10"
     aria-label="M610, 2026"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/prototype2/media/74f5e656bebbb2b7c8ea846ca-400.avif 400w, /prototype2/media/74f5e656bebbb2b7c8ea846ca-800.avif 800w, /prototype2/media/74f5e656bebbb2b7c8ea846ca-1600.avif 1600w" sizes="(max-width: 899px) 43vw, 260px" />
-      <source type="image/webp" srcset="/prototype2/media/74f5e656bebbb2b7c8ea846ca-400.webp 400w, /prototype2/media/74f5e656bebbb2b7c8ea846ca-800.webp 800w, /prototype2/media/74f5e656bebbb2b7c8ea846ca-1600.webp 1600w" sizes="(max-width: 899px) 43vw, 260px" />
+      <source type="image/avif" srcset="/prototype2/media/74f5e656bebbb2b7c8ea846ca-400.avif 400w, /prototype2/media/74f5e656bebbb2b7c8ea846ca-800.avif 800w, /prototype2/media/74f5e656bebbb2b7c8ea846ca-1600.avif 1600w" sizes="(max-width: 899px) 43vw, max(260px, calc(38vh * 0.840))" />
+      <source type="image/webp" srcset="/prototype2/media/74f5e656bebbb2b7c8ea846ca-400.webp 400w, /prototype2/media/74f5e656bebbb2b7c8ea846ca-800.webp 800w, /prototype2/media/74f5e656bebbb2b7c8ea846ca-1600.webp 1600w" sizes="(max-width: 899px) 43vw, max(260px, calc(38vh * 0.840))" />
       <img
         src="/prototype2/media/74f5e656bebbb2b7c8ea846ca-1600.jpg"
         alt=""
@@ -516,8 +522,8 @@ Acrylic on linen"
     data-index="11"
     aria-label="M614, 2026"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/prototype2/media/9fe5571bb697c05dc34950f39-400.avif 400w, /prototype2/media/9fe5571bb697c05dc34950f39-800.avif 800w, /prototype2/media/9fe5571bb697c05dc34950f39-1467.avif 1467w" sizes="(max-width: 899px) 43vw, 260px" />
-      <source type="image/webp" srcset="/prototype2/media/9fe5571bb697c05dc34950f39-400.webp 400w, /prototype2/media/9fe5571bb697c05dc34950f39-800.webp 800w, /prototype2/media/9fe5571bb697c05dc34950f39-1467.webp 1467w" sizes="(max-width: 899px) 43vw, 260px" />
+      <source type="image/avif" srcset="/prototype2/media/9fe5571bb697c05dc34950f39-400.avif 400w, /prototype2/media/9fe5571bb697c05dc34950f39-800.avif 800w, /prototype2/media/9fe5571bb697c05dc34950f39-1467.avif 1467w" sizes="(max-width: 899px) 43vw, max(260px, calc(38vh * 0.840))" />
+      <source type="image/webp" srcset="/prototype2/media/9fe5571bb697c05dc34950f39-400.webp 400w, /prototype2/media/9fe5571bb697c05dc34950f39-800.webp 800w, /prototype2/media/9fe5571bb697c05dc34950f39-1467.webp 1467w" sizes="(max-width: 899px) 43vw, max(260px, calc(38vh * 0.840))" />
       <img
         src="/prototype2/media/9fe5571bb697c05dc34950f39-1467.jpg"
         alt=""
@@ -545,8 +551,8 @@ Acrylic on linen"
     data-index="12"
     aria-label="M608, 2026"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/prototype2/media/1b433ee13065bebfc6db4f946-400.avif 400w, /prototype2/media/1b433ee13065bebfc6db4f946-800.avif 800w, /prototype2/media/1b433ee13065bebfc6db4f946-1470.avif 1470w" sizes="(max-width: 899px) 43vw, 260px" />
-      <source type="image/webp" srcset="/prototype2/media/1b433ee13065bebfc6db4f946-400.webp 400w, /prototype2/media/1b433ee13065bebfc6db4f946-800.webp 800w, /prototype2/media/1b433ee13065bebfc6db4f946-1470.webp 1470w" sizes="(max-width: 899px) 43vw, 260px" />
+      <source type="image/avif" srcset="/prototype2/media/1b433ee13065bebfc6db4f946-400.avif 400w, /prototype2/media/1b433ee13065bebfc6db4f946-800.avif 800w, /prototype2/media/1b433ee13065bebfc6db4f946-1470.avif 1470w" sizes="(max-width: 899px) 43vw, max(260px, calc(38vh * 0.840))" />
+      <source type="image/webp" srcset="/prototype2/media/1b433ee13065bebfc6db4f946-400.webp 400w, /prototype2/media/1b433ee13065bebfc6db4f946-800.webp 800w, /prototype2/media/1b433ee13065bebfc6db4f946-1470.webp 1470w" sizes="(max-width: 899px) 43vw, max(260px, calc(38vh * 0.840))" />
       <img
         src="/prototype2/media/1b433ee13065bebfc6db4f946-1470.jpg"
         alt=""
@@ -574,8 +580,8 @@ Acrylic on linen"
     data-index="13"
     aria-label="M605, 2026"
   ><picture class="tile-image">
-      <source type="image/avif" srcset="/prototype2/media/a7fc0bc8186731abc8f773d38-400.avif 400w, /prototype2/media/a7fc0bc8186731abc8f773d38-800.avif 800w, /prototype2/media/a7fc0bc8186731abc8f773d38-1501.avif 1501w" sizes="(max-width: 899px) 43vw, 260px" />
-      <source type="image/webp" srcset="/prototype2/media/a7fc0bc8186731abc8f773d38-400.webp 400w, /prototype2/media/a7fc0bc8186731abc8f773d38-800.webp 800w, /prototype2/media/a7fc0bc8186731abc8f773d38-1501.webp 1501w" sizes="(max-width: 899px) 43vw, 260px" />
+      <source type="image/avif" srcset="/prototype2/media/a7fc0bc8186731abc8f773d38-400.avif 400w, /prototype2/media/a7fc0bc8186731abc8f773d38-800.avif 800w, /prototype2/media/a7fc0bc8186731abc8f773d38-1501.avif 1501w" sizes="(max-width: 899px) 43vw, max(260px, calc(38vh * 0.840))" />
+      <source type="image/webp" srcset="/prototype2/media/a7fc0bc8186731abc8f773d38-400.webp 400w, /prototype2/media/a7fc0bc8186731abc8f773d38-800.webp 800w, /prototype2/media/a7fc0bc8186731abc8f773d38-1501.webp 1501w" sizes="(max-width: 899px) 43vw, max(260px, calc(38vh * 0.840))" />
       <img
         src="/prototype2/media/a7fc0bc8186731abc8f773d38-1501.jpg"
         alt=""
@@ -3513,7 +3519,7 @@ Mixed media on canvas"
     
     style="--a:0.8406;--sh:1.3761"
     
-    data-title="2021, 112 × 155 cm"
+    data-title="112 × 155 cm"
     data-year="2021"
     data-dimensions="112 × 155 cm"
     data-materials="Gouache on paper"
@@ -3522,7 +3528,7 @@ Mixed media on canvas"
 Gouache on paper"
     data-available="false"
     data-index="115"
-    aria-label="2021, 112 × 155 cm, 2021"
+    aria-label="112 × 155 cm, 2021"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/d0a3e64d8ff96ba5c1ead0b3f-400.avif 400w, /prototype2/media/d0a3e64d8ff96ba5c1ead0b3f-800.avif 800w, /prototype2/media/d0a3e64d8ff96ba5c1ead0b3f-1102.avif 1102w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/d0a3e64d8ff96ba5c1ead0b3f-400.webp 400w, /prototype2/media/d0a3e64d8ff96ba5c1ead0b3f-800.webp 800w, /prototype2/media/d0a3e64d8ff96ba5c1ead0b3f-1102.webp 1102w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -3541,7 +3547,7 @@ Gouache on paper"
     
     style="--a:0.8401;--sh:1.6285"
     
-    data-title="2021, 190 × 160 cm"
+    data-title="190 × 160 cm"
     data-year="2021"
     data-dimensions="190 × 160 cm"
     data-materials=""
@@ -3550,7 +3556,7 @@ Gouache on paper"
 Mixed technique on canvas"
     data-available="false"
     data-index="116"
-    aria-label="2021, 190 × 160 cm, 2021"
+    aria-label="190 × 160 cm, 2021"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/7f8fb57de3171350c38340824-400.avif 400w, /prototype2/media/7f8fb57de3171350c38340824-800.avif 800w, /prototype2/media/7f8fb57de3171350c38340824-1040.avif 1040w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/7f8fb57de3171350c38340824-400.webp 400w, /prototype2/media/7f8fb57de3171350c38340824-800.webp 800w, /prototype2/media/7f8fb57de3171350c38340824-1040.webp 1040w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -3569,7 +3575,7 @@ Mixed technique on canvas"
     
     style="--a:0.8399;--sh:1.4534"
     
-    data-title="2021, 160 × 130 cm"
+    data-title="160 × 130 cm"
     data-year="2021"
     data-dimensions="160 × 130 cm"
     data-materials=""
@@ -3578,7 +3584,7 @@ Mixed technique on canvas"
 Mixed technique on canvas"
     data-available="false"
     data-index="117"
-    aria-label="2021, 160 × 130 cm, 2021"
+    aria-label="160 × 130 cm, 2021"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/ed652f2fbfb8b55acd36958f2-400.avif 400w, /prototype2/media/ed652f2fbfb8b55acd36958f2-800.avif 800w, /prototype2/media/ed652f2fbfb8b55acd36958f2-1175.avif 1175w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/ed652f2fbfb8b55acd36958f2-400.webp 400w, /prototype2/media/ed652f2fbfb8b55acd36958f2-800.webp 800w, /prototype2/media/ed652f2fbfb8b55acd36958f2-1175.webp 1175w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -3597,7 +3603,7 @@ Mixed technique on canvas"
     
     style="--a:0.8403;--sh:1.8545"
     
-    data-title="2021, 220 × 270 cm"
+    data-title="220 × 270 cm"
     data-year="2021"
     data-dimensions="220 × 270 cm"
     data-materials="Acrylic on canvas"
@@ -3606,7 +3612,7 @@ Mixed technique on canvas"
 Acrylic on canvas"
     data-available="false"
     data-index="118"
-    aria-label="2021, 220 × 270 cm, 2021"
+    aria-label="220 × 270 cm, 2021"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/884f588e34c22329c186f4b38-400.avif 400w, /prototype2/media/884f588e34c22329c186f4b38-800.avif 800w, /prototype2/media/884f588e34c22329c186f4b38-1321.avif 1321w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/884f588e34c22329c186f4b38-400.webp 400w, /prototype2/media/884f588e34c22329c186f4b38-800.webp 800w, /prototype2/media/884f588e34c22329c186f4b38-1321.webp 1321w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -3625,7 +3631,7 @@ Acrylic on canvas"
     
     style="--a:0.8402;--sh:0.8992"
     
-    data-title="2021, 70 × 60 cm"
+    data-title="70 × 60 cm"
     data-year="2021"
     data-dimensions="70 × 60 cm"
     data-materials="Gouache on paper"
@@ -3634,7 +3640,7 @@ Acrylic on canvas"
 Gouache on paper"
     data-available="false"
     data-index="119"
-    aria-label="2021, 70 × 60 cm, 2021"
+    aria-label="70 × 60 cm, 2021"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/d8e04f697873c6f6ce00525b3-400.avif 400w, /prototype2/media/d8e04f697873c6f6ce00525b3-800.avif 800w, /prototype2/media/d8e04f697873c6f6ce00525b3-878.avif 878w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/d8e04f697873c6f6ce00525b3-400.webp 400w, /prototype2/media/d8e04f697873c6f6ce00525b3-800.webp 800w, /prototype2/media/d8e04f697873c6f6ce00525b3-878.webp 878w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -3653,7 +3659,7 @@ Gouache on paper"
     
     style="--a:0.8400;--sh:0.8993"
     
-    data-title="2021, 70 × 60 cm"
+    data-title="70 × 60 cm"
     data-year="2021"
     data-dimensions="70 × 60 cm"
     data-materials="Gouache on paper"
@@ -3662,7 +3668,7 @@ Gouache on paper"
 Gouache on paper"
     data-available="false"
     data-index="120"
-    aria-label="2021, 70 × 60 cm, 2021"
+    aria-label="70 × 60 cm, 2021"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/8fad03486513a37bc2f4fa7e5-400.avif 400w, /prototype2/media/8fad03486513a37bc2f4fa7e5-800.avif 800w, /prototype2/media/8fad03486513a37bc2f4fa7e5-887.avif 887w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/8fad03486513a37bc2f4fa7e5-400.webp 400w, /prototype2/media/8fad03486513a37bc2f4fa7e5-800.webp 800w, /prototype2/media/8fad03486513a37bc2f4fa7e5-887.webp 887w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -3681,7 +3687,7 @@ Gouache on paper"
     
     style="--a:0.8405;--sh:0.8990"
     
-    data-title="2021, 70 × 60 cm"
+    data-title="70 × 60 cm"
     data-year="2021"
     data-dimensions="70 × 60 cm"
     data-materials="Gouache on paper"
@@ -3690,7 +3696,7 @@ Gouache on paper"
 Gouache on paper"
     data-available="false"
     data-index="121"
-    aria-label="2021, 70 × 60 cm, 2021"
+    aria-label="70 × 60 cm, 2021"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/a17104e10a281fe5c22547295-400.avif 400w, /prototype2/media/a17104e10a281fe5c22547295-800.avif 800w, /prototype2/media/a17104e10a281fe5c22547295-880.avif 880w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/a17104e10a281fe5c22547295-400.webp 400w, /prototype2/media/a17104e10a281fe5c22547295-800.webp 800w, /prototype2/media/a17104e10a281fe5c22547295-880.webp 880w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -3709,7 +3715,7 @@ Gouache on paper"
     
     style="--a:0.8398;--sh:1.3640"
     
-    data-title="2021, 110 × 153 cm"
+    data-title="110 × 153 cm"
     data-year="2021"
     data-dimensions="110 × 153 cm"
     data-materials="Gouache on paper"
@@ -3718,7 +3724,7 @@ Gouache on paper"
 Gouache on paper"
     data-available="false"
     data-index="122"
-    aria-label="2021, 110 × 153 cm, 2021"
+    aria-label="110 × 153 cm, 2021"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/cfcb91517e2adeafcc0289a03-400.avif 400w, /prototype2/media/cfcb91517e2adeafcc0289a03-800.avif 800w, /prototype2/media/cfcb91517e2adeafcc0289a03-1001.avif 1001w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/cfcb91517e2adeafcc0289a03-400.webp 400w, /prototype2/media/cfcb91517e2adeafcc0289a03-800.webp 800w, /prototype2/media/cfcb91517e2adeafcc0289a03-1001.webp 1001w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -3737,7 +3743,7 @@ Gouache on paper"
     
     style="--a:0.8401;--sh:1.7682"
     
-    data-title="2021, 200 × 200 cm"
+    data-title="200 × 200 cm"
     data-year="2021"
     data-dimensions="200 × 200 cm"
     data-materials=""
@@ -3746,7 +3752,7 @@ Gouache on paper"
 Mixed technique on canvas"
     data-available="false"
     data-index="123"
-    aria-label="2021, 200 × 200 cm, 2021"
+    aria-label="200 × 200 cm, 2021"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/86070b4a304d4015ccbba8ba3-400.avif 400w, /prototype2/media/86070b4a304d4015ccbba8ba3-683.avif 683w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/86070b4a304d4015ccbba8ba3-400.webp 400w, /prototype2/media/86070b4a304d4015ccbba8ba3-683.webp 683w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -3765,7 +3771,7 @@ Mixed technique on canvas"
     
     style="--a:0.8401;--sh:1.3637"
     
-    data-title="2021, 110 × 153 cm"
+    data-title="110 × 153 cm"
     data-year="2021"
     data-dimensions="110 × 153 cm"
     data-materials="Gouache on paper"
@@ -3774,7 +3780,7 @@ Mixed technique on canvas"
 Gouache on paper"
     data-available="false"
     data-index="124"
-    aria-label="2021, 110 × 153 cm, 2021"
+    aria-label="110 × 153 cm, 2021"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/7c63fe7f2644e8b5c073ac46e-400.avif 400w, /prototype2/media/7c63fe7f2644e8b5c073ac46e-683.avif 683w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/7c63fe7f2644e8b5c073ac46e-400.webp 400w, /prototype2/media/7c63fe7f2644e8b5c073ac46e-683.webp 683w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -3793,7 +3799,7 @@ Gouache on paper"
     
     style="--a:0.8401;--sh:1.3637"
     
-    data-title="2021, 110 × 153 cm"
+    data-title="110 × 153 cm"
     data-year="2021"
     data-dimensions="110 × 153 cm"
     data-materials="Gouache on paper"
@@ -3802,7 +3808,7 @@ Gouache on paper"
 Gouache on paper"
     data-available="false"
     data-index="125"
-    aria-label="2021, 110 × 153 cm, 2021"
+    aria-label="110 × 153 cm, 2021"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/966d0d7939e01653cb57efd95-400.avif 400w, /prototype2/media/966d0d7939e01653cb57efd95-683.avif 683w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/966d0d7939e01653cb57efd95-400.webp 400w, /prototype2/media/966d0d7939e01653cb57efd95-683.webp 683w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -3821,7 +3827,7 @@ Gouache on paper"
     
     style="--a:0.8401;--sh:1.3637"
     
-    data-title="2021, 110 × 153 cm"
+    data-title="110 × 153 cm"
     data-year="2021"
     data-dimensions="110 × 153 cm"
     data-materials="Gouache on paper"
@@ -3830,7 +3836,7 @@ Gouache on paper"
 Gouache on paper"
     data-available="false"
     data-index="126"
-    aria-label="2021, 110 × 153 cm, 2021"
+    aria-label="110 × 153 cm, 2021"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/404ba263bc794077c4668dcd1-400.avif 400w, /prototype2/media/404ba263bc794077c4668dcd1-683.avif 683w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/404ba263bc794077c4668dcd1-400.webp 400w, /prototype2/media/404ba263bc794077c4668dcd1-683.webp 683w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -3849,7 +3855,7 @@ Gouache on paper"
     id="year-2020"
     style="--a:0.8399;--sh:0.9160"
     
-    data-title="2020, 72 × 62 cm"
+    data-title="72 × 62 cm"
     data-year="2020"
     data-dimensions="72 × 62 cm"
     data-materials="Gouache on paper"
@@ -3858,7 +3864,7 @@ Gouache on paper"
 Gouache on paper"
     data-available="false"
     data-index="127"
-    aria-label="2020, 72 × 62 cm, 2020"
+    aria-label="72 × 62 cm, 2020"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/dbc8c25944bfe321c47eebb81-400.avif 400w, /prototype2/media/dbc8c25944bfe321c47eebb81-800.avif 800w, /prototype2/media/dbc8c25944bfe321c47eebb81-1196.avif 1196w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/dbc8c25944bfe321c47eebb81-400.webp 400w, /prototype2/media/dbc8c25944bfe321c47eebb81-800.webp 800w, /prototype2/media/dbc8c25944bfe321c47eebb81-1196.webp 1196w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -3877,7 +3883,7 @@ Gouache on paper"
     
     style="--a:0.8403;--sh:0.9157"
     
-    data-title="2020, 72 × 62 cm"
+    data-title="72 × 62 cm"
     data-year="2020"
     data-dimensions="72 × 62 cm"
     data-materials="Gouache on paper"
@@ -3886,7 +3892,7 @@ Gouache on paper"
 Gouache on paper"
     data-available="false"
     data-index="128"
-    aria-label="2020, 72 × 62 cm, 2020"
+    aria-label="72 × 62 cm, 2020"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/3756c0b25e64a093c2b208ce8-400.avif 400w, /prototype2/media/3756c0b25e64a093c2b208ce8-800.avif 800w, /prototype2/media/3756c0b25e64a093c2b208ce8-1205.avif 1205w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/3756c0b25e64a093c2b208ce8-400.webp 400w, /prototype2/media/3756c0b25e64a093c2b208ce8-800.webp 800w, /prototype2/media/3756c0b25e64a093c2b208ce8-1205.webp 1205w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -3905,7 +3911,7 @@ Gouache on paper"
     
     style="--a:0.8405;--sh:1.1300"
     
-    data-title="2020, 100 × 90 cm"
+    data-title="100 × 90 cm"
     data-year="2020"
     data-dimensions="100 × 90 cm"
     data-materials="Gouache and collage on paper"
@@ -3914,7 +3920,7 @@ Gouache on paper"
 Gouache and collage on paper"
     data-available="false"
     data-index="129"
-    aria-label="2020, 100 × 90 cm, 2020"
+    aria-label="100 × 90 cm, 2020"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/5963c4aeedd147ffc954d37d2-400.avif 400w, /prototype2/media/5963c4aeedd147ffc954d37d2-800.avif 800w, /prototype2/media/5963c4aeedd147ffc954d37d2-1412.avif 1412w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/5963c4aeedd147ffc954d37d2-400.webp 400w, /prototype2/media/5963c4aeedd147ffc954d37d2-800.webp 800w, /prototype2/media/5963c4aeedd147ffc954d37d2-1412.webp 1412w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -3933,7 +3939,7 @@ Gouache and collage on paper"
     
     style="--a:0.8400;--sh:1.1304"
     
-    data-title="2020, 100 × 90 cm"
+    data-title="100 × 90 cm"
     data-year="2020"
     data-dimensions="100 × 90 cm"
     data-materials="Gouache on paper"
@@ -3942,7 +3948,7 @@ Gouache and collage on paper"
 Collage and gouache on paper"
     data-available="false"
     data-index="130"
-    aria-label="2020, 100 × 90 cm, 2020"
+    aria-label="100 × 90 cm, 2020"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/6f366a6cc6762364cc48cdf5b-400.avif 400w, /prototype2/media/6f366a6cc6762364cc48cdf5b-800.avif 800w, /prototype2/media/6f366a6cc6762364cc48cdf5b-1139.avif 1139w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/6f366a6cc6762364cc48cdf5b-400.webp 400w, /prototype2/media/6f366a6cc6762364cc48cdf5b-800.webp 800w, /prototype2/media/6f366a6cc6762364cc48cdf5b-1139.webp 1139w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -3961,7 +3967,7 @@ Collage and gouache on paper"
     
     style="--a:0.8400;--sh:1.4533"
     
-    data-title="2020, 160 × 130 cm"
+    data-title="160 × 130 cm"
     data-year="2020"
     data-dimensions="160 × 130 cm"
     data-materials="Acrylic on canvas"
@@ -3970,7 +3976,7 @@ Collage and gouache on paper"
 Acrylic on canvas"
     data-available="false"
     data-index="131"
-    aria-label="2020, 160 × 130 cm, 2020"
+    aria-label="160 × 130 cm, 2020"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/4f107afb95871b3dc20a5ca0e-400.avif 400w, /prototype2/media/4f107afb95871b3dc20a5ca0e-800.avif 800w, /prototype2/media/4f107afb95871b3dc20a5ca0e-1255.avif 1255w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/4f107afb95871b3dc20a5ca0e-400.webp 400w, /prototype2/media/4f107afb95871b3dc20a5ca0e-800.webp 800w, /prototype2/media/4f107afb95871b3dc20a5ca0e-1255.webp 1255w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -3989,7 +3995,7 @@ Acrylic on canvas"
     
     style="--a:0.8399;--sh:1.0912"
     
-    data-title="2020, 100 × 80 cm"
+    data-title="100 × 80 cm"
     data-year="2020"
     data-dimensions="100 × 80 cm"
     data-materials="Gouache on paper"
@@ -3998,7 +4004,7 @@ Acrylic on canvas"
 Gouache on paper"
     data-available="false"
     data-index="132"
-    aria-label="2020, 100 × 80 cm, 2020"
+    aria-label="100 × 80 cm, 2020"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/ee7ae094021e5399c1297be10-400.avif 400w, /prototype2/media/ee7ae094021e5399c1297be10-800.avif 800w, /prototype2/media/ee7ae094021e5399c1297be10-1600.avif 1600w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/ee7ae094021e5399c1297be10-400.webp 400w, /prototype2/media/ee7ae094021e5399c1297be10-800.webp 800w, /prototype2/media/ee7ae094021e5399c1297be10-1600.webp 1600w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4017,7 +4023,7 @@ Gouache on paper"
     
     style="--a:0.8399;--sh:1.0912"
     
-    data-title="2020, 100 × 80 cm"
+    data-title="100 × 80 cm"
     data-year="2020"
     data-dimensions="100 × 80 cm"
     data-materials=""
@@ -4026,7 +4032,7 @@ Gouache on paper"
 Gouache on paper"
     data-available="false"
     data-index="133"
-    aria-label="2020, 100 × 80 cm, 2020"
+    aria-label="100 × 80 cm, 2020"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/07a7cf8b21cf9fa2c661637a4-400.avif 400w, /prototype2/media/07a7cf8b21cf9fa2c661637a4-800.avif 800w, /prototype2/media/07a7cf8b21cf9fa2c661637a4-1600.avif 1600w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/07a7cf8b21cf9fa2c661637a4-400.webp 400w, /prototype2/media/07a7cf8b21cf9fa2c661637a4-800.webp 800w, /prototype2/media/07a7cf8b21cf9fa2c661637a4-1600.webp 1600w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4045,7 +4051,7 @@ Gouache on paper"
     
     style="--a:0.8399;--sh:1.0912"
     
-    data-title="2020, 100 × 80 cm"
+    data-title="100 × 80 cm"
     data-year="2020"
     data-dimensions="100 × 80 cm"
     data-materials="Gouache on paper"
@@ -4054,7 +4060,7 @@ Gouache on paper"
 Gouache on paper"
     data-available="false"
     data-index="134"
-    aria-label="2020, 100 × 80 cm, 2020"
+    aria-label="100 × 80 cm, 2020"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/b82760ddbe9346b1c5bb7586d-400.avif 400w, /prototype2/media/b82760ddbe9346b1c5bb7586d-800.avif 800w, /prototype2/media/b82760ddbe9346b1c5bb7586d-1600.avif 1600w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/b82760ddbe9346b1c5bb7586d-400.webp 400w, /prototype2/media/b82760ddbe9346b1c5bb7586d-800.webp 800w, /prototype2/media/b82760ddbe9346b1c5bb7586d-1600.webp 1600w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4073,7 +4079,7 @@ Gouache on paper"
     
     style="--a:0.8399;--sh:1.0912"
     
-    data-title="2020, 100 × 80 cm"
+    data-title="100 × 80 cm"
     data-year="2020"
     data-dimensions="100 × 80 cm"
     data-materials="Gouache on paper"
@@ -4082,7 +4088,7 @@ Gouache on paper"
 Gouache on paper"
     data-available="false"
     data-index="135"
-    aria-label="2020, 100 × 80 cm, 2020"
+    aria-label="100 × 80 cm, 2020"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/f953dd6c9ed8ce0dc1438ac9e-400.avif 400w, /prototype2/media/f953dd6c9ed8ce0dc1438ac9e-800.avif 800w, /prototype2/media/f953dd6c9ed8ce0dc1438ac9e-1600.avif 1600w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/f953dd6c9ed8ce0dc1438ac9e-400.webp 400w, /prototype2/media/f953dd6c9ed8ce0dc1438ac9e-800.webp 800w, /prototype2/media/f953dd6c9ed8ce0dc1438ac9e-1600.webp 1600w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4101,7 +4107,7 @@ Gouache on paper"
     
     style="--a:0.8397;--sh:1.4536"
     
-    data-title="2020, 160 × 130 cm"
+    data-title="160 × 130 cm"
     data-year="2020"
     data-dimensions="160 × 130 cm"
     data-materials=""
@@ -4110,7 +4116,7 @@ Gouache on paper"
 Mixed technique on canvas"
     data-available="false"
     data-index="136"
-    aria-label="2020, 160 × 130 cm, 2020"
+    aria-label="160 × 130 cm, 2020"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/1f238ad1d8b9ed3ac84bc5d91-400.avif 400w, /prototype2/media/1f238ad1d8b9ed3ac84bc5d91-800.avif 800w, /prototype2/media/1f238ad1d8b9ed3ac84bc5d91-1435.avif 1435w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/1f238ad1d8b9ed3ac84bc5d91-400.webp 400w, /prototype2/media/1f238ad1d8b9ed3ac84bc5d91-800.webp 800w, /prototype2/media/1f238ad1d8b9ed3ac84bc5d91-1435.webp 1435w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4129,7 +4135,7 @@ Mixed technique on canvas"
     
     style="--a:0.8403;--sh:1.4530"
     
-    data-title="2020, 160 × 130 cm"
+    data-title="160 × 130 cm"
     data-year="2020"
     data-dimensions="160 × 130 cm"
     data-materials=""
@@ -4138,7 +4144,7 @@ Mixed technique on canvas"
 Mixed technique on canvas"
     data-available="false"
     data-index="137"
-    aria-label="2020, 160 × 130 cm, 2020"
+    aria-label="160 × 130 cm, 2020"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/ead525252a6bebadccdf07045-400.avif 400w, /prototype2/media/ead525252a6bebadccdf07045-800.avif 800w, /prototype2/media/ead525252a6bebadccdf07045-1410.avif 1410w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/ead525252a6bebadccdf07045-400.webp 400w, /prototype2/media/ead525252a6bebadccdf07045-800.webp 800w, /prototype2/media/ead525252a6bebadccdf07045-1410.webp 1410w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4157,7 +4163,7 @@ Mixed technique on canvas"
     id="year-2019"
     style="--a:0.8401;--sh:0.9158"
     
-    data-title="2019, 72 × 62 cm"
+    data-title="72 × 62 cm"
     data-year="2019"
     data-dimensions="72 × 62 cm"
     data-materials=""
@@ -4165,7 +4171,7 @@ Mixed technique on canvas"
     data-caption="72 × 62 cm"
     data-available="false"
     data-index="138"
-    aria-label="2019, 72 × 62 cm, 2019"
+    aria-label="72 × 62 cm, 2019"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/98b339acfa029f5bc6d0f4ffb-400.avif 400w, /prototype2/media/98b339acfa029f5bc6d0f4ffb-800.avif 800w, /prototype2/media/98b339acfa029f5bc6d0f4ffb-1198.avif 1198w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/98b339acfa029f5bc6d0f4ffb-400.webp 400w, /prototype2/media/98b339acfa029f5bc6d0f4ffb-800.webp 800w, /prototype2/media/98b339acfa029f5bc6d0f4ffb-1198.webp 1198w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4184,7 +4190,7 @@ Mixed technique on canvas"
     
     style="--a:0.8401;--sh:1.2345"
     
-    data-title="2019, 115 × 105 cm"
+    data-title="115 × 105 cm"
     data-year="2019"
     data-dimensions="115 × 105 cm"
     data-materials=""
@@ -4193,7 +4199,7 @@ Mixed technique on canvas"
 Gouache and collage on paper"
     data-available="false"
     data-index="139"
-    aria-label="2019, 115 × 105 cm, 2019"
+    aria-label="115 × 105 cm, 2019"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/ceebdf22c5794adac0da7e96f-400.avif 400w, /prototype2/media/ceebdf22c5794adac0da7e96f-683.avif 683w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/ceebdf22c5794adac0da7e96f-400.webp 400w, /prototype2/media/ceebdf22c5794adac0da7e96f-683.webp 683w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4212,7 +4218,7 @@ Gouache and collage on paper"
     
     style="--a:0.8401;--sh:1.2345"
     
-    data-title="2019, 115 × 105 cm"
+    data-title="115 × 105 cm"
     data-year="2019"
     data-dimensions="115 × 105 cm"
     data-materials=""
@@ -4221,7 +4227,7 @@ Gouache and collage on paper"
 Gouache and collage on paper"
     data-available="false"
     data-index="140"
-    aria-label="2019, 115 × 105 cm, 2019"
+    aria-label="115 × 105 cm, 2019"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/d22b390bb96f14dbcdd7e95d1-400.avif 400w, /prototype2/media/d22b390bb96f14dbcdd7e95d1-683.avif 683w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/d22b390bb96f14dbcdd7e95d1-400.webp 400w, /prototype2/media/d22b390bb96f14dbcdd7e95d1-683.webp 683w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4240,7 +4246,7 @@ Gouache and collage on paper"
     
     style="--a:0.8401;--sh:1.2345"
     
-    data-title="2019, 115 × 105 cm"
+    data-title="115 × 105 cm"
     data-year="2019"
     data-dimensions="115 × 105 cm"
     data-materials=""
@@ -4249,7 +4255,7 @@ Gouache and collage on paper"
 Gouache and collage on paper"
     data-available="false"
     data-index="141"
-    aria-label="2019, 115 × 105 cm, 2019"
+    aria-label="115 × 105 cm, 2019"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/004cf5a319935c98ced3f4182-400.avif 400w, /prototype2/media/004cf5a319935c98ced3f4182-683.avif 683w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/004cf5a319935c98ced3f4182-400.webp 400w, /prototype2/media/004cf5a319935c98ced3f4182-683.webp 683w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4268,7 +4274,7 @@ Gouache and collage on paper"
     
     style="--a:0.8401;--sh:0.8568"
     
-    data-title="2019, 65 × 55 cm"
+    data-title="65 × 55 cm"
     data-year="2019"
     data-dimensions="65 × 55 cm"
     data-materials="Gouache sobre papel"
@@ -4277,7 +4283,7 @@ Gouache and collage on paper"
 Gouache on paper"
     data-available="false"
     data-index="142"
-    aria-label="2019, 65 × 55 cm, 2019"
+    aria-label="65 × 55 cm, 2019"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/0e0b9e2dbfbac0fac7e15bd6a-400.avif 400w, /prototype2/media/0e0b9e2dbfbac0fac7e15bd6a-683.avif 683w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/0e0b9e2dbfbac0fac7e15bd6a-400.webp 400w, /prototype2/media/0e0b9e2dbfbac0fac7e15bd6a-683.webp 683w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4296,7 +4302,7 @@ Gouache on paper"
     
     style="--a:0.8401;--sh:0.8568"
     
-    data-title="2019, 65 × 55 cm"
+    data-title="65 × 55 cm"
     data-year="2019"
     data-dimensions="65 × 55 cm"
     data-materials="Gouache sobre papel"
@@ -4305,7 +4311,7 @@ Gouache on paper"
 Gouache on paper"
     data-available="false"
     data-index="143"
-    aria-label="2019, 65 × 55 cm, 2019"
+    aria-label="65 × 55 cm, 2019"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/908571beaa329002cfa8a6ce3-400.avif 400w, /prototype2/media/908571beaa329002cfa8a6ce3-683.avif 683w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/908571beaa329002cfa8a6ce3-400.webp 400w, /prototype2/media/908571beaa329002cfa8a6ce3-683.webp 683w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4324,7 +4330,7 @@ Gouache on paper"
     
     style="--a:0.8401;--sh:1.2004"
     
-    data-title="2019, 110 × 100"
+    data-title="110 × 100 cm"
     data-year="2019"
     data-dimensions="110 × 100"
     data-materials=""
@@ -4332,7 +4338,7 @@ Gouache on paper"
     data-caption="110 × 100 cm"
     data-available="false"
     data-index="144"
-    aria-label="2019, 110 × 100, 2019"
+    aria-label="110 × 100 cm, 2019"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/c658d7f13d47150acebaff167-400.avif 400w, /prototype2/media/c658d7f13d47150acebaff167-683.avif 683w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/c658d7f13d47150acebaff167-400.webp 400w, /prototype2/media/c658d7f13d47150acebaff167-683.webp 683w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4351,7 +4357,7 @@ Gouache on paper"
     
     style="--a:0.8401;--sh:1.2004"
     
-    data-title="2019, 110 × 100"
+    data-title="110 × 100 cm"
     data-year="2019"
     data-dimensions="110 × 100"
     data-materials="Gouache on paper"
@@ -4360,7 +4366,7 @@ Gouache on paper"
 Collage and gouache on paper"
     data-available="false"
     data-index="145"
-    aria-label="2019, 110 × 100, 2019"
+    aria-label="110 × 100 cm, 2019"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/45d24138aed924acc97c6cb84-400.avif 400w, /prototype2/media/45d24138aed924acc97c6cb84-683.avif 683w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/45d24138aed924acc97c6cb84-400.webp 400w, /prototype2/media/45d24138aed924acc97c6cb84-683.webp 683w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4379,7 +4385,7 @@ Collage and gouache on paper"
     
     style="--a:1.0545"
     
-    data-title="2019"
+    data-title="Untitled"
     data-year="2019"
     data-dimensions=""
     data-materials=""
@@ -4387,7 +4393,7 @@ Collage and gouache on paper"
     data-caption=""
     data-available="false"
     data-index="146"
-    aria-label="2019, 2019"
+    aria-label="Untitled, 2019"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/ba959adcb8de1f09-400.avif 400w, /prototype2/media/ba959adcb8de1f09-800.avif 800w, /prototype2/media/ba959adcb8de1f09-1200.avif 1200w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/ba959adcb8de1f09-400.webp 400w, /prototype2/media/ba959adcb8de1f09-800.webp 800w, /prototype2/media/ba959adcb8de1f09-1200.webp 1200w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4406,7 +4412,7 @@ Collage and gouache on paper"
     
     style="--a:1.0545"
     
-    data-title="2019"
+    data-title="Untitled"
     data-year="2019"
     data-dimensions=""
     data-materials=""
@@ -4414,7 +4420,7 @@ Collage and gouache on paper"
     data-caption=""
     data-available="false"
     data-index="147"
-    aria-label="2019, 2019"
+    aria-label="Untitled, 2019"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/5d555e25302d7b31-400.avif 400w, /prototype2/media/5d555e25302d7b31-800.avif 800w, /prototype2/media/5d555e25302d7b31-1200.avif 1200w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/5d555e25302d7b31-400.webp 400w, /prototype2/media/5d555e25302d7b31-800.webp 800w, /prototype2/media/5d555e25302d7b31-1200.webp 1200w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4433,7 +4439,7 @@ Collage and gouache on paper"
     
     style="--a:1.0545"
     
-    data-title="2019"
+    data-title="Untitled"
     data-year="2019"
     data-dimensions=""
     data-materials=""
@@ -4441,7 +4447,7 @@ Collage and gouache on paper"
     data-caption=""
     data-available="false"
     data-index="148"
-    aria-label="2019, 2019"
+    aria-label="Untitled, 2019"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/38c8b2b7e3012e19-400.avif 400w, /prototype2/media/38c8b2b7e3012e19-800.avif 800w, /prototype2/media/38c8b2b7e3012e19-1200.avif 1200w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/38c8b2b7e3012e19-400.webp 400w, /prototype2/media/38c8b2b7e3012e19-800.webp 800w, /prototype2/media/38c8b2b7e3012e19-1200.webp 1200w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4460,7 +4466,7 @@ Collage and gouache on paper"
     
     style="--a:0.6676"
     
-    data-title="2019, 160 × 130 cm"
+    data-title="160 × 130 cm"
     data-year="2019"
     data-dimensions="160 × 130 cm"
     data-materials="Gouache and collage on paper"
@@ -4469,7 +4475,7 @@ Collage and gouache on paper"
 Gouache and collage on paper"
     data-available="false"
     data-index="149"
-    aria-label="2019, 160 × 130 cm, 2019"
+    aria-label="160 × 130 cm, 2019"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/e3644687f887bdbd-400.avif 400w, /prototype2/media/e3644687f887bdbd-800.avif 800w, /prototype2/media/e3644687f887bdbd-1600.avif 1600w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/e3644687f887bdbd-400.webp 400w, /prototype2/media/e3644687f887bdbd-800.webp 800w, /prototype2/media/e3644687f887bdbd-1600.webp 1600w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4488,7 +4494,7 @@ Gouache and collage on paper"
     
     style="--a:0.6676"
     
-    data-title="2019, 160 × 140 cm"
+    data-title="160 × 140 cm"
     data-year="2019"
     data-dimensions="160 × 140 cm"
     data-materials="Gouache and collage on paper"
@@ -4497,7 +4503,7 @@ Gouache and collage on paper"
 Gouache and collage on paper"
     data-available="false"
     data-index="150"
-    aria-label="2019, 160 × 140 cm, 2019"
+    aria-label="160 × 140 cm, 2019"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/c462852980c8bc0c-400.avif 400w, /prototype2/media/c462852980c8bc0c-800.avif 800w, /prototype2/media/c462852980c8bc0c-1600.avif 1600w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/c462852980c8bc0c-400.webp 400w, /prototype2/media/c462852980c8bc0c-800.webp 800w, /prototype2/media/c462852980c8bc0c-1600.webp 1600w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4516,7 +4522,7 @@ Gouache and collage on paper"
     
     style="--a:0.8333"
     
-    data-title="2019, 72 × 62 cm"
+    data-title="72 × 62 cm"
     data-year="2019"
     data-dimensions="72 × 62 cm"
     data-materials="Gouache on paper"
@@ -4525,7 +4531,7 @@ Gouache and collage on paper"
 Gouache on paper"
     data-available="false"
     data-index="151"
-    aria-label="2019, 72 × 62 cm, 2019"
+    aria-label="72 × 62 cm, 2019"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/b5e85dc92163ba94-400.avif 400w, /prototype2/media/b5e85dc92163ba94-800.avif 800w, /prototype2/media/b5e85dc92163ba94-1600.avif 1600w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/b5e85dc92163ba94-400.webp 400w, /prototype2/media/b5e85dc92163ba94-800.webp 800w, /prototype2/media/b5e85dc92163ba94-1600.webp 1600w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4544,7 +4550,7 @@ Gouache on paper"
     
     style="--a:0.8334"
     
-    data-title="2019, 120 × 110 cm"
+    data-title="120 × 110 cm"
     data-year="2019"
     data-dimensions="120 × 110 cm"
     data-materials="Gouache on paper"
@@ -4553,7 +4559,7 @@ Gouache on paper"
 Gouache on paper"
     data-available="false"
     data-index="152"
-    aria-label="2019, 120 × 110 cm, 2019"
+    aria-label="120 × 110 cm, 2019"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/e2751a738fafbc4e-400.avif 400w, /prototype2/media/e2751a738fafbc4e-800.avif 800w, /prototype2/media/e2751a738fafbc4e-1600.avif 1600w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/e2751a738fafbc4e-400.webp 400w, /prototype2/media/e2751a738fafbc4e-800.webp 800w, /prototype2/media/e2751a738fafbc4e-1600.webp 1600w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4572,7 +4578,7 @@ Gouache on paper"
     id="year-2018"
     style="--a:0.8405;--sh:0.9402"
     
-    data-title="2018, 65 × 75 cm"
+    data-title="65 × 75 cm"
     data-year="2018"
     data-dimensions="65 × 75 cm"
     data-materials="Gouache sobre papel la componen"
@@ -4581,7 +4587,7 @@ Gouache on paper"
 Gouache on paper"
     data-available="false"
     data-index="153"
-    aria-label="2018, 65 × 75 cm, 2018"
+    aria-label="65 × 75 cm, 2018"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/369f0eebdc937c10c25b14f04-400.avif 400w, /prototype2/media/369f0eebdc937c10c25b14f04-800.avif 800w, /prototype2/media/369f0eebdc937c10c25b14f04-843.avif 843w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/369f0eebdc937c10c25b14f04-400.webp 400w, /prototype2/media/369f0eebdc937c10c25b14f04-800.webp 800w, /prototype2/media/369f0eebdc937c10c25b14f04-843.webp 843w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4600,7 +4606,7 @@ Gouache on paper"
     
     style="--a:0.8333"
     
-    data-title="2018"
+    data-title="Untitled"
     data-year="2018"
     data-dimensions=""
     data-materials=""
@@ -4608,7 +4614,7 @@ Gouache on paper"
     data-caption=""
     data-available="false"
     data-index="154"
-    aria-label="2018, 2018"
+    aria-label="Untitled, 2018"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/d8f04d85fcf77bd0-400.avif 400w, /prototype2/media/d8f04d85fcf77bd0-800.avif 800w, /prototype2/media/d8f04d85fcf77bd0-1600.avif 1600w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/d8f04d85fcf77bd0-400.webp 400w, /prototype2/media/d8f04d85fcf77bd0-800.webp 800w, /prototype2/media/d8f04d85fcf77bd0-1600.webp 1600w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4627,7 +4633,7 @@ Gouache on paper"
     
     style="--a:0.8460"
     
-    data-title="2018"
+    data-title="Untitled"
     data-year="2018"
     data-dimensions=""
     data-materials=""
@@ -4635,7 +4641,7 @@ Gouache on paper"
     data-caption=""
     data-available="false"
     data-index="155"
-    aria-label="2018, 2018"
+    aria-label="Untitled, 2018"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/7d437acc68c6f22e-400.avif 400w, /prototype2/media/7d437acc68c6f22e-800.avif 800w, /prototype2/media/7d437acc68c6f22e-1269.avif 1269w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/7d437acc68c6f22e-400.webp 400w, /prototype2/media/7d437acc68c6f22e-800.webp 800w, /prototype2/media/7d437acc68c6f22e-1269.webp 1269w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4654,7 +4660,7 @@ Gouache on paper"
     
     style="--a:1.0545"
     
-    data-title="2018"
+    data-title="Untitled"
     data-year="2018"
     data-dimensions=""
     data-materials="Gouache on paper"
@@ -4662,7 +4668,7 @@ Gouache on paper"
     data-caption="Gouache on paper"
     data-available="false"
     data-index="156"
-    aria-label="2018, 2018"
+    aria-label="Untitled, 2018"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/32cdf07c53f6aca5-400.avif 400w, /prototype2/media/32cdf07c53f6aca5-800.avif 800w, /prototype2/media/32cdf07c53f6aca5-1200.avif 1200w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/32cdf07c53f6aca5-400.webp 400w, /prototype2/media/32cdf07c53f6aca5-800.webp 800w, /prototype2/media/32cdf07c53f6aca5-1200.webp 1200w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4681,7 +4687,7 @@ Gouache on paper"
     
     style="--a:1.0545"
     
-    data-title="2018"
+    data-title="Untitled"
     data-year="2018"
     data-dimensions=""
     data-materials="Gouache on paper"
@@ -4689,7 +4695,7 @@ Gouache on paper"
     data-caption="Gouache on paper"
     data-available="false"
     data-index="157"
-    aria-label="2018, 2018"
+    aria-label="Untitled, 2018"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/32b991c832913253-400.avif 400w, /prototype2/media/32b991c832913253-800.avif 800w, /prototype2/media/32b991c832913253-1200.avif 1200w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/32b991c832913253-400.webp 400w, /prototype2/media/32b991c832913253-800.webp 800w, /prototype2/media/32b991c832913253-1200.webp 1200w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4708,7 +4714,7 @@ Gouache on paper"
     
     style="--a:0.9233"
     
-    data-title="2018"
+    data-title="Untitled"
     data-year="2018"
     data-dimensions=""
     data-materials=""
@@ -4716,7 +4722,7 @@ Gouache on paper"
     data-caption=""
     data-available="false"
     data-index="158"
-    aria-label="2018, 2018"
+    aria-label="Untitled, 2018"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/2cd86570b677e5df-400.avif 400w, /prototype2/media/2cd86570b677e5df-800.avif 800w, /prototype2/media/2cd86570b677e5df-1385.avif 1385w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/2cd86570b677e5df-400.webp 400w, /prototype2/media/2cd86570b677e5df-800.webp 800w, /prototype2/media/2cd86570b677e5df-1385.webp 1385w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4735,7 +4741,7 @@ Gouache on paper"
     
     style="--a:1.0730"
     
-    data-title="2018, 80 × 70 cm"
+    data-title="80 × 70 cm"
     data-year="2018"
     data-dimensions="80 × 70 cm"
     data-materials=""
@@ -4743,7 +4749,7 @@ Gouache on paper"
     data-caption="80 × 70 cm"
     data-available="false"
     data-index="159"
-    aria-label="2018, 80 × 70 cm, 2018"
+    aria-label="80 × 70 cm, 2018"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/26f66515f50e938d-400.avif 400w, /prototype2/media/26f66515f50e938d-800.avif 800w, /prototype2/media/26f66515f50e938d-1500.avif 1500w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/26f66515f50e938d-400.webp 400w, /prototype2/media/26f66515f50e938d-800.webp 800w, /prototype2/media/26f66515f50e938d-1500.webp 1500w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4762,7 +4768,7 @@ Gouache on paper"
     id="year-2017"
     style="--a:0.8401;--sh:1.6599"
     
-    data-title="2017, 180 × 180"
+    data-title="180 × 180 cm"
     data-year="2017"
     data-dimensions="180 × 180"
     data-materials="Acrylic on canvas"
@@ -4771,7 +4777,7 @@ Gouache on paper"
 Acrylic on canvas"
     data-available="true"
     data-index="160"
-    aria-label="2017, 180 × 180, 2017"
+    aria-label="180 × 180 cm, 2017"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/8a5e678029d5329bc8d013ff7-400.avif 400w, /prototype2/media/8a5e678029d5329bc8d013ff7-683.avif 683w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/8a5e678029d5329bc8d013ff7-400.webp 400w, /prototype2/media/8a5e678029d5329bc8d013ff7-683.webp 683w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4790,7 +4796,7 @@ Acrylic on canvas"
     
     style="--a:0.8397;--sh:1.5469"
     
-    data-title="2017, 160 × 160"
+    data-title="160 × 160 cm"
     data-year="2017"
     data-dimensions="160 × 160"
     data-materials="Acrylic paint on canvas"
@@ -4799,7 +4805,7 @@ Acrylic on canvas"
 Acrylic paint on canvas"
     data-available="true"
     data-index="161"
-    aria-label="2017, 160 × 160, 2017"
+    aria-label="160 × 160 cm, 2017"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/94790520ec4c9cacc2cfba173-400.avif 400w, /prototype2/media/94790520ec4c9cacc2cfba173-800.avif 800w, /prototype2/media/94790520ec4c9cacc2cfba173-896.avif 896w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/94790520ec4c9cacc2cfba173-400.webp 400w, /prototype2/media/94790520ec4c9cacc2cfba173-800.webp 800w, /prototype2/media/94790520ec4c9cacc2cfba173-896.webp 896w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4818,7 +4824,7 @@ Acrylic paint on canvas"
     
     style="--a:0.8400;--sh:1.5467"
     
-    data-title="2017, 160 × 160"
+    data-title="160 × 160 cm"
     data-year="2017"
     data-dimensions="160 × 160"
     data-materials="Acrylic on canvas"
@@ -4827,7 +4833,7 @@ Acrylic paint on canvas"
 Acrylic on canvas"
     data-available="false"
     data-index="162"
-    aria-label="2017, 160 × 160, 2017"
+    aria-label="160 × 160 cm, 2017"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/b09fbd1e37ce87d6c01e6614a-400.avif 400w, /prototype2/media/b09fbd1e37ce87d6c01e6614a-800.avif 800w, /prototype2/media/b09fbd1e37ce87d6c01e6614a-945.avif 945w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/b09fbd1e37ce87d6c01e6614a-400.webp 400w, /prototype2/media/b09fbd1e37ce87d6c01e6614a-800.webp 800w, /prototype2/media/b09fbd1e37ce87d6c01e6614a-945.webp 945w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4846,7 +4852,7 @@ Acrylic on canvas"
     
     style="--a:0.8150"
     
-    data-title="2017, 130 × 100"
+    data-title="130 × 100 cm"
     data-year="2017"
     data-dimensions="130 × 100"
     data-materials="Acrylic paint"
@@ -4855,7 +4861,7 @@ Acrylic on canvas"
 Acrylic paint"
     data-available="false"
     data-index="163"
-    aria-label="2017, 130 × 100, 2017"
+    aria-label="130 × 100 cm, 2017"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/4d6e3f4c2277adaf-400.avif 400w, /prototype2/media/4d6e3f4c2277adaf-800.avif 800w, /prototype2/media/4d6e3f4c2277adaf-815.avif 815w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/4d6e3f4c2277adaf-400.webp 400w, /prototype2/media/4d6e3f4c2277adaf-800.webp 800w, /prototype2/media/4d6e3f4c2277adaf-815.webp 815w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4874,7 +4880,7 @@ Acrylic paint"
     
     style="--a:0.8401;--sh:1.2621"
     
-    data-title="2017, 130 × 100"
+    data-title="130 × 100 cm"
     data-year="2017"
     data-dimensions="130 × 100"
     data-materials="Acrylic paint on canvas"
@@ -4883,7 +4889,7 @@ Acrylic paint"
 Acrylic paint on canvas"
     data-available="false"
     data-index="164"
-    aria-label="2017, 130 × 100, 2017"
+    aria-label="130 × 100 cm, 2017"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/181bb4bf21c19265c366b443f-400.avif 400w, /prototype2/media/181bb4bf21c19265c366b443f-683.avif 683w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/181bb4bf21c19265c366b443f-400.webp 400w, /prototype2/media/181bb4bf21c19265c366b443f-683.webp 683w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4902,7 +4908,7 @@ Acrylic paint on canvas"
     
     style="--a:0.8242"
     
-    data-title="2017, 56 × 70 cm"
+    data-title="56 × 70 cm"
     data-year="2017"
     data-dimensions="56 × 70 cm"
     data-materials=""
@@ -4910,7 +4916,7 @@ Acrylic paint on canvas"
     data-caption="56 × 70 cm"
     data-available="false"
     data-index="165"
-    aria-label="2017, 56 × 70 cm, 2017"
+    aria-label="56 × 70 cm, 2017"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/cb5fd1996fc23dc6-400.avif 400w, /prototype2/media/cb5fd1996fc23dc6-800.avif 800w, /prototype2/media/cb5fd1996fc23dc6-989.avif 989w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/cb5fd1996fc23dc6-400.webp 400w, /prototype2/media/cb5fd1996fc23dc6-800.webp 800w, /prototype2/media/cb5fd1996fc23dc6-989.webp 989w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4929,7 +4935,7 @@ Acrylic paint on canvas"
     
     style="--a:0.8640"
     
-    data-title="2017, 80 × 150 cm"
+    data-title="80 × 150 cm"
     data-year="2017"
     data-dimensions="80 × 150 cm"
     data-materials=""
@@ -4937,7 +4943,7 @@ Acrylic paint on canvas"
     data-caption="80 × 150 cm"
     data-available="false"
     data-index="166"
-    aria-label="2017, 80 × 150 cm, 2017"
+    aria-label="80 × 150 cm, 2017"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/bb25802406944821-400.avif 400w, /prototype2/media/bb25802406944821-800.avif 800w, /prototype2/media/bb25802406944821-864.avif 864w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/bb25802406944821-400.webp 400w, /prototype2/media/bb25802406944821-800.webp 800w, /prototype2/media/bb25802406944821-864.webp 864w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4956,7 +4962,7 @@ Acrylic paint on canvas"
     
     style="--a:0.9025"
     
-    data-title="2017, 90 × 90 cm"
+    data-title="90 × 90 cm"
     data-year="2017"
     data-dimensions="90 × 90 cm"
     data-materials="Gouache on paper"
@@ -4965,7 +4971,7 @@ Acrylic paint on canvas"
 Gouache on paper"
     data-available="false"
     data-index="167"
-    aria-label="2017, 90 × 90 cm, 2017"
+    aria-label="90 × 90 cm, 2017"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/1be72d8b32c05a1a-400.avif 400w, /prototype2/media/1be72d8b32c05a1a-800.avif 800w, /prototype2/media/1be72d8b32c05a1a-1083.avif 1083w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/1be72d8b32c05a1a-400.webp 400w, /prototype2/media/1be72d8b32c05a1a-800.webp 800w, /prototype2/media/1be72d8b32c05a1a-1083.webp 1083w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -4984,7 +4990,7 @@ Gouache on paper"
     
     style="--a:0.9330"
     
-    data-title="2017, 100 × 100 cm"
+    data-title="100 × 100 cm"
     data-year="2017"
     data-dimensions="100 × 100 cm"
     data-materials="Gouache on paper"
@@ -4993,7 +4999,7 @@ Gouache on paper"
 Gouache on paper"
     data-available="false"
     data-index="168"
-    aria-label="2017, 100 × 100 cm, 2017"
+    aria-label="100 × 100 cm, 2017"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/256b4477d1cef930-400.avif 400w, /prototype2/media/256b4477d1cef930-800.avif 800w, /prototype2/media/256b4477d1cef930-933.avif 933w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/256b4477d1cef930-400.webp 400w, /prototype2/media/256b4477d1cef930-800.webp 800w, /prototype2/media/256b4477d1cef930-933.webp 933w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -5012,7 +5018,7 @@ Gouache on paper"
     
     style="--a:1.0435"
     
-    data-title="2017, 100 × 100 cm"
+    data-title="100 × 100 cm"
     data-year="2017"
     data-dimensions="100 × 100 cm"
     data-materials="Gouache on paper"
@@ -5021,7 +5027,7 @@ Gouache on paper"
 Gouache on paper"
     data-available="false"
     data-index="169"
-    aria-label="2017, 100 × 100 cm, 2017"
+    aria-label="100 × 100 cm, 2017"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/63de73eae7e1d72a-400.avif 400w, /prototype2/media/63de73eae7e1d72a-800.avif 800w, /prototype2/media/63de73eae7e1d72a-1200.avif 1200w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/63de73eae7e1d72a-400.webp 400w, /prototype2/media/63de73eae7e1d72a-800.webp 800w, /prototype2/media/63de73eae7e1d72a-1200.webp 1200w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -5040,7 +5046,7 @@ Gouache on paper"
     
     style="--a:0.8301"
     
-    data-title="2017, 110 × 130 cm"
+    data-title="110 × 130 cm"
     data-year="2017"
     data-dimensions="110 × 130 cm"
     data-materials="Acrylic on canvas"
@@ -5049,7 +5055,7 @@ Gouache on paper"
 Acrylic on canvas"
     data-available="false"
     data-index="170"
-    aria-label="2017, 110 × 130 cm, 2017"
+    aria-label="110 × 130 cm, 2017"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/d95f3643d09b19f3-400.avif 400w, /prototype2/media/d95f3643d09b19f3-800.avif 800w, /prototype2/media/d95f3643d09b19f3-1600.avif 1600w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/d95f3643d09b19f3-400.webp 400w, /prototype2/media/d95f3643d09b19f3-800.webp 800w, /prototype2/media/d95f3643d09b19f3-1600.webp 1600w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -5068,7 +5074,7 @@ Acrylic on canvas"
     id="year-2016"
     style="--a:0.8401;--sh:1.1817"
     
-    data-title="2016, 116 × 90"
+    data-title="116 × 90 cm"
     data-year="2016"
     data-dimensions="116 × 90"
     data-materials=""
@@ -5076,7 +5082,7 @@ Acrylic on canvas"
     data-caption="116 × 90 cm"
     data-available="false"
     data-index="171"
-    aria-label="2016, 116 × 90, 2016"
+    aria-label="116 × 90 cm, 2016"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/84600c907cf3f139cda083d76-400.avif 400w, /prototype2/media/84600c907cf3f139cda083d76-683.avif 683w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/84600c907cf3f139cda083d76-400.webp 400w, /prototype2/media/84600c907cf3f139cda083d76-683.webp 683w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -5095,7 +5101,7 @@ Acrylic on canvas"
     
     style="--a:0.8401;--sh:1.1817"
     
-    data-title="2016, 116 × 90"
+    data-title="116 × 90 cm"
     data-year="2016"
     data-dimensions="116 × 90"
     data-materials=""
@@ -5103,7 +5109,7 @@ Acrylic on canvas"
     data-caption="116 × 90 cm"
     data-available="false"
     data-index="172"
-    aria-label="2016, 116 × 90, 2016"
+    aria-label="116 × 90 cm, 2016"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/a95e39b0a74b09f5cc8ef68c8-400.avif 400w, /prototype2/media/a95e39b0a74b09f5cc8ef68c8-683.avif 683w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/a95e39b0a74b09f5cc8ef68c8-400.webp 400w, /prototype2/media/a95e39b0a74b09f5cc8ef68c8-683.webp 683w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -5122,7 +5128,7 @@ Acrylic on canvas"
     
     style="--a:0.8280"
     
-    data-title="2016, 130 × 100 cm"
+    data-title="130 × 100 cm"
     data-year="2016"
     data-dimensions="130 × 100 cm"
     data-materials="Acrylic paint"
@@ -5131,7 +5137,7 @@ Acrylic on canvas"
 Acrylic paint"
     data-available="false"
     data-index="173"
-    aria-label="2016, 130 × 100 cm, 2016"
+    aria-label="130 × 100 cm, 2016"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/ca7f1afdaf3b040d-400.avif 400w, /prototype2/media/ca7f1afdaf3b040d-800.avif 800w, /prototype2/media/ca7f1afdaf3b040d-828.avif 828w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/ca7f1afdaf3b040d-400.webp 400w, /prototype2/media/ca7f1afdaf3b040d-800.webp 800w, /prototype2/media/ca7f1afdaf3b040d-828.webp 828w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -5150,7 +5156,7 @@ Acrylic paint"
     
     style="--a:0.8430"
     
-    data-title="2016, 130 × 100 cm"
+    data-title="130 × 100 cm"
     data-year="2016"
     data-dimensions="130 × 100 cm"
     data-materials="Acrylic paint"
@@ -5159,7 +5165,7 @@ Acrylic paint"
 Acrylic paint"
     data-available="false"
     data-index="174"
-    aria-label="2016, 130 × 100 cm, 2016"
+    aria-label="130 × 100 cm, 2016"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/926abc4fc6f82c36-400.avif 400w, /prototype2/media/926abc4fc6f82c36-800.avif 800w, /prototype2/media/926abc4fc6f82c36-843.avif 843w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/926abc4fc6f82c36-400.webp 400w, /prototype2/media/926abc4fc6f82c36-800.webp 800w, /prototype2/media/926abc4fc6f82c36-843.webp 843w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -5178,7 +5184,7 @@ Acrylic paint"
     
     style="--a:0.8570"
     
-    data-title="2016, 130 × 100 cm"
+    data-title="130 × 100 cm"
     data-year="2016"
     data-dimensions="130 × 100 cm"
     data-materials=""
@@ -5186,7 +5192,7 @@ Acrylic paint"
     data-caption="130 × 100 cm"
     data-available="false"
     data-index="175"
-    aria-label="2016, 130 × 100 cm, 2016"
+    aria-label="130 × 100 cm, 2016"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/8744e56729d6eab3-400.avif 400w, /prototype2/media/8744e56729d6eab3-800.avif 800w, /prototype2/media/8744e56729d6eab3-857.avif 857w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/8744e56729d6eab3-400.webp 400w, /prototype2/media/8744e56729d6eab3-800.webp 800w, /prototype2/media/8744e56729d6eab3-857.webp 857w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -5205,7 +5211,7 @@ Acrylic paint"
     
     style="--a:0.8430"
     
-    data-title="2016, 150 × 110 cm"
+    data-title="150 × 110 cm"
     data-year="2016"
     data-dimensions="150 × 110 cm"
     data-materials="Acrylic paint"
@@ -5214,7 +5220,7 @@ Acrylic paint"
 Acrylic paint"
     data-available="false"
     data-index="176"
-    aria-label="2016, 150 × 110 cm, 2016"
+    aria-label="150 × 110 cm, 2016"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/4d8de0c530904422-400.avif 400w, /prototype2/media/4d8de0c530904422-800.avif 800w, /prototype2/media/4d8de0c530904422-843.avif 843w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/4d8de0c530904422-400.webp 400w, /prototype2/media/4d8de0c530904422-800.webp 800w, /prototype2/media/4d8de0c530904422-843.webp 843w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -5233,7 +5239,7 @@ Acrylic paint"
     
     style="--a:0.8430"
     
-    data-title="2016, 160 × 130 cm"
+    data-title="160 × 130 cm"
     data-year="2016"
     data-dimensions="160 × 130 cm"
     data-materials="Acrylic paint"
@@ -5242,7 +5248,7 @@ Acrylic paint"
 Acrylic paint"
     data-available="false"
     data-index="177"
-    aria-label="2016, 160 × 130 cm, 2016"
+    aria-label="160 × 130 cm, 2016"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/024e39a198b18367-400.avif 400w, /prototype2/media/024e39a198b18367-800.avif 800w, /prototype2/media/024e39a198b18367-843.avif 843w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/024e39a198b18367-400.webp 400w, /prototype2/media/024e39a198b18367-800.webp 800w, /prototype2/media/024e39a198b18367-843.webp 843w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -5261,7 +5267,7 @@ Acrylic paint"
     
     style="--a:0.7842"
     
-    data-title="2016, 90 × 100 cm"
+    data-title="90 × 100 cm"
     data-year="2016"
     data-dimensions="90 × 100 cm"
     data-materials="Gouache on paper"
@@ -5270,7 +5276,7 @@ Acrylic paint"
 Gouache on paper"
     data-available="false"
     data-index="178"
-    aria-label="2016, 90 × 100 cm, 2016"
+    aria-label="90 × 100 cm, 2016"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/e64e3cadc07834c3-400.avif 400w, /prototype2/media/e64e3cadc07834c3-800.avif 800w, /prototype2/media/e64e3cadc07834c3-803.avif 803w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/e64e3cadc07834c3-400.webp 400w, /prototype2/media/e64e3cadc07834c3-800.webp 800w, /prototype2/media/e64e3cadc07834c3-803.webp 803w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -5289,7 +5295,7 @@ Gouache on paper"
     
     style="--a:0.7773"
     
-    data-title="2016, 95 × 105 cm"
+    data-title="95 × 105 cm"
     data-year="2016"
     data-dimensions="95 × 105 cm"
     data-materials="Gouache on paper"
@@ -5298,7 +5304,7 @@ Gouache on paper"
 Gouache on paper"
     data-available="false"
     data-index="179"
-    aria-label="2016, 95 × 105 cm, 2016"
+    aria-label="95 × 105 cm, 2016"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/7649e98a37f76c69-400.avif 400w, /prototype2/media/7649e98a37f76c69-800.avif 800w, /prototype2/media/7649e98a37f76c69-1166.avif 1166w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/7649e98a37f76c69-400.webp 400w, /prototype2/media/7649e98a37f76c69-800.webp 800w, /prototype2/media/7649e98a37f76c69-1166.webp 1166w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -5317,7 +5323,7 @@ Gouache on paper"
     
     style="--a:0.7693"
     
-    data-title="2016, 95 × 105 cm"
+    data-title="95 × 105 cm"
     data-year="2016"
     data-dimensions="95 × 105 cm"
     data-materials="Gouache on paper"
@@ -5326,7 +5332,7 @@ Gouache on paper"
 Gouache on paper"
     data-available="false"
     data-index="180"
-    aria-label="2016, 95 × 105 cm, 2016"
+    aria-label="95 × 105 cm, 2016"
   ><picture class="tile-image">
       <source type="image/avif" srcset="/prototype2/media/0741d035d2c1092e-400.avif 400w, /prototype2/media/0741d035d2c1092e-800.avif 800w, /prototype2/media/0741d035d2c1092e-1154.avif 1154w" sizes="(max-width: 899px) 43vw, 260px" />
       <source type="image/webp" srcset="/prototype2/media/0741d035d2c1092e-400.webp 400w, /prototype2/media/0741d035d2c1092e-800.webp 800w, /prototype2/media/0741d035d2c1092e-1154.webp 1154w" sizes="(max-width: 899px) 43vw, 260px" />
@@ -5341,13 +5347,88 @@ Gouache on paper"
       />
     </picture></a></div>
     </main>
+<section class="inq" id="inquiries" data-inquiries aria-labelledby="inq-title">
+    <a class="inq-close" href="#" data-inquiries-close>Close</a>
 
+    <form
+      class="inq-form"
+      method="post"
+      action=""
+      data-inquiries-form
+      
+      novalidate
+    >
+      <h2 class="inq-title" id="inq-title">Inquiries</h2>
+
+      <div class="inq-field inq-name">
+    <label class="inq-label" for="inq-name">Contact name:</label>
+    <input
+        class="inq-input" id="inq-name" name="name" type="text"
+        required maxlength="120" autocomplete="name" enterkeyhint="next"
+      />
+  </div>
+      <div class="inq-field inq-country">
+    <label class="inq-label" for="inq-country">Country:</label>
+    <input
+        class="inq-input" id="inq-country" name="country" type="text"
+        maxlength="80" autocomplete="country-name" enterkeyhint="next"
+      />
+  </div>
+      <div class="inq-field inq-email">
+    <label class="inq-label" for="inq-email">Your email:</label>
+    <input
+        class="inq-input" id="inq-email" name="email" type="email"
+        required maxlength="160" autocomplete="email" spellcheck="false" enterkeyhint="next"
+      />
+  </div>
+      <div class="inq-field inq-subject">
+    <label class="inq-label" for="inq-subject">Subject:</label>
+    <input
+        class="inq-input" id="inq-subject" name="subject" type="text"
+        maxlength="160" enterkeyhint="next"
+      />
+  </div>
+      <!--
+        One line to look at and many to write in: the field grows with what is
+        typed (client/inquiries.ts), so the rule under it is a rule until
+        there is a reason for it to be a box.
+      -->
+      <div class="inq-field inq-message">
+    <label class="inq-label" for="inq-message">Your message:</label>
+    <textarea
+        class="inq-input inq-area" id="inq-message" name="message"
+        required maxlength="4000" rows="1"
+      ></textarea>
+  </div>
+
+      <!--
+        Out of sight, out of the tab order, and out of the accessibility tree:
+        three separate statements that no person is meant to reach this. Not
+        a hidden input, which is the one kind of field a form robot knows to
+        leave alone.
+      -->
+      <div class="inq-trap" aria-hidden="true">
+        <label for="inq-website">Website</label>
+        <input id="inq-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+      <input type="hidden" name="started" value="" data-inquiries-started />
+      <input type="hidden" name="desk" value="gallery" />
+
+      <!-- Cloudflare's widget is rendered in here, and only if a key is set. -->
+      <div class="inq-check" data-inquiries-check></div>
+
+      <div class="inq-send">
+        <p class="inq-status" data-inquiries-status role="status" aria-live="polite"></p>
+        <button type="submit" class="inq-button" data-inquiries-submit>Send</button>
+      </div>
+    </form>
+  </section>
 <div class="controls" data-controls>
     <div class="control-group" role="group" aria-label="Grid size">
-      <button type="button" class="control"
-            data-density="14.51vw" aria-pressed="false">24</button><button type="button" class="control"
-            data-density="9.07vw" aria-pressed="false">60</button><button type="button" class="control is-active"
-            data-density="7.26vw" aria-pressed="true">181</button>
+      <button type="button" class="control is-active"
+            data-density="14.51vw" aria-pressed="true">25</button><button type="button" class="control"
+            data-density="9.07vw" aria-pressed="false">50</button><button type="button" class="control"
+            data-density="7.26vw" aria-pressed="false">100</button>
     </div>
     <div class="control-group" role="group" aria-label="Sizing">
           <button type="button" class="control" data-scale="equal" aria-pressed="false">Equal</button>
@@ -5355,8 +5436,8 @@ Gouache on paper"
         </div>
     
   </div>
-<div class="scroll-cue scroll-cue-ink" data-scroll-cue aria-hidden="true">
-    <svg viewBox="0 0 28 16" focusable="false">
+<button type="button" class="scroll-cue scroll-cue-ink" data-scroll-cue aria-label="Scroll down">
+    <svg viewBox="0 0 28 16" aria-hidden="true" focusable="false">
       <path
         d="M1.5 1.5 L14 13 L26.5 1.5"
         fill="none"
@@ -5365,7 +5446,7 @@ Gouache on paper"
         stroke-linecap="square"
       />
     </svg>
-  </div>
+  </button>
 <div class="cursor" data-cursor aria-hidden="true"><span class="cursor-label"></span></div>
 <div class="panel-veil" data-panel-veil></div>
 <section class="about" id="about" data-panel aria-label="About">
@@ -5631,15 +5712,15 @@ Gouache on paper"
           </button>
     </div>
     <button type="button" class="about-reel-step is-prev" data-about-reel-step="-1" aria-label="Earlier photographs" hidden>
-      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="M8 1 1 8l7 7" /></svg>
+      <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M14.5 1.5 L3 14 L14.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
     </button>
     <button type="button" class="about-reel-step is-next" data-about-reel-step="1" aria-label="More photographs" hidden>
-      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="m1 1 7 7-7 7" /></svg>
+      <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M1.5 1.5 L13 14 L1.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
     </button>
   </div>
           </div>
         </div>
-        <p>Based on her reflections as an artist, her experience in color prediction and mural painting, brings to all her work, with color as a primary tool, an identifiable language.</p><p>She began her artistic career painting and soon realized that she had a natural ability with color. In her own words, ‘All I have done throughout my career has been to cultivate this natural gift. First as a mural painter, then designing color charts and prescribing color and finally as an artist’.</p><p>The tireless search for the reason of color and its form has obsessed artists throughout history, from the very creation of pictorial expression. Claudia Valsells knows about this and she aims to portray this into her artwork.</p><p>In her beginnings as a colorist she worked on commissions, for architects, and on projects of different scales advising and prescribing color. Soon she founded her own Studio, under the name of ‘Arts&amp;Claus’, in allegory to the ‘Arts&amp;Craft’ movement where she always found a lot of inspiration. She specialized in mural painting, color applied to architecture, and interior design for 20 years on projects in Spain and abroad. Her role was to convey the value of color and its texture in the decoration of interior spaces working closely with professionals in the fields of art, design, and architecture. It was in this context, working close with architects and designers, that she found out the communication between professionals was based by the painting companies, relegated the work of the colorist to the background due to ignorance or fear clients to make a mistake or be branded as eccentric. It was then when Claudia Valsells created a specific chromatic selection, a COLOUR CHART, with more than 200 references, which have been used as color communication tools by Spain’s best architects.</p><p>Her work has two very defined characteristics: on the one hand her chromatic instinct, a gift of colors and on the other her ability to select, group and interact colors creating a chromatic language of her own.</p>
+        <p>Based on her reflections as an artist, her experience in color prediction and mural painting, brings to all her work, with color as a primary tool, an identifiable language.</p><p>She began her artistic career painting and soon realized that she had a natural ability with color. In her own words, ‘All I have done throughout my career has been to cultivate this natural gift. First as a mural painter, then designing color charts and prescribing color and finally as an artist’.</p><p>The tireless search for the reason of color and its form has obsessed artists throughout history, from the very creation of pictorial expression. Claudia Valsells knows about this and she aims to portray this into her artwork.</p><p>In her beginnings as a colorist she worked on commissions, for architects, and on projects of different scales advising and prescribing color. Soon she founded her own Studio, under the name of ‘Arts&amp;Claus’, in allegory to the ‘Arts&amp;Craft’ movement where she always found a lot of inspiration. She specialized in mural painting, color applied to architecture, and interior design for 20 years on projects in Spain and abroad. Her role was to convey the value of color and its texture in the decoration of interior spaces working closely with professionals in the fields of art, design, and architecture. It was in this context, working close with architects and designers, that she found out the communication between professionals was based by the painting companies, relegated the work of the colorist to the background due to ignorance or fear clients to make a mistake or be branded as eccentric. It was then when Claudia Valsells created a specific chromatic selection, a COLOUR CHART, with more than 200 references, which have been used as color communication tools by Spain’s best architects.</p><p>Her work has two very defined characteristics: on the one hand her chromatic instinct, a gift of colors and on the other her ability to select, group and interact colors creating a chromatic language of her own.</p><p>Currently she combines her activity as an artist with colour prescription in the areas of design and architecture.</p><p>Her work is represented, in Spain and abroad, by the Barcelona gallery owner Miquel Alzueta. <a class="about-link hrow" href="https://alzuetagallery.com" target="_blank" rel="noopener">ALZUETA GALLERY</a></p>
       </div>
       <div class="about-record">
         <section class="about-shows">
@@ -5762,136 +5843,141 @@ Gouache on paper"
     <h3 class="about-label">Art fairs</h3>
     <div class="about-show-columns">
       <ul class="about-show-list"><li class="about-show">
-    <span class="about-show-when">2026 February</span>
-    <span class="about-show-title">Zona Maco CDMX</span>
-    <span class="about-show-line">with Alzueta Gallery</span>
-    <span class="about-show-place">Mexico</span>
+    <span class="about-show-when">2026</span>
+    <span class="about-show-title">ART COLOGNE</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Cologne, Germany</span>
   </li><li class="about-show">
-    <span class="about-show-when">2025 October</span>
-    <span class="about-show-title">Estampa contemporary<br />art fair,</span>
-    <span class="about-show-line">with Alzueta Gallery</span>
-    <span class="about-show-place">Madrid</span>
+    <span class="about-show-when">2026</span>
+    <span class="about-show-title">THE ARMORY SHOW</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">New York, USA</span>
   </li><li class="about-show">
-    <span class="about-show-when">2024 February</span>
+    <span class="about-show-when">2026</span>
     <span class="about-show-title">ZONA MACO</span>
-    <span class="about-show-line">with Alzueta Gallery</span>
-    
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Mexico City, Mexico</span>
   </li><li class="about-show">
-    <span class="about-show-when">2024 November</span>
-    <span class="about-show-title">Luxemburg art week</span>
-    <span class="about-show-line">with Alzueta Gallery</span>
-    <span class="about-show-place">Luxemburg</span>
+    <span class="about-show-when">2025</span>
+    <span class="about-show-title">ESTAMPA</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
   </li><li class="about-show">
-    <span class="about-show-when">2023 February</span>
-    <span class="about-show-title">Contemporary Art Fair</span>
-    <span class="about-show-line">Art Rotterdam</span>
-    <span class="about-show-place">Rotterdam</span>
+    <span class="about-show-when">2025</span>
+    <span class="about-show-title">THE ARMORY SHOW</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">New York, USA</span>
   </li><li class="about-show">
-    <span class="about-show-when">2021 October</span>
-    <span class="about-show-title">Estampa Contemporary Art Fair</span>
-    
-    <span class="about-show-place">Alzueta Gallery, Madrid</span>
+    <span class="about-show-when">2024</span>
+    <span class="about-show-title">LUXEMBOURG ART WEEK</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Luxembourg, Luxembourg</span>
   </li><li class="about-show">
-    <span class="about-show-when">2021 September</span>
-    <span class="about-show-title">Art Paris Fair</span>
-    
-    <span class="about-show-place">Alzueta Gallery, Paris</span>
+    <span class="about-show-when">2024</span>
+    <span class="about-show-title">ZONAMACO</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Mexico City, Mexico</span>
   </li><li class="about-show">
-    <span class="about-show-when">2021 June</span>
-    <span class="about-show-title">Art Madrid Feria</span>
-    
-    <span class="about-show-place">Alzueta Gallery, Madrid</span>
+    <span class="about-show-when">2023</span>
+    <span class="about-show-title">ART ROTTERDAM</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Rotterdam, The Netherlands</span>
   </li><li class="about-show">
-    <span class="about-show-when">2019 March</span>
-    <span class="about-show-title">AFF Art Fair</span>
-    
-    <span class="about-show-place">Brussels</span>
+    <span class="about-show-when">2022</span>
+    <span class="about-show-title">ART PARIS</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Paris, France</span>
   </li><li class="about-show">
-    <span class="about-show-when">2019 March</span>
-    <span class="about-show-title">Art Madrid</span>
-    
-    <span class="about-show-place">Madrid</span>
+    <span class="about-show-when">2021</span>
+    <span class="about-show-title">ESTAMPA ART FAIR</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
   </li><li class="about-show">
-    <span class="about-show-when">2018</span>
-    <span class="about-show-title">Art fair</span>
-    
-    <span class="about-show-place">Hamburg</span>
+    <span class="about-show-when">2021</span>
+    <span class="about-show-title">ART PARIS</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Paris, France</span>
   </li><li class="about-show">
-    <span class="about-show-when">2018</span>
-    <span class="about-show-title">Art Elysees</span>
-    
-    <span class="about-show-place">París</span>
+    <span class="about-show-when">2021</span>
+    <span class="about-show-title">ART MADRID</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
   </li><li class="about-show">
-    <span class="about-show-when">2018</span>
-    <span class="about-show-title">Art Fair</span>
-    
-    <span class="about-show-place">Stockholm</span>
+    <span class="about-show-when">2019</span>
+    <span class="about-show-title">ART ÉLYSÉES-ART &amp; DESIGN</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Paris, France</span>
   </li><li class="about-show">
-    <span class="about-show-when">2018</span>
-    <span class="about-show-title">Contemporary Art Fair<br />Just LX,</span>
-    
-    <span class="about-show-place">Portugal</span>
+    <span class="about-show-when">2019</span>
+    <span class="about-show-title">ART PARIS GRAND PALAIS</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Paris, France</span>
   </li><li class="about-show">
-    <span class="about-show-when">2018</span>
-    <span class="about-show-title">Almoneda Antik Passion</span>
-    
-    <span class="about-show-place">Madrid</span>
-  </li><li class="about-show">
-    <span class="about-show-when">2019 April</span>
-    <span class="about-show-title">Almoneda, Ifema<br />Feria de Madrid</span>
-    
-    <span class="about-show-place">Palau de Casavells, Madrid.</span>
+    <span class="about-show-when">2019</span>
+    <span class="about-show-title">ALMONEDA</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
   </li></ul>
       <ul class="about-show-list"><li class="about-show">
-    <span class="about-show-when">2018</span>
-    <span class="about-show-title">Art Fair Grand Palais</span>
-    
-    <span class="about-show-place">Paris</span>
+    <span class="about-show-when">2019</span>
+    <span class="about-show-title">ART MADRID</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
   </li><li class="about-show">
     <span class="about-show-when">2018</span>
-    <span class="about-show-title">Eurantica Art Fair</span>
-    
-    <span class="about-show-place">Brussels</span>
-  </li><li class="about-show">
-    <span class="about-show-when">2019 April</span>
-    <span class="about-show-title">Art Paris Grand Palais</span>
-    
-    <span class="about-show-place">París</span>
+    <span class="about-show-title">THE AFFORDABLE ART FAIR HAMBURG</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Hamburg, Germany</span>
   </li><li class="about-show">
     <span class="about-show-when">2018</span>
-    <span class="about-show-title">Art Madrid,</span>
-    
-    <span class="about-show-place">Madrid</span>
+    <span class="about-show-title">STOCKHOLM INDEPENDENT ART FAIR</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Stockholm, Sweden</span>
   </li><li class="about-show">
-    <span class="about-show-when">2017 July</span>
-    <span class="about-show-title">Uterqüe Art Essays</span>
-    <span class="about-show-line">AW 2017</span>
-    
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">JUST LX</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Lisbon, Portugal</span>
   </li><li class="about-show">
-    <span class="about-show-when">2017 March</span>
-    <span class="about-show-title">International Art Fair,<br />Art Paris</span>
-    
-    <span class="about-show-place">París</span>
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">ALMONEDA</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
   </li><li class="about-show">
-    <span class="about-show-when">2017 February</span>
-    <span class="about-show-title">Art Madrid</span>
-    
-    <span class="about-show-place">Madrid</span>
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">ART FAIR GRAND PALAIS</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Paris, France</span>
   </li><li class="about-show">
-    <span class="about-show-when">2016 November</span>
-    <span class="about-show-title">Antica Namur,</span>
-    
-    <span class="about-show-place">Belgium</span>
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">EURANTICA ART FAIR</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Brussels, Belgium</span>
   </li><li class="about-show">
-    <span class="about-show-when">2016 October</span>
-    <span class="about-show-title">Art Élysées,<br />International Art Fair,</span>
-    
-    <span class="about-show-place">París</span>
+    <span class="about-show-when">2018</span>
+    <span class="about-show-title">ART MADRID</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
   </li><li class="about-show">
-    <span class="about-show-when">2016 June</span>
-    <span class="about-show-title">Scope Basel,</span>
-    
-    <span class="about-show-place">Basel art fair</span>
+    <span class="about-show-when">2017</span>
+    <span class="about-show-title">ART PARIS</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Paris, France</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2017</span>
+    <span class="about-show-title">ART MADRID</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Madrid, Spain</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2016</span>
+    <span class="about-show-title">ANTICA NAMUR</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Namur, Belgium</span>
+  </li><li class="about-show">
+    <span class="about-show-when">2016</span>
+    <span class="about-show-title">SCOPE BASEL</span>
+    <span class="about-show-line">Alzueta Gallery</span>
+    <span class="about-show-place">Basel, Switzerland</span>
   </li></ul>
     </div>
   </section>
@@ -5900,28 +5986,30 @@ Gouache on paper"
           <ul class="about-collection-list">
             <li class="about-collection">
                   <span class="about-collection-name">Fundació Vilacases</span>
-                  <span class="about-collection-place">Barcelona</span>
+                  <span class="about-collection-place">Barcelona, SPAIN</span>
                 </li><li class="about-collection">
                   <span class="about-collection-name">Fundació Banc Sabadell</span>
-                  <span class="about-collection-place">Barcelona</span>
+                  <span class="about-collection-place">Barcelona, SPAIN</span>
                 </li><li class="about-collection">
                   <span class="about-collection-name">Collection Hayot</span>
                   <span class="about-collection-place">France</span>
                 </li><li class="about-collection">
+                  <span class="about-collection-name">Martinez Collection</span>
+                  <span class="about-collection-place">Mexico-US</span>
+                </li><li class="about-collection">
                   <span class="about-collection-name">Niederberghaus Collection</span>
-                  <span class="about-collection-place">Mexico - US</span>
+                  <span class="about-collection-place">Germany</span>
                 </li><li class="about-collection">
                   <span class="about-collection-name">Collection Richard</span>
                   <span class="about-collection-place">France</span>
                 </li><li class="about-collection">
                   <span class="about-collection-name">Smith Collection</span>
-                  <span class="about-collection-place">Wyoming</span>
+                  <span class="about-collection-place">Wyoming, USA</span>
                 </li>
           </ul>
         </section>
       </div>
       <address class="about-contact">
-        <a href="tel:+34609769186">+34 609 76 91 86</a>
         <a href="mailto:editorial@alzuetagallery.com">editorial@alzuetagallery.com</a><a href="mailto:claudia@claudiacolor.com">claudia@claudiacolor.com</a>
       </address>
       <p class="about-foot"><b>Claudia Valsells</b> © All Rights Reserved</p>
@@ -5932,16 +6020,16 @@ Gouache on paper"
   </div>
   </section>
   <a class="about-close" href="#" data-panel-close="about">Close</a>
-  <div class="about-cue" data-about-cue aria-hidden="true">
-    <svg viewBox="0 0 28 16" focusable="false">
+  <button type="button" class="about-cue" data-about-cue aria-label="Scroll down">
+    <svg viewBox="0 0 28 16" aria-hidden="true" focusable="false">
       <path d="M1.5 1.5 L14 13 L26.5 1.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
     </svg>
-  </div>
+  </button>
   <button type="button" class="about-viewer-step is-prev" data-about-step="-1" aria-label="Previous photograph">
-      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="M8 1 1 8l7 7" /></svg>
+      <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M14.5 1.5 L3 14 L14.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
     </button>
     <button type="button" class="about-viewer-step is-next" data-about-step="1" aria-label="Next photograph">
-      <svg viewBox="0 0 9 16" aria-hidden="true" focusable="false"><path d="m1 1 7 7-7 7" /></svg>
+      <svg class="step-chevron" viewBox="0 0 16 28" aria-hidden="true" focusable="false"><path d="M1.5 1.5 L13 14 L1.5 26.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
     </button>
 <div class="lightbox" data-lightbox data-available-label="Available" hidden>
     <div class="lightbox-veil" data-lightbox-veil></div>

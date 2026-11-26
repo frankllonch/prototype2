@@ -1,4 +1,4 @@
-import { isPlainClick, phone } from './env.js';
+import { isPlainClick, phone, returnFocus } from './env.js';
 export const stepState = () => (history.state ?? {});
 let leaving = false;
 /**
@@ -134,7 +134,9 @@ export function initPanels() {
         // On a phone what opened it may be in the menu, which is out of sight
         // again by now: the menu's button takes the keyboard instead.
         const shown = back && back.getClientRects().length > 0 && getComputedStyle(back).visibility !== 'hidden';
-        (shown ? back : document.querySelector('[data-menu-toggle]') ?? back)?.focus({ preventScroll: true });
+        // Marked as handed back rather than reached (env.ts), so the bar's hover
+        // (client/scramble.ts) does not take it for a keyboard arriving on the word.
+        returnFocus(shown ? back : document.querySelector('[data-menu-toggle]') ?? back);
     };
     /**
      * `arriving`: the page came with this panel up, and nobody has pressed anything yet.

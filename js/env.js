@@ -15,7 +15,7 @@ export const portrait = window.matchMedia('(orientation: portrait)');
  * taken away as it is scrolled back up. The one test for scripts; the
  * stylesheets make the same one around each stage.
  *
- * Wherever the engine runs scroll-driven animations and motion is not
+ * Wherever motion is not
  * reduced — and on a phone only when it is held upright (Frank, 2026-11-15):
  * turned on its side the screen is too short for the pinned words, which
  * would be typed below its edge, so there the words simply stand, as they do
@@ -23,18 +23,8 @@ export const portrait = window.matchMedia('(orientation: portrait)');
  * than once, because a phone turned mid-page changes the answer and the
  * stylesheet with it.
  */
-export const scrollWrites = (timeline = 'view()', upright = portrait) => !reduceMotion.matches &&
-    CSS.supports(`animation-timeline: ${timeline}`) &&
+export const scrollWrites = (upright = portrait) => !reduceMotion.matches &&
     (!phone.matches || upright.matches);
-/**
- * The Colour Chart's statement is taller than What's Color's note, so its
- * phone scene asks for a screen that is upright and tall enough: no squatter
- * than 375 by 590, or wider than 480, where --p follows the height. The same
- * query as 06-colour-chart.css's phone stage.
- */
-export const chartUpright = window.matchMedia('(orientation: portrait) and ((max-aspect-ratio: 375/590) or (min-width: 481px))');
-/** The Colour Chart's own test: its stylesheet asks for scroll(), not view(). */
-export const chartWrites = () => scrollWrites('scroll()', chartUpright);
 /** True for a plain left click — modified clicks mean "open this elsewhere". */
 export const isPlainClick = (event) => !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey && event.button === 0;
 /**

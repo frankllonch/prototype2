@@ -15,6 +15,7 @@
  * photograph at full size, which is a worse read but a complete one: nothing
  * here hides anything that cannot be got at without it.
  */
+import { morphSheet } from './sheet-morph.js';
 export function initFigures() {
     for (const reader of document.querySelectorAll('[data-reader]')) {
         // Panels only; nothing else on the site composes this way any more.
@@ -42,6 +43,31 @@ export function initFigures() {
             next.before(visible);
         }
         let shown = 0;
+        /*
+         * The arrows stand at half the height of the photograph showing
+         * (`--photo-mid`, 07-sheet.css). Measured, because where that falls
+         * depends on the photograph's shape as well as on the window's.
+         * Read off the last arrow: El color no existe hides its previous one.
+         */
+        const steps = [...reader.querySelectorAll('[data-figure-step]')];
+        const level = () => {
+            const img = figures[shown]?.querySelector('img')?.getBoundingClientRect();
+            const around = steps.at(-1)?.offsetParent?.getBoundingClientRect();
+            if (!img?.height || !around)
+                return;
+            const mid = `${img.top + img.height / 2 - around.top}px`;
+            for (const step of steps)
+                step.style.setProperty('--photo-mid', mid);
+        };
+        if (stage && steps.length) {
+            const sizes = new ResizeObserver(level);
+            sizes.observe(stage);
+            for (const figure of figures) {
+                const img = figure.querySelector('img');
+                if (img)
+                    sizes.observe(img);
+            }
+        }
         const show = (index) => {
             if (!figures.length)
                 return;
@@ -55,6 +81,7 @@ export function initFigures() {
             }
             if (visible)
                 visible.textContent = `${shown + 1} / ${figures.length}`;
+            level();
         };
         show(0);
         // A swipe across the photograph turns it, as the arrows do.
@@ -113,7 +140,12 @@ export function initFigures() {
         for (const button of expanders) {
             button.addEventListener('click', () => {
                 const already = button.getAttribute('aria-pressed') === 'true';
-                widen(already ? null : button.dataset.expand ?? null);
+                const which = already ? null : button.dataset.expand ?? null;
+                // A sheet moves from one layout to the other (sheet-morph.ts).
+                if (reader.hasAttribute('data-sheet'))
+                    morphSheet(reader, () => widen(which));
+                else
+                    widen(which);
                 // The column that was filling the screen has gone; starting anywhere but
                 // the top of what replaced it would be landing in the middle of it.
                 panel.scrollTop = 0;
@@ -121,7 +153,13 @@ export function initFigures() {
         }
         // Opening is always from the same state: first picture, neither column
         // widened, scrolled to the top.
-        panel.addEventListener('panelopen', () => { widen(null); show(0); });
+        // The Colour Chart's reel opens its panel at the photograph tapped
+        // (client/chart.ts); anything else opens at the first.
+        panel.addEventListener('panelopen', () => {
+            widen(null);
+            show(Number(panel.dataset.figureStart) || 0);
+            delete panel.dataset.figureStart;
+        });
         show(0);
     }
 }

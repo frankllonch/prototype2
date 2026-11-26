@@ -151,11 +151,12 @@
    *
    *   --side-top      where the first year's capitals start on the window
    *                   once the opening has ended. It is the first row of
-   *                   paintings: that row lands at --grid-start less the 30vh
-   *                   the pile scrolls beyond one screen (stack.ts, 1.3), so
+   *                   paintings: that row lands at --grid-start less the 45vh
+   *                   the opening scrolls beyond one screen (`motion.span`
+   *                   in client/pile.ts, 1.45), so
    *                   the two start on one line. A number in vh puts it there
    *                   instead.
-   *   --type-side     the size of the controls — 24, 60, 181, Equal, To
+   *   --type-side     the size of the controls — 25, 50, 100, Equal, To
    *                   scale: 30 of the sheet's 1920. The years are the page's
    *                   own size, --type.
    *   --controls-gap  the space between the last year and the first control.
@@ -164,7 +165,29 @@
    * row and rides up with the paintings as you scroll on, until its last
    * control is a margin above the foot of the window, then stays.
    */
-  --side-top: calc(var(--grid-start) - 30vh);
+  --side-top: calc(var(--grid-start) - 45vh);
+  /*
+   * THE COUNT — the gallery's opening filling up, from no paintings to all of
+   * them (2021 onwards), when the Gallery is opened. client/stack.ts queues
+   * the paintings; everything about the timing is here.
+   *
+   *   --count-delay     the wait before the first painting appears.
+   *   --count-duration  from the first painting to the last. The whole count.
+   *   --count-curve     the pace across it. 1 is steady. Above 1 it rushes
+   *                     first and the last ones trickle in (2 is clearly so);
+   *                     below 1 it starts slowly and ends in a rush (0.5).
+   *   --count-fade      how long each painting takes to appear.
+   *   --count-ease      the curve of that appearance.
+   *
+   * Each appears in its place and nothing else: no growing, no travelling. A
+   * scale here would also scale the distance the opening has moved the
+   * painting from its place in the grid, and it would drift in from below.
+   */
+  --count-delay: 0.2s;
+  --count-duration: 3s;
+  --count-curve: 0.7;
+  --count-fade: 0s;
+  --count-ease: var(--ease);
   --type-side: clamp(0.85rem, 1.5625vw, 2.55rem);
   --controls-gap: 4.7vw;
   /* The gallery's gutters, off the same sheet: 43 between columns and about
@@ -327,11 +350,11 @@ html.is-revealed .grid[data-stack] { animation-name: none; }
 }
 
 /*
- * THE CONTENT RISING — Exhibitions, Commissioned and Artwork (Frank,
- * 2026-11-17). Each time the section is opened from the bar the page's
+ * THE CONTENT RISING — Exhibitions and Commissioned (Frank, 2026-11-17). Each time the section is opened from the bar the page's
  * content comes up from the bottom of the window and settles into place:
  * arriving at the page, and clicking the section again while on it
- * (client/rise.ts, which replays it). On Artwork it is the pile that rises.
+ * (client/rise.ts, which replays it). Not Artwork: its opening is the scatter
+ * filling up (THE COUNT, above), and the two together were one too many.
  *
  * THE KNOBS:
  *
@@ -351,7 +374,7 @@ html.is-revealed .grid[data-stack] { animation-name: none; }
   30% { opacity: 1; }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .xlist, .grid[data-stack] {
+  .xlist {
     animation: content-rise var(--rise-time) var(--rise-ease) var(--rise-delay) backwards;
   }
 }
@@ -597,8 +620,9 @@ body.is-locked { overflow: hidden; }
  * Fixed at the foot of the screen rather than placed in the page, because the
  * gallery's runway is removed outright for reduced motion and on a back
  * navigation (`client/stack.ts`), and a cue living inside it would go with it.
- * Pointer events off: it says where to go, it does not go there, so the film
- * and the tiles under it stay clickable.
+ * A button: clicked, it goes where it points (`client/scroll-cue.ts`). It
+ * takes the pointer only on the chevron and a little around it, so the film
+ * and the tiles under it stay clickable, and not at all once it has gone.
  */
 /*
  * The two knobs for the scroll-down chevron, shared by the page's cue and the
@@ -621,9 +645,16 @@ body.is-locked { overflow: hidden; }
   z-index: 35;
   width: var(--cue-size);
   margin-left: calc(var(--cue-size) / -2);
-  pointer-events: none;
+  cursor: pointer;
   transition: opacity 0.7s var(--ease);
 }
+/* A target a little larger than the drawing, so the click need not be exact. */
+.scroll-cue::before, .about-cue::before {
+  content: '';
+  position: absolute;
+  inset: -0.9rem -0.6rem;
+}
+.scroll-cue:focus-visible, .about-cue:focus-visible { outline: 1px solid currentColor; outline-offset: 0.6rem; }
 /* The stroke is set here rather than on the path so the knob reaches it, and
    the drawing may spill past its box: a heavy line on a chevron drawn 1.5 from
    the edge would otherwise lose its top corners. */
@@ -632,7 +663,17 @@ body.is-locked { overflow: hidden; }
 
 /* Taken, and so no longer a cue. `client/scroll-cue.ts` sets this once, on the
    first movement worth the name, and never takes it off. */
-html.is-scrolled .scroll-cue { opacity: 0; }
+html.is-scrolled .scroll-cue { opacity: 0; pointer-events: none; visibility: hidden; transition: opacity 0.7s var(--ease), visibility 0s 0.7s; }
+
+/*
+ * The same chevron on its side: every viewer's Previous and Next
+ * (`stepChevron`, components/scroll-cue.ts). The cue's size and weight, so the
+ * arrows that turn the photographs are the arrow that asks for the scroll
+ * (Frank, 2026-11-18). Each viewer's button draws it in the negative, as the
+ * start page does, because the arrows are big enough now to cross a picture.
+ */
+.step-chevron { display: block; width: calc(var(--cue-size) * 16 / 28); height: auto; overflow: visible; }
+.step-chevron path { stroke-width: var(--cue-stroke); }
 
 /* The gallery's: paper behind it and nothing else, so it is simply the ink. */
 .scroll-cue-ink { color: var(--ink); }
@@ -665,9 +706,31 @@ html.is-scrolled .scroll-cue { opacity: 0; }
   50% { transform: translateY(0.18rem); }
 }
 
+/*
+ * THE GALLERY'S CUE INSISTS (Frank, 2026-11-20). Over the scattered paintings
+ * nothing says the page goes on, so here the chevron does not nudge, it
+ * knocks: down hard and back, twice, a breath, and again — for as long as
+ * the opening has not been scrolled through (client/scroll-cue.ts).
+ *
+ *   --cue-knock-time  one round: two knocks and the breath after them
+ *   --cue-knock-drop  how far down each knock goes
+ */
+:root {
+  --cue-knock-time: 1.7s;
+  --cue-knock-drop: 0.75rem;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .years ~ .scroll-cue svg { animation: scroll-cue-knock var(--cue-knock-time) cubic-bezier(0.5, 0, 0.3, 1) infinite; }
+}
+@keyframes scroll-cue-knock {
+  0%, 32%, 64%, 100% { transform: translateY(0); }
+  16%, 48% { transform: translateY(var(--cue-knock-drop)); }
+}
+
 /* No room to spare, and a phone's own scrollbar already says the page is long. */
 @media (max-width: 899px) {
-  .scroll-cue { bottom: 1.1rem; --cue-size: 2rem; }
+  :root { --cue-size: 2rem; }
+  .scroll-cue { bottom: 1.1rem; }
 }
 
 /* The phone's bar is three bars and a screen of its own: 09-phone.css. */
@@ -1075,6 +1138,16 @@ html.is-leaving body.has-film.is-film-past .top [aria-current='page']:is(a, butt
  * the link, where the block drops in the same way.
  */
 .has-film .top [aria-current='page']:is(a, button) { animation: none; }
+/*
+ * And no fade on its colour (Frank, 2026-11-20). At the film's edge the name
+ * turns from paper-on-block to the bar's ink in a single frame — the block
+ * goes with it — but the hover fade on bar names (`.top-soon`, --hover) made
+ * the letters take half a second to follow, so for that half second they
+ * stood dark over the film with nothing behind them: a flicker each time
+ * What's Color was scrolled back up to the start page, and the same the
+ * other way.
+ */
+.has-film .top [aria-current='page']:is(a, button) { transition: none; }
 html.wc-swatch-drop body.has-film .top [aria-current='page']:is(a, button) {
   animation: name-knock var(--knock-time) linear var(--knock-delay) backwards;
 }
@@ -1084,12 +1157,13 @@ html.wc-swatch-drop body.has-film .top [aria-current='page']:is(a, button) {
  * THE WAY OUT OF THE START PAGE — to any page but What's Color, by the bar
  * (client/transitions.ts, `fromStart`).
  *
- * In four beats, one after the other (Frank, 2026-11-17):
+ * In this order (Frank, 2026-11-19 — it used to be film first, then the bar):
  *
- *   1. the film goes to paper, the bar standing still on its middle line
- *   2. a pause, the bar alone on the paper
- *   3. the bar climbs to the top of the window, where it stands on every other
- *      page: slow away, fast through the middle, slow into place
+ *   1. a pause, the bar standing on the film's middle line
+ *   2. the bar climbs, over the film still playing, to the top of the window,
+ *      where it stands on every other page: slow away, fast, slow into place
+ *   3. the bar stands at the top a moment (--start-settle) while the film
+ *      goes, finishing just before the colour drops
  *   4. the colour drops onto the name chosen, as a page's own block drops in
  *      when it opens — and then the next page comes up under a bar standing
  *      exactly so, in the same colour, without dropping it again
@@ -1098,41 +1172,92 @@ html.wc-swatch-drop body.has-film .top [aria-current='page']:is(a, button) {
  * THE KNOBS — every one of them is here; the script reads them to know when
  * to go, so nothing else needs changing:
  *
- *   --start-veil    beat 1: how long the film takes to go
- *   --start-pause   beat 2: how long the bar waits before it climbs
- *   --start-climb   beat 3: how long the climb takes
- *   --start-ease    beat 3: the climb's curve. (0.83, 0, 0.17, 1) is very slow,
- *                   fast, very slow; (0.65, 0, 0.35, 1) is gentler
- *   --start-swatch  beat 4: how long the colour takes to drop
- *   --start-hold    after beat 4: how long it all stands before the next page
+ *   --start-film-lead   WHEN THE FILM GOES. How long before the colour drops
+ *                       the film is completely gone. 0s = gone the very moment
+ *                       the colour drops; bigger = earlier (0.3s: gone as the
+ *                       bar reaches the top; 0.6s: gone mid-climb). A negative
+ *                       value (-0.2s) lets the colour drop first and the film
+ *                       go after it.
+ *   --start-film-out    how long the film takes to go
+ *   --start-film-style  HOW THE FILM GOES (and how it comes back when you
+ *                       return to the start page). One of:
+ *                         film-fade  paper fades in over it (as before)
+ *                         film-cut   no fade: gone in one frame
+ *                         film-wipe  paper rises from the bottom, following
+ *                                    the bar up (coming back, it falls away)
+ *                         film-blur  the film blurs out as the paper comes in
+ *   --start-film-in     how long the film takes to come back, on the way back
+ *   --start-pause       how long the bar waits before it climbs
+ *   --start-climb       how long the climb takes
+ *   --start-ease        the climb's curve. (0.83, 0, 0.17, 1) is very slow,
+ *                       fast, very slow; (0.65, 0, 0.35, 1) is gentler
+ *   --start-settle      how long the bar stands at the top before the colour
+ *                       drops: the room the film has to go in after the climb
+ *   --start-swatch      how long the colour takes to drop
+ *   --start-hold        after the drop: how long it all stands before the
+ *                       next page
+ *   --start-veil        on the way back only: how long the page you leave
+ *                       takes to go to paper
  *
- * And back again, by the name at the top left from any other page: the same
- * beats run backwards, with the same knobs. The block lifts off the page's
- * name as the page goes to paper (--start-veil), the bar comes down to the
- * film's middle line (--start-climb, --start-ease), it waits (--start-pause),
- * and the start page comes up under it, the film fading in (--start-veil).
+ * To try the styles without editing anything, open the start page with
+ * ?film=wipe (or fade, cut, blur); it holds for the rest of the visit, and
+ * ?film=off goes back to the setting here.
+ *
+ * And back again, by the name at the top left from any other page (Frank,
+ * 2026-11-20): the block lifts off the page's name as the page goes to paper
+ * (--start-veil), the bar staying at the top. The start page opens with the
+ * bar still at the top, the film comes back in the --start-film-style chosen
+ * (--start-film-in; film-wipe comes back wiping down), and only then does
+ * the bar come down to the film's middle line (--start-climb, --start-ease):
+ *
+ *   --start-back-gap    how long after the film is back the bar starts down.
+ *                       0s = the moment it is back; negative (-0.3s) = the
+ *                       bar sets off while the film is still coming in
  *
  * The climb is the bar's resting offset taken back: it stands at
  * (film-h − film-bar) / 2 and every other page has it at 0, with the same
  * padding over the line.
  */
 :root {
-  --start-veil: 0.6s;
+  --start-film-lead: 0.03s;
+  --start-film-out: 0.6s;
+  --start-film-style: film-wipe;
+  --start-film-in: 0.6s;
   --start-pause: 0.01s;
   --start-climb: 0.5s;
   --start-ease: cubic-bezier(0.65, 0, 0.17, 1);
+  --start-settle: 0.25s;
   --start-swatch: 0.3s;
   --start-hold: 0.01s;
-  /* Derived: where the climb and the drop begin. */
-  --start-climb-at: calc(var(--start-veil) + var(--start-pause));
-  --start-drop-at: calc(var(--start-climb-at) + var(--start-climb));
+  --start-veil: 0.6s;
+  --start-back-gap: -0.6s;
+  /* Derived: where the climb, the drop and the film's going begin. */
+  --start-climb-at: var(--start-pause);
+  --start-drop-at: calc(var(--start-climb-at) + var(--start-climb) + var(--start-settle));
+  --start-film-at: calc(var(--start-drop-at) - var(--start-film-lead) - var(--start-film-out));
 }
 html.is-leaving-start body.has-film .top {
   transform: translateY(calc((var(--film-bar) - var(--film-h)) / 2));
   transition: transform var(--start-climb) var(--start-ease) var(--start-climb-at);
 }
 @media (prefers-reduced-motion: no-preference) {
-  html.is-leaving-start body.has-film .page-veil { animation: veil-in var(--start-veil) ease-in-out both; }
+  html.is-leaving-start body.has-film .page-veil {
+    animation: film-fade var(--start-film-out) ease-in-out var(--start-film-at) both;
+    animation-name: var(--start-film-style);
+  }
+}
+/* The ways the film can go. Each is written as the paper arriving; coming
+   back, the same one runs in reverse (`arrive-start` below). */
+@keyframes film-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes film-cut { 0%, 99.9% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes film-wipe {
+  from { opacity: 1; clip-path: inset(100% 0 0 0); }
+  to { opacity: 1; clip-path: inset(0 0 0 0); }
+}
+@keyframes film-blur {
+  from { opacity: 0; backdrop-filter: blur(0); -webkit-backdrop-filter: blur(0); }
+  60% { opacity: 0.35; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+  to { opacity: 1; backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
 }
 html.is-leaving-start .top a.is-chosen {
   position: relative;
@@ -1156,22 +1281,34 @@ html.is-leaving-start .top a.is-chosen::before {
 }
 @keyframes swatch-wait { from { visibility: hidden; } to { visibility: visible; } }
 
-/* Back to the start page (client/transitions.ts, `toStart`). The bar comes
-   down to where the start page holds it; the film's figures live on that
-   page alone (04-whats-color.css), so they are repeated here as fallbacks. */
-html.is-leaving-to-start .top {
-  transform: translateY(calc((var(--film-h, 100vh) - var(--film-bar, 4.2rem)) / 2));
-  transition: transform var(--start-climb) var(--start-ease) var(--start-veil);
+/* Back to the start page (client/transitions.ts, `toStart`). The page goes
+   to paper under a bar that stays where it is; the start page then opens with
+   the bar at the top, brings the film back, and only then lowers the bar to
+   the film's middle line, where it rests there. */
+@media (prefers-reduced-motion: no-preference) {
+  /* `start-arrived` once it has run (client/transitions.ts): the arrival
+     class stays on the page, and without it every scroll back up from What's
+     Color ran the descent again — the bar jumped to the top and came down. */
+  html.arrive-start:not(.start-arrived) body.has-film:not(.is-film-past) .top {
+    animation: bar-descend var(--start-climb) var(--start-ease)
+      calc(var(--start-film-in) + var(--start-back-gap)) backwards;
+  }
 }
-/* The block lifts off as everywhere, and then is gone: lifted, it waits just
-   above the name, which is in sight once the bar starts down. */
+@keyframes bar-descend {
+  from { transform: translateY(calc((var(--film-bar) - var(--film-h)) / 2)); }
+  to { transform: none; }
+}
+/* The block lifts off as everywhere, and then is gone. */
 html.is-leaving-to-start .top [aria-current='page']:is(a, button)::before {
   animation: swatch-lift 0.34s var(--ease) both, swatch-gone 0s linear 0.34s both;
 }
 @keyframes swatch-gone { to { visibility: hidden; } }
 @media (prefers-reduced-motion: no-preference) {
   html.is-leaving-to-start .page-veil { animation: veil-in var(--start-veil) ease-in-out both; }
-  html.arrive-start .page-veil { animation: veil-out var(--start-veil) ease-in-out backwards; }
+  html.arrive-start .page-veil {
+    animation: film-fade var(--start-film-in) ease-in-out reverse backwards;
+    animation-name: var(--start-film-style);
+  }
 }
 
 /* Arrived that way: the block and the name stand as they were left. */
@@ -1440,9 +1577,40 @@ html.js .hero[data-hero]+.grid[data-stack] {
 .grid.is-layered .tile {
   will-change: transform;
 }
+/*
+ * Safari. A tile on a layer of its own is drawn once at its size in the grid,
+ * and the pile's scale — two or three times that — is then applied to the
+ * drawing, so in Safari the opening came out soft where Chrome and Brave,
+ * which draw the layer again at the size it is shown, are sharp (Frank,
+ * 2026-11-21). Given a layer of its own, the picture is handed to Safari's
+ * compositor as the image itself, which it scales from the full file: sharp
+ * at any size, still moved without repainting anything. Chrome is left as it
+ * was (client/stack.ts sets .is-webkit only in Safari).
+ */
+.grid.is-webkit.is-layered .tile img {
+  will-change: transform;
+}
 
 .grid.is-stacked {
   pointer-events: none;
+}
+
+/*
+ * THE COUNT (client/stack.ts): a painting waits unseen for its turn, then
+ * comes in. Its turn is its place in the queue, --count-at, along
+ * --count-duration; the knobs are in 00-base.css, THE COUNT.
+ */
+.tile[data-count='wait'] {
+  opacity: 0;
+}
+.tile[data-count='in'] {
+  animation: count-in var(--count-fade) var(--count-ease) backwards;
+  /* Steady, for a browser without pow(); the next line is the real one. */
+  animation-delay: max(0s, calc(var(--count-delay) + var(--count-duration) * var(--count-at) - var(--count-late, 0s)));
+  animation-delay: max(0s, calc(var(--count-delay) + var(--count-duration) * pow(var(--count-at), var(--count-curve)) - var(--count-late, 0s)));
+}
+@keyframes count-in {
+  from { opacity: 0; }
 }
 
 /* On a phone the gallery is two plain columns: 05-artwork.css, THE GALLERY ON
@@ -1703,7 +1871,6 @@ html.js .hero[data-hero]+.grid[data-stack] {
 }
 /* The medium as it is written, straight under the title. */
 .detail-facts { margin-top: var(--caption-break); }
-.detail-year { font-weight: 600; }
 
 /* "87 of 154", its capitals --index-gap under the small pictures, or under the
    painting itself when there are none. */
@@ -2564,7 +2731,6 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
     visibility 0s linear 0.9s;
 }
 .about.is-open ~ .about-close { opacity: 1; visibility: visible; transition-delay: 0s; }
-.about.is-open ~ .about-close:hover,
 .about.is-open ~ .about-close:focus-visible { opacity: 0.55; }
 @media (max-width: 899px) {
   .about-close { top: 1.6rem; right: calc(var(--pad) - 0.071em); translate: none; line-height: var(--lead); }
@@ -2611,6 +2777,17 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 }
 .about-opening + p { margin-top: calc(70.5em / 40); }
 .about-text > p + p { margin-top: 1em; }
+/*
+ * The gallery's name at the end of the biography: set as the text is, and
+ * lit like the Exhibitions and Commissioned rows (its `.hrow` takes their
+ * hover and focus colour from 01-grid.css, a new hue each time from
+ * hover-list.ts; ink without scripting).
+ */
+.about-link {
+  --exh-hover: var(--ink);
+  color: inherit;
+  transition: color var(--hover) var(--ease);
+}
 
 /*
  * The photographs: a reel 210 tall, each at its own proportion, 53 apart,
@@ -2689,7 +2866,8 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   padding: 0;
   border: 0;
   background: none;
-  color: #000;
+  color: rgb(252, 252, 250);
+  mix-blend-mode: difference;
   cursor: pointer;
   translate: 0 -50%;
   opacity: 0;
@@ -2701,21 +2879,9 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .about-reel-step[hidden] { display: none; }
 .about-reel-step.is-prev { left: calc(-1 * var(--m)); justify-items: start; padding-left: calc(var(--m) / 2 - var(--chev-w) / 2); }
 .about-reel-step.is-next { right: calc(-1 * var(--m)); justify-items: end; padding-right: calc(var(--m) / 2 - var(--chev-w) / 2); }
-.about-reel { --chev-w: clamp(0.4375rem, calc(var(--m) * 0.3), 0.875rem); }
-.about-reel.is-placed .about-reel-step { opacity: var(--reel-dim, 0.3); visibility: visible; transition-delay: 0s; }
-.about-reel.is-placed .about-reel-step:hover,
-.about-reel.is-placed .about-reel-step:focus-visible { opacity: 1; }
-.about-reel-step svg {
-  display: block;
-  width: var(--chev-w);
-  height: auto;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  overflow: visible;
-}
+.about-reel { --chev-w: calc(var(--cue-size) * 16 / 28); }
+.about-reel.is-placed .about-reel-step { opacity: 1; visibility: visible; transition-delay: 0s; }
+.about-reel.is-placed .about-reel-step:focus-visible { opacity: 0.45; }
 
 /*
  * The four parts.
@@ -2759,12 +2925,15 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
   color: rgb(219, 218, 215);
   mix-blend-mode: difference;
   pointer-events: none;
+  visibility: hidden;
   opacity: 0;
-  transition: opacity 0.7s var(--ease);
+  cursor: pointer;
+  transition: opacity 0.7s var(--ease), visibility 0s 0.7s;
 }
-.about.is-open ~ .about-cue.is-shown { opacity: 1; }
+/* Clickable only while it shows: it carries the panel on (client/about.ts). */
+.about.is-open ~ .about-cue.is-shown { opacity: 1; pointer-events: auto; visibility: visible; transition: opacity 0.7s var(--ease); }
 /* Not while a photograph is up: the panel does not scroll then. */
-.about.is-viewing ~ .about-cue.is-shown { opacity: 0; }
+.about.is-viewing ~ .about-cue.is-shown { opacity: 0; pointer-events: none; visibility: hidden; transition: opacity 0.7s var(--ease), visibility 0s 0.7s; }
 @media (prefers-reduced-motion: no-preference) {
   .about-cue svg { animation: scroll-cue-fall 2.4s var(--ease) infinite; }
 }
@@ -2825,9 +2994,7 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 .about.is-viewing ~ .about-viewer-step { opacity: 1; visibility: visible; transition-delay: 0s; }
 .about-viewer-step.is-prev { left: max(0.5rem, 2.5vw); }
 .about-viewer-step.is-next { right: max(0.5rem, 2.5vw); }
-.about.is-viewing ~ .about-viewer-step:hover,
 .about.is-viewing ~ .about-viewer-step:focus-visible { opacity: 0.45; }
-.about-viewer-step svg { display: block; width: 0.9rem; height: auto; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
 
 /* ----------------------------------------------------------- the record */
 
@@ -2891,7 +3058,7 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 
 /*
  * How to reach her, centred above the copyright: the record's size, its
- * three ways in a row, 192 under the record.
+ * two emails in a row, 192 under the record.
  */
 .about-contact {
   display: flex;
@@ -3180,14 +3347,15 @@ body:has(.panel.is-open) .top { opacity: 0; pointer-events: none; }
   transform: translateY(-50%);
   z-index: 3;
   padding: 0.6rem 0.9rem;
-  color: var(--ink);
-  opacity: 0.45;
+  color: rgb(252, 252, 250);
+  mix-blend-mode: difference;
+  opacity: 1;
   font-size: var(--type);
   line-height: 1;
   transition: opacity var(--hover) var(--ease);
 }
 [data-panel] .reader:not(.plates) .reader-step:hover,
-[data-panel] .reader:not(.plates) .reader-step:focus-visible { opacity: 1; }
+[data-panel] .reader:not(.plates) .reader-step:focus-visible { opacity: 0.45; }
 [data-panel] .reader:not(.plates) .reader-prev { left: -3.2rem; }
 [data-panel] .reader:not(.plates) .reader-next { right: -3.2rem; }
 
@@ -3264,9 +3432,15 @@ body:has(.panel.is-open) .top { opacity: 0; pointer-events: none; }
   /* How many years there are: written by client/years.ts, eleven until then. */
   --years-count: 11;
   --years-height: calc(var(--years-count) * var(--type) * var(--year-lead));
-  --controls-top: calc(var(--side-top) + var(--years-height) + var(--controls-gap));
+  /* Where the first thing under the years stands: Inquiries on the Gallery,
+     otherwise the first control. */
+  --under-years: calc(var(--side-top) + var(--years-height) + var(--controls-gap));
+  /* The room Inquiries takes between the years and the controls: its line
+     and a line clear. Nothing where there is no Inquiries. */
+  --inq-slot: 0px;
+  --controls-top: calc(var(--under-years) + var(--inq-slot));
   /* Five controls: three sizes, then equal and to scale. */
-  --side-height: calc(var(--years-height) + var(--controls-gap) + 5 * var(--type-side) * var(--side-lead));
+  --side-height: calc(var(--years-height) + var(--controls-gap) + var(--inq-slot) + 5 * var(--type-side) * var(--side-lead));
   /* How far above --side-top the column has to stand for its foot to clear the
      window's by a margin. */
   --side-lift: max(0px, calc(var(--side-top) + var(--side-height) + var(--pad) - 100vh));
@@ -3309,6 +3483,33 @@ body:has(.panel.is-open) .top { opacity: 0; pointer-events: none; }
   white-space: nowrap;
 }
 
+/*
+ * "Inquiries" under the years, before the controls (Frank, 2026-11-21; it
+ * stood over the years until then): 30 regular, on the controls'
+ * 40 line, where the first control used to start. The controls step down by
+ * its line and a line clear (--inq-slot). Its hover is the index rows'
+ * (01-grid.css `.hrow`, a new hue each time from client/hover-list.ts), ink
+ * without scripting.
+ */
+:root:has(.side-inquiries) {
+  --inq-slot: calc(2 * var(--type-side) * var(--side-lead));
+}
+
+.side-inquiries {
+  --exh-hover: var(--ink);
+  position: fixed;
+  left: var(--pad);
+  top: calc(var(--under-years) - var(--side-lift));
+  z-index: 30;
+  font-size: var(--type-side);
+  font-weight: 400;
+  line-height: var(--side-lead);
+  margin-top: calc((0.317 - var(--side-lead) / 2) * 1em);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  transition: opacity 0.8s var(--ease), color var(--hover) var(--ease);
+}
+
 /* While a year is in focus the rail says so: the chosen one stays, the rest
    step back. */
 .years.is-focused .year:not([aria-pressed='true']) { opacity: 0.35; }
@@ -3336,7 +3537,8 @@ body:has(.panel.is-open) .top { opacity: 0; pointer-events: none; }
    still drawn — blended, in the controls' case — on every frame of the
    opening. The visibility waits for the fade out before it goes. */
 html.js .controls,
-html.js .years {
+html.js .years,
+html.js .side-inquiries {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -3345,7 +3547,8 @@ html.js .years {
 }
 
 html.js.stack-settled .controls,
-html.js.stack-settled .years {
+html.js.stack-settled .years,
+html.js.stack-settled .side-inquiries {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
@@ -3357,7 +3560,8 @@ html.js.stack-settled .years {
    nothing to guard against — and left on, it fired eight seconds after a
    scroll back into the pile and showed the controls over the heap. */
 html.js.stack-running .controls,
-html.js.stack-running .years {
+html.js.stack-running .years,
+html.js.stack-running .side-inquiries {
   animation: none;
 }
 
@@ -3933,6 +4137,44 @@ html.js.stack-running .years {
 }
 
 /*
+ * Sound on and off, in the film's top left corner: the scroll cue's size and
+ * weight, set in from the corner by the cue's own distance from the foot, and
+ * like it the negative of whatever frame is behind it. Above the dimming
+ * layer, inside the film's own stacking context, so the blend is with the
+ * picture.
+ */
+.wc-film-sound {
+  position: absolute;
+  top: 1.9rem;
+  left: 1.9rem;
+  z-index: 1;
+  width: var(--cue-size);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: rgb(252, 252, 250);
+  mix-blend-mode: difference;
+  cursor: pointer;
+}
+.wc-film-sound[hidden] { display: none; }
+/* A target a little larger than the drawing, so the click need not be exact. */
+.wc-film-sound::before {
+  content: '';
+  position: absolute;
+  inset: -0.9rem;
+}
+.wc-film-sound:focus-visible { outline: 1px solid currentColor; outline-offset: 0.6rem; }
+.wc-film-sound svg { display: block; width: 100%; height: auto; overflow: visible; }
+.wc-film-sound path { stroke-width: var(--cue-stroke); }
+.wc-film-sound .wc-sound-on,
+.wc-film-sound[aria-pressed='true'] .wc-sound-off { display: none; }
+.wc-film-sound[aria-pressed='true'] .wc-sound-on { display: inline; }
+/* No film for reduced motion, so nothing to hear. */
+@media (prefers-reduced-motion: reduce) {
+  .wc-film-sound { display: none; }
+}
+
+/*
  * The film lags the page, so it reads as sinking beneath it.
  *
  * Over the screen it takes to scroll past, the film is slid down 15vh while the
@@ -4438,7 +4680,9 @@ html:has(body.has-film) {
   --sheet-strip-h: 0.0991;
 }
 .wc-edition-iii .wc-sheet {
-  --sheet-top: 0.0537;
+  /* Held to the other two (I 0.0705, II 0.0727) so its reel and its text sit
+     as far under the names as theirs do (Frank, 2026-11-18). */
+  --sheet-top: 0.0716;
   --sheet-strip-h: 0.1;
 }
 
@@ -4524,6 +4768,29 @@ html:has(body.has-film) {
 .wc-book-plate {
   margin: 0;
 }
+/*
+ * The start page's chevron on its side, either side of the photograph, in the
+ * negative. The script moves them to the end of the body (client/book.ts) so
+ * the blend reaches the photograph and the page rather than only the view's
+ * own veil, and shows them (`.is-shown`) only while a photograph is up.
+ */
+.wc-book-step {
+  position: fixed;
+  top: 50%;
+  translate: 0 -50%;
+  z-index: 41;
+  padding: 1.5rem 1rem;
+  color: rgb(252, 252, 250);
+  mix-blend-mode: difference;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+}
+.wc-book-step.is-shown { opacity: 1; visibility: visible; transition-delay: 0s; }
+.wc-book-step.is-shown:focus-visible { opacity: 0.45; }
+.wc-book-step.is-prev { left: max(0.5rem, 2.5vw); }
+.wc-book-step.is-next { right: max(0.5rem, 2.5vw); }
 .wc-book-plate img {
   display: block;
   width: auto;
@@ -4633,10 +4900,18 @@ html:has(body.has-film) {
  *   --wc-lead-measure   the paragraph's width (set with the note's type above).
  *   --wc-ask            the colour behind the question. One of the palette's.
  *
- * Everything below the first rule asks the engine first: without scroll-run
- * animations, or with motion reduced, no word is ever hidden and the section
- * is an ordinary paragraph above the names.
+ * An engine without scroll-run animations has its words put in by
+ * client/write.ts, on the same stage and the same slices. With motion reduced
+ * no word is ever hidden: the note simply stands, in the middle of a screen
+ * of its own.
  */
+@media (prefers-reduced-motion: reduce) and (min-width: 900px) {
+  .wc-write {
+    display: grid;
+    align-items: center;
+    min-height: 100vh;
+  }
+}
 .wc-write {
   margin: 0 0 calc(var(--wc-zoom, 1) * var(--wc-lead-gap, 7vw));
 }
@@ -4686,46 +4961,51 @@ html:has(body.has-film) {
 
 /* From 900 up. A phone held upright has a stage of its own, at the foot of
    this sheet, on the same words and the same timeline (Frank, 2026-11-15). */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) and (min-width: 900px) {
-    .wc-write {
-      height: var(--wc-write-length, 370vh);
-      /*
-       * Pulled up under the film, so the stage pins — and the writing can
-       * begin, at the fixed centre — while the film's last stretch is still
-       * leaving the top of the screen. THE knob for "the words come too
-       * soon / too late": what still shows of the film when the first word
-       * lands is this pull less the page's own top padding, so more is
-       * sooner, less is later, and at the padding's own size the writing
-       * waits for an empty page.
-       */
-      margin-top: calc(-1 * var(--wc-write-early, 30vh));
-      /*
-       * Pulled up by half a screen: while the finished sentence holds the
-       * centre, the names climb the lower half of the view, stop a breath
-       * beneath it — the knob is the breath — and only then does the pin let
-       * go, so the sentence travels up sitting right on top of them.
-       * --wc-write-air is the room left between them when they meet, in the
-       * type's own terms: 6.77vw leaves the sheet's 157 at 1920, about four
-       * lines of the note, from the invitation's ink to the first numeral's.
-       */
-      margin-bottom: calc(var(--wc-write-meet, 12vh) + var(--wc-write-air, 6.77vw) - 50vh);
-      view-timeline: --wc-write block;
-    }
-    .wc-write-pin {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      display: grid;
-      place-items: center;
-      /*
-       * Nothing in here is for pointing at, and the pin is a positioned box:
-       * once the names are pulled up into its empty lower half, a positioned
-       * box sits above them for hit-testing and their links go dead. The
-       * whole stage waves pointers through instead.
-       */
-      pointer-events: none;
-    }
+@media (prefers-reduced-motion: no-preference) and (min-width: 900px) {
+  .wc-write {
+    height: var(--wc-write-length, 370vh);
+    /*
+     * Pulled up under the film, so the stage pins — and the writing can
+     * begin, at the fixed centre — while the film's last stretch is still
+     * leaving the top of the screen. THE knob for "the words come too
+     * soon / too late": what still shows of the film when the first word
+     * lands is this pull less the page's own top padding, so more is
+     * sooner, less is later, and at the padding's own size the writing
+     * waits for an empty page.
+     */
+    margin-top: calc(-1 * var(--wc-write-early, 30vh));
+    /*
+     * Pulled up by half a screen: while the finished sentence holds the
+     * centre, the names climb the lower half of the view, stop a breath
+     * beneath it — the knob is the breath — and only then does the pin let
+     * go, so the sentence travels up sitting right on top of them.
+     * --wc-write-air is the room left between them when they meet, in the
+     * type's own terms: 6.77vw leaves the sheet's 157 at 1920, about four
+     * lines of the note, from the invitation's ink to the first numeral's.
+     */
+    margin-bottom: calc(var(--wc-write-meet, 12vh) + var(--wc-write-air, 6.77vw) - 50vh);
+    view-timeline: --wc-write block;
+  }
+  .wc-write-pin {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: grid;
+    place-items: center;
+    /*
+     * Nothing in here is for pointing at, and the pin is a positioned box:
+     * once the names are pulled up into its empty lower half, a positioned
+     * box sits above them for hit-testing and their links go dead. The
+     * whole stage waves pointers through instead.
+     */
+    pointer-events: none;
+  }
+}
+
+/* The words, hidden until their turn: on the section's own timeline where the
+   engine has one, and by client/write.ts where it has not (Safari before 26). */
+@media (prefers-reduced-motion: no-preference) and (min-width: 900px), (prefers-reduced-motion: no-preference) and (orientation: portrait) {
+  @supports (animation-timeline: view()) {
     .wc-word {
       opacity: 0;
       /* Each word arrives whole, the moment its turn comes: no fade-in, so
@@ -4734,6 +5014,9 @@ html:has(body.has-film) {
       animation-timeline: --wc-write;
       /* Each word's own animation-range rides on the element. */
     }
+  }
+  @supports not (animation-timeline: view()) {
+    html.js .wc-word:not(.is-written) { opacity: 0; }
   }
 }
 
@@ -4837,6 +5120,11 @@ html.js .wc-text.is-open .wc-text-closed {
 }
 html:not(.js) .wc-text-closed {
   display: none;
+}
+/* 'Read more' writes the rest in (client/texts.ts): a word not yet written
+   keeps its place, so the block stands at its full height from the start. */
+.wc-text.is-typing .wc-type:not(.is-written) {
+  visibility: hidden;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -5064,34 +5352,27 @@ a.wc-bar:focus-visible {
  * be typed below its edge. Placed after the phone block, which it outweighs
  * where both speak.
  */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) and (max-width: 899px) and (orientation: portrait) {
-    #whats-color { padding-top: 0; }
-    .wc-write {
-      /* THE knob for "the typing is too fast / too slow" by hand. More than
-         240svh, or the first word is already there on the blank page. */
-      height: var(--wc-phone-write-length, 370svh);
-      margin: 0 0 var(--wc-phone-note-gap);
-      view-timeline: --wc-write block;
-    }
-    .wc-write-pin {
-      position: sticky;
-      top: 0;
-      padding-top: var(--wc-phone-top);
-      /* Nothing in here is for pointing at, as on the desktop's stage. */
-      pointer-events: none;
-    }
-    .wc-word {
-      opacity: 0;
-      animation: wc-word-in steps(1, jump-start) both;
-      animation-timeline: --wc-write;
-    }
-    /* The cue over the blank page, standing clear of the screen's foot.
-       It overrides the film's place for it and the phone's 'no cue'. */
-    html.js .has-film .scroll-cue {
-      display: block;
-      bottom: calc(24 * var(--p));
-    }
+@media (prefers-reduced-motion: no-preference) and (max-width: 899px) and (orientation: portrait) {
+  #whats-color { padding-top: 0; }
+  .wc-write {
+    /* THE knob for "the typing is too fast / too slow" by hand. More than
+       240svh, or the first word is already there on the blank page. */
+    height: var(--wc-phone-write-length, 370svh);
+    margin: 0 0 var(--wc-phone-note-gap);
+    view-timeline: --wc-write block;
+  }
+  .wc-write-pin {
+    position: sticky;
+    top: 0;
+    padding-top: var(--wc-phone-top);
+    /* Nothing in here is for pointing at, as on the desktop's stage. */
+    pointer-events: none;
+  }
+  /* The cue over the blank page, standing clear of the screen's foot.
+     It overrides the film's place for it and the phone's 'no cue'. */
+  html.js .has-film .scroll-cue {
+    display: block;
+    bottom: calc(24 * var(--p));
   }
 }
 
@@ -5619,8 +5900,7 @@ a.wc-bar:focus-visible {
     line-height: inherit;
   }
   .detail-title { font-size: inherit; }
-  .detail-title + .detail-medium,
-  .detail-size + .detail-year { margin-top: var(--work-pair); }
+  .detail-title + .detail-medium { margin-top: var(--work-pair); }
   .detail-facts { margin-top: var(--work-break); }
 
   .detail-stage { order: 2; position: static; margin-top: var(--work-plate); }
@@ -5871,186 +6151,180 @@ a.wc-bar:focus-visible {
     -webkit-tap-highlight-color: transparent;
   }
   .year.is-current { transform: scale(var(--wheel-zoom)); }
+
+  /* "Inquiries" on the phone: over the wheel, in the middle where the current
+     year stands, at 30 to the years' 40 as on a wide screen. Drawn as the
+     years are, as its negative, so it reads black over white paper. */
+  .side-inquiries,
+  html.js .side-inquiries {
+    top: auto;
+    left: 50%;
+    bottom: calc(18 * var(--p) * 2 + 28 * var(--p) * 1.25 + env(safe-area-inset-bottom, 0px));
+    margin: 0;
+    transform: translateX(-50%);
+    font-size: calc(21 * var(--p));
+    color: #fff;
+    mix-blend-mode: difference;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    animation: none;
+    -webkit-tap-highlight-color: transparent;
+  }
   .year-swatch { display: none; }
   .year-label { display: block; margin: 0; color: inherit; }
 }
 
 /*
- * The Colour Chart.
+ * The Colour Chart (COLOR CHART DISSENY III, Frank, 2026-11-19).
  *
- * A page of type and nothing else: the statement across the full width, the
- * way to order one under it, the price, her thanks, and the site's line at the
- * foot. No columns, no stack of colours, no record — the sheet before this one
- * had all three and this is the simplification.
+ * An ordinary page that scrolls, as About does: the title, the statement
+ * across the full width, the way to order one and the price, Features and
+ * Technical characteristics in three columns each, her thanks, and the
+ * site's line at the foot.
  *
+ * The title and the statement are typed in on arrival and everything under
+ * them comes in out of a blur as it reaches the screen (`client/chart.ts`).
  *
- * THE DESIGNER'S POINT
+ * The type of what was on the page before this sheet is unchanged: only the
+ * room between the parts follows the new sheet. The two sections are the new
+ * text, 20 on 20 with their titles semibold.
  *
- * Her sheets are now drawn at 1728 — a laptop's own width — and the sizes on
- * them are given in points of that frame: 40 for text, 45 for a heading or a
- * control, 45 of leading on 40 of text. The site's one type size is 40 of a
- * 1920 frame (`--type`, 2.0833vw), so her point is a tenth larger than the
- * site's: 40pt comes out at 44.4 where `--type` gives 40.
- *
- * Rather than scatter that ratio through the file as 1.111s, it is stated once
- * as a unit. Everything below is then the sheet's own figure, and the page
- * still scales with the site rather than against it.
- *
- *     --pt  =  --type / 40        (since the typography sheets of 2026-11-17)
- *
- * The page margin is the one figure not taken from the sheet. She sets it at
- * 45pt, which is 50 against the site's 40, and the bar is set at 40 everywhere
- * — so following her here would put the first word of the statement ten pixels
- * to the right of the wordmark above it. The sheet shows them flush, and flush
- * is the thing to keep; `--pad` is a decision for the whole site, not for this
- * page.
+ *     --pt  =  --type / 40        one point of the 1920 sheets
  */
 
 .chart {
-  /* One point of the typography sheets (JERARQUIA, 2026-11-17), which are set
-     on the site's 1920 frame like every other page: 40pt is `--type`. It was
-     `--type / 36` while this page followed the older 1728 sheet, which set
-     the whole page a ninth larger than the rest of the site. */
   --pt: calc(var(--type) / 40);
-  /* One line of the statement: 45pt of leading on 40pt of text. */
-  --chart-line: calc(var(--pt) * 45);
 
   /*
-   * Where the statement's first line sits.
-   *
-   * 60pt below the bar, against the sheet's 205. The sheet draws a page you
-   * scroll through; this one has to stand whole on a screen, so the air
-   * between its parts is what gives. The type is hers to the point — only the
-   * room around it has been taken in, and the same is true of every figure
-   * below.
+   * Where the title stands: on the line where Commissioned and Exhibitions
+   * begin. Their first heading's line box is the list's top (`--list-top`,
+   * 07-sheet.css, held below the bar by the same max as 01-grid.css) plus the
+   * row's own air (`--row-top`), and its capitals are 40. The title's are
+   * 45, so its line box is raised by the five points' share of the cap's drop
+   * in a line set solid — 0.165 of the size in Switzer — which puts the tops
+   * of the two sets of capitals on the same pixel.
    */
-  --chart-top: calc(var(--bar) + var(--pt) * 40);
+  --chart-top: calc(
+    max(calc(var(--bar) + 2rem), 20.745vw) + 0.78125vw - var(--pt) * 5 * 0.165
+  );
 
+  /* The room between the parts, read off the sheet, line box to line box. */
+  --chart-title-gap: calc(var(--pt) * 5);       /* the title to the statement */
+  --chart-order-gap: calc(var(--pt) * 82);      /* the statement to Order yours */
+  --chart-reel-gap: calc(var(--pt) * 60);       /* the statement to the photographs, and them to Order yours */
+  --chart-cost-gap: calc(var(--pt) * 8);        /* Order yours to the cost */
+  --chart-section-gap: calc(var(--pt) * 70);    /* the cost to Features */
+  --chart-section-next: calc(var(--pt) * 80);   /* one section to the next */
+  --chart-head-gap: calc(var(--pt) * 40);       /* a section's title to its text */
+  --chart-col-gap: calc(var(--pt) * 20);        /* between the columns */
+  --chart-thanks-gap: calc(var(--pt) * 150);    /* the last section to the thanks */
+  --chart-foot-gap: calc(var(--pt) * 104);      /* the thanks to the line at the foot */
+  --chart-end: calc(var(--pt) * 170);           /* under the line at the foot */
+
+  /* The new text: 20 on 20. */
+  --chart-small: calc(var(--pt) * 20);
 }
 
-/*
- * The whole page, on one screen, stuck to the top of the view.
- *
- * Everything the sheet sets is in here, and it does not move: the run behind
- * it (`.chart-runway`) is what the reader scrolls, and this stays put being
- * written. A column rather than a stack of margins, so the line at the foot
- * can be pushed to the foot of the screen and the room left over goes there
- * rather than being spent on a figure chosen in advance.
- *
- * `min-height`, not `height`: on a short window the content is taller than a
- * screen and has to be allowed to be. The stage then releases near the end of
- * the run and the last of the page scrolls up, which is the ordinary thing a
- * page does when it does not fit.
- */
 .chart-page {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding: var(--chart-top) var(--pad) calc(var(--pt) * 10);
+  padding: 0 var(--pad) var(--chart-end);
 }
 
-/* The line at the foot goes to the foot. */
-.chart-footer { margin-top: auto; }
+/* The reel's photographs run on to the window's edges, and no further: the
+   page is never reached sideways. `clip` rather than `hidden`, which would
+   make the page a scroll box and let go of the sticky opening. */
+.chart { overflow-x: clip; }
+
+/*
+ * The photographs (Frank, 2026-11-22): About's reel (02-overlays.css), the
+ * same height, gaps and chevrons in the margins, between the statement and
+ * Order yours. Driven in and along by client/chart.ts.
+ */
+.chart-reel {
+  --u: calc(100vw / 1920);
+  --m: var(--pad);
+  margin-top: var(--chart-reel-gap);
+}
+.chart-hold:has(.chart-reel) + .chart-order { margin-top: var(--chart-reel-gap); }
+
+/*
+ * Once the statement is typed the page goes on until the photographs stand
+ * over the foot of the screen, and is held there while the scroll drives them
+ * sideways, as About's are: client/chart.ts sets `--hold-top` and the run of
+ * scroll after it.
+ */
+.chart-hold.is-held > .chart-held { position: sticky; top: var(--hold-top); }
+
+/*
+ * The opening holds still while the statement is typed by the scroll: the
+ * stage is stuck to the top of the screen and a run of empty height under it
+ * (`.chart-runway`, made by client/chart.ts, which also sets the stage's
+ * `top` so a stage taller than the screen shows its foot) is what the reader
+ * travels. When the run is spent the stage lets go and the page goes on.
+ * The page's top margin is the stage's, so it is pinned exactly where it
+ * stood: the title on Commissioned's line.
+ */
+.chart-stage {
+  position: sticky;
+  top: 0;
+  padding-top: var(--chart-top);
+}
 
 /* ----------------------------------------------------------- the statement */
 
 /*
- * What the chart is, in her own words, across the whole width of the page.
- *
- * 40pt medium in capitals, led at 45 — the sheet's "MEDIUM 40 pt MAJUSCULA"
- * and its "INTERLINEAT 45". One clear line between paragraphs, which at this
- * leading is one more line box.
+ * What the chart is, in her own words, across the whole width of the page:
+ * 40 medium in capitals, set solid, one clear line between paragraphs.
  */
 .chart-statement {
   font-size: calc(var(--pt) * 40);
   font-weight: 500;
-  line-height: 1;                       /* INTRO: medium 40 on 40 (typography sheet) */
+  line-height: 1;
   text-transform: uppercase;
-  /* None. Capitals are already wide; a page of them does not need help, and
-     the sheet's line measures to within a third of a pixel of zero. */
   letter-spacing: 0;
+}
+
+/* The title over it (Frank, 2026-11-18): semibold 45 in capitals. */
+.chart-title {
+  margin: 0 0 var(--chart-title-gap);
+  font-size: calc(var(--pt) * 45);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
 }
 
 .chart-statement p { margin: 0 0 1em; }
 .chart-statement p:last-child { margin-bottom: 0; }
 
-/* --------------------------------------------------------- the writing */
+/* ------------------------------------------------------------- the typing */
 
 /*
- * The statement is written by the scroll, and the scroll is the page's own.
- *
- * The page holds still (`.chart-page`, above) and a run of empty height
- * behind it is what the reader travels: each word has a slice of that run,
- * worked out where the words are, at build, and riding on the elements as
- * `animation-range` (`components/colour-chart.ts`). The last word lands on
- * the last pixel, so when the sentence stands the page will not go on — there
- * is nothing after it to go to.
- *
- * Scrolling back unwrites it, which is not a feature added here but what a
- * scroll timeline is: the words are at a position, not partway through a
- * performance, so the page is as readable backwards as forwards.
- *
- * One knob: --chart-run, how much scroll the writing takes. More is slower.
- * It is only the run's height — the slices are fractions of whatever it is —
- * so it can be tuned here alone without moving a word's turn.
- *
- * Everything below asks the engine first. Without scroll-run animations, or
- * with motion reduced, no word is ever hidden, the run is not there at all
- * and the page is the static one the sheet draws.
- *
- * And from 900 wide up only. The phone sheet is a page taller than a phone,
- * which cannot stand whole on one screen, so a phone held upright has a run
- * of its own, measured in lengths rather than in shares of the document (the
- * block after the phone one, Frank, 2026-11-15); on its side it is the static
- * page (`client/env.ts`, `scrollWrites`, makes the same test).
+ * Typed in by the script, a word at a time: the statement is hidden only
+ * where there is a script to type it, and the words it has written are shown
+ * one by one. `.is-typed` shows everything, however far the typing got.
+ * `visibility` rather than opacity, so the lines are laid out from the start
+ * and nothing reflows as the words arrive.
  */
-.chart-runway { display: none; }
+@media (prefers-reduced-motion: no-preference) {
+  html.js .chart:not(.is-typed) .chart-statement { visibility: hidden; }
+  html.js .chart:not(.is-typed) .chart-word.is-written { visibility: visible; }
 
-@supports (animation-timeline: scroll()) {
-  @media (prefers-reduced-motion: no-preference) and (min-width: 900px) {
-    .chart-page { position: sticky; top: 0; }
-
-    .chart-runway {
-      display: block;
-      height: var(--chart-run, 300vh);
-    }
-
-    .chart-word {
-      opacity: 0;
-      /* Each word arrives whole, the moment its turn comes: no fade, so there
-         is never a half-written word ahead of the reader. */
-      animation: chart-word-in steps(1, jump-start) both;
-      animation-timeline: scroll(root block);
-      /* Each word's own animation-range rides on the element. */
-    }
-
-    /*
-     * And the four under the sentence come in rather than being written:
-     * each rises a little out of a blur over its own slice of the same run,
-     * the way the last part of About arrives. Written word by word they would
-     * read as more of the statement; arriving whole, they are what the page
-     * is for — where to get one, what it costs, her thanks, the line at the
-     * foot.
-     *
-     * Eased, not stepped, because the point of this one is the arrival.
-     */
-    .chart-in {
-      opacity: 0;
-      filter: blur(10px);
-      transform: translateY(14px);
-      animation: chart-in var(--ease) both;
-      animation-timeline: scroll(root block);
-      /* Each one's own animation-range rides on the element. */
-    }
+  /* And everything under it comes in out of a blur, as About's record does. */
+  html.js .chart-in {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(14px);
+    transition:
+      opacity 0.9s var(--ease) var(--pop-delay, 0s),
+      filter 0.9s var(--ease) var(--pop-delay, 0s),
+      transform 0.9s var(--ease) var(--pop-delay, 0s);
   }
-}
-
-@keyframes chart-word-in {
-  to { opacity: 1; }
-}
-
-@keyframes chart-in {
-  to { opacity: 1; filter: none; transform: none; }
+  html.js .chart-in.is-in { opacity: 1; filter: none; transform: none; }
+  /* Out of sight is out of reach: a hidden control takes no click. */
+  html.js .chart-in:not(.is-in) { pointer-events: none; }
 }
 
 /* ------------------------------------------------------------- the ordering */
@@ -6064,7 +6338,7 @@ a.wc-bar:focus-visible {
   display: inline-flex;
   align-items: center;
   gap: 0.55em;
-  margin-top: calc(var(--pt) * 24);
+  margin-top: var(--chart-order-gap);
   font-size: calc(var(--pt) * 45);
   font-weight: 600;
   line-height: calc(40 / 45);
@@ -6125,7 +6399,7 @@ a.wc-bar:focus-visible {
 .chart-order:focus-visible { text-decoration: underline; text-underline-offset: 0.3em; }
 
 .chart-price {
-  margin: calc(var(--pt) * 18) 0 0;
+  margin: var(--chart-cost-gap) 0 0;
   font-size: calc(var(--pt) * 40);
   font-weight: 400;
   line-height: 1;
@@ -6134,19 +6408,55 @@ a.wc-bar:focus-visible {
 
 .chart-price b { font-weight: 600; }
 
+/* ------------------------------------------------------------ the sections */
+
+/*
+ * Features and Technical characteristics: the new text, 20 on 20, regular,
+ * its titles semibold in capitals at the same size. Three columns, each
+ * running down on its own, a clear line between the blocks in a column.
+ */
+.chart-section {
+  margin-top: var(--chart-section-next);
+  font-size: var(--chart-small);
+  line-height: var(--chart-small);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.chart-price + .chart-section,
+.chart-order + .chart-section { margin-top: var(--chart-section-gap); }
+
+.chart-section-title {
+  margin: 0 0 var(--chart-head-gap);
+  font-size: inherit;
+  line-height: inherit;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.chart-cols {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: var(--chart-col-gap);
+  align-items: start;
+}
+
+.chart-col p { margin: 0 0 var(--chart-small); }
+.chart-col p:last-child { margin-bottom: 0; }
+.chart-col strong, .chart-col b { font-weight: 600; }
+
 /* ---------------------------------------------------------------- the close */
 
-/* Her thanks, down the middle: 45pt, the same size as the control above it. */
+/* Her thanks, down the middle: 45pt, the same size as Order yours. */
 /*
- * Her thanks, down the middle — and lifted clear of the line at the foot.
- *
- * --chart-thanks-lift is that lift, a tenth of the screen, and the room for
- * it comes out of the gaps above rather than out of the page's height: this
- * page stands on one screen and that is not negotiable. The figures above are
- * what paid for it.
+ * The link in it lights up the way the Exhibitions and Commissioned rows do
+ * (Frank, 2026-11-18): it carries their `.hrow`, so it takes their hover and
+ * focus colour from 01-grid.css and a new hue each time from hover-list.ts.
+ * Ink is the fallback without scripting, as it is for the lists.
  */
 .chart-thanks {
-  margin: calc(var(--pt) * 18) 0 var(--chart-thanks-lift, 10vh);
+  --exh-hover: var(--ink);
+  margin: var(--chart-thanks-gap) 0 var(--chart-foot-gap);
   text-align: center;
   font-size: calc(var(--pt) * 45);
   font-weight: 500;
@@ -6173,61 +6483,61 @@ a.wc-bar:focus-visible {
 /* ------------------------------------------------------------------- phone */
 
 /*
- * The phone sheet ("COLOR CHART PHONE", 375 wide).
+ * The phone sheet ("COLOR CHART PHONE", 375 wide), every figure in units of
+ * its frame (`--p`, 09-phone.css), the side margin the phone's own.
  *
- * At the sheet's sizes it is 1080 tall, and Order yours and the thanks cannot
- * be held on one pinned screen, so here there is no line at the foot, and the
- * page as this block leaves it has no pin, no run behind it and no cue: every
- * word stands and the document scrolls the ordinary way. That is the page on
- * its side, or wherever the scroll writes nothing; held upright, the block
- * after this one writes the statement first (Frank, 2026-11-15).
+ * The title stands where Commissioned's first heading does on a phone
+ * (`--com-top`, 07-sheet.css): the same 106, at the same 30 semibold.
  *
- * Every figure is the sheet's, in units of its frame (`--p`, 09-phone.css).
- * The ones to change by hand are the list at the top; the side margin is the
- * phone's own (`--phone-pad`, 20).
- *
- * Everything is set solid — 20 on 20, 30 on 30 — so each gap below is the
- * whole distance from one line box to the next. It is also why the first
- * figure ends in a half: a line box 20 tall carries its baseline 17.5 down,
- * and the sheet's first baseline is at 123.
+ * The two sections run in one column here, their blocks back in the order
+ * they are written in (`--n`). Their text is 14 on 16, the step under the
+ * statement's 20 that a phone can still read.
  */
 @media (max-width: 899px) {
   .chart {
-    --chart-phone-top: calc(105.5 * var(--p));        /* top of the page to the statement */
+    --chart-phone-top: calc(106 * var(--p));          /* top of the page to the title */
     --chart-phone-text: calc(20 * var(--p));          /* the statement's size, and its leading */
     --chart-phone-para: calc(20 * var(--p));          /* between its paragraphs: one empty line */
-    --chart-phone-large: calc(30 * var(--p));         /* Order yours, the cost, the thanks */
+    --chart-phone-large: calc(30 * var(--p));         /* the title, Order yours, the cost, the thanks */
     --chart-phone-order-gap: calc(89 * var(--p));     /* statement to Order yours */
+    --chart-phone-reel-gap: calc(40 * var(--p));      /* statement to the photographs, them to Order yours */
     --chart-phone-arrow-gap: calc(20 * var(--p));     /* Order yours to its arrow */
     --chart-phone-arrow-w: calc(22.5 * var(--p));     /* the arrow, 22.5 by 22 */
     --chart-phone-arrow-h: calc(22 * var(--p));
     --chart-phone-cost-gap: calc(16 * var(--p));      /* Order yours to the cost */
-    --chart-phone-thanks-gap: calc(154 * var(--p));   /* the cost to the thanks */
+    --chart-phone-section-gap: calc(70 * var(--p));   /* the cost to Features, one section to the next */
+    --chart-phone-small: calc(14 * var(--p));         /* the sections' text */
+    --chart-phone-small-lead: calc(16 * var(--p));    /* and its leading */
+    --chart-phone-head-gap: calc(20 * var(--p));      /* a section's title to its text */
+    --chart-phone-thanks-gap: calc(120 * var(--p));   /* the last section to the thanks */
     --chart-phone-rule: calc(1.5 * var(--p));         /* the line under the thanks: how thick */
     --chart-phone-rule-drop: calc(3.75 * var(--p));   /* and how far under the baseline */
     --chart-phone-foot: calc(185.5 * var(--p));       /* under the thanks to the end of the page */
   }
 
   .chart-page {
-    position: static;
-    min-height: 0;
-    padding: var(--chart-phone-top) var(--phone-pad) var(--chart-phone-foot);
+    padding: 0 var(--phone-pad) var(--chart-phone-foot);
+  }
+  .chart-stage { padding-top: var(--chart-phone-top); }
+
+  .chart-title {
+    margin: 0 0 var(--chart-phone-para);
+    font-size: var(--chart-phone-large);
   }
 
-  /* Medium, capitals and no tracking come from the rule above. */
   .chart-statement { font-size: var(--chart-phone-text); line-height: 1; }
   .chart-statement p { margin-bottom: var(--chart-phone-para); }
 
   .chart-order {
-    /* The link is its words and its arrow, not the whole row beside them. */
     align-self: flex-start;
-    /* The arrow stands on the baseline: a drawing's baseline is its foot. */
     align-items: baseline;
     gap: var(--chart-phone-arrow-gap);
     margin-top: var(--chart-phone-order-gap);
     font-size: var(--chart-phone-large);
     line-height: 1;
   }
+  .chart-reel { --m: var(--phone-pad); margin-top: var(--chart-phone-reel-gap); }
+  .chart-hold:has(.chart-reel) + .chart-order { margin-top: var(--chart-phone-reel-gap); }
   .chart-arrow { display: none; }
   .chart-arrow-phone {
     display: block;
@@ -6237,7 +6547,6 @@ a.wc-bar:focus-visible {
     overflow: visible;
   }
 
-  /* A step under Order yours, as on the computer: 40 to its 45. */
   .chart-price {
     margin-top: var(--chart-phone-cost-gap);
     font-size: calc(var(--chart-phone-large) * 40 / 45);
@@ -6245,7 +6554,18 @@ a.wc-bar:focus-visible {
     line-height: 1;
   }
 
-  /* From the left edge like everything else, and regular. */
+  .chart-section,
+  .chart-price + .chart-section,
+  .chart-order + .chart-section {
+    margin-top: var(--chart-phone-section-gap);
+    font-size: var(--chart-phone-small);
+    line-height: var(--chart-phone-small-lead);
+  }
+  .chart-section-title { margin-bottom: var(--chart-phone-head-gap); }
+  .chart-cols { display: flex; flex-direction: column; gap: var(--chart-phone-small-lead); }
+  .chart-col { display: contents; }
+  .chart-col p { order: var(--n, 0); margin: 0; }
+
   .chart-thanks {
     margin: var(--chart-phone-thanks-gap) 0 0;
     text-align: left;
@@ -6253,9 +6573,7 @@ a.wc-bar:focus-visible {
     font-weight: 400;
     line-height: 1;
   }
-  /* Underlined where it opens the photographs: there is no hover on a phone
-     to say that it does. Straight through the descenders, as the sheet's is. */
-  .chart-thanks a {
+  .chart-thanks .hrow {
     text-decoration: underline;
     text-decoration-thickness: var(--chart-phone-rule);
     text-underline-offset: var(--chart-phone-rule-drop);
@@ -6263,63 +6581,6 @@ a.wc-bar:focus-visible {
   }
 
   .chart-footer { display: none; }
-  /* Nothing is written by the scroll here, so there is nothing to cue. */
-  .chart-body .scroll-cue { display: none; }
-}
-
-/*
- * The statement typed by the scroll on a phone held upright (Frank,
- * 2026-11-15): the page arrives blank, the first paragraph types itself
- * (`client/chart.ts`) and the cue asks for the rest; scrolling types the
- * other two and scrolling back takes every word away again. Once the last
- * word stands, Order yours, the cost and the thanks pop in under it
- * (`client/chart.ts` again — they come in as everything else on a phone does,
- * not over a slice of the run).
- *
- * The desktop's mechanism on the phone's sheet: the page is stuck to the top
- * and a run behind it is what the reader travels. The page is taller than
- * the screen, so it is pinned with its foot below the edge, and lets go when
- * the run is spent. Each word's turn is a length of that run — its fractions
- * (`--w0`, `--w1`, written at build) times --chart-phone-run — so neither the
- * page's height nor the toolbar coming and going moves a word. This relies on
- * the chart starting at the top of the document, which on a phone it does.
- *
- * Upright only, for the same reason as the note on What's Color: on its side
- * the pinned statement runs below the foot of the screen.
- */
-@supports (animation-timeline: scroll()) {
-  /* Upright and tall enough for the statement to be typed on screen: a phone
-     no squatter than 375 by 590, or one wide enough that --p follows the
-     height. client/env.ts asks the same (`chartUpright`). */
-  @media (prefers-reduced-motion: no-preference) and (max-width: 899px) and (orientation: portrait) and ((max-aspect-ratio: 375/590) or (min-width: 481px)) {
-    /* THE knob for "the typing is too fast / too slow": more is slower. At
-       2400 each word has about 22 of travel. */
-    /* In the small viewport's height rather than --p, which past 480 wide
-       follows the dynamic one: a toolbar coming and going must not move a word. */
-    .chart { --chart-phone-run: calc(2400 * max(min(100vw, 480px) / 375, min(100vw / 375, 100svh / 667))); }
-
-    .chart-page { position: sticky; top: 0; }
-
-    .chart-runway {
-      display: block;
-      /* The pin lets go when the last word stands: the words take 0.8 of the
-         run (data-chart-written), so the runway is that much of it. */
-      height: calc(var(--chart-phone-run) * 0.8);
-    }
-
-    .chart-word {
-      opacity: 0;
-      animation: chart-word-in steps(1, jump-start) both;
-      animation-timeline: scroll(root block);
-      /* Important, because the desktop's range rides on the element too, as
-         its inline style, and would otherwise outrank this one. */
-      animation-range:
-        calc(var(--w0) * var(--chart-phone-run))
-        calc(var(--w1) * var(--chart-phone-run)) !important;
-    }
-
-    html.js .chart-body .scroll-cue { display: block; }
-  }
 }
 
 /* --------------------------------------------------------------- inquiries */
@@ -6507,9 +6768,6 @@ html:not(.js) .inq-close { display: none; }
   transition: opacity var(--hover) var(--ease);
 }
 .inq-button:focus-visible { opacity: 0.55; }
-/* Only where something hovers: a finger leaves :hover behind it, and Send
-   stayed dimmed after it was pressed. */
-@media (hover: hover) { .inq-button:hover { opacity: 0.55; } }
 .inq-button[disabled] { opacity: 0.35; cursor: default; }
 
 /*
@@ -6659,7 +6917,7 @@ html:not(.js) .inq-close { display: none; }
    the negative of what is under it: on a phone the text scrolls up beneath it.
    The source comes out as the ink over the sheet's paper (255 − 36, 37, 40),
    and the sheet's paper is opaque, so the blend has a true ground to work on. */
-.panel:has(.sheet) .panel-close {
+.panel:is(:has(.sheet), :has(.plates)) .panel-close {
   position: absolute;
   top: calc(var(--f) * 80);
   right: var(--s-pad);
@@ -6673,8 +6931,7 @@ html:not(.js) .inq-close { display: none; }
   mix-blend-mode: difference;
   z-index: 3;
 }
-.panel:has(.sheet) .panel-close:hover,
-.panel:has(.sheet) .panel-close:focus-visible { opacity: 0.55; }
+.panel:is(:has(.sheet), :has(.plates)) .panel-close:focus-visible { opacity: 0.55; }
 
 /* ---------------------------------------------------------------- masthead */
 
@@ -6728,6 +6985,9 @@ html:not(.js) .inq-close { display: none; }
   text-transform: uppercase;
   line-height: 1;
 }
+/* Color Palette: FOR SANTA & COLE at the weight of its opening paragraph
+   (Frank, 2026-11-25). */
+#commissioned-santa-cole-color-palette-2023 .sheet-lines { font-weight: 500; }
 .sheet-when {
   margin-top: calc(var(--f) * 1);
   /* Regular italic, 40 on 40: DATA on both typography sheets. */
@@ -6768,16 +7028,29 @@ html:not(.js) .inq-close { display: none; }
  * open with something that is not a paragraph.
  */
 .sheet-prose > p:first-of-type {
-  font-size: var(--t-45);           /* INTRO: medium 45 on 45 */
+  font-size: var(--type);           /* INTRO: medium 40 on 40 (Frank, 2026-11-25) */
   font-weight: 500;
   text-transform: uppercase;
 }
 .sheet-prose p:last-child { margin-bottom: 0; }
 .sheet-prose .is-style-lead {
-  font-size: var(--t-45);
+  font-size: var(--type);
   font-weight: 500;
   text-transform: uppercase;
 }
+/*
+ * A group show's artists, where a solo show has its lede: the names in
+ * capitals, medium, at the text's 40 on 40 (the exhibitions' sheets,
+ * 2026-11-24). The text under them is all body; nothing after the names is
+ * set as a lede.
+ */
+.sheet-prose > p.sheet-artists {
+  font-size: var(--type);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+/* Mira'm's English gloss, on its own lines in italic as her sheet sets it. */
+.sheet-prose .lede-gloss { font-style: italic; font-weight: inherit; }
 /* Some sheets leave a second empty line before a change of voice. */
 .sheet-prose .apart { margin-top: calc(var(--s-lead) * 1em); }
 /*
@@ -6799,22 +7072,37 @@ html:not(.js) .inq-close { display: none; }
 .sheet-prose a { color: inherit; text-decoration: none; }
 .sheet-prose a:hover,
 .sheet-prose a:focus-visible { text-decoration: underline; text-underline-offset: 0.15em; text-decoration-thickness: 1px; }
+/* The gallery's name, lit in colour like About's (02-overlays.css) rather than underlined. */
+.sheet-prose a.about-link:is(:hover, :focus-visible) { text-decoration: none; }
 .sheet-prose .is-style-note {
   /* The same distance from the text as before the credits went to 30. */
   margin-top: calc(var(--type) * 5.2);
   /*
-   * ROLS: regular 30 on 30 (typography sheets, 2026-11-17). Everyone credited
-   * here is set a size under the text, so no one else's name is ever the size
-   * of hers. Claudia's own name, where a credit carries it, stays at the
+   * ROLS: regular 20 on 20. The typography sheets had them at 30
+   * (2026-11-17); Frank moved every credit to 20 (2026-11-18). Everyone
+   * credited here is set under the text, so no one else's name is ever the
+   * size of hers. Claudia's own name, where a credit carries it, stays at the
    * text's 40: wrap it in `.is-artist`.
    */
-  font-size: var(--t-30);
+  font-size: var(--t-20);
   font-weight: 400;
   line-height: 1;
 }
 /* The names keep their capitals, in the regular weight of the line. */
 .sheet-prose .is-style-note :is(b, strong, em) { font-weight: 400; }
-.sheet-prose .is-style-note .is-artist { font-size: calc(1em * 40 / 30); }
+.sheet-prose .is-style-note .is-artist { font-size: calc(1em * 40 / 20); }
+/*
+ * A credit and thank-you list set apart at 20, all of it: What's Color? (II)'s
+ * "photos ©" line and its THANKS TO list (content/shows.ts, setThanks).
+ */
+.sheet-prose .is-style-thanks { font-size: var(--t-20); line-height: 1; }
+.sheet-prose .is-style-thanks p { margin-bottom: 1em; }
+.sheet-prose .is-style-thanks p:last-child { margin-bottom: 0; }
+/*
+ * A quotation set apart from the lede: the text's 40, regular, in the case it
+ * was written in, opening on a tab (Edges, Frank 2026-11-18).
+ */
+.sheet-prose .is-quote { font-size: var(--type); font-weight: 400; text-transform: none; text-indent: 2em; }
 .sheet-prose .is-style-cta {
   margin-top: calc(var(--s-lead) * 3em);
   font-style: italic;
@@ -6841,7 +7129,7 @@ html:not(.js) .inq-close { display: none; }
 .sheet-more svg { display: block; width: 100%; height: 100%; overflow: visible; }
 .sheet-more circle { fill: none; stroke: currentColor; stroke-width: 2; }
 .sheet-more .sheet-dot { fill: currentColor; stroke: none; }
-.sheet-more:hover, .sheet-more:focus-visible { opacity: 0.55; }
+.sheet-more:focus-visible { opacity: 0.55; }
 /* Pressed, it is filled: the text has the sheet, and pressing again gives it back. */
 .sheet-more[aria-pressed='true'] circle:not(.sheet-dot) { fill: currentColor; }
 .sheet-more[aria-pressed='true'] .sheet-dot { fill: var(--paper); }
@@ -6851,7 +7139,12 @@ html:not(.js) .inq-close { display: none; }
 .sheet-stage {
   position: absolute;
   left: calc(var(--f) * 1070);
-  width: calc(var(--f) * 770);
+  /* The last term keeps room for the next arrow: gap, chevron, window edge. */
+  width: min(calc(var(--f) * 770), calc(var(--f) * 850 - var(--step-gap) - var(--step-w) - 20px));
+  --step-gap: 14px;                              /* the least between photograph and arrow */
+  --step-w: calc(var(--cue-size) * 16 / 28);     /* the chevron, .step-chevron */
+  --step-pad: calc(var(--f) * 14);
+  --step-out: calc(var(--f) * (1870 - 1840));    /* box to an arrow's far edge */
   top: calc(var(--f) * 128);
   bottom: calc(var(--f) * 80);
 }
@@ -6891,20 +7184,52 @@ html:not(.js) .inq-close { display: none; }
   .sheet .sheet-figure.is-wide img { max-width: calc(var(--f) * 700); }
 }
 
-/* The arrows sit either side of the box, on its middle: the next one on the
-   right margin as the sheet draws it, the previous one mirrored on the left. */
+/*
+ * An exhibition's photograph, as the exhibitions' sheets place it
+ * (UPDATES/exhibitions, 2026-11-24): in a narrower box, 636 wide and 134 to
+ * 1008 down. The sheets stand it at 1083; it is centred between its arrows
+ * instead, 1139 to 1775 (Frank, 2026-11-25). A portrait fills its height; a
+ * landscape is set at the box's width with its top at 300, level with the
+ * masthead's date rather than with the text.
+ */
+@media (min-width: 900px) {
+  .sheet.is-show .sheet-stage {
+    left: calc(var(--f) * 1139);
+    width: calc(var(--f) * 636);
+    top: calc(var(--f) * 134);
+    bottom: calc(var(--f) * 72);
+  }
+  .sheet.is-show .is-live .sheet-figure.is-wide { padding-top: calc(var(--f) * 166); }
+  .sheet.is-show .sheet-figure.is-wide img { max-width: 100%; }
+  .sheet.is-show .sheet-stage { --step-out: calc(var(--f) * (1870 - 1775)); }
+  /* The name on one line, as every exhibition's sheet sets it, running past
+     the text's column when it is long (What abstract art means to me). */
+  .sheet.is-show .sheet-title { width: max-content; max-width: calc(var(--f) * 1000); }
+  /* The masthead's lines break where the sheet breaks them (show-sheets.ts). */
+  .sheet.is-show .sheet-lines { width: max-content; white-space: nowrap; }
+}
+/* On a phone the lines run on and turn where the screen turns them. */
+@media (max-width: 899px) {
+  .sheet-br { display: none; }
+}
+
+/* The arrows sit either side of the box: the next one on the right margin as
+   the sheet draws it, the previous one as far out on the left, and neither
+   nearer the box than `--step-gap` however small the window (the chevron is
+   not sized by it). Level with the middle of the photograph showing, which
+   figures.ts measures: a landscape does not stand on the box's middle. */
 .sheet-step {
   position: absolute;
-  top: 50%;
+  top: var(--photo-mid, 50%);
   translate: 0 -50%;
   padding: calc(var(--f) * 24) calc(var(--f) * 14);
-  color: var(--ink);
+  color: rgb(252, 252, 250);
+  mix-blend-mode: difference;
   transition: opacity var(--hover) var(--ease);
 }
-.sheet-step svg { display: block; width: calc(var(--f) * 9); min-width: 7px; height: auto; overflow: visible; }
-.sheet-step:hover, .sheet-step:focus-visible { opacity: 0.45; }
-.sheet-next { right: calc(var(--f) * (1870 - 1840) * -1 - var(--f) * 14); }
-.sheet-prev { left: calc(var(--f) * -30 - var(--f) * 14 - var(--f) * 9); }
+.sheet-step:focus-visible { opacity: 0.45; }
+.sheet-next { left: calc(100% + max(var(--step-gap), var(--step-out) - var(--step-w)) - var(--step-pad)); }
+.sheet-prev { right: calc(100% + max(var(--step-gap), var(--step-out) - var(--step-w)) - var(--step-pad)); }
 
 /* ---------------------------------------------------- the text on its own */
 
@@ -6919,6 +7244,8 @@ html:not(.js) .inq-close { display: none; }
   grid-template-columns: minmax(0, 1fr);
 }
 .sheet.is-wide-text .sheet-stage { display: none; }
+/* Still there while it is pushed off (client/sheet-morph.ts). */
+.sheet.is-wide-text .sheet-stage.is-leaving { display: block; pointer-events: none; }
 /* The text then starts at 153 — its first baseline at 213 — unless the
    masthead's lines need more. Kept clear of Close and the button on the right. */
 .sheet.is-wide-text .sheet-head {
@@ -6937,7 +7264,16 @@ html:not(.js) .inq-close { display: none; }
   padding-right: calc(var(--f) * 40);
   box-sizing: border-box;
 }
-.sheet.is-wide-text .sheet-lines { margin: 0; }
+/* The place gives way before the date does: an exhibition's is held on its own
+   lines in the narrow masthead, but here the name, place and date share one row
+   and the row has to end short of the button and Close. */
+.sheet.is-wide-text .sheet-lines {
+  flex: 0 1 auto;
+  width: auto;
+  min-width: 0;
+  margin: 0;
+  white-space: normal;
+}
 .sheet.is-wide-text .sheet-when {
   flex: none;
   margin: 0 0 0 calc(var(--f) * 100);
@@ -7080,17 +7416,40 @@ html:not(.js) .sheet-step { display: none; }
   line-height: var(--s-lead);
 }
 
-/* Alone in the top left. 360 wide keeps it clear of the widest photograph,
-   whose box opens at 416. */
+/* Alone in the top left. The name runs on one line, over the photograph if
+   it must, as the sheets set every one of them; what follows it keeps to 360,
+   clear of the widest photograph, whose box opens at 416. */
 .plates-head {
   position: absolute;
   left: calc(var(--f) * 48);
   top: 4.6vh;
-  width: calc(var(--f) * 360);
+  width: max-content;
+  max-width: calc(var(--f) * 1300);
   z-index: 2;
+}
+@media (min-width: 900px) {
+  .plates-head > :not(.sheet-title) { max-width: calc(var(--f) * 352); }
+  /* The sheet's own line breaks, and no others. */
+  .plates-head .sheet-lines { white-space: nowrap; }
+}
+/* El color no existe's caption: capitals at 30 on 30, its top at 550. */
+.plates-note {
+  margin: 2.4em 0 0;
+  font-size: var(--t-30, calc(var(--type) * 0.75));
+  line-height: 1;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+@media (min-width: 900px) {
+  .plates-head > .plates-note { margin-top: calc(var(--f) * 140); max-width: calc(var(--f) * 372); }
 }
 .plates-head .sheet-lines { margin-top: 1em; }
 .plates-head .sheet-when { margin-top: 1.6em; }
+/* El color no existe: the date sits 30% closer to the venue (Frank, 2026-11-18).
+   Desktop only here; the phone's gap is set with the other phone spacing. */
+@media (min-width: 900px) {
+  #exhibition-el-color-no-existe .plates-head .sheet-when { margin-top: 1.12em; }
+}
 
 .plates-stage {
   position: absolute;
@@ -7116,6 +7475,16 @@ html:not(.js) .sheet-step { display: none; }
   transition: opacity 0.5s var(--ease);
 }
 .plates-figure.is-current { opacity: 1; pointer-events: auto; }
+/* A landscape is set lower than the box: 722 tall on the sheets, on the
+   frame's middle, where a portrait takes the box's whole height. */
+@media (min-width: 900px) {
+  .plates-figure.is-wide {
+    inset: auto 0;
+    top: 50%;
+    height: min(calc(var(--f) * 722), 66.9vh);
+    translate: 0 -50%;
+  }
+}
 .plates-figure picture { display: contents; }
 /*
  * Fitted to the box, not capped by it. A maximum height alone is not enough
@@ -7131,18 +7500,24 @@ html:not(.js) .sheet-step { display: none; }
   object-fit: contain;
 }
 
+/* El color no existe's caption runs down past the middle of the frame, where
+   the previous arrow would sit on it; the next one goes round all the same. */
+@media (min-width: 900px) {
+  .plates:has(.plates-note) .plates-prev { display: none; }
+}
+
 /* At the frame's margins, as the sheets place them, and level with the middle
    of the picture — so they never meet the masthead in the top left. */
 .plates-step {
   position: absolute;
-  top: 50%;
+  top: var(--photo-mid, 50%);
   translate: 0 -50%;
   padding: calc(var(--f) * 24) calc(var(--f) * 14);
-  color: var(--ink);
+  color: rgb(252, 252, 250);
+  mix-blend-mode: difference;
   transition: opacity var(--hover) var(--ease);
 }
-.plates-step svg { display: block; width: calc(var(--f) * 9); min-width: 7px; height: auto; overflow: visible; }
-.plates-step:hover, .plates-step:focus-visible { opacity: 0.45; }
+.plates-step:focus-visible { opacity: 0.45; }
 .plates-prev { left: calc(var(--s-pad) - var(--f) * 14); }
 .plates-next { right: calc(var(--s-pad) - var(--f) * 14); }
 
@@ -7202,11 +7577,11 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
     --sh-foot: calc(80 * var(--p));          /* under the last block */
     /* The typography sheet's hierarchy at the phone's scale: the text keeps
        the phone frame's size, and the rest stand to it as on the computer —
-       name and lede 45 to its 40, credits 30 (Frank, 2026-11-17). */
+       name 45 to its 40, the lede the text's own size (Frank, 2026-11-25). */
     --sh-type: calc(20 * var(--p));          /* place, dates and text, on a line of the same */
     --sh-name: calc(var(--sh-type) * 1.125); /* the name, likewise */
-    --sh-lede: calc(var(--sh-type) * 1.125); /* the lede, likewise */
-    --sh-note: calc(var(--sh-type) * 0.75);  /* credits, likewise */
+    --sh-lede: var(--sh-type);               /* the lede, at the text's size */
+    --sh-note: calc(var(--sh-type) * 0.5);   /* credits, likewise: 20 to the text's 40 */
     --sh-measure: none;                      /* where the lines under the name turn: the column */
     --sh-lines-top: calc(14 * var(--p));     /* name → place */
     --sh-when-top: 0px;                      /* place → dates: the next line */
@@ -7225,8 +7600,8 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
     --sh-foot: calc(119 * var(--p));
     --sh-type: calc(30 * var(--p));
     --sh-name: calc(var(--sh-type) * 1.125);
-    --sh-lede: calc(var(--sh-type) * 1.125);
-    --sh-note: calc(var(--sh-type) * 0.75);
+    --sh-lede: var(--sh-type);
+    --sh-note: calc(var(--sh-type) * 0.5);
     --sh-measure: calc(261 * var(--p));      /* the lines under the name turn at the photograph's width */
     --sh-lines-top: calc(60 * var(--p));
     --sh-when-top: calc(29 * var(--p));      /* lines → year */
@@ -7254,6 +7629,8 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
     --sh-pic-top: calc(64 * var(--p));       /* dates → the first photograph */
     --sh-pics-gap: calc(20 * var(--p));
   }
+  /* El color no existe: place → dates 30% closer (Frank, 2026-11-18). */
+  #exhibition-el-color-no-existe { --sh-when-top: calc(22.4 * var(--p)); }
 
   /* ---- the page ---- */
 
@@ -7320,6 +7697,10 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
   .panel > .sheet .sheet-prose .lede-open { margin-bottom: var(--sh-para); }
   .panel > .sheet .sheet-prose > :is(p:first-of-type, .is-style-lead) { font-size: var(--sh-lede); line-height: var(--sh-lede); }
   .panel > .sheet .sheet-prose > .is-style-note { font-size: var(--sh-note); line-height: var(--sh-note); }
+  .panel > .sheet .sheet-prose > .is-quote { font-size: var(--sh-type); line-height: var(--sh-type); }
+  .panel > .sheet .sheet-prose > .is-style-thanks { font-size: var(--sh-note); line-height: var(--sh-note); }
+  .panel > .sheet .sheet-prose > .is-style-thanks p { margin: 0 0 1em; }
+  .panel > .sheet .sheet-prose > .is-style-thanks p:last-child { margin-bottom: 0; }
   /* Anything set into the text — a film — keeps to the column. */
   .panel > .sheet .sheet-prose :is(video, iframe, img) { max-width: 100%; }
 
@@ -7404,11 +7785,10 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
      Every sheet's photographs are one reel where the first photograph stood:
      one at a time, turned by the arrows under it or a swipe, the count between
      the arrows. client/figures.ts turns them and writes the count.
-       --reel-arrow   an arrow's height
+       (the arrows are the start page's chevron, sized by --cue-size)
        --reel-gap     photograph → the row of arrows
        --reel-count   the count's size */
   .panel > :is(.sheet, .plates) {
-    --reel-arrow: calc(16 * var(--p));
     --reel-gap: calc(14 * var(--p));
     --reel-count: calc(14 * var(--p));
   }
@@ -7439,9 +7819,7 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
     margin: var(--reel-gap) 0 0;
     padding: calc(10 * var(--p)) calc(16 * var(--p));
     opacity: 1;
-    color: var(--ink);
   }
-  .panel > :is(.sheet, .plates) :is(.sheet-step, .plates-step) svg { display: block; width: auto; height: var(--reel-arrow); }
   .panel > :is(.sheet, .plates) :is(.sheet-prev, .plates-prev) { grid-column: 1; justify-self: end; }
   .panel > :is(.sheet, .plates) :is(.sheet-next, .plates-next) { grid-column: 3; justify-self: start; }
   .panel > :is(.sheet, .plates) .reel-count {
@@ -7922,3 +8300,169 @@ body,
 .tuner-small { margin-top: 6px; font-size: 11px !important; color: #aaa !important; }
 .tuner-copied { color: #9c9; align-self: center; }
 
+/* ------------------------------------------------------------- pile tuner */
+
+/*
+ * The gallery opening's panel (client/pile-tuner.ts, ?pile). It wears the
+ * hover tuner's clothes; when both are open it stands to the left of it.
+ */
+html[data-tune] .tuner-pile { right: 372px; }
+.tuner-pile .tuner-effects { grid-template-columns: repeat(4, 1fr); }
+.tuner-spread {
+  margin: 6px 0 8px; padding: 6px 8px 8px;
+  border: 1px solid rgb(255 255 255 / 0.22); border-radius: 7px;
+  background: rgb(255 255 255 / 0.05);
+}
+.tuner-kicker { display: block; margin-bottom: 2px; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; font-weight: 600; }
+.tuner-row.is-big { grid-template-columns: 1fr 150px 64px; }
+.tuner-row.is-big .tuner-label { color: #fff; font-weight: 600; }
+.tuner-row.is-big .tuner-value { color: #eee; }
+.tuner-pile .tuner-row { grid-template-columns: 1fr 130px 72px; }
+.tuner-pile .tuner-row.is-big { grid-template-columns: 1fr 140px 64px; }
+
+/*
+ * Opaque and flat: no backdrop blur. Blurring what is behind it meant redrawing
+ * the panel from 181 moving painting layers every frame, which in Chromium
+ * (Brave) ran the graphics memory out and drew the panel as a black square.
+ */
+.tuner-pile {
+  background: #161618; backdrop-filter: none; -webkit-backdrop-filter: none;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 0.3);
+  isolation: isolate; contain: layout paint;
+}
+
+/* The panel holds still: Try it and the tabs at the top, one pane below. */
+.tuner-pile .tuner-body { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: visible; }
+.tuner-pile .tuner-pane { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.tuner-pile .tuner-pane > .tuner-section { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.tuner-pile .tuner-pane .tuner-fields { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+.tuner-pile .tuner-pane > [hidden] { display: none; }
+.tuner-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin: 12px 0 10px; padding-bottom: 10px; border-bottom: 1px solid rgb(255 255 255 / 0.1); padding-top: 10px; border-top: 1px solid rgb(255 255 255 / 0.1); }
+.tuner-pile .tuner-pane .tuner-section h3 { display: none; }
+.tuner-tabs button { font-weight: 600 !important; }
+.tuner-pile .tuner-row { padding: 2px 0; }
+.tuner-pile .tuner-note { margin: 6px 0; }
+
+/* --------------------------------------------------------------- ball */
+
+/*
+ * The site's pointer: a ball that follows the mouse and shows as the negative
+ * of whatever is under it (client/ball.ts). Over the white page it reads as a
+ * black ball; over a painting, as the painting's photographic negative.
+ *
+ * ── Where to adjust it ──────────────────────────────────────────────────
+ * Every setting is one of the variables below. To try them live, open any
+ * page with ?ball (client/ball-tuner.ts), then "Copy settings" and paste the
+ * lines back here.
+ */
+:root {
+  --ball-size: 20px;
+  /* the ball at rest */
+  --ball-hover-size: 50px;
+  /* over anything clickable */
+  --ball-press: 2;
+  /* while the button is held, as a share of its size */
+  --ball-follow: 0.5;
+  /* how fast it catches up: 1 = glued to the pointer, 0.1 = a slow trail */
+  --ball-grow: 0.7s;
+  /* how long it takes to grow and shrink */
+  --ball-grow-ease: var(--ease);
+  /*
+   * White, with `difference`: the result is |backdrop − white|, the negative of
+   * the backdrop, so the white page makes it black. (A black ball under
+   * `difference` would leave everything unchanged and be invisible.)
+   */
+  --ball-color: #ffffff;
+  --ball-blend: difference;
+  --ball-over-names: 0;
+  /* over a painting its name stands in for the pointer: 0 hides the ball there, 1 keeps it */
+}
+
+/*
+ * Only once the script is running, and only for a mouse (the class is set by
+ * client/ball.ts): without it a page with no script would have no pointer at
+ * all, and touch screens keep behaving as they always have.
+ */
+html.has-ball,
+html.has-ball * {
+  cursor: none !important;
+}
+
+.ball {
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* Above everything, the tuners included. */
+  z-index: 2147483647;
+  pointer-events: none;
+  /* The blend goes on this outer layer, as with the painting names' `.cursor`:
+     blended inside its own stacking context it would only meet itself. */
+  mix-blend-mode: var(--ball-blend);
+  opacity: 0;
+  transition: opacity 0.2s var(--ease);
+  will-change: transform;
+}
+
+.ball.is-on {
+  opacity: 1;
+}
+
+/* Safari: drawn with the page, not on a layer of its own (client/ball.ts),
+   so the bar's blend is never taken apart; and shown or hidden outright, since
+   a fading opacity would put it on a layer again for the length of the fade. */
+.ball.is-flat {
+  will-change: auto;
+  transition: none;
+}
+
+/* Over a painting the pointer becomes its name (client/cursor.ts). */
+html:has(.cursor.is-visible) .ball.is-on {
+  opacity: var(--ball-over-names);
+}
+
+.ball-dot {
+  display: block;
+  width: var(--ball-size);
+  height: var(--ball-size);
+  border-radius: 50%;
+  background: var(--ball-color);
+  transform: translate(-50%, -50%);
+  transition:
+    width var(--ball-grow) var(--ball-grow-ease),
+    height var(--ball-grow) var(--ball-grow-ease),
+    transform 0.15s var(--ease);
+}
+
+.ball.is-hover .ball-dot {
+  width: var(--ball-hover-size);
+  height: var(--ball-hover-size);
+}
+
+.ball.is-down .ball-dot {
+  transform: translate(-50%, -50%) scale(var(--ball-press));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ball-dot {
+    transition: none;
+  }
+}
+
+@media (hover: none),
+(pointer: coarse) {
+  .ball {
+    display: none;
+  }
+}
+
+/* The ball's tuner (client/ball-tuner.ts) wears the other tuners' clothes,
+   in the bottom left so it never covers theirs. */
+.tuner-ball {
+  right: auto;
+  left: 16px;
+  width: 320px;
+}
+
+.tuner-ball .tuner-row {
+  grid-template-columns: 1fr 130px 58px;
+}

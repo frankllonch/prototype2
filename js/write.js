@@ -1,4 +1,4 @@
-import { phone, scrollWrites } from './env.js';
+import { phone, reduceMotion, scrollWrites } from './env.js';
 import { glide } from './glide.js';
 /**
  * Matches `writeOn()` in components/whats-color.ts: each word steps in whole
@@ -20,8 +20,8 @@ export const WRITE_MS = 2400;
 /**
  * The scroll offset at which the note stands fully written and the names have
  * yet to rise — the scene a link into the page should open on. Null when
- * there is no scene: no write section on this page, a phone on its side, no
- * scroll-run animations in this engine, or motion reduced (`scrollWrites`),
+ * there is no scene: no write section on this page, a phone on its side, or
+ * motion reduced (`scrollWrites`),
  * in all of which the note is an ordinary paragraph and the top of the page's
  * own section is the place to land.
  */
@@ -78,6 +78,7 @@ export function typeIn() {
  */
 const HOLD_MS = 1800;
 export function initWrite() {
+    initWords();
     // Whatever happens below, the page is uncovered once this has run: the head
     // holds it under the veil only until the landing has been made (00-base.css).
     const uncover = () => document.documentElement.classList.remove('wc-arriving');
@@ -134,4 +135,39 @@ export function initWrite() {
         settle();
     else
         window.addEventListener('load', settle, { once: true });
+}
+/**
+ * The words, and the names' fade, put in by script where the engine has no
+ * scroll-run animations (Safari before 26): the same slices the stylesheet's
+ * timeline uses, read off each word's own `animation-range`, so the scene is
+ * the same one. The names' share of it is the stylesheet's `wc-rise` range.
+ */
+const NAMES_FROM = 0.658;
+const NAMES_TO = 0.7;
+function initWords() {
+    const section = document.querySelector('.wc-write');
+    if (!section || CSS.supports('animation-timeline: view()'))
+        return;
+    const words = [...section.querySelectorAll('.wc-word')].map((el) => ({
+        el,
+        from: Number(/cover ([\d.]+)%/.exec(el.getAttribute('style') ?? '')?.[1] ?? 0) / 100,
+    }));
+    const rise = document.querySelector('#whats-color .wc-rise');
+    const update = () => {
+        const box = section.getBoundingClientRect();
+        // The section's `cover` timeline: 0 as its head reaches the foot of the
+        // window, 1 as its foot leaves the top.
+        const at = (window.innerHeight - box.top) / (box.height + window.innerHeight);
+        for (const { el, from } of words)
+            el.classList.toggle('is-written', at >= from);
+        if (!rise)
+            return;
+        const held = scrollWrites() && !phone.matches;
+        const shown = Math.min(1, Math.max(0, (at - NAMES_FROM) / (NAMES_TO - NAMES_FROM)));
+        rise.style.opacity = held && shown < 1 ? String(shown) : '';
+    };
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    reduceMotion.addEventListener('change', update);
+    update();
 }
