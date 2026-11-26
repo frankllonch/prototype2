@@ -437,9 +437,14 @@ html:not(.js) .panel { position: static; opacity: 1; visibility: visible; transf
 }
 .about-go > span { display: block; }
 /* Leaving by one of them, About goes out with the page under it. */
-html.is-leaving .about.is-open, html.is-leaving .about.is-open ~ .about-close {
+html.is-leaving .about.is-open, html.is-leaving .about.is-open ~ :is(.about-close, .about-cue) {
   opacity: 0;
   transition: opacity 0.42s var(--ease);
+}
+/* Over the start page the film is never uncovered on the way out: the veil goes to paper first. */
+html.is-leaving body.has-film .panel-veil.is-open { background: var(--paper); transition: background 0.18s linear; }
+html.is-leaving body.has-film .about.is-open, html.is-leaving body.has-film .about.is-open ~ :is(.about-close, .about-cue) {
+  transition: opacity 0.26s var(--ease) 0.16s;
 }
 .about-collection-name { font-weight: 600; text-transform: uppercase; }
 .about-collection-place { margin-top: calc(1em / 20); font-weight: 300; }

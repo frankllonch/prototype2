@@ -6,7 +6,7 @@ import { stepState } from './panels.ts';
 /** How long after the page opens the name answers, once the list has risen into place. */
 const ARRIVE_MS = 900;
 /** The pulse itself, as `row-pulse` in 01-grid.css runs it. */
-const PULSE_MS = 1000;
+const PULSE_MS = 2000;
 
 /** About's record points at the rows of the Exhibitions list: there, in view, the name lit once. */
 export function initLocate(): void {
