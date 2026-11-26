@@ -16460,54 +16460,54 @@
       "sourceUrl": "archive:2026 Shift towards coinidence Colectiva",
       "rows": [],
       "cover": {
-        "id": "3803ee4fa9e87f0e",
-        "source": "local/shows/shift-towards-coincidence/01.jpg",
+        "id": "279c0435da58c303",
+        "source": "local/exhibitions/shift-towards-coincidence/01.png",
         "alt": "",
-        "width": 1920,
-        "height": 2880
+        "width": 1086,
+        "height": 724
       },
       "images": [
         {
-          "id": "3803ee4fa9e87f0e",
-          "source": "local/shows/shift-towards-coincidence/01.jpg",
+          "id": "279c0435da58c303",
+          "source": "local/exhibitions/shift-towards-coincidence/01.png",
           "alt": "",
-          "width": 1920,
-          "height": 2880
+          "width": 1086,
+          "height": 724
         },
         {
-          "id": "a6d25ea5ef538092",
-          "source": "local/shows/shift-towards-coincidence/02.jpg",
+          "id": "61dc85d954d99130",
+          "source": "local/exhibitions/shift-towards-coincidence/02.png",
           "alt": "",
-          "width": 2880,
-          "height": 1920
+          "width": 598,
+          "height": 897
         },
         {
-          "id": "efca6da572ae9783",
-          "source": "local/shows/shift-towards-coincidence/03.jpg",
+          "id": "55aa304c80e5964f",
+          "source": "local/exhibitions/shift-towards-coincidence/03.png",
           "alt": "",
-          "width": 1920,
-          "height": 2880
+          "width": 598,
+          "height": 897
         },
         {
-          "id": "9cff81b978bb1999",
-          "source": "local/shows/shift-towards-coincidence/04.jpg",
+          "id": "6e66ff62e5f4879d",
+          "source": "local/exhibitions/shift-towards-coincidence/04.png",
           "alt": "",
-          "width": 1920,
-          "height": 2880
+          "width": 598,
+          "height": 897
         },
         {
-          "id": "89cb6cafaf2c8571",
-          "source": "local/shows/shift-towards-coincidence/05.jpg",
+          "id": "d081fb77ee736211",
+          "source": "local/exhibitions/shift-towards-coincidence/05.png",
           "alt": "",
-          "width": 2880,
-          "height": 1920
+          "width": 691,
+          "height": 897
         },
         {
-          "id": "b84520fe439664a7",
-          "source": "local/shows/shift-towards-coincidence/06.jpg",
+          "id": "13abfa05e19944ba",
+          "source": "local/exhibitions/shift-towards-coincidence/06.png",
           "alt": "",
-          "width": 1087,
-          "height": 1411
+          "width": 1086,
+          "height": 724
         }
       ],
       "metadata": {}
@@ -16557,54 +16557,54 @@
       "sourceUrl": "archive:2025 ep titol 'notas al pie'  COLECTIVA paper DESEMBRE",
       "rows": [],
       "cover": {
-        "id": "015f81a8b2959bf7",
-        "source": "local/shows/notas-al-pie/01.jpg",
+        "id": "388327ed3eed6f59",
+        "source": "local/exhibitions/notas-al-pie/01.png",
         "alt": "",
-        "width": 1920,
-        "height": 2880
+        "width": 598,
+        "height": 896
       },
       "images": [
         {
-          "id": "015f81a8b2959bf7",
-          "source": "local/shows/notas-al-pie/01.jpg",
+          "id": "388327ed3eed6f59",
+          "source": "local/exhibitions/notas-al-pie/01.png",
           "alt": "",
-          "width": 1920,
-          "height": 2880
+          "width": 598,
+          "height": 896
         },
         {
-          "id": "e3a02a3bdd808264",
-          "source": "local/shows/notas-al-pie/02.jpg",
+          "id": "1526586bf3eaf783",
+          "source": "local/exhibitions/notas-al-pie/02.png",
           "alt": "",
-          "width": 1920,
-          "height": 2880
+          "width": 598,
+          "height": 897
         },
         {
-          "id": "28c084f6b4e43002",
-          "source": "local/shows/notas-al-pie/03.jpg",
+          "id": "03a14dd3d6fe8bc7",
+          "source": "local/exhibitions/notas-al-pie/03.png",
           "alt": "",
-          "width": 1920,
-          "height": 2880
+          "width": 598,
+          "height": 897
         },
         {
-          "id": "28ca89eb95e4f0c6",
-          "source": "local/shows/notas-al-pie/04.jpg",
+          "id": "0e2c21a0349815fa",
+          "source": "local/exhibitions/notas-al-pie/04.png",
           "alt": "",
-          "width": 1920,
-          "height": 2880
+          "width": 598,
+          "height": 897
         },
         {
-          "id": "3d76841cc93f3e9f",
-          "source": "local/shows/notas-al-pie/05.jpg",
+          "id": "d0ba02ade16efdd3",
+          "source": "local/exhibitions/notas-al-pie/05.png",
           "alt": "",
-          "width": 1920,
-          "height": 2880
+          "width": 598,
+          "height": 897
         },
         {
-          "id": "c04d7039854070fd",
-          "source": "local/shows/notas-al-pie/06.jpg",
+          "id": "98e888fc9a93490d",
+          "source": "local/exhibitions/notas-al-pie/06.png",
           "alt": "",
-          "width": 2880,
-          "height": 1920
+          "width": 1086,
+          "height": 724
         }
       ],
       "metadata": {}
@@ -16616,54 +16616,40 @@
       "sourceUrl": "archive:2024 colectiva MARCO LIMITE y lugar , Madrid",
       "rows": [],
       "cover": {
-        "id": "0ca4501d9ee02c96",
-        "source": "local/shows/marco-limite-y-lugar/01.jpg",
+        "id": "177e5e1b106fdc82",
+        "source": "local/exhibitions/marco-limite-y-lugar/01.png",
         "alt": "",
-        "width": 8256,
-        "height": 5504
+        "width": 598,
+        "height": 897
       },
       "images": [
         {
-          "id": "0ca4501d9ee02c96",
-          "source": "local/shows/marco-limite-y-lugar/01.jpg",
+          "id": "177e5e1b106fdc82",
+          "source": "local/exhibitions/marco-limite-y-lugar/01.png",
           "alt": "",
-          "width": 8256,
-          "height": 5504
+          "width": 598,
+          "height": 897
         },
         {
-          "id": "a375d2b4392f5ca4",
-          "source": "local/shows/marco-limite-y-lugar/02.jpg",
+          "id": "714c0f3d4d71d827",
+          "source": "local/exhibitions/marco-limite-y-lugar/02.png",
           "alt": "",
-          "width": 8256,
-          "height": 5504
+          "width": 1086,
+          "height": 724
         },
         {
-          "id": "962cef1a5e6b639b",
-          "source": "local/shows/marco-limite-y-lugar/03.jpg",
+          "id": "0d5cd0f7916d746b",
+          "source": "local/exhibitions/marco-limite-y-lugar/03.png",
           "alt": "",
-          "width": 8256,
-          "height": 5504
+          "width": 1086,
+          "height": 724
         },
         {
-          "id": "2ea7584a652bb97c",
-          "source": "local/shows/marco-limite-y-lugar/04.jpg",
+          "id": "98d83194a6a7cc56",
+          "source": "local/exhibitions/marco-limite-y-lugar/04.png",
           "alt": "",
-          "width": 1600,
-          "height": 2400
-        },
-        {
-          "id": "e1ecd6f30b77dac3",
-          "source": "local/shows/marco-limite-y-lugar/05.jpg",
-          "alt": "",
-          "width": 3508,
-          "height": 2480
-        },
-        {
-          "id": "5b84408f70c401fe",
-          "source": "local/shows/marco-limite-y-lugar/06.jpg",
-          "alt": "",
-          "width": 3508,
-          "height": 2480
+          "width": 1086,
+          "height": 724
         }
       ],
       "metadata": {}
@@ -16675,103 +16661,96 @@
       "sourceUrl": "archive:2024 'Painting as a gift from color' Tetbury England",
       "rows": [],
       "cover": {
-        "id": "b747c788581f9631",
-        "source": "local/shows/painting-as-a-gift-of-color/01.jpg",
+        "id": "a9e380f4b3dde6b5",
+        "source": "local/exhibitions/painting-as-a-gift-of-color/01.png",
         "alt": "",
-        "width": 6134,
-        "height": 4089
+        "width": 1086,
+        "height": 724
       },
       "images": [
         {
-          "id": "b747c788581f9631",
-          "source": "local/shows/painting-as-a-gift-of-color/01.jpg",
+          "id": "a9e380f4b3dde6b5",
+          "source": "local/exhibitions/painting-as-a-gift-of-color/01.png",
           "alt": "",
-          "width": 6134,
-          "height": 4089
+          "width": 1086,
+          "height": 724
         },
         {
-          "id": "43fa910981fd4f26",
-          "source": "local/shows/painting-as-a-gift-of-color/02.jpg",
+          "id": "925b0657c240230f",
+          "source": "local/exhibitions/painting-as-a-gift-of-color/02.png",
           "alt": "",
-          "width": 5817,
-          "height": 3878
+          "width": 1086,
+          "height": 724
         },
         {
-          "id": "7df13797b19b6412",
-          "source": "local/shows/painting-as-a-gift-of-color/03.jpg",
+          "id": "bacc56ca6896e991",
+          "source": "local/exhibitions/painting-as-a-gift-of-color/03.png",
           "alt": "",
-          "width": 6050,
-          "height": 3522
+          "width": 1086,
+          "height": 724
         },
         {
-          "id": "a94f237ae11c27c1",
-          "source": "local/shows/painting-as-a-gift-of-color/04.jpg",
+          "id": "4f6a13b28f16bf33",
+          "source": "local/exhibitions/painting-as-a-gift-of-color/04.png",
           "alt": "",
-          "width": 5809,
-          "height": 3873
+          "width": 1244,
+          "height": 724
         },
         {
-          "id": "fc3dbaccbbaff1a2",
-          "source": "local/shows/painting-as-a-gift-of-color/05.jpg",
+          "id": "6a7a93ff154730b0",
+          "source": "local/exhibitions/painting-as-a-gift-of-color/05.png",
           "alt": "",
-          "width": 6190,
-          "height": 4127
+          "width": 1086,
+          "height": 724
         },
         {
-          "id": "dc4513c48e3b36e5",
-          "source": "local/shows/painting-as-a-gift-of-color/06.jpg",
+          "id": "ccf120594c2098e6",
+          "source": "local/exhibitions/painting-as-a-gift-of-color/06.png",
           "alt": "",
-          "width": 6122,
-          "height": 4081
+          "width": 1086,
+          "height": 724
         },
         {
-          "id": "27f7b6b1545db9a4",
-          "source": "local/shows/painting-as-a-gift-of-color/07.jpg",
+          "id": "25bb93f69f91d819",
+          "source": "local/exhibitions/painting-as-a-gift-of-color/07.png",
           "alt": "",
-          "width": 5593,
-          "height": 3729
+          "width": 1086,
+          "height": 724
         },
         {
-          "id": "7987860e3ba16871",
-          "source": "local/shows/painting-as-a-gift-of-color/08.jpg",
+          "id": "2c7d85191b85dabf",
+          "source": "local/exhibitions/painting-as-a-gift-of-color/08.png",
           "alt": "",
-          "width": 5738,
-          "height": 3825
+          "width": 1086,
+          "height": 724
         },
         {
-          "id": "d72544e21cc07073",
-          "source": "local/shows/painting-as-a-gift-of-color/09.jpg",
+          "id": "636d76518455003b",
+          "source": "local/exhibitions/painting-as-a-gift-of-color/09.png",
           "alt": "",
-          "width": 5982,
-          "height": 3988
+          "width": 1086,
+          "height": 724
         },
         {
-          "id": "d78ac1d8ece7bd7e",
-          "source": "local/shows/painting-as-a-gift-of-color/10.jpg",
+          "id": "1d9727ef59107384",
+          "source": "local/exhibitions/painting-as-a-gift-of-color/10.png",
           "alt": "",
-          "width": 6079,
-          "height": 4053
+          "width": 1086,
+          "height": 724
         },
         {
-          "id": "43a309d29cf95e1f",
-          "source": "local/shows/painting-as-a-gift-of-color/11.jpg",
+          "id": "8fb2293c66af7d33",
+          "source": "local/exhibitions/painting-as-a-gift-of-color/11.png",
           "alt": "",
-          "width": 6086,
-          "height": 4057
+          "width": 1086,
+          "height": 724
         },
         {
-          "id": "affa224cf596a164",
-          "source": "local/shows/painting-as-a-gift-of-color/12.jpg",
+          "id": "34a37a7251faf9a1",
+          "source": "local/exhibitions/painting-as-a-gift-of-color/12.png",
           "alt": "",
-          "width": 6066,
-          "height": 4044
-        },
-        {
-          "id": "3c8f00983263b540",
-          "source": "local/shows/painting-as-a-gift-of-color/13.jpg",
-          "alt": "",
-          "width": 4982,
-          "height": 3321
+          "width": 1086,
+          "height": 724
         }
       ],
       "metadata": {}
@@ -16783,40 +16762,33 @@
       "sourceUrl": "archive:2024 Colectiva 'what abstract art means to me ?'",
       "rows": [],
       "cover": {
-        "id": "d4ceb466982a3a0f",
-        "source": "local/shows/what-abstract-art-means-to-me/01.jpg",
+        "id": "74ff14cca4da661f",
+        "source": "local/exhibitions/what-abstract-art-means-to-me/01.png",
         "alt": "",
-        "width": 2400,
-        "height": 1600
+        "width": 1086,
+        "height": 724
       },
       "images": [
         {
-          "id": "d4ceb466982a3a0f",
-          "source": "local/shows/what-abstract-art-means-to-me/01.jpg",
+          "id": "74ff14cca4da661f",
+          "source": "local/exhibitions/what-abstract-art-means-to-me/01.png",
           "alt": "",
-          "width": 2400,
-          "height": 1600
+          "width": 1086,
+          "height": 724
         },
         {
-          "id": "f242ec8372225cd4",
-          "source": "local/shows/what-abstract-art-means-to-me/02.jpg",
+          "id": "076012d1ad7e218c",
+          "source": "local/exhibitions/what-abstract-art-means-to-me/02.png",
           "alt": "",
-          "width": 1600,
-          "height": 2400
+          "width": 598,
+          "height": 897
         },
         {
-          "id": "a99c161076f20058",
-          "source": "local/shows/what-abstract-art-means-to-me/03.jpg",
+          "id": "34ac213c90b6f0a2",
+          "source": "local/exhibitions/what-abstract-art-means-to-me/03.png",
           "alt": "",
-          "width": 750,
-          "height": 913
-        },
-        {
-          "id": "530efe8e361f24ae",
-          "source": "local/shows/what-abstract-art-means-to-me/04.jpg",
-          "alt": "",
-          "width": 2250,
-          "height": 4000
+          "width": 737,
+          "height": 897
         }
       ],
       "metadata": {}
@@ -16828,68 +16800,54 @@
       "sourceUrl": "archive:2023 COLECTIVA La terre est blue comen un orange",
       "rows": [],
       "cover": {
-        "id": "81dbcca0a2c8e826",
-        "source": "local/shows/la-terre-est-bleu/01.jpg",
+        "id": "e82416ad6c460b1f",
+        "source": "local/exhibitions/la-terre-est-bleu/01.png",
         "alt": "",
-        "width": 1440,
-        "height": 1794
+        "width": 1085,
+        "height": 724
       },
       "images": [
         {
-          "id": "81dbcca0a2c8e826",
-          "source": "local/shows/la-terre-est-bleu/01.jpg",
+          "id": "e82416ad6c460b1f",
+          "source": "local/exhibitions/la-terre-est-bleu/01.png",
           "alt": "",
-          "width": 1440,
-          "height": 1794
+          "width": 1085,
+          "height": 724
         },
         {
-          "id": "4428d01c7c1d0d71",
-          "source": "local/shows/la-terre-est-bleu/02.jpg",
+          "id": "e5a986e977d39afe",
+          "source": "local/exhibitions/la-terre-est-bleu/02.png",
           "alt": "",
-          "width": 1440,
-          "height": 1800
+          "width": 599,
+          "height": 897
         },
         {
-          "id": "8097c5a891927198",
-          "source": "local/shows/la-terre-est-bleu/03.jpg",
+          "id": "268332a6ec38f058",
+          "source": "local/exhibitions/la-terre-est-bleu/03.png",
           "alt": "",
-          "width": 2400,
-          "height": 1602
+          "width": 1085,
+          "height": 724
         },
         {
-          "id": "dbf1f3ea4e2c9c61",
-          "source": "local/shows/la-terre-est-bleu/04.jpg",
+          "id": "4a3001ec01445062",
+          "source": "local/exhibitions/la-terre-est-bleu/04.png",
           "alt": "",
-          "width": 2400,
-          "height": 1602
+          "width": 720,
+          "height": 897
         },
         {
-          "id": "b45dcc169d83844b",
-          "source": "local/shows/la-terre-est-bleu/05.jpg",
+          "id": "17c8728a111debe0",
+          "source": "local/exhibitions/la-terre-est-bleu/05.png",
           "alt": "",
-          "width": 2400,
-          "height": 1602
+          "width": 1085,
+          "height": 724
         },
         {
-          "id": "86ec50e7bc984956",
-          "source": "local/shows/la-terre-est-bleu/06.jpg",
+          "id": "a91396a968dd6b94",
+          "source": "local/exhibitions/la-terre-est-bleu/06.png",
           "alt": "",
-          "width": 2400,
-          "height": 3596
-        },
-        {
-          "id": "1fdacc99883e20d0",
-          "source": "local/shows/la-terre-est-bleu/07.jpg",
-          "alt": "",
-          "width": 2400,
-          "height": 1569
-        },
-        {
-          "id": "14bb55ec19e0c1b0",
-          "source": "local/shows/la-terre-est-bleu/08.jpg",
-          "alt": "",
-          "width": 4696,
-          "height": 8367
+          "width": 1107,
+          "height": 724
         }
       ],
       "metadata": {}
@@ -16901,47 +16859,47 @@
       "sourceUrl": "archive:2020 T10 project",
       "rows": [],
       "cover": {
-        "id": "b710b17e33151ddf",
-        "source": "local/shows/t10/01.jpg",
+        "id": "808225c6ad275115",
+        "source": "local/exhibitions/t10/01.png",
         "alt": "",
-        "width": 3687,
-        "height": 4424
+        "width": 748,
+        "height": 897
       },
       "images": [
         {
-          "id": "b710b17e33151ddf",
-          "source": "local/shows/t10/01.jpg",
+          "id": "808225c6ad275115",
+          "source": "local/exhibitions/t10/01.png",
           "alt": "",
-          "width": 3687,
-          "height": 4424
+          "width": 748,
+          "height": 897
         },
         {
-          "id": "7a34d9efd879be31",
-          "source": "local/shows/t10/02.jpg",
+          "id": "e447674c9aaba467",
+          "source": "local/exhibitions/t10/02.png",
           "alt": "",
-          "width": 3687,
-          "height": 4424
+          "width": 748,
+          "height": 897
         },
         {
-          "id": "fc92ccfe1d93a3fd",
-          "source": "local/shows/t10/03.jpg",
+          "id": "b40ff3d6a0950f20",
+          "source": "local/exhibitions/t10/03.png",
           "alt": "",
-          "width": 3687,
-          "height": 4424
+          "width": 748,
+          "height": 897
         },
         {
-          "id": "07dd801bb7bed074",
-          "source": "local/shows/t10/04.jpg",
+          "id": "d8932f742d618c63",
+          "source": "local/exhibitions/t10/04.png",
           "alt": "",
-          "width": 3687,
-          "height": 4424
+          "width": 748,
+          "height": 897
         },
         {
-          "id": "14e0978ff5e5ac64",
-          "source": "local/shows/t10/05.jpg",
+          "id": "f8b6e9c346c70417",
+          "source": "local/exhibitions/t10/05.png",
           "alt": "",
-          "width": 1600,
-          "height": 1200
+          "width": 965,
+          "height": 724
         }
       ],
       "metadata": {}
@@ -16953,40 +16911,40 @@
       "sourceUrl": "archive:2017 Color y forma",
       "rows": [],
       "cover": {
-        "id": "c355ab5ca0845497",
-        "source": "local/shows/color-y-forma/01.jpg",
+        "id": "4963527c401359a5",
+        "source": "local/exhibitions/color-y-forma/01.png",
         "alt": "",
-        "width": 750,
-        "height": 743
+        "width": 747,
+        "height": 897
       },
       "images": [
         {
-          "id": "c355ab5ca0845497",
-          "source": "local/shows/color-y-forma/01.jpg",
+          "id": "4963527c401359a5",
+          "source": "local/exhibitions/color-y-forma/01.png",
           "alt": "",
-          "width": 750,
-          "height": 743
+          "width": 747,
+          "height": 897
         },
         {
-          "id": "378dd214b440680f",
-          "source": "local/shows/color-y-forma/02.jpg",
+          "id": "7adab7fe87cdf841",
+          "source": "local/exhibitions/color-y-forma/02.png",
           "alt": "",
-          "width": 725,
-          "height": 739
+          "width": 814,
+          "height": 806
         },
         {
-          "id": "ace92abd9077349f",
-          "source": "local/shows/color-y-forma/03.jpg",
+          "id": "7a74d2ca192a7e9c",
+          "source": "local/exhibitions/color-y-forma/03.png",
           "alt": "",
-          "width": 1242,
-          "height": 1491
+          "width": 1087,
+          "height": 724
         },
         {
-          "id": "c728ba8dddd03f91",
-          "source": "local/shows/color-y-forma/04.jpg",
+          "id": "aae4b2b90d5d717f",
+          "source": "local/exhibitions/color-y-forma/04.png",
           "alt": "",
-          "width": 865,
-          "height": 576
+          "width": 880,
+          "height": 897
         }
       ],
       "metadata": {}
@@ -16998,26 +16956,26 @@
       "sourceUrl": "archive:2016 colectiva Axel Pairon Gallery Antwerp, Belgium",
       "rows": [],
       "cover": {
-        "id": "3ced528db43382b4",
-        "source": "local/shows/galeria-axel-pairon/01.jpg",
+        "id": "9bcf80e6dfc5846b",
+        "source": "local/exhibitions/galeria-axel-pairon/01.png",
         "alt": "",
-        "width": 746,
-        "height": 831
+        "width": 695,
+        "height": 882
       },
       "images": [
         {
-          "id": "3ced528db43382b4",
-          "source": "local/shows/galeria-axel-pairon/01.jpg",
+          "id": "9bcf80e6dfc5846b",
+          "source": "local/exhibitions/galeria-axel-pairon/01.png",
           "alt": "",
-          "width": 746,
-          "height": 831
+          "width": 695,
+          "height": 882
         },
         {
-          "id": "bba224b69272f12f",
-          "source": "local/shows/galeria-axel-pairon/02.jpg",
+          "id": "9fb019b25674ff9d",
+          "source": "local/exhibitions/galeria-axel-pairon/02.png",
           "alt": "",
-          "width": 1280,
-          "height": 1600
+          "width": 718,
+          "height": 897
         }
       ],
       "metadata": {}
@@ -17029,40 +16987,40 @@
       "sourceUrl": "archive:2000 el color no existe existe la luz Sala VInçon Barcelona",
       "rows": [],
       "cover": {
-        "id": "67ccaefc7923a990",
-        "source": "local/shows/el-color-no-existe/01.jpg",
+        "id": "586561b1855aed9e",
+        "source": "local/exhibitions/el-color-no-existe/01.png",
         "alt": "",
-        "width": 1800,
-        "height": 1183
+        "width": 863,
+        "height": 724
       },
       "images": [
         {
-          "id": "67ccaefc7923a990",
-          "source": "local/shows/el-color-no-existe/01.jpg",
+          "id": "586561b1855aed9e",
+          "source": "local/exhibitions/el-color-no-existe/01.png",
           "alt": "",
-          "width": 1800,
-          "height": 1183
+          "width": 863,
+          "height": 724
         },
         {
-          "id": "73c862cca2a3b1db",
-          "source": "local/shows/el-color-no-existe/02.jpg",
+          "id": "19dd3dae8f5d2f38",
+          "source": "local/exhibitions/el-color-no-existe/02.png",
           "alt": "",
-          "width": 1800,
-          "height": 1265
+          "width": 765,
+          "height": 724
         },
         {
-          "id": "d064cc728f683d50",
-          "source": "local/shows/el-color-no-existe/03.jpg",
+          "id": "dfd8132b78b0bc87",
+          "source": "local/exhibitions/el-color-no-existe/03.png",
           "alt": "",
-          "width": 1957,
-          "height": 1852
+          "width": 1102,
+          "height": 724
         },
         {
-          "id": "1d0ad99ec66e6f81",
-          "source": "local/shows/el-color-no-existe/04.jpg",
+          "id": "2db2a2ea8a54bb58",
+          "source": "local/exhibitions/el-color-no-existe/04.png",
           "alt": "",
-          "width": 2511,
-          "height": 2107
+          "width": 1030,
+          "height": 724
         }
       ],
       "metadata": {}
@@ -17244,6 +17202,249 @@
           "alt": "",
           "width": 587,
           "height": 783
+        }
+      ],
+      "metadata": {}
+    },
+    {
+      "slug": "color-dialogues",
+      "kind": "show",
+      "title": "Color dialogues",
+      "sourceUrl": "official:color-dialogues",
+      "rows": [],
+      "cover": {
+        "id": "eb45b7800dae06fd",
+        "source": "local/exhibitions/color-dialogues/01.png",
+        "alt": "",
+        "width": 636,
+        "height": 424
+      },
+      "images": [
+        {
+          "id": "eb45b7800dae06fd",
+          "source": "local/exhibitions/color-dialogues/01.png",
+          "alt": "",
+          "width": 636,
+          "height": 424
+        },
+        {
+          "id": "1d0d0c1bbd47d4ae",
+          "source": "local/exhibitions/color-dialogues/02.png",
+          "alt": "",
+          "width": 1024,
+          "height": 683
+        },
+        {
+          "id": "4dfc0cb092721eaf",
+          "source": "local/exhibitions/color-dialogues/03.png",
+          "alt": "",
+          "width": 1024,
+          "height": 683
+        },
+        {
+          "id": "ae1a049c75ec65e3",
+          "source": "local/exhibitions/color-dialogues/04.png",
+          "alt": "",
+          "width": 683,
+          "height": 1024
+        },
+        {
+          "id": "5ae0d2aa95d86e1b",
+          "source": "local/exhibitions/color-dialogues/05.png",
+          "alt": "",
+          "width": 683,
+          "height": 1024
+        }
+      ],
+      "metadata": {}
+    },
+    {
+      "slug": "mira-m-no-deixis-de-mirar-me",
+      "kind": "show",
+      "title": "Mira’m no deixis de mirar-me",
+      "sourceUrl": "official:mira-m-no-deixis-de-mirar-me",
+      "rows": [],
+      "cover": {
+        "id": "c2c10cc45247710a",
+        "source": "local/exhibitions/mira-m-no-deixis-de-mirar-me/01.png",
+        "alt": "",
+        "width": 650,
+        "height": 974
+      },
+      "images": [
+        {
+          "id": "c2c10cc45247710a",
+          "source": "local/exhibitions/mira-m-no-deixis-de-mirar-me/01.png",
+          "alt": "",
+          "width": 650,
+          "height": 974
+        },
+        {
+          "id": "042b61cc07c45ff3",
+          "source": "local/exhibitions/mira-m-no-deixis-de-mirar-me/02.png",
+          "alt": "",
+          "width": 735,
+          "height": 490
+        },
+        {
+          "id": "788b885d3dde8b3e",
+          "source": "local/exhibitions/mira-m-no-deixis-de-mirar-me/03.png",
+          "alt": "",
+          "width": 650,
+          "height": 975
+        },
+        {
+          "id": "c2545780ec48b906",
+          "source": "local/exhibitions/mira-m-no-deixis-de-mirar-me/04.png",
+          "alt": "",
+          "width": 735,
+          "height": 490
+        },
+        {
+          "id": "34815edf8e23e16d",
+          "source": "local/exhibitions/mira-m-no-deixis-de-mirar-me/05.png",
+          "alt": "",
+          "width": 650,
+          "height": 974
+        },
+        {
+          "id": "219fdaae633b0f54",
+          "source": "local/exhibitions/mira-m-no-deixis-de-mirar-me/06.png",
+          "alt": "",
+          "width": 735,
+          "height": 490
+        },
+        {
+          "id": "e0d73f9e6fd095f1",
+          "source": "local/exhibitions/mira-m-no-deixis-de-mirar-me/07.png",
+          "alt": "",
+          "width": 735,
+          "height": 490
+        }
+      ],
+      "metadata": {}
+    },
+    {
+      "slug": "moll-de-l-os",
+      "kind": "show",
+      "title": "Moll de l’Ós",
+      "sourceUrl": "official:moll-de-l-os",
+      "rows": [],
+      "cover": {
+        "id": "fa5b71fbe3d6e40e",
+        "source": "local/exhibitions/moll-de-l-os/01.png",
+        "alt": "",
+        "width": 650,
+        "height": 951
+      },
+      "images": [
+        {
+          "id": "fa5b71fbe3d6e40e",
+          "source": "local/exhibitions/moll-de-l-os/01.png",
+          "alt": "",
+          "width": 650,
+          "height": 951
+        },
+        {
+          "id": "9dd9e1e9cdd48942",
+          "source": "local/exhibitions/moll-de-l-os/02.png",
+          "alt": "",
+          "width": 735,
+          "height": 502
+        },
+        {
+          "id": "76db50cad93a7d03",
+          "source": "local/exhibitions/moll-de-l-os/03.png",
+          "alt": "",
+          "width": 735,
+          "height": 502
+        },
+        {
+          "id": "9b49323fc2273730",
+          "source": "local/exhibitions/moll-de-l-os/04.png",
+          "alt": "",
+          "width": 735,
+          "height": 502
+        },
+        {
+          "id": "2e83028a45746cdc",
+          "source": "local/exhibitions/moll-de-l-os/05.png",
+          "alt": "",
+          "width": 735,
+          "height": 502
+        },
+        {
+          "id": "3475cdf93038a8f5",
+          "source": "local/exhibitions/moll-de-l-os/06.png",
+          "alt": "",
+          "width": 650,
+          "height": 951
+        },
+        {
+          "id": "a6aad42fae55a9cf",
+          "source": "local/exhibitions/moll-de-l-os/07.png",
+          "alt": "",
+          "width": 650,
+          "height": 951
+        }
+      ],
+      "metadata": {}
+    },
+    {
+      "slug": "transitions",
+      "kind": "show",
+      "title": "Transitions",
+      "sourceUrl": "official:transitions",
+      "rows": [],
+      "cover": {
+        "id": "0dba0ad5ee49cc53",
+        "source": "local/exhibitions/transitions/01.png",
+        "alt": "",
+        "width": 735,
+        "height": 490
+      },
+      "images": [
+        {
+          "id": "0dba0ad5ee49cc53",
+          "source": "local/exhibitions/transitions/01.png",
+          "alt": "",
+          "width": 735,
+          "height": 490
+        },
+        {
+          "id": "19417af6c3c8f56c",
+          "source": "local/exhibitions/transitions/02.png",
+          "alt": "",
+          "width": 650,
+          "height": 975
+        },
+        {
+          "id": "56e21acf021d1a6a",
+          "source": "local/exhibitions/transitions/03.png",
+          "alt": "",
+          "width": 735,
+          "height": 490
+        },
+        {
+          "id": "375c019cda60e2bf",
+          "source": "local/exhibitions/transitions/04.png",
+          "alt": "",
+          "width": 650,
+          "height": 975
+        },
+        {
+          "id": "68c7627a4b564ad0",
+          "source": "local/exhibitions/transitions/05.png",
+          "alt": "",
+          "width": 650,
+          "height": 975
+        },
+        {
+          "id": "8151224d7dd0d94c",
+          "source": "local/exhibitions/transitions/06.png",
+          "alt": "",
+          "width": 650,
+          "height": 975
         }
       ],
       "metadata": {}

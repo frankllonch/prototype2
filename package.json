@@ -34,7 +34,8 @@
     "wp:rehearsal": "cd wordpress/rehearsal && npx wp-env start",
     "add-shows": "node --experimental-strip-types scripts/add-shows.ts",
     "add-chart-photos": "node --experimental-strip-types scripts/add-chart-photos.ts",
-    "add-commission-photos": "node --experimental-strip-types scripts/add-commission-photos.ts"
+    "add-commission-photos": "node --experimental-strip-types scripts/add-commission-photos.ts",
+    "add-show-photos": "node --experimental-strip-types scripts/add-show-photos.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",

@@ -127,9 +127,14 @@ export const exhibitionItem = (e: Exhibition): PanelItem => ({
   ...(e.kind !== undefined ? { kind: e.kind } : {}),
 });
 
-/** The photographs a show's sheet steps through, in order. Its row shows the first. */
+/**
+ * The photographs a show's sheet steps through, in order. Its row shows the first.
+ * A show with its own set (the official photographs, or the archive's) shows
+ * that; one without falls back to the pictures its source page carried.
+ */
 function showReel(slug: string, derived: Exhibition | undefined): readonly ProjectImage[] {
-  return leadWith(derived?.images.length ? derived.images : showPhotos.get(slug)?.images ?? [], SHOW_SHEETS[slug]?.lead);
+  const own = showPhotos.get(slug)?.images ?? [];
+  return leadWith(own.length ? own : derived?.images ?? [], SHOW_SHEETS[slug]?.lead);
 }
 
 /** The same for a commissioned project. */
