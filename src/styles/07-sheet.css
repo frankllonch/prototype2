@@ -312,14 +312,10 @@
   max-height: 100%;
   object-fit: contain;
 }
-/* A landscape hangs from the line the text starts on (308) at a reading width,
-   as the sheets draw Santa & Cole, Dadà 2017 and Uterqüe; a portrait or a
-   square fills the frame. */
+/* A landscape is set at a reading width, as the sheets draw Santa & Cole,
+   Dadà 2017 and Uterqüe; a portrait or a square fills the frame. Every one is
+   centred in the frame, level with the arrows (Frank, 2026-11-26). */
 @media (min-width: 900px) {
-  .sheet .is-live .sheet-figure.is-wide {
-    align-items: flex-start;
-    padding-top: calc(var(--f) * 180);
-  }
   .sheet .sheet-figure.is-wide img { max-width: calc(var(--f) * 700); }
 }
 
@@ -328,8 +324,7 @@
  * (UPDATES/exhibitions, 2026-11-24): in a narrower box, 636 wide and 134 to
  * 1008 down. The sheets stand it at 1083; it is centred between its arrows
  * instead, 1139 to 1775 (Frank, 2026-11-25). A portrait fills its height; a
- * landscape is set at the box's width with its top at 300, level with the
- * masthead's date rather than with the text.
+ * landscape is set at the box's width, centred in it like every photograph.
  */
 @media (min-width: 900px) {
   .sheet.is-show .sheet-stage {
@@ -338,7 +333,6 @@
     top: calc(var(--f) * 134);
     bottom: calc(var(--f) * 72);
   }
-  .sheet.is-show .is-live .sheet-figure.is-wide { padding-top: calc(var(--f) * 166); }
   .sheet.is-show .sheet-figure.is-wide img { max-width: 100%; }
   .sheet.is-show .sheet-stage { --step-out: calc(var(--f) * (1870 - 1775)); }
   /* The name on one line, as every exhibition's sheet sets it, running past
