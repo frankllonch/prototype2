@@ -188,6 +188,8 @@
 }
 /* Mira'm's English gloss, on its own lines in italic as her sheet sets it. */
 .sheet-prose .lede-gloss { font-style: italic; font-weight: inherit; }
+/* What's Color (II)'s lede picks up again on a new line after a tab, as its sheet sets it. */
+.sheet-prose .lede-tab { display: inline-block; width: 3.5em; }
 /* Some sheets leave a second empty line before a change of voice. */
 .sheet-prose .apart { margin-top: calc(var(--s-lead) * 1em); }
 /*
