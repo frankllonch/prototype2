@@ -20,10 +20,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function cv_menu(): array {
 	return [
-		[ 'label' => 'Color Chart', 'path' => '/color-chart/', 'phone' => 5 ],
-		[ 'label' => 'Exhibitions', 'path' => '/exhibitions/', 'phone' => 3 ],
+		[ 'label' => 'Exhibitions', 'path' => '/exhibitions/', 'phone' => 5 ],
 		[ 'label' => 'Commissioned', 'path' => '/commissioned/', 'phone' => 4 ],
-		[ 'label' => 'Artwork', 'path' => '/artwork/', 'phone' => 2 ],
+		[ 'label' => 'Artwork', 'path' => '/artwork/', 'phone' => 3 ],
+		[ 'label' => 'Color Chart', 'path' => '/color-chart/', 'phone' => 2 ],
 		[ 'label' => 'About', 'path' => '/about/', 'panel' => 'about', 'phone' => 1 ],
 	];
 }
