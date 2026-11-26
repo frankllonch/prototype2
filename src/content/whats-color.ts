@@ -510,7 +510,7 @@ function build(): readonly Edition[] {
         return {
           heading: 'WHAT\u2019S COLOR (II)',
           align: 'left' as const,
-          teaser: cutAt(full, 'cannot be repeated today.\u00bb'),
+          teaser: cutAt(full, 'cannot be repeated today."'),
           full,
         };
       })(),
