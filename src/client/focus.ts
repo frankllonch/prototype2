@@ -1,11 +1,15 @@
-import { isPlainClick, reduceMotion, targetElement } from './env.ts';
-import { glide, topOf } from './glide.ts';
+import { isPlainClick, targetElement } from './env.ts';
+import { topOf } from './glide.ts';
 import { ABANDONED } from './transitions.ts';
 
 /** A clicked name brings its answer forward. */
 export function initWcFocus(): void {
-  sheetFocus();
-  openingFocus();
+  try {
+    sheetFocus();
+    openingFocus();
+  } finally {
+    document.documentElement.classList.remove('wc-landing');
+  }
 }
 
 function sheetFocus(): void {
@@ -59,23 +63,21 @@ function sheetFocus(): void {
     if (event.persisted) clear();
   });
 
-  if (location.hash) {
+  // Arriving by a name on the opening view: the page opens on the answer, already chosen. Only a
+  // fresh arrival: a reload or a step back in the history keeps the place the reader left.
+  const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
+  if (location.hash && (!nav || nav.type === 'navigate')) {
     const id = decodeURIComponent(location.hash.slice(1));
     const cell = document.getElementById(id);
     if (cell && focus(id)) {
-      /* The browser lands on the anchor in one jump. */
-      if (!reduceMotion.matches) {
-        /* The browser makes that jump itself, after this script has run. */
-        cell.removeAttribute('id');
-        const restore = () => window.setTimeout(() => { cell.id = id; }, 1800);
-        if (document.readyState === 'complete') restore();
-        else window.addEventListener('load', restore, { once: true });
-        window.scrollTo({ top: 0, behavior: 'auto' });
-        window.setTimeout(() => {
-          window.scrollTo({ top: 0, behavior: 'auto' });
-          glide(topOf(cell));
-        }, 80);
-      }
+      // Under the veil the head holds (components/layout.ts), so the page is first seen in place.
+      const land = () => {
+        if (cell.classList.contains('wc-focused')) window.scrollTo({ top: topOf(cell), behavior: 'instant' });
+      };
+      land();
+      // Late fonts and pictures can move the answer; follow it until the reader takes over.
+      void document.fonts?.ready.then(land);
+      if (document.readyState !== 'complete') window.addEventListener('load', land, { once: true });
     }
   }
 }
@@ -99,6 +101,8 @@ function openingFocus(): void {
     // forward, so it leaves like any other link — the page simply fades — rather than blurring the
     // view behind it.
     if (name.classList.contains('wc-numeral-link')) return;
+    // Nor is there for a name with no answer to show: it opens its edition the same plain way.
+    if (name.classList.contains('wc-name') && !name.hash) return;
     for (const el of page.querySelectorAll('.wc-focused')) el.classList.remove('wc-focused');
     // A text block holds as one; a name holds alone.
     (name.closest('.wc-text') ?? name).classList.add('wc-focused');
