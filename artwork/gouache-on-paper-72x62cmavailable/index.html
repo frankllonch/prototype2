@@ -291,7 +291,21 @@ setTimeout(function () { var root = document.documentElement;
       <div class="detail-stage">
     <figure class="detail-plate" data-tilt>
       <span class="detail-plate-inner is-photo">
-        <span class="detail-view is-shown" data-view="0">
+        <span class="detail-view is-shown" data-view="0" data-plate data-flat>
+          <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/98b339acfa029f5bc6d0f4ffb-400.avif 400w, /prototype2/media/98b339acfa029f5bc6d0f4ffb-800.avif 800w, /prototype2/media/98b339acfa029f5bc6d0f4ffb-1198.avif 1198w" sizes="(max-width: 900px) 92vw, 54vw" />
+      <source type="image/webp" srcset="/prototype2/media/98b339acfa029f5bc6d0f4ffb-400.webp 400w, /prototype2/media/98b339acfa029f5bc6d0f4ffb-800.webp 800w, /prototype2/media/98b339acfa029f5bc6d0f4ffb-1198.webp 1198w" sizes="(max-width: 900px) 92vw, 54vw" />
+      <img
+        src="/prototype2/media/98b339acfa029f5bc6d0f4ffb-1198.jpg"
+        alt="72 × 62 cm — 72 × 62 cm, 2019. Painting by Claudia Valsells."
+        width="1198"
+        height="1426"
+        style="aspect-ratio:1198 / 1426"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </picture>
+        </span><span class="detail-view" data-view="1">
           <picture class="">
       <source type="image/avif" srcset="/prototype2/media/98b339acfa029f5b-400.avif 400w, /prototype2/media/98b339acfa029f5b-800.avif 800w, /prototype2/media/98b339acfa029f5b-1600.avif 1600w" sizes="(max-width: 900px) 92vw, 54vw" />
       <source type="image/webp" srcset="/prototype2/media/98b339acfa029f5b-400.webp 400w, /prototype2/media/98b339acfa029f5b-800.webp 800w, /prototype2/media/98b339acfa029f5b-1600.webp 1600w" sizes="(max-width: 900px) 92vw, 54vw" />
@@ -301,11 +315,11 @@ setTimeout(function () { var root = document.documentElement;
         width="2000"
         height="2400"
         style="aspect-ratio:2000 / 2400"
-        loading="eager"
-        fetchpriority="high"
+        loading="lazy"
+        decoding="async"
       />
     </picture>
-        </span><span class="detail-view" data-view="1">
+        </span><span class="detail-view" data-view="2">
           <picture class="">
       <source type="image/avif" srcset="/prototype2/media/871045d49bda12e2-400.avif 400w, /prototype2/media/871045d49bda12e2-800.avif 800w, /prototype2/media/871045d49bda12e2-1600.avif 1600w" sizes="(max-width: 900px) 92vw, 54vw" />
       <source type="image/webp" srcset="/prototype2/media/871045d49bda12e2-400.webp 400w, /prototype2/media/871045d49bda12e2-800.webp 800w, /prototype2/media/871045d49bda12e2-1600.webp 1600w" sizes="(max-width: 900px) 92vw, 54vw" />
@@ -329,6 +343,24 @@ setTimeout(function () { var root = document.documentElement;
               class="detail-thumb is-shown"
               data-show="0"
               aria-pressed="true"
+              aria-label="72 × 62 cm — 72 × 62 cm, 2019. Painting by Claudia Valsells."
+            ><picture class="">
+      <source type="image/avif" srcset="/prototype2/media/98b339acfa029f5bc6d0f4ffb-400.avif 400w, /prototype2/media/98b339acfa029f5bc6d0f4ffb-800.avif 800w, /prototype2/media/98b339acfa029f5bc6d0f4ffb-1198.avif 1198w" sizes="(max-width: 899px) 5rem, 6vw" />
+      <source type="image/webp" srcset="/prototype2/media/98b339acfa029f5bc6d0f4ffb-400.webp 400w, /prototype2/media/98b339acfa029f5bc6d0f4ffb-800.webp 800w, /prototype2/media/98b339acfa029f5bc6d0f4ffb-1198.webp 1198w" sizes="(max-width: 899px) 5rem, 6vw" />
+      <img
+        src="/prototype2/media/98b339acfa029f5bc6d0f4ffb-1198.jpg"
+        alt=""
+        width="1198"
+        height="1426"
+        style="aspect-ratio:1198 / 1426"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </picture></button><button
+              type="button"
+              class="detail-thumb"
+              data-show="1"
+              aria-pressed="false"
               aria-label="Photograph of 72 × 62 cm, uncropped"
             ><picture class="">
       <source type="image/avif" srcset="/prototype2/media/98b339acfa029f5b-400.avif 400w, /prototype2/media/98b339acfa029f5b-800.avif 800w, /prototype2/media/98b339acfa029f5b-1600.avif 1600w" sizes="(max-width: 899px) 5rem, 6vw" />
@@ -345,7 +377,7 @@ setTimeout(function () { var root = document.documentElement;
     </picture></button><button
               type="button"
               class="detail-thumb"
-              data-show="1"
+              data-show="2"
               aria-pressed="false"
               aria-label="72 × 62 cm, another view"
             ><picture class="">
@@ -379,6 +411,7 @@ setTimeout(function () { var root = document.documentElement;
         <a href="/prototype2/artwork/collage-gouache-on-paper-115x105-cm/" rel="next" data-replace>Next</a>
       </nav>
     </article></main>
+
 
 
 
@@ -921,10 +954,10 @@ setTimeout(function () { var root = document.documentElement;
           <ul class="about-collection-list">
             <li class="about-collection">
                   <span class="about-collection-name">Fundació Vilacases</span>
-                  <span class="about-collection-place">Barcelona, SPAIN</span>
+                  <span class="about-collection-place">Barcelona, Spain</span>
                 </li><li class="about-collection">
                   <span class="about-collection-name">Fundació Banc Sabadell</span>
-                  <span class="about-collection-place">Barcelona, SPAIN</span>
+                  <span class="about-collection-place">Barcelona, Spain</span>
                 </li><li class="about-collection">
                   <span class="about-collection-name">Collection Hayot</span>
                   <span class="about-collection-place">France</span>

@@ -5488,7 +5488,13 @@ a.wc-bar:focus-visible {
   .wc-edition-i .wc-names .wc-sep::after { content: '\A'; white-space: pre; }
   /* A name travelled to stops where the numeral stands, clear of the bars. */
   .wc-sheet-page .wc-cell { scroll-margin-top: var(--wc-phone-top); }
-  .wc-edition .wc-back { display: none; }
+  /* The way back to all of What's Color?, at the foot of the edition as on
+     the computer (Frank, 2026-11-26), at the size of her words. */
+  .wc-edition .wc-back {
+    margin: var(--wc-ed-foot-top) 0 0;
+    font-size: var(--wc-ed-say);
+    line-height: var(--wc-ed-say-lead);
+  }
 
   .wc-sheet-page .wc-sheet {
     display: block;
@@ -5723,6 +5729,33 @@ a.wc-bar:focus-visible {
    desktop's, and the phone and tablet layouts are still (Frank, 2026-11-15). */
 @media (max-width: 899px) {
   .detail-plate, [data-tilt] { --tilt-max: 0deg; --tilt-lift: 1; }
+}
+
+/* --------------------------------- ONE WORK, SHOWN WHEN IT IS READY */
+
+/*
+ * The painting, its caption and its small pictures stay out of sight until
+ * client/views.ts has them at their final size, then come up together. Before
+ * this the browser showed the cut-out's whole transparent canvas first, so
+ * the painting arrived small and grew, and the caption beside it moved.
+ *
+ *   --ready-fade   how long they take to come up once ready.
+ *
+ * Only with scripting (html.js). Should the script never get there, the hold
+ * lets go by itself after 4s: nothing here can leave the page blank.
+ */
+.detail { --ready-fade: 0.45s; }
+html.js .detail:not(.is-ready) :is(.detail-stage, .detail-caption) {
+  opacity: 0;
+  animation: detail-unhold var(--ready-fade) var(--ease) 4s forwards;
+}
+html.js .detail.is-ready :is(.detail-stage, .detail-caption) {
+  opacity: 1;
+  transition: opacity var(--ready-fade) var(--ease);
+}
+@keyframes detail-unhold { to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .detail { --ready-fade: 0s; }
 }
 
 /* ------------------------------------------------- the other pictures */
@@ -6174,6 +6207,15 @@ a.wc-bar:focus-visible {
   .year-swatch { display: none; }
   .year-label { display: block; margin: 0; color: inherit; }
 }
+
+/*
+ * The Gallery's opening scatters the paintings past the right edge of the
+ * screen, and those transformed tiles widened the page, so it could be slid
+ * sideways while it was still loading (Frank, 2026-11-26). The page stays
+ * put: nothing scrolls sideways while the opening runs. `hidden` is the
+ * fallback for Safari before 16; on the root both mean the same.
+ */
+html.stack-running { overflow-x: hidden; overflow-x: clip; }
 
 /*
  * The Colour Chart (COLOR CHART DISSENY III, Frank, 2026-11-19).
@@ -7033,6 +7075,15 @@ html:not(.js) .inq-close { display: none; }
   text-transform: uppercase;
 }
 .sheet-prose p:last-child { margin-bottom: 0; }
+/*
+ * What's Color (II) arrives as boxes inside boxes, and the last paragraph of
+ * each box drops its gap, so "Download PDF" sat flush against the essay above
+ * it and the note below it. A box with something after it keeps the empty
+ * line (Frank, 2026-11-26).
+ */
+#exhibition-what-s-color-ii-for-architects-and-designers .sheet-prose div:not(:last-child) {
+  margin-bottom: calc(var(--s-lead) * 1em);
+}
 .sheet-prose .is-style-lead {
   font-size: var(--type);
   font-weight: 500;
@@ -7051,6 +7102,8 @@ html:not(.js) .inq-close { display: none; }
 }
 /* Mira'm's English gloss, on its own lines in italic as her sheet sets it. */
 .sheet-prose .lede-gloss { font-style: italic; font-weight: inherit; }
+/* What's Color (II)'s lede picks up again on a new line after a tab, as its sheet sets it. */
+.sheet-prose .lede-tab { display: inline-block; width: 3.5em; }
 /* Some sheets leave a second empty line before a change of voice. */
 .sheet-prose .apart { margin-top: calc(var(--s-lead) * 1em); }
 /*
@@ -7173,14 +7226,10 @@ html:not(.js) .inq-close { display: none; }
   max-height: 100%;
   object-fit: contain;
 }
-/* A landscape hangs from the line the text starts on (308) at a reading width,
-   as the sheets draw Santa & Cole, Dadà 2017 and Uterqüe; a portrait or a
-   square fills the frame. */
+/* A landscape is set at a reading width, as the sheets draw Santa & Cole,
+   Dadà 2017 and Uterqüe; a portrait or a square fills the frame. Every one is
+   centred in the frame, level with the arrows (Frank, 2026-11-26). */
 @media (min-width: 900px) {
-  .sheet .is-live .sheet-figure.is-wide {
-    align-items: flex-start;
-    padding-top: calc(var(--f) * 180);
-  }
   .sheet .sheet-figure.is-wide img { max-width: calc(var(--f) * 700); }
 }
 
@@ -7189,8 +7238,7 @@ html:not(.js) .inq-close { display: none; }
  * (UPDATES/exhibitions, 2026-11-24): in a narrower box, 636 wide and 134 to
  * 1008 down. The sheets stand it at 1083; it is centred between its arrows
  * instead, 1139 to 1775 (Frank, 2026-11-25). A portrait fills its height; a
- * landscape is set at the box's width with its top at 300, level with the
- * masthead's date rather than with the text.
+ * landscape is set at the box's width, centred in it like every photograph.
  */
 @media (min-width: 900px) {
   .sheet.is-show .sheet-stage {
@@ -7199,7 +7247,6 @@ html:not(.js) .inq-close { display: none; }
     top: calc(var(--f) * 134);
     bottom: calc(var(--f) * 72);
   }
-  .sheet.is-show .is-live .sheet-figure.is-wide { padding-top: calc(var(--f) * 166); }
   .sheet.is-show .sheet-figure.is-wide img { max-width: 100%; }
   .sheet.is-show .sheet-stage { --step-out: calc(var(--f) * (1870 - 1775)); }
   /* The name on one line, as every exhibition's sheet sets it, running past
@@ -7216,11 +7263,11 @@ html:not(.js) .inq-close { display: none; }
 /* The arrows sit either side of the box: the next one on the right margin as
    the sheet draws it, the previous one as far out on the left, and neither
    nearer the box than `--step-gap` however small the window (the chevron is
-   not sized by it). Level with the middle of the photograph showing, which
-   figures.ts measures: a landscape does not stand on the box's middle. */
+   not sized by it). Level with the middle of the box, the same height for
+   every photograph whatever its shape (Frank, 2026-11-26). */
 .sheet-step {
   position: absolute;
-  top: var(--photo-mid, 50%);
+  top: 50%;
   translate: 0 -50%;
   padding: calc(var(--f) * 24) calc(var(--f) * 14);
   color: rgb(252, 252, 250);
@@ -7507,10 +7554,10 @@ html:not(.js) .sheet-step { display: none; }
 }
 
 /* At the frame's margins, as the sheets place them, and level with the middle
-   of the picture — so they never meet the masthead in the top left. */
+   of the frame, the same height for every picture (Frank, 2026-11-26). */
 .plates-step {
   position: absolute;
-  top: var(--photo-mid, 50%);
+  top: 50%;
   translate: 0 -50%;
   padding: calc(var(--f) * 24) calc(var(--f) * 14);
   color: rgb(252, 252, 250);
@@ -7694,6 +7741,9 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
   /* Pasted text that arrived in boxes of its own keeps the same empty line. */
   .panel > .sheet .sheet-prose > * p { margin: 0 0 var(--sh-para); }
   .panel > .sheet .sheet-prose > * p:last-child { margin-bottom: 0; }
+  /* What's Color (II): its "Download PDF" keeps an empty line either side. */
+  #exhibition-what-s-color-ii-for-architects-and-designers > .sheet .sheet-prose > div { margin-bottom: 0; }
+  #exhibition-what-s-color-ii-for-architects-and-designers > .sheet .sheet-prose > * div:not(:last-child) { margin-bottom: var(--sh-para); }
   .panel > .sheet .sheet-prose .lede-open { margin-bottom: var(--sh-para); }
   .panel > .sheet .sheet-prose > :is(p:first-of-type, .is-style-lead) { font-size: var(--sh-lede); line-height: var(--sh-lede); }
   .panel > .sheet .sheet-prose > .is-style-note { font-size: var(--sh-note); line-height: var(--sh-note); }
@@ -8466,3 +8516,38 @@ html:has(.cursor.is-visible) .ball.is-on {
 .tuner-ball .tuner-row {
   grid-template-columns: 1fr 130px 58px;
 }
+/* ------------------------------------------------------------------ foot */
+
+/*
+ * The contact footer at the foot of every page but About and the detail pages
+ * (HOME sheet, 2026-11-26): centred, 20 on 20 in the 1920 frame, a blank line
+ * between its three parts, the addresses and Claudia's name semibold.
+ */
+.site-foot {
+  --u: calc(100vw / 1920);
+  position: relative;
+  z-index: 1;
+  padding: calc(160 * var(--u)) 1.25rem max(2.5rem, calc(76 * var(--u)));
+  font-size: max(0.75rem, calc(20 * var(--u)));
+  line-height: 1;
+  font-weight: 400;
+  text-align: center;
+  color: var(--ink);
+  background: var(--paper);
+}
+.site-foot p { margin: 0; }
+.site-foot p + p { margin-top: 1em; }
+.site-foot b,
+.site-foot a { font-weight: 600; }
+.site-foot a { color: inherit; text-decoration: none; }
+.site-foot a:hover,
+.site-foot a:focus-visible { background: var(--ink); color: var(--paper); outline: none; }
+
+@media (max-width: 899px) {
+  .site-foot { line-height: 1.25; padding-top: 4rem; }
+  .site-foot p + p { margin-top: 0.75rem; }
+  /* Artwork keeps its years and Inquiries fixed along the phone's foot
+     (about 100px of it): the footer stops above them. */
+  body:has(.years) .site-foot { padding-bottom: 8.5rem; }
+}
+

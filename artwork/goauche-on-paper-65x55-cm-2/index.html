@@ -291,7 +291,21 @@ setTimeout(function () { var root = document.documentElement;
       <div class="detail-stage">
     <figure class="detail-plate" data-tilt>
       <span class="detail-plate-inner is-photo">
-        <span class="detail-view is-shown" data-view="0">
+        <span class="detail-view is-shown" data-view="0" data-plate data-flat>
+          <picture class="">
+      <source type="image/avif" srcset="/prototype2/media/908571beaa329002cfa8a6ce3-400.avif 400w, /prototype2/media/908571beaa329002cfa8a6ce3-683.avif 683w" sizes="(max-width: 900px) 92vw, 54vw" />
+      <source type="image/webp" srcset="/prototype2/media/908571beaa329002cfa8a6ce3-400.webp 400w, /prototype2/media/908571beaa329002cfa8a6ce3-683.webp 683w" sizes="(max-width: 900px) 92vw, 54vw" />
+      <img
+        src="/prototype2/media/908571beaa329002cfa8a6ce3-683.jpg"
+        alt="65 × 55 cm — Gouache sobre papel, 65 × 55 cm, 2019. Painting by Claudia Valsells."
+        width="683"
+        height="813"
+        style="aspect-ratio:683 / 813"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </picture>
+        </span><span class="detail-view" data-view="1">
           <picture class="">
       <source type="image/avif" srcset="/prototype2/media/908571beaa329002-400.avif 400w, /prototype2/media/908571beaa329002-600.avif 600w" sizes="(max-width: 900px) 92vw, 54vw" />
       <source type="image/webp" srcset="/prototype2/media/908571beaa329002-400.webp 400w, /prototype2/media/908571beaa329002-600.webp 600w" sizes="(max-width: 900px) 92vw, 54vw" />
@@ -301,15 +315,53 @@ setTimeout(function () { var root = document.documentElement;
         width="600"
         height="800"
         style="aspect-ratio:600 / 800"
-        loading="eager"
-        fetchpriority="high"
+        loading="lazy"
+        decoding="async"
       />
     </picture>
         </span>
       </span>
     </figure>
     <div class="detail-under">
-      
+      <div class="detail-thumbs" role="group" aria-label="Pictures of this work">
+            <button
+              type="button"
+              class="detail-thumb is-shown"
+              data-show="0"
+              aria-pressed="true"
+              aria-label="65 × 55 cm — Gouache sobre papel, 65 × 55 cm, 2019. Painting by Claudia Valsells."
+            ><picture class="">
+      <source type="image/avif" srcset="/prototype2/media/908571beaa329002cfa8a6ce3-400.avif 400w, /prototype2/media/908571beaa329002cfa8a6ce3-683.avif 683w" sizes="(max-width: 899px) 5rem, 6vw" />
+      <source type="image/webp" srcset="/prototype2/media/908571beaa329002cfa8a6ce3-400.webp 400w, /prototype2/media/908571beaa329002cfa8a6ce3-683.webp 683w" sizes="(max-width: 899px) 5rem, 6vw" />
+      <img
+        src="/prototype2/media/908571beaa329002cfa8a6ce3-683.jpg"
+        alt=""
+        width="683"
+        height="813"
+        style="aspect-ratio:683 / 813"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </picture></button><button
+              type="button"
+              class="detail-thumb"
+              data-show="1"
+              aria-pressed="false"
+              aria-label="Photograph of 65 × 55 cm, uncropped"
+            ><picture class="">
+      <source type="image/avif" srcset="/prototype2/media/908571beaa329002-400.avif 400w, /prototype2/media/908571beaa329002-600.avif 600w" sizes="(max-width: 899px) 5rem, 6vw" />
+      <source type="image/webp" srcset="/prototype2/media/908571beaa329002-400.webp 400w, /prototype2/media/908571beaa329002-600.webp 600w" sizes="(max-width: 899px) 5rem, 6vw" />
+      <img
+        src="/prototype2/media/908571beaa329002-600.jpg"
+        alt=""
+        width="600"
+        height="800"
+        style="aspect-ratio:600 / 800"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </picture></button>
+          </div>
       <p class="detail-index"><b>144</b> of 181</p>
     </div>
   </div>
@@ -327,6 +379,7 @@ setTimeout(function () { var root = document.documentElement;
         <a href="/prototype2/artwork/collage-and-gouache-on-paper-110x100-2/" rel="next" data-replace>Next</a>
       </nav>
     </article></main>
+
 
 
 
@@ -869,10 +922,10 @@ setTimeout(function () { var root = document.documentElement;
           <ul class="about-collection-list">
             <li class="about-collection">
                   <span class="about-collection-name">Fundació Vilacases</span>
-                  <span class="about-collection-place">Barcelona, SPAIN</span>
+                  <span class="about-collection-place">Barcelona, Spain</span>
                 </li><li class="about-collection">
                   <span class="about-collection-name">Fundació Banc Sabadell</span>
-                  <span class="about-collection-place">Barcelona, SPAIN</span>
+                  <span class="about-collection-place">Barcelona, Spain</span>
                 </li><li class="about-collection">
                   <span class="about-collection-name">Collection Hayot</span>
                   <span class="about-collection-place">France</span>
