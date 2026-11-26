@@ -10,7 +10,9 @@
  * ("FEBURARY", "MAYO", "COMEN").
  *
  * `lead` is the photograph the sheet opens on, as its index in the show's own
- * set; the rest follow in their order.
+ * set; the rest follow in their order. The official sets (finalfotosexhibitions,
+ * 2026-11-26) are already in the designer's variant order and every one opens
+ * on its first, as its sheet does, so none names one now.
  *
  * `artists` is the list of names a group show's sheet sets under the masthead,
  * in place of the lede. `text` is the show's text where the site has none of
@@ -44,7 +46,6 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
     title: '‘Míra’m no deixis de mirar-me’',
     lines: ['Solo show at Alzueta Gallery,', 'Palau de Casavells'],
     when: 'From April to June 2025',
-    lead: 6,
     // The sheet sets the English gloss on lines of its own, in italic.
     edits: [['“Look at Me, Don’t Stop Looking at Me”', '<br /><em class="lede-gloss">“Look at me, don’t stop looking at me”</em>']],
   },
@@ -52,7 +53,6 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
     title: 'Painting as a gift from color',
     lines: ['Solo exhibition', 'at Gallery_BR', 'Tetbury, UK'],
     when: 'May 2024',
-    lead: 6,
   },
   // The designer's sheet (finaldesgings/exhibitions/wciii, 2026-11-26), text
   // and all: the source has no page for this edition as a show. Quotes set
@@ -77,14 +77,12 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
   transitions: {
     lines: ['Solo show at Alzueta Gallery,', 'Barcelona'],
     when: 'September 2023',
-    lead: 5,
     // The sheet does not set the name apart in the lede.
     edits: [['<strong>Transitions</strong>', 'Transitions']],
   },
   'color-dialogues': {
     lines: ['Solo show at Alzueta Gallery,', 'Madrid'],
     when: 'December 2021 to January 2022',
-    lead: 1,
     // Claudia's Spanish text (UPDATES, "Color Dialogues full sala (esp)"), in
     // place of the English, set as the English was: two paragraphs, then the
     // quote with its credit.
@@ -110,13 +108,11 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
   'color-y-forma': {
     lines: ['Solo exhibition', 'at Alzueta Gallery,', 'Barcelona'],
     when: 'February 2017',
-    lead: 2,
   },
   'el-color-no-existe': {
     title: 'El color no existe,\nexiste la luz',
     lines: ['Solo exhibition,', 'Sala Vinçon,', 'Barcelona'],
     when: 'April 2000',
-    lead: 3,
     note:
       'Individual exhibition where the interaction of the public with the installation was essential. ' +
       'I tried to demonstrate through personal experimentation that color only exists if there is light.',
@@ -131,7 +127,6 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
     title: 'Shift towards coincidence',
     lines: ['Group exhibition at Alzueta Gallery,', 'Palau de Casavells'],
     when: 'June to July 2026',
-    lead: 4,
     artists:
       'Aythamy Armas, Manolo Ballesteros, Berni Puig, Enrich.R, Claudia Valsells, Alexander Wertheim, Maria Yelletisch.',
     text: p(
@@ -162,7 +157,6 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
   'marco-limite-y-lugar': {
     lines: ['Group exhibition', 'Alzueta Gallery, Madrid'],
     when: 'March 2026',
-    lead: 3,
     artists:
       'Jordi Alcaraz, Aythamy Armas, Max Cobalto, Enrich R, Iván Franco, Nuria Maria, Bruno Ollé, Maru Quiñonero, ' +
       'Guim Tió, Claudia Valsells, Maria Yelletisch',
@@ -217,7 +211,6 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
     title: 'La Terre est bleu comme un orange',
     lines: ['Group exhibition Alzueta Gallery,', 'Madrid'],
     when: 'November 2023',
-    lead: 3,
     artists:
       'Cesc Abad, Hugo Alonso, Manolo Ballesteros, Sune Christiansen, Enrich R., Nacho Eterno, Sabine Finkenauer, ' +
       'Jon Koko, David Macho, Jan Monclús, Guillem Nadal, Juan Narowé, Maru Quiñonero, Kes Richardson, James Rielly, ' +
