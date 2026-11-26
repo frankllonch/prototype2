@@ -30,3 +30,15 @@
      100px of it): the footer stops above them. */
   body:has(.years) .site-foot { padding-bottom: 8.5rem; }
 }
+
+/*
+ * Artwork: the footer closer to the paintings (Frank, 2026-11-27). The white
+ * between the last row and the footer is the grid's own foot plus the
+ * footer's head; both are halved on this page, on the computer and the phone.
+ */
+body:has(.years) .grid { padding-bottom: 31vh; }
+body:has(.years) .site-foot { padding-top: calc(80 * var(--u)); }
+@media (max-width: 899px) {
+  body:has(.years) .grid { padding-bottom: 3.75rem; }
+  body:has(.years) .site-foot { padding-top: 2rem; }
+}
