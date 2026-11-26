@@ -1,4 +1,4 @@
-import { finePointer, phone, reduceMotion, targetElement } from './env.ts';
+import { finePointer, phone, piling, reduceMotion, targetElement } from './env.ts';
 
 /**
  * Over a painting the pointer *becomes* its name — title and year, read from the
@@ -73,6 +73,7 @@ export function initCursor(): void {
   let looking = 0;
   const relook = () => {
     if (!placed || looking || phone.matches) return;
+    if (piling()) { if (active) refresh(null); return; }
     looking = requestAnimationFrame(() => {
       looking = 0;
       refresh(document.elementFromPoint(targetX, targetY));
@@ -80,6 +81,7 @@ export function initCursor(): void {
   };
   window.addEventListener('scroll', relook, { passive: true });
   document.addEventListener('stackrestart', relook);
+  document.addEventListener('stacksettle', relook);
 
   // Coming back to the gallery restores it from the cache exactly as it was left — with the name
   // of the painting just clicked still on the pointer, which then blinked off on the first

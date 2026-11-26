@@ -6,6 +6,9 @@ export const phone = window.matchMedia('(max-width: 899px)');
 /** A screen held upright. Only the phone layout asks: see `scrollWrites`. */
 export const portrait = window.matchMedia('(orientation: portrait)');
 
+/** The gallery's opening is running: the paintings cannot be pointed at, and nothing else under the pointer scrolls. */
+export const piling = (): boolean => document.documentElement.classList.contains('stack-running');
+
 /**
  * Whether the scroll writes the words here — the note on What's Color and the
  * statement on the Colour Chart, typed in as the page is scrolled down and taken

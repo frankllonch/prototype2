@@ -1,23 +1,22 @@
 import { phone, reduceMotion, targetElement } from './env.ts';
 import { glide } from './glide.ts';
-import { LAYOUTS, WATER, easeOf, pile, scrollSpan, seeded, type Start } from './pile.ts';
+import { MOTION, SCATTER, WATER, scrollSpan, seeded } from './pile.ts';
 
 /**
  * The opening: every painting gathered into one pile in the middle of the
  * screen, dispersing into the grid as you scroll — and gathering back into it
  * when you scroll up again.
  */
-/* The opening's settings live in client/pile.ts (`motion`, `effects.pile`). */
+/* The opening's settings live in client/pile.ts. */
 export const SCROLL_SPAN = scrollSpan();
-/** The frame length `motion.follow` was tuned at. */
-const FOLLOW_FRAME_MS = 1000 / 120;
 const WATCHDOG = 4000;      // ms: if the pile cannot be measured by now, show the grid
 
 /* WebKit — Safari, and every browser on iOS. */
 const webkit = /AppleWebKit/.test(navigator.userAgent) && !/Chrome|Chromium|Edg\//.test(navigator.userAgent)
   || /CriOS|FxiOS|EdgiOS/.test(navigator.userAgent);
 
-interface Target { tx: number; ty: number; w: number; h: number; s: number; ox: number; oy: number; rot: number; op: number; delay: number }
+/** A painting's place in the grid (tx, ty, w, h), and its start: scale, offset from the centre, whether it is shown, its wait. */
+interface Target { tx: number; ty: number; w: number; h: number; s: number; ox: number; oy: number; shown: boolean; delay: number }
 /** Where the water has carried a painting from its starting place, and how fast it is going. */
 interface Drift { x: number; y: number; vx: number; vy: number; phase: number }
 
@@ -54,41 +53,42 @@ export function initStack(): void {
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   window.scrollTo(0, 0);
 
+  /*
+   * What is moved is the picture inside each tile: writing to the tile itself has the browser
+   * restyle its child as well, twice the work per painting per frame.
+   */
+  const pictureOf = new Map(tiles.map((tile) => [tile, tile.querySelector<HTMLElement>('picture') ?? tile]));
   let targets: Target[] = [];
   let live: HTMLElement[] = [];
+  let pictures: HTMLElement[] = [];
   let frame = 0;
   let measured = false;
   /** Set once the pile has been given up on; it never runs again. */
   let disabled = false;
   /** Whether the grid was fully settled on the previous frame. */
   let settled = false;
-  /** How far the pile is drawn unfolded, 0 to 1 — behind the scroll by FOLLOW. */
-  let shown = 0;
-  /** When the last frame was drawn, so the follow can be applied by time. */
-  let drawnAt = 0;
   /** Whether the tiles carry their pile order; it never changes mid-motion. */
   let ordered = false;
   /** The pending release of the tiles' layers once the grid has come to rest. */
   let unlayer = 0;
   /** Whether the grid may have changed shape since the targets were taken. */
   let stale = true;
-  /** The pile tuner changed a setting: take the starting places again on the next frame. */
-  let retake = false;
+  /** What each live tile last had written, so a frame only touches the ones that changed. */
+  let drawn: string[] = [];
+  let away: boolean[] = [];
 
   const clearTransforms = () => {
     for (const tile of tiles) {
-      tile.style.transform = '';
+      pictureOf.get(tile)!.style.transform = '';
       tile.style.zIndex = '';
-      tile.style.opacity = '';
-      tile.style.transition = '';
+      tile.classList.remove('is-away');
     }
+    drawn = [];
+    away = [];
     ordered = false;
   };
 
-  /*
-   * Each painting is drawn on a layer of its own while it moves, so the move is
-   * the compositor's work and nothing is repainted.
-   */
+  /* Each picture is on a layer of its own while it moves, so the move is the compositor's work. */
   const layer = () => {
     window.clearTimeout(unlayer);
     unlayer = 0;
@@ -105,11 +105,10 @@ export function initStack(): void {
 
   const measure = () => {
     if (disabled) return;
-    // Clear first: a transformed element reports its transformed box, and the whole pile is
-    // computed from where the tiles *would* sit without it.
     clearTransforms();
 
     live = tiles.filter((tile) => !tile.hidden);
+    pictures = live.map((tile) => pictureOf.get(tile)!);
     const h = window.innerHeight;
     const scroll = window.scrollY;
 
@@ -118,73 +117,31 @@ export function initStack(): void {
     const lift = new DOMMatrixReadOnly(getComputedStyle(grid).transform).m42;
 
     const vw = window.innerWidth;
-    const layout = LAYOUTS[pile.effect] ?? LAYOUTS.pile!;
-    const v = pile.effects[pile.effect] ?? {};
-    const m = pile.motion;
-    const box = grid.getBoundingClientRect();
-    const gridBox = { left: box.left, top: box.top - lift + scroll, width: box.width };
-    const seed = Number(m.seed) * 7919;
-    const rects = live.map((tile) => tile.getBoundingClientRect());
+    const seed = MOTION.seed * 7919;
+    const wait = seeded(seed + 17);
+    const size = h * SCATTER.size;
 
-    /* A layout with a `since` only places paintings of that year and later. */
-    const since = Number(v.since) || 0;
-    const recent = live.map((tile) => !since || Number(tile.dataset.year) >= since);
-    const placed = recent.filter(Boolean).length;
-    let front = 0;
-    let back = placed;
-    const slots = recent.map((is) => (is ? front++ : back++));
-    const shape = since ? { ...v, count: Math.min(Number(v.count) || placed, placed) } : v;
-
-    const starts: Start[] = rects.map((r, i) => layout({
-      i: slots[i]!, n: live.length, vw, vh: h,
-      tx: r.left + r.width / 2, ty: r.top - lift + scroll + r.height / 2, th: r.height,
-      grid: gridBox, rand: seeded(seed + i * 101),
-    }, shape));
-
-    /*
-     * The stagger: each painting waits its share of the unfold before it moves,
-     * in the order chosen.
-     */
-    const order = String(m.order);
-    const order_ = seeded(seed + 17);
-    const n = Math.max(1, live.length - 1);
-    const far = Math.max(1, ...starts.map((s) => Math.hypot(s.x, s.y)));
-    const tops = rects.map((r) => r.top);
-    const lo = Math.min(...tops);
-    const hi = Math.max(lo + 1, ...tops);
-    const rank = (i: number): number => {
-      switch (order) {
-        case 'random': return order_();
-        case 'centre first': return Math.hypot(starts[i]!.x, starts[i]!.y) / far;
-        case 'edges first': return 1 - Math.hypot(starts[i]!.x, starts[i]!.y) / far;
-        case 'top rows first': return (tops[i]! - lo) / (hi - lo);
-        case 'bottom rows first': return 1 - (tops[i]! - lo) / (hi - lo);
-        case 'back of pile first': return 1 - i / n;
-        default: return i / n;
-      }
-    };
-    const fade = Number(m.fade);
-
-    targets = rects.map((r, i) => {
-      const st = starts[i]!;
+    targets = live.map((tile, i) => {
+      const r = tile.getBoundingClientRect();
+      // Paintings from before `since` are not thrown: they wait unseen at the centre.
+      const shown = Number(tile.dataset.year) >= SCATTER.since;
+      const rand = seeded(seed + i * 101);
       return {
         tx: r.left + r.width / 2,
         ty: r.top - lift + scroll + r.height / 2,
         w: r.width,
         h: r.height,
-        s: r.height ? st.h / r.height : 1,
-        ox: st.x,
-        oy: st.y,
-        rot: st.rot,
-        op: st.op * fade,
-        delay: Number(m.stagger) * rank(i),
+        s: r.height ? size / r.height : 1,
+        ox: shown ? (rand() * 2 - 1) * vw * SCATTER.spreadX / 2 : 0,
+        oy: shown ? (rand() * 2 - 1) * h * SCATTER.spreadY / 2 : 0,
+        shown,
+        // The stagger: each waits its share of the unfold before it moves, in a random order.
+        delay: MOTION.stagger * wait(),
       };
     });
-    measured = live.length > 0 && live.every((tile) => tile.getBoundingClientRect().height > 0);
+    measured = targets.length > 0 && targets.every((t) => t.h > 0);
     stale = !measured;
-    if (measured && since && !counted) {
-      count(live.filter((_, i) => slots[i]! < Number(shape.count) && starts[i]!.op > 0));
-    }
+    if (measured && !counted) count(live.filter((_, i) => targets[i]!.shown));
   };
 
   /* The water: the paintings drift from the pointer (settings: WATER in client/pile.ts). */
@@ -215,12 +172,12 @@ export function initStack(): void {
   document.addEventListener('click', (event) => {
     if (settled || disabled || !measured || event.defaultPrevented || event.button !== 0) return;
     if (targetElement(event)?.closest('a, button, input, [role="dialog"]')) return;
-    const hit = live.some((tile) => {
-      if (Number(getComputedStyle(tile).opacity) < 0.5) return false;
-      const r = tile.getBoundingClientRect();
+    const hit = live.some((tile, i) => {
+      if (away[i] || Number(getComputedStyle(tile).opacity) < 0.5) return false;
+      const r = pictures[i]!.getBoundingClientRect();
       return event.clientX >= r.left && event.clientX <= r.right && event.clientY >= r.top && event.clientY <= r.bottom;
     });
-    if (hit) glide(window.innerHeight * scrollSpan());
+    if (hit) glide(window.innerHeight * SCROLL_SPAN);
   });
 
   let counted = false;
@@ -252,34 +209,19 @@ export function initStack(): void {
     if (event.animationName === 'count-in') delete (event.target as HTMLElement).dataset.count;
   });
 
-  /*
-   * The curve is `motion.curve` in client/pile.ts: in-and-out with a power of 2
-   * (gentle leaving the heap, gentle arriving in the grid) is the site's.
-   */
   const render = (time: number) => {
     frame = 0;
     if (disabled) return;
-    // The first frame after the pile has been at rest counts as one frame's worth — the clock is
-    // reset whenever it comes to rest, so a pause in the scrolling is never mistaken for time to
-    // catch up.
-    const elapsed = drawnAt ? Math.min(time - drawnAt, 100) : FOLLOW_FRAME_MS;
-    const FOLLOW = Math.min(1, Math.max(0.005, Number(pile.motion.follow)));
-    drawnAt = time;
 
     // Without a trustworthy measurement there is nothing sensible to draw, so try once more and
     // otherwise sit this frame out — the grid is already in its real positions.
-    if (retake && !settled) { retake = false; measure(); }
     if (!measured) { measure(); if (!measured) return; }
 
+    // Read once, before anything is written: a read after a write is a style pass of its own.
     const h = window.innerHeight;
-    const wanted = pile.freeze ?? Math.min(1, Math.max(0, window.scrollY / (h * scrollSpan())));
-    // Drawn behind the scroll, not at it: close the gap by FOLLOW each frame, snap the last sliver
-    // so it does not creep for ever, and keep drawing frames until the pile has caught up.
-    shown += (wanted - shown) * (1 - Math.pow(1 - FOLLOW, elapsed / FOLLOW_FRAME_MS));
-    if (Math.abs(wanted - shown) < 0.0015) shown = wanted;
-    if (shown !== wanted) schedule();
-    else drawnAt = 0;
-    const p = shown;
+    const vw = window.innerWidth;
+    const scroll = window.scrollY;
+    const p = Math.min(1, Math.max(0, scroll / (h * SCROLL_SPAN)));
 
     if (p >= 1) {
       // Settled.
@@ -315,10 +257,9 @@ export function initStack(): void {
 
     grid.classList.add('is-stacked');
     layer();
-    const ease = easeOf(pile.motion);
-    const cx = window.innerWidth * Number(pile.motion.cx);
-    const cy = window.scrollY + h * Number(pile.motion.cy);
-    const stagger = Math.min(0.95, Math.max(0, Number(pile.motion.stagger)));
+    const cx = vw * MOTION.cx;
+    const cy = scroll + h * MOTION.cy;
+    const travel = 1 - MOTION.stagger;
 
     // The water's step: real time, capped so a stalled frame throws nothing.
     const water = WATER.on;
@@ -326,7 +267,6 @@ export function initStack(): void {
     floatedAt = time;
     const reach = WATER.reach * h;
     const tether = Math.max(1, WATER.limit * h);
-    const vw = window.innerWidth;
     const slow = Math.exp(-WATER.thick * dt);
     // A cursor that has stopped is still water: its speed dies away.
     const fade = Math.exp(-6 * dt);
@@ -335,23 +275,34 @@ export function initStack(): void {
     const force = WATER.push * (WATER.still + (1 - WATER.still) * Math.min(1, Math.hypot(finger.vx, finger.vy) / WATER.fast));
     const sway = (time / 1000) * (2 * Math.PI / WATER.sway);
 
-    live.forEach((tile, i) => {
+    for (let i = 0; i < live.length; i++) {
+      const tile = live[i]!;
       const t = targets[i]!;
       // Each painting's own share of the unfold, after its wait.
-      const q = stagger ? Math.min(1, Math.max(0, (p - t.delay) / (1 - stagger))) : p;
-      const e = ease(q);
+      const e = Math.min(1, Math.max(0, (p - t.delay) / travel));
+      // The order is written once per gathering.
+      if (!ordered) tile.style.zIndex = String(live.length - i);
+      if (!t.shown) {
+        // One the pile does not show is not drawn or moved at all until it is in its place.
+        const gone = e < 1;
+        if (gone !== (away[i] ?? false)) {
+          away[i] = gone;
+          tile.classList.toggle('is-away', gone);
+        }
+        continue;
+      }
       const s = t.s + (1 - t.s) * e;
       let dx = (cx + t.ox - t.tx) * (1 - e);
       let dy = (cy + t.oy - t.ty) * (1 - e);
       // Only the paintings that are shown float, and less the nearer the grid.
-      if (water && t.op > 0 && e < 1) {
+      if (water && e < 1) {
         const d = driftOf(tile);
         const calm = 1 - e;
         if (finger.on && dt) {
           // From the cursor to the nearest point of the painting: nothing when it is over it, so
           // touching is felt the most.
           const X = t.tx + dx + d.x * calm;
-          const Y = t.ty + dy + d.y * calm - window.scrollY;
+          const Y = t.ty + dy + d.y * calm - scroll;
           const hw = (t.w * s) / 2;
           const hh = (t.h * s) / 2;
           const gap = Math.hypot(
@@ -365,7 +316,7 @@ export function initStack(): void {
         }
         // The window's edge: past it, pressed back in, harder the further out.
         const hx = t.tx + dx;
-        const hy = t.ty + dy - window.scrollY;
+        const hy = t.ty + dy - scroll;
         const outX = Math.max(0, hx + d.x - Math.max(vw, hx)) + Math.min(0, hx + d.x - Math.min(0, hx));
         const outY = Math.max(0, hy + d.y - Math.max(h, hy)) + Math.min(0, hy + d.y - Math.min(0, hy));
         d.vx = (d.vx - (d.x * WATER.home + outX * WATER.wall) * dt) * slow;
@@ -383,19 +334,13 @@ export function initStack(): void {
         dx += (d.x + WATER.bob * Math.sin(sway + d.phase)) * calm;
         dy += (d.y + WATER.bob * Math.cos(sway * 0.83 + d.phase * 1.7)) * calm;
       }
-      const r = t.rot * (1 - e);
-      tile.style.transform = `translate3d(${dx.toFixed(1)}px, ${dy.toFixed(1)}px, 0)${r ? ` rotate(${r.toFixed(2)}deg)` : ''} scale(${s.toFixed(4)})`;
-      if (t.op === 0) {
-        // One the pile does not show stays wholly unseen until it is in its place: part-faded on
-        // the way it stood as a ghost behind the others.
-        tile.style.transition = e < 1 ? 'none' : '';
-        tile.style.opacity = e < 1 ? '0' : '';
-      } else if (t.op !== 1) tile.style.opacity = (t.op + (1 - t.op) * Math.min(1, Math.max(0, e))).toFixed(3);
-      else if (tile.style.opacity) tile.style.opacity = '';
-      // The order is written once per gathering, not every frame: rewriting 181 z-indexes per
-      // frame was a style recalculation for nothing.
-      if (!ordered) tile.style.zIndex = String(live.length - i);
-    });
+      // In its place it carries no transform; a value that has not changed is not written again.
+      const css = e >= 1 ? '' : `translate3d(${dx.toFixed(1)}px, ${dy.toFixed(1)}px, 0) scale(${s.toFixed(4)})`;
+      if (css !== (drawn[i] ?? '')) {
+        drawn[i] = css;
+        pictures[i]!.style.transform = css;
+      }
+    }
     ordered = true;
     // Water never quite stops: the paintings are drawn every frame until the grid has them.
     if (water) schedule();
@@ -435,14 +380,6 @@ export function initStack(): void {
   // The grid can change shape under the pile (density).
   grid.addEventListener('gridchange', relayoutAfterResize);
   window.addEventListener('load', relayout);
-  // The pile tuner (client/pile-tuner.ts) changed a setting: take the starting places again and
-  // draw.
-  document.addEventListener('piletune', () => {
-    if (disabled) return;
-    stale = true;
-    retake = true;
-    schedule();
-  });
   void document.fonts.ready.then(relayout);
 
   // A tablet turned upright, or a window drawn in below 900px: the gallery becomes the phone's two
@@ -465,6 +402,8 @@ function reveal(): void {
   // The opening is over, so the browser may have the scroll back: it is what returns the reader to
   // their place when they come back from a painting.
   if ('scrollRestoration' in history) history.scrollRestoration = 'auto';
+  // Every time the grid comes to rest, for what reads the element under a still pointer.
+  document.dispatchEvent(new CustomEvent('stacksettle'));
   if (wired) return;
   wired = true;
   document.dispatchEvent(new CustomEvent('stackdone'));
