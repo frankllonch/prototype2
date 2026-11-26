@@ -17139,6 +17139,107 @@
         }
       ],
       "metadata": {}
+    },
+    {
+      "slug": "whats-color-iii",
+      "kind": "show",
+      "title": "What’s Color III",
+      "sourceUrl": "archive:finaldesgings/exhibitions/wciii/fotos",
+      "rows": [],
+      "cover": {
+        "id": "6555b3357bf3ab0c",
+        "source": "local/shows/whats-color-iii/01.png",
+        "alt": "",
+        "width": 1177,
+        "height": 785
+      },
+      "images": [
+        {
+          "id": "6555b3357bf3ab0c",
+          "source": "local/shows/whats-color-iii/01.png",
+          "alt": "",
+          "width": 1177,
+          "height": 785
+        },
+        {
+          "id": "23fb2daca0dbc981",
+          "source": "local/shows/whats-color-iii/02.png",
+          "alt": "",
+          "width": 1177,
+          "height": 785
+        },
+        {
+          "id": "73a714924719d75d",
+          "source": "local/shows/whats-color-iii/03.png",
+          "alt": "",
+          "width": 1177,
+          "height": 785
+        },
+        {
+          "id": "0a85cbefa230f155",
+          "source": "local/shows/whats-color-iii/04.png",
+          "alt": "",
+          "width": 1177,
+          "height": 785
+        },
+        {
+          "id": "0cecbdff3d03df55",
+          "source": "local/shows/whats-color-iii/05.png",
+          "alt": "",
+          "width": 1177,
+          "height": 785
+        },
+        {
+          "id": "d303f8b859ab437a",
+          "source": "local/shows/whats-color-iii/06.png",
+          "alt": "",
+          "width": 1177,
+          "height": 785
+        },
+        {
+          "id": "5f1309b9b79678f4",
+          "source": "local/shows/whats-color-iii/07.png",
+          "alt": "",
+          "width": 1177,
+          "height": 785
+        },
+        {
+          "id": "6e88e9eb596a2f18",
+          "source": "local/shows/whats-color-iii/08.png",
+          "alt": "",
+          "width": 1177,
+          "height": 785
+        },
+        {
+          "id": "d72d5cf767a9a66a",
+          "source": "local/shows/whats-color-iii/09.png",
+          "alt": "",
+          "width": 1177,
+          "height": 785
+        },
+        {
+          "id": "d59884502ba4bc28",
+          "source": "local/shows/whats-color-iii/10.png",
+          "alt": "",
+          "width": 1177,
+          "height": 785
+        },
+        {
+          "id": "85a2e82c1dcaf82a",
+          "source": "local/shows/whats-color-iii/11.png",
+          "alt": "",
+          "width": 1177,
+          "height": 785
+        },
+        {
+          "id": "03ea9cd17f0bba82",
+          "source": "local/shows/whats-color-iii/12.png",
+          "alt": "",
+          "width": 1177,
+          "height": 785
+        }
+      ],
+      "metadata": {}
     }
   ]
 }

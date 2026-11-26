@@ -54,6 +54,26 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
     when: 'May 2024',
     lead: 6,
   },
+  // The designer's sheet (finaldesgings/exhibitions/wciii, 2026-11-26), text
+  // and all: the source has no page for this edition as a show. Quotes set
+  // straight, as Frank asked; "Because To me" corrected to "to".
+  'whats-color-iii': {
+    title: 'What’s Color III',
+    lines: ['Terranova Bookstore'],
+    when: 'April 2024',
+    text: p(
+      '<strong>"What’s Color?"</strong> is a personal project I started in 2020 where I assign a color to people who ' +
+        'inspire and admire me and whom I ask about their personal relationship with color.<br />' +
+        'I presented this third edition at Llibreria Terranova in Barcelona during April 2024.',
+      'During the past months I have invited them to consider and answer the question: "What does color mean to you?"',
+      'First of all, to open up a dialogue, to grasp new ways of seeing colors, other perspectives, but also to better ' +
+        'understand the world. I wanted to think of color in a broader context, outside of the artistic view, and to ' +
+        'discover the notion of color as it is thought of by others.',
+      'Now, this whole journey has become a process of identifying and synthesizing knowledge, when possible, into ' +
+        'color, with the wish to create and share a "Color Glossary" where color meets perception. For what purpose?',
+      'Because to me, COLOR is a universal visual emotion, capable of reaching and inspiring every human being.',
+    ),
+  },
   transitions: {
     lines: ['Solo show at Alzueta Gallery,', 'Barcelona'],
     when: 'September 2023',
