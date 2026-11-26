@@ -1,22 +1,4 @@
-/*
- * The phone: the unit everything on it is measured in, and its bar.
- *
- * Last of the numbered parts on purpose. The bar's desktop rules are spread
- * over the base sheet and What's Color's, some of them heavier than they look
- * (the film's three states, the block of colour on the current page), and a
- * phone rule that came before any of them would lose to it on order alone.
- *
- * The designer's phone sheets are 375 wide, and every figure in the phone
- * rules across the site is a measurement off those sheets, written as so many
- * of `--p`: one unit of that frame. On a 375 phone it is one pixel, on a wider
- * phone or an upright tablet the whole sheet grows with the screen, as the
- * desktop's does with its 1920, so a tablet is the phone layout at its own
- * size. A phone on its side is the exception: wide but short, it stops growing
- * at `--phone-frame-max` so that it is not set in 90px type.
- *
- * The phone layout is everything below 900px wide: `(max-width: 899px)` here
- * and in each page's own sheet, `phone` in client/env.ts for the scripts.
- */
+/* The phone: the unit everything on it is measured in, and its bar. */
 .menu-toggle { display: none; }
 
 @media (max-width: 899px) {
@@ -28,17 +10,12 @@
     );
     /* The page margin of the phone sheets: 20 either side, content 335 wide. */
     --phone-pad: calc(20 * var(--p));
-    /* What a page with no sheet of its own clears at the top: the three bars
-       end 37 down, and 20 under them. Every drawn page sets its own. */
+    /* What a page with no sheet of its own clears at the top: the three bars end
+       37 down, and 20 under them. */
     --bar: calc(57 * var(--p));
   }
 
-  /*
-   * About is not on the phone unit. Its phone layout was approved as it stood,
-   * measured from the old two-line bar and the desktop's own clamps, so the
-   * figures it reads off the root are held here at what they were. Nothing
-   * else on the phone depends on them any more.
-   */
+  /* About is not on the phone unit. */
   .about { --bar: 8rem; }
   .about-close { --pad: clamp(1.25rem, 3.5vw, 3rem); --type: clamp(1rem, 2.0833vw, 3.4rem); --lead: 1.25; }
   .about-cue { --cue-stroke: 4.5; }
@@ -49,10 +26,10 @@
     position: fixed; z-index: 96;
     top: calc(20 * var(--p)); right: calc(20 * var(--p));
     width: calc(27 * var(--p)); height: calc(17 * var(--p));
-    /* three bars 27 x 3 at 0 / 7 / 14, each its own element (.menu-line) so
-       each can turn on its own: see THE MENU'S MOTION at the foot. */
-    /* The negative of what is under it, as the desktop bar is: 255 less the
-       ink (36, 37, 40), so that over paper it comes out as the ink itself. */
+    /* three bars 27 x 3 at 0 / 7 / 14, each its own element (.menu-line) so each
+       can turn on its own: see THE MENU'S MOTION at the foot. */
+    /* The negative of what is under it, as the desktop bar is: 255 less the ink
+       (36, 37, 40), so that over paper it comes out as the ink itself. */
     color: rgb(219, 218, 215);
     mix-blend-mode: difference;
     -webkit-tap-highlight-color: transparent;
@@ -60,9 +37,7 @@
   }
   /* 44 x 44 to press, without moving the bars */
   .menu-toggle::before { content: ''; position: absolute; inset: calc(-13.5 * var(--p)) calc(-8.5 * var(--p)); }
-  /* Reached by key, a frame round the bars. The site shows focus as it shows
-     hover, by a change of colour (00-base.css), and this button has neither a
-     hover nor a second colour to change to. Never drawn for a finger. */
+  /* Reached by key, a frame round the bars. */
   .menu-toggle:focus-visible { outline: calc(2 * var(--p)) solid currentColor; outline-offset: calc(8 * var(--p)); }
   /* The overlays that keep a Close of their own in this corner. */
   body:has(.about.is-open) .menu-toggle,
@@ -86,8 +61,8 @@
     visibility: hidden; opacity: 0;
     transition: opacity 0.35s var(--ease), visibility 0s linear 0.35s;
   }
-  /* The start page's own first screen stands under About and the panels;
-     raised by the hamburger it stands over everything. */
+  /* The start page's own first screen stands under About and the panels; raised
+     by the hamburger it stands over everything. */
   html.is-start .top { z-index: 50; }
   html.is-menu-open .top, html.is-start .top { visibility: visible; opacity: 1; transition-delay: 0s; }
   html.is-menu-open body, html.is-start body { overflow: hidden; }
@@ -101,8 +76,8 @@
   html.is-leaving:is(.is-menu-closing, .is-menu-collapsed):not(.is-menu-held) .top .wordmark { opacity: 0; transition: opacity 0.3s var(--ease); }
 
   /* Rules elsewhere that take the bar away outright. */
-/* A work on its own page is drawn with no bar at all on the phone sheet
-     either: it is put away by touching the ground around it (client/paging.ts). */
+/* A work on its own page is drawn with no bar at all on the phone sheet either:
+   it is put away by touching the ground around it (client/paging.ts). */
   .is-detail .menu-toggle { display: none; }
   html.is-menu-open body:has(.panel.is-open) .top { opacity: 1; pointer-events: auto; }   /* 02-overlays.css:730 */
 
@@ -134,11 +109,11 @@
   .top :is(.wordmark, .top-soon, .menu a):focus-visible { text-decoration: underline; text-underline-offset: 0.12em; }
   /* The letters boxed for the desktop's other hover (client/scramble.ts), left
      in the words when a window that loaded wide goes below 900px: they flow as
-     plain text. The roll's are taken out again by its own script. */
+     plain text. */
   .top .scram { display: inline; }
-  /* The roll's letters stand down for the plain word, which kerns: boxed one
-     to a box, VALSELLS and WHAT'S sat three and four pixels off the sheet at
-     this size, and a word could break between any two of its letters. */
+  /* The roll's letters stand down for the plain word, which kerns: boxed one to
+     a box, VALSELLS and WHAT'S sat three and four pixels off the sheet at this
+     size, and a word could break between any two of its letters. */
   .top .roll-word { display: none; }
   .top .roll-text { position: static; width: auto; height: auto; margin: 0; overflow: visible; clip-path: none; white-space: inherit; }
   /* The two names break after their first word because the column is 335 wide. */
@@ -167,50 +142,15 @@
   .top, .menu-toggle { transition: none; }
 }
 
-/*
- * A screen shorter than the sheet. The menu is drawn 771 tall to the foot of
- * its last word, which no phone shows at once, so below 811 of height the
- * shortfall comes out of the two large gaps — under the wordmark and under
- * What's Color? — in the proportion they stand in, and never below 40. From
- * 811 up it is the sheet exactly. Take this block out to have the sheet's
- * gaps at any height, and the menu scroll.
- */
+/* A screen shorter than the sheet. */
 @media (max-width: 899px) {
   .top { --menu-short: max(0px, calc(811 * var(--p) - 100svh)); }
   .wordmark { margin-bottom: max(calc(40 * var(--p)), calc(179 * var(--p) - 0.635 * var(--menu-short))); }
   .menu { margin-top: max(calc(40 * var(--p)), calc(103 * var(--p) - 0.365 * var(--menu-short))); }
 }
 
-/*
- * ============================================================================
- * THE MENU'S MOTION — every knob for the three bars and the cascade is here.
- * (Frank, 2026-11-15.) Times in ms or s, angles in deg, shifts in --p (so 7
- * is 7 px on a 375 phone). Try them live on the preview page's sliders.
- *
- * The three bars, when the menu is showing. Each bar turns about its middle:
- *   --lineN-rotate    how far it turns (0deg leaves it straight)
- *   --lineN-shift     how far it moves down (minus is up) before turning;
- *                     7 brings the top bar to the middle one's line
- *   --lineN-opacity   1 shows it, 0 hides it
- *   --lineN-duration  how long the turn takes
- *   --lineN-delay     how long it waits before turning
- *   --line-ease       the turn's curve, the same for all three
- * Frank's settings (2026-11-15): top and bottom meet on the middle line and
- * turn ±45°, the middle one stays and spins a half turn.
- *
- * The cascade: the sections drop in one after another, top to bottom, and
- * leave in the reverse order when the menu closes.
- *   --cascade-style   which drop. Change the one word to try another:
- *                       cascade-slide    straight down into place
- *                       cascade-bounce   down, a little past, and back
- *                       cascade-unfold   swings down from its top edge
- *                       cascade-side     in from the left
- *   --cascade-duration  how long each section takes
- *   --cascade-step      the wait between one section and the next
- *   --cascade-distance  how far each comes from, in --p
- *   --cascade-ease      the curve
- * ============================================================================
- */
+/* ============================================================================
+   THE MENU'S MOTION — every knob for the three bars and the cascade is here. */
 @media (max-width: 899px) {
   :root {
     --line1-rotate: 45deg;   --line1-shift: 7;  --line1-opacity: 1; --line1-duration: 400ms; --line1-delay: 0ms;
@@ -260,8 +200,8 @@
     animation-direction: reverse;
     animation-delay: calc((5 - var(--cascade-at)) * var(--cascade-step));
   }
-  /* Put away, on the start screen or over a page: the name and the bars stay
-     on the paper, the rest is gone (Frank, 2026-11-15). */
+  /* Put away, on the start screen or over a page: the name and the bars stay on
+     the paper, the rest is gone. */
   html.is-menu-collapsed:not(.is-menu-closing) .top :is(.top-soon, .menu) { visibility: hidden; }
   html.is-menu-collapsed:not(.is-menu-closing) .top :is(.top-soon, .menu a) { animation: none; }
   /* The paper stays until the last section has gone. */
@@ -291,11 +231,7 @@
   .top :is(.top-soon, .menu a) { animation: none !important; }
 }
 
-/*
- * What's Color? and the Color Chart come in as About's record does: each block
- * rises a little out of a blur as it reaches the screen (client/reveal.ts).
- * The same figures as `.about-pop` in 02-overlays.css.
- */
+/* What's Color? */
 @media (max-width: 899px) {
   .phone-pop {
     opacity: 0;
@@ -311,13 +247,9 @@
   .phone-pop:not(.is-in) { pointer-events: none; }
 }
 
-/*
- * Nothing pulls past its top or its foot, on a phone or a computer, in any
- * browser: not the pages, not the start page (which had pull-to-reload back
- * on for phones, 04-whats-color.css), not a sheet, About or the menu (Frank,
- * 2026-11-15). Wider than the Safari-only rule in 00-base.css, which it
- * outlasts.
- */
+/* Nothing pulls past its top or its foot, on a phone or a computer, in any
+   browser: not the pages, not the start page (which had pull-to-reload back on
+   for phones, 04-whats-color.css), not a sheet, About or the menu. */
 html,
 html:has(body.has-film),
 body,

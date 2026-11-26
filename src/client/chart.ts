@@ -1,28 +1,7 @@
-import { reduceMotion } from './env.ts';
+import { reduceMotion, targetElement } from './env.ts';
 import { initReel, type Loop } from './about.ts';
 
-/**
- * The Colour Chart's opening (Frank, 2026-11-19).
- *
- * 1. On arrival the title and the first paragraph ("Color has always been my
- *    inspiration: a source of knowledge, a way of life!") type themselves in.
- * 2. The rest of the statement is typed by the reader: the opening holds
- *    still over a run of scroll, and each stretch of it types the next words
- *    — or a tap on the chevron carries the page down the run for them
- *    (client/scroll-cue.ts). Forwards only, as About is: a word once typed
- *    stays, and scrolling back up takes nothing away.
- * 3. When the run is spent the opening lets go and the page scrolls on as any
- *    page does. Everything under the statement — Order yours, the cost, the
- *    two sections, the thanks, the line at the foot — comes in out of a blur
- *    as it reaches the screen, with About's look and beat.
- *
- * Typing never jumps: however fast the scroll, the words come at most one a
- * beat (`WORD_MS`), so a quick flick types quickly rather than all at once.
- *
- * All of it is an enhancement of a page that already stands. The words are
- * split here and the run is made here; the stylesheet hides the statement
- * only under `html.js`, and `.is-typed` shows every word whatever happened.
- */
+/** The Colour Chart's opening. */
 
 /** After the page's own entrance, so the words are not typed behind a veil. */
 const WAIT_MS = 350;
@@ -31,33 +10,20 @@ const WAIT_MS = 350;
 const WORD_MS = 24;
 
 /**
- * And once the reader has scrolled past the end of the run, the words still
- * owed are typed at this pace, so the statement is finished before anything
- * under it comes in (Frank, 2026-11-20).
+ * And once the reader has scrolled past the end of the run, the words still owed
+ * are typed at this pace, so the statement is finished before anything under it
+ * comes in.
  */
 const CATCH_UP_MS = 10;
 
-/**
- * How much scroll the reader types with, per word, in screens. More is
- * slower: the reader has to travel further for each word. The run is at
- * least RUN_MIN screens, so a short statement still asks for a real scroll.
- */
+/** How much scroll the reader types with, per word, in screens. */
 const PER_WORD = 0.02;
 const RUN_MIN = 0.6;
 
 /** Each column comes in this much later than the one to its left, at most. */
 const STAGGER_MS = 260;
 
-/**
- * The photographs (Frank, 2026-11-22). Once the statement is typed, the reel
- * is driven in from the right, starting REEL_LEAD of a screen before the typing
- * run ends, so the words finishing and the photographs arriving are one
- * movement. With the photographs over the foot of the screen the page is held
- * still for REEL_HOLD of a screen of scroll, as About is (Frank, 2026-11-25),
- * which carries them the rest of the way in. More is a longer hold. Then, as About's,
- * it goes on round its loop with the scroll: REEL_DRIFT sideways per pixel,
- * the pace it comes in at easing down to that one.
- */
+/** The photographs. */
 const REEL_LEAD = 0.1;
 const REEL_HOLD = 0.6;
 const REEL_DRIFT = 0.8;
@@ -101,10 +67,8 @@ export function initChart(): void {
     },
     { rootMargin: '0px 0px -2% 0px' },
   );
-  // Nothing under the statement comes in until the statement is finished:
-  // the page reads as one sequence, the words and then the rest (Frank,
-  // 2026-11-20). Asked from `done`, so whatever is already on screen then
-  // comes in at once, column by column.
+  // Nothing under the statement comes in until the statement is finished: the page reads as one
+  // sequence, the words and then the rest.
   let watching = false;
   const watch = (landed = false) => {
     if (watching) return;
@@ -148,15 +112,15 @@ export function initChart(): void {
     if (settled) return;
     run = Math.round(Math.max(RUN_MIN, restWords.length * PER_WORD) * window.innerHeight);
     runway.style.height = `${run}px`;
-    // A stage taller than the screen is held with its foot on the screen's,
-    // so the words being typed are always in view.
+    // A stage taller than the screen is held with its foot on the screen's, so the words being
+    // typed are always in view.
     stage.style.top = `${Math.min(0, window.innerHeight - stage.offsetHeight)}px`;
     // Where the run ends, for the chevron to carry the reader to.
     top = hold ? hold.getBoundingClientRect().top + window.scrollY : opening.offsetTop;
     chart.dataset.chartEnd = String(top + run);
     if (!reel || !held) return;
-    // Held with the photographs a gap above the foot of the screen, or where
-    // it stands as the typing ends if they are already higher than that.
+    // Held with the photographs a gap above the foot of the screen, or where it stands as the
+    // typing ends if they are already higher than that.
     const h = window.innerHeight;
     const gap = Number.parseFloat(getComputedStyle(chart.querySelector('[data-chart-reel]')!).marginTop) || 0;
     const at = Math.min(-run, h - held.offsetHeight - gap);
@@ -170,9 +134,8 @@ export function initChart(): void {
 
   /* ------------------------------------------------------- once, and done */
 
-  // Everything comes in once, on the way down, and then stays as it is
-  // (Frank, 2026-11-25): when the runs are spent, or the reader turns back,
-  // they are taken out of the page, with the scroll moved by as much, so
+  // Everything comes in once, on the way down, and then stays as it is: when the runs are spent,
+  // or the reader turns back, they are taken out of the page, with the scroll moved by as much, so
   // nothing on screen moves and nothing is held again on the way up.
   let lastY = 0;
   let idle = 0;
@@ -227,14 +190,12 @@ export function initChart(): void {
   };
 
   let autoDone = false;
-  // The furthest the reader has been down the run. Forwards only: going back
-  // up never lowers it, so a reader who went past the end and came back finds
-  // the statement finished, not stopped where they now are.
+  // The furthest the reader has been down the run.
   let furthest = 0;
   const onScroll = () => {
     furthest = Math.max(furthest, window.scrollY - top);
-    // The reader's words follow the clock's: nothing they scroll is typed
-    // until the opening has finished typing itself, and then it catches up.
+    // The reader's words follow the clock's: nothing they scroll is typed until the opening has
+    // finished typing itself, and then it catches up.
     if (!autoDone) return;
     const share = Math.max(0, Math.min(1, furthest / run));
     aim(autoWords.length + Math.ceil(share * restWords.length));
@@ -253,8 +214,7 @@ export function initChart(): void {
 
   window.setTimeout(() => {
     aim(autoWords.length);
-    // When the clock's words are in, whatever the reader has scrolled since
-    // is typed after them.
+    // When the clock's words are in, whatever the reader has scrolled since is typed after them.
     const wait = () => {
       if (shown < autoWords.length) return void window.setTimeout(wait, WORD_MS);
       autoDone = true;
@@ -271,12 +231,6 @@ interface ReelRun { from: number; to: number }
  * The reel of photographs between the statement and Order yours: About's loop
  * (client/about.ts), seen through the page to the window's edges, and moved by
  * the window's scroll instead of About's panel's.
- *
- * `still` stands it in its place, to be moved only by hand (motion reduced).
- * `go` starts it on the scroll, once the statement is typed: in from the right
- * over the run of scroll it is given, and round the loop after that. Tapped, a
- * photograph opens the panel of photographs at itself (client/figures.ts reads
- * `figureStart`).
  */
 function initChartReel(chart: HTMLElement): { still(): void; go(run: () => ReelRun, landed: boolean): void; settled(removed: number): void } | null {
   const el = chart.querySelector<HTMLElement>('[data-chart-reel]');
@@ -285,7 +239,7 @@ function initChartReel(chart: HTMLElement): { still(): void; go(run: () => ReelR
   el.addEventListener(
     'click',
     (event) => {
-      const item = (event.target as HTMLElement).closest<HTMLElement>('[data-chart-photo]');
+      const item = targetElement(event)?.closest<HTMLElement>('[data-chart-photo]');
       if (item && panel) panel.dataset.figureStart = item.dataset.chartPhoto ?? '0';
     },
     { capture: true },
@@ -298,15 +252,13 @@ function initChartReel(chart: HTMLElement): { still(): void; go(run: () => ReelR
   let started = false;
   let reelRun = (): ReelRun => ({ from: 0, to: 1 });
   let start = 0;
-  // Where the reader's scroll has the reel, eased twice over, so neither its
-  // place nor its pace ever jumps. One number for the whole movement: the reel
-  // is never carried round its loop before it has come all the way in.
+  // Where the reader's scroll has the reel, eased twice over, so neither its place nor its pace
+  // ever jumps.
   let eased = 0;
   let at = 0;
-  // Once it has come in, it stays in, and moves round its loop one way as the
-  // page goes down and the other as it comes up (Frank, 2026-11-25): `zero` is
-  // the scroll at which it stands in its place, `rest` what is left of its way
-  // in, `shift` the scroll taken out of the page with the runs.
+  // Once it has come in, it stays in, and moves round its loop one way as the page goes down and
+  // the other as it comes up: `zero` is the scroll at which it stands in its place, `rest` what is
+  // left of its way in, `shift` the scroll taken out of the page with the runs.
   let inPlace = false;
   let landed = false;
   let zero = 0;
@@ -379,8 +331,6 @@ function initChartReel(chart: HTMLElement): { still(): void; go(run: () => ReelR
       reelRun = run;
       landed = arrived;
       // Arriving down the page (a reload, Back): it stands in its place.
-      // Otherwise it sets out from the run's own start, and comes in
-      // gently, however far on the reader is when the typing ends.
       eased = at = landed ? reelRun().to : Math.min(window.scrollY, reelRun().from);
       if (!landed) settle = REEL_ARRIVE_MS;
       place();
@@ -403,8 +353,7 @@ function initChartReel(chart: HTMLElement): { still(): void; go(run: () => ReelR
 
 /**
  * Every word in the element wrapped in its own span, in reading order, leaving
- * the markup around them (line breaks, the paragraphs) as it is. The spaces
- * stay outside the spans, so the lines break exactly as they did.
+ * the markup around them (line breaks, the paragraphs) as it is.
  */
 function splitWords(root: HTMLElement): HTMLElement[] {
   const nodes: Text[] = [];

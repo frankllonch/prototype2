@@ -1,7 +1,5 @@
 <?php
-/**
- * Any other page — a privacy notice, say — set as a column of text.
- */
+/** Any other page — a privacy notice, say — set as a column of text. */
 $cv_post = get_queried_object();
 cv_page( [
 	'title' => get_the_title( $cv_post ),

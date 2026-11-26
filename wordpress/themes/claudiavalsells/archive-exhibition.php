@@ -1,12 +1,5 @@
 <?php
-/**
- * Exhibitions: a list rather than a gallery, in the sheet's four groups. The
- * name and place at the left, the year at the right, a rule between each —
- * and the photograph only when you reach for a row.
- *
- * Also the body of each exhibition's own address (single-exhibition.php),
- * which is this page with that show's panel already open.
- */
+/** Exhibitions: a list rather than a gallery, in the sheet's four groups. */
 $cv_open  = $args['open'] ?? '';
 $cv_title = $args['title'] ?? 'Exhibitions';
 $cv_desc  = $args['description'] ?? 'Exhibitions and art fairs of the painter Claudia Valsells, 2000 to today.';
@@ -14,25 +7,20 @@ $cv_desc  = $args['description'] ?? 'Exhibitions and art fairs of the painter Cl
 $cv_shows  = array_map( 'cv_exhibition', function_exists( 'cvc_exhibitions' ) ? cvc_exhibitions() : [] );
 $cv_panels = array_values( array_filter( $cv_shows, fn( $s ) => $s['hasPage'] ) );
 
-// The show at its own address joins the panels when the list does not carry
-// it — a draft being previewed, say — and a panel that is not on the page is
-// not opened: a veil locked over nothing would be the whole page.
+// The show at its own address joins the panels when the list does not carry it — a draft
+// being previewed, say — and a panel that is not on the page is not opened: a veil locked
+// over nothing would be the whole page.
 if ( ! empty( $args['show'] ) && $args['show']['hasPage'] && ! in_array( $args['show']['id'], array_column( $cv_panels, 'id' ), true ) ) {
 	$cv_panels[] = $args['show'];
 }
 if ( $cv_open && ! in_array( $cv_open, array_map( fn( $s ) => "exhibition-{$s['slug']}", $cv_panels ), true ) ) {
 	$cv_open = '';
 }
-// Where a served panel closes to: the bar's address once the script closes
-// it, and its Close link's for a reader without scripting.
+// Where a served panel closes to: the bar's address once the script closes it, and its Close
+// link's for a reader without scripting.
 $cv_root = $cv_open ? home_url( '/exhibitions/' ) : '';
 
 // A detail as the static page sets it (exhibitionsPage in src/pages/index.ts).
-// Its masthead states the place alone, as the list's rows do: the kind of show
-// that opens an entry's "Where" ("Solo show, …") is the group's name, and is
-// taken off here (placeOf). And a text that opens on the show's own name and a
-// bracketed translation of it has that opening set apart (splitOpening). The
-// list below is given the entries as they are: the phone's rows show the kind.
 $cv_panels = array_map(
 	fn( $s ) => array_merge( $s, [ 'venue' => cv_show_place( $s['venue'] ), 'text' => cv_show_opening( $s['text'] ) ] ),
 	$cv_panels
@@ -48,7 +36,6 @@ cv_page( [
 ] );
 get_header();
 echo '<h1 class="sr-only">Exhibitions</h1>';
-// The private collections close the list. WordPress keeps them on the About
-// page (its "Private collections" field), so they are typed once.
+// The private collections close the list.
 echo cv_exhibition_list( $cv_shows, cv_about()['collections'] );
 get_footer();

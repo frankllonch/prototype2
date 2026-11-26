@@ -1,20 +1,17 @@
-import { isPlainClick, reduceMotion } from './env.ts';
+import { isPlainClick, reduceMotion, targetElement } from './env.ts';
 import { glide, topOf } from './glide.ts';
 
 /**
- * ‘Read more’ writes the rest of the text in (Frank, 2026-11-26): the words
- * the reader has already read stand where they were, and the rest step in
- * one at a time, as the Color Chart's statement does, ‘Read less’ last. The
- * block takes its whole height at once — unwritten words keep their place —
- * so nothing under it moves while the words come. At most one word every
- * this many milliseconds; less is faster typing.
+ * ‘Read more’ writes the rest of the text in: the words the reader has already
+ * read stand where they were, and the rest step in one at a time, as the Color
+ * Chart's statement does, ‘Read less’ last.
  */
 const WORD_MS = 18;
 
 /**
- * And never longer than this in all (Frank, 2026-11-26): a long text — the
- * second edition's runs to some 450 words — types several words a beat so it
- * is written in this time rather than eight seconds. Less is quicker.
+ * And never longer than this in all: a long text — the second edition's runs to
+ * some 450 words — types several words a beat so it is written in this time
+ * rather than eight seconds.
  */
 const MAX_MS = 3000;
 
@@ -39,11 +36,7 @@ function teaserWords(block: HTMLElement): number {
   return n;
 }
 
-/**
- * Every word of the whole text (not its heading) in its own span, in reading
- * order, made once. The spaces stay outside the spans, so the lines break
- * exactly as they did.
- */
+/** Every word of the whole text (not its heading) in its own span, in reading order, made once. */
 function wordsOf(block: HTMLElement): HTMLElement[] {
   const open = block.querySelector<HTMLElement>('.wc-text-open');
   if (!open) return [];
@@ -76,8 +69,8 @@ function wordsOf(block: HTMLElement): HTMLElement[] {
 }
 
 /**
- * Words written from `from` to `to` (or erased, when `to` is less) over
- * `total` milliseconds, then `done`.
+ * Words written from `from` to `to` (or erased, when `to` is less) over `total`
+ * milliseconds, then `done`.
  */
 function run(block: HTMLElement, words: HTMLElement[], from: number, to: number, total: number, done?: () => void): void {
   block.classList.add('is-typing');
@@ -115,9 +108,8 @@ function typeOpen(block: HTMLElement): void {
 }
 
 /**
- * ‘Read less’ undoes it (Frank, 2026-11-26): the words written in are taken
- * back out, last first, half as fast again as they came — then the block
- * folds to its cut text.
+ * ‘Read less’ undoes it: the words written in are taken back out, last first,
+ * half as fast again as they came — then the block folds to its cut text.
  */
 const UNTYPE_SPEED = 1.5;
 
@@ -139,21 +131,14 @@ function typeClose(block: HTMLElement, fold: () => void): void {
   });
 }
 
-/**
- * The opening view's three texts.
- *
- * ‘Read more’ swaps the cut text for the whole of it, in place; any other
- * plain click on a block is the block being used as the doorway it looks
- * like, and goes through the heading's own link so the page leaves the way
- * every other departure does. Modified clicks are left alone — the heading is
- * a real link and knows what a cmd-click means.
- */
+/** The opening view's three texts. */
 export function initWcTexts(): void {
   const texts = document.querySelector<HTMLElement>('.wc-texts');
   if (!texts) return;
 
   texts.addEventListener('click', (event) => {
-    const target = event.target as Element;
+    const target = targetElement(event);
+    if (!target) return;
     const more = target.closest<HTMLButtonElement>('.wc-more');
     if (more) {
       event.preventDefault();
@@ -173,8 +158,8 @@ export function initWcTexts(): void {
         typeClose(block, () => {
           block.classList.remove('is-open');
           block.querySelector('.wc-more')?.setAttribute('aria-expanded', 'false');
-          // Folding a long text can leave the reader staring past its end;
-          // bring the block's head back if it has gone over the top.
+          // Folding a long text can leave the reader staring past its end; bring the block's head
+          // back if it has gone over the top.
           if (block.getBoundingClientRect().top < 0) {
             glide(topOf(block));
           }

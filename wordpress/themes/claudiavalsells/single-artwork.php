@@ -1,7 +1,5 @@
 <?php
-/**
- * A painting on its own page — what a shared link opens.
- */
+/** A painting on its own page — what a shared link opens. */
 $cv_post = get_queried_object();
 $cv_work = cv_work( $cv_post );
 $cv_text = trim( wp_strip_all_tags( $cv_work['text'] ) );

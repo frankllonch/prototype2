@@ -2,11 +2,6 @@
 /**
  * The grid, its tiles, the density controls and the year rail —
  * src/components/gallery.ts and src/components/years.ts.
- *
- * Rows of one height, widths following the pictures, left-aligned with wide
- * gutters. `--unit` (the row height) is the only thing the density control
- * changes; every tile's width is `--unit × --a`. Everything the lightbox
- * caption needs rides on the tile as data attributes.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -21,10 +16,7 @@ const CV_DENSITIES = [
 ];
 const CV_DEFAULT_DENSITY = 2;
 
-/**
- * One tile. `$item`: slug, title, url, image (attachment id), and optionally
- * year, dimensions, materials, reference, available, plate.
- */
+/** One tile. */
 function cv_tile( array $item, int $index, bool $priority, ?string $panels = null, ?int $anchor = null, ?float $scaled = null ): string {
 	$name   = $item['title'];
 	$href   = $panels ? ( $item['url'] ?: "#{$panels}-{$item['slug']}" ) : $item['url'];
@@ -53,10 +45,7 @@ function cv_tile( array $item, int $index, bool $priority, ?string $panels = nul
 	);
 }
 
-/**
- * The grid. Options: items, lightbox, panels (kind), stack, justified, feed,
- * toScale, eager (leading tiles loaded eagerly).
- */
+/** The grid. */
 function cv_grid( array $o ): string {
 	$items     = $o['items'];
 	$lightbox  = ! empty( $o['lightbox'] );
@@ -67,8 +56,8 @@ function cv_grid( array $o ): string {
 	$to_scale  = ! empty( $o['toScale'] );
 	$eager     = $o['eager'] ?? 14;
 
-	// Every tile carries the size it would be drawn at on a wall, whether or
-	// not the reader ever asks for it: the switch is then a class on the grid.
+	// Every tile carries the size it would be drawn at on a wall, whether or not the reader ever
+	// asks for it: the switch is then a class on the grid.
 	$sizes    = array_map( fn( $item ) => cv_real_size( $item['dimensions'] ?? null ), $items );
 	$scale    = cv_scale_against( $sizes );
 	$scale_of = fn( array $item, int $i ) => ( $to_scale && ! empty( $item['plate'] ) ) ? $scale( $sizes[ $i ], cv_aspect( $item['image'] ) ) : null;
@@ -82,8 +71,8 @@ function cv_grid( array $o ): string {
 			. '<div class="feed-column">' . $columns[0] . '</div><div class="feed-column">' . $columns[1] . '</div></div>';
 	}
 
-	// The first tile of each year carries that year's anchor, so the rail can
-	// be plain links and still work with scripting off.
+	// The first tile of each year carries that year's anchor, so the rail can be plain links and
+	// still work with scripting off.
 	$seen  = [];
 	$tiles = '';
 	foreach ( $items as $i => $item ) {

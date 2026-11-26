@@ -1,18 +1,6 @@
 /* ------------------------------------------------------- the roll, rewound */
 
-/*
- * The bar's roll plays backwards when the pointer leaves (Frank, 2026-11-17).
- *
- * In, each letter turns over a step after the one before it, first letter
- * first (00-base.css, "text roll"). Out, it used to run in that same order, so
- * the word came back the way a new word arrives. Now the last letter that went
- * over is the first to come back, and the word unrolls the way it rolled: the
- * hover is one motion played forwards and then backwards.
- *
- * `--n` is the number of letters in the word, written on it by the build
- * (components/layout.ts). 85ms is the roll's own step, and has to move with it.
- * Kept in a file of its own, below the roll, so it can be lifted out whole.
- */
+/* The bar's roll plays backwards when the pointer leaves. */
 .roll::before, .roll::after {
   transition-delay: max(0ms, calc((var(--n, 1) - 1 - var(--i)) * 85ms));
 }
@@ -22,20 +10,7 @@
 
 /* ------------------------------------------------- the roll, without a cut */
 
-/*
- * No visible edge to the roll (Frank, 2026-11-17).
- *
- * Each letter rolls inside a box that cuts off whatever leaves it, and the
- * cut was a hard line: a letter rising out was sliced flat across, which drew
- * the box it sits in. Now the box reaches --roll-pad further above and below
- * the letter, taken straight back as margin so nothing in the bar moves, and
- * instead of cutting it fades: clear at the box's edge, solid by --roll-soft
- * in from it. A letter leaving dissolves as it goes, and one arriving
- * condenses out of nothing.
- *
- * The two copies are placed by `top`, which counts from inside that padding,
- * so they are set down by the same amount to stay where they were.
- */
+/* No visible edge to the roll. */
 .roll {
   --roll-pad: 0.35em;
   --roll-soft: 0.35em;

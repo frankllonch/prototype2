@@ -1,12 +1,4 @@
-/**
- * Crawls claudiavalsells.com and writes a structured dataset to content/projects.json.
- *
- * Discovery is sitemap-driven (the site publishes wp-sitemap.xml), so we get the
- * canonical URL list from WordPress itself instead of guessing or scraping links.
- *
- * Raw HTML is cached under content/raw/ so re-runs are offline and instant; delete
- * that directory to force a refetch.
- */
+/** Crawls claudiavalsells.com and writes a structured dataset to content/projects.json. */
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
@@ -74,11 +66,7 @@ async function sitemapUrls(name: string): Promise<string[]> {
 const clean = (s: string) =>
   s.replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
 
-/**
- * Decodes the entities WordPress emits. Numeric references are handled generically
- * rather than one at a time — the source uses at least &#215; (×) and &#8243; (″),
- * and listing them individually is how the first two got missed.
- */
+/** Decodes the entities WordPress emits. */
 const decode = (s: string) =>
   s.replace(/&#(\d+);/g, (_, code: string) => String.fromCodePoint(Number(code)))
    .replace(/&#x([0-9a-f]+);/gi, (_, code: string) => String.fromCodePoint(parseInt(code, 16)))
@@ -174,8 +162,8 @@ function metadataFrom(postEl: HTMLElement | null, rows: readonly Row[], title: s
     meta.available = categories.includes('available');
   }
 
-  // The body text of a painting page is Claudia's own inventory line,
-  // e.g. "L585, Cv2026, 162x130cm" followed by "Acrylic on canvas".
+  // The body text of a painting page is Claudia's own inventory line, e.g. "L585, Cv2026,
+  // 162x130cm" followed by "Acrylic on canvas".
   const body = rows.flatMap((r) => r.columns).filter((c) => c.kind === 'text').map((c) => stripTags(c.html)).join(' · ');
   const haystack = `${title} · ${body}`;
 
@@ -196,8 +184,8 @@ function metadataFrom(postEl: HTMLElement | null, rows: readonly Row[], title: s
       .replace(/(\d)\s*(cm|mm|m)$/, '$1 $2');
   }
 
-  // Stop before any digit: the source often runs the medium straight into the
-  // dimensions ("Acrylic on canvas 70x60cm"), which belong in their own field.
+  // Stop before any digit: the source often runs the medium straight into the dimensions ("Acrylic
+  // on canvas 70x60cm"), which belong in their own field.
   const materials = /\b((?:acrylic|oil|gouache|watercolou?r|pigment|ink|tempera)\b[^.,;·\n\d]*)/i.exec(body)?.[1];
   if (materials) {
     meta.materials = clean(materials)
@@ -242,8 +230,8 @@ async function extractOne(url: string, kind: ProjectKind): Promise<Project | nul
     }
   }
 
-  // Two painting pages have a dead placehold.it image in the body but a real
-  // featured image, which WordPress only exposes through og:image. Recover it.
+  // Two painting pages have a dead placehold.it image in the body but a real featured image, which
+  // WordPress only exposes through og:image.
   if (images.length === 0) {
     const og = /<meta property="og:image" content="([^"]+)"/.exec(html)?.[1];
     if (og?.includes('/wp-content/uploads/')) {

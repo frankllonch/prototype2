@@ -1,12 +1,5 @@
 <?php
-/**
- * The order things come in.
- *
- * Content rules rather than presentation, so they live here and not in the
- * theme: the works newest first, the exhibitions and the commissioned work in
- * the order they were listed with anything new on top, and everything on one
- * page — these are archives of a few hundred entries at most, not feeds.
- */
+/** The order things come in. */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -34,13 +27,7 @@ function cvc_order_archives( WP_Query $q ): void {
 	}
 }
 
-/**
- * Every published work, newest year first, ties broken by the date it was added.
- *
- * Cached for the request and for an hour across requests, since the gallery,
- * each painting's page (for its neighbours and its place in the archive) and
- * the year rail all ask for the same list.
- */
+/** Every published work, newest year first, ties broken by the date it was added. */
 function cvc_works(): array {
 	static $works = null;
 	if ( null !== $works ) {
@@ -65,12 +52,7 @@ function cvc_works(): array {
 	return $works;
 }
 
-/**
- * The pictures of a list of entries, read into the cache in one go.
- *
- * Each tile asks for its picture's metadata and mime type; without this,
- * that is two queries per entry — some four hundred for the grid.
- */
+/** The pictures of a list of entries, read into the cache in one go. */
 function cvc_prime_pictures( array $post_ids ): void {
 	$pictures = [];
 	foreach ( $post_ids as $id ) {
@@ -84,12 +66,7 @@ function cvc_prime_pictures( array $post_ids ): void {
 	}
 }
 
-/**
- * The list is remade whenever a work is saved, trashed or restored. The save
- * is caught on wp_after_insert_post, which the block editor fires once an
- * entry's fields are written — save_post fires before them, with the year
- * still the old one.
- */
+/** The list is remade whenever a work is saved, trashed or restored. */
 add_action( 'wp_after_insert_post', function ( int $post_id, WP_Post $post ) {
 	if ( 'artwork' === $post->post_type ) {
 		cvc_forget_works();
@@ -102,15 +79,7 @@ function cvc_forget_works(): void {
 	delete_transient( 'cvc_work_ids' );
 }
 
-/**
- * An entry saved without a year is this year's.
- *
- * The year is what the grid, the rail and the lists are ordered by, so an
- * entry without one would not appear at all — and the editor only sends the
- * fields that were touched, so a new painting published without opening the
- * Year field has none. This year is the likeliest answer, and the field is
- * there to correct it. Early, so the colour sampler and the list cache see it.
- */
+/** An entry saved without a year is this year's. */
 add_action( 'wp_after_insert_post', function ( int $post_id, WP_Post $post ) {
 	if ( ! in_array( $post->post_type, [ 'artwork', 'exhibition', 'commissioned' ], true ) ) {
 		return;
@@ -123,7 +92,10 @@ add_action( 'wp_after_insert_post', function ( int $post_id, WP_Post $post ) {
 	}
 }, 5, 2 );
 
-/** Exhibitions in their listed order: anything new (order 0) first, then as listed, then by year. */
+/**
+ * Exhibitions in their listed order: anything new (order 0) first, then as
+ * listed, then by year.
+ */
 function cvc_exhibitions(): array {
 	static $items = null;
 	if ( null === $items ) {
@@ -140,12 +112,7 @@ function cvc_exhibitions(): array {
 	return $items;
 }
 
-/**
- * The commissioned work by group, the groups in their own order.
- *
- * A project filed under no group falls into the first one rather than
- * disappearing — it turns up on the page where it will be noticed and moved.
- */
+/** The commissioned work by group, the groups in their own order. */
 function cvc_commissioned_groups(): array {
 	$terms = get_terms( [ 'taxonomy' => 'commissioned_group', 'hide_empty' => false ] );
 	if ( is_wp_error( $terms ) ) {
@@ -169,7 +136,8 @@ function cvc_commissioned_groups(): array {
 	] );
 	cvc_prime_pictures( wp_list_pluck( $posts, 'ID' ) );
 	foreach ( $posts as $post ) {
-		// get_the_terms reads the cache get_posts has just filled; wp_get_post_terms would query again.
+		// get_the_terms reads the cache get_posts has just filled; wp_get_post_terms would query
+		// again.
 		$own = get_the_terms( $post, 'commissioned_group' );
 		$own = is_array( $own ) ? wp_list_pluck( $own, 'term_id' ) : [];
 		$key = ( $own && isset( $groups[ $own[0] ] ) ) ? $own[0] : $first;

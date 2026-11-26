@@ -1,7 +1,4 @@
-/**
- * Boot. Every module is an enhancement: the pages are complete and navigable
- * with scripting off — tiles are real links, panels are real anchors.
- */
+/** Boot. */
 import { initTextRoll } from './text-roll.ts';
 import { initScramble } from './scramble.ts';
 import { initTransitions } from './transitions.ts';
@@ -15,7 +12,6 @@ import { initSheets } from './sheets.ts';
 import { initLightbox } from './lightbox.ts';
 import { initCursor } from './cursor.ts';
 import { initBall } from './ball.ts';
-import { initBallTuner } from './ball-tuner.ts';
 import { initFilm } from './film.ts';
 import { initCurrent } from './current.ts';
 import { initScrollbar } from './scrollbar.ts';
@@ -33,57 +29,51 @@ import { initGlide } from './glide.ts';
 import { initWrite } from './write.ts';
 import { initMenu } from './menu.ts';
 import { initReveal } from './reveal.ts';
-import { initPileTuner } from './pile-tuner.ts';
 
-// The head stops waiting for these scripts after a few seconds and lets the
-// page stand as it does without them (components/layout.ts). Arriving later
-// than that, they take it back before anything below reads the document.
-document.documentElement.classList.add('js');
-// The menu first: on a phone it is the only way from one page to another, so
-// nothing that fails further down may leave its button unanswered. And before
-// the panels: it gets out of About's way on the click that opens it.
-initMenu();
-// One hover or the other, never both: the document says which, and
-// components/layout.ts is where that is decided.
-if (document.documentElement.dataset.hover === 'scramble') initScramble();
-else initTextRoll();
-initTransitions();
-initControls();
-initStack();
-initYears();
-initHoverList();
-initPanels();
-initFigures();
-initSheets();
-initLightbox();
-initCursor();
-// The pointer itself: the ball (client/ball.ts, styles/11-ball.css).
-initBall();
-initFilm();
-initCurrent();
-initScrollbar();
-initTilt();
-initPaging();
-initViews();
-initScrollCue();
-initAbout();
-initInquiries();
-initChart();
-initBook();
-initWcFocus();
-initWcTexts();
-initGlide();
-initWrite();
-initReveal();
-// The menu hover tuner (client/hover-tuner.ts) is retired from the page
-// (Frank, 2026-11-18): whatever it left in this browser is cleared so the bar
-// is drawn exactly as the stylesheet says.
-try { localStorage.removeItem('cv-tune'); localStorage.removeItem('cv-tune-css'); } catch { /* private window */ }
-document.getElementById('tune-early')?.remove();
-delete document.documentElement.dataset.tune;
-// The gallery opening's tuner: off unless the page was opened with ?pile
-// (client/pile-tuner.ts).
-initPileTuner();
-// The ball's tuner: off unless the page was opened with ?ball
-// (client/ball-tuner.ts).
-initBallTuner();
+const root = document.documentElement;
+// The head removes this class if the scripts are late (components/layout.ts); put back here.
+root.classList.add('js');
+
+// In boot order. The menu first: on a phone it is the only way between pages. Each module is an
+// enhancement, so one that fails is reported and the rest still start.
+const modules: readonly (() => void)[] = [
+  initMenu,
+  // The bar's hover, as components/layout.ts chose it.
+  root.dataset.hover === 'scramble' ? initScramble : initTextRoll,
+  initTransitions,
+  initControls,
+  initStack,
+  initYears,
+  initHoverList,
+  initPanels,
+  initFigures,
+  initSheets,
+  initLightbox,
+  initCursor,
+  initBall,
+  initFilm,
+  initCurrent,
+  initScrollbar,
+  initTilt,
+  initPaging,
+  initViews,
+  initScrollCue,
+  initAbout,
+  initInquiries,
+  initChart,
+  initBook,
+  initWcFocus,
+  initWcTexts,
+  initGlide,
+  initWrite,
+  initReveal,
+];
+for (const init of modules) {
+  try { init(); } catch (error) { console.error(error); }
+}
+
+// The tuners are development tools, fetched only when asked for with ?pile or ?ball.
+const asked = new URLSearchParams(location.search);
+const stored = (key: string) => { try { return localStorage.getItem(key) === '1'; } catch { return false; } };
+if (asked.has('pile') || stored('cv-pile-on')) void import('./pile-tuner.ts').then((m) => m.initPileTuner());
+if (asked.has('ball') || stored('cv-ball-on')) void import('./ball-tuner.ts').then((m) => m.initBallTuner());

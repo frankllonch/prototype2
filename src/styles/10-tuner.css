@@ -1,10 +1,6 @@
-/* ------------------------------------------------------------ hover tuner */
+/* ---------------------------------------------------------- tuner panels */
 
-/*
- * The panel for trying the bar's hover live (client/hover-tuner.ts). Only on
- * a page opened with ?tune, and never below 900px. It sets its own type and
- * colours throughout, so nothing of the site's lettering leaks into it.
- */
+/* The development tuners' panel (client/tuner-ui.ts). */
 .tuner {
   /* Clear of the bar, which it is there to watch. */
   position: fixed; right: 16px; bottom: 16px; z-index: 100000;
@@ -49,11 +45,7 @@
 
 /* ------------------------------------------------------------- pile tuner */
 
-/*
- * The gallery opening's panel (client/pile-tuner.ts, ?pile). It wears the
- * hover tuner's clothes; when both are open it stands to the left of it.
- */
-html[data-tune] .tuner-pile { right: 372px; }
+/* The gallery opening's panel (client/pile-tuner.ts, ?pile). */
 .tuner-pile .tuner-effects { grid-template-columns: repeat(4, 1fr); }
 .tuner-spread {
   margin: 6px 0 8px; padding: 6px 8px 8px;
@@ -67,11 +59,7 @@ html[data-tune] .tuner-pile { right: 372px; }
 .tuner-pile .tuner-row { grid-template-columns: 1fr 130px 72px; }
 .tuner-pile .tuner-row.is-big { grid-template-columns: 1fr 140px 64px; }
 
-/*
- * Opaque and flat: no backdrop blur. Blurring what is behind it meant redrawing
- * the panel from 181 moving painting layers every frame, which in Chromium
- * (Brave) ran the graphics memory out and drew the panel as a black square.
- */
+/* Opaque and flat: no backdrop blur. */
 .tuner-pile {
   background: #161618; backdrop-filter: none; -webkit-backdrop-filter: none;
   box-shadow: 0 4px 16px rgb(0 0 0 / 0.3);

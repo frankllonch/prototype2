@@ -9,15 +9,6 @@ type ReelOf = (project: Project) => readonly ProjectImage[];
  * The commissioned index, after the designer's layout: the kind of work named
  * once at the left, its projects listed beside it, a rule under each and the
  * year at the right margin.
- *
- * The rows are tighter than the exhibitions index because each is one line, so
- * the photograph cannot sit in the row — it would set the row's height and the
- * list would jump as the pointer crossed it. It floats over the list instead,
- * taken out of flow entirely, which costs the layout nothing and reads as the
- * picture being held up beside the name rather than filed under it.
- *
- * That photograph is the first of the project's reel, whatever `reelOf` puts
- * there; it is never set on its own.
  */
 export function commissionedList(groups: readonly ProjectGroup[], reelOf: ReelOf): Html {
   return html`<div class="xlist com-list">
@@ -56,9 +47,6 @@ function group(section: ProjectGroup, reelOf: ReelOf): Html {
 /**
  * A project's name, with the one break the phone sheet sets by hand offered
  * where it is recorded (`BREAK_AFTER` in content/groups.ts).
- *
- * The space before the `<br>` stays: from 900px up the break is not displayed
- * (`.xrow-br`), and the name must read there exactly as it does without it.
  */
 function title(item: GroupedProject): Html {
   if (!item.breakAfter) return html`${item.title}`;

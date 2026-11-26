@@ -1,22 +1,4 @@
-/**
- * Puts the official photographs on the commissioned sheets.
- *
- * Frank sent a set for each commissioned project (claudiastuff/finalfotos,
- * 2026-11-26), exported from the designer's file in the order each sheet steps
- * through them. They replace what came from WordPress: a project with a folder
- * here shows exactly that folder, in its order, and nothing else.
- *
- * The folder is the source, as for the colour chart's photographs: drop the
- * pictures into content/raw/local/commissioned/<slug>/ named so that they sort
- * in reading order (01.png, 02.png …), run this, and they are in. They were
- * sent rather than published, so the files are the record, kept out of git
- * with the rest of content/raw. A project with no folder keeps its own.
- *
- * Re-runnable: it rewrites each project's images from whatever is in its
- * folder, so adding, removing or reordering a photograph is doing it to a file.
- *
- *   npm run add-commission-photos && npm run images && npm run build
- */
+/** Puts the official photographs on the commissioned sheets. */
 import { readFile, writeFile, readdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';

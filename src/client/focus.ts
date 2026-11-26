@@ -1,23 +1,8 @@
-import { isPlainClick, reduceMotion } from './env.ts';
+import { isPlainClick, reduceMotion, targetElement } from './env.ts';
 import { glide, topOf } from './glide.ts';
 import { ABANDONED } from './transitions.ts';
 
-/**
- * A clicked name brings its answer forward.
- *
- * On an edition's page the anchor itself already travels — the page scrolls
- * smoothly by stylesheet — so this only marks what was chosen: the page gets
- * `wc-focus`, the entry gets `wc-focused`, and the stylesheet blurs everything
- * else. The reader's next own movement — a wheel, a touch, a click outside the
- * entry, Escape — clears it, and the programmatic travel does not count as
- * movement, which is why this listens to inputs rather than to the scroll they
- * cause. Arriving with an answer's id in the address focuses it the same way,
- * so a shared link lands the way a click does.
- *
- * On the opening view a clicked name is a departure instead, and the view sees
- * it off the same way: the chosen name holds while the rest of the page falls
- * back, until the new page takes the screen.
- */
+/** A clicked name brings its answer forward. */
 export function initWcFocus(): void {
   sheetFocus();
   openingFocus();
@@ -44,15 +29,15 @@ function sheetFocus(): void {
 
   document.addEventListener('click', (event) => {
     // A name in the roster, or a bar of the colour chart at the foot.
-    const name = (event.target as Element).closest<HTMLAnchorElement>(
+    const name = targetElement(event)?.closest<HTMLAnchorElement>(
       'a.wc-name[href^="#"], a.wc-bar[href^="#"]',
     );
     if (name) {
       if (focus(decodeURIComponent(name.hash.slice(1)))) return;
     }
-    // The quote itself is a thing to choose, not only its name in the roster:
-    // clicking an entry brings it forward the same way.
-    const cell = (event.target as Element).closest<HTMLElement>('.wc-cell');
+    // The quote itself is a thing to choose, not only its name in the roster: clicking an entry
+    // brings it forward the same way.
+    const cell = targetElement(event)?.closest<HTMLElement>('.wc-cell');
     if (cell && cell.id) {
       focus(cell.id);
       return;
@@ -67,10 +52,8 @@ function sheetFocus(): void {
   });
 
   /*
-   * A page left focused and revisited through the back/forward cache comes
-   * back exactly as it was left — blurred, with no click to explain it. Only
-   * the cached restore is cleared: on a fresh arrival this event follows the
-   * address-led focus below, and must not undo it.
+   * A page left focused and revisited through the back/forward cache comes back
+   * exactly as it was left — blurred, with no click to explain it.
    */
   window.addEventListener('pageshow', (event) => {
     if (event.persisted) clear();
@@ -80,25 +63,9 @@ function sheetFocus(): void {
     const id = decodeURIComponent(location.hash.slice(1));
     const cell = document.getElementById(id);
     if (cell && focus(id)) {
-      /*
-       * The browser lands on the anchor in one jump. Arriving from the
-       * opening view should instead read as entering the page and travelling
-       * down to the answer, the way an on-page click does — so back to the
-       * top at once, then the same journey. Travel only: with motion reduced,
-       * the jump the browser already made is the right behaviour.
-       */
+      /* The browser lands on the anchor in one jump. */
       if (!reduceMotion.matches) {
-        /*
-         * The browser makes that jump itself, after this script has run —
-         * Chromium as parsing finishes, Safari some while after load — and
-         * once it has, the glide finds itself already at the answer and has
-         * nowhere to go. (The stylesheet's smooth scroll used to disguise the
-         * jump as a journey; it is gone, so the jump showed.) So the answer's
-         * id is taken off until the browser has stopped looking for it: there
-         * is no anchor to jump to, the page stays at the top, and the glide
-         * makes the trip. The id comes back once loading has settled, for the
-         * roster's own links and anyone copying the address.
-         */
+        /* The browser makes that jump itself, after this script has run. */
         cell.removeAttribute('id');
         const restore = () => window.setTimeout(() => { cell.id = id; }, 1800);
         if (document.readyState === 'complete') restore();
@@ -124,22 +91,20 @@ function openingFocus(): void {
 
   document.addEventListener('click', (event) => {
     if (!isPlainClick(event)) return;
-    const name = (event.target as Element).closest<HTMLAnchorElement>(
+    const name = targetElement(event)?.closest<HTMLAnchorElement>(
       'a.wc-name, a.wc-intro, .wc-text-head a',
     );
     if (!name || !page.contains(name)) return;
-    // A numeral (I, II, III) opens a whole edition, not one answer: there is
-    // nothing to hold forward, so it leaves like any other link — the page
-    // simply fades — rather than blurring the view behind it (Frank,
-    // 2026-11-20: the blur read as a veil over the page before it loaded).
+    // A numeral (I, II, III) opens a whole edition, not one answer: there is nothing to hold
+    // forward, so it leaves like any other link — the page simply fades — rather than blurring the
+    // view behind it.
     if (name.classList.contains('wc-numeral-link')) return;
     for (const el of page.querySelectorAll('.wc-focused')) el.classList.remove('wc-focused');
     // A text block holds as one; a name holds alone.
     (name.closest('.wc-text') ?? name).classList.add('wc-focused');
     page.classList.add('wc-focus');
-    // If the departure never commits — the load is stopped, the tab was
-    // backgrounded — the page must come back whole, on the same clock the
-    // transition module keeps for its own veil.
+    // If the departure never commits — the load is stopped, the tab was backgrounded — the page
+    // must come back whole, on the same clock the transition module keeps for its own veil.
     window.setTimeout(clear, ABANDONED);
   });
 

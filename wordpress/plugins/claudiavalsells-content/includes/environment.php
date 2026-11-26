@@ -1,28 +1,5 @@
 <?php
-/**
- * Which site is this: the live one, staging, or a copy on a laptop.
- *
- * WordPress reads it from WP_ENVIRONMENT_TYPE in wp-config.php, and a site
- * that does not say is production — so the live site needs nothing set, and
- * staging needs one line: define( 'WP_ENVIRONMENT_TYPE', 'staging' ). wp-env
- * sets 'local' on this Mac.
- *
- * Anywhere but production:
- *   - the admin bar says which site it is, in red, on every page, so a change
- *     meant for staging is never made on the live site or the other way round;
- *   - every page also tells search engines not to index it, as a header, on
- *     top of Settings → Reading — a staging copy found by Google competes with
- *     the real site, and the setting alone is one checkbox from being undone.
- *
- * On a laptop only — a site whose environment is 'local' and whose address is
- * on this machine — mail is written to wp-content/cv-mail.log.php instead of
- * being sent, since there is no mail server in Docker, so the order form and
- * the site check's test message can be tried end to end. The file begins with
- * a line of PHP that ends any request for it, so a browser asking for it gets
- * nothing; and a copy of this site that reaches a server (a Duplicator
- * package carries wp-config.php, 'local' and all) sends its mail as usual,
- * because its address is no longer this machine's.
- */
+/** Which site is this: the live one, staging, or a copy on a laptop. */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -74,10 +51,7 @@ function cvc_environment_style(): void {
 	echo '<style>#wpadminbar .cvc-environment > .ab-item{background:#b32d2e;color:#fff;font-weight:600}</style>';
 }
 
-/*
- * The mail log, on a laptop only. pre_wp_mail answering anything but null
- * stops wp_mail() there; true says it was sent.
- */
+/* The mail log, on a laptop only. */
 add_filter( 'pre_wp_mail', function ( $short, array $atts ) {
 	if ( ! cvc_is_laptop() ) {
 		return $short;
@@ -94,8 +68,8 @@ add_filter( 'pre_wp_mail', function ( $short, array $atts ) {
 	);
 	$file = cvc_mail_log();
 	if ( ! is_file( $file ) ) {
-		// Ends a request for the file, and stops PHP reading on: nothing written
-		// below — a message is whatever a visitor typed — is ever taken as code.
+		// Ends a request for the file, and stops PHP reading on: nothing written below — a message
+		// is whatever a visitor typed — is ever taken as code.
 		file_put_contents( $file, "<?php exit; __halt_compiler();\n" );
 	}
 	return false !== file_put_contents( $file, $entry, FILE_APPEND | LOCK_EX );

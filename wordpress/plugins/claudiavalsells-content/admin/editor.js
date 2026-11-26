@@ -1,11 +1,4 @@
-/**
- * The panel of fields beside each entry.
- *
- * Plain script, no build step: it uses the editor's own libraries from the
- * `wp` global and draws one control per field named in cvEditor (set in
- * includes/editor.php). A field reads and writes its post meta directly, so
- * saving the entry saves the fields with it.
- */
+/** The panel of fields beside each entry. */
 ( function ( wp ) {
 	if ( ! wp || ! wp.plugins ) {
 		return;

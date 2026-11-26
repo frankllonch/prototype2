@@ -1,24 +1,8 @@
-/*
- * The year rail: the years down the left margin, each in a colour sampled from
- * that year's own paintings (scripts/palette.ts), and under them the grid's
- * controls (00-base.css). Clicking a year travels to it in the grid.
- *
- * It is hidden while the opening pile is still moving — it is drawn hidden and
- * `stack-settled` is set once the grid has come to rest — and fades in once
- * the scroll has unfolded the whole grid. Scrolling back into the pile takes
- * the class away again and the rail goes with it.
- *
- * Off the designer's final sheet at 1920: the years at the page's size, 50
- * apart; then the controls at 30, 40 apart. The knobs are in 00-base.css,
- * under THE SIDE COLUMN, next to --rail.
- *
- * It does not move. The column is drawn where it ends up — as low as
- * --side-top asks, but never so low that its last control leaves the window —
- * and simply fades in there.
- */
+/* The year rail: the years down the left margin, each in a colour sampled from
+   that year's own paintings (scripts/palette.ts), and under them the grid's
+   controls (00-base.css). */
 :root {
-  /* The column's lines. Years medium 40 on 40 (DATA on the typography
-     sheet, 2026-11-17), controls at 40 over 30. */
+  /* The column's lines. */
   --year-lead: 1;
   --side-lead: 1.3333;
   /* How many years there are: written by client/years.ts, eleven until then. */
@@ -27,8 +11,7 @@
   /* Where the first thing under the years stands: Inquiries on the Gallery,
      otherwise the first control. */
   --under-years: calc(var(--side-top) + var(--years-height) + var(--controls-gap));
-  /* The room Inquiries takes between the years and the controls: its line
-     and a line clear. Nothing where there is no Inquiries. */
+  /* The room Inquiries takes between the years and the controls: its line and a line clear. */
   --inq-slot: 0px;
   --controls-top: calc(var(--under-years) + var(--inq-slot));
   /* Five controls: three sizes, then equal and to scale. */
@@ -50,7 +33,7 @@
   font-weight: 500;
   line-height: var(--year-lead);
   /* The capitals, not the line box, start on that line: half the leading less
-     the 0.317 em Switzer puts above a capital (see .detail-caption). */
+     the 0.317 em Switzer puts above a capital (see.detail-caption). */
   margin-top: calc((0.317 - var(--year-lead) / 2) * 1em);
   transition: opacity 0.8s var(--ease);
 }
@@ -66,8 +49,7 @@
   transition: opacity var(--hover) var(--ease);
 }
 
-/* The bars are the phone's rail (05-artwork.css); on a wide screen the years
-   are type. */
+/* The bars are the phone's rail (05-artwork.css); on a wide screen the years are type. */
 .year-swatch { display: none; }
 
 .year-label {
@@ -75,14 +57,8 @@
   white-space: nowrap;
 }
 
-/*
- * "Inquiries" under the years, before the controls (Frank, 2026-11-21; it
- * stood over the years until then): 30 regular, on the controls'
- * 40 line, where the first control used to start. The controls step down by
- * its line and a line clear (--inq-slot). Its hover is the index rows'
- * (01-grid.css `.hrow`, a new hue each time from client/hover-list.ts), ink
- * without scripting.
- */
+/* "Inquiries" under the years, before the controls: 30 regular, on the controls'
+   40 line, where the first control used to start. */
 :root:has(.side-inquiries) {
   --inq-slot: calc(2 * var(--type-side) * var(--side-lead));
 }
@@ -102,32 +78,13 @@
   transition: opacity 0.8s var(--ease), color var(--hover) var(--ease);
 }
 
-/* While a year is in focus the rail says so: the chosen one stays, the rest
-   step back. */
+/* While a year is in focus the rail says so: the chosen one stays, the rest step back. */
 .years.is-focused .year:not([aria-pressed='true']) { opacity: 0.35; }
 
 
-/*
- * Nothing that waits on the opening animation may be reachable, or visible,
- * before it ends.
- *
- * Stated the hidden way round on purpose. These used to be hidden by a class
- * the script adds, which cannot be in place for the first paint — the markup
- * has already been drawn by the time a module runs — so the rail appeared at
- * full strength and was taken away again a moment later. Hiding is the initial
- * state now, written against the `js` class the document carries before
- * anything is painted, and the script's job is to reveal rather than to
- * conceal. With scripting off neither class is ever set and the rail is simply
- * there, which is right: no animation runs to wait for.
- *
- * The failsafe matters more than it looks. Anything hidden until a script says
- * otherwise is lost for good if that script never arrives, so these reveal
- * themselves after eight seconds — far longer than any pile — and the class,
- * when it comes, cancels it.
- */
+/* Nothing that waits on the opening animation may be reachable, or visible, before it ends. */
 /* Hidden, not merely transparent: a see-through column over the paintings is
-   still drawn — blended, in the controls' case — on every frame of the
-   opening. The visibility waits for the fade out before it goes. */
+   still drawn — blended, in the controls' case — on every frame of the opening. */
 html.js .controls,
 html.js .years,
 html.js .side-inquiries {
@@ -149,8 +106,7 @@ html.js.stack-settled .side-inquiries {
 }
 
 /* While the pile is running the script is plainly alive, so the failsafe has
-   nothing to guard against — and left on, it fired eight seconds after a
-   scroll back into the pile and showed the controls over the heap. */
+   nothing to guard against. */
 html.js.stack-running .controls,
 html.js.stack-running .years,
 html.js.stack-running .side-inquiries {
@@ -161,6 +117,5 @@ html.js.stack-running .side-inquiries {
   to { opacity: 1; visibility: visible; pointer-events: auto; }
 }
 
-/* On a phone the years are a bar of their colours along the foot of the
-   screen and the controls are not offered: 05-artwork.css, THE GALLERY ON A
-   PHONE. */
+/* On a phone the years are a bar of their colours along the foot of the screen
+   and the controls are not offered: 05-artwork.css, THE GALLERY ON A PHONE. */

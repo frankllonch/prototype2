@@ -34,10 +34,8 @@ require_once CVC_DIR . 'includes/import-admin.php';
 require_once CVC_DIR . 'includes/site-check.php';
 require_once CVC_DIR . 'includes/guide.php';
 
-// The admin in Claudia's languages: languages/claudiavalsells-es_ES and -ca,
-// loaded from the plugin's own folder. On init, not before — WordPress 6.7
-// refuses translations asked for earlier than that — and ahead of the post
-// types, whose labels are translated as they are registered.
+// The admin in Claudia's languages: languages/claudiavalsells-es_ES and -ca, loaded from the
+// plugin's own folder.
 add_action( 'init', function () {
 	load_plugin_textdomain( 'claudiavalsells', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 }, 0 );

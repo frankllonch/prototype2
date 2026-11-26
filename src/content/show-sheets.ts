@@ -1,26 +1,6 @@
 /**
- * What each exhibition's detail says at its head, as the designer's sheets
- * for them set it (UPDATES/exhibitions, 2026-11-24), and the texts Frank sent
- * with them for the shows that had none ("text sala expos que falten").
- *
- * The sheets win over what the index row would derive: the masthead's lines
- * are the sheet's own, kind of show and all ("Solo show at Alzueta Gallery,"),
- * with a line break wherever the sheet breaks one; the date is the sheet's
- * wording. Spelling slips on a sheet are corrected here rather than copied
- * ("FEBURARY", "MAYO", "COMEN").
- *
- * `lead` is the photograph the sheet opens on, as its index in the show's own
- * set; the rest follow in their order. The official sets (finalfotosexhibitions,
- * 2026-11-26) are already in the designer's variant order and every one opens
- * on its first, as its sheet does, so none names one now.
- *
- * `artists` is the list of names a group show's sheet sets under the masthead,
- * in place of the lede. `text` is the show's text where the site has none of
- * its own, or where Claudia sent one to replace it (Color Dialogues, in
- * Spanish); any other show keeps the text from its source page.
- *
- * `note` is the short caption a sheet with no text sets under the date
- * (El color no existe).
+ * What each exhibition's detail says at its head, from the designer's sheets,
+ * and the wall texts for the shows that had none.
  */
 export interface ShowSheet {
   readonly title?: string;
@@ -54,9 +34,7 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
     lines: ['Solo exhibition', 'at Gallery_BR', 'Tetbury, UK'],
     when: 'May 2024',
   },
-  // The designer's sheet (finaldesgings/exhibitions/wciii, 2026-11-26), text
-  // and all: the source has no page for this edition as a show. Quotes set
-  // straight, as Frank asked; "Because To me" corrected to "to".
+  // The designer's sheet, text and all: the source has no page for this edition as a show.
   'whats-color-iii': {
     title: 'What’s Color III',
     lines: ['Terranova Bookstore'],
@@ -80,12 +58,9 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
     // The sheet does not set the name apart in the lede.
     edits: [['<strong>Transitions</strong>', 'Transitions']],
   },
-  // What's Color I and II: the text as the designer's sheets set it
-  // (WHATS COLOR I / II - DISSENY, 2026-11-26), in place of the source page's,
-  // which ran on into the glossary and the participants (I) and the curators,
-  // the Download PDF link and the edition note (II). Neither sheet has those.
-  // Two slips on the sheets corrected: I's question was never closed, and II's
-  // "for this sector. I / n this exhibition" had the I split from its word.
+  // What's Color I and II: the text as the designer's sheets set it, in place of the source
+  // page's, which ran on into the glossary and the participants (I) and the curators, the Download
+  // PDF link and the edition note (II).
   'what-s-color-i': {
     text: p(
       '<span class="lede-open">Throughout the lockdown I was away from my studio and my art form – painting.</span>' +
@@ -146,9 +121,8 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
   'color-dialogues': {
     lines: ['Solo show at Alzueta Gallery,', 'Madrid'],
     when: 'December 2021 to January 2022',
-    // Claudia's Spanish text (UPDATES, "Color Dialogues full sala (esp)"), in
-    // place of the English, set as the English was: two paragraphs, then the
-    // quote with its credit.
+    // Claudia's Spanish text (UPDATES, "Color Dialogues full sala (esp)"), in place of the
+    // English, set as the English was: two paragraphs, then the quote with its credit.
     text:
       '<p><span>Tras la exposición individual de la artista hace un año en la que se cuestionaba el significado del color ' +
       'y se presentaba su nueva línea de trabajo sobre lienzo, esta nueva exposición continúa la intensa meditación que ' +
@@ -312,11 +286,8 @@ export function applyEdits(html: string, sheet: ShowSheet | undefined): string {
 }
 
 /**
- * The photograph each commissioned project's sheet opens on, as its index in
- * the project's own set. The sets are the official photographs (finalfotos,
- * 2026-11-26), already in the order of the designer's variants, and most open
- * on their first; these two open where their sheet in UPDATES/commissioned
- * does. The rest follow in order.
+ * The photograph each commissioned project's sheet opens on, as its index in the
+ * project's own set.
  */
 export const COMMISSION_LEADS: Readonly<Record<string, number>> = {
   'dada-workshops-2017-2': 4,       // Color Atlas: the red façade (Variant5)

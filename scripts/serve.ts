@@ -16,15 +16,7 @@ const TYPES: Record<string, string> = {
   '.woff2': 'font/woff2', '.ico': 'image/x-icon', '.txt': 'text/plain; charset=utf-8',
 };
 
-/**
- * Which bytes the client asked for, or null for all of them.
- *
- * Only the single-range form, which is the only one a browser sends for media.
- * `bytes=500-` is from there to the end and `bytes=-500` is the last 500, so
- * the suffix form is not a negative offset however much it looks like one.
- * Returns `false` for a range that cannot be met, which is answered with 416
- * rather than quietly sending the whole file.
- */
+/** Which bytes the client asked for, or null for all of them. */
 function wanted(header: string | undefined, size: number): { start: number; end: number } | null | false {
   const m = /^bytes=(\d*)-(\d*)$/.exec((header ?? '').trim());
   if (!m) return null;
@@ -55,30 +47,11 @@ http.createServer(async (req, res) => {
     res.end('Not found');
     return;
   }
-  /*
-   * `no-cache`, deliberately, and not `no-store`.
-   *
-   * They read as near-synonyms and are not: `no-store` forbids keeping the
-   * response at all, and a page that may not be kept cannot go in the
-   * back/forward cache either. That is the thing that makes stepping back
-   * instant — the page is resumed rather than rebuilt, with its scroll and its
-   * state intact — so forbidding it to fix a staleness problem that turned out
-   * to be something else entirely was a poor trade. `no-cache` still has the
-   * browser check with the server before reusing anything.
-   */
+  /* `no-cache`, deliberately, and not `no-store`. */
   const type = TYPES[path.extname(file)] ?? 'application/octet-stream';
   const { size, mtime } = await stat(file);
 
-  /*
-   * And something to check *against*. `no-cache` asks the browser to confirm
-   * with the server before reusing a copy, but without a validator there is
-   * nothing to confirm, and Safari took that as licence to keep reusing the
-   * scripts it already held in memory: a rebuild changed the files on disk and
-   * Safari went on running the old ones, page load after page load, while
-   * Chromium fetched afresh. Every response now carries a fingerprint of the
-   * file — its size and when it last changed — and a request that already
-   * holds the current one is told so in a few bytes.
-   */
+  /* And something to check *against*. */
   const etag = `"${size.toString(36)}-${mtime.getTime().toString(36)}"`;
   const lastModified = mtime.toUTCString();
   const unchanged = req.headers['if-none-match']
@@ -90,18 +63,7 @@ http.createServer(async (req, res) => {
     return;
   }
 
-  /*
-   * Byte ranges, which are what makes video work at all in Safari.
-   *
-   * Safari will not play a `<video>` from a server that answers a range
-   * request with the whole file: it asks for the first bytes, is handed two
-   * hundred and a stream, and gives up. Chromium does not mind — it downloads
-   * the lot and plays it — so the film ran everywhere except the one browser
-   * that was being strict, which is also why seeking never moved off zero.
-   *
-   * `accept-ranges` goes on every response, including the ones that are not
-   * ranged, because that is how a client learns it may ask.
-   */
+  /* Byte ranges, which are what makes video work at all in Safari. */
   const range = wanted(req.headers.range, size);
   if (range === false) {
     res.writeHead(416, { 'content-range': `bytes */${size}`, 'accept-ranges': 'bytes' });

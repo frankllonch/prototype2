@@ -4,16 +4,6 @@ import { nextHue } from './hues.ts';
 /**
  * The controls above the grid: three densities, and a switch between equal
  * heights and relative sizes.
- *
- * Both only change how the grid is drawn — a custom property and a class — and
- * both fire `gridchange`, so the opening pile re-measures against the new layout
- * rather than against stale targets, and the year rail waits for the move
- * before deciding where to scroll.
- *
- * The one pressed is named in a colour from the site's list, a different one
- * at every press — the way the index rows answer the pointer. The controls are
- * drawn as the difference of what scrolls under them, so the colour is given
- * as its negative and comes out as itself over paper.
  */
 const MORPH_MS = 500;
 
@@ -42,11 +32,7 @@ export function initControls(): void {
     });
   }
 
-  /*
-   * The sizing switch is only offered where the tiles were given their real
-   * sizes to draw at; without them every work would claim the same scale, which
-   * would be a worse lie than showing them all the same on purpose.
-   */
+  /* The sizing switch is only offered where the tiles were given their real sizes to draw at. */
   const scales = root.querySelectorAll<HTMLButtonElement>('[data-scale]');
   if (grid.hasAttribute('data-scalable')) {
     for (const button of scales) {
@@ -67,18 +53,7 @@ export function initControls(): void {
   }
 }
 
-/**
- * Change the grid and let every painting travel to its new place.
- *
- * The rows fill the width, so a change of size re-wraps them: a painting can
- * move to another row, and the row it left re-spreads to the edge. A size
- * transition cannot carry that — the size animates but the re-wrap is a jump,
- * and it jumps again at every width the transition passes through. So the
- * layout is changed in one step, and each tile is then drawn where it was,
- * and eased to where it is: measure, change, measure again, and animate the
- * transform that joins the two. The layout itself never moves; only the
- * paintings do, on the compositor.
- */
+/** Change the grid and let every painting travel to its new place. */
 function morph(grid: HTMLElement, change: () => void): void {
   if (reduceMotion.matches || grid.classList.contains('is-stacked')) { change(); return; }
 
@@ -89,8 +64,8 @@ function morph(grid: HTMLElement, change: () => void): void {
     const was = before[i]!;
     const now = tile.getBoundingClientRect();
     if (!was.width || !now.width) return;
-    // The tiles turn about their centre (the pile needs that), so the move is
-    // the move of the centre, and the size the ratio of the two boxes.
+    // The tiles turn about their centre (the pile needs that), so the move is the move of the
+    // centre, and the size the ratio of the two boxes.
     const dx = (was.left + was.width / 2) - (now.left + now.width / 2);
     const dy = (was.top + was.height / 2) - (now.top + now.height / 2);
     const sx = was.width / now.width;

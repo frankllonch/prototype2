@@ -1,41 +1,6 @@
 import { finePointer, reduceMotion } from './env.ts';
 
-/**
- * Leans a painting towards the pointer.
- *
- * Every figure comes out of the stylesheet — `--tilt-max`, `--tilt-lift` and
- * the rest live on `.detail-plate` in `05-artwork.css`, and this reads them.
- * That is deliberate: the look is a design decision and belongs where the
- * other design decisions are, so it can be tuned without opening this file.
- * Setting `--tilt-max` to 0 and `--tilt-lift` to 1 turns the lean off, which
- * is also how the reduced-motion case is handled — in CSS, not here.
- *
- * Also leans the About card, which names its own inner element with
- * `data-tilt-inner`; a painting is the plate's inner by default.
- *
- * Bound to the painting and not to the figure. The figure is a grid cell as
- * wide as its column, so hovering anywhere in that column tipped a painting
- * the pointer was nowhere near; the inner element is sized to the picture, so
- * the lean begins where the picture does.
- *
- * Kept deliberately cheap. Nothing is measured or read from the stylesheet
- * while the pointer moves: the box and the numbers are taken once when the
- * pointer arrives and again only if the window changes. Reading either per
- * movement forces the browser to recompute style or layout on every event —
- * which is what made it feel heavy.
- *
- * And smoothed here, once per frame, rather than left to the pointer. The
- * pointer only says where the lean is heading; the painting follows it on its
- * own clock, easing a fixed share of the way each frame (`--tilt-follow`).
- * Before, every pointer move wrote the transform outright and a CSS transition
- * was meant to stay out of the way — but on the artwork page it never did,
- * because the rule switching it off looked for the tilting class on the
- * figure and the class goes on the picture. So each move started a fresh
- * 620ms transition from wherever the last had reached. Chromium sends moves
- * in step with the screen and blurs that into a lagging glide; Safari sends
- * them unevenly and restarts transitions less gracefully, so there the lean
- * stuttered. Driven by frames, it is the same glide on every engine.
- */
+/** Leans a painting towards the pointer. */
 export function initTilt(): void {
   if (!finePointer.matches) return;
 
@@ -87,15 +52,12 @@ export function initTilt(): void {
     };
 
     const lean = (event: PointerEvent) => {
-      // A box with no size is a picture that has not arrived; a lean worked out
-      // against it divides by zero and writes nothing but noise.
+      // A box with no size is a picture that has not arrived; a lean worked out against it divides
+      // by zero and writes nothing but noise.
       if (!box || !box.width || !box.height || reduceMotion.matches) return;
       // A photograph on the plate (see views.ts) is a flat record, not the work.
       if (inner.classList.contains('is-photo')) return;
-      // −1 to 1 from the middle, on each axis. Pointer to the right leans the
-      // right edge away, which is a rotation about the vertical axis in the
-      // same direction; about the horizontal axis the sign flips, because
-      // screen y grows downwards — both applied in `write`.
+      // −1 to 1 from the middle, on each axis.
       goal = {
         x: (event.clientX - box.left) / box.width * 2 - 1,
         y: (event.clientY - box.top) / box.height * 2 - 1,
@@ -116,8 +78,8 @@ export function initTilt(): void {
     inner.addEventListener('pointerenter', (event) => {
       if (reduceMotion.matches || inner.classList.contains('is-photo')) return;
       read();
-      // Picking up where the settle has got to, roughly, so coming back in
-      // mid-settle does not snap the painting flat first.
+      // Picking up where the settle has got to, roughly, so coming back in mid-settle does not
+      // snap the painting flat first.
       const left = Math.min(1, (performance.now() - leftAt) / settle);
       const remain = Math.pow(1 - left, 3);
       now = { x: now.x * remain, y: now.y * remain };
@@ -127,11 +89,11 @@ export function initTilt(): void {
     });
     inner.addEventListener('pointermove', lean);
     inner.addEventListener('pointerleave', rest);
-    // A pointer that is cancelled — dragged off, interrupted — never sends
-    // `pointerleave`, and the painting would stay leaning at nothing.
+    // A pointer that is cancelled — dragged off, interrupted — never sends `pointerleave`, and the
+    // painting would stay leaning at nothing.
     inner.addEventListener('pointercancel', rest);
-    // The box is only true for where the painting was when the pointer
-    // arrived; a resize moves it under a pointer that has not left.
+    // The box is only true for where the painting was when the pointer arrived; a resize moves it
+    // under a pointer that has not left.
     window.addEventListener('resize', () => { if (box) read(); });
   }
 }

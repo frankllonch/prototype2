@@ -1,22 +1,4 @@
-/**
- * One colour per year, sampled from that year's paintings.
- *
- * The year rail in the design is a column of colour swatches. Rather than
- * inventing them, each is taken from the work itself.
- *
- * Every painting is read at thumbnail size and only actual paint is kept — the
- * wall, the glass and the cream ground are filtered out by saturation and
- * lightness. The remaining pixels go into hue buckets, weighted by how vivid
- * they are.
- *
- * A year's colour is then its *distinctive* hue, not its commonest one: the
- * bucket most over-represented in that year compared with the archive as a
- * whole. Claudia paints a consistent palette, so the commonest hue is nearly
- * the same ochre every year; what separates 2024 from 2021 is which hue each
- * one leans on more than usual. That is what the rail should show.
- *
- * Output: content/years.json — [{ year, colour, count }], newest first.
- */
+/** One colour per year, sampled from that year's paintings. */
 import { readFile, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
@@ -108,8 +90,8 @@ async function main() {
         const r = data[i]!, g = data[i + 1]!, b2 = data[i + 2]!;
         const { s: sat, l, h } = sl(r, g, b2);
         if (sat < MIN_SAT || l > MAX_LIGHT || l < MIN_LIGHT) continue;
-        // Weight by saturation squared, so a vivid passage counts for more than
-        // a washed one and the average lands on real colour.
+        // Weight by saturation squared, so a vivid passage counts for more than a washed one and
+        // the average lands on real colour.
         const w = sat * sat;
         const bucket = Math.min(HUES - 1, Math.floor(h * HUES));
         b.count[bucket]! += w;
@@ -140,8 +122,8 @@ async function main() {
       if (share < MIN_SHARE) continue;
       const baseline = globalCount[i]! / globalTotal;
       let score = baseline > 0 ? share / baseline : share;
-      // Nudge away from a hue already spoken for, so the rail reads as a range
-      // rather than three years of the same red.
+      // Nudge away from a hue already spoken for, so the rail reads as a range rather than three
+      // years of the same red.
       if (taken.has(i)) score *= 0.45;
       if (score > bestScore) { bestScore = score; best = i; }
     }

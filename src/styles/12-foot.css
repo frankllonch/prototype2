@@ -1,10 +1,8 @@
 /* ------------------------------------------------------------------ foot */
 
-/*
- * The contact footer at the foot of every page but About and the detail pages
- * (HOME sheet, 2026-11-26): centred, 20 on 20 in the 1920 frame, a blank line
- * between its three parts, the addresses and Claudia's name semibold.
- */
+/* The contact footer at the foot of every page but About and the detail pages:
+   centred, 20 on 20 in the 1920 frame, a blank line between its three parts, the
+   addresses and Claudia's name semibold. */
 .site-foot {
   --u: calc(100vw / 1920);
   position: relative;
@@ -28,7 +26,7 @@
 @media (max-width: 899px) {
   .site-foot { line-height: 1.25; padding-top: 4rem; }
   .site-foot p + p { margin-top: 0.75rem; }
-  /* Artwork keeps its years and Inquiries fixed along the phone's foot
-     (about 100px of it): the footer stops above them. */
+  /* Artwork keeps its years and Inquiries fixed along the phone's foot (about
+     100px of it): the footer stops above them. */
   body:has(.years) .site-foot { padding-bottom: 8.5rem; }
 }

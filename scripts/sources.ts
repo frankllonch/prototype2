@@ -1,13 +1,4 @@
-/**
- * Where a picture's file is.
- *
- * Most images were extracted from claudiavalsells.com and carry that URL as
- * their `source`; they are downloaded once into content/raw/media. A painting
- * that was never on the site has nowhere to be fetched from, so its source is
- * a path under content/raw instead — `local/2019/gouache 72x62.jpg` — and the
- * file itself is the record. Both kinds are kept out of git with the rest of
- * content/raw.
- */
+/** Where a picture's file is. */
 import path from 'node:path';
 
 const RAW = path.resolve(import.meta.dirname, '..', 'content', 'raw');

@@ -5,52 +5,16 @@ import { SAYS_III_SHEET } from './whats-color-sheet.ts';
 import { FINAL_COLOURS } from './whats-color-colours.ts';
 import { hues } from './palette.ts';
 
-/**
- * What's Color?, read out of the source rather than retyped.
- *
- * The project ran three times and the site already holds all three: editions
- * I and II as exhibitions, III as a project. An earlier pass at this page took
- * the roster off the designer's sheet on the assumption that the names existed
- * nowhere else. They do: editions I and III both carry every participant with
- * their role, the colour their answer was given, and in most cases the answer
- * itself, set as a run of paragraphs on the page. So this reads them.
- *
- * That matters beyond tidiness. The sheet was transcribed from this same page
- * and picked up errors on the way — Emecke for Emcke, Attenborough for the
- * site's Attenborugh, Udy for Judy, and several commas dropped so that two
- * people ran into one. Deriving means a correction Claudia makes in WordPress
- * arrives here, and that this page cannot drift from the page it describes.
- *
- * Edition II used to be the exception: the site's own page names its studios
- * in a single thank-you sentence and prints no answers at all. Claudia's
- * document of the three editions has them, so they are read from there — see
- * `whats-color-edition-ii.ts` — and that document is also what decides who
- * appears, on all three editions. Anyone it does not name is not on the page.
- */
+/** What's Color?, read out of the source rather than retyped. */
 
-/**
- * The standing note about the project, set above the names.
- *
- * The one paragraph on this page that is not someone's answer, and so the one
- * that had to be written. Every phrase in it is the editions' own: the third
- * calls this "a personal project I started in 2020" in which she assigns "a
- * color to people who inspire and admire me" and asks about "their personal
- * relationship with color"; the first names the kinds of people invited —
- * philosophers, historians, thinkers, writers and other artists. Only the
- * roll-call of the three editions is assembled here, and each of those facts
- * is already stated further down the page.
- *
- * Kept to three or four lines on purpose: what the project is, not what it
- * means. The editions say the rest in her own voice, at length.
- */
+/** The standing note about the project, set above the names. */
 export const LEAD =
   'I assign a color to people who inspire me \u2014 philosophers, historians, ' +
   'thinkers, writers, architects and artists \u2014 and ask each of them a ' +
   "simple question: WHAT\u2019S COLOR? It has run three times: Barcelona in " +
   '2020, Madrid in 2021, and Llibreria Terranova in Barcelona in 2024.' +
-  // A blank line, then the invitation: its own paragraph on the sheet, set
-  // semibold in capitals by the stylesheet. Written in sentence case here,
-  // because a word in capitals is how the note marks the question.
+  // A blank line, then the invitation: its own paragraph on the sheet, set semibold in capitals by
+  // the stylesheet.
   '\n\nClick on their names to see what they said.';
 
 export interface Participant {
@@ -80,39 +44,22 @@ export interface Edition {
   readonly sourceTitle: string;
   /** The introduction the opening view shows in that edition's column. */
   readonly intro: string;
-  /**
-   * The artist's own statement about this edition, for its own page.
-   *
-   * The same text as `intro` for I and III, where there is only one. Edition
-   * II has two — a curators' essay and a note from Claudia — and the sheet
-   * puts the essay in the opening column, so the note would otherwise appear
-   * nowhere on the site despite being the only thing she wrote about it.
-   */
+  /** The artist's own statement about this edition, for its own page. */
   readonly statement: string;
   readonly participants: readonly Participant[];
   /** False for edition II, whose source lists names and nothing else. */
   readonly hasAnswers: boolean;
-  /**
-   * Claudia's own paragraphs, kept apart rather than joined.
-   *
-   * The first edition's sheet sets them across the full width between the
-   * entries, so the page needs them one at a time and in order. Read from the
-   * source like everything else; `statement` above is the same words run
-   * together for the editions that show them as one block.
-   */
+  /** Claudia's own paragraphs, kept apart rather than joined. */
   readonly says?: readonly string[];
   /**
-   * Everyone the source names for this edition, answered or not — the list
-   * the designer sets across the top of its page. `participants` below keeps
-   * only those with an answer, which is what the entries are built from.
+   * Everyone the source names for this edition, answered or not — the list the
+   * designer sets across the top of its page.
    */
   readonly roster?: readonly Participant[];
   /**
    * The edition's text as the opening view sets it: a heading line, then the
-   * writing, shown cut to the sentence her start-page sheet cuts it at until
-   * the reader asks for more. Plain text, read from the source — the cut is
-   * the only thing the sheet adds. `align` is per edition because her sheet
-   * justifies the first and sets the other two ragged.
+   * writing, shown cut to the sentence her start-page sheet cuts it at until the
+   * reader asks for more.
    */
   readonly opening?: {
     readonly heading: string;
@@ -132,20 +79,10 @@ function paragraphs(html: string): string[] {
 const plain = (html: string) =>
   html.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
 
-/**
- * The text of the `<strong>` runs a block opens with.
- *
- * Which bit of a header is bold is the one reliable signal of where the name
- * ends, and the two editions mark it differently: I bolds the name and leaves
- * the role as plain text beside it, III bolds the whole line. Reading the
- * leading run tells those apart without having to know which edition it is.
- */
+/** The text of the `<strong>` runs a block opens with. */
 function leadingStrong(html: string): string {
   let rest = html.replace(/^<p\b[^>]*>/i, '').replace(/<\/p>$/i, '');
-  // Step over whatever inline wrapper the editor opened first. Half of edition
-  // I's headers are `<span><strong>NAME</strong>ROLE …</span>` and half are the
-  // same without the span; without this the wrapped ones lose the boundary and
-  // the role is read as part of the name.
+  // Step over whatever inline wrapper the editor opened first.
   rest = rest.replace(/^(?:\s*<(?:span|em|i|b)\b[^>]*>)+/i, '');
   let out = '';
   for (;;) {
@@ -160,23 +97,13 @@ function leadingStrong(html: string): string {
 /** AC011, AC 002, AC16, AC39 — all the same thing, written four ways. */
 const AC = /\bAC\s*0*(\d{1,3})\b/i;
 
-/**
- * One participant out of a header line.
- *
- * The shape is `NAME, ROLE / ACnnn COLOUR`, with every part of it optional
- * somewhere in the source. The code is found first because it is the one
- * unambiguous landmark: everything before it is the person, everything after
- * it is the colour's name — except for the two entries that put the code after
- * the colour instead, which is why both sides are tried.
- */
+/** One participant out of a header line. */
 function looksLikeHeader(block: string): boolean {
   const text = plain(block);
   if (!text) return false;
   if (AC.test(text)) return true;
-  // A header with a colour reference this regex cannot read would otherwise
-  // vanish and be swallowed as the previous person's answer — silently, and
-  // one person short. So shape is the fallback test: a bold run at the front,
-  // short, and shouted, which no answer in either source is.
+  // A header with a colour reference this regex cannot read would otherwise vanish and be
+  // swallowed as the previous person's answer — silently, and one person short.
   const lead = leadingStrong(block);
   if (!lead || text.length > 180) return false;
   const letters = text.replace(/[^\p{L}]/gu, '');
@@ -193,13 +120,10 @@ function readHeader(block: string): Participant | null {
   let before = code ? text.slice(0, code.index) : text;
   let after = code ? text.slice(code.index + code[0].length) : '';
 
-  // JULIA RUIZ CABELLO and CRISTINA STOLHE are written `… OCRE ROJIZO AC075`,
-  // with the colour before the code. Nothing follows the code there, so when
-  // the tail is empty the colour is the last words of the head instead.
+  // JULIA RUIZ CABELLO and CRISTINA STOLHE are written `… OCRE ROJIZO AC075`, with the colour
+  // before the code.
   let colourName = after.replace(/^[\s/,.-]+/, '').trim();
-  // JULIA RUIZ CABELLO's entry ends in a stray diaeresis after the code. A
-  // "colour" with no letters in it is not one, and treating it as one left the
-  // real colour stranded in the role.
+  // JULIA RUIZ CABELLO's entry ends in a stray diaeresis after the code.
   if (!/\p{L}/u.test(colourName)) colourName = '';
   if (!colourName) {
     const tail = /[/,]\s*([^/,]+)$/.exec(before);
@@ -209,8 +133,8 @@ function readHeader(block: string): Participant | null {
   before = before.replace(/[\s/,]+$/, '').trim();
 
   const lead = leadingStrong(block);
-  // Edition I bolds the name alone, so the bold run is shorter than the head
-  // and is the better boundary. Edition III bolds the lot, so it is not.
+  // Edition I bolds the name alone, so the bold run is shorter than the head and is the better
+  // boundary.
   const head = lead && lead.length < before.length ? lead : before;
 
   const parts = head.split(',').map((s) => s.trim()).filter(Boolean);
@@ -228,8 +152,8 @@ function readHeader(block: string): Participant | null {
     .replace(/\s*\/\s*\/+\s*/g, ' / ')
     .replace(/[\s/]+$/, '');
 
-  // An alias is a lowercase or mixed-case run sitting between the name and the
-  // role: `JOSE JAVIER SERRANO, Yosigo, FOTÓGRAFO`.
+  // An alias is a lowercase or mixed-case run sitting between the name and the role: `JOSE JAVIER
+  // SERRANO, Yosigo, FOTÓGRAFO`.
   let alias: string | undefined;
   const bits = role.split(/\s*,\s*/).filter(Boolean);
   if (bits.length > 1 && bits[0] && bits[0] !== bits[0].toLocaleUpperCase()) alias = bits[0];
@@ -245,15 +169,7 @@ function readHeader(block: string): Participant | null {
   };
 }
 
-/**
- * Names the source runs into the next word for want of a comma.
- *
- * Two of them, one in each roster, and both only resolvable by knowing that
- * the trailing words are a job: LUCIA BONED's `LIBRERA` (edition III) sits in
- * the role column of the designer's own sheet, and HENRY GIROUX's bold run
- * (edition I) swallows his title. Written down because they are readings of
- * the source, not the source.
- */
+/** Names the source runs into the next word for want of a comma. */
 const NAME_FIX: Readonly<Record<string, { name: string; rest: string[] }>> = {
   'LUCIA BONED LIBRERA': { name: 'LUCIA BONED', rest: ['LIBRERA'] },
   'HENRY GIROUX WRITER AND CULTURAL CRITIC': {
@@ -261,14 +177,7 @@ const NAME_FIX: Readonly<Record<string, { name: string; rest: string[] }>> = {
   },
 };
 
-/**
- * The source shouts; the page does not.
- *
- * Only words the source set entirely in capitals are lowered. A studio that
- * writes itself Int-sight or Conti.Cert already chose its own casing and
- * keeps it — the thank-you list in edition II is written normally, while the
- * rosters in I and III are in full caps throughout.
- */
+/** The source shouts; the page does not. */
 function titleCase(s: string): string {
   const small = new Set(['de', 'del', 'la', 'y', 'i', 'van', 'von', 'des']);
   return s.split(/\s+/).map((w, i) => {
@@ -285,23 +194,15 @@ function sentenceCase(s: string): string {
   return t.toLocaleLowerCase().replace(/^[\p{L}]/u, (c) => c.toLocaleUpperCase());
 }
 
-/**
- * Participants out of a column that alternates header, answer, header, answer.
- *
- * An answer is whatever non-header paragraph follows a header, so somebody who
- * gave none simply has nothing between them and the next name — which is how
- * fourteen of edition I's twenty-eight sit in the source, and the page says so
- * rather than inventing them a sentence.
- */
+/** Participants out of a column that alternates header, answer, header, answer. */
 function readRoster(html: string): Participant[] {
   const out: Participant[] = [];
   const answers: string[][] = [];
   for (const block of paragraphs(html)) {
     if (readHeader(block)) { out.push(readHeader(block)!); answers.push([]); continue; }
     const body = plain(block);
-    // Luís Cerveró answers in two paragraphs; taking only the first dropped
-    // seven hundred characters of him without saying so. Everything between
-    // one header and the next belongs to the person named in it.
+    // Luís Cerveró answers in two paragraphs; taking only the first dropped seven hundred
+    // characters of him without saying so.
     if (!out.length || !body) continue;
     answers[answers.length - 1]!.push(body);
   }
@@ -311,15 +212,7 @@ function readRoster(html: string): Participant[] {
   });
 }
 
-/**
- * The thank-you sentence edition II has instead of a roster.
- *
- * Read off the whole column rather than paragraph by paragraph: in the source
- * it is not a paragraph of its own but the tail of the artist's note, after
- * the photo credit. Several entries carry a studio in brackets — "Montse
- * Vicens (Int-sight)" — and those brackets are kept, because that is how the
- * page names them and it is not this module's place to decide otherwise.
- */
+/** The thank-you sentence edition II has instead of a roster. */
 function readThanks(html: string): Participant[] {
   const m = /thanks\s*to\s*:?\s*([^<]+)/i.exec(plain(html));
   if (!m) return [];
@@ -341,14 +234,7 @@ function textColumns(rows: readonly RowLike[]): string[] {
     .filter((html) => plain(html).length > 40);
 }
 
-/**
- * The column holding the roster, found by what is in it rather than by where
- * it sits.
- *
- * Counting positions would work today and break the first time Claudia adds a
- * paragraph in WordPress. The roster is the one column full of colour
- * references, so that is the test.
- */
+/** The column holding the roster, found by what is in it rather than by where it sits. */
 function rosterColumn(rows: readonly RowLike[]): string {
   let best = '';
   let most = 0;
@@ -366,8 +252,8 @@ function intro(html: string, take: number, skip = 0): string {
   for (const block of blocks) {
     const text = plain(block);
     if (!text) continue;
-    // The curators' byline opens edition II's essay; the designer's layout
-    // starts at the writing itself.
+    // The curators' byline opens edition II's essay; the designer's layout starts at the writing
+    // itself.
     if (/^exhibition curators\s*:/i.test(text)) continue;
     kept.push(block);
     if (kept.length >= take) break;
@@ -377,27 +263,12 @@ function intro(html: string, take: number, skip = 0): string {
 
 /*
  * Names compared without their accents, case or punctuation, because the two
- * sources spell the same person three ways between them — Attenborugh for
- * Attenborough, Plantea Estudi for Plantea Estudio, Conti.Cert for ContiCert.
+ * sources spell the same person three ways between them.
  */
 const nameKey = (name: string) =>
   name.toLocaleLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '');
 
-/**
- * The document decides who is on the page; the site supplies what it already
- * knows about them.
- *
- * Walked in the document's order, so the roster is the document's roster: a
- * name the document does not carry is simply never reached, which is how the
- * people who had drifted in — Oscar Tusquets filed under edition II, where he
- * was not a guest — come off. Where the document and the site describe the
- * same person, the document wins on spelling, role and colour, because it is
- * Claudia's own record and the site's text is a transcription of it.
- *
- * The answer is the exception: for editions I and III it comes from the site,
- * which already holds every one of them and agrees with the document. Only
- * edition II's answers are carried here, because they are nowhere else.
- */
+/** The document decides who is on the page; the site supplies what it already knows about them. */
 function fromDocument(doc: readonly DocumentEntry[], derived: readonly Participant[]): Participant[] {
   const known = new Map<string, Participant>();
   for (const person of derived) known.set(nameKey(person.name), person);
@@ -424,12 +295,7 @@ function fromDocument(doc: readonly DocumentEntry[], derived: readonly Participa
   });
 }
 
-/**
- * The paragraphs up to and including the sentence the start-page sheet cuts
- * at, as plain text. The sentinel is the cut's closing words; a source edit
- * that removes them turns the teaser into the whole text, which reads fine
- * and is noticed, rather than an empty block, which is neither.
- */
+/** The paragraphs up to and including the sentence the start-page sheet cuts at, as plain text. */
 function cutAt(paras: readonly string[], sentinel: string): string[] {
   const out: string[] = [];
   for (const para of paras) {
@@ -457,21 +323,20 @@ function build(): readonly Edition[] {
     const column = rosterColumn(three.rows);
     out.push({
       numeral: 'III', slug: three.slug, sourceTitle: three.title,
-      // Block 0 is the masthead — title, bookshop, dates — which the page sets
-      // elsewhere; block 1 is the writing.
+      // Block 0 is the masthead — title, bookshop, dates — which the page sets elsewhere; block 1
+      // is the writing.
       intro: intro(column, 1, 1),
       statement: intro(column, 1, 1),
       participants: fromDocument(EDITION_III, readRoster(column)),
-      // The first of the five is the artist's own paragraph, read from the
-      // source; the sheet's other four exist nowhere else and come transcribed
-      // with their provenance stated beside them.
+      // The first of the five is the artist's own paragraph, read from the source; the sheet's
+      // other four exist nowhere else and come transcribed with their provenance stated beside
+      // them.
       says: [
         ...paragraphs(column)
           .slice(1, 2)
           .map((p) => p.replace(/^<p\b[^>]*>/i, '').replace(/<\/p>$/i, '').trim())
-          // The project's name, as the source sets it: in italics, with a
-          // stray asterisk and its closing quote bold on its own. Set upright
-          // and semibold as one phrase instead, the words as written.
+          // The project's name, as the source sets it: in italics, with a stray asterisk and its
+          // closing quote bold on its own.
           .map((p) =>
             p.replace(
               /(?:<\/?(?:em|strong)>)*‘\*?(WHAT.S COLOR\?)\s*(?:<\/?(?:em|strong)>)*‘(?:<\/?(?:em|strong)>)*/,
@@ -500,9 +365,8 @@ function build(): readonly Edition[] {
     const note = columns[1] ?? '';
     out.push({
       numeral: 'II', slug: two.slug, sourceTitle: two.title,
-      // The sheet opens this column with the curators' essay, so that is what
-      // the opening view shows; Claudia's own note is kept for the edition's
-      // own page rather than left unused.
+      // The sheet opens this column with the curators' essay, so that is what the opening view
+      // shows; Claudia's own note is kept for the edition's own page rather than left unused.
       intro: intro(essay, 1),
       statement: intro(note, 1),
       participants: fromDocument(EDITION_II, readThanks(columns.join('\n'))),
@@ -515,9 +379,7 @@ function build(): readonly Edition[] {
           full,
         };
       })(),
-      // The six her sheet sets between the entries. Not a run of them: the
-      // curators' credit opens the column, a note about who commissioned the
-      // first paragraph follows it, and the sheet sets neither.
+      // The six her sheet sets between the entries.
       says: [1, 3, 4, 5, 6, 7].map((i) =>
         (paragraphs(essay)[i] ?? '')
           .replace(/^<p\b[^>]*>/i, '')
@@ -531,13 +393,12 @@ function build(): readonly Edition[] {
   if (one) {
     out.push({
       numeral: 'I', slug: one.slug, sourceTitle: one.title,
-      // Three paragraphs, not one: the opening sentence alone reads as a
-      // statement that was cut off, and the paragraph that actually says what
-      // the project is comes third.
+      // Three paragraphs, not one: the opening sentence alone reads as a statement that was cut
+      // off, and the paragraph that actually says what the project is comes third.
       intro: intro(textColumns(one.rows)[0] ?? '', 3),
       statement: intro(textColumns(one.rows)[0] ?? '', 3),
-      // The glossary column, which opens with Claudia's own note before the
-      // first name; `readRoster` ignores anything before a header anyway.
+      // The glossary column, which opens with Claudia's own note before the first name;
+      // `readRoster` ignores anything before a header anyway.
       participants: fromDocument(EDITION_I, readRoster(rosterColumn(one.rows))),
       // The four her sheet sets between the entries, in source order.
       says: paragraphs(textColumns(one.rows)[0] ?? '')
@@ -559,32 +420,7 @@ function build(): readonly Edition[] {
   return out;
 }
 
-/**
- * The colour behind a participant's name, when it is hovered.
- *
- * It has to be the colour the entry says — the line under the name reads
- * "AC071 POMPEIAN RED", and the highlight is that colour. The AC numbers index
- * Claudia's chart, which is on paper, so the values come from the closest
- * thing to it there is, in this order:
- *
- *   1. The paint itself, photographed. The third edition's book prints a
- *      page per guest with their colour brushed on it, and ten of those pages
- *      are in the photographs on its sheet. Each value is the middle of the
- *      painted patch, set against the white of the page it is on, so the
- *      photograph's exposure is taken out. Keyed by code, so everyone given
- *      the same colour shares it — Oscar Tusquets's AC071 is the paint on
- *      Tomás López Amat's and Plantea Estudio's pages.
- *   2. The colour's name, for everyone else who has one: a value chosen for
- *      each name the editions actually use, listed whole rather than guessed
- *      at from words — guessing coloured OCHER RED yellow and left NEGRE,
- *      VAINILLA and TERRACOTA to chance.
- *   3. Nobody named a colour: one of the site's own palette, chosen at random
- *      but the same every time for the same person, so a name keeps its
- *      colour from the opening view to its edition and on into WordPress.
- *
- * The theme draws the same three steps (inc/colour.php), after a hex typed
- * into the answer in WordPress, which wins over all of them.
- */
+/** The colour behind a participant's name, when it is hovered. */
 const PAINTED: Readonly<Record<string, string>> = {
   AC001: '#dfcb6c', // Carlota Guerrero
   AC009: '#642625', // Tortell Poltrona
@@ -677,29 +513,12 @@ const luminance = (rgb: readonly number[]) =>
   0.2126 * channel(rgb[0]!) + 0.7152 * channel(rgb[1]!) + 0.0722 * channel(rgb[2]!);
 const hex2 = (v: number) => Math.round(Math.min(1, Math.max(0, v)) * 255).toString(16).padStart(2, '0');
 
-/**
- * Which of ink or paper to set on top of a swatch.
- *
- * The hovered name is knocked out of its colour, and the palette runs from a
- * near-white off-white to a near-black green. White on the off-white is not
- * faint, it is absent, so the knockout follows the swatch rather than always
- * being paper.
- */
+/** Which of ink or paper to set on top of a swatch. */
 export function inkOn(hex: string): 'paper' | 'ink' {
   return luminance(toRgb(hex)) > 0.42 ? 'ink' : 'paper';
 }
 
-/**
- * The same colour, dark enough to read as type on white.
- *
- * The colour reference is the one place the colour IS the type, which is how
- * the sheet draws it — but the sheet only ever draws the red brown. Set
- * literally, a third of the palette falls under 3:1 against the paper and
- * NATURAL OFF WHITE disappears entirely. So the hue is kept and only the
- * lightness comes down, and only as far as it has to; a colour already legible
- * is not touched. The same approach, and the same reasoning, as `vivid()` in
- * `components/exhibitions.ts`.
- */
+/** The same colour, dark enough to read as type on white. */
 export function readable(hex: string, ratio = 4.5): string {
   const rgb = toRgb(hex);
   const max = Math.max(...rgb), min = Math.min(...rgb);
@@ -714,11 +533,7 @@ export function readable(hex: string, ratio = 4.5): string {
   return '#242528';
 }
 
-/**
- * The colour Claudia signed off for this person, where she has (see
- * `whats-color-colours.ts`). It comes before everything below, which is now
- * only what a newcomer to the roster gets until she names theirs.
- */
+/** The colour Claudia signed off for this person, where she has (see `whats-color-colours.ts`). */
 export function finalColourFor(name: string): string | undefined {
   return FINAL.get(idFor(name));
 }
@@ -742,14 +557,7 @@ const FINAL: ReadonlyMap<string, string> = new Map(FINAL_COLOURS.map((c) => [idF
 
 const built = build();
 
-/**
- * The editions entire: everyone the document names, answer or no answer.
- *
- * The pages below show only the people who answered in words; this is for the
- * one reader that wants the whole record — the WordPress import, which keeps
- * the roster as entries so that nobody who took part is lost, and lets the
- * site decide what to show of them.
- */
+/** The editions entire: everyone the document names, answer or no answer. */
 export const EDITIONS_ALL: readonly Edition[] = built.map((edition) => ({
   ...edition,
   participants: edition.participants.map((p) => ({ ...p, edition: edition.numeral, id: idFor(p.name) })),
@@ -758,23 +566,13 @@ export const EDITIONS_ALL: readonly Edition[] = built.map((edition) => ({
 /**
  * Each participant stamped with the edition they came from, for linking — and
  * only those with something to read.
- *
- * The document names everyone who was asked, which is why it is still the
- * roster: the record of who took part belongs with the work. But a name on the
- * page with nothing under it reads as an answer gone missing rather than as
- * someone who did not give one, and that is as true of the four who answered in
- * pictures as of the guests who never replied. So the pages show the people who
- * answered in words, and the document keeps the rest.
- *
- * Filtered here rather than per page, so the opening run of names and each
- * edition's own run cannot disagree about who is in it.
  */
 const onPage = (p: Participant): boolean => Boolean(p.answer);
 
 export const EDITIONS: readonly Edition[] = built.map((edition) => ({
   ...edition,
-  // The roster is everyone; only those on the page get an id, because only
-  // they have an entry for a name to point at.
+  // The roster is everyone; only those on the page get an id, because only they have an entry for
+  // a name to point at.
   roster: edition.participants.map((p) =>
     onPage(p)
       ? { ...p, edition: edition.numeral, id: idFor(p.name) }
@@ -785,18 +583,11 @@ export const EDITIONS: readonly Edition[] = built.map((edition) => ({
     .map((p) => ({ ...p, edition: edition.numeral, id: idFor(p.name) })),
 }));
 
-/**
- * Everyone, once, in the order the editions run.
- *
- * The opening view is one continuous run of names, so a person who answered
- * more than once appears a single time — reading the same name twice in one
- * sentence looks like a fault in the page whatever the truth behind it. The
- * per-edition views still show them under each.
- */
+/** Everyone, once, in the order the editions run. */
 export function allParticipants(): readonly Participant[] {
-  // Keep the fuller record where somebody answered twice: Oscar Tusquets is a
-  // bare name in edition II and a colour and an answer in edition I, and it
-  // was the bare one that survived, so he hovered a colour that is not his.
+  // Keep the fuller record where somebody answered twice: Oscar Tusquets is a bare name in edition
+  // II and a colour and an answer in edition I, and it was the bare one that survived, so he
+  // hovered a colour that is not his.
   const rank = (p: Participant) => (p.answer ? 2 : 0) + (p.code ? 1 : 0);
   const best = new Map<string, Participant>();
   const order: string[] = [];

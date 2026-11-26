@@ -1,18 +1,5 @@
-/*
- * Claudia Valsells — stylesheet.
- *
- * Three colours from the designer's mockups, one typeface. The work carries all
- * the colour; the interface is blue type on near-white, and peach for About.
- */
-/*
- * Switzer, from Fontshare, self-hosted. Its licence permits commercial use and
- * self-hosting outright, and travels with it in src/assets/fonts.
- *
- * Both files are the variable cut, so one request covers every weight the site
- * asks for — the 400 of the prose and the 500 of everything uppercase — and the
- * italic is a drawn italic rather than a slanted roman, which is what the index
- * years need.
- */
+/* Claudia Valsells — stylesheet. */
+/* Switzer, from Fontshare, self-hosted. */
 @font-face {
   font-family: 'Switzer';
   src: url('/fonts/Switzer-Variable.woff2') format('woff2-variations');
@@ -28,22 +15,7 @@
   font-display: swap;
 }
 
-/*
- * Tinos, for the italic serif phrases on About.
- *
- * The sheet names Times New Roman, which is Monotype's and ships with macOS
- * and Windows under terms that do not cover serving it from a website. Tinos
- * is Steve Matteson's metric-compatible cut of it under the SIL Open Font
- * License: the same widths, so a line breaks in the same place and the phrase
- * occupies the same space. Times New Roman still comes first in the stack, so
- * on a Mac or a PC the literal face the designer specified is what renders,
- * and this is what everyone else gets instead of a generic serif that is a
- * different width.
- *
- * Latin and Latin Extended only, split as Google splits them. The Greek,
- * Cyrillic, Hebrew and Vietnamese cuts are four fifths of the family's weight
- * and nothing on this site, in any of its languages, reaches for them.
- */
+/* Tinos, for the italic serif phrases on About. */
 @font-face {
   font-family: 'Tinos';
   src: url('/fonts/Tinos-Regular-latin.woff2') format('woff2');
@@ -80,9 +52,7 @@
 
 :root {
   color-scheme: light;
-  /* From the designer's mockups. The ground is white so the paintings carry
-     every colour on the page; the type is a near-black grey, with a tint of the
-     same value for anything inactive — never a different colour. */
+  /* From the designer's mockups. */
   --paper: #ffffff;
   --ink: #242528;
   --ink-soft: color-mix(in srgb, var(--ink) 48%, var(--paper));
@@ -90,99 +60,37 @@
 
   --sans: 'Switzer', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
 
-  /*
-   * One size for the whole site, in the designer's 1920-frame pixels: 40 on a
-   * 50 line. Weight, case, slope and the serif face are what tell one kind of
-   * text from another — not size. Two things are deliberately outside it: the
-   * bar, at 20, and the cursor label, which keeps the size it had.
-   *
-   * The clamp guards only the extremes. 2.0833vw is the 40, and it holds from
-   * about 768px up to 2600px; below that a floor keeps the type readable on a
-   * phone, above it a ceiling stops it running away on a very wide screen.
-   */
+  /* One size for the whole site, in the designer's 1920-frame pixels: 40 on a 50 line. */
   --type: clamp(1rem, 2.0833vw, 3.4rem);
   --lead: 1.25;
 
-  /*
-   * The designer's scale for the exhibitions and commissioned sheets, and the
-   * whole of it: five styles over two sizes and one leading. 45 and 40 of the
-   * 1920 frame, with 45 over 40 — 1.125 — throughout. Semibold 45 names a
-   * thing; medium 40 in capitals says what and where; light 40 does the same
-   * where there is no event, only a place; regular 40 carries years and prose.
-   */
+  /* The designer's scale for the exhibitions and commissioned sheets, and the
+     whole of it: five styles over two sizes and one leading. */
   --t-40: var(--type);
   --t-45: calc(var(--type) * 1.125);
   --t-30: calc(var(--type) * 0.75);
   --t-20: calc(var(--type) * 0.5);
   --lead-45: 1.125;      /* 45 over 40, the sheets own leading */
   --type-menu: clamp(0.75rem, 1.0417vw, 1.7rem);
-  /*
-   * The page margin, which the mockups agree is a fixed inset rather than a
-   * proportional one: on the earlier set it measured 40px at 1866 wide, 43 at
-   * 1368 and 47 at 1588 — near-constant while the frames differ by 500px. So
-   * it stays a clamp with a flat ceiling, and only the ceiling has moved.
-   *
-   * 3rem is 48, by instruction. It was 50 off the designer's final sheets (the
-   * wordmark's stem landed at 49–52 on them) and 40 before that. The bar and
-   * the pages take the same variable, so they move together and stay flush.
-   */
+  /* The page margin, which the mockups agree is a fixed inset rather than a
+     proportional one: on the earlier set it measured 40px at 1866 wide, 43 at
+     1368 and 47 at 1588. */
   --pad: clamp(1.25rem, 3.5vw, 3rem);
   --gap: clamp(1.5rem, 4.5vw, 5rem);
   --bar: 5.5rem;
-  /*
-   * Where the bar's first line sits, and with it everything that lines up on
-   * it — the close control of every overlay.
-   *
-   * 1.6rem, which is where it always sat. For a day it was 3rem, after the
-   * designer's final sheets put the wordmark's cap 48 below the top of the
-   * window; that was taken back by instruction. One figure rather than four
-   * literals, so the bar and the controls that answer to it can never drift
-   * apart again.
-   */
+  /* Where the bar's first line sits, and with it everything that lines up on it
+     — the close control of every overlay. */
   --bar-top: 1.6rem;
   /* The menu's own inset below its line, the same 48 as its sides. */
   --bar-bottom: 3rem;
   /* Width kept clear for the year rail: the grid starts at 211 of the sheet's
      1654, with the rail's bars 120 wide in it. */
   --rail: clamp(9rem, 12.76vw, 17rem);
-  /*
-   * THE SIDE COLUMN — the years, in their colours, and the grid's controls
-   * under them, down the left margin (the designer's final sheet, 1920 wide).
-   *
-   *   --side-top      where the first year's capitals start on the window
-   *                   once the opening has ended. It is the first row of
-   *                   paintings: that row lands at --grid-start less the 45vh
-   *                   the opening scrolls beyond one screen (`motion.span`
-   *                   in client/pile.ts, 1.45), so
-   *                   the two start on one line. A number in vh puts it there
-   *                   instead.
-   *   --type-side     the size of the controls — 25, 50, 100, Equal, To
-   *                   scale: 30 of the sheet's 1920. The years are the page's
-   *                   own size, --type.
-   *   --controls-gap  the space between the last year and the first control.
-   *
-   * The column is taller than a short window. It starts level with the first
-   * row and rides up with the paintings as you scroll on, until its last
-   * control is a margin above the foot of the window, then stays.
-   */
+  /* THE SIDE COLUMN — the years, in their colours, and the grid's controls under
+     them, down the left margin (the designer's final sheet, 1920 wide). */
   --side-top: calc(var(--grid-start) - 45vh);
-  /*
-   * THE COUNT — the gallery's opening filling up, from no paintings to all of
-   * them (2021 onwards), when the Gallery is opened. client/stack.ts queues
-   * the paintings; everything about the timing is here.
-   *
-   *   --count-delay     the wait before the first painting appears.
-   *   --count-duration  from the first painting to the last. The whole count.
-   *   --count-curve     the pace across it. 1 is steady. Above 1 it rushes
-   *                     first and the last ones trickle in (2 is clearly so);
-   *                     below 1 it starts slowly and ends in a rush (0.5).
-   *   --count-fade      how long each painting takes to appear.
-   *   --count-ease      the curve of that appearance.
-   *
-   * Each appears in its place and nothing else: no growing, no travelling. A
-   * scale here would also scale the distance the opening has moved the
-   * painting from its place in the grid, and it would drift in from below.
-   */
+  /* THE COUNT — the gallery's opening filling up, from no paintings to all of
+     them (2021 onwards), when the Gallery is opened. */
   --count-delay: 0.2s;
   --count-duration: 3s;
   --count-curve: 0.7;
@@ -190,28 +98,16 @@
   --count-ease: var(--ease);
   --type-side: clamp(0.85rem, 1.5625vw, 2.55rem);
   --controls-gap: 4.7vw;
-  /* The gallery's gutters, off the same sheet: 43 between columns and about
-     23 between rows at 1654 — tighter than the page gap, so the paintings fill
-     the screen as they do there. */
+  /* The gallery's gutters, off the same sheet: 43 between columns and about 23
+     between rows at 1654 — tighter than the page gap, so the paintings fill the
+     screen as they do there. */
   --grid-gap-x: clamp(1rem, 2.6vw, 3.2rem);
   --grid-gap-y: clamp(0.6rem, 1.45vw, 1.8rem);
-  /*
-   * THE WALL'S SIZE — how big the paintings are drawn when the grid is to
-   * scale, against their size at equal heights. 1 draws the typical work at
-   * the row height; the wall came out larger than the contact sheet because
-   * its rows are fewer per line and grow further to meet the edge, so it is
-   * taken down to 0.85. The spread between small and large works is a
-   * separate matter: content/size.ts, GAMMA.
-   */
+  /* THE WALL'S SIZE — how big the paintings are drawn when the grid is to scale,
+     against their size at equal heights. */
   --wall-scale: 0.85;
-  /*
-   * WHERE THE OPENING ENDS — how far down the window the grid's first row sits
-   * the moment the pile has unfolded. The pile lets go after SCROLL_SPAN
-   * screens of scrolling (stack.ts, 1.3), and the first row lands at
-   *   (this − (SCROLL_SPAN − 1) × 100vh)
-   * from the top of the window: 52vh puts it 22vh down.
-   * Raise it to end lower, lower it to end higher.
-   */
+  /* WHERE THE OPENING ENDS — how far down the window the grid's first row sits
+     the moment the pile has unfolded. */
   --grid-start: 70vh;
   --blue: var(--ink);                 /* alias kept for the About panel */
 
@@ -220,43 +116,10 @@
   --veil-blur: 8px;
 }
 
-/*
- * Moving between pages fades rather than cutting: the page you are leaving goes
- * out, the one you arrive at comes in, so the site reads as one surface instead
- * of a set of documents.
- *
- * This was `@view-transition` and it did nothing in practice. Cross-document
- * view transitions are skipped without a word whenever the browser has not
- * implemented them, and they cannot be feature-detected from script, so there
- * was no way even to know. The entrance is now a plain animation that every
- * browser runs, and the exit is `client/transitions.ts` holding the navigation
- * back for the length of the fade.
- *
- * What fades is a sheet of paper over the page, not the page itself. Fading
- * `body` looked identical and was wrong twice over: `body` is the containing
- * block for the menu, the panels, the lightbox and the pointer label, all of
- * which are fixed — and an opacity animation, even one that finishes at 1, keeps
- * a stacking context on the element for as long as it fills. That context
- * trapped the menu's `difference` blend against the body's own background
- * instead of the page, so the type came out raw peach rather than the indigo it
- * resolves to over paper.
- *
- * The entrance needs no script, so a failure to load one cannot leave the page
- * covered; the exit is script, so a failure there is just an ordinary
- * navigation.
- *
- * `backwards`, not `both`. Filling forwards keeps the animation in effect for
- * the life of the page, which on an opacity animation means a stacking context
- * that never goes away — the same thing that trapped the menu's blend when this
- * was on `body`. Falling back to the resting state is both safer and the state
- * we want anyway.
- */
-/*
- * Under the bar, not over it. At 150 the veil covered the menu too, so the
- * whole chrome went out with the page and came back with it — and the bar is
- * the one thing that does not change between two paintings. Below 40 it fades
- * the page and leaves the menu standing.
- */
+/* Moving between pages fades rather than cutting: the page you are leaving goes
+   out, the one you arrive at comes in, so the site reads as one surface instead
+   of a set of documents. */
+/* Under the bar, not over it. */
 .page-veil {
   position: fixed; inset: 0; z-index: 39;
   background: var(--paper);
@@ -266,30 +129,14 @@
 @media (prefers-reduced-motion: no-preference) {
   .page-veil { animation: veil-out 0.6s var(--ease) backwards; }
   /* Naming a different animation rather than clearing this one: replacing the
-     name restarts it from its own first frame, where removing it would leave
-     the transition to guess what it was fading from. Forwards here, because
-     this one has to hold the page covered until the navigation commits. */
+     name restarts it from its own first frame, where removing it would leave the
+     transition to guess what it was fading from. */
   html.is-leaving .page-veil { animation: veil-in 0.42s var(--ease) both; }
 }
 @keyframes veil-out { from { opacity: 1; } to { opacity: 0; } }
 @keyframes veil-in { from { opacity: 0; } to { opacity: 1; } }
 
-/*
- * Arriving at What's Color by its link. That page is laid out at its top and
- * then moved down to the written sentence by script, and the browser paints
- * before the script runs: measured in Safari, two to three frames of the film,
- * with the bar riding it mid-screen and the top of the screen blank where the
- * bar stands on every other page. So until the page stands where it should
- * (client/write.ts lifts the class) the paper is held fully over it, and the
- * bar is drawn as it is everywhere else — pinned at the top, its block
- * dropping in — rather than in its first film state. The menu never leaves
- * the top across the move, which is the continuity every other page has.
- *
- * The veil's fade starts from its own first frame when the hold lifts — a
- * different animation name, so `veil-out` restarts rather than resumes.
- * Only where the landing is made at all: the class is set in the head, and a
- * timer there lifts it after 1.5s whatever happens to the script.
- */
+/* Arriving at What's Color by its link. */
 @media (prefers-reduced-motion: no-preference) {
   html.wc-arriving body.has-film .page-veil { animation: veil-hold 1s linear both; }
 }
@@ -303,25 +150,7 @@ html.wc-arriving body.has-film .top [aria-current='page']:is(a, button) {
 html.wc-arriving body.has-film .top [aria-current='page']:is(a, button)::before { display: block; }
 @keyframes veil-hold { from, to { opacity: 1; } }
 
-/*
- * And the guarantee underneath all of it.
- *
- * Everything above hides something and then reveals it by finishing. That is a
- * single point of failure for the whole page: an animation that never starts, or
- * starts and never advances, leaves a site that has loaded perfectly behind an
- * opaque sheet with its content at zero opacity. I have watched this page do
- * exactly that — fully loaded, every image fetched, nothing in the console, and
- * nothing on screen — because the document's animation timeline had not begun.
- * A tab that loads while in the background is the ordinary way to meet it.
- *
- * So nothing is allowed to depend on an animation completing. `transitions.ts`
- * sets this class on a timer well after the longest entrance would have ended,
- * and it cancels the entrances outright. In the normal case the animations have
- * already finished and this changes nothing that can be seen; in the bad case it
- * is the difference between the site and a blank page.
- *
- * `:not(.is-leaving)` so it never cancels the exit, which is meant to hold.
- */
+/* And the guarantee underneath all of it. */
 html.is-revealed:not(.is-leaving) .page-veil,
 html.is-revealed .feed-column,
 html.is-revealed .chart,
@@ -330,39 +159,20 @@ html.is-revealed .detail,
 html.is-revealed .xlist,
 html.is-revealed .grid[data-stack] { animation-name: none; }
 
-/*
- * The other half of it: the page fades in, and then its content settles rather
- * than being there already. A rise of a few pixels and a short stagger is
- * enough — anything more and it reads as a slideshow.
- *
- * Not on the artwork index, which has the pile to arrive with, and not for
- * anyone who has asked for less movement.
- */
+/* The other half of it: the page fades in, and then its content settles rather
+   than being there already. */
 @keyframes settle-in { from { opacity: 0; transform: translateY(18px); } }
 @media (prefers-reduced-motion: no-preference) {
   .feed-column, .chart, .grid-justified, .detail {
     /* Backwards, so the page's resting state is visible and upright: nothing is
        left holding a transform, and nothing stays hidden if the animation does
-       not run. See the reveal guarantee above. */
+       not run. */
     animation: settle-in 0.9s var(--ease) 0.1s backwards;
   }
   .feed-column:nth-child(2) { animation-delay: 0.25s; }
 }
 
-/*
- * THE CONTENT RISING — Exhibitions and Commissioned (Frank, 2026-11-17). Each time the section is opened from the bar the page's
- * content comes up from the bottom of the window and settles into place:
- * arriving at the page, and clicking the section again while on it
- * (client/rise.ts, which replays it). Not Artwork: its opening is the scatter
- * filling up (THE COUNT, above), and the two together were one too many.
- *
- * THE KNOBS:
- *
- *   --rise-distance  how far below its place the content starts
- *   --rise-time      how long it takes to settle
- *   --rise-ease      the curve: fast off the bottom, slow into place
- *   --rise-delay     how long after the page opens it sets off
- */
+/* THE CONTENT RISING — Exhibitions and Commissioned. */
 :root {
   --rise-distance: 60vh;
   --rise-time: 1.5s;
@@ -380,7 +190,7 @@ html.is-revealed .grid[data-stack] { animation-name: none; }
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 body {
   margin: 0;
   background: var(--paper);
@@ -392,23 +202,14 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 img, picture { display: block; max-width: 100%; }
-/* The pile stacks its tiles with z-index while it animates. Without a stacking
-   context of its own here, those values compete with the overlays and the
-   artwork draws over the About panel. */
+/* The pile stacks its tiles with z-index while it animates. */
 main { isolation: isolate; }
 a { color: inherit; text-decoration: none; }
 h1, h2, h3 { font-weight: 500; margin: 0; }
 p { margin: 0 0 1em; }
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
 ::selection { background: var(--ink); color: var(--paper); }
-/*
- * No ring. Keyboard focus is shown the way hover is — the thing you are on
- * changes colour — because a 2px box drawn round an arrow or a close button is
- * a shape the design does not otherwise contain, and it was landing on every
- * arrow of every detail panel. Each focusable thing pairs `:focus-visible`
- * with its own `:hover` rule, so moving by key shows what moving by pointer
- * shows, and nothing is left without an indicator.
- */
+/* No ring. */
 :focus-visible { outline: none; }
 .skip-link { position: absolute; left: -999px; top: 0; z-index: 100; background: var(--ink); color: var(--paper); padding: 0.6rem 1rem; }
 .skip-link:focus { left: 0; }
@@ -429,13 +230,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   font-weight: 500;
 }
 
-/*
- * The two names in the bar are set heavier than the pages are.
- *
- * Semibold for the two names, regular for the five pages, by instruction: they
- * are what the site is called and what you are looking at; the pages are where
- * you can go next, and they are not shouting.
- */
+/* The two names in the bar are set heavier than the pages are. */
 .wordmark, .top-soon { font-weight: 600; }
 .menu a { font-weight: 400; }
 
@@ -445,53 +240,16 @@ body.is-locked { overflow: hidden; }
 
 /* ---------------------------------------------------------------- top bar */
 
-/*
- * The bar holds still when a Mac rubber-bands past the top of a page — in
- * Safari too.
- *
- * Pulled past the top, Chromium keeps fixed elements where they are and
- * stretches only the page beneath them, so the bar stays pinned and its
- * colours simply turn against whatever the gap shows. Safari moves the whole
- * window instead, fixed elements and all: the bar slid down with the page and
- * left a strip of white above it. Nothing in a stylesheet changes how Safari
- * carries fixed elements through the bounce, so in Safari the page is asked
- * not to overscroll at all — the Colour Chart page never could, scrolling
- * inside its own panel, and the opening page already refuses it for the
- * film's sake.
- *
- * Safari only. The test is a font keyword only WebKit's Apple builds
- * understand; Chromium and Firefox answer no and keep the bounce they draw
- * well. On iOS every browser is WebKit underneath and carries fixed elements
- * the same way, so the same answer is the right one there. The cost is
- * Safari's bounce at the foot of a page as well, since the property cannot
- * tell the top from the bottom.
- */
+/* The bar holds still when a Mac rubber-bands past the top of a page — in Safari too. */
 @supports (font: -apple-system-body) {
   html { overscroll-behavior-y: none; }
 }
 
-/*
- * The bar has no ground of its own. Instead the type is drawn as the negative of
- * whatever passes under it — after huyml.co — so it stays legible over a dark
- * painting and a light one alike, and over nothing at all.
- *
- * The trick is the source colour. `difference` computes |backdrop − source| per
- * channel, so over white paper a source of (255, 199, 127) resolves to exactly
- * (0, 56, 128): the indigo. Over a painting it becomes that painting's negative.
- */
+/* The bar has no ground of its own. */
 .top {
   position: fixed; inset: 0 0 auto 0; z-index: 40;
   display: grid;
-  /*
-   * Wordmark, the section still to come, then the pages pushed to the right.
-   *
-   * The first column is the same 25.53% the commissioned groups use, because
-   * in the sheet the section heading starts at x498 and the list's rules start
-   * at x497 — it is one alignment, not two that happen to be close. The rule
-   * that used to place it keyed off a `.top-feature` class that is not in the
-   * markup, so it had never done anything and the heading sat against the
-   * wordmark.
-   */
+  /* Wordmark, the section still to come, then the pages pushed to the right. */
   grid-template-columns: 25.53% auto minmax(0, 1fr);
   align-items: baseline;
   gap: 0;
@@ -499,58 +257,24 @@ body.is-locked { overflow: hidden; }
   pointer-events: none;
   mix-blend-mode: difference;
 }
-/*
- * The bar, measured off the designer's sheet at the 1866 it was exported at.
- *
- * Every item in it — wordmark, the section heading, the pages — sits on one
- * baseline at one size there; the build had the wordmark at 13px and the rest
- * at 11, which is why the whole bar read small and bunched. Four of the menu
- * items give the size independently, from their rendered widths rather than
- * from a cap height an antialiased edge can shift by a pixel: 18.24, 18.14,
- * 18.29, 18.33. The wordmark is tracked looser than the pages in our build and
- * tighter in the sheet, so its own tracking comes down to suit.
- */
+/* The bar, measured off the designer's sheet at the 1866 it was exported at. */
 /* The bar is the one part of the site set smaller: 20 of the designer’s
    1920-frame pixels, against 40 everywhere else. */
 /* 20 of the 1920 frame, tracked at 10% — the whole bar at one size and one
    spacing; only the weight tells the names from the pages. */
 .wordmark, .top-soon, .menu { font-size: var(--type-menu); letter-spacing: 0.1em; }
-/*
- * A heading for a section that does not exist yet. It is a button and not a
- * link because there is nowhere to go: a link to nothing is a broken link, and
- * `aria-disabled` says plainly that it is here but not ready, which is the
- * truth. It keeps its place in the tab order so it is not a surprise when it
- * starts working.
- *
- * It takes the menu’s colours all the same — quiet by default, bright on hover
- * and when it is the current page. It used to sit in the always-bright group,
- * so it read as permanently selected while no page it names existed, and the
- * one page you were actually on looked no different from it.
- */
+/* A heading for a section that does not exist yet. */
 .top-soon {
   font-family: inherit;
   white-space: nowrap;
   cursor: pointer;
 }
-/*
- * The bar passes the pointer through; only what you can actually press takes
- * it. `.top > *` once covered this, but the third of those children is the
- * nav, which is a column 853px wide holding five short words — so most of it
- * was an invisible catcher laid over the page. The links take the pointer, the
- * box they sit in does not.
- */
+/* The bar passes the pointer through; only what you can actually press takes it. */
 .top > * { pointer-events: auto; }
 .menu { pointer-events: none; }
 .menu a { pointer-events: auto; }
 
-/*
- * The wordmark is as wide as the wordmark.
- *
- * It sits in a grid column a quarter of the page across, and a grid item fills
- * its column unless told otherwise — so its box ran 337px for 145px of
- * lettering, and the roll answered anywhere in the 192px of nothing beside it.
- * Hovering near the title, not on it, turned it over.
- */
+/* The wordmark is as wide as the wordmark. */
 .wordmark {
   justify-self: start;
   white-space: nowrap;
@@ -558,26 +282,9 @@ body.is-locked { overflow: hidden; }
 /* Evenly spaced, and the sheet says how far apart: 75px of 1866, four times
    over, to within a pixel each time. */
 .menu { display: flex; justify-content: flex-end; gap: clamp(1rem, 4.019vw, 4.7rem); }
-/* Source colours chosen so that, over white, they resolve to the indigo and to
-   a softer tint of it. */
-/*
- * These are the inverses, not the colours. The bar blends with `difference`, so
- * over the white page each resolves to |255 − source|: rgb(219,218,215) comes
- * out as the ink's #242528 and rgb(105,105,103) as its quieter tint, while over
- * a painting both become that painting's negative. Change `--ink` and these have
- * to be recomputed — they cannot be written as `var(--ink)`, because what is
- * wanted here is the colour that *produces* it.
- *
- * Both sit near white, so the bar is a true negative of whatever it crosses:
- * close to black over paper, close to white over a dark frame. They used to be
- * tuned so that over paper they landed exactly on the ink, which was right for
- * a white page and left the menu a pale grey — 150 of 255 — on every page where
- * nothing dark passed beneath it. That read as the blend not working at all.
- *
- * The cost is that the current page and a hover are now a smaller step from the
- * rest: over paper, 3 against 27, where it used to be 36 against 150. The step
- * is still there and it is the same one the opening film has always used.
- */
+/* Source colours chosen so that, over white, they resolve to the indigo and to a
+   softer tint of it. */
+/* These are the inverses, not the colours. */
 .top { --bar-ink: rgb(252, 252, 250); }
 .wordmark,
 .menu a:hover, .menu a:focus-visible, .menu a[aria-current='page'],
@@ -585,15 +292,7 @@ body.is-locked { overflow: hidden; }
 
 .menu a, .top-soon { color: rgb(228, 228, 226); transition: color var(--hover) var(--ease); }
 
-/*
- * The grid's controls — the three sizes, and equal against to scale — one to a
- * line in the left margin under the years (the knobs are with --rail, under
- * THE SIDE COLUMN), and drawn the way the bar is: as the negative of whatever
- * is under them. Same colours as the menu — the chosen one bright, the rest a
- * step back — until the script names the chosen one in a colour from the
- * site's list (client/controls.ts). Where the column stands, and how it rides
- * up with the scroll, is in 03-years.css.
- */
+/* The grid's controls — the three sizes, and equal against to scale. */
 .controls {
   position: fixed; z-index: 30;
   left: var(--pad);
@@ -612,26 +311,10 @@ body.is-locked { overflow: hidden; }
 
 /* ---------------------------------------------------------- scroll cue */
 
-/*
- * The hint that there is more below, on the two pages that open on a full
- * screen of something — the film and the pile. Neither looks like the top of a
- * document, so without this nothing on the first view says what happens next.
- *
- * Fixed at the foot of the screen rather than placed in the page, because the
- * gallery's runway is removed outright for reduced motion and on a back
- * navigation (`client/stack.ts`), and a cue living inside it would go with it.
- * A button: clicked, it goes where it points (`client/scroll-cue.ts`). It
- * takes the pointer only on the chevron and a little around it, so the film
- * and the tiles under it stay clickable, and not at all once it has gone.
- */
-/*
- * The two knobs for the scroll-down chevron, shared by the page's cue and the
- * one inside About so they cannot drift apart.
- *
- *   --cue-size    how wide the chevron is
- *   --cue-stroke  how heavy its line is, in the drawing's own units (the
- *                 chevron is 28 wide, so 2 is a hairline and 5 is bold)
- */
+/* The hint that there is more below, on the two pages that open on a full screen
+   of something — the film and the pile. */
+/* The two knobs for the scroll-down chevron, shared by the page's cue and the
+   one inside About so they cannot drift apart. */
 :root {
   --cue-size: 2.8rem;
   --cue-stroke: 4.5;
@@ -655,49 +338,31 @@ body.is-locked { overflow: hidden; }
   inset: -0.9rem -0.6rem;
 }
 .scroll-cue:focus-visible, .about-cue:focus-visible { outline: 1px solid currentColor; outline-offset: 0.6rem; }
-/* The stroke is set here rather than on the path so the knob reaches it, and
-   the drawing may spill past its box: a heavy line on a chevron drawn 1.5 from
-   the edge would otherwise lose its top corners. */
+/* The stroke is set here rather than on the path so the knob reaches it, and the
+   drawing may spill past its box: a heavy line on a chevron drawn 1.5 from the
+   edge would otherwise lose its top corners. */
 .scroll-cue svg, .about-cue svg { display: block; width: 100%; height: auto; overflow: visible; }
 .scroll-cue path, .about-cue path { stroke-width: var(--cue-stroke); }
 
-/* Taken, and so no longer a cue. `client/scroll-cue.ts` sets this once, on the
-   first movement worth the name, and never takes it off. */
+/* Taken, and so no longer a cue. */
 html.is-scrolled .scroll-cue { opacity: 0; pointer-events: none; visibility: hidden; transition: opacity 0.7s var(--ease), visibility 0s 0.7s; }
 
-/*
- * The same chevron on its side: every viewer's Previous and Next
- * (`stepChevron`, components/scroll-cue.ts). The cue's size and weight, so the
- * arrows that turn the photographs are the arrow that asks for the scroll
- * (Frank, 2026-11-18). Each viewer's button draws it in the negative, as the
- * start page does, because the arrows are big enough now to cross a picture.
- */
+/* The same chevron on its side: every viewer's Previous and Next (`stepChevron`,
+   components/scroll-cue.ts). */
 .step-chevron { display: block; width: calc(var(--cue-size) * 16 / 28); height: auto; overflow: visible; }
 .step-chevron path { stroke-width: var(--cue-stroke); }
 
 /* The gallery's: paper behind it and nothing else, so it is simply the ink. */
 .scroll-cue-ink { color: var(--ink); }
 
-/*
- * The start page's, crossing the film: drawn as the inverse of whatever frame
- * is behind it, exactly as the bar's type is.
- *
- * The same near-white source the wordmark uses, and for the same reason — this
- * is the colour that *produces* the ink over paper, not the ink itself, and
- * over a dark frame it comes out near white. The blend sits on this element
- * rather than on the svg inside it: a fixed, z-indexed box is its own stacking
- * context, so a blend set on a child would mix with the empty space inside the
- * box instead of with the film.
- */
+/* The start page's, crossing the film: drawn as the inverse of whatever frame is
+   behind it, exactly as the bar's type is. */
 .scroll-cue-negative {
   color: rgb(252, 252, 250);
   mix-blend-mode: difference;
 }
 
-/*
- * A slow fall, repeated — the movement is the instruction. Small enough that it
- * reads as a nudge rather than as something demanding to be clicked.
- */
+/* A slow fall, repeated — the movement is the instruction. */
 @media (prefers-reduced-motion: no-preference) {
   .scroll-cue svg { animation: scroll-cue-fall 2.4s var(--ease) infinite; }
 }
@@ -706,15 +371,7 @@ html.is-scrolled .scroll-cue { opacity: 0; pointer-events: none; visibility: hid
   50% { transform: translateY(0.18rem); }
 }
 
-/*
- * THE GALLERY'S CUE INSISTS (Frank, 2026-11-20). Over the scattered paintings
- * nothing says the page goes on, so here the chevron does not nudge, it
- * knocks: down hard and back, twice, a breath, and again — for as long as
- * the opening has not been scrolled through (client/scroll-cue.ts).
- *
- *   --cue-knock-time  one round: two knocks and the breath after them
- *   --cue-knock-drop  how far down each knock goes
- */
+/* THE GALLERY'S CUE INSISTS. */
 :root {
   --cue-knock-time: 1.7s;
   --cue-knock-drop: 0.75rem;
@@ -737,25 +394,15 @@ html.is-scrolled .scroll-cue { opacity: 0; pointer-events: none; visibility: hid
 
 /* ------------------------------------------------------------- cursor */
 
-/*
- * The label that follows the pointer over a painting. Pointer-events off, so it
- * can never intercept the click it is describing; hidden entirely on touch,
- * where the caption has nothing to follow.
- */
-/*
- * The blend goes on the container, not on the label. `.cursor` is a stacking
- * context of its own (fixed, z-indexed), so a blend applied inside it would mix
- * with the container's own empty backdrop and simply render its raw colour —
- * which is why the label came out peach instead of the negative of the work.
- */
+/* The label that follows the pointer over a painting. */
+/* The blend goes on the container, not on the label. */
 .cursor {
   position: fixed; top: 0; left: 0; z-index: 90;
   pointer-events: none;
   opacity: 0;
   /* Hidden, not only transparent, once the fade is done: a transparent blended
      layer is still blended on every frame, and Safari does that blending far
-     less cheaply than Chromium. The same for the standing layer hint, which
-     only earns its keep while the label moves. */
+     less cheaply than Chromium. */
   visibility: hidden;
   transition: opacity 0.22s var(--ease), visibility 0s linear 0.22s;
   mix-blend-mode: difference;
@@ -769,14 +416,7 @@ html.is-scrolled .scroll-cue { opacity: 0; pointer-events: none; visibility: hid
 /* Centred on the pointer, because it *is* the pointer while it shows. */
 .cursor-label {
   display: inline-block;
-  /*
-   * White, where the menu uses peach. With `difference` the result is
-   * |backdrop − source|, so white gives 255 − backdrop: the photographic
-   * negative of whatever the pointer is over, and the furthest any single
-   * colour can get from the picture underneath it. The menu wants peach because
-   * it is mostly over paper and peach resolves there to the house indigo; the
-   * pointer is always over a painting, where contrast matters more than hue.
-   */
+  /* White, where the menu uses peach. */
   color: #ffffff;
   /* A painting's caption keeps Claudia's own lines (client/cursor.ts). */
   white-space: pre;
@@ -788,29 +428,24 @@ html.is-scrolled .scroll-cue { opacity: 0; pointer-events: none; visibility: hid
   font-weight: 600;
   transform: translate(-50%, -50%);
 }
-/* The arrow steps aside over a painting — but only once the script that
-   replaces it is actually running. */
+/* The arrow steps aside over a painting — but only once the script that replaces
+   it is actually running. */
 .has-cursor .tile { cursor: none; }
 @media (hover: none), (pointer: coarse) { .cursor { display: none; } }
 
 /* ------------------------------------------------------------ text roll */
 
-/*
- * Hover text roll on the menu and wordmark, after landonorris.com: each
- * character is a span with its own text made transparent and two copies drawn
- * by pseudo-elements, one in place and one held below. On hover the top rolls
- * out while the lower rolls in, each character 25ms after the last.
- */
+/* Hover text roll on the menu and wordmark, after landonorris.com: each
+   character is a span with its own text made transparent and two copies drawn by
+   pseudo-elements, one in place and one held below. */
 .roll { position: relative; display: inline-block; white-space: pre; color: transparent; overflow: hidden;
   padding-bottom: 0.18em; margin-bottom: -0.18em; }
 .roll::before, .roll::after {
   content: attr(data-ch); position: absolute; left: 0; top: 0; color: var(--roll-color, var(--ink));
-  /* Frank's settings from the hover tuner (2026-11-17): a slow turn that
-     overshoots and settles ("back out"), a quick fade, 85ms between letters. */
+  /* A slow turn that overshoots and settles, a quick fade, 85ms between letters. */
   transition: transform 810ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
   /* Each character a step behind the one before it, going and coming back:
-     staggered, the word turns over; in step, it swaps all at once, which
-     reads as the two copies trading places rather than as one roll. */
+     staggered, the word turns over. */
   transition-delay: calc(var(--i) * 85ms);
 }
 .roll::after { transform: translateY(100%); opacity: 0; }
@@ -818,14 +453,11 @@ html.is-scrolled .scroll-cue { opacity: 0; pointer-events: none; visibility: hid
 [data-roll]:hover .roll::after { transform: translateY(0); opacity: 1; }
 /* The span's own text is transparent, so the copies take their colour from a
    variable rather than inheriting it. */
-/* The roll draws its copies from a variable rather than from `currentColor`:
-   the character span's own text is transparent — that is how the roll works —
-   so `currentColor` inside it is transparent too, and the copies vanished. */
-/*
- * Each word in the bar comes written twice (components/layout.ts): cut into
- * the roll's letters, for the eye, and plain, for a screen reader — and for
- * the phone, which shows the plain one (09-phone.css).
- */
+/* The roll draws its copies from a variable rather than from `currentColor`: the
+   character span's own text is transparent. */
+/* Each word in the bar comes written twice (components/layout.ts): cut into the
+   roll's letters, for the eye, and plain, for a screen reader — and for the
+   phone, which shows the plain one (09-phone.css). */
 .roll-text {
   position: absolute; width: 1px; height: 1px;
   margin: -1px; padding: 0; overflow: hidden;
@@ -836,72 +468,18 @@ html.is-scrolled .scroll-cue { opacity: 0; pointer-events: none; visibility: hid
 .menu a:hover, .menu a:focus-visible, .menu a[aria-current='page'],
 .top-soon:hover, .top-soon:focus-visible, .top-soon[aria-current='page'] { --roll-color: rgb(252, 252, 250); }
 
-/*
- * The page you are on, as a block of colour hanging from the top of the screen.
- *
- * The same mark the question wears in the opening text — a solid field of one
- * of the palette's colours with the words knocked out of it — except that this
- * one reaches the top edge, so it reads as a chip of paint laid on the screen
- * rather than as a highlighter run across a line.
- *
- * It sits below everything else that colours the bar, and it names an element
- * in its selector. Both are needed. The rules it has to beat —
- * `.menu a[aria-current]` for the ink, and the same selector again for
- * `--roll-color` — carry a class, an attribute and an element each, so a
- * lighter selector loses outright and an equal one loses on order. Written
- * above them the name came out dark on its own colour; and because the roll
- * draws the glyphs you actually see from `--roll-color`, while the element's
- * own text is only what shows before the script runs, getting one and not the
- * other bought a flash of white and nothing more.
- *
- * Three things make it behave.
- *
- * The colour arrives as a negative, because the bar blends with `difference`:
- * what it paints is the distance between the backdrop and the colour it is
- * given, so over the page's white a negative comes back as the hue itself.
- * `client/current.ts` draws it from the site's list, afresh on every load.
- *
- * The ink is black for the same reason and not by accident — black against
- * white is the whole distance, which is paper. So the name is knocked out in
- * white without naming a second colour to keep in step.
- *
- * And it climbs without moving anything: the padding that carries it to the top
- * edge is taken straight back as margin, on every side, so the item occupies
- * exactly the space it did unpainted and the spacing measured off the
- * designer's sheet is untouched.
- *
- * The three knobs:
- *
- *   --bar-rise   how far the block climbs towards the top edge. Measured by
- *                the script off a neighbour, since the opening page gives its
- *                bar a different height; set it here to override that.
- *   --bar-drop   how far it hangs below the line of type.
- *   --bar-side   how far it stands out either side of the name.
- */
+/* The page you are on, as a block of colour hanging from the top of the screen. */
 .top {
   --bar-rise: var(--bar-rise-measured, 1rem);
   --bar-drop: 0.001em;
   --bar-side: 0.18em;
-  /*
-   * How much is taken off the bottom of the block, and the knob to reach for
-   * when it wants to be shorter.
-   *
-   * --bar-drop can only add or remove space *below* the name, and at nothing
-   * the block still ends where the name's line ends — which is lower than the
-   * letters, because a line box carries its leading under the baseline. This
-   * cuts into that, so the block can finish above where the type stops without
-   * the type moving: the block is a layer of its own and this trims the layer.
-   */
+  /* How much is taken off the bottom of the block, and the knob to reach for
+     when it wants to be shorter. */
   --bar-trim: 6px;
   /* How far the block runs on above the window's top edge (see below). */
   --bar-reach: 2rem;
-  /*
-   * When the name turns from the bar's ink to paper, knocked out of the
-   * block: once the block has dropped in behind it, not on the first frame.
-   * Turned at once, it was paper on paper — invisible — until the falling
-   * block reached it, so every new page opened with its own name missing
-   * and then drawn in from the top down.
-   */
+  /* When the name turns from the bar's ink to paper, knocked out of the block:
+     once the block has dropped in behind it, not on the first frame. */
   --knock-delay: 0.2s;
   --knock-time: 0.18s;
 }
@@ -915,38 +493,19 @@ html.is-scrolled .scroll-cue { opacity: 0; pointer-events: none; visibility: hid
   margin: calc(-1 * var(--bar-rise)) calc(-1 * var(--bar-side)) calc(-1 * var(--bar-drop));
 }
 
-/*
- * The colour is a layer of its own behind the name, and not the name's own
- * background, so that it can move while the name stays where it is. Arriving,
- * it drops into place from above the top edge; leaving, it withdraws the same
- * way. The name is only ever still, and only changes colour.
- */
+/* The colour is a layer of its own behind the name, and not the name's own
+   background, so that it can move while the name stays where it is. */
 .top [aria-current='page']:is(a, button)::before {
   content: '';
   position: absolute;
-  /*
-   * Reaching past the top edge on purpose. The rise that carries the block up
-   * is measured by script (client/current.ts), so until it has run, and in
-   * Safari wherever its figure comes out a pixel short, the block stopped just
-   * under the edge and a hairline of the page showed above it. Running on
-   * above the window, where nothing is drawn, it meets the edge whatever the
-   * measurement says.
-   */
+  /* Reaching past the top edge on purpose. */
   inset: calc(-1 * var(--bar-reach)) 0 var(--bar-trim) 0;
   z-index: -1;
   background: var(--bar-swatch, var(--neg-0));
   animation: swatch-drop 0.46s var(--ease) both;
 }
 
-/*
- * Going somewhere else. `is-leaving` is already on the document while the veil
- * draws over the page, so the block has that long to withdraw and the name to
- * go back to the ink it wears everywhere else — which over paper is black. The
- * bar itself does not move through any of this: it sits a layer above the veil,
- * so it is the one thing on the screen that does not fade, and the only change
- * between one page and the next is this block leaving one name and dropping
- * onto another.
- */
+/* Going somewhere else. */
 html.is-leaving .top [aria-current='page']:is(a, button) {
   color: var(--bar-ink);
   --roll-color: var(--bar-ink);
@@ -955,8 +514,8 @@ html.is-leaving .top [aria-current='page']:is(a, button)::before {
   animation: swatch-lift 0.34s var(--ease) both;
 }
 
-/* Registered so the name's colour can be carried over time: the glyphs are
-   drawn by the roll in this colour, not in the element's own. */
+/* Registered so the name's colour can be carried over time: the glyphs are drawn
+   by the roll in this colour, not in the element's own. */
 @property --roll-color {
   syntax: '<color>';
   inherits: true;
@@ -974,19 +533,7 @@ html.is-leaving .top [aria-current='page']:is(a, button)::before {
   to { transform: translateY(-100%); }
 }
 
-/*
- * The name twice over, for the stretch where the film is still passing it.
- *
- * `--edge` is where the film's bottom edge falls inside the name's own box:
- * the edge sits --film-lift below the top of the item, and the name begins
- * --bar-rise below that same top, so the difference is the edge measured from
- * the name. Floored at nothing, since the edge passes the name and keeps going.
- *
- * The lower copy is the one in the document; the upper is drawn over it in the
- * ink the bar wears over the film, with no block behind it. Each shows only its
- * own side of that edge, so as the film clears, the name is handed from one to
- * the other a letter at a time.
- */
+/* The name twice over, for the stretch where the film is still passing it. */
 .top-face { display: inline-block; }
 
 .top-echo {
@@ -1001,9 +548,9 @@ html.is-leaving .top [aria-current='page']:is(a, button)::before {
 }
 
 .has-film.is-film-past .top [aria-current='page'] {
-  /* A plain length, not a guarded one: a clip-path keyframe will not
-     interpolate from a value still carrying a math function, and an inset
-     clamps a negative of its own accord anyway. */
+  /* A plain length, not a guarded one: a clip-path keyframe will not interpolate
+     from a value still carrying a math function, and an inset clamps a negative
+     of its own accord anyway. */
   --edge: calc(var(--film-lift) - var(--bar-rise));
 }
 .has-film.is-film-past .top-face { clip-path: inset(var(--edge) 0 0 0); }
@@ -1029,13 +576,9 @@ html.is-leaving .top [aria-current='page']:is(a, button)::before {
   .has-film.is-film-past .top-echo { animation-name: echo-clear; }
 }
 
-/*
- * Both copies are cut at the film's edge all the way through, which ends the
- * stretch not at the name's top but --bar-rise above it, at the top of the
- * window. Ending the cut at the name's top instead made it trail the edge,
- * so the upper copy, in the ink, stood on the block for a moment and the
- * name read as turning from black to white as the film cleared.
- */
+/* Both copies are cut at the film's edge all the way through, which ends the
+   stretch not at the name's top but --bar-rise above it, at the top of the
+   window. */
 @keyframes face-reveal {
   from { clip-path: inset(var(--edge) 0 0 0); }
   to { clip-path: inset(calc(-1 * var(--bar-rise)) 0 0 0); }
@@ -1045,26 +588,8 @@ html.is-leaving .top [aria-current='page']:is(a, button)::before {
   to { clip-path: inset(0 0 calc(100% + var(--bar-rise)) 0); }
 }
 
-/*
- * On the opening page the block comes out from under the film rather than
- * appearing once it has gone.
- *
- * Nothing shows while the bar is still held on the middle line: there the bar
- * is the film's negative, and a second colour laid over that reads as part of
- * the picture.
- *
- * From the moment the bar settles on the film's bottom edge the block is there
- * but cut off at that edge, so only what has cleared the film is seen. The cut
- * is a constant and not something to recompute as the page moves: the bar rides
- * that edge for the whole of the film's last stretch, so the film's bottom
- * always sits exactly `--film-lift` below the top of the block.
- *
- * What is left is the final stretch — the bar has reached the top and the
- * film's last `--film-lift` of picture is still sliding past it — and that one
- * opens the cut, on the scroll itself, so the block looks drawn out from
- * beneath the film. Where scroll timelines are not understood the cut is simply
- * dropped once the film has gone, which is the behaviour this replaces.
- */
+/* On the opening page the block comes out from under the film rather than
+   appearing once it has gone. */
 .has-film:not(.is-film-past) .top [aria-current='page']:is(a, button)::before { display: none; }
 .has-film:not(.is-film-past) .top [aria-current='page']:is(a, button) {
   color: var(--bar-ink);
@@ -1075,18 +600,10 @@ html.is-leaving .top [aria-current='page']:is(a, button)::before {
   margin-bottom: 0;
 }
 
-/*
- * The cut falls on the colour and on nothing else.
- *
- * It used to be set on the item itself, which carries the name as well as the
- * block behind it, so the moment the cut came in it took the top of the item
- * away — and since the name sits in that top, the name went with it. What is
- * wanted is a block emerging from under the film with its name on it the whole
- * time, so the cut belongs to the layer that is the block.
- */
+/* The cut falls on the colour and on nothing else. */
 .has-film.is-film-past .top [aria-current='page']:is(a, button)::before {
-  /* The block runs on above the window by --bar-reach; the cut is measured
-     from the item's own top, so that is added back. */
+  /* The block runs on above the window by --bar-reach; the cut is measured from
+     the item's own top, so that is added back. */
   clip-path: inset(calc(var(--film-lift) + var(--bar-reach)) 0 0 0);
 }
 .has-film.is-film-gone .top [aria-current='page']:is(a, button)::before {
@@ -1106,23 +623,7 @@ html.is-leaving .top [aria-current='page']:is(a, button)::before {
   to { clip-path: inset(var(--bar-reach) 0 0 0); }
 }
 
-/*
- * Arriving and leaving, the block moves here as it does on every other page.
- *
- * The scroll-driven reveal above takes the block's animation slot for as long
- * as the film is behind the bar — and, being the more specific rule, for good
- * once it is: the drop on arrival never ran (landing below the film, the
- * reveal is already over, so the block was simply there) and neither did the
- * lift on leaving, so the block was cut off with the page instead of drawn up
- * out of it. Both moments win the slot back here, by out-weighing that rule.
- *
- * The drop starts with the page's first frame (the arrival rules above) and
- * this keeps it running through the hand-over to the film's own state — the
- * same animation by name, so it continues rather than restarts; the head lifts
- * the class once it has finished. The lift comes with the page-leaving class,
- * as everywhere. The shorthand resets the timeline, so both run on the clock,
- * not the scroll. Leaving comes last, so it wins if the two ever meet.
- */
+/* Arriving and leaving, the block moves here as it does on every other page. */
 html.wc-swatch-drop body.has-film.is-film-past .top [aria-current='page']:is(a, button)::before {
   animation: swatch-drop 0.46s var(--ease) both;
 }
@@ -1130,94 +631,19 @@ html.is-leaving body.has-film.is-film-past .top [aria-current='page']:is(a, butt
   animation: swatch-lift 0.34s var(--ease) both;
 }
 
-/*
- * The name never changes colour here as the block slides out: its two copies
- * hand it over at the film's edge, the same line the block is cut at, so the
- * paper copy only ever shows on the block. The turn from ink to paper that
- * the other pages make once their block has dropped is kept for arriving by
- * the link, where the block drops in the same way.
- */
+/* The name never changes colour here as the block slides out: its two copies
+   hand it over at the film's edge, the same line the block is cut at, so the
+   paper copy only ever shows on the block. */
 .has-film .top [aria-current='page']:is(a, button) { animation: none; }
-/*
- * And no fade on its colour (Frank, 2026-11-20). At the film's edge the name
- * turns from paper-on-block to the bar's ink in a single frame — the block
- * goes with it — but the hover fade on bar names (`.top-soon`, --hover) made
- * the letters take half a second to follow, so for that half second they
- * stood dark over the film with nothing behind them: a flicker each time
- * What's Color was scrolled back up to the start page, and the same the
- * other way.
- */
+/* And no fade on its colour. */
 .has-film .top [aria-current='page']:is(a, button) { transition: none; }
 html.wc-swatch-drop body.has-film .top [aria-current='page']:is(a, button) {
   animation: name-knock var(--knock-time) linear var(--knock-delay) backwards;
 }
 
 
-/*
- * THE WAY OUT OF THE START PAGE — to any page but What's Color, by the bar
- * (client/transitions.ts, `fromStart`).
- *
- * In this order (Frank, 2026-11-19 — it used to be film first, then the bar):
- *
- *   1. a pause, the bar standing on the film's middle line
- *   2. the bar climbs, over the film still playing, to the top of the window,
- *      where it stands on every other page: slow away, fast, slow into place
- *   3. the bar stands at the top a moment (--start-settle) while the film
- *      goes, finishing just before the colour drops
- *   4. the colour drops onto the name chosen, as a page's own block drops in
- *      when it opens — and then the next page comes up under a bar standing
- *      exactly so, in the same colour, without dropping it again
- *      (`arrive-held` below)
- *
- * THE KNOBS — every one of them is here; the script reads them to know when
- * to go, so nothing else needs changing:
- *
- *   --start-film-lead   WHEN THE FILM GOES. How long before the colour drops
- *                       the film is completely gone. 0s = gone the very moment
- *                       the colour drops; bigger = earlier (0.3s: gone as the
- *                       bar reaches the top; 0.6s: gone mid-climb). A negative
- *                       value (-0.2s) lets the colour drop first and the film
- *                       go after it.
- *   --start-film-out    how long the film takes to go
- *   --start-film-style  HOW THE FILM GOES (and how it comes back when you
- *                       return to the start page). One of:
- *                         film-fade  paper fades in over it (as before)
- *                         film-cut   no fade: gone in one frame
- *                         film-wipe  paper rises from the bottom, following
- *                                    the bar up (coming back, it falls away)
- *                         film-blur  the film blurs out as the paper comes in
- *   --start-film-in     how long the film takes to come back, on the way back
- *   --start-pause       how long the bar waits before it climbs
- *   --start-climb       how long the climb takes
- *   --start-ease        the climb's curve. (0.83, 0, 0.17, 1) is very slow,
- *                       fast, very slow; (0.65, 0, 0.35, 1) is gentler
- *   --start-settle      how long the bar stands at the top before the colour
- *                       drops: the room the film has to go in after the climb
- *   --start-swatch      how long the colour takes to drop
- *   --start-hold        after the drop: how long it all stands before the
- *                       next page
- *   --start-veil        on the way back only: how long the page you leave
- *                       takes to go to paper
- *
- * To try the styles without editing anything, open the start page with
- * ?film=wipe (or fade, cut, blur); it holds for the rest of the visit, and
- * ?film=off goes back to the setting here.
- *
- * And back again, by the name at the top left from any other page (Frank,
- * 2026-11-20): the block lifts off the page's name as the page goes to paper
- * (--start-veil), the bar staying at the top. The start page opens with the
- * bar still at the top, the film comes back in the --start-film-style chosen
- * (--start-film-in; film-wipe comes back wiping down), and only then does
- * the bar come down to the film's middle line (--start-climb, --start-ease):
- *
- *   --start-back-gap    how long after the film is back the bar starts down.
- *                       0s = the moment it is back; negative (-0.3s) = the
- *                       bar sets off while the film is still coming in
- *
- * The climb is the bar's resting offset taken back: it stands at
- * (film-h − film-bar) / 2 and every other page has it at 0, with the same
- * padding over the line.
- */
+/* THE WAY OUT OF THE START PAGE — to any page but What's Color, by the bar
+   (client/transitions.ts, `fromStart`). */
 :root {
   --start-film-lead: 0.03s;
   --start-film-out: 0.6s;
@@ -1246,8 +672,7 @@ html.is-leaving-start body.has-film .top {
     animation-name: var(--start-film-style);
   }
 }
-/* The ways the film can go. Each is written as the paper arriving; coming
-   back, the same one runs in reverse (`arrive-start` below). */
+/* The ways the film can go. */
 @keyframes film-fade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes film-cut { 0%, 99.9% { opacity: 0; } 100% { opacity: 1; } }
 @keyframes film-wipe {
@@ -1273,22 +698,19 @@ html.is-leaving-start .top a.is-chosen::before {
   inset: calc(-1 * var(--bar-reach)) 0 var(--bar-trim) 0;
   z-index: -1;
   background: var(--bar-swatch, var(--neg-0));
-  /* Held out of sight until it drops: waiting above the name, it would
-     stand over the bar's other words while the bar is still climbing. */
+  /* Held out of sight until it drops: waiting above the name, it would stand
+     over the bar's other words while the bar is still climbing. */
   animation:
     swatch-drop var(--start-swatch) var(--ease) var(--start-drop-at) both,
     swatch-wait 0s linear var(--start-drop-at) both;
 }
 @keyframes swatch-wait { from { visibility: hidden; } to { visibility: visible; } }
 
-/* Back to the start page (client/transitions.ts, `toStart`). The page goes
-   to paper under a bar that stays where it is; the start page then opens with
-   the bar at the top, brings the film back, and only then lowers the bar to
-   the film's middle line, where it rests there. */
+/* Back to the start page (client/transitions.ts, `toStart`). */
 @media (prefers-reduced-motion: no-preference) {
-  /* `start-arrived` once it has run (client/transitions.ts): the arrival
-     class stays on the page, and without it every scroll back up from What's
-     Color ran the descent again — the bar jumped to the top and came down. */
+  /* `start-arrived` once it has run (client/transitions.ts): the arrival class
+     stays on the page, and without it every scroll back up from What's Color ran
+     the descent again. */
   html.arrive-start:not(.start-arrived) body.has-film:not(.is-film-past) .top {
     animation: bar-descend var(--start-climb) var(--start-ease)
       calc(var(--start-film-in) + var(--start-back-gap)) backwards;
@@ -1314,34 +736,12 @@ html.is-leaving-to-start .top [aria-current='page']:is(a, button)::before {
 /* Arrived that way: the block and the name stand as they were left. */
 html.arrive-held:not(.is-leaving) .top [aria-current='page']:is(a, button),
 html.arrive-held:not(.is-leaving) .top [aria-current='page']:is(a, button)::before { animation: none; }
-/* Only until it leaves: leaving, the block lifts off as on any page. Without
-   the :not, a page arrived at this way held its block through the way back,
-   and the block came down with the bar instead of lifting off first. */
+/* Only until it leaves: leaving, the block lifts off as on any page. */
 
 
 /* ------------------------------------------------------------- scrollbar */
 
-/*
- * The handle and nothing else.
- *
- * The browser's own bar draws a channel down the right edge — a pale box with
- * a rule beside it — which on a site that is otherwise paper and ink reads as
- * a piece of the operating system left on the page. The track is given no
- * colour at all, so what is left is the handle, apparently floating on
- * whatever the page happens to be behind it.
- *
- * The handle is a mid grey on purpose rather than the ink: it has to hold on
- * the white pages and on the opening film alike, and nothing here can blend
- * the way the bar does — a scrollbar is drawn by the browser, outside anything
- * `mix-blend-mode` can reach. A grey at this weight reads against both.
- *
- * Its slimness comes from a transparent border with the paint clipped inside
- * it, which is the one way to inset a handle: the track keeps its full width
- * for the pointer to find, while the mark itself is narrow.
- *
- * Firefox has no pseudo-elements for this and takes the two properties above
- * instead; between them every browser gets a handle and no box.
- */
+/* The handle and nothing else. */
 html {
   scrollbar-width: thin;
   scrollbar-color: rgb(140 140 140 / 0.55) transparent;
@@ -1358,25 +758,7 @@ html {
 }
 ::-webkit-scrollbar-thumb:hover { background: rgb(120 120 120 / 0.75); background-clip: content-box; }
 
-/*
- * The drawn handle.
- *
- * It replaces the browser's bar rather than restyling it, because a native bar
- * cannot be moved onto the page: however the track is painted, the column it
- * sits in is still held open beside the content. Taking it away gives those
- * pixels back to the page and leaves the handle floating over whatever is
- * behind it.
- *
- * Both halves are behind the same support query, and deliberately so. The
- * handle is carried by a scroll-driven animation, so where that is not
- * understood there is no handle — and in that case the native bar has to stay,
- * styled as far as it can be. Hiding it unconditionally would have left those
- * browsers with no indication of position at all.
- *
- * Mid grey rather than the ink: it has to hold on the white pages and on the
- * opening film alike, and nothing can blend it — this is drawn over the page,
- * not into it.
- */
+/* The drawn handle. */
 @supports (animation-timeline: scroll()) {
   html { scrollbar-width: none; }
   html::-webkit-scrollbar { width: 0; height: 0; }
@@ -1402,15 +784,7 @@ html {
 
 /* ---------------------------------------------------------- text scramble */
 
-/*
- * The churning hover's characters.
- *
- * Each keeps the width it measured while the word was still, so whatever
- * nonsense lands in it cannot push the word wider and shove the rest of the
- * bar along — every position up there was set against the designer's sheet and
- * none of it may move. A piece too wide for its box is centred and cut rather
- * than allowed to spread.
- */
+/* The churning hover's characters. */
 .scram {
   display: inline-block;
   width: var(--w);

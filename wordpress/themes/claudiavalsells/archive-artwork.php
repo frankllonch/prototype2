@@ -1,8 +1,5 @@
 <?php
-/**
- * The gallery. The wordmark, then every painting gathered into one stack;
- * scrolling disperses the stack into the grid, which is where the tiles live.
- */
+/** The gallery. */
 $cv_items = array_values( array_filter( array_map( 'cv_work_item', cv_works() ), fn( $i ) => $i['image'] ) );
 
 cv_page( [
@@ -19,7 +16,7 @@ get_header();
 <h1 class="sr-only"><?php echo esc_html( get_bloginfo( 'name' ) ); ?> — Artwork</h1>
 <div class="hero" data-hero aria-hidden="true"></div>
 <?php
-// Tiles go to the painting's own page rather than opening over the gallery:
-// the page carries the caption, the lean and the way through the collection.
+// Tiles go to the painting's own page rather than opening over the gallery: the page carries
+// the caption, the lean and the way through the collection.
 echo cv_grid( [ 'items' => $cv_items, 'stack' => true, 'toScale' => true ] );
 get_footer();

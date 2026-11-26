@@ -1,17 +1,4 @@
-/**
- * Adds paintings that were never on claudiavalsells.com.
- *
- * Drop the photograph into content/raw/local/<year>/, named with what is known
- * about it — `gouache on paper 95x105.jpg` — and run `npm run add-works`, then
- * `npm run images` and `npm run build`. The year comes from the folder and the
- * size and medium from the name; anything the name does not say is left out
- * rather than guessed, so a file called `3.jpg` becomes an untitled work of
- * that year and nothing more.
- *
- * Files already in the dataset are skipped, so the script can be run again
- * after every drop. Within a year the new works follow the order of their
- * names, after the works that came from the site.
- */
+/** Adds paintings that were never on claudiavalsells.com. */
 import { readFile, writeFile, readdir } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
@@ -90,9 +77,7 @@ async function main() {
         cover: image,
         images: [image],
         metadata: {
-          // The gallery sorts a year newest-first by this date. The works from
-          // the site all carry a real publication date, so a time on the first
-          // of January puts these after them, in the order of their names.
+          // The gallery sorts a year newest-first by this date.
           date: `${year}-01-01T00:00:${String(59 - i).padStart(2, '0')}+00:00`,
           year,
           categories: ['pinturas-paintings'],

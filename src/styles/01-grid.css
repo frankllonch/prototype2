@@ -1,7 +1,6 @@
 /* ------------------------------------------------------------------ hero */
 
-/* A screen of empty ground under the wordmark. The stack is drawn over it by
-   transforming the grid's own tiles, so nothing here is laid out twice. */
+/* A screen of empty ground under the wordmark. */
 .hero {
   height: 100vh;
 }
@@ -13,48 +12,24 @@ html:not(.js) .hero,
 
 /* ------------------------------------------------------------------ grid */
 
-/*
- * Rows of one height, widths following the pictures, left-aligned with wide
- * gutters — the designer's grid. `--unit` is the row height and the only thing
- * the density control changes; each tile's width is `--unit × --a`.
- */
+/* Rows of one height, widths following the pictures, left-aligned with wide
+   gutters — the designer's grid. */
 .grid {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
   gap: var(--grid-gap-y) var(--grid-gap-x);
-  /* Left inset clears the year rail; the mockup starts the grid well in.
-     The tail is deliberate: without it the last years sit too close to the
-     bottom for the rail to bring them to the top, and clicking them did
-     nothing. */
+  /* Left inset clears the year rail; the mockup starts the grid well in. */
   padding: 0 var(--pad) 62vh var(--rail);
 }
 
-/* The justified grid sets its own padding; excluded here so this more
-   specific selector does not quietly win over it. */
+/* The justified grid sets its own padding; excluded here so this more specific
+   selector does not quietly win over it. */
 .grid:not([data-stack]):not(.grid-justified) {
   padding-top: var(--gap);
 }
 
-/*
- * Half a screen of paper between the pile settling and the first painting.
- *
- * It buys two things: the opening stops running straight into the grid, and the
- * early years become reachable — to bring a year to the middle of the screen you
- * scroll to half a viewport above it, and without any runway that landed inside
- * the pile's own stretch of scroll, so choosing it gathered the paintings back
- * up instead.
- *
- * The amount is `--grid-start`, set with the other knobs in 00-base.css: the
- * pile lets go after SCROLL_SPAN screens (stack.ts), so the first row lands at
- * `--grid-start` minus the scroll past the first screen.
- *
- * Only where the pile actually runs. `stack.ts` deletes the hero on every path
- * where it does not — reduced motion, or no tiles to pile — and the sibling
- * selector goes with it, so the runway is not left standing above nothing.
- * `html.js` covers the remaining case: with no scripting the hero is collapsed
- * rather than removed, and there is no opening to make room for either.
- */
+/* Half a screen of paper between the pile settling and the first painting. */
 html.js .hero[data-hero]+.grid[data-stack] {
   padding-top: var(--grid-start);
 }
@@ -67,25 +42,15 @@ html.js .hero[data-hero]+.grid[data-stack] {
   transform-origin: center center;
 }
 
-/*
- * The archive's rows fill the width. Each tile starts at its unit size and
- * then grows in proportion to its width, so every tile in a row grows by the
- * same factor, the shapes hold, and the row meets the right edge instead of
- * stopping wherever the last tile happened to end — which at the two looser
- * sizes left most of a tile's width empty at the right. `--k` is 1, or the
- * work's relative size when the grid is drawn to scale.
- *
- * The last row is the exception: a pseudo-element with a vast grow factor
- * takes its slack, so the last few works stay at their size, at the left.
- */
+/* The archive's rows fill the width. */
 .grid[data-stack] .tile {
   height: auto;
   width: auto;
   flex: calc(var(--a) * var(--k) * 10) 1 calc(var(--unit) * var(--k) * var(--a));
   aspect-ratio: var(--a);
-  /* A change of size is carried by client/controls.ts, which moves each
-     painting from where it was to where it is; the layout itself must snap,
-     or the paintings would be chasing a target still on its way. */
+  /* A change of size is carried by client/controls.ts, which moves each painting
+     from where it was to where it is; the layout itself must snap, or the
+     paintings would be chasing a target still on its way. */
   transition: opacity 0.45s var(--ease), filter 0.45s var(--ease);
 }
 .grid[data-stack]::after {
@@ -98,12 +63,9 @@ html.js .hero[data-hero]+.grid[data-stack] {
   display: none;
 }
 
-/*
- * Choosing a year pushes every other one back rather than hiding it: the sheet
- * keeps its shape and its place, and the year you asked for is the only thing
- * in focus. Blur is only applied when a year is actually chosen, so the resting
- * grid never pays for it.
- */
+/* Choosing a year pushes every other one back rather than hiding it: the sheet
+   keeps its shape and its place, and the year you asked for is the only thing in
+   focus. */
 .tile.is-dimmed {
   filter: blur(2.5px);
   opacity: 0.38;
@@ -116,11 +78,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
     opacity 0.45s var(--ease), filter 0.45s var(--ease);
 }
 
-/*
- * Hovering a painting softens it, slowly — after tylermitchell.co. Slight
- * enough to read as attention rather than as a effect, and slow enough that
- * crossing the sheet quickly does not strobe.
- */
+/* Hovering a painting softens it, slowly — after tylermitchell.co. */
 .tile picture,
 .tile img {
   transition: filter 0.7s var(--ease), opacity 0.7s var(--ease);
@@ -147,25 +105,14 @@ html.js .hero[data-hero]+.grid[data-stack] {
   object-fit: contain;
 }
 
-/* While the stack is dispersing, tiles move every frame: no size transitions.
-   Each is its own layer while it moves (is-layered), and keeps it for a
-   moment after the grid settles — client/stack.ts releases it when idle. */
+/* While the stack is dispersing, tiles move every frame: no size transitions. */
 .grid.is-stacked .tile {
   transition: none;
 }
 .grid.is-layered .tile {
   will-change: transform;
 }
-/*
- * Safari. A tile on a layer of its own is drawn once at its size in the grid,
- * and the pile's scale — two or three times that — is then applied to the
- * drawing, so in Safari the opening came out soft where Chrome and Brave,
- * which draw the layer again at the size it is shown, are sharp (Frank,
- * 2026-11-21). Given a layer of its own, the picture is handed to Safari's
- * compositor as the image itself, which it scales from the full file: sharp
- * at any size, still moved without repainting anything. Chrome is left as it
- * was (client/stack.ts sets .is-webkit only in Safari).
- */
+/* Safari. */
 .grid.is-webkit.is-layered .tile img {
   will-change: transform;
 }
@@ -174,11 +121,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
   pointer-events: none;
 }
 
-/*
- * THE COUNT (client/stack.ts): a painting waits unseen for its turn, then
- * comes in. Its turn is its place in the queue, --count-at, along
- * --count-duration; the knobs are in 00-base.css, THE COUNT.
- */
+/* THE COUNT (client/stack.ts): a painting waits unseen for its turn, then comes in. */
 .tile[data-count='wait'] {
   opacity: 0;
 }
@@ -192,17 +135,10 @@ html.js .hero[data-hero]+.grid[data-stack] {
   from { opacity: 0; }
 }
 
-/* On a phone the gallery is two plain columns: 05-artwork.css, THE GALLERY ON
-   A PHONE. */
+/* On a phone the gallery is two plain columns: 05-artwork.css, THE GALLERY ON A PHONE. */
 
-/*
- * A handful of items rather than 154, and no size for the reader to choose:
- * these fill the width in justified rows. Each tile grows in proportion to its
- * aspect ratio, so every row resolves to one height and fills the line exactly.
- * The scale factor on `flex-grow` matters — flexbox only distributes all of a
- * line's free space when the grow factors on it sum to at least 1, and a lone
- * landscape tile would otherwise stop short of the edge.
- */
+/* A handful of items rather than 154, and no size for the reader to choose:
+   these fill the width in justified rows. */
 .grid-justified {
   padding: calc(var(--bar) + var(--gap)) var(--pad) var(--gap);
 }
@@ -244,56 +180,8 @@ html.js .hero[data-hero]+.grid[data-stack] {
 
 /* ---------------------------------------------------------------- detail */
 
-/*
- * One screen, never more, after the designer's sheet of 11 November (measured
- * at 2000 × 1125 and given here at 1920 × 1080). No menu: the four corners say
- * where to go — the section and Close at the top, Previous and Next at the
- * foot. On plain white paper:
- *
- *   - the painting and the caption stand side by side, and the two together
- *     are centred across the page, whatever the painting's shape;
- *   - the caption, from the title's capitals to the year's baseline, is
- *     centred on the painting's middle, and the painting's middle is a fixed
- *     line down the window;
- *   - under the painting, centred on it, its other pictures, and under those
- *     the work's place in the archive.
- *
- * THE DETAIL PAGE — the numbers to change are all here.
- *
- *   --edge           how far the four corner words stand in from the sides of
- *                    the window: 48 of 1920.
- *   --edge-v         and from its top and foot: 50 of 1920.
- *   --axis           the line the painting and the caption are centred on,
- *                    down the window: 521 of 1080.
- *   --plate-max      the most height the painting may take: 519 of 1080. A
- *                    wide work is held by the room across instead and comes
- *                    out shorter, still on the same line.
- *   --text-gap       from the painting's right edge to the caption's column:
- *                    249 of 1920, which with the first letter's own margin is
- *                    the sheet's 252 from paint to ink.
- *   --text-w         the caption's column: 265 of 1920, which is what centres
- *                    the sheet's painting and caption on the page exactly. A
- *                    longer title widens it, up to --text-max, and the pair
- *                    re-centres.
- *   --caption-rise   how far the caption stands above the painting's exact
- *                    middle: the sheet sets it a hair high, 2 of 1080.
- *   --under-gap      from the painting's foot to the small pictures: 25 of 1080.
- *   --thumb-h        the small pictures' height: 80 of 1080.
- *   --thumb-gap      between the small pictures: 15 of 1080.
- *   --index-gap      from the small pictures to the capitals of "87 of 154":
- *                    43 of 1080.
- *   --caption-break  the space that parts the title and medium from the size
- *                    and year, in em of the caption's type.
- *   --view-spill     the page is set by the cut-out and stays set when another
- *                    picture of the work is chosen: the caption and the small
- *                    pictures do not move. A wider picture is centred where the
- *                    cut-out stands and may reach this share of the gap towards
- *                    the caption (0.5 is half of it; 0 keeps it within the
- *                    cut-out's width).
- *   --nav-dim        how faint ARTWORK, CLOSE, PREVIOUS and NEXT stand at rest,
- *                    0 to 1 (0 invisible, 1 full black). On hover they turn
- *                    full black.
- */
+/* One screen, never more, after the designer's sheet of 11 November (measured at
+   2000 × 1125 and given here at 1920 × 1080). */
 .is-detail .top { display: none; }
 
 .detail {
@@ -312,12 +200,13 @@ html.js .hero[data-hero]+.grid[data-stack] {
   --caption-break: 2.36em;
   --view-spill: 0.5;
   --nav-dim: 0.15;
-  /* Read by client/views.ts: the width the painting and the caption share,
-     and whether the caption takes its share beside the painting. */
+  /* Read by client/views.ts: the width the painting and the caption share, and
+     whether the caption takes its share beside the painting. */
   --plate-room: calc(100vw - 2 * var(--edge) - var(--text-gap));
   --caption-beside: 1;
 
   position: relative;
+  height: 100vh;
   height: 100dvh;
   overflow: hidden;
   display: grid;
@@ -329,18 +218,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
   align-items: center;
 }
 
-/*
- * The corners. The page's type size, tracked out (the sheet's ARTWORK runs 217
- * wide at 40: 0.09 em between letters), set on a line exactly one em tall so
- * the ink can be put where the sheet puts it: capitals 51 from the top, and
- * baselines 48 from the foot, of 1080. In Switzer the cap sits 0.15 em below
- * such a line's top and the baseline 0.137 em above its foot; the 0.03 and
- * 0.05 em beyond those are the sheet's own extra.
- *
- * Tracking puts its space after every letter, the last one too, so a word
- * set against the right margin would stop 0.09 em short of it. The two on
- * the right take that last space back.
- */
+/* The corners. */
 .detail-back,
 .detail-pager a {
   font-size: var(--type);
@@ -377,13 +255,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
   line-height: 1;
 }
 
-/*
- * The painting. Its box is the painted part alone — client/views.ts sizes it
- * by that, not by the cut-out's transparent canvas — so it is the painting
- * that is centred on --axis, and the column is exactly as wide as it is.
- * Until the script has measured, the picture is held to the most room it
- * could have, whole.
- */
+/* The painting. */
 .detail-stage {
   grid-column: 1;
   grid-row: 1;
@@ -417,16 +289,10 @@ html.js .hero[data-hero]+.grid[data-stack] {
   align-items: center;
 }
 
-/*
- * The caption. The small negative margins take off the part of the line box
- * above the first capital and below the last baseline, so it is the ink, not
- * the box, that is centred on the painting: in Switzer (ascent 0.987 em,
- * descent 0.261 em, caps 0.680 em, measured) that is half the leading less
- * 0.317 em above, and half the leading less 0.363 em below.
- */
+/* The caption. */
 .detail-caption {
-  /* DETALL ARTWORK on the typography sheet (2026-11-17): every line 30 on
-     30 — the title and the year semibold, the rest regular. */
+  /* DETALL ARTWORK on the typography sheet: every line 30 on 30 — the title and
+     the year semibold, the rest regular. */
   --caption-lead: 1;
   grid-column: 3;
   grid-row: 1;
@@ -469,14 +335,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
 
 /* ------------------------------------------------------------------- feed */
 
-/*
- * Two columns, offset, pictures at their own proportions — the composition on
- * nachoalegre.com. Nothing is cropped to a common height and nothing is
- * justified to the line: the shapes of the works are the rhythm.
- *
- * The second column starts lower than the first, so scrolling never brings two
- * pictures level with each other and the eye is given somewhere to travel.
- */
+/* Two columns, offset, pictures at their own proportions — the composition on nachoalegre.com. */
 .grid-feed {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -513,8 +372,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
   object-fit: contain;
 }
 
-/* Stacked, the stagger would only push the second half of the works down the
-   page for no reason. */
+/* Stacked, the stagger would only push the second half of the works down the page for no reason. */
 @media (max-width: 699px) {
   .grid-feed {
     grid-template-columns: 1fr;
@@ -527,57 +385,23 @@ html.js .hero[data-hero]+.grid[data-stack] {
 
 /* ------------------------------------------------------------ index rows */
 
-/*
- * One row system, used by both indexes.
- *
- * Exhibitions and Commissioned are the same object — a name, a date, a rule
- * under it — and the designer drew them that way. They had drifted apart in the
- * build: the exhibitions row was a hairline under 1.15vw type with 8.5rem of
- * air around it, which is nothing the sheet asks for. Everything that is not
- * the column layout lives here now, and each list brings only its columns.
- *
- * Measured off the references at the 1866 they were exported at: the rule is
- * 3px, one single-line row sits 60px from the next, and the type sits 7px clear
- * of the line beneath it.
- */
+/* One row system, used by both indexes. */
 .xrow {
   position: relative;
   display: grid;
   align-items: baseline;
   gap: 1.5rem;
-  /*
-   * Four knobs, so the two lists can share everything else: the type scale, the
-   * leading, and the space above and below. Commissioned keeps the defaults,
-   * which are the figures solved off its reference; exhibitions turns each one
-   * down or up because its rows carry two lines and a date range rather than a
-   * name.
-   */
+  /* Four knobs, so the two lists can share everything else: the type scale, the
+     leading, and the space above and below. */
   padding: var(--row-top, 1.0785vw) 0 var(--row-bottom, 0px);
-  /*
-   * A hairline at full ink. Measured as coverage rather than by a threshold,
-   * both sheets draw about one pixel of ink: 1.0-1.26 on the commissioned one
-   * at 1866, 0.75-0.87 on the exhibitions one at 1598. The 3px here was my
-   * misreading of an antialiased edge as thickness. What was actually wrong
-   * before all this was the ink, not the width — a 1px line at 18% of the ink
-   * colour, which is a sixth of a pixel of actual mark, and read as nothing.
-   */
+  /* A hairline at full ink. */
   border-bottom: 1px solid var(--ink);
   color: var(--ink);
   transition: color 0.45s var(--ease);
 }
 
-/*
- * Solved against the reference rather than guessed: 2.286vw puts the cap height
- * at its 29px, and 0.8915 puts the baseline 7px clear of the rule.
- *
- * The line box is under 1 because the slack a normal one carries beneath the
- * baseline is what was holding the type off the line. On the exhibitions rows,
- * which run to two lines, that same figure becomes the leading — these are caps
- * with no descenders, so the lines stack close without colliding. The
- * half-leading under the last baseline does not depend on how many lines sit
- * above it, so the 7px comes out the same on a two-line row as on a one-line
- * row, and the two lists share a rule position without being told to.
- */
+/* Solved against the reference rather than guessed: 2.286vw puts the cap height
+   at its 29px, and 0.8915 puts the baseline 7px clear of the rule. */
 .xrow-title,
 .xrow-when,
 .exh-title,
@@ -585,24 +409,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
 .exh-when,
 .exh-year,
 .xgroup-name {
-  /*
-   * The designer's values: Switzer Variable at 40px on a 40px line, no
-   * tracking. 2.0833vw is that 40px at a 1920 frame.
-   *
-   * The frame is 1920 and not the width the sheets were exported at, which is
-   * what I had. The sheet's own line-height settles it: the designer sets the
-   * line equal to the size, and the exhibitions export has 33px between the
-   * two baselines of a row at 1598 wide, so its frame is 40 x 1598/33 = 1937
-   * — 1920 within the pixel of error a 33px read carries. Sizing against the
-   * export instead made the type 3.9% too large, and because the rhythm was
-   * being held to its measured figures, the padding absorbed the difference
-   * and the list read tight.
-   *
-   * The per-list size knob is gone: there is one size for the whole site now,
-   * `--type` in 00-base.css, and these rows take it like everything else.
-   * `--row-leading` is kept because a row can still want a different line
-   * from the site's, but it falls through to `--lead`.
-   */
+  /* The designer's values: Switzer Variable at 40px on a 40px line, no tracking. */
   font-size: var(--type);
   font-weight: 500;
   letter-spacing: 0;
@@ -611,20 +418,14 @@ html.js .hero[data-hero]+.grid[data-stack] {
   font-variant-numeric: tabular-nums;
 }
 
-/*
- * Semibold for the name of the thing, medium for what qualifies it: the show's
- * title against its address, the kind of work against the projects in it. Both
- * sheets draw it that way — measured, the heavier stems run about 1.13 times
- * the lighter ones, and 600 is the step that gives that; 700 would be 1.34.
- * The designer's sheet says 600 in as many words.
- */
+/* Semibold for the name of the thing, medium for what qualifies it: the show's
+   title against its address, the kind of work against the projects in it. */
 .exh-title,
 .xgroup-name {
   font-weight: 600;
 }
 
-/* A commission's name is regular: on that list the group heading is the one
-   line in semibold (Frank, 2026-11-17). */
+/* A commission's name is regular: on that list the group heading is the one line in semibold. */
 .xrow-title {
   font-weight: 400;
 }
@@ -649,16 +450,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
   white-space: nowrap;
 }
 
-/*
- * The photograph floats rather than sitting in the row.
- *
- * A picture inside a row sets that row's height, so the list lurches every time
- * the pointer crosses it. The exhibitions index used to buy its way out of that
- * by being tall enough to hold the plate whether or not one was showing, which
- * is where its air came from. At the measured rhythm there is no room for that,
- * so the picture is taken out of flow on both lists. Only one row is ever
- * hovered, so there is nothing for it to collide with.
- */
+/* The photograph floats rather than sitting in the row. */
 .exh-plate {
   display: block;
   opacity: 0;
@@ -688,11 +480,8 @@ html.js .hero[data-hero]+.grid[data-stack] {
   pointer-events: none;
 }
 
-/*
- * The colour is set per hover by `client/hover-list.ts`, which walks the palette
- * sampled from the paintings so no two consecutive rows answer alike. Without
- * scripting `--exh-hover` keeps its default and the row still responds.
- */
+/* The colour is set per hover by `client/hover-list.ts`, which walks the palette
+   sampled from the paintings so no two consecutive rows answer alike. */
 @media (hover: hover) {
   .hrow:hover {
     color: var(--exh-hover);
@@ -703,12 +492,8 @@ html.js .hero[data-hero]+.grid[data-stack] {
   }
 }
 
-/*
- * Not when the row is only being given focus back by a closing detail
- * (`returnFocus`, client/env.ts). The browser takes the arrow keys that turned
- * the reel's photographs as a keyboard's, so the row came back lit in its
- * colour with the pointer nowhere near it, and stayed so (Frank, 2026-11-26).
- */
+/* Not when the row is only being given focus back by a closing detail
+   (`returnFocus`, client/env.ts). */
 .hrow:focus-visible {
   outline: none;
 }
@@ -717,52 +502,24 @@ html.js .hero[data-hero]+.grid[data-stack] {
   color: var(--exh-hover);
 }
 
-/*
- * The preview is a pointer affordance and stays one.
- *
- * It used to answer to focus as well, and closing a detail returns focus to
- * the row that opened it — so coming back left that row lit with its
- * photograph hanging over the list, with no pointer anywhere near it. The
- * colour change is the focus indicator, which is enough to say where you are;
- * the photograph is for reaching towards a row, not for landing back on one.
- */
+/* The preview is a pointer affordance and stays one. */
 
 /* ------------------------------------------------------- exhibitions list */
 
-/*
- * A line per show rather than a gallery of them: name and place at the left,
- * the run of dates and the year at the right, a rule between each.
- */
+/* A line per show rather than a gallery of them: name and place at the left, the
+   run of dates and the year at the right, a rule between each. */
 .exh-list {
   --exh-hover: var(--ink);
-  /*
-   * The designer's final sheet, measured: 3648 wide, which is exactly 1.900
-   * times the 1920 frame the rest of the site is set on. The rules begin at
-   * 25.2% and run to the margin, which is the commissioned plate's own column,
-   * and the rows are 188 apart — 99 at the frame — for the two lines each one
-   * carries.
-   */
+  /* The designer's final sheet, measured: 3648 wide, which is exactly 1.900
+     times the 1920 frame the rest of the site is set on. */
   /* The year stands in the last twelfth, right-aligned at the margin. */
   --year-col: 12%;
-  /*
-   * 188 from rule to rule on the sheet, which is 99 at the frame. The two
-   * lines sit 40.4 apart there — measured baseline to baseline, title ink at
-   * 736 and location at 812.7 — so each line box is given that and the rest
-   * is the air above and below the pair.
-   */
+  /* 188 from rule to rule on the sheet, which is 99 at the frame. */
   --row-top: 0.344vw;    /* 6.6 of the frame's pixels */
   --row-bottom: 0.448vw;
 }
 
-/*
- * The same plate as the commissioned index, with one line more. A show states
- * what kind it was and where under its name, which a commission does not.
- *
- * `.xlist.exh-list`, not `.exh-list`: the commissioned `.xlist .xrow` rule
- * sits further down this file at the same specificity, so the plainer
- * selector loses on source order alone and the row stacks instead of laying
- * out.
- */
+/* The same plate as the commissioned index, with one line more. */
 .xlist.exh-list .xrow {
   grid-template-columns: minmax(0, 1fr) var(--year-col, 10%);
   align-items: start;
@@ -774,13 +531,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
   min-width: 0;
 }
 
-/*
- * The sheet's type, and only the sheet's type.
- *
- * The designer's typography sheet (JERARQUIA EXHIBITIONS, 2026-11-17): the
- * name semibold 40 on 40, the line under it light 40 on 40, the year regular
- * 40 on 40 and upright. Every line is set solid.
- */
+/* The sheet's type, and only the sheet's type. */
 .exh-title {
   font-size: var(--t-40);
   font-weight: 600;
@@ -788,12 +539,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
 }
 .exh-venue {
   font-size: var(--t-40);
-  /*
-   * Light, not medium. Measured off the sheet the location's stems run 3.50
-   * against the title's 6.23 — a bit over half — which is the light cut of the
-   * scale rather than the medium one. Switzer is variable from 100 to 900, so
-   * this is the face thinning rather than a fallback standing in for it.
-   */
+  /* Light, not medium. */
   font-weight: 300;
   font-style: normal;
   text-transform: uppercase;
@@ -824,11 +570,9 @@ html.js .hero[data-hero]+.grid[data-stack] {
   font-variant-numeric: tabular-nums;
 }
 
-/*
- * A private collection is a place rather than an event: it states no year, and
- * the sheet sets its line light and in sentence case where every other group
- * is medium and in capitals.
- */
+/* A private collection is a place rather than an event: it states no year, and
+   the sheet sets its line light and in sentence case where every other group is
+   medium and in capitals. */
 .xgroup[data-group='Private collections'] .exh-venue {
   font-weight: 300;
   text-transform: none;
@@ -840,24 +584,8 @@ html.js .hero[data-hero]+.grid[data-stack] {
   right: calc(var(--year-col, 10%) + 2rem);
 }
 
-/*
- * The phone sheet: 375 wide, and every figure below is so many of `--p`, one
- * unit of that frame (09-phone.css).
- *
- * It is a different list made of the same rows. One size for every word, 16
- * on a line of 16. The solo and the group shows run together, latest first,
- * with no heading over them, so each row says what kind it was on a line of
- * its own between the name and the place. The year leans, at the right margin
- * on the name's first line. A row is 10, its lines, 7, and the rule.
- *
- * The order is not the markup's: each row carries its place as
- * `--phone-order` (components/exhibitions.ts), and the groups dissolve
- * (`display: contents`) so the rows of all four are one column to be ordered.
- * Art fairs and Private collections come after the shows, each under its own
- * name, which is set as a row of the list with air above it.
- *
- * The figures to change by hand are the first block.
- */
+/* The phone sheet: 375 wide, and every figure below is so many of `--p`, one
+   unit of that frame (09-phone.css). */
 @media (max-width: 899px) {
   .xlist.exh-list {
     --exh-top: calc(97 * var(--p));          /* top of the page → the first row; its name starts 10 lower, at 107 */
@@ -879,8 +607,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
     display: contents;
   }
 
-  /* name | year. The year takes the width of its four figures (36.88), the
-     name what is left; a private collection has no year and takes it all. */
+  /* name | year. */
   .xlist.exh-list .xrow {
     order: var(--phone-order, 0);
     grid-template-columns: minmax(0, 1fr) auto;
@@ -913,8 +640,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
     display: inline;
   }
 
-  /* Upright, as on the computer: the typography sheet keeps the list's
-     year upright (Frank, 2026-11-17). */
+  /* Upright, as on the computer: the typography sheet keeps the list's year upright. */
   .exh-list .exh-year {
     font-style: normal;
   }
@@ -924,8 +650,8 @@ html.js .hero[data-hero]+.grid[data-stack] {
     display: block;
   }
 
-  /* A group's name, as a row: the name's own semibold, the row's padding and
-     its rule, placed just ahead of the group's first row. */
+  /* A group's name, as a row: the name's own semibold, the row's padding and its
+     rule, placed just ahead of the group's first row. */
   .exh-list .xgroup-name {
     order: var(--phone-order, 0);
     margin: var(--exh-group-gap) 0 0;
@@ -933,9 +659,9 @@ html.js .hero[data-hero]+.grid[data-stack] {
     border-bottom: 1px solid var(--ink);
   }
 
-  /* The solo and the group shows are not together under their names any
-     more, so those two are kept for a reader and taken from the eye
-     (`.sr-only`, in 00-base.css, spelt out). */
+  /* The solo and the group shows are not together under their names any more, so
+     those two are kept for a reader and taken from the eye (`.sr-only`, in
+     00-base.css, spelt out). */
   .exh-list .xgroup[data-phone='merged'] .xgroup-name {
     position: absolute;
     width: 1px;
@@ -951,20 +677,8 @@ html.js .hero[data-hero]+.grid[data-stack] {
 
 /* ---------------------------------------------------------- to-scale grid */
 
-/*
- * The same works at their relative sizes rather than at one height — the grid
- * read as a wall instead of as a contact sheet.
- *
- * Each tile carries `--sh`, its height as a multiple of the unit, worked out
- * from the catalogued measurements in `content/size.ts`. The width still follows
- * the photograph's shape, so the area is what carries the size and nothing is
- * letterboxed. A work whose dimensions could not be read keeps `--sh: 1` and
- * stays at the unit height, which is the honest answer to not knowing.
- *
- * The rows centre on a line. That is the whole reason this reads as a hang and
- * not as a jumble: `align-items` works per flex line, so each row of tiles
- * settles on its own horizontal centre, which is how work is actually hung.
- */
+/* The same works at their relative sizes rather than at one height — the grid
+   read as a wall instead of as a contact sheet. */
 .tile {
   --sh: 1;
 }
@@ -983,39 +697,24 @@ html.js .hero[data-hero]+.grid[data-stack] {
 
 /* ------------------------------------------------- commissioned, by group */
 
-/*
- * The kind of work named once at the left, its projects beside it: a rule under
- * each and the year at the right margin. The rows themselves are the shared
- * ones above; only the columns and the spacing between groups are here.
- */
+/* The kind of work named once at the left, its projects beside it: a rule under
+   each and the year at the right margin. */
 .xlist {
   --exh-hover: var(--ink);
   margin: 0 auto;
-  /* First rule 438px down the 1866 sheet; we had it at 228. Same reasoning as
-     the exhibitions offset: proportional, with the bar as a floor. */
+  /* First rule 438px down the 1866 sheet; we had it at 228. */
   padding: max(calc(var(--bar) + 2rem), var(--list-top, 20.257vw)) var(--pad) 18vh;
 }
 
 .xgroup {
   display: grid;
   /* The rows begin at 496px of 1866 in the mockup, measured off the rules
-     themselves rather than off the type. Inside the 40px margins that is
-     456 of 1786, so 25.53%. The gap is nil because that figure already is the
-     gap: it is where the rules start, not where the label ends. */
+     themselves rather than off the type. */
   grid-template-columns: 25.53% minmax(0, 1fr);
   gap: 0;
-  /*
-   * 139px from the last rule of one group to the first rule of the next, which
-   * is 79px of margin once the 60px row is taken off — 4.234vw at the 1866 the
-   * reference was exported at.
-   *
-   * The reference is not consistent about this: the same figure across the
-   * second boundary is 168px, and both exports of the file agree on both
-   * numbers, so it is the file rather than the measurement. Two different gaps
-   * in one list reads as hand-placed blocks rather than as intent, so the
-   * tighter one is used throughout — the note that came with the reference was
-   * that the spacing is tighter than we had it.
-   */
+  /* 139px from the last rule of one group to the first rule of the next, which
+     is 79px of margin once the 60px row is taken off — 4.234vw at the 1866 the
+     reference was exported at. */
   margin-bottom: clamp(2.5rem, 4.234vw, 6rem);
 }
 
@@ -1023,27 +722,16 @@ html.js .hero[data-hero]+.grid[data-stack] {
   margin-bottom: 0;
 }
 
-/* On the first row's baseline, as the sheet has it — both sit in the same
-   band there. The label is in its own grid column, so without this it starts
-   at the top of the cell and the row's own padding drops the row 17px below
-   it. Same property, so the two cannot drift apart. */
+/* On the first row's baseline, as the sheet has it — both sit in the same band there. */
 .xgroup-name {
   margin: 0;
   padding-top: var(--row-top, 1.0785vw);
 }
 
-/*
- * Exhibitions starts exactly where Commissioned does, so switching between the
- * two moves nothing: "Solo shows" sits where Commissioned's first group name
- * sits, and the first show's name starts on the same line as the first
- * commission's. The figures are Commissioned's own (`.xlist.com-list` in
- * 07-sheet.css): its list top, its side margins, and the padding above its
- * first row. Exhibitions' rows carry less padding above the type, so the list
- * starts lower by the difference. The show's name is a size up from the
- * group name, but on its 0.942 line its capitals start where a 40 on a 40
- * line does, so the group name is set on a 40 line here too and the two start
- * together. Change one of these figures and change it in both.
- */
+/* Exhibitions starts exactly where Commissioned does, so switching between the
+   two moves nothing: "Solo shows" sits where Commissioned's first group name
+   sits, and the first show's name starts on the same line as the first
+   commission's. */
 /* The computer only: the phone sets its own list top, above. */
 @media (min-width: 900px) {
   .xlist.exh-list {
@@ -1055,14 +743,14 @@ html.js .hero[data-hero]+.grid[data-stack] {
 }
 
 /* Scoped to the list: the two indexes share every rule above but the columns,
-   and an unscoped `.xrow` here would win over the exhibitions template on
-   source order alone — same specificity, further down the sheet. */
+   and an unscoped `.xrow` here would win over the exhibitions template on source
+   order alone. */
 .xlist .xrow {
   grid-template-columns: minmax(0, 1fr) auto;
 }
 
 /* On the phone each index lays its groups out for itself — the exhibitions
-   above, the commissioned work in 07-sheet.css. This much they share. */
+   above, the commissioned work in 07-sheet.css. */
 @media (max-width: 899px) {
   /* No pointer to hover with, and no room beside the row for a picture. */
   .xrow .exh-plate {

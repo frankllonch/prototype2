@@ -212,13 +212,14 @@ scripts/
   extract.ts      Sitemap-driven crawler → typed dataset
   crop.ts         Painting detection + metadata validation + contact sheets
   images.ts       Image pipeline (crop-aware)
+  assets.ts       Stylesheet and client bundle (esbuild), shared with the WordPress theme
   serve.ts        Zero-dependency static server
 src/
   content/        types, load (the only disk reader), title, describe, sections
   components/     html (the 40-line template tag), image, gallery, panels, slider, layout
   pages/index.ts  The pages and the artwork detail
-  client/         stack, controls, slider, panels, lightbox, text-roll — no framework
-  styles/         base + top bar, grid + detail, overlays, colour chart
+  client/         One module per behaviour, booted by index.ts — no framework
+  styles/         Numbered parts, concatenated in order into site.css
   build.ts        Renders every route
 server/
   inquiries/      The order desk: the one piece that is not a static file
@@ -228,8 +229,13 @@ content/
   crops.final.json  Ids whose crop passed review
 ```
 
+The build writes one minified `site.css` and one minified `js/index.js` (with
+source maps), written for Chrome/Edge 109+, Firefox 115+ and Safari 15.4+
+(`TARGET` in `scripts/assets.ts`). The two development tuners load only when a
+page is opened with `?pile` or `?ball`.
+
 Runtime dependencies: none — the site is files. Build dependencies:
-`typescript`, `node-html-parser`, `sharp`. The order desk under `server/` is
+`typescript`, `esbuild-wasm`, `node-html-parser`, `sharp`. The order desk under `server/` is
 deployed on its own and shares none of this.
 
 ## Not in this build, by decision

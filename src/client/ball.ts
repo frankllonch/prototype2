@@ -1,18 +1,11 @@
-import { finePointer, reduceMotion } from './env.ts';
+import { finePointer, reduceMotion, targetElement } from './env.ts';
 
 /**
- * The site's pointer: a ball, the negative of whatever is under it, that grows
- * a little over anything that can be clicked. How it looks and moves is set by
- * the --ball-* variables at the head of styles/11-ball.css; ?ball opens a panel
- * to try them live (client/ball-tuner.ts).
- *
- * Mouse only. Touch screens never see it and keep their own behaviour, and a
- * page whose script never runs keeps the ordinary arrow, since the arrow is
- * only taken away by the class set here.
+ * The site's pointer: a ball, the negative of whatever is under it, that grows a
+ * little over anything that can be clicked.
  */
 
-/** Anything that answers a click. Rules in the stylesheet that give an
- *  element a pointing hand are added to this when the page starts. */
+/** Anything that answers a click. */
 const CLICKABLE = [
   'a[href]', 'button:not([disabled])', '[role="button"]', '[role="link"]', '[role="tab"]',
   'label[for]', 'select', 'summary', 'input[type="checkbox"]', 'input[type="radio"]',
@@ -38,14 +31,7 @@ function pointerRules(): string[] {
   return found.filter((s) => { try { document.querySelector(s); return true; } catch { return false; } });
 }
 
-/*
- * Safari. There the ball is drawn with the page rather than on a layer of its
- * own. A blended layer kept apart (will-change, a 3D move) made Safari redo
- * how it puts the page together, and every so often the bar — which is drawn
- * with the same blend — came out in its raw colours: the menu gone grey
- * (Frank, 2026-11-21). Drawn with the page, the ball is blended the same way
- * the bar is. Chrome keeps the layer, where it was never a problem.
- */
+/* Safari. */
 const webkit = /AppleWebKit/.test(navigator.userAgent) && !/Chrome|Chromium|Edg\//.test(navigator.userAgent);
 
 export function initBall(): void {
@@ -79,8 +65,8 @@ export function initBall(): void {
     : () => { ball.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`; };
 
   const tick = (time: number) => {
-    // A share of the way per 120th of a second, applied by elapsed time so
-    // the trail feels the same at 60fps (Safari) as at 120.
+    // A share of the way per 120th of a second, applied by elapsed time so the trail feels the
+    // same at 60fps (Safari) as at 120.
     const elapsed = tickedAt ? Math.min(time - tickedAt, 100) : 1000 / 120;
     tickedAt = time;
     const ease = reduceMotion.matches || follow >= 1 ? 1 : 1 - Math.pow(1 - follow, elapsed / (1000 / 120));
@@ -105,7 +91,7 @@ export function initBall(): void {
     // Start where the pointer is, or it swoops in from the corner.
     if (!placed) { placed = true; x = targetX; y = targetY; draw(); }
     ball.classList.add('is-on');
-    hover(event.target as Element | null);
+    hover(targetElement(event));
     if (!frame) frame = requestAnimationFrame(tick);
   }, { passive: true });
 

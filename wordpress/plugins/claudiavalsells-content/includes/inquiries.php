@@ -1,17 +1,5 @@
 <?php
-/**
- * The order desk.
- *
- * The Colour Chart's form posts here: one message, one email to Claudia,
- * nothing kept. Every check the form made is made again, because a page can be
- * edited by whoever is looking at it, so nothing the browser decides counts.
- *
- * A refusal says only `invalid`, `email`, `rate` or `blocked` — never which
- * check caught it. The honeypot and the time trap answer as if all were well
- * and send nothing, so a robot has no reason to come back and try it
- * differently. The same arrangement as the Cloudflare worker this replaces
- * (server/inquiries/), moved in-house because the host can send mail.
- */
+/** The order desk. */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -30,7 +18,10 @@ function cvc_inquiries_endpoint(): string {
 	return rest_url( 'cv/v1/inquiries' );
 }
 
-/** Anything bound for a mail header loses its control characters, which is how a second recipient gets added. */
+/**
+ * Anything bound for a mail header loses its control characters, which is how a
+ * second recipient gets added.
+ */
 function cvc_header_safe( string $value, int $max ): string {
 	$value = preg_replace( '/[\x00-\x1F\x7F]+/u', ' ', $value ) ?? '';
 	return mb_substr( trim( preg_replace( '/\s+/u', ' ', $value ) ), 0, $max );
@@ -74,8 +65,8 @@ function cvc_inquiry( WP_REST_Request $request ) {
 		return new WP_REST_Response( [ 'error' => 'unconfigured' ], 503 );
 	}
 
-	// The two silent traps: a field no person can see, and a form submitted in
-	// less time than a message takes to type, or left open past any reason.
+	// The two silent traps: a field no person can see, and a form submitted in less time than a
+	// message takes to type, or left open past any reason.
 	if ( '' !== trim( $p( 'website' ) ) ) {
 		return new WP_REST_Response( [ 'ok' => true ], 200 );
 	}
@@ -118,8 +109,8 @@ function cvc_inquiry( WP_REST_Request $request ) {
 	}
 	$body = implode( "\n", $lines ) . "\n\n" . $message . "\n\n—\n" . sprintf( 'Sent from the Colour Chart order form on %s.', home_url( '/' ) );
 
-	// The address alone: wp_mail splits a Reply-To on commas, so a name with
-	// one in it would read as a second address. The name is in the body.
+	// The address alone: wp_mail splits a Reply-To on commas, so a name with one in it would read
+	// as a second address.
 	$headers = [
 		'Content-Type: text/plain; charset=UTF-8',
 		'Reply-To: ' . $email,

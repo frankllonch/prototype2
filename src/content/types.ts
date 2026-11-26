@@ -1,16 +1,4 @@
-/**
- * Content model for the prototype.
- *
- * It is deliberately shaped around what claudiavalsells.com *actually* holds, not
- * around an idealised portfolio schema. The live site is WordPress running the
- * "Koncept" theme, whose editor stores a page body as a stack of rows, each row
- * split into 12-column-grid containers holding either images or rich text.
- * We preserve that structure verbatim so Claudia's own layout decisions
- * (three images side by side, then a full-width text block) survive the redesign.
- *
- * Every field beyond `slug`/`title`/`kind` is optional: if the source page does
- * not carry a piece of metadata, it is absent here rather than invented.
- */
+/** Content model for the prototype. */
 
 /** Width of a column on the source site's 12-column grid. */
 export type ColumnSpan = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
@@ -37,12 +25,7 @@ export interface ProjectImage {
     /** Largest JPEG, used as the <img src> fallback. */
     readonly fallback: string;
   };
-  /**
-   * For a cropped painting, the photograph it was cut from. The cut-out is the
-   * work and is what `variants` holds; this is the record of it — the frame,
-   * the wall, the light — and the only place they survive. Absent when nothing
-   * was cropped, in which case `variants` already is the photograph.
-   */
+  /** For a cropped painting, the photograph it was cut from. */
   readonly original?: {
     readonly width: number;
     readonly height: number;
@@ -75,9 +58,9 @@ export interface ProjectMetadata {
 }
 
 /**
- * `work`    — a single painting (WordPress `portfolio` post type)
- * `project` — a collaboration / commission (WordPress page under /projects/)
- * `page`    — a long-form page (About, Color Chart, Exhibitions)
+ * `work` — a single painting (WordPress `portfolio` post type) `project` — a
+ * collaboration / commission (WordPress page under /projects/) `page` — a
+ * long-form page (About, Color Chart, Exhibitions)
  */
 export type ProjectKind = 'work' | 'project' | 'page' | 'show';
 

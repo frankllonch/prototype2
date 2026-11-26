@@ -2,15 +2,8 @@ import type { ProjectImage } from './types.ts';
 
 /**
  * About, as the designer's sheet sets it: the capitals lead, the studio
- * photographs in a row, the biography, the record of exhibitions and the
- * private collections in five columns, how to reach her, and the line of
- * copyright. (The card's name and emails are still kept in ABOUT_CARD.)
- *
- * Typed here rather than read from WordPress. The source About page was one run
- * of nested HTML that had to be cut apart by guesswork to lay out at all, and
- * the sheet's lists — a date, a title, a place, set in columns — are not a
- * structure that page ever had. A record this short is better written down
- * than parsed.
+ * photographs in a row, the biography, the record of exhibitions and the private
+ * collections in five columns, how to reach her, and the line of copyright.
  */
 
 export interface AboutCard {
@@ -35,11 +28,6 @@ export type AboutBlock =
 /**
  * One entry of the record, as the designer sets it: the date, then the title,
  * then any number of plain lines, then the place in a lighter weight.
- *
- * A line break inside a string (`\n`) is a break inside that line, set at the
- * tighter 20-over-20 the sheet uses within a title, where separate lines sit
- * 22.75 apart. The sheet breaks a long title that way rather than letting it
- * wrap, and holds a few two-line places and details together the same way.
  */
 export interface AboutShow {
   readonly when: string;
@@ -65,15 +53,9 @@ export interface AboutCollection {
 /**
  * The studio photographs, rendered at up to four widths in `src/assets/about`
  * from the originals in `content/raw/about`, and copied into dist by the build.
- * Every one listed in ABOUT_BLOCKS goes into the reel, in order — the first
- * eight as the designer's sheet of 12 November lays them out under the lead,
- * the rest after them round the loop. `width` and `height` are the largest
- * rendering's: portraits stop at 1600 wide, the film's landscapes at 2692.
- * Shaped as a `ProjectImage` so the same `<picture>` component serves them.
  */
 function photograph(n: number, alt: string, width: number, height: number): ProjectImage {
-  // 400 for the reel, 800 and 1600 for the photograph opened large, and its
-  // own width above that. Never wider than the photograph is.
+  // 400 for the reel, 800 and 1600 for the photograph opened large, and its own width above that.
   const widths = [...new Set([400, 800, 1600, width].filter((w) => w <= width))].sort((x, y) => x - y);
   const variant = (ext: string) => widths.map((w) => ({ width: w, url: `/about/about-${n}-${w}.${ext}` }));
   const largest = `/about/about-${n}-${widths[widths.length - 1]}.jpg`;
@@ -103,8 +85,7 @@ export const ABOUT_BLOCKS: readonly AboutBlock[] = [
     text:
       'Claudia is an artist specialized in color. A multidisciplinary creator, she discovered painting through her own instinct for color. Her formation as a mural painter gave her a professional opportunity, and her passion in color her own artistic language.',
   },
-  // The reel, in order. The first eight are the sheet's row; the rest follow
-  // round the loop, reached by the arrows, by dragging, or by scrolling on.
+  // The reel, in order.
   { kind: 'figure', image: portrait(1, 'Colour charts pinned to the studio wall above jars of brushes and a broad, paint-spattered brush') },
   { kind: 'figure', image: portrait(2, 'Claudia Valsells in her studio among canvases and pots of paint, seen from above') },
   { kind: 'figure', image: portrait(3, 'Claudia Valsells on a step, reaching up to paint the studio wall, a pot of paint in her hand') },
@@ -148,8 +129,7 @@ export const ABOUT_BLOCKS: readonly AboutBlock[] = [
     text:
       'Her work has two very defined characteristics: on the one hand her chromatic instinct, a gift of colors and on the other her ability to select, group and interact colors creating a chromatic language of her own.',
   },
-  // The last two paragraphs, and the gallery's name in capitals linking to
-  // its site (Frank, 2026-11-18).
+  // The last two paragraphs, and the gallery's name in capitals linking to its site.
   {
     kind: 'text',
     text: 'Currently she combines her activity as an artist with colour prescription in the areas of design and architecture.',
@@ -164,12 +144,6 @@ export const ABOUT_BLOCKS: readonly AboutBlock[] = [
 /**
  * The record, column by column, as the designer's sheet sets it — the same
  * entries, the same lines, the same breaks, the same weights.
- *
- * Kept from the sheet as it is, punctuation and all, with three exceptions:
- * the misspellings 'Coincidnce', 'Clauida' and 'fromcolor' are corrected, and
- * the Catalan title is written as the language writes it (‘Mira’m…’, opened
- * and closed). The sheet's dates are in its own order, which is not strictly
- * by date in the fourth column; that order is kept too.
  */
 export const ABOUT_SHOWS: readonly AboutShows[] = [
   {

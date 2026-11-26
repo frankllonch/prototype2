@@ -1,11 +1,8 @@
 import type { Project } from './types.ts';
 
 /**
- * A painting's caption as Claudia wrote it on her own site, line for line —
- * the first text block of the work's page, a line per paragraph or break.
- * Empty when the page had no words. Some carry more than the facts (a show it
- * hung in, a note on the exhibition), so it is read for them by
- * `captionFacts` rather than shown as it stands.
+ * A painting's caption as Claudia wrote it on her own site, line for line — the
+ * first text block of the work's page, a line per paragraph or break.
  */
 export function captionLines(work: Project): string[] {
   for (const row of work.rows) {
@@ -29,22 +26,14 @@ export function captionLines(work: Project): string[] {
   return [];
 }
 
-/**
- * A painting's reference. The extractor reads it in capitals ("L569"); a few
- * of Claudia's captions type it in lower case ("l581, CV 2026, …"), so a
- * caption that opens on one is read too, and set in capitals.
- */
+/** A painting's reference. */
 export function referenceOf(work: Project): string | undefined {
   if (work.metadata.reference) return work.metadata.reference;
   const first = captionLines(work)[0] ?? '';
   return /^([a-z]{1,3}\d{2,4})\b/i.exec(first)?.[1]?.toUpperCase();
 }
 
-/**
- * The collection code Claudia gives some works, "CV2024" — the catalogue the
- * piece belongs to. Typed every way in her captions ("CV 2024", "cv2026",
- * "Cv 2026"); set here one way.
- */
+/** The collection code Claudia gives some works, "CV2024" — the catalogue the piece belongs to. */
 export function collectionOf(work: Project): string | undefined {
   const year = /\bcv\s?((?:19|20)\d{2})\b/i.exec(captionLines(work).join(' '))?.[1];
   return year ? `CV${year}` : undefined;
@@ -61,8 +50,8 @@ export function techniqueOf(work: Project): string | undefined {
       .replace(/goauche/, 'gouache');
     return said[0]!.toUpperCase() + said.slice(1);
   }
-  // Without one in the caption, the extractor's reading — unless it caught
-  // a Spanish sentence ("Gouache sobre papel la componen").
+  // Without one in the caption, the extractor's reading — unless it caught a Spanish sentence
+  // ("Gouache sobre papel la componen").
   const materials = work.metadata.materials;
   return materials && !/\bsobre\b/i.test(materials) ? materials : undefined;
 }
@@ -74,9 +63,9 @@ export function sizeOf(work: Project): string | undefined {
 }
 
 /**
- * What a painting's label says (Frank, 2026-11-17): its reference, with the
- * collection code when it has one, then its size, then its technique — and
- * nothing else, whatever else the caption on her page goes on to say.
+ * What a painting's label says: its reference, with the collection code when it
+ * has one, then its size, then its technique — and nothing else, whatever else
+ * the caption on her page goes on to say.
  */
 export function captionFacts(work: Project): string[] {
   const head = [referenceOf(work), collectionOf(work)].filter(Boolean).join(', ');

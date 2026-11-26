@@ -1,24 +1,5 @@
 <?php
-/**
- * Tools → Site check: the go-live checklist, checked by the site itself.
- *
- * Section 6 of the plan says everything that keeps staging private comes off
- * at go-live "from a checklist, so none of it is forgotten on the live site".
- * A list on paper is only as good as the morning it is read on; this one reads
- * the site's real state each time the page is opened — search engines, HTTPS,
- * permalinks, the order form's recipient and a test message, the redirects,
- * the sitemap, debug output, the default admin account, the import folder,
- * what the server can do with images — and says, for the kind of site it is
- * (production, staging, local), which items are right, which need a look and
- * which must be fixed before anyone else sees the site.
- *
- * It also answers the plan's questions about the host (PHP version, memory,
- * time limit, WebP and AVIF) the moment the site is installed there, and puts
- * the whole report in a box to paste into an email.
- *
- * Administrators only. It changes nothing but, on request, sends one test
- * message to the order form's recipient.
- */
+/** Tools → Site check: the go-live checklist, checked by the site itself. */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -36,11 +17,7 @@ add_action( 'admin_menu', function () {
 
 add_action( 'admin_post_cvc_site_check_mail', 'cvc_site_check_send_mail' );
 
-/**
- * Every check: [ 'group', 'label', 'status' ok|warn|fail|info, 'detail', 'fix' ].
- * A 'fail' must be fixed before go-live (or, on staging, before anyone is
- * shown the site); a 'warn' wants a look; 'info' is a fact worth knowing.
- */
+/** Every check: [ 'group', 'label', 'status' ok|warn|fail|info, 'detail', 'fix' ]. */
 function cvc_site_checks(): array {
 	if ( ! function_exists( 'is_plugin_active' ) ) {
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
@@ -84,9 +61,9 @@ function cvc_site_checks(): array {
 			$public ? __( 'Settings → Reading: tick “Discourage search engines from indexing this site”.', 'claudiavalsells' ) : '' );
 	}
 
-	// The addresses as saved, not as this request sees them: home_url() takes
-	// the scheme of the page it is called from, so an admin opened over https
-	// would make a site still saved as http look right.
+	// The addresses as saved, not as this request sees them: home_url() takes the scheme of the
+	// page it is called from, so an admin opened over https would make a site still saved as http
+	// look right.
 	$home  = (string) get_option( 'home' );
 	$https = str_starts_with( $home, 'https://' ) && str_starts_with( (string) get_option( 'siteurl' ), 'https://' );
 	$add( $g, __( 'HTTPS', 'claudiavalsells' ), $https ? 'ok' : ( $local ? 'info' : 'fail' ),
@@ -201,8 +178,6 @@ function cvc_site_checks(): array {
 		$wrong ? __( 'Check includes/redirects.php in the content plugin.', 'claudiavalsells' ) : __( 'Every old address is checked from outside with npm run wp:check-links.', 'claudiavalsells' ) );
 
 	// From outside in: the server answering a real request for an old address.
-	// On a laptop in Docker, and on staging behind its password, the site often
-	// cannot reach itself; that is reported, not counted against it.
 	$probe = wp_remote_get( home_url( '/colour-chart/' ), [ 'redirection' => 0, 'timeout' => 8 ] );
 	if ( is_wp_error( $probe ) ) {
 		$add( $g, __( 'A redirect, requested', 'claudiavalsells' ), 'info',
@@ -253,8 +228,8 @@ function cvc_site_checks(): array {
 
 	/* ---------------------------------------------------------- server */
 	$g      = __( 'Server', 'claudiavalsells' );
-	// The limit the server sets, as WordPress saved it before raising it for
-	// the admin: the front of the site, and the import's requests, run at this.
+	// The limit the server sets, as WordPress saved it before raising it for the admin: the front
+	// of the site, and the import's requests, run at this.
 	$limit  = class_exists( 'WP_Site_Health' ) ? (string) WP_Site_Health::get_instance()->php_memory_limit : '';
 	$limit  = '' !== $limit ? $limit : (string) ini_get( 'memory_limit' );
 	$memory = wp_convert_hr_to_bytes( $limit );

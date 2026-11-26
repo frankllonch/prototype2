@@ -1,7 +1,5 @@
 <?php
-/**
- * One project at its own address: the index, with its panel open.
- */
+/** One project at its own address: the index, with its panel open. */
 $cv_project = cv_project( get_queried_object() );
 $cv_text    = trim( wp_strip_all_tags( $cv_project['text'] ) );
 

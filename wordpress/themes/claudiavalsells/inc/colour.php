@@ -1,14 +1,5 @@
 <?php
-/**
- * The site's colour arithmetic, after src/content/palette.ts and
- * src/content/whats-color.ts.
- *
- * Everything that answers in colour — a row under the pointer, the page you
- * are on in the bar, a name on What's Color? — draws from the year palette
- * sampled from the paintings, each brought up to where it reads as a hue on
- * paper. The list is handed to the browser once, as custom properties on the
- * document, and client/hues.js is the one way of choosing from it.
- */
+/** The site's colour arithmetic, after src/content/palette.ts and src/content/whats-color.ts. */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -32,15 +23,7 @@ function cv_luminance( array $rgb ): float {
 	return 0.2126 * cv_channel( $rgb[0] ) + 0.7152 * cv_channel( $rgb[1] ) + 0.0722 * cv_channel( $rgb[2] );
 }
 
-/**
- * The same colour, brought up to where it reads as one.
- *
- * Several of the year colours are very dark — a ground, a deep red — which on
- * the rail is right. As a line of type on white, `#2b2d15` is not an olive, it
- * is black. Lightness and saturation are moved into a band where a hue is
- * legible as that hue, then lightness comes down from its brightest until the
- * contrast clears 4.5:1. The hue itself is never changed.
- */
+/** The same colour, brought up to where it reads as one. */
 function cv_vivid( string $hex ): string {
 	[ $r, $g, $b ] = cv_hex_rgb( $hex );
 	$max = max( $r, $g, $b );
@@ -77,11 +60,7 @@ function cv_vivid( string $hex ): string {
 	return cv_rgb_hex( $best );
 }
 
-/**
- * The same colour as the bar has to be told it. The bar is drawn as the
- * difference of whatever passes under it, so to arrive at a colour there, its
- * negative is what is set.
- */
+/** The same colour as the bar has to be told it. */
 function cv_negative( string $hex ): string {
 	[ $r, $g, $b ] = cv_hex_rgb( $hex );
 	return sprintf( 'rgb(%d, %d, %d)', 255 - round( $r * 255 ), 255 - round( $g * 255 ), 255 - round( $b * 255 ) );
@@ -120,11 +99,7 @@ function cv_readable( string $hex, float $ratio = 4.5 ): string {
 
 /**
  * The colour Claudia signed off for each person — FINAL_COLOURS in
- * src/content/whats-color-colours.ts, keyed by cv_id_for() of the name. The
- * import writes the same value into each entry's own colour field, which is
- * where she sees and changes it; this table is what an entry falls back to
- * when that field is empty, so a cleared field returns to her colour rather
- * than to a guess from the reference or the name.
+ * src/content/whats-color-colours.ts, keyed by cv_id_for() of the name.
  */
 const CV_SWATCH_FINAL = [
 	'wc-marina-garces'                  => '#b15f60',
@@ -210,15 +185,7 @@ const CV_SWATCH_FINAL = [
 	'wc-julia-ruiz-cabello'             => '#c24700',
 ];
 
-/**
- * The colour behind a participant's name, when it is hovered — the colour the
- * entry says. A port of swatchFor() in src/content/whats-color.ts, with one
- * step ahead of it: a hex typed into the answer in WordPress wins. After that
- * the colour Claudia signed off, by name; then the paint photographed in the book, by code; then a value per colour name;
- * and for nobody-named-a-colour, the site's palette, at random but the same
- * every time for the same person. The tables are the static site's, kept in
- * step by hand: a change there is a change here.
- */
+/** The colour behind a participant's name, when it is hovered — the colour the entry says. */
 const CV_SWATCH_PAINTED = [
 	'AC001' => '#dfcb6c',
 	'AC009' => '#642625',

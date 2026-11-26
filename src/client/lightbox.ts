@@ -1,17 +1,5 @@
-import { isPlainClick, reduceMotion, returnFocus } from './env.ts';
+import { isPlainClick, reduceMotion, returnFocus, targetElement } from './env.ts';
 
-/**
- * A painting opens over the contact sheet: the grid stays put, blurred, and you
- * move between works without a page load.
- *
- * One transition per action, and only one in flight. Every navigation takes a
- * ticket; when the fade-out finishes the swap happens only if that ticket is
- * still the current one. A second click issues a new ticket, so the older one
- * lapses instead of racing it.
- *
- * History: opening pushes one entry, moving between works replaces it. Back
- * therefore leaves the lightbox in a single press.
- */
 /** Must match `.lightbox-plate`'s transition in the stylesheet. */
 const FADE = 420;
 const SWIPE = 48;
@@ -34,12 +22,7 @@ export function initLightbox(): void {
   let current = -1;
   let ticket = 0;
   let pending = 0;
-  /**
-   * The close teardown, held so reopening can cancel it. An unowned one belongs
-   * to the close it was started by and knows nothing of what happened since: a
-   * painting opened inside its window was torn down under the reader, and the
-   * scroll lock went with it.
-   */
+  /** The close teardown, held so reopening can cancel it. */
   let teardown = 0;
   /** Whether the lightbox is meant to be on screen right now. */
   let shown = false;
@@ -83,8 +66,8 @@ export function initLightbox(): void {
   };
 
   const open = (tile: HTMLElement) => {
-    // A close still counting down belongs to the painting that was on screen
-    // before this one, and would otherwise empty the plate under it.
+    // A close still counting down belongs to the painting that was on screen before this one, and
+    // would otherwise empty the plate under it.
     window.clearTimeout(teardown);
     shown = true;
     openedAt = location.pathname + location.search;
@@ -92,9 +75,8 @@ export function initLightbox(): void {
     document.body.classList.add('is-locked');
     current = -1;
     show(tiles().indexOf(tile), false);
-    // Opened on the next frame so the fade has a value to start from — and only
-    // if it has not been closed again in the meantime, or the class would be put
-    // back on something already shutting.
+    // Opened on the next frame so the fade has a value to start from — and only if it has not been
+    // closed again in the meantime, or the class would be put back on something already shutting.
     requestAnimationFrame(() => { if (shown) box.classList.add('is-open'); });
     history.pushState({ lightbox: true }, '', tile.getAttribute('href') ?? location.href);
     nextBtn.focus({ preventScroll: true });
@@ -115,7 +97,7 @@ export function initLightbox(): void {
   };
 
   galleryEl.addEventListener('click', (event) => {
-    const tile = (event.target as Element).closest<HTMLElement>('.tile');
+    const tile = targetElement(event)?.closest<HTMLElement>('.tile');
     if (!tile || !isPlainClick(event)) return;
     event.preventDefault();
     open(tile);
@@ -147,10 +129,7 @@ export function initLightbox(): void {
   window.addEventListener('popstate', () => { if (!box.hidden) close(false); });
 }
 
-/**
- * The plate, rebuilt from the tile's own <picture> at a larger size. `sizes` is
- * a width and must be expressed as one; the height cap lives in the stylesheet.
- */
+/** The plate, rebuilt from the tile's own <picture> at a larger size. */
 function largePicture(tile: HTMLElement): HTMLElement {
   const picture = tile.querySelector('picture');
   const clone = (picture?.cloneNode(true) ?? document.createElement('span')) as HTMLElement;

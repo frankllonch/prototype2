@@ -15,41 +15,18 @@ interface LayoutProps {
   readonly rail?: Html;
   /** Grid density control. */
   readonly controls?: Html;
-  /**
-   * Content that must sit above the page: the detail panels. `main` is its own
-   * stacking context — the opening pile gives its tiles a z-index, which would
-   * otherwise compete with the overlays — so anything meant to rise above the
-   * veil has to live outside it.
-   */
-  /**
-   * A class on <body>, for a page that needs the chrome to behave differently.
-   * The opening film is the only user: it makes the bar sticky rather than
-   * fixed so it can begin in the middle of the film and rise to the top.
-   */
+  /** A class on <body>, for a page that needs the chrome to behave differently. */
   readonly bodyClass?: string;
+  /** Content that must sit above the page: the detail panels. */
   readonly overlays?: Html;
-  /**
-   * The hint that there is more below, on the pages that open on a full screen
-   * of something. `negative` draws it as the inverse of the film behind it,
-   * `ink` in the ink. It belongs at body level for the same reason the bar
-   * does: a blend reaches the film only from outside `main`, which the pile
-   * gives a stacking context of its own.
-   */
+  /** The hint that there is more below, on the pages that open on a full screen of something. */
   readonly cue?: 'ink' | 'negative';
-  /**
-   * The contact footer at the foot of the page (Frank, 2026-11-26: on every
-   * page but About and the detail pages). On unless a page says otherwise.
-   */
+  /** The contact footer at the foot of the page. */
   readonly foot?: boolean;
   readonly children: Html;
 }
 
-/** Order and wording of the menu, after the designer's mockup. */
-/*
- * `phone` is where the item stands on the phone's menu screen, which lists the
- * pages the other way about: About first, Exhibitions last. Only the drawing
- * order changes there (the stylesheet's `order`); the document keeps this one.
- */
+/** The menu, in document order. `phone` is the item's place on the phone's menu screen (CSS `order`). */
 const MENU = [
   { label: 'Exhibitions', href: '/exhibitions/', phone: 5 },
   { label: 'Commissioned', href: '/commissioned/', phone: 4 },
@@ -58,35 +35,13 @@ const MENU = [
   { label: 'About', href: '/#about', panel: 'about', phone: 1 },
 ] as const;
 
-/** Client modules, in boot order. Preloaded so the first interaction is instant. */
-/*
- * Which hover the bar's words wear. The one knob for it.
- *
- *   'roll'     — each letter turns over like a split-flap board
- *   'scramble' — the word churns through nonsense and settles back
- *
- * Only one is ever wired up: the choice is written onto the document and the
- * boot reads it, so the other costs nothing but the file it sits in.
- */
-/*
- * The scramble since 2026-11-17, Frank's pick from the hover tuner (?tune,
- * client/hover-tuner.ts); its settings are at the head of client/scramble.ts.
- */
+/** Which hover the bar's words wear; settings at the head of client/scramble.ts. */
 const HOVER: 'roll' | 'scramble' = 'scramble';
 
-const CLIENT_MODULES = [
-  'env', 'text-roll', 'transitions', 'controls', 'pile', 'stack', 'years', 'hover-list', 'panels',
-  'figures', 'lightbox', 'cursor', 'ball', 'ball-tuner', 'film', 'tilt', 'paging', 'views',
-  'scroll-cue', 'about', 'inquiries', 'chart', 'book', 'focus', 'hues', 'current', 'scrollbar', 'scramble', 'pile-tuner', 'rise', 'menu', 'index',
-] as const;
-
-/** The loading screen's five lines, set in blue on peach. */
-
 /*
- * The button is the phone's whole bar: three bars at the top right, drawn by
- * the stylesheet, which raise the header below as a screen of its own
- * (`client/menu.ts`). Above 899px it is not displayed. It stands before the
- * header so that it is reached first and the menu's links follow it.
+ * The button is the phone's whole bar: three bars at the top right, drawn by the
+ * stylesheet, which raise the header below as a screen of its own
+ * (`client/menu.ts`).
  */
 function topBar(path: string): Html {
   return html`<button type="button" class="menu-toggle" data-menu-toggle aria-label="Menu" aria-expanded="false" aria-controls="site-menu"><span class="menu-line"></span><span class="menu-line"></span><span class="menu-line"></span></button>
@@ -109,23 +64,7 @@ function topBar(path: string): Html {
   </header>`;
 }
 
-/**
- * A word in the bar, already cut into the roll's letters.
- *
- * The cutting used to be done by client/text-roll.ts once the scripts had
- * run, which is after the browser may already have painted the bar: every
- * page then opened on plain, kerned lettering and swapped a beat later to
- * the boxed letters the roll is made of, which do not kern — so on every
- * move between pages the words in the bar shifted by a pixel or two, letter
- * by letter. Written into the page instead, the first frame is the last one.
- *
- * Both drawings are here: the letters for the desktop, shown to the eye and
- * hidden from a screen reader, and the plain word, which a screen reader
- * reads and the phone shows (09-phone.css), since a phone has no hover and
- * its bigger type wants the kerning. The same for either hover: the roll's
- * letters carry two drawings each (00-base.css, "text roll"), the scramble's
- * one box each that the churn writes into (client/scramble.ts).
- */
+/** A word in the bar, already cut into the roll's letters. */
 const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' });
 function rolled(text: string): Html {
   let i = 0;
@@ -138,20 +77,10 @@ function rolled(text: string): Html {
 /**
  * About opens over whatever page you are on, which stays faintly visible and
  * blurred behind it, and tells itself in four parts as you scroll
- * (`client/about.ts`): the capitals lead writes itself, the reel of
- * photographs slides in and stops where the designer's sheet sets it, then
- * moves on with the scroll as the rest of the biography writes itself, and
- * the record, the collections and how to reach her come in last.
- *
- * Close and the chevron stand beside the panel rather than in it, so that they
- * can be drawn as the bar is — the negative of whatever passes under them —
- * which a blend can only do with what shares its stacking context.
- *
- * The markup is the page as it stands at rest — the same with or without the
- * script, which only hides and shows what is already here. Photographs are
- * collected wherever they stand in the biography into one reel straight after
- * the lead, the rule the WordPress theme follows for photographs placed in the
- * editor (`cv_about`), so both sides print the same thing.
+ * (`client/about.ts`): the capitals lead writes itself, the reel of photographs
+ * slides in and stops where the designer's sheet sets it, then moves on with the
+ * scroll as the rest of the biography writes itself, and the record, the
+ * collections and how to reach her come in last.
  */
 function aboutOverlay(): Html {
   const lead = ABOUT_BLOCKS.find((b) => b.kind === 'lead');
@@ -203,16 +132,7 @@ function aboutOverlay(): Html {
   ${images.length > 1 ? aboutSteps() : ''}`;
 }
 
-/**
- * The photographs in a reel, each a button that opens it large
- * (`client/about.ts`). Buttons rather than links: there is nowhere to go, and
- * a link to the file would be followed by the page transitions and differ
- * between the static site and WordPress for no reason.
- *
- * The script turns the row into a loop that the scroll moves on and the two
- * chevrons step through; without it the row scrolls sideways and the chevrons
- * stay hidden. The chevrons stand in the margins, clear of the photographs.
- */
+/** The photographs in a reel, each a button that opens it large (`client/about.ts`). */
 function aboutReel(images: readonly ProjectImage[]): Html {
   return html`<div class="about-reel" data-about-reel>
     <div class="about-reel-track" data-about-track>
@@ -229,9 +149,8 @@ function aboutReel(images: readonly ProjectImage[]): Html {
 }
 
 /**
- * How wide a photograph stands in the reel: 210 frame pixels tall, so 10.94vw
- * of height above 1097px wide and 7.5rem below it, times its own proportion.
- * `cv_about_reel_sizes` in the WordPress theme says the same.
+ * How wide a photograph stands in the reel: 210 frame pixels tall, so 10.94vw of
+ * height above 1097px wide and 7.5rem below it, times its own proportion.
  */
 function reelSizes(image: ProjectImage): string {
   const ratio = image.width / image.height;
@@ -265,11 +184,7 @@ function aboutViewer(): Html {
   </div>`;
 }
 
-/**
- * The exhibitions' chevrons, to step through the photographs while one is up.
- * Beside the panel, like Close, so they too are drawn as the negative of what
- * is under them — on a phone the photograph runs beneath them.
- */
+/** The exhibitions' chevrons, to step through the photographs while one is up. */
 function aboutSteps(): Html {
   return html`<button type="button" class="about-viewer-step is-prev" data-about-step="-1" aria-label="Previous photograph">
       ${stepChevron(-1)}
@@ -307,17 +222,7 @@ function aboutShow(show: AboutShow): Html {
   </li>`;
 }
 
-/**
- * How many of a two-column list stand in its first column. The sheet fills
- * the fairs' first column until it is level with the longest of the others —
- * sixteen, just past the end of the solo shows — and carries the rest to the
- * top of the next; and never fewer than would leave the second column the
- * taller of the two.
- *
- * Measured as the sheet sets it: a line is 20, a separate line under it 22.75
- * further, a line broken in two (`\n`) 20 further, and 65.5 between entries.
- * The WordPress theme uses the same arithmetic (`cv_about_first_column`).
- */
+/** How many of a two-column list stand in its first column. */
 function firstColumn(shows: readonly AboutShow[], others: readonly (readonly AboutShow[])[]): number {
   const entry = (s: AboutShow) =>
     [s.when, s.title, ...s.lines, ...(s.places ?? [])].reduce(
@@ -355,9 +260,9 @@ function lightbox(): Html {
 }
 
 /**
- * The contact footer, after the designer's HOME sheet (2026-11-26): who to
- * write to, the copyright line About closes on, and the credit, centred at the
- * foot of the page. The emails are About's own card.
+ * The contact footer, after the designer's HOME sheet: who to write to, the
+ * copyright line About closes on, and the credit, centred at the foot of the
+ * page.
  */
 function siteFoot(): Html {
   const [inquiries, other] = ABOUT_CARD.emails;
@@ -371,9 +276,46 @@ function siteFoot(): Html {
   </footer>`;
 }
 
+/** Runs in the head, before the first paint. Comment lines are dropped from the page. */
+const HEAD_SCRIPT = String.raw`document.documentElement.classList.add('js');
+// Arriving at /#whats-color: the page stays covered until client/write.ts has moved it to the
+// written sentence; the timers uncover it if that never runs.
+try { var nav = performance.getEntriesByType('navigation')[0];
+  if (location.hash === '#whats-color' && (!nav || nav.type === 'navigate')
+    && !matchMedia('(prefers-reduced-motion: reduce)').matches
+    && !matchMedia('(max-width: 899px)').matches) {
+    document.documentElement.classList.add('wc-arriving', 'wc-swatch-drop');
+    setTimeout(function () { document.documentElement.classList.remove('wc-arriving') }, 1500);
+    setTimeout(function () { document.documentElement.classList.remove('wc-swatch-drop') }, 700);
+  } } catch (e) {}
+// ?film=wipe|fade|cut|blur tries a way out of the start page for the visit; ?film=off resets.
+try { var film = new URLSearchParams(location.search).get('film');
+  if (film === 'off') sessionStorage.removeItem('cv-film');
+  else if (film && /^(fade|cut|wipe|blur)$/.test(film)) sessionStorage.setItem('cv-film', film);
+  film = sessionStorage.getItem('cv-film');
+  if (film) document.documentElement.style.setProperty('--start-film-style', 'film-' + film); } catch (e) {}
+// The page's colour, chosen before the first paint so the bar's block never changes colour.
+(function () { try { var root = document.documentElement, hues = Number(root.style.getPropertyValue('--hues')) || 0;
+  if (!hues) return; var hue = Math.floor(Math.random() * hues);
+  // A colour or a start-page arrival handed over by the previous page (client/transitions.ts).
+  try { var held = JSON.parse(sessionStorage.getItem('cv-held') || 'null'); sessionStorage.removeItem('cv-held');
+    if (held && held.path === location.pathname && Date.now() - held.at < 5000) {
+      if (held.start) root.classList.add('arrive-start');
+      else if (held.hue >= 0 && held.hue < hues) { hue = held.hue; root.classList.add('arrive-held'); } } } catch (e) {}
+  root.dataset.hue = String(hue);
+  root.style.setProperty('--bar-swatch', 'var(--neg-' + hue + ')');
+  root.style.setProperty('--wc-ask', 'var(--hue-' + hue + ')'); } catch (e) {} })();
+// On a phone the start page opens on the menu (client/menu.ts).
+try { if (document.documentElement.hasAttribute('data-start')
+  && matchMedia('(max-width: 899px)').matches
+  && (location.hash === '' || location.hash === '#about'))
+  document.documentElement.classList.add('is-start') } catch (e) {}
+// If client/menu.ts has not started after four seconds, fall back to the page without scripts.
+setTimeout(function () { var root = document.documentElement;
+  if (!root.hasAttribute('data-menu')) root.classList.remove('js', 'is-start') }, 4000);`.split('\n').filter((line) => !line.trim().startsWith('//')).join('\n');
+
 export function layout({ title, description, path, rail, controls, overlays, cue, bodyClass, foot = true, children }: LayoutProps): Html {
   const fullTitle = title === 'Claudia Valsells' ? title : `${title} — Claudia Valsells`;
-  const modules = CLIENT_MODULES.map((m) => withBase(`/js/${m}.js`));
   return raw(`<!doctype html>
 <html lang="en" data-hover="${HOVER}"${bodyClass === 'has-film' ? ' data-start' : ''} style="${hueVars()}">
 <head>
@@ -383,65 +325,8 @@ export function layout({ title, description, path, rail, controls, overlays, cue
 ${description ? `<meta name="description" content="${description.replace(/"/g, '&quot;').slice(0, 300)}" />` : ''}
 <link rel="preload" href="${withBase('/fonts/Switzer-Variable.woff2')}" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="${withBase('/site.css')}" />
-${modules.map((m) => `<link rel="modulepreload" href="${m}" />`).join('\n')}
-<script>document.documentElement.classList.add('js');
-// Arriving at What's Color by its link, the page is laid out at the top and
-// moved down to the written sentence by script — so it is kept covered until
-// it has been, and no frame is ever painted in the wrong place. The script
-// uncovers it as soon as it lands (client/write.ts); this timer is the net if
-// it never runs.
-// Only where that landing is made at all — the same tests client/write.ts
-// makes — so a browser that keeps the plain anchor jump never waits for it.
-try { var nav = performance.getEntriesByType('navigation')[0];
-  if (location.hash === '#whats-color' && (!nav || nav.type === 'navigate')
-    && !matchMedia('(prefers-reduced-motion: reduce)').matches
-    && !matchMedia('(max-width: 899px)').matches) {
-    document.documentElement.classList.add('wc-arriving', 'wc-swatch-drop');
-    setTimeout(function () { document.documentElement.classList.remove('wc-arriving') }, 1500);
-    setTimeout(function () { document.documentElement.classList.remove('wc-swatch-drop') }, 700);
-  } } catch (e) {}
-// Trying the ways the start page's film can go and come back (THE WAY OUT
-// OF THE START PAGE, 00-base.css): ?film=wipe, fade, cut or blur holds for
-// the visit; ?film=off goes back to the stylesheet's own setting.
-try { var film = new URLSearchParams(location.search).get('film');
-  if (film === 'off') sessionStorage.removeItem('cv-film');
-  else if (film && /^(fade|cut|wipe|blur)$/.test(film)) sessionStorage.setItem('cv-film', film);
-  film = sessionStorage.getItem('cv-film');
-  if (film) document.documentElement.style.setProperty('--start-film-style', 'film-' + film); } catch (e) {}
-// The page's colour, drawn here rather than by client/current.ts so that the
-// block in the bar is the right colour on the first frame. Drawn by the scripts,
-// it was painted once in the list's first colour and then changed, on every
-// page. client/hues.ts carries on from this one.
-(function () { try { var root = document.documentElement, hues = Number(root.style.getPropertyValue('--hues')) || 0;
-  if (!hues) return; var hue = Math.floor(Math.random() * hues);
-  // Arriving from the start page by its bar, which has already dropped this
-  // page's colour onto its name (client/transitions.ts): the same colour, and
-  // standing there from the first frame rather than dropping again. Or
-  // arriving back at the start page by the name, the bar already come down
-  // to the film's middle line: the film fades in under it, slowly.
-  // The timings for both are THE WAY OUT OF THE START PAGE, 00-base.css.
-  try { var held = JSON.parse(sessionStorage.getItem('cv-held') || 'null'); sessionStorage.removeItem('cv-held');
-    if (held && held.path === location.pathname && Date.now() - held.at < 5000) {
-      if (held.start) root.classList.add('arrive-start');
-      else if (held.hue >= 0 && held.hue < hues) { hue = held.hue; root.classList.add('arrive-held'); } } } catch (e) {}
-  root.dataset.hue = String(hue);
-  root.style.setProperty('--bar-swatch', 'var(--neg-' + hue + ')');
-  root.style.setProperty('--wc-ask', 'var(--hue-' + hue + ')'); } catch (e) {} })();
-// On a phone the start page opens on the menu, where the film is on a desktop
-// (client/menu.ts): decided here, before the first paint, so the page under
-// it is never seen.
-try { if (document.documentElement.hasAttribute('data-start')
-  && matchMedia('(max-width: 899px)').matches
-  && (location.hash === '' || location.hash === '#about'))
-  document.documentElement.classList.add('is-start') } catch (e) {}
-// From here on the stylesheet keeps the phone's menu out of sight, and only
-// client/menu.ts can raise it. If that has not said it is there after four
-// seconds — the scripts never arrived, or one of them fell over on the way —
-// the page goes back to what it is without them: the menu at its head, in
-// the flow, and no start screen held over it. Scripts that arrive later than
-// that take the page back (client/index.ts).
-setTimeout(function () { var root = document.documentElement;
-  if (!root.hasAttribute('data-menu')) root.classList.remove('js', 'is-start') }, 4000);</script>
+<link rel="modulepreload" href="${withBase('/js/index.js')}" />
+<script>${HEAD_SCRIPT}</script>
 </head>
 <body${bodyClass ? ' class="' + bodyClass + '"' : ''}>
 <div class="page-veil" aria-hidden="true"></div>

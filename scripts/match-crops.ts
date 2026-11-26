@@ -1,35 +1,4 @@
-/**
- * Matches the hand-made crops in content/raw/recortadas to the paintings they
- * were cut from.
- *
- * The files arrive as screenshots named only by the minute they were taken, so
- * nothing but the picture itself says which work each one is. They are crops of
- * the catalogue images, which is the fact this leans on: a crop is a rectangle
- * of its original, so the right original is the one the crop can be *found* in.
- *
- * Two stages, because comparing every crop against every painting at a useful
- * resolution is too much work to do all at once.
- *
- * 1. A shortlist, by colour. Each image is reduced to a histogram of hue
- *    weighted by saturation — which ignores the wall, the floor and the mount,
- *    all of them near-neutral, and keeps what the painting is made of. These
- *    paintings are abstract fields of colour and no two share a palette, so this
- *    alone usually puts the right one first; it is used only to cut 154
- *    candidates down to a handful.
- *
- * 2. The decision, by search. The crop is slid over each shortlisted painting at
- *    a range of sizes and positions and scored on how well it lines up, which is
- *    the question actually being asked: is this picture a piece of that one?
- *    Colour alone would be fooled by two works in the same key; a rectangle that
- *    matches in place will not be.
- *
- * Then the assignment is made one crop to one painting, best scores first, so a
- * confident match takes its painting out of the running for a doubtful one.
- *
- * Nothing here edits the site. It writes content/recortadas.json and a set of
- * side-by-side sheets to review before anything is substituted, because a crop
- * put on the wrong painting is worse than no crop at all.
- */
+/** Matches the hand-made crops in content/raw/recortadas to the paintings they were cut from. */
 import { readdir, readFile, writeFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import sharp from 'sharp';
@@ -116,10 +85,7 @@ function cells(px: Buffer, w: number, h: number, gx: number, gy: number): Float6
   return out;
 }
 
-/**
- * How well the template sits inside the painting, over every size and position
- * tried. Scored by mean absolute colour difference, turned into 0..1.
- */
+/** How well the template sits inside the painting, over every size and position tried. */
 function bestPlacement(
   plate: Float64Array, pw: number, ph: number,
   tpl: Float64Array, tw: number, th: number,
@@ -129,8 +95,8 @@ function bestPlacement(
 
   for (const scale of SCALES) {
     const boxW = Math.round(pw * scale);
-    // The plate grid is already in the painting's own proportions, so a box of
-    // the crop's aspect ratio is just width over that ratio.
+    // The plate grid is already in the painting's own proportions, so a box of the crop's aspect
+    // ratio is just width over that ratio.
     const boxH = Math.round(boxW / cropAspect);
     if (boxW < TPL || boxH < TPL || boxW > pw || boxH > ph) continue;
 
@@ -167,8 +133,7 @@ async function main() {
   await mkdir(REVIEW, { recursive: true });
 
   const projects = JSON.parse(await readFile(path.join(ROOT, 'content', 'projects.json'), 'utf8'));
-  // Only paintings are candidates. An exhibition photograph is not a work, and
-  // letting one into the pool only invites a wrong answer.
+  // Only paintings are candidates.
   const works = projects.projects.filter((p: any) => p.kind === 'work' && p.cover?.id);
   const coverIds: string[] = [...new Set<string>(works.map((p: any) => p.cover.id))];
   const titleOf = new Map<string, string>(works.map((p: any) => [p.cover.id, p.title]));
@@ -216,10 +181,8 @@ async function main() {
     if ((n + 1) % 20 === 0) console.log(`  ${n + 1}/${files.length}`);
   }
 
-  // --- one crop to one painting --------------------------------------------
-  // Taken best-first, so a confident match claims its painting before a doubtful
-  // one can take it. Two crops of the same painting cannot both win; the loser is
-  // left unassigned and reported rather than forced somewhere wrong.
+  // --- one crop to one painting -------------------------------------------- Taken best-first, so
+  // a confident match claims its painting before a doubtful one can take it.
   const flat = results.flatMap((r) =>
     r.candidates.map((c: any, rank: number) => ({ file: r.file, rank, ...c })));
   flat.sort((a, b) => b.score - a.score);
@@ -243,8 +206,7 @@ async function main() {
         id: a?.id ?? null,
         title: a?.title ?? null,
         score: a?.score ?? 0,
-        // How far clear of the next-best painting. A match that only just beats
-        // its runner-up is the kind that needs looking at.
+        // How far clear of the next-best painting.
         margin: a && runnerUp ? a.score - runnerUp.score : null,
         rank: a?.rank ?? null,
         box: a ? { left: a.left, top: a.top, width: a.width, height: a.height } : null,

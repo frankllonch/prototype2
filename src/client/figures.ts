@@ -1,20 +1,5 @@
-/**
- * Turning the pictures in a detail panel, and giving either column the screen.
- *
- * The photographs used to change as you scrolled. That read well while the text
- * was the thing you were following, but it meant you could not go back, and
- * could not stay on one picture — and looking at the photographs is half of why
- * anyone opens an exhibition. So they are turned by hand here, with arrows under
- * them.
- *
- * Either column can also take the whole width: the text alone for reading, the
- * pictures alone and centred for looking. One at a time — expanding one puts the
- * other away, so there is always something to come back to.
- *
- * With scripting off the panel is a plain column of text followed by every
- * photograph at full size, which is a worse read but a complete one: nothing
- * here hides anything that cannot be got at without it.
- */
+import { targetElement } from './env.ts';
+/** Turning the pictures in a detail panel, and giving either column the screen. */
 import { morphSheet } from './sheet-morph.ts';
 
 export function initFigures(): void {
@@ -27,15 +12,13 @@ export function initFigures(): void {
     const figures = stage ? [...stage.querySelectorAll<HTMLElement>('.reader-figure')] : [];
     const counter = reader.querySelector<HTMLElement>('[data-figure-count]');
 
-    // The stacked, one-at-a-time presentation is the same as the scrolled
-    // version's; only what advances it differs.
+    // The stacked, one-at-a-time presentation is the same as the scrolled version's; only what
+    // advances it differs.
     if (stage && figures.length) stage.classList.add('is-live');
 
     /*
-     * The count a phone shows between the arrows, "2 / 8" (07-sheet.css hides
-     * it on a computer, where the frame stands alone). Made here rather than in
-     * the markup: it is only ever filled by this script, and the WordPress
-     * theme's markup then needs nothing new.
+     * The count a phone shows between the arrows, "2 / 8" (07-sheet.css hides it
+     * on a computer, where the frame stands alone).
      */
     const next = reader.querySelector<HTMLElement>('[data-figure-step="1"]');
     const visible = next && figures.length > 1 ? document.createElement('p') : null;
@@ -83,19 +66,13 @@ export function initFigures(): void {
     }
 
     /*
-     * The arrow keys turn the pictures too, which is how anyone looking at a
-     * set of photographs expects to move through them.
-     *
-     * Bound to the document and gated on this panel being the open one, rather
-     * than to the panel itself: the panel is not focused when it opens, so a
-     * listener on it would only answer after something inside had been clicked.
-     * A press is ignored while the caret is in a field, and when a modifier is
-     * held, so it never takes a key away from the browser or from typing.
+     * The arrow keys turn the pictures too, which is how anyone looking at a set
+     * of photographs expects to move through them.
      */
     document.addEventListener('keydown', (event) => {
       if (!panel.classList.contains('is-open')) return;
       if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
-      const target = event.target as HTMLElement | null;
+      const target = targetElement(event);
       if (target?.closest('input, textarea, select, [contenteditable]')) return;
       const step = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
       if (!step || figures.length < 2) return;
@@ -119,16 +96,14 @@ export function initFigures(): void {
         // A sheet moves from one layout to the other (sheet-morph.ts).
         if (reader.hasAttribute('data-sheet')) morphSheet(reader, () => widen(which));
         else widen(which);
-        // The column that was filling the screen has gone; starting anywhere but
-        // the top of what replaced it would be landing in the middle of it.
+        // The column that was filling the screen has gone; starting anywhere but the top of what
+        // replaced it would be landing in the middle of it.
         panel.scrollTop = 0;
       });
     }
 
-    // Opening is always from the same state: first picture, neither column
-    // widened, scrolled to the top.
-    // The Colour Chart's reel opens its panel at the photograph tapped
-    // (client/chart.ts); anything else opens at the first.
+    // Opening is always from the same state: first picture, neither column widened, scrolled to
+    // the top.
     panel.addEventListener('panelopen', () => {
       widen(null);
       show(Number(panel.dataset.figureStart) || 0);

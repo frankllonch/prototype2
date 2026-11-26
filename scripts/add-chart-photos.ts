@@ -1,27 +1,4 @@
-/**
- * Registers the photographs of the colour chart in use.
- *
- * The chart's own page has the statement and the way to order one; these are
- * the thing itself, out in the world — fanned on a shelf, on a workbench, in a
- * hand, open on a restaurant table. They hang off "Thanks to everyone!", which
- * is who they are of.
- *
- * Unlike `add-shows.ts` this reads no archive: the folder *is* the source.
- * Drop pictures into content/raw/local/chart, run this, and they are in. There
- * is nowhere else they could come from — they were sent rather than published,
- * so there is no URL to fetch them from and the files are the record, kept out
- * of git with the rest of content/raw.
- *
- * They are recorded as a project of kind `page` so that `npm run images` picks
- * them up: the pipeline walks every project in the dataset, and a page is the
- * one kind no index of the site lists. `load.ts` finds pages by slug and
- * nothing asks for this one but the chart.
- *
- * Re-runnable: it rewrites the record from whatever is in the folder, so
- * adding or removing a photograph is adding or removing a file.
- *
- *   npm run add-chart-photos && npm run images && npm run build
- */
+/** Registers the photographs of the colour chart in use. */
 import { readFile, writeFile, readdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';

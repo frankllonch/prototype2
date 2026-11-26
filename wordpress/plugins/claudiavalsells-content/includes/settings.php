@@ -1,9 +1,7 @@
 <?php
 /**
- * The handful of texts that belong to the site rather than to any one entry,
- * and the one address nobody else may see.
- *
- * Settings → Site texts.
+ * The handful of texts that belong to the site rather than to any one entry, and
+ * the one address nobody else may see.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
