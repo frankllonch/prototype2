@@ -258,15 +258,13 @@ export function applyEdits(html: string, sheet: ShowSheet | undefined): string {
 }
 
 /**
- * The photograph each commissioned project's sheet opens on (UPDATES/commissioned,
- * 2026-11-24), as its index in the project's own set. The rest follow in order.
+ * The photograph each commissioned project's sheet opens on, as its index in
+ * the project's own set. The sets are the official photographs (finalfotos,
+ * 2026-11-26), already in the order of the designer's variants, and most open
+ * on their first; these two open where their sheet in UPDATES/commissioned
+ * does. The rest follow in order.
  */
 export const COMMISSION_LEADS: Readonly<Record<string, number>> = {
-  'dada-workshops-2017': 5,
-  'dada-workshops-2018': 3,
-  'dada-workshops-2017-2': 2,
-  'edges-collection-for-within-reach': 10,
-  'silla-8-aoo-2019-2020': 4,
-  'tones-collection-2022': 1,
-  trainings_silences: 3,
+  'dada-workshops-2017-2': 4,       // Color Atlas: the red façade (Variant5)
+  'dada-workshops-2018': 7,         // the chair with the zigzag back (Variant10)
 };
