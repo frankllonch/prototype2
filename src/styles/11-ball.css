@@ -20,6 +20,41 @@
   --ball-blend: difference;
   --ball-over-names: 0;
   /* over a painting its name stands in for the pointer: 0 hides the ball there, 1 keeps it */
+  --ball-opacity: 1;
+  --ball-press-time: 0.15s;
+  /* how long it takes to reach its pressed size */
+
+  /* The click, a drop of oil in water (client/ball-oil.ts). */
+  --ball-oil: 1;
+  /* 0 turns the click's wobble off */
+  --ball-oil-expand: 0.35;
+  /* how far it swells, as a share of its size */
+  --ball-oil-wobble: 0.25;
+  /* how far out of round it goes */
+  --ball-oil-lobes: 4;
+  /* how many bumps the wobble can have */
+  --ball-oil-bounce: 420;
+  /* ms for one swing out and back: lower is a stiffer spring */
+  --ball-oil-settle: 1100;
+  /* ms until it is round again: lower is more damping */
+  --ball-oil-tension: 0.6;
+  /* how much quicker the small ripples are than the big ones */
+  --ball-oil-release: 0.4;
+  /* the second push as the button comes up, as a share of the first; below 0 pulls in */
+  --ball-oil-swirl: 0;
+  /* degrees a second the drop turns while it wobbles */
+  --ball-oil-stretch: 0;
+  /* how much it stretches along its way when moved fast */
+  --ball-oil-speed: 1;
+  /* the whole effect faster or slower */
+  --ball-oil-ring: 0;
+  /* a ripple ring let go on the click: its opacity, 0 for none */
+  --ball-oil-ring-size: 2.4;
+  /* how far the ring travels, in ball sizes */
+  --ball-oil-ring-time: 600;
+  /* ms the ring lasts */
+  --ball-oil-ring-width: 0.12;
+  /* the ring's line, as a share of the ball's radius */
 }
 
 /* Only once the script is running, and only for a mouse (the class is set by
@@ -46,7 +81,7 @@ html.has-ball * {
 }
 
 .ball.is-on {
-  opacity: 1;
+  opacity: var(--ball-opacity);
 }
 
 /* Safari: drawn with the page, not on a layer of its own (client/ball.ts), so
@@ -63,6 +98,7 @@ html:has(.cursor.is-visible) .ball.is-on {
 
 .ball-dot {
   display: block;
+  position: relative;
   width: var(--ball-size);
   height: var(--ball-size);
   border-radius: 50%;
@@ -71,7 +107,7 @@ html:has(.cursor.is-visible) .ball.is-on {
   transition:
     width var(--ball-grow) var(--ball-grow-ease),
     height var(--ball-grow) var(--ball-grow-ease),
-    transform 0.15s var(--ease);
+    transform var(--ball-press-time) var(--ease);
 }
 
 .ball.is-hover .ball-dot {
@@ -81,6 +117,36 @@ html:has(.cursor.is-visible) .ball.is-on {
 
 .ball.is-down .ball-dot {
   transform: translate(-50%, -50%) scale(var(--ball-press));
+}
+
+/* The wobbling outline, drawn only while it is out of round; three balls wide so
+   the swell is never cut off. */
+.ball-blob {
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  display: none;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.ball-blob path {
+  fill: var(--ball-color);
+}
+
+.ball-blob circle {
+  fill: none;
+  stroke: var(--ball-color);
+}
+
+.ball.is-oil .ball-dot {
+  background: transparent;
+}
+
+.ball.is-oil .ball-blob {
+  display: block;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -106,4 +172,8 @@ html:has(.cursor.is-visible) .ball.is-on {
 
 .tuner-ball .tuner-row {
   grid-template-columns: 1fr 130px 58px;
+}
+
+.tuner-ball .tuner-out {
+  flex-wrap: wrap;
 }
