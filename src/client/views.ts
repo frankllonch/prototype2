@@ -240,6 +240,35 @@ export function initViews(): void {
     };
     fitAll();
     window.addEventListener('resize', fitAll);
+
+    /*
+     * Shown once, at its size. Until the bytes are in the browser draws the
+     * cut-out's whole canvas — transparent band and all — so the painting
+     * came up small and then grew when this fitted it, the caption beside it
+     * stepping across, and each small picture did the same as it arrived. The
+     * stylesheet holds the painting, the caption and the small pictures out
+     * of sight until the page is marked ready (05-artwork.css, ONE WORK,
+     * SHOWN WHEN IT IS READY); that waits for the painting, its small
+     * pictures and the type, fits them all, and reveals them in one frame. A
+     * slow connection still gets a page: after HOLD_MAX it shows what it has.
+     */
+    const page = stage.closest<HTMLElement>('.detail');
+    if (page && !page.classList.contains('is-ready')) {
+      const HOLD_MAX = 2500;
+      const first = views[0]?.querySelector('img');
+      const wanted = [first, ...thumbs.map((t) => t.querySelector('img'))].filter((i): i is HTMLImageElement => !!i);
+      const settled = Promise.all([
+        ...wanted.map(async (img) => {
+          await loaded(img);
+          await Promise.race([img.decode().catch(() => undefined), new Promise((r) => setTimeout(r, 250))]);
+        }),
+        document.fonts.ready,
+      ]);
+      void Promise.race([settled, new Promise((r) => setTimeout(r, HOLD_MAX))]).then(() => {
+        fitAll();
+        requestAnimationFrame(() => page.classList.add('is-ready'));
+      });
+    }
     // The box may change as the pictures arrive (a lazily measured size, a
     // font that settles the caption's width), so it is read again then.
     for (const img of stage.querySelectorAll('img')) if (!img.complete) img.addEventListener('load', fitAll, { once: true });

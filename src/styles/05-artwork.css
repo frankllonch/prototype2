@@ -80,6 +80,33 @@
   .detail-plate, [data-tilt] { --tilt-max: 0deg; --tilt-lift: 1; }
 }
 
+/* --------------------------------- ONE WORK, SHOWN WHEN IT IS READY */
+
+/*
+ * The painting, its caption and its small pictures stay out of sight until
+ * client/views.ts has them at their final size, then come up together. Before
+ * this the browser showed the cut-out's whole transparent canvas first, so
+ * the painting arrived small and grew, and the caption beside it moved.
+ *
+ *   --ready-fade   how long they take to come up once ready.
+ *
+ * Only with scripting (html.js). Should the script never get there, the hold
+ * lets go by itself after 4s: nothing here can leave the page blank.
+ */
+.detail { --ready-fade: 0.45s; }
+html.js .detail:not(.is-ready) :is(.detail-stage, .detail-caption) {
+  opacity: 0;
+  animation: detail-unhold var(--ready-fade) var(--ease) 4s forwards;
+}
+html.js .detail.is-ready :is(.detail-stage, .detail-caption) {
+  opacity: 1;
+  transition: opacity var(--ready-fade) var(--ease);
+}
+@keyframes detail-unhold { to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .detail { --ready-fade: 0s; }
+}
+
 /* ------------------------------------------------- the other pictures */
 
 /*
