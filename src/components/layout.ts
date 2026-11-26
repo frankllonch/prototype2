@@ -294,6 +294,12 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     setTimeout(function () { document.documentElement.classList.remove('wc-arriving') }, 1500);
     setTimeout(function () { document.documentElement.classList.remove('wc-swatch-drop') }, 700);
   } } catch (e) {}
+// Arriving on one answer of What's Color (/whats-color/ii/#wc-…): covered until client/focus.ts
+// has put the page on it; the timer uncovers it if that never runs.
+try { if (/^#wc-/.test(location.hash)) {
+    document.documentElement.classList.add('wc-landing');
+    setTimeout(function () { document.documentElement.classList.remove('wc-landing') }, 1200);
+  } } catch (e) {}
 // ?film=wipe|fade|cut|blur tries a way out of the start page for the visit; ?film=off resets.
 try { var film = new URLSearchParams(location.search).get('film');
   if (film === 'off') sessionStorage.removeItem('cv-film');
