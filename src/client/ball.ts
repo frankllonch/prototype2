@@ -1,5 +1,5 @@
 import { initOil } from './ball-oil.ts';
-import { finePointer, reduceMotion, targetElement } from './env.ts';
+import { finePointer, piling, reduceMotion, targetElement } from './env.ts';
 
 /**
  * The site's pointer: a ball, the negative of whatever is under it, that grows a
@@ -102,13 +102,14 @@ export function initBall(): void {
   // The page can move under a still pointer: look again, once a frame at most.
   let looking = 0;
   const relook = () => {
-    if (!placed || looking) return;
+    if (!placed || looking || piling()) return;
     looking = requestAnimationFrame(() => {
       looking = 0;
       hover(document.elementFromPoint(targetX, targetY));
     });
   };
   window.addEventListener('scroll', relook, { passive: true, capture: true });
+  document.addEventListener('stacksettle', relook);
 
   /** --ball-oil-release: the second, smaller push as the button comes up. */
   const release = () => parseFloat(getComputedStyle(root).getPropertyValue('--ball-oil-release')) || 0;
