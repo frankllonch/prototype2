@@ -1546,6 +1546,11 @@ html.js .wc-text.is-open .wc-text-closed {
 html:not(.js) .wc-text-closed {
   display: none;
 }
+/* 'Read more' writes the rest in (client/texts.ts): a word not yet written
+   keeps its place, so the block stands at its full height from the start. */
+.wc-text.is-typing .wc-type:not(.is-written) {
+  visibility: hidden;
+}
 
 @media (prefers-reduced-motion: reduce) {
   .wc-text {
