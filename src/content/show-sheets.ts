@@ -80,6 +80,69 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
     // The sheet does not set the name apart in the lede.
     edits: [['<strong>Transitions</strong>', 'Transitions']],
   },
+  // What's Color I and II: the text as the designer's sheets set it
+  // (WHATS COLOR I / II - DISSENY, 2026-11-26), in place of the source page's,
+  // which ran on into the glossary and the participants (I) and the curators,
+  // the Download PDF link and the edition note (II). Neither sheet has those.
+  // Two slips on the sheets corrected: I's question was never closed, and II's
+  // "for this sector. I / n this exhibition" had the I split from its word.
+  'what-s-color-i': {
+    text: p(
+      '<span class="lede-open">Throughout the lockdown I was away from my studio and my art form – painting.</span>' +
+        'I found great comfort reading pieces by philosophers, historians, thinkers, writers, and other artists. ' +
+        'They helped me better understand humanity and its role in this globalized world.',
+      'During the past months I have invited them to consider and answer the question: ‘What does color mean to you?’',
+      'First of all, to open up a dialogue, to grasp new ways of seeing colors, other perspectives, but also to better ' +
+        'understand the world.<br />I wanted to think of color in a broader context, outside of the artistic view, and ' +
+        'to discover the notion of color as it is thought of by others.',
+      'Claudia Valsells',
+    ),
+  },
+  'what-s-color-ii-for-architects-and-designers': {
+    text:
+      p(
+        '‘The memory of one of my architecture teachers taking off one of his reddish-brown English shoes, rolling up ' +
+          'the tour of his pants to show the navy blue color of his socks, and cutting out a piece of clothing from the ' +
+          'striped Oxford shirt.<br /><span class="lede-tab"></span>All this spectacle in the middle of a construction ' +
+          'site to show respectively the color of the wood, the color of the carpet and the different shades of the ' +
+          'walls, is an image that I remember with some nostalgia, but that cannot be repeated today.’',
+        'From the scientific experiment to the artistic concern, from Munsell’s diagrams and Goethe’s studies to Le ' +
+          'Corbusier’s Salubra and the almost infinite possible combinations of electronics, the color chart has always ' +
+          'existed to facilitate the communication of color.',
+        'A mere organic, hierarchical and chromatic division in its origin, a method of plastic expression and ' +
+          'aesthetic positioning in its development, this instrument, which came to democratize design and encourage ' +
+          'the creative impulse, has seen in its years of life how the use of color by the architectural sector has ' +
+          'been diminishing, limited perhaps because of certain social prejudices and canons encouraged by advertising ' +
+          'and the market. The pristine white, the sad black, the nondescript gray, the garish red.',
+        'Monopolized the business of colors available by the painting companies, relegated the work of the colorist ' +
+          'to the background due to ignorance or fear of architects and clients to make a mistake or be branded as ' +
+          'eccentric; it is in this context that the artist Claudia Valsells had an idea: to create a specific ' +
+          'chromatic selection for this sector.',
+        'In this exhibition we wanted to highlight the work of the colorist, the process of selecting and prescribing ' +
+          'colors for a project and the color chart as a tool that facilitates and enables communication between ' +
+          'architects and designers.',
+        'For this reason we have compiled in the exhibition a series of work tools that Claudia, an artist linked to ' +
+          'color since her beginnings as a mural painter, used for the elaboration of her own chart: notebooks, mixers, ' +
+          'spatulas, annotations, paint covers. It is therefore a retrospective, documentary and personal exhibition, ' +
+          'where experiences, stories and testimonies are mixed.<br />The result of more than twenty years of work by ' +
+          'the artist, collaborating with architects and designers in the definition of colors, this color chart is ' +
+          'composed of 142 colors applied with real paint, which allows to see the exact reproduction of the color as ' +
+          'it will look once applied on the surface.',
+        'This range of colors, developed for use in architecture, both exterior and interior, allows the colorist to ' +
+          'demonstrate Valsells’ natural ability and chromatic instinct, the knowledge of the language that color ' +
+          'implies.<br />This color chart, and the work of its author, Claudia Valsells, is an invitation to explore, ' +
+          'to play, and to dare to prescribe colors. Any color from this palette can be achieved, and it is worth the ' +
+          'effort to see exactly what one is looking for.',
+        'We want to reopen the dialogue on the use of color in architecture, to offer one more tool, among many ' +
+          'others, that encourages that return to color, with knowledge, dialogue and vision.',
+      ) +
+      '<div class="is-style-thanks"><p>Photos © Julia Ruiz-Cabello and Gonzalo de Benito</p><p>THANKS TO:<br />' +
+      'Plantea Estudi, Kal-a, Elii, HANGHAR, Nomos arquitectos, Montse Vicens (Int-sight), Isabel Francoy, ' +
+      'Tomás López Design, Stefano Colli, Conti.Cert, Un parell d’arquitectes, Naso ++, Isla, Auxi Gálvez (PSAAP), ' +
+      'Escobedo Soliz, Antoni Arola, Barbara Aurell, Laura Castanya, Andrea Batlló y Adrià Escolano, Marc Morro, ' +
+      'Anna Vidal (Vis arquitectes), Gema Sach, Oscar Tusquets, Mariona Espinet, Isabel Sendra, AMOO, Loca Studio, ' +
+      'Paula Arroyo, Cierto Estudio.</p></div>',
+  },
   'color-dialogues': {
     lines: ['Solo show at Alzueta Gallery,', 'Madrid'],
     when: 'December 2021 to January 2022',
