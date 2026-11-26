@@ -392,8 +392,8 @@ export function whatsColorEdition(edition: Edition): Html {
     <p class="wc-back"><a href="${withBase('/#whats-color')}">All of What&rsquo;s Color?</a></p>
     ${chart(edition)}
     <!--
-      The line the phone sheets close an edition on. Shown on a phone only,
-      where the link above is not; the words are About's own.
+      The line the phone sheets close an edition on, under the link above.
+      Shown on a phone only; the words are About's own.
     -->
     <p class="wc-foot"><b>${ABOUT_CARD.name}</b> ${ABOUT_COPYRIGHT}</p>
   </div>`;
