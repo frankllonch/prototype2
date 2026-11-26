@@ -1,7 +1,8 @@
 /** Builds the stylesheet and the client bundle; shared by the static build and the WordPress theme. */
 import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { build, transform } from 'esbuild';
+// esbuild-wasm rather than esbuild: no platform binary, so one node_modules serves macOS and Linux.
+import { build, transform } from 'esbuild-wasm';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const STYLES = path.join(ROOT, 'src', 'styles');

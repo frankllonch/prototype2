@@ -235,7 +235,7 @@ source maps), written for Chrome/Edge 109+, Firefox 115+ and Safari 15.4+
 page is opened with `?pile` or `?ball`.
 
 Runtime dependencies: none — the site is files. Build dependencies:
-`typescript`, `esbuild`, `node-html-parser`, `sharp`. The order desk under `server/` is
+`typescript`, `esbuild-wasm`, `node-html-parser`, `sharp`. The order desk under `server/` is
 deployed on its own and shares none of this.
 
 ## Not in this build, by decision
