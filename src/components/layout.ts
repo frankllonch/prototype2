@@ -42,14 +42,14 @@ interface LayoutProps {
 /** Order and wording of the menu, after the designer's mockup. */
 /*
  * `phone` is where the item stands on the phone's menu screen, which lists the
- * pages the other way about: About first, Color Chart last. Only the drawing
+ * pages the other way about: About first, Exhibitions last. Only the drawing
  * order changes there (the stylesheet's `order`); the document keeps this one.
  */
 const MENU = [
-  { label: 'Color Chart', href: '/color-chart/', phone: 5 },
-  { label: 'Exhibitions', href: '/exhibitions/', phone: 3 },
+  { label: 'Exhibitions', href: '/exhibitions/', phone: 5 },
   { label: 'Commissioned', href: '/commissioned/', phone: 4 },
-  { label: 'Artwork', href: '/artwork/', phone: 2 },
+  { label: 'Artwork', href: '/artwork/', phone: 3 },
+  { label: 'Color Chart', href: '/color-chart/', phone: 2 },
   { label: 'About', href: '/#about', panel: 'about', phone: 1 },
 ] as const;
 
