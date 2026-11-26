@@ -161,6 +161,15 @@
   text-transform: uppercase;
 }
 .sheet-prose p:last-child { margin-bottom: 0; }
+/*
+ * What's Color (II) arrives as boxes inside boxes, and the last paragraph of
+ * each box drops its gap, so "Download PDF" sat flush against the essay above
+ * it and the note below it. A box with something after it keeps the empty
+ * line (Frank, 2026-11-26).
+ */
+#exhibition-what-s-color-ii-for-architects-and-designers .sheet-prose div:not(:last-child) {
+  margin-bottom: calc(var(--s-lead) * 1em);
+}
 .sheet-prose .is-style-lead {
   font-size: var(--type);
   font-weight: 500;
@@ -822,6 +831,9 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
   /* Pasted text that arrived in boxes of its own keeps the same empty line. */
   .panel > .sheet .sheet-prose > * p { margin: 0 0 var(--sh-para); }
   .panel > .sheet .sheet-prose > * p:last-child { margin-bottom: 0; }
+  /* What's Color (II): its "Download PDF" keeps an empty line either side. */
+  #exhibition-what-s-color-ii-for-architects-and-designers > .sheet .sheet-prose > div { margin-bottom: 0; }
+  #exhibition-what-s-color-ii-for-architects-and-designers > .sheet .sheet-prose > * div:not(:last-child) { margin-bottom: var(--sh-para); }
   .panel > .sheet .sheet-prose .lede-open { margin-bottom: var(--sh-para); }
   .panel > .sheet .sheet-prose > :is(p:first-of-type, .is-style-lead) { font-size: var(--sh-lede); line-height: var(--sh-lede); }
   .panel > .sheet .sheet-prose > .is-style-note { font-size: var(--sh-note); line-height: var(--sh-note); }
