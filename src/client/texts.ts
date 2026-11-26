@@ -1,4 +1,4 @@
-import { isPlainClick, reduceMotion } from './env.ts';
+import { isPlainClick, reduceMotion, targetElement } from './env.ts';
 import { glide, topOf } from './glide.ts';
 
 /**
@@ -137,7 +137,8 @@ export function initWcTexts(): void {
   if (!texts) return;
 
   texts.addEventListener('click', (event) => {
-    const target = event.target as Element;
+    const target = targetElement(event);
+    if (!target) return;
     const more = target.closest<HTMLButtonElement>('.wc-more');
     if (more) {
       event.preventDefault();

@@ -15,9 +15,9 @@ interface LayoutProps {
   readonly rail?: Html;
   /** Grid density control. */
   readonly controls?: Html;
-  /** Content that must sit above the page: the detail panels. */
   /** A class on <body>, for a page that needs the chrome to behave differently. */
   readonly bodyClass?: string;
+  /** Content that must sit above the page: the detail panels. */
   readonly overlays?: Html;
   /** The hint that there is more below, on the pages that open on a full screen of something. */
   readonly cue?: 'ink' | 'negative';
@@ -26,11 +26,7 @@ interface LayoutProps {
   readonly children: Html;
 }
 
-/** Order and wording of the menu, after the designer's mockup. */
-/*
- * `phone` is where the item stands on the phone's menu screen, which lists the
- * pages the other way about: About first, Exhibitions last.
- */
+/** The menu, in document order. `phone` is the item's place on the phone's menu screen (CSS `order`). */
 const MENU = [
   { label: 'Exhibitions', href: '/exhibitions/', phone: 5 },
   { label: 'Commissioned', href: '/commissioned/', phone: 4 },
@@ -280,6 +276,44 @@ function siteFoot(): Html {
   </footer>`;
 }
 
+/** Runs in the head, before the first paint. Comment lines are dropped from the page. */
+const HEAD_SCRIPT = String.raw`document.documentElement.classList.add('js');
+// Arriving at /#whats-color: the page stays covered until client/write.ts has moved it to the
+// written sentence; the timers uncover it if that never runs.
+try { var nav = performance.getEntriesByType('navigation')[0];
+  if (location.hash === '#whats-color' && (!nav || nav.type === 'navigate')
+    && !matchMedia('(prefers-reduced-motion: reduce)').matches
+    && !matchMedia('(max-width: 899px)').matches) {
+    document.documentElement.classList.add('wc-arriving', 'wc-swatch-drop');
+    setTimeout(function () { document.documentElement.classList.remove('wc-arriving') }, 1500);
+    setTimeout(function () { document.documentElement.classList.remove('wc-swatch-drop') }, 700);
+  } } catch (e) {}
+// ?film=wipe|fade|cut|blur tries a way out of the start page for the visit; ?film=off resets.
+try { var film = new URLSearchParams(location.search).get('film');
+  if (film === 'off') sessionStorage.removeItem('cv-film');
+  else if (film && /^(fade|cut|wipe|blur)$/.test(film)) sessionStorage.setItem('cv-film', film);
+  film = sessionStorage.getItem('cv-film');
+  if (film) document.documentElement.style.setProperty('--start-film-style', 'film-' + film); } catch (e) {}
+// The page's colour, chosen before the first paint so the bar's block never changes colour.
+(function () { try { var root = document.documentElement, hues = Number(root.style.getPropertyValue('--hues')) || 0;
+  if (!hues) return; var hue = Math.floor(Math.random() * hues);
+  // A colour or a start-page arrival handed over by the previous page (client/transitions.ts).
+  try { var held = JSON.parse(sessionStorage.getItem('cv-held') || 'null'); sessionStorage.removeItem('cv-held');
+    if (held && held.path === location.pathname && Date.now() - held.at < 5000) {
+      if (held.start) root.classList.add('arrive-start');
+      else if (held.hue >= 0 && held.hue < hues) { hue = held.hue; root.classList.add('arrive-held'); } } } catch (e) {}
+  root.dataset.hue = String(hue);
+  root.style.setProperty('--bar-swatch', 'var(--neg-' + hue + ')');
+  root.style.setProperty('--wc-ask', 'var(--hue-' + hue + ')'); } catch (e) {} })();
+// On a phone the start page opens on the menu (client/menu.ts).
+try { if (document.documentElement.hasAttribute('data-start')
+  && matchMedia('(max-width: 899px)').matches
+  && (location.hash === '' || location.hash === '#about'))
+  document.documentElement.classList.add('is-start') } catch (e) {}
+// If client/menu.ts has not started after four seconds, fall back to the page without scripts.
+setTimeout(function () { var root = document.documentElement;
+  if (!root.hasAttribute('data-menu')) root.classList.remove('js', 'is-start') }, 4000);`.split('\n').filter((line) => !line.trim().startsWith('//')).join('\n');
+
 export function layout({ title, description, path, rail, controls, overlays, cue, bodyClass, foot = true, children }: LayoutProps): Html {
   const fullTitle = title === 'Claudia Valsells' ? title : `${title} — Claudia Valsells`;
   return raw(`<!doctype html>
@@ -292,64 +326,7 @@ ${description ? `<meta name="description" content="${description.replace(/"/g, '
 <link rel="preload" href="${withBase('/fonts/Switzer-Variable.woff2')}" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="${withBase('/site.css')}" />
 <link rel="modulepreload" href="${withBase('/js/index.js')}" />
-<script>document.documentElement.classList.add('js');
-// Arriving at What's Color by its link, the page is laid out at the top and
-// moved down to the written sentence by script — so it is kept covered until
-// it has been, and no frame is ever painted in the wrong place. The script
-// uncovers it as soon as it lands (client/write.ts); this timer is the net if
-// it never runs.
-// Only where that landing is made at all — the same tests client/write.ts
-// makes — so a browser that keeps the plain anchor jump never waits for it.
-try { var nav = performance.getEntriesByType('navigation')[0];
-  if (location.hash === '#whats-color' && (!nav || nav.type === 'navigate')
-    && !matchMedia('(prefers-reduced-motion: reduce)').matches
-    && !matchMedia('(max-width: 899px)').matches) {
-    document.documentElement.classList.add('wc-arriving', 'wc-swatch-drop');
-    setTimeout(function () { document.documentElement.classList.remove('wc-arriving') }, 1500);
-    setTimeout(function () { document.documentElement.classList.remove('wc-swatch-drop') }, 700);
-  } } catch (e) {}
-// Trying the ways the start page's film can go and come back (THE WAY OUT
-// OF THE START PAGE, 00-base.css): ?film=wipe, fade, cut or blur holds for
-// the visit; ?film=off goes back to the stylesheet's own setting.
-try { var film = new URLSearchParams(location.search).get('film');
-  if (film === 'off') sessionStorage.removeItem('cv-film');
-  else if (film && /^(fade|cut|wipe|blur)$/.test(film)) sessionStorage.setItem('cv-film', film);
-  film = sessionStorage.getItem('cv-film');
-  if (film) document.documentElement.style.setProperty('--start-film-style', 'film-' + film); } catch (e) {}
-// The page's colour, drawn here rather than by client/current.ts so that the
-// block in the bar is the right colour on the first frame. Drawn by the scripts,
-// it was painted once in the list's first colour and then changed, on every
-// page. client/hues.ts carries on from this one.
-(function () { try { var root = document.documentElement, hues = Number(root.style.getPropertyValue('--hues')) || 0;
-  if (!hues) return; var hue = Math.floor(Math.random() * hues);
-  // Arriving from the start page by its bar, which has already dropped this
-  // page's colour onto its name (client/transitions.ts): the same colour, and
-  // standing there from the first frame rather than dropping again. Or
-  // arriving back at the start page by the name, the bar already come down
-  // to the film's middle line: the film fades in under it, slowly.
-  // The timings for both are THE WAY OUT OF THE START PAGE, 00-base.css.
-  try { var held = JSON.parse(sessionStorage.getItem('cv-held') || 'null'); sessionStorage.removeItem('cv-held');
-    if (held && held.path === location.pathname && Date.now() - held.at < 5000) {
-      if (held.start) root.classList.add('arrive-start');
-      else if (held.hue >= 0 && held.hue < hues) { hue = held.hue; root.classList.add('arrive-held'); } } } catch (e) {}
-  root.dataset.hue = String(hue);
-  root.style.setProperty('--bar-swatch', 'var(--neg-' + hue + ')');
-  root.style.setProperty('--wc-ask', 'var(--hue-' + hue + ')'); } catch (e) {} })();
-// On a phone the start page opens on the menu, where the film is on a desktop
-// (client/menu.ts): decided here, before the first paint, so the page under
-// it is never seen.
-try { if (document.documentElement.hasAttribute('data-start')
-  && matchMedia('(max-width: 899px)').matches
-  && (location.hash === '' || location.hash === '#about'))
-  document.documentElement.classList.add('is-start') } catch (e) {}
-// From here on the stylesheet keeps the phone's menu out of sight, and only
-// client/menu.ts can raise it. If that has not said it is there after four
-// seconds — the scripts never arrived, or one of them fell over on the way —
-// the page goes back to what it is without them: the menu at its head, in
-// the flow, and no start screen held over it. Scripts that arrive later than
-// that take the page back (client/index.ts).
-setTimeout(function () { var root = document.documentElement;
-  if (!root.hasAttribute('data-menu')) root.classList.remove('js', 'is-start') }, 4000);</script>
+<script>${HEAD_SCRIPT}</script>
 </head>
 <body${bodyClass ? ' class="' + bodyClass + '"' : ''}>
 <div class="page-veil" aria-hidden="true"></div>

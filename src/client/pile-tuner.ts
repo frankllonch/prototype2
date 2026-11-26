@@ -1,5 +1,5 @@
 import { phone, reduceMotion } from './env.ts';
-import { button, el, flag, num, pick, row, section, type Field } from './hover-tuner.ts';
+import { button, el, flag, num, pick, row, section, type Field } from './tuner-ui.ts';
 import { ON, SITE, STORE, gridCss, pile, scrollSpan, type Values } from './pile.ts';
 
 /**

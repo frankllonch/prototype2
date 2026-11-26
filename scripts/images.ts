@@ -119,12 +119,8 @@ async function main() {
       while (cursor < images.length) {
         const image = images[cursor++]!;
         const original = await download(image);
-        // A crop that passed review replaces the photograph everywhere the image is shown.
-        /*
-         * A cut-out has no background and must keep it that way, so it is held
-         * as PNG; AVIF and WebP carry the transparency through and only the JPEG
-         * fallback has to be given a ground.
-         */
+        // An accepted crop replaces the photograph. Cut-outs stay PNG to keep their transparency;
+        // only the JPEG fallback is given a ground.
         const cutout = path.join(CROPS, `${image.id}.png`);
         const flat = path.join(CROPS, `${image.id}.jpg`);
         const crop = existsSync(cutout) ? cutout : flat;

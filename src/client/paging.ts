@@ -1,4 +1,4 @@
-import { isPlainClick, phone, reduceMotion } from './env.ts';
+import { isPlainClick, phone, reduceMotion, targetElement } from './env.ts';
 import { OUT_MS } from './transitions.ts';
 
 /** Leaving a painting the way you came: a step back, not a fresh gallery. */
@@ -92,7 +92,7 @@ function touchPaging(prev: HTMLAnchorElement | null, next: HTMLAnchorElement | n
     if (!phone.matches || !close || !isPlainClick(event)) return;
     // The painting, its small pictures and the words are not the ground: a touch there is looking,
     // choosing a picture or selecting text.
-    const target = event.target as Element | null;
+    const target = targetElement(event);
     if (target?.closest('a, button, .detail-plate, .detail-under, .detail-caption')) return;
     follow(close);
   });

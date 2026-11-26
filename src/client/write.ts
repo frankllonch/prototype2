@@ -131,8 +131,10 @@ function initWords(): void {
     const shown = Math.min(1, Math.max(0, (at - NAMES_FROM) / (NAMES_TO - NAMES_FROM)));
     rise.style.opacity = held && shown < 1 ? String(shown) : '';
   };
-  window.addEventListener('scroll', update, { passive: true });
-  window.addEventListener('resize', update);
+  let queued = 0;
+  const schedule = () => { queued ||= requestAnimationFrame(() => { queued = 0; update(); }); };
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', schedule);
   reduceMotion.addEventListener('change', update);
   update();
 }

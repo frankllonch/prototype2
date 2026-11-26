@@ -1,4 +1,4 @@
-import { phone, reduceMotion } from './env.ts';
+import { phone, reduceMotion, targetElement } from './env.ts';
 import { scrollSpan } from './pile.ts';
 import { glide } from './glide.ts';
 
@@ -115,7 +115,7 @@ export function initYears(): void {
   /* Clicking away drops the year — the most natural way out. */
   document.addEventListener('pointerdown', (event) => {
     if (!focused) return;
-    const target = event.target as Element | null;
+    const target = targetElement(event);
     if (target?.closest('.tile') || target?.closest('[data-years]')) return;
     focus('');
   });
@@ -196,14 +196,17 @@ export function initYears(): void {
       }, { passive: true });
     }
 
+    // At most every 60ms while scrolling, and once more when it stops (Safari has no `scrollend`).
     let last = 0;
+    let trailing = 0;
     window.addEventListener('scroll', () => {
+      window.clearTimeout(trailing);
+      trailing = window.setTimeout(update, 120);
       const now = performance.now();
       if (now - last < 60) return;
       last = now;
       update();
     }, { passive: true });
-    window.addEventListener('scrollend', update);
     /*
      * Scrolling back up gathers the paintings into the pile again, and a year
      * still marked against a heap is marking nothing.

@@ -1,8 +1,7 @@
-import { phone } from './env.ts';
+import { graphemes, phone } from './env.ts';
 
 /** Hover text roll, after the links on landonorris.com. */
 export function initTextRoll(): void {
-  const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' });
   /*
    * The static site writes the letters into the page already
    * (components/layout.ts), both drawings of each word, and the stylesheet picks
@@ -15,7 +14,7 @@ export function initTextRoll(): void {
   const wrap = (into: HTMLElement, text: string) => {
     into.textContent = '';
     let index = 0;
-    for (const { segment } of segmenter.segment(text)) {
+    for (const segment of graphemes(text)) {
       if (!segment.trim()) {
         into.append(segment);
         continue;

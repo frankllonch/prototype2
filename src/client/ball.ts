@@ -1,4 +1,4 @@
-import { finePointer, reduceMotion } from './env.ts';
+import { finePointer, reduceMotion, targetElement } from './env.ts';
 
 /**
  * The site's pointer: a ball, the negative of whatever is under it, that grows a
@@ -91,7 +91,7 @@ export function initBall(): void {
     // Start where the pointer is, or it swoops in from the corner.
     if (!placed) { placed = true; x = targetX; y = targetY; draw(); }
     ball.classList.add('is-on');
-    hover(event.target as Element | null);
+    hover(targetElement(event));
     if (!frame) frame = requestAnimationFrame(tick);
   }, { passive: true });
 

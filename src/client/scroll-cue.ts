@@ -3,7 +3,6 @@ import { glide, topOf } from './glide.ts';
 import { SCROLL_SPAN } from './stack.ts';
 import { WRITE_MS, writtenPoint } from './write.ts';
 
-/** The scroll hint goes once it has been taken. */
 /** The tap down the Colour Chart's run: long enough to watch it type. */
 const CHART_TYPE_MS = 2600;
 

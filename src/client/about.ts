@@ -1,4 +1,4 @@
-import { reduceMotion, returnFocus } from './env.ts';
+import { reduceMotion, returnFocus, targetElement } from './env.ts';
 
 /** About, told in four parts as you scroll down it. */
 
@@ -311,14 +311,9 @@ const REEL_DRAG_PX = 6;
 const REEL_FLING_MS = 240;
 
 /**
- * The reel of photographs as a loop: the photographs stand in a row from the
- * left of the measure, and whatever does not fit waits to their right and comes
- * round again after the last.
- */
-/**
- * `root` holds the reel; `bounds` is what it is seen through to its edges, and
- * what says a photograph is up large (`.is-viewing`): About's panel, or the
- * Colour Chart's page.
+ * The reel of photographs as a loop: a row from the left of the measure that
+ * wraps round after the last. `root` holds the reel; `bounds` is the scroller it
+ * is seen through, which also carries `.is-viewing` while a photograph is large.
  */
 export function initReel(root: HTMLElement, bounds: HTMLElement): Loop | null {
   const reel = root.querySelector<HTMLElement>('[data-about-reel]');
@@ -446,7 +441,7 @@ export function initReel(root: HTMLElement, bounds: HTMLElement): Loop | null {
 
   // Tabbed to out of sight: brought in to the left margin.
   track.addEventListener('focusin', (event) => {
-    const el = (event.target as HTMLElement).closest<HTMLElement>('.about-reel-item');
+    const el = targetElement(event)?.closest<HTMLElement>('.about-reel-item');
     if (!looped || !el?.matches(':focus-visible')) return;
     const slot = slots.find((s) => s.el === el);
     if (!slot) return;
@@ -547,8 +542,7 @@ export function initReel(root: HTMLElement, bounds: HTMLElement): Loop | null {
 function keyScroll(about: HTMLElement, event: KeyboardEvent): void {
   if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey) return;
   if (about.classList.contains('is-viewing')) return;
-  const target = event.target as HTMLElement;
-  if (target.closest('input, textarea, select, button, [contenteditable]')) return;
+  if (targetElement(event)?.closest('input, textarea, select, button, [contenteditable]')) return;
   const page = about.clientHeight * 0.85;
   const by: Record<string, number> = {
     PageDown: page, PageUp: -page, ArrowDown: 60, ArrowUp: -60,

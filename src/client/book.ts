@@ -1,4 +1,4 @@
-import { isPlainClick, phone, returnFocus } from './env.ts';
+import { isPlainClick, phone, returnFocus, targetElement } from './env.ts';
 import { keepScroll, stepBack, stepState } from './panels.ts';
 
 /** The photographs of the book open over the page. */
@@ -79,7 +79,7 @@ export function initBook(): void {
   document.addEventListener(
     'click',
     (event) => {
-      const link = (event.target as Element).closest<HTMLAnchorElement>('a.wc-book');
+      const link = targetElement(event)?.closest<HTMLAnchorElement>('a.wc-book');
       if (link && isPlainClick(event)) {
         event.preventDefault();
         open(link);
@@ -89,7 +89,7 @@ export function initBook(): void {
         event.preventDefault();
         // Its two chevrons (beside the view, components/whats-color.ts) turn the book rather than
         // closing it.
-        const turn = (event.target as Element).closest<HTMLElement>('[data-book-step]');
+        const turn = targetElement(event)?.closest<HTMLElement>('[data-book-step]');
         if (turn) {
           event.stopPropagation();
           step(Number(turn.dataset.bookStep));

@@ -1,4 +1,4 @@
-import { reduceMotion } from './env.ts';
+import { reduceMotion, targetElement } from './env.ts';
 
 /* HOW FAST THE SITE SCROLLS ITSELF — the numbers to change are here. */
 const BASE_MS = 1050;
@@ -90,7 +90,7 @@ export function initGlide(): void {
   document.addEventListener('click', (event) => {
     if (event.defaultPrevented || event.button !== 0) return;
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-    const link = (event.target as Element).closest<HTMLAnchorElement>('a[href*="#"]');
+    const link = targetElement(event)?.closest<HTMLAnchorElement>('a[href*="#"]');
     if (!link || link.target) return;
     const url = new URL(link.href, location.href);
     if (url.pathname !== location.pathname || url.search !== location.search || !url.hash) return;

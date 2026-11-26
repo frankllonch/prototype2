@@ -1,4 +1,4 @@
-import { isPlainClick, phone, reduceMotion } from './env.ts';
+import { cssMs, isPlainClick, phone, reduceMotion, targetElement } from './env.ts';
 import { typeIn } from './write.ts';
 import { replayRise } from './rise.ts';
 
@@ -57,10 +57,7 @@ export function initMenu(): void {
   const leave = (done: () => void) => {
     window.clearTimeout(closing);
     const style = getComputedStyle(root);
-    const ms = (name: string) => {
-      const v = style.getPropertyValue(name).trim();
-      return (Number.parseFloat(v) || 0) * (v.endsWith('ms') ? 1 : 1000);
-    };
+    const ms = (name: string) => cssMs(style, name);
     // Until the last section has gone and the last bar has turned back.
     const total = reduceMotion.matches ? 0 : Math.max(
       ms('--cascade-duration') + 5 * ms('--cascade-step'),
@@ -122,7 +119,7 @@ export function initMenu(): void {
 
   bar.addEventListener('click', (event) => {
     if (!phone.matches || !isPlainClick(event)) return;
-    const link = (event.target as Element | null)?.closest<HTMLAnchorElement>('a[href]');
+    const link = targetElement(event)?.closest<HTMLAnchorElement>('a[href]');
     if (!link) return;
     // About: client/panels.ts raises it, on this same click.
     if (link.dataset.panelOpen && document.getElementById(link.dataset.panelOpen)) {

@@ -2,8 +2,7 @@ import { isPlainClick, phone, reduceMotion } from './env.ts';
 import { glide } from './glide.ts';
 import { writtenPoint } from './write.ts';
 
-/** Switches the bar between its two resting states over the opening film. */
-/** Starts the film, and copes with being told no. */
+/** Starts the film, and copes with the browser refusing autoplay. */
 function startFilm(): void {
   const video = document.querySelector<HTMLVideoElement>('.wc-film-video');
   // Withheld entirely for reduced motion, where the stylesheet hides it and the poster is the

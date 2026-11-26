@@ -1,9 +1,5 @@
-import { isPlainClick, reduceMotion, returnFocus } from './env.ts';
+import { isPlainClick, reduceMotion, returnFocus, targetElement } from './env.ts';
 
-/**
- * A painting opens over the contact sheet: the grid stays put, blurred, and you
- * move between works without a page load.
- */
 /** Must match `.lightbox-plate`'s transition in the stylesheet. */
 const FADE = 420;
 const SWIPE = 48;
@@ -101,7 +97,7 @@ export function initLightbox(): void {
   };
 
   galleryEl.addEventListener('click', (event) => {
-    const tile = (event.target as Element).closest<HTMLElement>('.tile');
+    const tile = targetElement(event)?.closest<HTMLElement>('.tile');
     if (!tile || !isPlainClick(event)) return;
     event.preventDefault();
     open(tile);

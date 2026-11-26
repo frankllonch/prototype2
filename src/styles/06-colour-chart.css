@@ -344,7 +344,7 @@
   transition-delay: 0s;
 }
 
-@supports not (backdrop-filter: blur(1px)) {
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .inq { background: color-mix(in srgb, var(--paper) 97%, transparent); }
 }
 

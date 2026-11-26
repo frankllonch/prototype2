@@ -1,5 +1,5 @@
 /** Brings the exhibition photographs in from Claudia's archive. */
-import { readFile, writeFile, readdir, mkdir, copyFile, stat } from 'node:fs/promises';
+import { readFile, writeFile, readdir, mkdir, copyFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import path from 'node:path';

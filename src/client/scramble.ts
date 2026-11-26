@@ -1,4 +1,4 @@
-import { phone, reduceMotion } from './env.ts';
+import { graphemes, phone, reduceMotion } from './env.ts';
 
 /**
  * The other hover: the letters under the pointer churn, and the rest of the word
@@ -21,7 +21,6 @@ export function initScramble(): void {
   // Not on a phone, for the roll's reasons (client/text-roll.ts): nothing hovers there, and a
   // letter boxed on its own stops kerning.
   if (phone.matches) return;
-  const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' });
 
   for (const root of document.querySelectorAll<HTMLElement>('[data-roll]')) {
     // The build writes the boxes into the page already (components/layout.ts), so the bar's first
@@ -36,7 +35,7 @@ export function initScramble(): void {
     root.textContent = '';
 
     const cells: HTMLElement[] = [];
-    for (const { segment } of segmenter.segment(text)) {
+    for (const segment of graphemes(text)) {
       // Spaces are left as themselves: a gap that churns reads as a mistake.
       if (!segment.trim()) {
         root.append(segment);
@@ -136,10 +135,6 @@ function wire(root: HTMLElement, cells: readonly HTMLElement[]): void {
   let pointer = 0;
   let centres: number[] = [];
 
-  // The hover tuner (?tune, client/hover-tuner.ts) writes the bar's words itself while it is on;
-  // this stands aside for it.
-  const tuning = () => 'tune' in document.documentElement.dataset;
-
   /*
    * Whether anything still asks for the churn: the pointer on the word, or a
    * keyboard's focus on it.
@@ -157,7 +152,6 @@ function wire(root: HTMLElement, cells: readonly HTMLElement[]): void {
   const settle = () => {
     if (frame) cancelAnimationFrame(frame);
     frame = 0;
-    if (tuning()) return;
     for (const set of boxes(root, cells.length)) for (const cell of set) write(cell, cell.dataset.ch ?? '');
   };
 
@@ -172,7 +166,7 @@ function wire(root: HTMLElement, cells: readonly HTMLElement[]): void {
   const run = () => {
     // Nor on a page that loaded wide and is below 900px now: the boxes are still in the words
     // there (09-phone.css lets them flow as plain text).
-    if (reduceMotion.matches || phone.matches || tuning()) return;
+    if (reduceMotion.matches || phone.matches) return;
     if (frame) return;
     let piece = -1;
 
@@ -210,7 +204,7 @@ function wire(root: HTMLElement, cells: readonly HTMLElement[]): void {
   root.addEventListener('pointerdown', () => {
     pressed = true;
     // The word as itself for the press, in every copy of it.
-    if (!tuning()) for (const set of boxes(root, cells.length)) for (const cell of set) write(cell, cell.dataset.ch ?? '');
+    for (const set of boxes(root, cells.length)) for (const cell of set) write(cell, cell.dataset.ch ?? '');
   });
   const release = () => {
     if (!pressed) return;

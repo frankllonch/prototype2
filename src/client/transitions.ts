@@ -1,4 +1,4 @@
-import { isPlainClick, phone, reduceMotion } from './env.ts';
+import { cssMs, isPlainClick, phone, reduceMotion, targetElement } from './env.ts';
 import { nextHue } from './hues.ts';
 import { replayRise, rises } from './rise.ts';
 
@@ -76,7 +76,7 @@ export function initTransitions(): void {
     // preventDefault by the time this reaches the document, and is not a navigation at all.
     if (event.defaultPrevented || !isPlainClick(event)) return;
 
-    const link = (event.target as Element | null)?.closest<HTMLAnchorElement>('a[href]');
+    const link = targetElement(event)?.closest<HTMLAnchorElement>('a[href]');
     if (!link || link.hasAttribute('download') || (link.target && link.target !== '_self')) return;
 
     const url = new URL(link.href, location.href);
@@ -158,11 +158,7 @@ function choose(link: HTMLAnchorElement, url: URL): number {
 /** The sum of the stylesheet's beats named, in milliseconds. */
 function beats(...names: string[]): number {
   const style = getComputedStyle(document.documentElement);
-  const ms = (name: string) => {
-    const v = style.getPropertyValue(name).trim();
-    return (Number.parseFloat(v) || 0) * (v.endsWith('ms') ? 1 : 1000);
-  };
-  return names.reduce((total, name) => total + ms(name), 0);
+  return names.reduce((total, name) => total + cssMs(style, name), 0);
 }
 
 /** And back: from any other page to the start page by the name at the top left. */

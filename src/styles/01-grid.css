@@ -206,6 +206,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
   --caption-beside: 1;
 
   position: relative;
+  height: 100vh;
   height: 100dvh;
   overflow: hidden;
   display: grid;

@@ -1,4 +1,4 @@
-import { phone } from './env.ts';
+import { phone, targetElement } from './env.ts';
 
 /** The sheet holds still and only its text moves (`components/sheet.ts`). */
 export function initSheets(): void {
@@ -36,7 +36,7 @@ export function initSheets(): void {
     document.addEventListener('keydown', (event) => {
       if (!panel.classList.contains('is-open')) return;
       if (event.metaKey || event.ctrlKey || event.altKey) return;
-      const target = event.target as HTMLElement | null;
+      const target = targetElement(event);
       if (target && !phone.matches && text.contains(target)) return;
       if (target?.closest('input, textarea, select, [contenteditable]')) return;
       // Space on a button presses it; on a link — Close, which has the focus when the sheet opens

@@ -135,8 +135,8 @@ description, canonical, the tags search engines and link previews read, the
 preloads — reported apart from the body. A page that differs means a PHP
 component has not been brought along with its TypeScript one.
 
-Three things follow on their own with `wp:assets`: the list of client modules
-the theme preloads (read off `src/client/index.ts`), where everything
+Three things follow on their own with `wp:assets`: the client bundle
+(`assets/js/index.js`, built by `scripts/assets.ts` exactly as the static site's), where everything
 sits on What's Color's three sheets (`src/content/whats-color-sheet.ts`,
 written to `assets/whats-color-sheets.json`), and the one line break the
 phone's commissioned list sets by design (`BREAK_AFTER` in

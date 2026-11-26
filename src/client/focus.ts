@@ -1,4 +1,4 @@
-import { isPlainClick, reduceMotion } from './env.ts';
+import { isPlainClick, reduceMotion, targetElement } from './env.ts';
 import { glide, topOf } from './glide.ts';
 import { ABANDONED } from './transitions.ts';
 
@@ -29,7 +29,7 @@ function sheetFocus(): void {
 
   document.addEventListener('click', (event) => {
     // A name in the roster, or a bar of the colour chart at the foot.
-    const name = (event.target as Element).closest<HTMLAnchorElement>(
+    const name = targetElement(event)?.closest<HTMLAnchorElement>(
       'a.wc-name[href^="#"], a.wc-bar[href^="#"]',
     );
     if (name) {
@@ -37,7 +37,7 @@ function sheetFocus(): void {
     }
     // The quote itself is a thing to choose, not only its name in the roster: clicking an entry
     // brings it forward the same way.
-    const cell = (event.target as Element).closest<HTMLElement>('.wc-cell');
+    const cell = targetElement(event)?.closest<HTMLElement>('.wc-cell');
     if (cell && cell.id) {
       focus(cell.id);
       return;
@@ -91,7 +91,7 @@ function openingFocus(): void {
 
   document.addEventListener('click', (event) => {
     if (!isPlainClick(event)) return;
-    const name = (event.target as Element).closest<HTMLAnchorElement>(
+    const name = targetElement(event)?.closest<HTMLAnchorElement>(
       'a.wc-name, a.wc-intro, .wc-text-head a',
     );
     if (!name || !page.contains(name)) return;

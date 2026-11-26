@@ -1,3 +1,4 @@
+import { targetElement } from './env.ts';
 /** Turning the pictures in a detail panel, and giving either column the screen. */
 import { morphSheet } from './sheet-morph.ts';
 
@@ -71,7 +72,7 @@ export function initFigures(): void {
     document.addEventListener('keydown', (event) => {
       if (!panel.classList.contains('is-open')) return;
       if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
-      const target = event.target as HTMLElement | null;
+      const target = targetElement(event);
       if (target?.closest('input, textarea, select, [contenteditable]')) return;
       const step = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
       if (!step || figures.length < 2) return;

@@ -1,4 +1,4 @@
-import { html, join, raw, type Html } from './html.ts';
+import { html, join, type Html } from './html.ts';
 import { responsiveImage } from './image.ts';
 import { stepChevron } from './scroll-cue.ts';
 import { wide } from './sheet.ts';

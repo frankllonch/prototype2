@@ -15,6 +15,25 @@ export const scrollWrites = (upright: MediaQueryList = portrait): boolean =>
   !reduceMotion.matches &&
   (!phone.matches || upright.matches);
 
+/** The letters of a word as a reader counts them; by code point where Intl.Segmenter is missing. */
+export function graphemes(text: string): string[] {
+  if (typeof Intl.Segmenter !== 'function') return Array.from(text);
+  return Array.from(new Intl.Segmenter(undefined, { granularity: 'grapheme' }).segment(text), (s) => s.segment);
+}
+
+/** A custom property holding a CSS time, in milliseconds. */
+export function cssMs(style: CSSStyleDeclaration, name: string): number {
+  const v = style.getPropertyValue(name).trim();
+  return (Number.parseFloat(v) || 0) * (v.endsWith('ms') ? 1 : 1000);
+}
+
+/** The element an event happened on: null for the window or document, the parent for a text node. */
+export function targetElement(event: Event): Element | null {
+  const target = event.target;
+  if (target instanceof Element) return target;
+  return target instanceof Node ? target.parentElement : null;
+}
+
 /** True for a plain left click — modified clicks mean "open this elsewhere". */
 export const isPlainClick = (event: MouseEvent): boolean =>
   !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey && event.button === 0;

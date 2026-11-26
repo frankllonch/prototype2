@@ -1,7 +1,6 @@
 /**
- * What each exhibition's detail says at its head, as the designer's sheets for
- * them set it, and the texts Frank sent with them for the shows that had none
- * ("text sala expos que falten").
+ * What each exhibition's detail says at its head, from the designer's sheets,
+ * and the wall texts for the shows that had none.
  */
 export interface ShowSheet {
   readonly title?: string;

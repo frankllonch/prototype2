@@ -104,20 +104,11 @@ function cv_asset( string $path ): string {
 	return CV_THEME_URI . '/assets/' . $path . '?v=' . rawurlencode( cv_asset_version() );
 }
 
-/** The client modules, in boot order, as src/components/layout.ts lists them. */
+/** The scripts header.php preloads: the entry, as `npm run wp:assets` lists it in modules.json. */
 function cv_modules(): array {
-	// The list the asset build reads off the entry's own imports; the one below only stands in
-	// for an assets folder built before it wrote one.
 	$listed = json_decode( (string) @file_get_contents( CV_THEME_DIR . '/assets/modules.json' ), true );
-	if ( is_array( $listed ) && $listed ) {
-		return array_map( fn( $m ) => cv_asset( 'js/' . sanitize_file_name( $m ) . '.js' ), $listed );
-	}
-	$names = [
-		'env', 'text-roll', 'transitions', 'controls', 'stack', 'years', 'hover-list', 'panels',
-		'figures', 'lightbox', 'cursor', 'film', 'tilt', 'paging', 'views',
-		'scroll-cue', 'inquiries', 'book', 'focus', 'hues', 'index',
-	];
-	return array_map( fn( $m ) => cv_asset( "js/$m.js" ), $names );
+	$names  = is_array( $listed ) && $listed ? $listed : [ 'index' ];
+	return array_map( fn( $m ) => cv_asset( 'js/' . sanitize_file_name( $m ) . '.js' ), $names );
 }
 
 /* ----------------------------------------------------------- the page */

@@ -1,6 +1,6 @@
-/* ------------------------------------------------------------ hover tuner */
+/* ---------------------------------------------------------- tuner panels */
 
-/* The panel for trying the bar's hover live (client/hover-tuner.ts). */
+/* The development tuners' panel (client/tuner-ui.ts). */
 .tuner {
   /* Clear of the bar, which it is there to watch. */
   position: fixed; right: 16px; bottom: 16px; z-index: 100000;
@@ -46,7 +46,6 @@
 /* ------------------------------------------------------------- pile tuner */
 
 /* The gallery opening's panel (client/pile-tuner.ts, ?pile). */
-html[data-tune] .tuner-pile { right: 372px; }
 .tuner-pile .tuner-effects { grid-template-columns: repeat(4, 1fr); }
 .tuner-spread {
   margin: 6px 0 8px; padding: 6px 8px 8px;

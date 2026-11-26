@@ -50,26 +50,6 @@ export function whatsColorNames(
     )}
   </p>`;
 }
-
-/** The three introductions, across the foot of the view. */
-export function whatsColorIntros(editions: readonly Edition[]): Html {
-  const forwards = [...editions].reverse();
-  return html`<div class="wc-intros">
-    ${join(
-      forwards.map(
-        (edition) => html`<a
-          class="wc-intro"
-          href="${withBase(`/whats-color/${edition.numeral.toLowerCase()}/`)}"
-          data-edition="${edition.numeral}"
-        >
-          <h2 class="wc-intro-title">What&rsquo;s Color? <sup>(${edition.numeral})</sup></h2>
-          <div class="wc-intro-text">${raw(edition.intro)}</div>
-        </a>`,
-      ),
-    )}
-  </div>`;
-}
-
 /** The opening view entire. */
 export function whatsColorOpening(editions: readonly Edition[]): Html {
   return html`<div class="wc" id="whats-color">
@@ -238,7 +218,7 @@ const colourLine = (p: Participant): string => [p.code, p.colourName].filter(Boo
  * ranged right beside it, the colour their answer was given underneath that, and
  * the answer itself below.
  */
-function answer(p: Participant, index: number): Html {
+function answer(p: Participant): Html {
   const swatch = swatchFor(p);
   return html`<article class="wc-answer" id="${p.id ?? ''}">
     <h2 class="wc-answer-name">${p.name}${p.alias ? html`<span class="wc-answer-alias">${p.alias}</span>` : ''}</h2>
@@ -328,7 +308,7 @@ export function whatsColorFilm(): Html {
     >
       <source src="${withBase('/video/whats-color.mp4')}" type="video/mp4" media="(min-width: 900px)" />
     </video>
-    <script>(function (v) { if (!matchMedia('(max-width: 899px)').matches) v.poster = v.dataset.poster })(document.currentScript.previousElementSibling)</script>
+    <script>(function (v) { if (!matchMedia('(max-width: 899px)').matches) v.poster = v.dataset.poster; if (matchMedia('(prefers-reduced-motion: reduce)').matches) { v.removeAttribute('autoplay'); v.preload = 'none' } })(document.currentScript.previousElementSibling)</script>
     <!--
       Sound on and off, in the film's top left corner (Frank, 2026-11-19): the
       scroll cue's size and weight, and like it the negative of the frame

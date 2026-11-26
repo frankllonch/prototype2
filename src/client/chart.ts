@@ -1,4 +1,4 @@
-import { reduceMotion } from './env.ts';
+import { reduceMotion, targetElement } from './env.ts';
 import { initReel, type Loop } from './about.ts';
 
 /** The Colour Chart's opening. */
@@ -239,7 +239,7 @@ function initChartReel(chart: HTMLElement): { still(): void; go(run: () => ReelR
   el.addEventListener(
     'click',
     (event) => {
-      const item = (event.target as HTMLElement).closest<HTMLElement>('[data-chart-photo]');
+      const item = targetElement(event)?.closest<HTMLElement>('[data-chart-photo]');
       if (item && panel) panel.dataset.figureStart = item.dataset.chartPhoto ?? '0';
     },
     { capture: true },

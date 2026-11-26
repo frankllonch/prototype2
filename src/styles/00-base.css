@@ -190,7 +190,7 @@ html.is-revealed .grid[data-stack] { animation-name: none; }
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 body {
   margin: 0;
   background: var(--paper);
@@ -442,8 +442,7 @@ html.is-scrolled .scroll-cue { opacity: 0; pointer-events: none; visibility: hid
   padding-bottom: 0.18em; margin-bottom: -0.18em; }
 .roll::before, .roll::after {
   content: attr(data-ch); position: absolute; left: 0; top: 0; color: var(--roll-color, var(--ink));
-  /* Frank's settings from the hover tuner: a slow turn that overshoots and
-     settles ("back out"), a quick fade, 85ms between letters. */
+  /* A slow turn that overshoots and settles, a quick fade, 85ms between letters. */
   transition: transform 810ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
   /* Each character a step behind the one before it, going and coming back:
      staggered, the word turns over. */

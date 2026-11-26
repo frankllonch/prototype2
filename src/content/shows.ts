@@ -1,31 +1,4 @@
-/** The two editorial decisions about the exhibitions index. */
 
-/** Shows belonging to the What's Color? */
-export const WHATS_COLOR_SHOWS = new Set([
-  'what-s-color-i',
-  'what-s-color-ii-for-architects-and-designers',
-]);
-
-/** How many comma-separated clauses of a venue the index shows. */
-const VENUE_CLAUSES: Readonly<Record<string, number>> = {
-  'mira-m-no-deixis-de-mirar-me': 2,
-};
-
-/**
- * The venue as the index shows it: the whole thing, unless this show is one of
- * the few that is cut, and then only if the cut really is a prefix of it.
- */
-export function venueFor(slug: string, venue: string | undefined): string | undefined {
-  if (!venue) return venue;
-  const keep = VENUE_CLAUSES[slug];
-  if (!keep) return venue;
-
-  const clauses = venue.split(',');
-  if (clauses.length <= keep) return venue;
-
-  const cut = clauses.slice(0, keep).join(',').trim();
-  return venue.startsWith(cut) ? cut : venue;
-}
 
 /** Breaks the opening paragraph after a title and its translation. */
 export function splitOpening(html: string): string {

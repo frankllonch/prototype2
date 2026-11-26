@@ -2,7 +2,7 @@ import { html, join, raw, type Html } from '../components/html.ts';
 import { layout } from '../components/layout.ts';
 import { grid, gridControls, type GridItem } from '../components/gallery.ts';
 import { responsiveImage } from '../components/image.ts';
-import { panels, panelShell, type PanelItem } from '../components/panels.ts';
+import { panels, panelShell } from '../components/panels.ts';
 import { exhibitionList } from '../components/exhibitions.ts';
 import { SHOWS, placeOf } from '../content/exhibitions-list.ts';
 import { setThanks, splitOpening } from '../content/shows.ts';
@@ -15,10 +15,10 @@ import { groupCommissioned, type GroupedProject } from '../content/groups.ts';
 import { yearRail, sideInquiries } from '../components/years.ts';
 import { whatsColorOpening, whatsColorEdition, whatsColorFilm } from '../components/whats-color.ts';
 import { chartPhotographs, colourChart, inquiries } from '../components/colour-chart.ts';
-import { EDITIONS, allParticipants, type Edition } from '../content/whats-color.ts';
+import { EDITIONS, type Edition } from '../content/whats-color.ts';
 import { isPlate, showPhotos, type YearColour } from '../content/load.ts';
 import { describeImage } from '../content/describe.ts';
-import { displayTitle, workTitle } from '../content/title.ts';
+import { workTitle } from '../content/title.ts';
 import { captionFacts, collectionOf, referenceOf, sizeOf, techniqueOf } from '../content/caption.ts';
 import { withBase } from '../content/paths.ts';
 import { REEL_I, REEL_II, type Plate } from '../content/whats-color-sheet.ts';
@@ -68,53 +68,7 @@ export function artworkPage(works: readonly Project[], years: readonly YearColou
   });
 }
 
-/** Exhibitions and collaborations: a grid of projects, each tile opening a panel. */
-export function panelGridPage(opts: {
-  readonly title: string;
-  readonly path: string;
-  readonly kind: string;
-  readonly items: readonly PanelItem[];
-  readonly composition: 'feed' | 'justified';
-}): Html {
-  const gridItems: GridItem[] = opts.items
-    .filter((i) => i.images[0])
-    .map((i) => ({ slug: i.slug, title: i.title, image: i.images[0]!, year: i.year }));
-
-  return layout({
-    title: opts.title,
-    path: opts.path,
-    overlays: panels(opts.kind, opts.items),
-    children: html`
-      <h1 class="sr-only">${opts.title}</h1>
-      ${grid({
-        items: gridItems,
-        basePath: opts.path.replace(/\/$/, ''),
-        panels: opts.kind,
-        feed: opts.composition === 'feed',
-        justified: opts.composition === 'justified',
-        eagerCount: gridItems.length,
-      })}
-    `,
-  });
-}
-
-export const exhibitionItem = (e: Exhibition): PanelItem => ({
-  slug: e.slug,
-  title: e.title,
-  images: e.images,
-  rows: e.rows,
-  ...(e.year !== undefined ? { year: e.year } : {}),
-  ...(e.venue !== undefined ? { venue: e.venue } : {}),
-  ...(e.from !== undefined ? { from: e.from } : {}),
-  ...(e.to !== undefined ? { to: e.to } : {}),
-  ...(e.kind !== undefined ? { kind: e.kind } : {}),
-});
-
-/** The photographs a show's sheet steps through, in order. */
-/**
- * What's Color I and II as shows: the same photographs, in the same order, as
- * the reel under the names on each edition's own page.
- */
+/** A plate as an image, for the What's Color I and II shows, which reuse their editions' reels. */
 const plateImage = (plate: Plate): ProjectImage => ({
   id: plate.name,
   source: `/img/${plate.name}.jpg`,
@@ -149,7 +103,6 @@ export function exhibitionsPage(items: readonly Exhibition[], commissioned: read
   const reels = new Map(SHOWS.flatMap(({ slug }) => (slug ? [[slug, showReel(slug, bySlug.get(slug))] as const] : [])));
   const covers = new Map([...reels].flatMap(([slug, reel]) => (reel[0] ? [[slug, reel[0]] as const] : [])));
 
-  /* Two sheets, as the designer draws two. */
   // A show that was also a commission opens the commissioned work's own sheet, the same one the
   // Commissioned page opens, and leads with its photograph.
   const commissions = new Map(
@@ -168,7 +121,7 @@ export function exhibitionsPage(items: readonly Exhibition[], commissioned: read
     if (!show.slug) return [];
     const derived = bySlug.get(show.slug);
     // The designer's sheet for this show, where there is one: its masthead, the photograph it
-    // opens on, and the text Frank sent for it.
+    // opens on, and its text.
     const design = SHOW_SHEETS[show.slug] ?? {};
     const images = reels.get(show.slug) ?? [];
     if (!images.length) return [];
@@ -277,8 +230,6 @@ export function colourChartPage(): Html {
   });
 }
 
-/** A painting on its own page — what a shared link opens. */
-/** Every picture there is of a work, the cut-out first. */
 /** The first year whose cut-outs lean towards the pointer; earlier ones lie flat. */
 const TILT_FROM = 2021;
 

@@ -1,5 +1,5 @@
 /** Writes everything the WordPress import needs into wordpress/import/. */
-import { copyFile, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { copyFile, mkdir, rm, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
@@ -9,11 +9,11 @@ import { groupCommissioned } from '../src/content/groups.ts';
 import { SHEETS } from '../src/content/commissioned-sheets.ts';
 import { SHOWS } from '../src/content/exhibitions-list.ts';
 import { EDITIONS_ALL, LEAD, finalColourFor } from '../src/content/whats-color.ts';
-import { ABOUT_BLOCKS, ABOUT_CARD, ABOUT_COLLECTIONS, ABOUT_COPYRIGHT, ABOUT_SHOWS } from '../src/content/about.ts';
+import { ABOUT_BLOCKS, ABOUT_CARD, ABOUT_COLLECTIONS, ABOUT_COPYRIGHT } from '../src/content/about.ts';
 import { BANDS, photographs, price, sections, statement } from '../src/content/colour-chart.ts';
 import { displayTitle } from '../src/content/title.ts';
 import { describeImage } from '../src/content/describe.ts';
-import type { Project, ProjectImage, Row } from '../src/content/types.ts';
+import type { ProjectImage, Row } from '../src/content/types.ts';
 import { localFile, sourceExt } from './sources.ts';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -152,7 +152,6 @@ const tidy = (html: string) =>
 
 const BLOCK_TAGS = new Set(['p', 'div', 'section', 'article', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'blockquote', 'figure', 'table']);
 
-/** Editor blocks out of a column of the source's HTML. */
 /** What makes an element a film or an embed rather than text. */
 const EMBED = /<(video|audio|iframe|object|embed)\b/i;
 
@@ -311,11 +310,6 @@ async function exportCommissioned() {
 const normalise = (s: string) =>
   s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
 
-/**
- * Which column of the About record a show belongs in — solo, group or fair —
- * read off the designer's record where the show is in it, and off the show's own
- * wording where it is not.
- */
 /** The sheet's four groups in the vocabulary the export already uses. */
 const KIND_OF_GROUP: Readonly<Record<string, 'solo' | 'group' | 'fair' | ''>> = {
   'Solo shows': 'solo',
@@ -323,39 +317,6 @@ const KIND_OF_GROUP: Readonly<Record<string, 'solo' | 'group' | 'fair' | ''>> = 
   'Art fairs': 'fair',
   'Private collections': '',
 };
-
-function kindOf(title: string, venue: string | undefined, year: number): 'solo' | 'group' | 'fair' | '' {
-  const mine = normalise(title);
-  const key = mine.slice(0, 18);
-  const kind = (heading: string) =>
-    heading.startsWith('Solo') ? 'solo' : heading.startsWith('Group') ? 'group' : 'fair';
-  const within = (show: { when: string }, years: number) => {
-    const theirs = Number(show.when.slice(0, 4));
-    return theirs > 0 && Math.abs(theirs - year) <= years;
-  };
-  // The same title first, within a few years: the two lists disagree on a year here and there —
-  // Transitions is 2023 on one and 2025 on the other.
-  for (const column of ABOUT_SHOWS) {
-    for (const show of column.shows) {
-      if (within(show, 3) && normalise(show.title) === mine) return kind(column.heading);
-    }
-  }
-  // A fair by its wording next, before a title that merely begins the same way can claim it: the
-  // 2018 Art Élysées fair starts like the 2019 solo show.
-  const text = `${title} ${venue ?? ''}`;
-  if (/\b(fair|feria|zona maco|almoneda|estampa|antica|scope|eurantica|art paris|art madrid|art elys|art week|aff|just lx)\b/i.test(text)) return 'fair';
-  for (const column of ABOUT_SHOWS) {
-    for (const show of column.shows) {
-      const theirs = normalise(show.title);
-      if (within(show, 1) && key && (theirs.startsWith(key) || mine.startsWith(theirs.slice(0, 18)))) {
-        return kind(column.heading);
-      }
-    }
-  }
-  if (/\bgroup\b/i.test(text)) return 'group';
-  if (/\bsolo\b/i.test(text)) return 'solo';
-  return '';
-}
 
 async function exportExhibitions() {
   const out = [];

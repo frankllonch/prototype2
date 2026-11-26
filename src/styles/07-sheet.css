@@ -752,7 +752,7 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
   .panel > .plates .plates-frame { height: auto; }
   .panel > .plates .plates-figure:first-child { margin-top: 0; }
 
-  /* ---- the photographs: one reel, as on the desktop (Frank, 2026-11-15) ----
+  /* ---- the photographs: one reel, as on the desktop ----
 
      Every sheet's photographs are one reel where the first photograph stood:
      one at a time, turned by the arrows under it or a swipe, the count between

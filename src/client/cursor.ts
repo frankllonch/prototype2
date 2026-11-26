@@ -1,4 +1,4 @@
-import { finePointer, phone, reduceMotion } from './env.ts';
+import { finePointer, phone, reduceMotion, targetElement } from './env.ts';
 
 /**
  * Over a painting the pointer *becomes* its name — title and year, read from the
@@ -65,7 +65,7 @@ export function initCursor(): void {
     targetY = event.clientY;
     // Start where the pointer already is, or the label swoops in from 0,0.
     if (!placed) { placed = true; x = targetX; y = targetY; }
-    refresh(event.target as Element | null);
+    refresh(targetElement(event));
   }, { passive: true });
 
   // The page can move under a pointer that has not: a scroll carries a tile away, or gathers the
@@ -95,8 +95,6 @@ export function initCursor(): void {
   };
   phone.addEventListener('change', follow);
 
-  document.addEventListener('pointerleave', () => {
-    active = false;
-    cursor.classList.remove('is-visible');
-  });
+  // The pointer leaving the window; `pointerleave` on the document fires in Chromium only.
+  root.addEventListener('mouseleave', clear);
 }

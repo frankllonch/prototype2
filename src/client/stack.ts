@@ -1,4 +1,4 @@
-import { phone, reduceMotion } from './env.ts';
+import { phone, reduceMotion, targetElement } from './env.ts';
 import { glide } from './glide.ts';
 import { LAYOUTS, WATER, easeOf, pile, scrollSpan, seeded, type Start } from './pile.ts';
 
@@ -7,20 +7,11 @@ import { LAYOUTS, WATER, easeOf, pile, scrollSpan, seeded, type Start } from './
  * screen, dispersing into the grid as you scroll — and gathering back into it
  * when you scroll up again.
  */
-/* THE OPENING — the two numbers that decide how the pile unfolds. */
-/*
- * Both now live in client/pile.ts with the rest of the opening's shape —
- * `motion.span` and `motion.power` — where the pile tuner (?pile) can reach
- * them.
- */
+/* The opening's settings live in client/pile.ts (`motion`, `effects.pile`). */
 export const SCROLL_SPAN = scrollSpan();
-/* FOLLOW how closely the pile keeps up with the scroll. */
-// FOLLOW is `motion.follow` in client/pile.ts.
-/** The frame length FOLLOW was tuned at. */
+/** The frame length `motion.follow` was tuned at. */
 const FOLLOW_FRAME_MS = 1000 / 120;
 const WATCHDOG = 4000;      // ms: if the pile cannot be measured by now, show the grid
-
-// The pile's size, fan and offsets are `effects.pile` in client/pile.ts.
 
 /* WebKit — Safari, and every browser on iOS. */
 const webkit = /AppleWebKit/.test(navigator.userAgent) && !/Chrome|Chromium|Edg\//.test(navigator.userAgent)
@@ -196,11 +187,7 @@ export function initStack(): void {
     }
   };
 
-  /*
-   * THE COUNT — on arrival the scatter is not simply there: it fills, from no
-   * paintings to all of them, one after another.
-   */
-  /* THE WATER (the knobs and what they mean: WATER, client/pile.ts). */
+  /* The water: the paintings drift from the pointer (settings: WATER in client/pile.ts). */
   const finger = { x: 0, y: 0, vx: 0, vy: 0, at: 0, on: false };
   const drifts = new Map<HTMLElement, Drift>();
   let floatedAt = 0;
@@ -227,7 +214,7 @@ export function initStack(): void {
   /* A painting clicked while they float opens the gallery, as the arrow does. */
   document.addEventListener('click', (event) => {
     if (settled || disabled || !measured || event.defaultPrevented || event.button !== 0) return;
-    if ((event.target as Element | null)?.closest('a, button, input, [role="dialog"]')) return;
+    if (targetElement(event)?.closest('a, button, input, [role="dialog"]')) return;
     const hit = live.some((tile) => {
       if (Number(getComputedStyle(tile).opacity) < 0.5) return false;
       const r = tile.getBoundingClientRect();
