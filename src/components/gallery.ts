@@ -78,7 +78,8 @@ export const DENSITIES = [
   { unit: '9.07vw', label: 50 },
   { unit: '7.26vw', label: 100 },
 ] as const;
-export const DEFAULT_DENSITY = 2;
+// The Artwork page opens at 25 (Frank, 2026-11-26).
+export const DEFAULT_DENSITY = 0;
 
 function tile(
   item: GridItem, basePath: string, index: number, priority: boolean,
