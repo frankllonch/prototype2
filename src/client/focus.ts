@@ -1,5 +1,5 @@
-import { isPlainClick, targetElement } from './env.ts';
-import { topOf } from './glide.ts';
+import { isPlainClick, reduceMotion, targetElement } from './env.ts';
+import { glide, topOf } from './glide.ts';
 import { ABANDONED } from './transitions.ts';
 
 /** A clicked name brings its answer forward. */
@@ -63,21 +63,44 @@ function sheetFocus(): void {
     if (event.persisted) clear();
   });
 
-  // Arriving by a name on the opening view: the page opens on the answer, already chosen. Only a
-  // fresh arrival: a reload or a step back in the history keeps the place the reader left.
+  // Arriving by a name on the opening view: the page opens at its top and travels to the answer.
+  // Only a fresh arrival: a reload or a step back in the history keeps the place the reader left.
   const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
   if (location.hash && (!nav || nav.type === 'navigate')) {
     const id = decodeURIComponent(location.hash.slice(1));
     const cell = document.getElementById(id);
-    if (cell && focus(id)) {
-      // Under the veil the head holds (components/layout.ts), so the page is first seen in place.
-      const land = () => {
-        if (cell.classList.contains('wc-focused')) window.scrollTo({ top: topOf(cell), behavior: 'instant' });
+    if (cell && page.contains(cell)) {
+      // The browser would jump to the answer by itself, so its id is held back until loading has
+      // settled: the page opens at the top and travels down.
+      clear();
+      if (reduceMotion.matches) { focus(id); return; }
+      cell.removeAttribute('id');
+      const restore = () => window.setTimeout(() => { cell.id = id; }, 1800);
+      if (document.readyState === 'complete') restore();
+      else window.addEventListener('load', restore, { once: true });
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      // The page stays sharp on the way; the answer is chosen as it comes into view.
+      let left = false;
+      const leave = () => { left = true; };
+      for (const kind of ['wheel', 'touchmove', 'keydown'] as const) {
+        window.addEventListener(kind, leave, { once: true, passive: true });
+      }
+      const choose = () => {
+        if (left) return;
+        for (const el of page.querySelectorAll('.wc-focused')) el.classList.remove('wc-focused');
+        cell.classList.add('wc-focused');
+        page.classList.add('wc-focus');
       };
-      land();
-      // Late fonts and pictures can move the answer; follow it until the reader takes over.
-      void document.fonts?.ready.then(land);
-      if (document.readyState !== 'complete') window.addEventListener('load', land, { once: true });
+      const seen = new IntersectionObserver((entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        seen.disconnect();
+        choose();
+      }, { rootMargin: '0px 0px -25% 0px' });
+      window.setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'instant' });
+        seen.observe(cell);
+        glide(topOf(cell));
+      }, 80);
     }
   }
 }
