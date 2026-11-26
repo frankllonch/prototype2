@@ -234,8 +234,13 @@
   letter-spacing: 0;
   text-transform: uppercase;
 }
-.wc-back a { color: var(--ink); text-decoration: none; padding: 0 0.2em; }
-.wc-back a:hover, .wc-back a:focus-visible { background: var(--ink); color: var(--paper); outline: none; }
+/* Its highlight is the band the question wears in the note (`.wc-ask`), tight to the letters. */
+.wc-back a { color: var(--ink); text-decoration: none; padding: 0 0 0 0.117em; margin-left: -0.117em; }
+.wc-back a:hover, .wc-back a:focus-visible {
+  background: linear-gradient(var(--ink), var(--ink)) no-repeat 0 0.2em / calc(100% - 0.033em) 0.905em;
+  color: var(--paper);
+  outline: none;
+}
 
 .wc-answers-none {
   margin: var(--wc-answers-gap, 7vw) auto 0;

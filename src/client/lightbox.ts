@@ -79,7 +79,7 @@ export function initLightbox(): void {
     // closed again in the meantime, or the class would be put back on something already shutting.
     requestAnimationFrame(() => { if (shown) box.classList.add('is-open'); });
     history.pushState({ lightbox: true }, '', tile.getAttribute('href') ?? location.href);
-    nextBtn.focus({ preventScroll: true });
+    returnFocus(nextBtn);
   };
 
   const close = (restore: boolean) => {

@@ -142,6 +142,10 @@
 @media (prefers-reduced-motion: no-preference) {
   html.wc-arriving body.has-film .page-veil { animation: veil-hold 1s linear both; }
 }
+/* Arriving on one answer of an edition: covered until the page stands on it (client/focus.ts). */
+@media (prefers-reduced-motion: no-preference) {
+  html.wc-landing .page-veil { animation: veil-hold 1s linear both; }
+}
 html.wc-arriving body.has-film .top { top: 0; }
 html.wc-arriving body.has-film .top [aria-current='page']:is(a, button) {
   color: #000;

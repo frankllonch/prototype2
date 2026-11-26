@@ -1,7 +1,7 @@
 import { html, join, raw, type Html } from './html.ts';
 import { responsiveImage } from './image.ts';
 import type { ProjectImage } from '../content/types.ts';
-import { PHONE_MERGED, SHOW_GROUPS, kindOf, phoneOrder, placeOf, type Show, type ShowGroup } from '../content/exhibitions-list.ts';
+import { PHONE_MERGED, SHOW_GROUPS, kindOf, phoneOrder, placeOf, rowId, type Show, type ShowGroup } from '../content/exhibitions-list.ts';
 
 /**
  * The exhibitions index, after the designer's layout: one line per show — what
@@ -58,6 +58,6 @@ function row(s: Show, order: number, cover?: ProjectImage): Html {
 
   const panel = s.commission ? `commissioned-${s.commission}` : s.slug ? `exhibition-${s.slug}` : undefined;
   return panel
-    ? html`<a class="xrow hrow" href="#${panel}" data-panel-open="${panel}" style="--phone-order:${order}">${inner}</a>`
-    : html`<div class="xrow hrow" style="--phone-order:${order}">${inner}</div>`;
+    ? html`<a class="xrow hrow" id="${rowId(s)}" href="#${panel}" data-panel-open="${panel}" style="--phone-order:${order}">${inner}</a>`
+    : html`<div class="xrow hrow" id="${rowId(s)}" style="--phone-order:${order}">${inner}</div>`;
 }

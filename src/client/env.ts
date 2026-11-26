@@ -42,8 +42,8 @@ export const isPlainClick = (event: MouseEvent): boolean =>
   !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey && event.button === 0;
 
 /**
- * Gives focus back to the photograph a viewer was opened from, or was last
- * showing, without the photograph answering as if it were hovered.
+ * Gives focus from a script (back to the photograph a viewer was opened from, or to Close as a
+ * panel opens) without the element answering as if it were hovered.
  */
 export function returnFocus(el: HTMLElement | null | undefined): void {
   if (!el) return;

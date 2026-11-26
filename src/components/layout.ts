@@ -3,7 +3,7 @@ import { scrollCue, stepChevron } from './scroll-cue.ts';
 import { responsiveImage } from './image.ts';
 import type { ProjectImage } from '../content/types.ts';
 import { withBase } from '../content/paths.ts';
-import { ABOUT_BLOCKS, ABOUT_CARD, ABOUT_COLLECTIONS, ABOUT_COPYRIGHT, ABOUT_SHOWS, type AboutShow, type AboutShows } from '../content/about.ts';
+import { ABOUT_BLOCKS, ABOUT_CARD, ABOUT_COLLECTIONS, ABOUT_COPYRIGHT, ABOUT_SHOWS, rowOf, type AboutShow, type AboutShows } from '../content/about.ts';
 import { hueVars } from '../content/palette.ts';
 
 interface LayoutProps {
@@ -112,8 +112,8 @@ function aboutOverlay(): Html {
             ${join(
               ABOUT_COLLECTIONS.map(
                 (c) => html`<li class="about-collection">
-                  <span class="about-collection-name">${c.name}</span>
-                  <span class="about-collection-place">${c.place}</span>
+                  ${located(html`<span class="about-collection-name">${c.name}</span>
+                  <span class="about-collection-place">${c.place}</span>`, rowOf(c.name))}
                 </li>`,
               ),
             )}
@@ -214,12 +214,18 @@ function aboutShows(group: AboutShows): Html {
 }
 
 function aboutShow(show: AboutShow): Html {
-  return html`<li class="about-show">
-    <span class="about-show-when">${show.when}</span>
+  const inner = html`<span class="about-show-when">${show.when}</span>
     <span class="about-show-title">${broken(show.title)}</span>
     ${join(show.lines.map((line) => html`<span class="about-show-line">${broken(line)}</span>`))}
-    ${join((show.places ?? []).map((place) => html`<span class="about-show-place">${broken(place)}</span>`))}
-  </li>`;
+    ${join((show.places ?? []).map((place) => html`<span class="about-show-place">${broken(place)}</span>`))}`;
+  return html`<li class="about-show">${located(inner, rowOf(show.title, show.when, show.at))}</li>`;
+}
+
+/** An entry of the record, as a link to its row in the Exhibitions list (`client/locate.ts`). */
+function located(inner: Html, row: string | undefined): Html {
+  return row
+    ? html`<a class="about-go hrow" href="${withBase('/exhibitions/')}#${row}" data-locate="${row}">${inner}</a>`
+    : inner;
 }
 
 /** How many of a two-column list stand in its first column. */
@@ -287,6 +293,12 @@ try { var nav = performance.getEntriesByType('navigation')[0];
     document.documentElement.classList.add('wc-arriving', 'wc-swatch-drop');
     setTimeout(function () { document.documentElement.classList.remove('wc-arriving') }, 1500);
     setTimeout(function () { document.documentElement.classList.remove('wc-swatch-drop') }, 700);
+  } } catch (e) {}
+// Arriving on one answer of What's Color (/whats-color/ii/#wc-…): covered until client/focus.ts
+// has put the page on it; the timer uncovers it if that never runs.
+try { if (/^#wc-/.test(location.hash)) {
+    document.documentElement.classList.add('wc-landing');
+    setTimeout(function () { document.documentElement.classList.remove('wc-landing') }, 1200);
   } } catch (e) {}
 // ?film=wipe|fade|cut|blur tries a way out of the start page for the visit; ?film=off resets.
 try { var film = new URLSearchParams(location.search).get('film');

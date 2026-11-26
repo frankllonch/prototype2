@@ -10,6 +10,8 @@ export function initHoverList(): void {
   for (const link of document.querySelectorAll<HTMLElement>('.side-inquiries')) wireRow(link);
   // So does the gallery's name at the foot of About's biography.
   for (const link of document.querySelectorAll<HTMLElement>('.about-link')) wireRow(link);
+  // And the entries of About's record that have a row in the Exhibitions list.
+  for (const link of document.querySelectorAll<HTMLElement>('.about-go')) wireRow(link);
   // And every corner control: Close, Next, Previous and the arrows.
   for (const control of document.querySelectorAll<HTMLElement>(CORNERS)) wireRow(control);
 }

@@ -35,7 +35,7 @@
 }
 @media (min-width: 900px) {
   :is(.detail-back, .panel-close, .about-close, .inq-close, .lightbox-close, .lightbox-nav,
-      .sheet-step, .plates-step, .wc-book-step, .about-viewer-step):is(:hover, :focus-visible),
+      .sheet-step, .plates-step, .wc-book-step, .about-viewer-step):is(:hover, :focus-visible:not([data-quiet-focus])),
   .detail-pager a:is(:hover, :focus-visible) {
     --corner-c: var(--exh-hover, var(--ink));
   }
