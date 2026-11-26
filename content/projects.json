@@ -4024,7 +4024,7 @@
         ],
         "available": false,
         "reference": "M588",
-        "dimensions": "60 × 70 cm",
+        "dimensions": "60 × 73 cm",
         "materials": "Oil on canvas"
       }
     },
@@ -5463,7 +5463,7 @@
     {
       "slug": "untitled-2020-110x153cm",
       "kind": "work",
-      "title": "Untitled 2021, 110x153cm",
+      "title": "Untitled 2020, 110x153cm",
       "sourceUrl": "https://www.claudiavalsells.com/portfolio/untitled-2020-110x153cm/",
       "description": "Untitled 2020, 110 x 153 cm, 43,30 x 60,23 inches, gouache on paper.",
       "rows": [
@@ -5512,7 +5512,7 @@
       ],
       "metadata": {
         "date": "2021-03-04T15:37:14+00:00",
-        "year": 2021,
+        "year": 2020,
         "categories": [
           "pinturas-paintings"
         ],
@@ -5951,7 +5951,7 @@
     {
       "slug": "untitled-2020-200x200cm-2",
       "kind": "work",
-      "title": "Untitled 2021, 200x200cm",
+      "title": "Untitled 2020, 200x200cm",
       "sourceUrl": "https://www.claudiavalsells.com/portfolio/untitled-2020-200x200cm-2/",
       "description": "Untitled 2020, 200x200cm, 78,74 x 78,74 inches. Mixed technique on canvas.",
       "rows": [
@@ -6000,7 +6000,7 @@
       ],
       "metadata": {
         "date": "2021-03-04T15:52:21+00:00",
-        "year": 2021,
+        "year": 2020,
         "categories": [
           "pinturas-paintings"
         ],
@@ -8609,10 +8609,9 @@
         "date": "2025-12-27T19:31:33+00:00",
         "year": 2025,
         "categories": [
-          "pinturas-paintings",
-          "available"
+          "pinturas-paintings"
         ],
-        "available": true,
+        "available": false,
         "reference": "L580",
         "dimensions": "160 × 130 cm",
         "materials": "Acrylic on canvas"
@@ -9230,10 +9229,9 @@
         "date": "2026-06-04T11:25:28+00:00",
         "year": 2026,
         "categories": [
-          "pinturas-paintings",
-          "available"
+          "pinturas-paintings"
         ],
-        "available": true,
+        "available": false,
         "reference": "M608",
         "dimensions": "70 × 63 cm",
         "materials": "Acrylic on linen"
@@ -10165,7 +10163,7 @@
         ],
         "available": false,
         "reference": "L584",
-        "dimensions": "160 × 130 cm",
+        "dimensions": "162 × 130 cm",
         "materials": "Acrylic on linen"
       }
     },
@@ -10227,7 +10225,7 @@
         ],
         "available": false,
         "reference": "L586",
-        "dimensions": "130 × 160 cm",
+        "dimensions": "130 × 162 cm",
         "materials": "Acrylic on linen"
       }
     },
@@ -10351,7 +10349,7 @@
         ],
         "available": false,
         "reference": "M613",
-        "dimensions": "80 × 101 cm",
+        "dimensions": "81 × 100 cm",
         "materials": "Acrylic on linen"
       }
     },
