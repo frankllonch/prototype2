@@ -773,7 +773,6 @@ html:has(body.has-film) {
 /* The sheets' Close. */
 .wc-book-view > .panel-close {
   top: var(--bar);
-  color: var(--ink);
 }
 .wc-book-plate {
   margin: 0;
@@ -785,15 +784,13 @@ html:has(body.has-film) {
   translate: 0 -50%;
   z-index: 41;
   padding: 1.5rem 1rem;
-  color: rgb(252, 252, 250);
-  mix-blend-mode: difference;
+  color: var(--corner-c);
   cursor: pointer;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+  transition: color var(--hover) var(--ease), opacity 0.3s ease, visibility 0s linear 0.3s;
 }
-.wc-book-step.is-shown { opacity: 1; visibility: visible; transition-delay: 0s; }
-.wc-book-step.is-shown:focus-visible { opacity: 0.45; }
+.wc-book-step.is-shown { opacity: 1; visibility: visible; transition-delay: 0s, 0s, 0s; }
 .wc-book-step.is-prev { left: max(0.5rem, 2.5vw); }
 .wc-book-step.is-next { right: max(0.5rem, 2.5vw); }
 .wc-book-plate img {

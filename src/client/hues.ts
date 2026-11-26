@@ -15,6 +15,9 @@ export function nextHue(): number {
     at = pageHue();
   }
   if (!count) return -1;
-  at = at < 0 ? Math.floor(Math.random() * count) : (at + 1) % count;
+  // Any colour but the one just drawn.
+  at = at < 0 || count < 2
+    ? Math.floor(Math.random() * count)
+    : (at + 1 + Math.floor(Math.random() * (count - 1))) % count;
   return at;
 }
