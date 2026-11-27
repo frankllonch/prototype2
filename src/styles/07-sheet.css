@@ -141,7 +141,9 @@
 .sheet-prose .lede-credit { display: block; font-size: var(--t-30); font-weight: 100; line-height: 1; }
 /* What's Color I-III: link to the edition's answers, highlighted as .wc-back. */
 .sheet-prose > p.sheet-answers {
-  margin-top: calc(var(--s-lead) * 1em);
+  margin-top: calc(var(--s-lead) * var(--type));
+  font-size: var(--t-20);
+  line-height: 1;
   font-weight: 500;
   text-transform: uppercase;
 }
@@ -687,7 +689,7 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
   #exhibition-what-s-color-ii-for-architects-and-designers > .sheet .sheet-prose > * div:not(:last-child) { margin-bottom: var(--sh-para); }
   .panel > .sheet .sheet-prose .lede-open { margin-bottom: var(--sh-para); }
   .panel > .sheet .sheet-prose .lede-credit { font-size: calc(var(--sh-type) * 0.75); }
-  .panel > .sheet .sheet-prose > .sheet-answers { margin-top: calc(var(--sh-para) * 2); }
+  .panel > .sheet .sheet-prose > .sheet-answers { margin-top: calc(var(--sh-para) * 2); font-size: var(--sh-note); line-height: var(--sh-note); }
   .panel > .sheet .sheet-prose > :is(p:first-of-type, .is-style-lead) { font-size: var(--sh-lede); line-height: var(--sh-lede); }
   .panel > .sheet .sheet-prose > .is-style-note { font-size: var(--sh-note); line-height: var(--sh-note); }
   .panel > .sheet .sheet-prose > .is-quote { font-size: var(--sh-type); line-height: var(--sh-type); }
