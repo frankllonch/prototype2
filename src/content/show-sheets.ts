@@ -56,7 +56,13 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
     lines: ['Solo show at Alzueta Gallery,', 'Barcelona'],
     when: 'September 2023',
     // The sheet does not set the name apart in the lede.
-    edits: [['<strong>Transitions</strong>', 'Transitions']],
+    // The closing poem runs on as one paragraph inside single quotes.
+    edits: [
+      ['<strong>Transitions</strong>', 'Transitions'],
+      ['<p><i>To rethinking,', '<p><i>‘To rethinking,'],
+      ['is ENERGY.</i></p>', 'is ENERGY.’</i></p>'],
+      ['<br> ', ' '],
+    ],
   },
   // What's Color I and II: the text as the designer's sheets set it, in place of the source
   // page's, which ran on into the glossary and the participants (I) and the curators, the Download
