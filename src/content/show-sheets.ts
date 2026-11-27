@@ -71,12 +71,13 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
     lines: ['Solo show at Alzueta Gallery,', 'Barcelona'],
     when: 'September 2023',
     // The sheet does not set the name apart in the lede.
-    // The closing poem runs on as one paragraph inside single quotes.
+    // The closing poem runs on as one paragraph inside single quotes, signed at 30.
     edits: [
       ['<strong>Transitions</strong>', 'Transitions'],
       ['<p><i>To rethinking,', '<p><i>‘To rethinking,'],
       ['is ENERGY.</i></p>', 'is ENERGY.’</i></p>'],
       ['<br> ', ' '],
+      ['<p>Claudia Valsells</p>', '<p class="sign-30">Claudia Valsells</p>'],
     ],
   },
   // What's Color I and II: the text as the designer's sheets set it, in place of the source
