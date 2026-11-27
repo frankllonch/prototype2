@@ -24,15 +24,14 @@ export interface SheetProps {
  */
 export function sheetBody({ title, lines, when, body, images, artists, kind }: SheetProps): Html {
   return html`<div class="sheet${kind ? ` is-${kind}` : ''}" data-reader data-sheet>
-    <header class="sheet-head">
-      <h2 class="sheet-title">${title}</h2>
-      ${lines.length
-        ? html`<p class="sheet-lines">${join(lines.map((line, i) => (i ? html` <br class="sheet-br" />${line}` : html`${line}`)))}</p>`
-        : ''}
-      ${when ? html`<p class="sheet-when">${when}</p>` : ''}
-    </header>
-
     <div class="sheet-text" data-sheet-text tabindex="-1">
+      <header class="sheet-head">
+        <h2 class="sheet-title">${title}</h2>
+        ${lines.length
+          ? html`<p class="sheet-lines">${join(lines.map((line, i) => (i ? html` <br class="sheet-br" />${line}` : html`${line}`)))}</p>`
+          : ''}
+        ${when ? html`<p class="sheet-when">${when}</p>` : ''}
+      </header>
       <div class="sheet-prose${artists ? ' has-artists' : ''}">${artists ? html`<p class="sheet-artists">${artists}</p>` : ''}${body}</div>
     </div>
 

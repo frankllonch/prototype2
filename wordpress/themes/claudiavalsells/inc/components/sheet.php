@@ -12,6 +12,7 @@ function cv_sheet_body( array $item ): string {
 	$lines  = array_values( array_filter( $item['lines'] ?? [], fn( $l ) => '' !== trim( $l ) ) );
 
 	$out = '<div class="sheet" data-reader data-sheet>'
+		. '<div class="sheet-text" data-sheet-text tabindex="-1">'
 		. '<header class="sheet-head">'
 		. '<h2 class="sheet-title">' . esc_html( $item['title'] ) . '</h2>';
 	if ( $lines ) {
@@ -21,7 +22,6 @@ function cv_sheet_body( array $item ): string {
 		$out .= '<p class="sheet-when">' . esc_html( $item['when'] ) . '</p>';
 	}
 	$out .= '</header>'
-		. '<div class="sheet-text" data-sheet-text tabindex="-1">'
 		. '<div class="sheet-prose">' . $item['text'] . '</div>'
 		. '</div>'
 		. '<button type="button" class="sheet-more" data-expand="text" aria-pressed="false" aria-label="Read the whole text">'
