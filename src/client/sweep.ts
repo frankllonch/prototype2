@@ -6,13 +6,17 @@ import { nextHue } from './hues.ts';
  */
 export function initSweep(): void {
   for (const word of document.querySelectorAll<HTMLElement>('.top [data-roll]')) {
-    const here = () => word.getAttribute('aria-current') === 'page';
+    // On the opening page the block only comes out once the film has passed (00-base.css).
+    const here = () => word.getAttribute('aria-current') === 'page'
+      && !document.querySelector('.has-film:not(.is-film-past)');
+    let tinted = false;
     const enter = () => {
       const n = nextHue();
       if (n < 0) return;
-      word.style.setProperty(here() ? '--bar-swatch' : '--fx-paint', `var(--neg-${n})`);
+      tinted = here();
+      word.style.setProperty(tinted ? '--bar-swatch' : '--fx-paint', `var(--neg-${n})`);
     };
-    const leave = () => { if (here()) word.style.removeProperty('--bar-swatch'); };
+    const leave = () => { if (tinted) word.style.removeProperty('--bar-swatch'); tinted = false; };
     word.addEventListener('pointerenter', (e) => { if (e.pointerType !== 'touch') enter(); });
     word.addEventListener('focus', () => { if (word.matches(':focus-visible')) enter(); });
     word.addEventListener('pointerleave', leave);
