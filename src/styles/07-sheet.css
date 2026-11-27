@@ -141,9 +141,7 @@
 .sheet-prose .lede-credit { display: block; font-size: var(--t-30); font-weight: 100; line-height: 1; }
 /* What's Color I: her name under the text, at 20. */
 .sheet-prose .text-sign { font-size: var(--t-20); }
-/* What's Color I-III: the way to the edition's answers, an empty line under the text, set and
-   highlighted as the edition's own "All of What's Color?" (04-whats-color.css): capitals, medium,
-   the band tight to the letters. */
+/* What's Color I-III: link to the edition's answers, highlighted as .wc-back. */
 .sheet-prose > p.sheet-answers {
   margin-top: calc(var(--s-lead) * 1em);
   font-weight: 500;
