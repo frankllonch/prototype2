@@ -41,7 +41,7 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
   },
   'painting-as-a-gift-of-color': {
     title: 'Painting as a gift from color',
-    lines: ['Solo exhibition', 'at Gallery_BR', 'Tetbury, UK'],
+    lines: ['Solo show', 'at Gallery_BR', 'Tetbury, UK'],
     when: 'May 2024',
   },
   // The designer's sheet, text and all: the source has no page for this edition as a show.
@@ -71,13 +71,13 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
     lines: ['Solo show at Alzueta Gallery,', 'Barcelona'],
     when: 'September 2023',
     // The sheet does not set the name apart in the lede.
-    // The closing poem runs on as one paragraph inside single quotes, signed at 30.
+    // The closing poem runs on as one paragraph inside single quotes, signed in its box.
     edits: [
       ['<strong>Transitions</strong>', 'Transitions'],
       ['<p><i>To rethinking,', '<p><i>‘To rethinking,'],
-      ['is ENERGY.</i></p>', 'is ENERGY.’</i></p>'],
+      ['is ENERGY.</i></p>', 'is ENERGY.’</i><span class="text-by">Claudia Valsells</span></p>'],
       ['<br> ', ' '],
-      ['<p>Claudia Valsells</p>', '<p class="sign-30">Claudia Valsells</p>'],
+      ['<p>Claudia Valsells</p>', ''],
     ],
   },
   // What's Color I and II: the text as the designer's sheets set it, in place of the source
@@ -92,10 +92,9 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
       'During the past months I have invited them to consider and answer the question: ‘What does color mean to you?’',
       'First of all, to open up a dialogue, to grasp new ways of seeing colors, other perspectives, but also to better ' +
         'understand the world.<br />I wanted to think of color in a broader context, outside of the artistic view, and ' +
-        'to discover the notion of color as it is thought of by others.',
+        'to discover the notion of color as it is thought of by others.<span class="text-by">Claudia Valsells</span>',
     ) +
-      '<div class="is-style-thanks"><p class="fn-gap4">Claudia Valsells</p>' +
-      '<p class="fn-gap4">Film below: Mariona Domenech<br />Graphic design: Maria Vicente</p>' +
+      '<div class="is-style-thanks"><p class="fn-gap4">Film below: <b>Mariona Domenech</b><br />Graphic design: <b>Maria Vicente</b></p>' +
       `<p>${THANK_YOU_ALL}</p>` +
       '<p>THANKS TO: MARINA GARCÉS, OLAFUR ELIASSON, LI EDELKOORT, RUPI KAUR, RAMÓN ANDRÉS, VICTORIA CIRLOT, ' +
       'TORTELL POLTRONA, ANGELICA DASS, JAUME FUNES, OSCAR TUSQUETS, DAVID BUENO I TORRENS, FLAVIA COMPANY, ' +
@@ -142,7 +141,7 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
           'effort to see exactly what one is looking for. We want to reopen the dialogue on the use of color in architecture, to offer one more tool, among many ' +
           'others, that encourages that return to color, with knowledge, dialogue and vision.',
       ) +
-      '<div class="is-style-thanks"><p>Photos © Julia Ruiz-Cabello and Gonzalo de Benito</p><p>THANKS TO:<br />' +
+      '<div class="is-style-thanks"><p>Photos © <b>Julia Ruiz-Cabello</b> and <b>Gonzalo de Benito</b></p><p>THANKS TO:<br />' +
       'Plantea Estudi, Kal-a, Elii, HANGHAR, Nomos arquitectos, Montse Vicens (Int-sight), Isabel Francoy, ' +
       'Tomás López Design, Stefano Colli, Conti.Cert, Un parell d’arquitectes, Naso ++, Isla, Auxi Gálvez (PSAAP), ' +
       'Escobedo Soliz, Antoni Arola, Barbara Aurell, Laura Castanya, Andrea Batlló y Adrià Escolano, Marc Morro, ' +
@@ -152,14 +151,14 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
   'color-dialogues': {
     lines: ['Solo show at Alzueta Gallery,', 'Madrid'],
     when: 'December 2021 to January 2022',
-    edits: [['<span>© Flavia Company </span>', '<span class="quote-credit">© Flavia Company</span>']],
+    edits: [['<span>© Flavia Company </span>', '<span class="text-by">© Flavia Company</span>']],
   },
   t10: {
-    lines: ['Solo exhibition', 'at Alzueta Gallery', 'Barcelona'],
+    lines: ['Solo show', 'at Alzueta Gallery', 'Barcelona'],
     when: 'November 2020',
   },
   'color-y-forma': {
-    lines: ['Solo exhibition', 'at Alzueta Gallery,', 'Barcelona'],
+    lines: ['Solo show', 'at Alzueta Gallery,', 'Barcelona'],
     when: 'February 2017',
   },
   'solo-exhibition-2007': {
@@ -168,19 +167,19 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
   },
   'el-color-no-existe': {
     title: 'El color no existe,\nexiste la luz',
-    lines: ['Solo exhibition,', 'Sala Vinçon,', 'Barcelona'],
+    lines: ['Solo show,', 'Sala Vinçon,', 'Barcelona'],
     when: 'April 2000',
     note: 'Individual exhibition where the interaction of the public with the installation was essential.',
   },
 
   // ------------------------------------------------------------ group shows
   'notas-al-pie': {
-    lines: ['Group exhibition', 'at Barcelona'],
+    lines: ['Group show', 'at Barcelona'],
     when: 'December 2026',
   },
   'shift-towards-coincidence': {
     title: 'Shift towards coincidence',
-    lines: ['Group exhibition at Alzueta Gallery,', 'Palau de Casavells'],
+    lines: ['Group show at Alzueta Gallery,', 'Palau de Casavells'],
     when: 'June to July 2026',
     artists:
       'Aythamy Armas, Manolo Ballesteros, Berni Puig, Enrich.R, Claudia Valsells, Alexander Wertheim, Maria Yelletisch.',
@@ -206,11 +205,11 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
   },
   'abstract-paintings': {
     title: 'Abstract paintings',
-    lines: ['Group exhibition', 'at New York'],
+    lines: ['Group show', 'at New York'],
     when: 'June 2026',
   },
   'marco-limite-y-lugar': {
-    lines: ['Group exhibition', 'Alzueta Gallery, Madrid'],
+    lines: ['Group show', 'Alzueta Gallery, Madrid'],
     when: 'March 2026',
     artists:
       'Jordi Alcaraz, Aythamy Armas, Max Cobalto, Enrich R, Iván Franco, Nuria Maria, Bruno Ollé, Maru Quiñonero, ' +
@@ -229,13 +228,13 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
         'coexist and bring together ice and fire, not as opposing elements but as complementary ones: both necessary, ' +
         'both desirous of each other, coinciding for a time in a shared reality. Like love and desire.',
       'Here, paintings and frames nourish the mysterious path of something as complex, difficult, and almost ' +
-        'impossible as capturing beauty in a moment, suspending it in time, and framing it for eternity”.<br />' +
-        'Miquel Alzueta',
+        'impossible as capturing beauty in a moment, suspending it in time, and framing it for eternity”.' +
+        '<span class="text-by">Miquel Alzueta</span>',
     ),
   },
   'what-abstract-art-means-to-me': {
     title: 'What abstract art means to me',
-    lines: ['Group exhibition Alzueta Gallery', 'Séneca'],
+    lines: ['Group show Alzueta Gallery', 'Séneca'],
     when: 'January 2024',
     artists:
       'Jin Angdoo, Aythamy Armas, Manolo Ballesteros, Lawrence Calver, Enrich. R, Daniel Jensen, Scott Licznerski, ' +
@@ -259,12 +258,12 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
         'is created in an active way, this is how it should be observed. To abstract oneself is to move away from the ' +
         'reality of the body, let be carried away by the gaze, create rhythms between the figures, connect the ' +
         'different parts, accept the formal ambiguity and the chromatism as an articulating component, and understand ' +
-        'that the material contains its own language.<br />Text by Carolina-Laia Puigdevall',
+        'that the material contains its own language.<span class="text-by">Text by Carolina-Laia Puigdevall</span>',
     ),
   },
   'la-terre-est-bleu': {
     title: 'La Terre est bleu comme un orange',
-    lines: ['Group exhibition Alzueta Gallery,', 'Madrid'],
+    lines: ['Group show Alzueta Gallery,', 'Madrid'],
     when: 'November 2023',
     artists:
       'Cesc Abad, Hugo Alonso, Manolo Ballesteros, Sune Christiansen, Enrich R., Nacho Eterno, Sabine Finkenauer, ' +
@@ -289,7 +288,7 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
     ),
   },
   'galeria-axel-pairon': {
-    lines: ['Group exhibition'],
+    lines: ['Group show'],
     when: 'December 2016',
   },
 };
@@ -310,6 +309,6 @@ export function applyEdits(html: string, sheet: ShowSheet | undefined): string {
  * project's own set.
  */
 export const COMMISSION_LEADS: Readonly<Record<string, number>> = {
-  'dada-workshops-2017-2': 4,       // Color Atlas: the red façade (Variant5)
+  'dada-workshops-2017-2': 1,       // Color Atlas: the white stairs (Variant2)
   'dada-workshops-2018': 7,         // the chair with the zigzag back (Variant10)
 };

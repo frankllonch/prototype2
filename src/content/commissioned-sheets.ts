@@ -19,7 +19,7 @@ export const SHEETS: Readonly<Record<string, Sheet>> = {
       <p>My intervention examined the meaning related to the ‘readymade’ color: the color purchased in the store instead of hand-mixed.<br>‘’Color of red clay, rich with red iron oxides. Clay is a Mediterranean element, very characteristic…"<br>Words that describe the color ‘brown earth’ and invite you to touche it. Descriptions that help us to perceive and understand color, to feel it. Words that are also the name of the color itself.<br>So what happens when colors are described by codes, numbers?<br>Is the emotional part of the color lost?<br>Does the perception we have of that color change?</p>
       <p>I had chosen 5 colors with a reference to explore the impact of mass-produced color on contemporary art. References that openly testify to the status of painting as a product manufactured in series and standardized.</p>
       <p>The dialogue is precisely between the natural clay color base with the almost provocative color sample and its reference.</p>
-      <p class="is-style-note">Photos by <b>FRANCESCO STELITANO</b><br>Concept by <b>APARTAMENTO STUDIOS</b><br>Curated by <a href="https://www.juliaesque.com"><b>JÚLIA ESQUÉ</b></a><br>Creative partners <b>ELOI BONADONA, CARLES LLARCH AND MAX MILÀ</b></p>`,
+      <p class="is-style-note"><span>Photography by <b>FRANCESCO STELITANO</b></span><span>Concept by <b>APARTAMENTO STUDIOS</b></span><span>Curated by <a href="https://www.juliaesque.com"><b>JÚLIA ESQUÉ</b></a></span><span>Creative partners: <b>ELOI BONADONA, CARLES LLARCH <span>and</span> MAX MILÀ</b></span></p>`,
   },
 
   'color-chart-el-taller-de-arquitectura-rbta': {
@@ -31,7 +31,7 @@ export const SHEETS: Readonly<Record<string, Sheet>> = {
       <p>It is specifically in this chromatic context that I was asked to make a colour chart based on the use of colour by RBTA throughout its history.</p>
       <p>For the last two years I have been observing, gathering and creating a colour guide that aims to be a chromatic tool for the studio’s projects.</p>
       <p>The Color Chart, composed of 100 colors and is divided into 21 color families, is an effort of chromatic synthesis to delimit and guide the colour prescriptions of the studio and has been developed as a framework of action for the color prescriptions of the materials involved in a project.</p>
-      <p class="is-style-note">Interview at <a href="https://www.bofill.com/journal/to-work-with-certainty/"><em>bofill.com</em></a></p>`,
+      <p class="is-style-note"><span>Interview at <a href="https://www.bofill.com/journal/to-work-with-certainty/"><em>bofill.com</em></a></span></p>`,
   },
 
   'santa-cole-color-palette-2023': {
@@ -49,7 +49,8 @@ export const SHEETS: Readonly<Record<string, Sheet>> = {
       <p>As a colourist, I approached my chromatic studies through a constant juxtaposition of colours. The key lies in placing one colour next to another, so as to influence their perception and achieve the desired visual experience. Rather than simply an individual selection of colours, the new palette represents a careful study of their combination. Demonstrating the close relationship between light and colour, the inside of the screens is covered in white, a detail that softens the light reflection.</p>
       <p>This collaboration seeks to add another layer of meaning to an existing product by emphasising the light interaction between the colours of the screens and how they engage with the space they are placed in.</p>
       <p>During the colour study, I developed the interaction of the selected colours to present the collection as chromatic harmonies. From this exercise, six new Neoseries, the art editions of Santa &amp; Cole were born.</p>
-      <p class="is-style-note">More info at <a href="https://www.santacole.com/es/neoseries/colour-scheme-i-n-00240/"><em>Claudia Valsells ‘Color Schemes’</em></a><br>Campaign images © <b>JARA VARELA</b><br>Studio images © <b>ENRIC BADRINAS</b></p>`,
+      <p>More info at <a href="https://www.santacole.com/es/neoseries/colour-scheme-i-n-00240/"><em>Claudia Valsells ‘Color Schemes’</em></a></p>
+      <p class="is-style-note"><span>Campaign images by <b>JARA VARELA</b></span><span>Studio images by <b>ENRIC BADRINAS</b></span></p>`,
   },
 
   'artist-residence-2022': {
@@ -58,7 +59,7 @@ export const SHEETS: Readonly<Record<string, Sheet>> = {
     when: '2022',
     body: `
       <p>BRAVA! is where <a class="about-link hrow" href="https://alzuetagallery.com" target="_blank" rel="noopener">ALZUETA GALLERY</a> has its creation center where develops its artistic residency program to support the creativity and work of contemporary artist of our time. I was so glad to be there, 500m industrial building to work in the heart of Costa Brava.</p>
-      <p class="is-style-note">Photography by <a href="https://www.juditbou.com"><b>JUDIT BOU</b></a></p>`,
+      <p class="is-style-note"><span>Photography by <a href="https://www.juditbou.com"><b>JUDIT BOU</b></a></span></p>`,
   },
 
   'tones-collection-2022': {
@@ -71,7 +72,7 @@ export const SHEETS: Readonly<Record<string, Sheet>> = {
       <p>The collection boasts an infinite richness of tonalities, highlighting the chromatic harmony that in a certain way refers to musical notes.</p>
       <p>The colors of the Tones collection are born from the instruments of an orchestra, the tan colors of the stringed instruments, the colors of the wind instruments, the grays and blues, the ochers of the percussion, etc. From this chromatic universe the forms appeared and then I only had to play to compose them in a way that was reproducible in different scales and harmonies.</p>
       <p>Going from my usual medium, painting, to the nuances and textures provided by fibers and wool has been a very interesting challenge.</p>
-      <p class="is-style-note">To discover the collection link <a href="https://nanimarquina.com/en/collections/tones"><em>Nani Marquina</em></a></p>`,
+      <p class="is-style-note"><span>To discover the collection link <a href="https://nanimarquina.com/en/collections/tones"><em>Nani Marquina</em></a></span></p>`,
   },
 
   'dada-workshops-2017-2': {
@@ -83,7 +84,8 @@ export const SHEETS: Readonly<Record<string, Sheet>> = {
       <p class="is-style-lead apart">Research and realization of the restored color scheme from Ricardo Bofill’s building, ‘La Muralla Roja’.</p>
       <p class="apart">Within the context of La Manzanera, La Muralla Roja (The Red Wall) asks to be considered as a case apart. It embodies a clear reference to the popular architecture of the Arab Mediterranean, in particular to the adobe towers of North Africa. The Red Wall is like a fortress which marks a vertical silhouette following the contour lines of the rocky cliff.</p>
       <p>With this building, RBTA wanted to break the post-Renaissance division between public and private spaces reinterpreting the Mediterranean tradition of the Kasbah. The labyrinth of this recreated Kasbah corresponds to a precise geometric plan based on the typology of…</p>
-      <p class="is-style-note"><a href="https://ricardobofill.com/projects/la-muralla-roja/"><em>Read the full article</em></a><br>Photos by <b>@GREGORICIVERA</b> and <b>@GARATEHAUSMANN</b></p>`,
+      <p class="read-more"><a href="https://ricardobofill.com/projects/la-muralla-roja/"><em>Read full article</em></a></p>
+      <p class="is-style-note"><span>Photos by <b>@GREGORICIVERA <span>AND</span> @GARATEHAUSMANN</b></span></p>`,
   },
 
   'silla-8-aoo-2019-2020': {
@@ -96,7 +98,9 @@ export const SHEETS: Readonly<Record<string, Sheet>> = {
       <p>To enhance its visual uniqueness, the artist Claudia Valsells has developed a series of colour combinations that denote her exploration of beauty. The chair transmits us the tactility of the work through the palette; because what can be touched is tangible and brings us closer to its reality. Each chair is painted in more than one color to emphasize the meaning of each one when it enters in contrast with the others.</p>
       <p>This proposal is the result of a collaboration that normally does not occur in the world of art and design, is a dialogue between disciplines that converge in a common and unlikely end point for each of the participants and also an excuse between two professionals that ends with a good friendship.</p>
       <p>If we had to design a chair we would talk about the conceptual and formal process of an object. If we had to talk about colour we would talk about texture and paint, about tones and shades. And here we talk about adding two languages and a single idea: a series of chairs shaped in a plastic exercise and the chromatic development that enhances, perhaps, their uniqueness. The object is raised piece by piece and is given a different value: the sense is decontextualized and a new proposal grows.</p>
-      <p class="is-style-note">Material <b>STRUCTURE IN SOLID POPLAR, SEAT AND BACK IN POPLAR PLYWOOD</b><br>Finish <b>PIGMENT APPLIED BY BRUSH, SEMI-MATT WATER-BASED VARNISH</b><br>Images © <a href="http://www.yosigo.es"><em>yosigoyosigo</em></a><br><a href="https://marcmorro.com"><em>marcmorro.com</em></a></p>`,
+      <p class="apart">Material: Structure in solid poplar and seat and back in poplar plywood</p>
+      <p>Finish: Pigment applied by brush and finished with semi-matt water-based varnish.</p>
+      <p class="is-style-note"><span>Images © <a href="http://www.yosigo.es"><em>yosigoyosigo</em></a></span><span><a href="https://marcmorro.com"><em>marcmorro.com</em></a></span></p>`,
   },
 
   'edges-collection-for-within-reach': {
@@ -106,7 +110,7 @@ export const SHEETS: Readonly<Record<string, Sheet>> = {
     body: `
       <p class="is-style-lead">An exclusive collection I designed for Design Within Reach, edited by Nani Marquina</p>
       <p class="is-quote">“The abstract forms of this piece ‘Edges’ have significant value, a dichotomy between structure and form, a singular balance.” Claudia Valsells</p>
-      <p class="is-style-note">To discover the collection link <a href="https://nanimarquina.com/es/"><em>Nani Marquina</em></a></p>`,
+      <p class="is-style-note"><span>To discover the collection link <a href="https://nanimarquina.com/es/"><em>Nani Marquina</em></a></span></p>`,
   },
 
   'uterque-art-essays': {
@@ -116,9 +120,8 @@ export const SHEETS: Readonly<Record<string, Sheet>> = {
     body: `
       <p class="is-style-lead">“Creativity, Art and Fashion. Synonyms of a search for beauty, the effort to tell a unique and personal story. Disciplines that have joined in history, that have mixed and created together; they can’t be understood separately. Style is architecture. Creativity is a second skin. And fashion is, always, art.”</p>
       <p>Uterqüe Art Essays was a project I carried out in 2017 for Inditex company during the autumn and winter collection.<br>Two big artworks sized 250x200m each in acrylic on canvas reproducing color harmonies. This two big artworks were used as background for the photo shoot and at the same time as a color palette for the collection.</p>
-      <p>Creative direction and design by Play&amp;Type Studio. Edited by Uterqüe.</p>
-      <p>All the artworks are made by Claudia Valsells</p>
-      <p class="is-style-note">Images © <b>CESC NOGUERES</b></p>`,
+      <p>Creative direction and design by Play&amp;Type Studio. Edited by Uterqüe.<br>All the artworks are made by Claudia Valsells.</p>
+      <p class="is-style-note"><span>Images by <b>CESC NOGUERES</b></span></p>`,
   },
 
   'trainings_silences': {
@@ -136,7 +139,7 @@ export const SHEETS: Readonly<Record<string, Sheet>> = {
       <p>Silence for me… is the space that surrounds us when there is no hurry, no effort, nor expectations: a beginning. Silence would be a beginning. This silence understood as a state of calm – a slow and leisurely state – is not a sign of our time and should be a universal right.</p>
       <p>To my work… When I work in the studio, when I don’t do, I am in silence and this silence gives me a lot of strength.</p>
       <p>An image of silence… would be to contemplate a desert landscape, to contemplate a blank sheet of paper, to contemplate!</p>
-      <p class="is-style-note"><a href="http://www.silencis.org"><em>@silencis</em></a>, a <a href="http://www.dadabarcelona.com"><em>dadabarcelona</em></a> project at <a href="https://www.dipta.cat/mamt"><em>MAMT</em></a><br>Photos <b>@HLEB_MASHA</b></p>`,
+      <p class="is-style-note"><span>Photography by <em>@hleb_masha</em></span><span><a href="http://www.silencis.org"><em>@silencis</em></a>, a <a href="http://www.dadabarcelona.com"><em>dadabarcelona</em></a> project at <a href="https://www.dipta.cat/mamt"><em>MAMT</em></a></span></p>`,
   },
 
   'dada-workshops-2018': {
@@ -148,7 +151,7 @@ export const SHEETS: Readonly<Record<string, Sheet>> = {
       <p>We want to be building in new ways without forgetting that we are constantly building ourselves.</p>
       <p>Dada Barcelona summer workshops, always collaborates with a social project that can open children to other realities and help them build a new consciousness of the world that surrounds them.</p>
       <p>This year, Marc Morro, who, through his NGO Foundation, has worked to build furniture for schools in Senegal. My role was to color the pieces that were built. I decide the black and white color palette and let children paint free different shapes with just this two colors. As the pieces were painted separately, once the chairs were assembled got different identities, letting each one a little bit of all.</p>
-      <p class="is-style-note">Images © <em>Iris Humm</em></p>`,
+      <p class="is-style-note"><span>Images © <em>Iris Humm</em></span></p>`,
   },
 
   'dada-workshops-2017': {
@@ -159,7 +162,7 @@ export const SHEETS: Readonly<Record<string, Sheet>> = {
       <p class="is-style-lead">“To look is an act of choice”<br>John Berger</p>
       <p>I had the opportunity to collaborate for two consecutive years at DadàBarcelona workshops, artistic summer projects developed around an important topic and divided into two weeks: one to discover creative languages and the other to produce an artistic project.</p>
       <p>The workshops are triangulated into movement sound and art.</p>
-      <p class="is-style-note">Images © <em>Iris Humm</em></p>`,
+      <p class="is-style-note"><span>Images © <em>Iris Humm</em></span></p>`,
   },
 
   'kamanar-10-chairs-10-artists-2022': {
@@ -172,7 +175,7 @@ export const SHEETS: Readonly<Record<string, Sheet>> = {
       <p><a href="https://foundawtion.org"><em>Foundawtion,</em></a> was born between the architecture studio Dawoffice, in Barcelona, and the Senegalese population of Thionck Essyl. A non-profit organization to carry out projects that meet architectural needs in economically disadvantaged areas.</p>
       <p><em>Chaise S</em> is the chair for the students of the CEM <em>Kamanar School</em>. It is part of a collection of school furniture that has sought the most optimal relationship between efficiency and comfort, prioritizing making things as easy as possible for every step of the process: from design, choice of materials, construction and/or maintenance.</p>
       <p>Designed between Barcelona and Thionck Essyl by <a href="http://marcmorro.com"><em>Marc Morro</em></a> for <em>Foundawtion and CEM Kamanar</em>. And just like the architecture of the school, the production of these pieces has been carried out with local materials and workers.</p>
-      <p class="is-style-note">Photos <a href="https://yosigo.es"><em>yosigo</em></a></p>`,
+      <p class="is-style-note"><span>Photos by <a href="https://yosigo.es"><em>yosigo</em></a></span></p>`,
   },
 
   'solidary-fulard': {

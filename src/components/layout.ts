@@ -263,19 +263,21 @@ function lightbox(): Html {
 }
 
 /**
- * The contact footer, after the designer's HOME sheet: who to write to, the
- * copyright line About closes on, and the credit, centred at the foot of the
- * page, About included.
+ * The contact footer, after the designer's Figma footer: who to write to and
+ * where to follow her, then the copyright line and the credit, centred at the
+ * foot of the page, About included.
  */
+const INSTAGRAM = { handle: '@claudiavalsells', url: 'https://www.instagram.com/claudiavalsells/' } as const;
+
 function siteFoot(className = ''): Html {
   const [inquiries, other] = ABOUT_CARD.emails;
   return html`<footer class="site-foot${className ? ` ${className}` : ''}">
     <p>
-      Artwork inquiries: <a href="mailto:${inquiries}">${inquiries}</a><br />
-      Others: <a href="mailto:${other}">${other}</a>
+      Artwork Inquiries: <a href="mailto:${inquiries}">${inquiries}</a><br />
+      Other’s: <a href="mailto:${other}">${other}</a><br />
+      Instagram: <a href="${INSTAGRAM.url}" target="_blank" rel="noopener">${INSTAGRAM.handle}</a>
     </p>
-    <p><b>${ABOUT_CARD.name}</b> ${ABOUT_COPYRIGHT}</p>
-    <p>Web design by Frank Llonch &amp; Laia Puig</p>
+    <p><b>${ABOUT_CARD.name}</b> ${ABOUT_COPYRIGHT}<br />Web design by Frank Llonch &amp; Laia Puig</p>
   </footer>`;
 }
 
