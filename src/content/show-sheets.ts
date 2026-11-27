@@ -10,6 +10,8 @@ export interface ShowSheet {
   readonly artists?: string;
   readonly text?: string;
   readonly note?: string;
+  /** What's Color: the edition whose answers the sheet closes on a link to. */
+  readonly answers?: 'I' | 'II' | 'III';
   /** Exact replacements in the source's text, where the sheet sets it otherwise. */
   readonly edits?: readonly (readonly [string, string])[];
 }
@@ -37,6 +39,7 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
   // The designer's sheet, text and all: the source has no page for this edition as a show.
   'whats-color-iii': {
     title: 'What’s Color III',
+    answers: 'III',
     lines: ['Terranova Bookstore'],
     when: 'April 2024',
     text: p(
@@ -68,6 +71,7 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
   // page's, which ran on into the glossary and the participants (I) and the curators, the Download
   // PDF link and the edition note (II).
   'what-s-color-i': {
+    answers: 'I',
     text: p(
       '<span class="lede-open">Throughout the lockdown I was away from my studio and my art form – painting.</span>' +
         'I found great comfort reading pieces by philosophers, historians, thinkers, writers, and other artists. ' +
@@ -81,6 +85,7 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
   },
   'what-s-color-ii-for-architects-and-designers': {
     title: 'What’s Color II',
+    answers: 'II',
     lines: ['Espacio Pavilon', 'Madrid'],
     text:
       p(
