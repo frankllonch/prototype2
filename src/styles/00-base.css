@@ -85,12 +85,6 @@
   --bar-top: 1.6rem;
   /* The menu's own inset below its line, the same 48 as its sides. */
   --bar-bottom: 3rem;
-  /* Width kept clear for the year rail: the grid starts at 211 of the sheet's
-     1654, with the rail's bars 120 wide in it. */
-  --rail: clamp(9rem, 12.76vw, 17rem);
-  /* THE SIDE COLUMN — the years, in their colours, and the grid's controls under
-     them, down the left margin (the designer's final sheet, 1920 wide). */
-  --side-top: calc(var(--grid-start) - 45vh);
   /* THE COUNT — the gallery's opening filling up, from no paintings to all of
      them (2021 onwards), when the Gallery is opened. */
   --count-delay: 0.2s;
@@ -98,8 +92,6 @@
   --count-curve: 0.7;
   --count-fade: 0s;
   --count-ease: var(--ease);
-  --type-side: clamp(0.85rem, 1.5625vw, 2.55rem);
-  --controls-gap: 4.7vw;
   /* The gallery's gutters, off the same sheet: 43 between columns and about 23
      between rows at 1654 — tighter than the page gap, so the paintings fill the
      screen as they do there. */
@@ -298,12 +290,9 @@ body.is-locked { overflow: hidden; }
 
 .menu a, .top-soon { color: rgb(228, 228, 226); transition: color var(--hover) var(--ease); }
 
-/* The grid's controls — the three sizes, and equal against to scale. */
+/* The grid's controls — the three sizes, and equal against to scale — in the Artwork row (03-years.css). */
 .controls {
-  position: fixed; z-index: 30;
-  left: var(--pad);
   display: flex; flex-direction: column; align-items: flex-start;
-  font-size: var(--type-side); line-height: var(--side-lead);
   mix-blend-mode: difference;
   transition: opacity 0.8s var(--ease);
 }
@@ -383,7 +372,7 @@ html.is-scrolled .scroll-cue { opacity: 0; pointer-events: none; visibility: hid
   --cue-knock-drop: 0.75rem;
 }
 @media (prefers-reduced-motion: no-preference) {
-  .years ~ .scroll-cue svg { animation: scroll-cue-knock var(--cue-knock-time) cubic-bezier(0.5, 0, 0.3, 1) infinite; }
+  .side-row ~ .scroll-cue svg { animation: scroll-cue-knock var(--cue-knock-time) cubic-bezier(0.5, 0, 0.3, 1) infinite; }
 }
 @keyframes scroll-cue-knock {
   0%, 32%, 64%, 100% { transform: translateY(0); }

@@ -1,46 +1,38 @@
-/* The year rail: the years down the left margin, each in a colour sampled from
-   that year's own paintings (scripts/palette.ts), and under them the grid's
-   controls (00-base.css). */
+/* The Artwork row: the years, each in a colour sampled from that year's own
+   paintings (scripts/palette.ts), Inquiries and the grid's controls, in one line
+   along the foot of the window at 20 in the 1920 frame. */
 :root {
-  /* The column's lines. */
-  --year-lead: 1;
-  --side-lead: 1.3333;
-  /* How many years there are: written by client/years.ts, eleven until then. */
-  --years-count: 11;
-  --years-height: calc(var(--years-count) * var(--type) * var(--year-lead));
-  /* Where the first thing under the years stands: Inquiries on the Gallery,
-     otherwise the first control. */
-  --under-years: calc(var(--side-top) + var(--years-height) + var(--controls-gap));
-  /* The room Inquiries takes between the years and the controls: its line and a line clear. */
-  --inq-slot: 0px;
-  --controls-top: calc(var(--under-years) + var(--inq-slot));
-  /* Five controls: three sizes, then equal and to scale. */
-  --side-height: calc(var(--years-height) + var(--controls-gap) + var(--inq-slot) + 5 * var(--type-side) * var(--side-lead));
-  /* How far above --side-top the column has to stand for its foot to clear the
-     window's by a margin. */
-  --side-lift: max(0px, calc(var(--side-top) + var(--side-height) + var(--pad) - 100vh));
+  --row-type: max(0.75rem, calc(20 * 100vw / 1920));
+  --row-pad-y: max(0.9rem, calc(30 * 100vw / 1920));
+  --row-gap: calc(var(--row-type) * 2.4);
+  --row-item-gap: calc(var(--row-type) * 0.75);
+  --row-height: calc(var(--row-type) + 2 * var(--row-pad-y));
+}
+
+.side-row {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 30;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--row-item-gap) var(--row-gap);
+  box-sizing: border-box;
+  padding: var(--row-pad-y) var(--pad) calc(var(--row-pad-y) + env(safe-area-inset-bottom, 0px));
+  background: var(--paper);
+  font-size: var(--row-type);
+  line-height: 1;
 }
 
 .years {
-  position: fixed;
-  left: var(--pad);
-  top: calc(var(--side-top) - var(--side-lift));
-  z-index: 30;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  font-size: var(--type);
+  flex-direction: row;
+  gap: var(--row-item-gap);
+  font-size: inherit;
   font-weight: 500;
-  line-height: var(--year-lead);
-  /* The capitals, not the line box, start on that line: half the leading less
-     the 0.317 em Switzer puts above a capital (see.detail-caption). */
-  margin-top: calc((0.317 - var(--year-lead) / 2) * 1em);
-  transition: opacity 0.8s var(--ease);
-}
-
-.controls {
-  top: calc(var(--controls-top) - var(--side-lift));
-  margin-top: calc((0.317 - var(--side-lead) / 2) * 1em);
+  line-height: 1;
 }
 
 .year {
@@ -57,25 +49,30 @@
   white-space: nowrap;
 }
 
-/* "Inquiries" under the years, before the controls: 30 regular, on the controls'
-   40 line, where the first control used to start. */
-:root:has(.side-inquiries) {
-  --inq-slot: calc(2 * var(--type-side) * var(--side-lead));
-}
-
 .side-inquiries {
   --exh-hover: var(--ink);
-  position: fixed;
-  left: var(--pad);
-  top: calc(var(--under-years) - var(--side-lift));
-  z-index: 30;
-  font-size: var(--type-side);
+  font-size: inherit;
   font-weight: 400;
-  line-height: var(--side-lead);
-  margin-top: calc((0.317 - var(--side-lead) / 2) * 1em);
+  line-height: 1;
   letter-spacing: 0.06em;
   white-space: nowrap;
   transition: opacity 0.8s var(--ease), color var(--hover) var(--ease);
+}
+
+.side-row .controls {
+  position: static;
+  flex-direction: row;
+  gap: var(--row-gap);
+  font-size: inherit;
+  line-height: 1;
+}
+.side-row .control-group { flex-direction: row; gap: var(--row-item-gap); }
+
+@media (min-width: 900px) {
+  /* The grid takes the whole width the column used to keep clear. */
+  body:has(.side-row) .grid { padding-left: var(--pad); }
+  body:has(.side-row) .site-foot { padding-bottom: calc(max(2.5rem, calc(76 * var(--u))) + var(--row-height)); }
+  body:has(.side-row) .scroll-cue { bottom: calc(var(--row-height) + 1.9rem); }
 }
 
 /* While a year is in focus the rail says so: the chosen one stays, the rest step back. */
@@ -85,6 +82,7 @@
 /* Nothing that waits on the opening animation may be reachable, or visible, before it ends. */
 /* Hidden, not merely transparent: a see-through column over the paintings is
    still drawn — blended, in the controls' case — on every frame of the opening. */
+html.js .side-row,
 html.js .controls,
 html.js .years,
 html.js .side-inquiries {
@@ -95,6 +93,7 @@ html.js .side-inquiries {
   animation: control-failsafe 0.01s linear 8s forwards;
 }
 
+html.js.stack-settled .side-row,
 html.js.stack-settled .controls,
 html.js.stack-settled .years,
 html.js.stack-settled .side-inquiries {
@@ -107,6 +106,7 @@ html.js.stack-settled .side-inquiries {
 
 /* While the pile is running the script is plainly alive, so the failsafe has
    nothing to guard against. */
+html.js.stack-running .side-row,
 html.js.stack-running .controls,
 html.js.stack-running .years,
 html.js.stack-running .side-inquiries {
@@ -115,6 +115,15 @@ html.js.stack-running .side-inquiries {
 
 @keyframes control-failsafe {
   to { opacity: 1; visibility: visible; pointer-events: auto; }
+}
+
+/* On a phone the row has no box of its own: its years and Inquiries stand on
+   their own along the foot of the screen. */
+@media (max-width: 899px) {
+  .side-row,
+  html.js .side-row {
+    display: contents;
+  }
 }
 
 /* On a phone the years are a bar of their colours along the foot of the screen

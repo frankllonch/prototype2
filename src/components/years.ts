@@ -20,11 +20,7 @@ export function yearRail(years: readonly YearColour[]): Html {
   </nav>`;
 }
 
-/**
- * "Inquiries", under the years on the Gallery and before the controls: set at 30
- * regular, as the controls are, and lit on hover in a new hue each time the way
- * the Exhibitions and Commissioned rows are (it carries their `.hrow`.
- */
+/** "Inquiries" in the Artwork row, lit on hover like the Exhibitions and Commissioned rows (`.hrow`). */
 export function sideInquiries(): Html {
   return html`<a class="side-inquiries hrow" href="#inquiries" data-inquiries-open>Inquiries</a>`;
 }
