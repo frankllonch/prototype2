@@ -81,8 +81,10 @@ const plateImage = (plate: Plate): ProjectImage => ({
     fallback: `/img/${plate.name}.jpg`,
   },
 });
+/** The What's Color I sheet's own extra photograph, second in its reel; the edition page keeps REEL_I. */
+const SHOW_I_PHOTO: Plate = { name: 'whats-color-i-reel-5', w: 524, h: 785, alt: 'A painting of colour bands on the white gallery wall, a visitor walking past.' };
 const EDITION_REELS: Readonly<Record<string, readonly ProjectImage[]>> = {
-  'what-s-color-i': REEL_I.map(plateImage),
+  'what-s-color-i': [REEL_I[0]!, SHOW_I_PHOTO, ...REEL_I.slice(1)].map(plateImage),
   'what-s-color-ii-for-architects-and-designers': REEL_II.map(plateImage),
 };
 

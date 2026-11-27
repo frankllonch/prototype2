@@ -18,6 +18,14 @@ export interface ShowSheet {
 
 const p = (...paragraphs: string[]): string => paragraphs.map((t) => `<p>${t}</p>`).join('');
 
+/** The thank-you that closes the What's Color I and III sheets. */
+const THANK_YOU_ALL =
+  '‘Thank you all for opening up a dialogue, for showing me new ways of seeing colors, other perspectives, but also ' +
+  'for helping me better understand this world. I wanted to understand color in a broader context, outside of the ' +
+  'artistic view, and to discover the notion of color as it is thought of by others like yourself. Now, this whole ' +
+  'journey has become a process of identifying and synthesizing knowledge, when possible, into color, with the wish ' +
+  'to create and share a ‘Color Glossary’ where color meets perception.’';
+
 export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
   // ------------------------------------------------------------- solo shows
   'moll-de-l-os': {
@@ -53,7 +61,11 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
       'Now, this whole journey has become a process of identifying and synthesizing knowledge, when possible, into ' +
         'color, with the wish to create and share a "Color Glossary" where color meets perception. For what purpose?',
       'Because to me, COLOR is a universal visual emotion, capable of reaching and inspiring every human being.',
-    ),
+    ) +
+      `<div class="is-style-thanks"><p>THANKS TO:</p><p class="fn-gap2">${THANK_YOU_ALL}</p>` +
+      '<p>MARC GÓMEZ del MORAL, JOSE JAVIER SERRANO, YOSIGO, LUCIA BONED, ISABEL MARTINEZ, ISABELITAVIRTUAL, ' +
+      'ALBERT RIERA GALCERÁN, MARIA MEDEM, ANA CUBA, JULIA RUIZ CABELLO, RAQUEL QUEVEDO, JOSÉ QUINTANAR, ' +
+      'LUÍS CERVERÓ, ÁLVARO GALMÉS, JUAN DIEGO VALERA, BELEN GAYÁN, ARNAU BLANCH, MARTA D.RIEZU, CRISTINA STOLHE</p></div>',
   },
   transitions: {
     lines: ['Solo show at Alzueta Gallery,', 'Barcelona'],
@@ -80,8 +92,13 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
       'First of all, to open up a dialogue, to grasp new ways of seeing colors, other perspectives, but also to better ' +
         'understand the world.<br />I wanted to think of color in a broader context, outside of the artistic view, and ' +
         'to discover the notion of color as it is thought of by others.',
-      '<span class="text-sign">Claudia Valsells</span>',
-    ),
+    ) +
+      '<div class="is-style-thanks"><p class="fn-gap4">Claudia Valsells</p>' +
+      '<p class="fn-gap4">Film below: Mariona Domenech<br />Graphic design: Maria Vicente</p>' +
+      `<p>${THANK_YOU_ALL}</p>` +
+      '<p>THANKS TO: MARINA GARCÉS, OLAFUR ELIASSON, LI EDELKOORT, RUPI KAUR, RAMÓN ANDRÉS, VICTORIA CIRLOT, ' +
+      'TORTELL POLTRONA, ANGELICA DASS, JAUME FUNES, OSCAR TUSQUETS, DAVID BUENO I TORRENS, FLAVIA COMPANY, ' +
+      'SIRI HUSTVEDT, HENRY GIROUX</p></div>',
   },
   'what-s-color-ii-for-architects-and-designers': {
     title: 'What’s Color II',
