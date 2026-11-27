@@ -134,6 +134,9 @@
 .sheet-prose .lede-gloss { font-style: italic; font-weight: inherit; }
 /* What's Color (II)'s lede picks up again on a new line after a tab, as its sheet sets it. */
 .sheet-prose .lede-tab { display: inline-block; width: 3.5em; }
+/* What's Color (II): who the lede's text was written for, just under it: thin 30 on 30. */
+.sheet-prose > p:has(+ p > .lede-credit:only-child) { margin-bottom: calc(var(--type) * 0.375); }
+.sheet-prose .lede-credit { display: block; font-size: var(--t-30); font-weight: 100; line-height: 1; }
 /* Some sheets leave a second empty line before a change of voice. */
 .sheet-prose .apart { margin-top: calc(var(--s-lead) * 1em); }
 /* The sheet decides the distribution, not the pasted markup. */
@@ -663,6 +666,7 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
   #exhibition-what-s-color-ii-for-architects-and-designers > .sheet .sheet-prose > div { margin-bottom: 0; }
   #exhibition-what-s-color-ii-for-architects-and-designers > .sheet .sheet-prose > * div:not(:last-child) { margin-bottom: var(--sh-para); }
   .panel > .sheet .sheet-prose .lede-open { margin-bottom: var(--sh-para); }
+  .panel > .sheet .sheet-prose .lede-credit { font-size: calc(var(--sh-type) * 0.75); }
   .panel > .sheet .sheet-prose > :is(p:first-of-type, .is-style-lead) { font-size: var(--sh-lede); line-height: var(--sh-lede); }
   .panel > .sheet .sheet-prose > .is-style-note { font-size: var(--sh-note); line-height: var(--sh-note); }
   .panel > .sheet .sheet-prose > .is-quote { font-size: var(--sh-type); line-height: var(--sh-type); }
@@ -710,6 +714,7 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
   .panel[id^='exhibition-'] .sheet:has(.sheet-figure) .sheet-prose > p:first-child + * { margin-top: 0; }
   .panel[id^='exhibition-'] .sheet-figure:first-child { order: 2; margin: var(--sh-pic-top) 0 var(--sh-pic-bottom); }
   .panel[id^='exhibition-'] .sheet-figure:nth-child(2) { margin-top: var(--sh-pics-top); }
+  .panel[id^='exhibition-'] .sheet-prose > p:first-child + p:has(> .lede-credit:only-child) { order: 1; margin-top: calc(var(--sh-type) * 0.375); }
   /* A text that does not open on a paragraph has no lede to go first: the
      photograph leads, under the dates, and the whole text follows it. */
   .panel[id^='exhibition-'] .sheet-prose > :first-child:not(p) { margin-top: 0; }
