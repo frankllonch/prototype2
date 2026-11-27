@@ -80,19 +80,20 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
     ),
   },
   'what-s-color-ii-for-architects-and-designers': {
+    title: 'What’s Color II',
+    lines: ['Espacio Pavilon', 'Madrid'],
     text:
       p(
-        '‘The memory of one of my architecture teachers taking off one of his reddish-brown English shoes, rolling up ' +
+        '<span class="lede-open">‘The memory of one of my architecture teachers taking off one of his reddish-brown English shoes, rolling up ' +
           'the tour of his pants to show the navy blue color of his socks, and cutting out a piece of clothing from the ' +
-          'striped Oxford shirt.<br /><span class="lede-tab"></span>All this spectacle in the middle of a construction ' +
+          'striped Oxford shirt.</span>All this spectacle in the middle of a construction ' +
           'site to show respectively the color of the wood, the color of the carpet and the different shades of the ' +
           'walls, is an image that I remember with some nostalgia, but that cannot be repeated today.’',
         '<span class="lede-credit">Text commissioned by the architect Cristian Cirici on the occasion of my first ' +
           'color chart self edited in 2000.</span>',
         'From the scientific experiment to the artistic concern, from Munsell’s diagrams and Goethe’s studies to Le ' +
           'Corbusier’s Salubra and the almost infinite possible combinations of electronics, the color chart has always ' +
-          'existed to facilitate the communication of color.',
-        'A mere organic, hierarchical and chromatic division in its origin, a method of plastic expression and ' +
+          'existed to facilitate the communication of color.<br />A mere organic, hierarchical and chromatic division in its origin, a method of plastic expression and ' +
           'aesthetic positioning in its development, this instrument, which came to democratize design and encourage ' +
           'the creative impulse, has seen in its years of life how the use of color by the architectural sector has ' +
           'been diminishing, limited perhaps because of certain social prejudices and canons encouraged by advertising ' +
@@ -103,20 +104,19 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
           'chromatic selection for this sector.',
         'In this exhibition we wanted to highlight the work of the colorist, the process of selecting and prescribing ' +
           'colors for a project and the color chart as a tool that facilitates and enables communication between ' +
-          'architects and designers.',
-        'For this reason we have compiled in the exhibition a series of work tools that Claudia, an artist linked to ' +
+          'architects and designers.<br />For this reason we have compiled in the exhibition a series of work tools that Claudia, an artist linked to ' +
           'color since her beginnings as a mural painter, used for the elaboration of her own chart: notebooks, mixers, ' +
           'spatulas, annotations, paint covers. It is therefore a retrospective, documentary and personal exhibition, ' +
-          'where experiences, stories and testimonies are mixed.<br />The result of more than twenty years of work by ' +
+          'where experiences, stories and testimonies are mixed.',
+        'The result of more than twenty years of work by ' +
           'the artist, collaborating with architects and designers in the definition of colors, this color chart is ' +
           'composed of 142 colors applied with real paint, which allows to see the exact reproduction of the color as ' +
-          'it will look once applied on the surface.',
-        'This range of colors, developed for use in architecture, both exterior and interior, allows the colorist to ' +
+          'it will look once applied on the surface. This range of colors, developed for use in architecture, both exterior and interior, allows the colorist to ' +
           'demonstrate Valsells’ natural ability and chromatic instinct, the knowledge of the language that color ' +
-          'implies.<br />This color chart, and the work of its author, Claudia Valsells, is an invitation to explore, ' +
+          'implies.',
+        'This color chart, and the work of its author, Claudia Valsells, is an invitation to explore, ' +
           'to play, and to dare to prescribe colors. Any color from this palette can be achieved, and it is worth the ' +
-          'effort to see exactly what one is looking for.',
-        'We want to reopen the dialogue on the use of color in architecture, to offer one more tool, among many ' +
+          'effort to see exactly what one is looking for. We want to reopen the dialogue on the use of color in architecture, to offer one more tool, among many ' +
           'others, that encourages that return to color, with knowledge, dialogue and vision.',
       ) +
       '<div class="is-style-thanks"><p>Photos © Julia Ruiz-Cabello and Gonzalo de Benito</p><p>THANKS TO:<br />' +
