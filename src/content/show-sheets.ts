@@ -31,6 +31,11 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
   'moll-de-l-os': {
     lines: ['8 rue des Beaux-Arts, Paris'],
     when: 'From May 27 to June 26 2026',
+    // The quote's last paragraph a weight up; the signature at 20.
+    edits: [
+      ['<p>My hope is that', '<p class="sheet-hope">My hope is that'],
+      ['<p>Claudia Valsells</p>', '<p class="sheet-sign">Claudia Valsells</p>'],
+    ],
   },
   'mira-m-no-deixis-de-mirar-me': {
     title: '‘Míra’m no deixis de mirar-me’',
