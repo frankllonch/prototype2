@@ -21,6 +21,28 @@
   --ball-over-names: 0;
   /* over a painting its name stands in for the pointer: 0 hides the ball there, 1 keeps it */
   --ball-opacity: 1;
+
+  /* How it travels (client/ball.ts). */
+  --ball-spring: 0;
+  /* 1 follows on a spring that overshoots, in place of the plain trail above */
+  --ball-spring-swing: 450;
+  /* ms for one swing of that spring */
+  --ball-spring-bounce: 0.5;
+  /* how much it overshoots: 0 none, 0.9 a lot */
+  --ball-move-stretch-max: 0.5;
+  /* the most it may stretch, as a share of its size */
+  --ball-move-size: 0;
+  /* grows (above 0) or shrinks (below 0) the faster it goes */
+  --ball-move-wobble: 0;
+  /* how much its outline shakes while it travels */
+  --ball-trail: 0;
+  /* how many dots follow behind */
+  --ball-trail-follow: 0.35;
+  /* how closely each dot keeps to the one before: 1 = on top of it */
+  --ball-trail-shrink: 0.6;
+  /* how much smaller the last dot is than the ball */
+  --ball-trail-fade: 0;
+  /* how much fainter the last dot is than the ball */
   --ball-press-time: 0.15s;
   /* how long it takes to reach its pressed size */
 
@@ -110,9 +132,26 @@ html:has(.cursor.is-visible) .ball.is-on {
     transform var(--ball-press-time) var(--ease);
 }
 
-.ball.is-hover .ball-dot {
+.ball.is-hover .ball-dot,
+.ball.is-hover .ball-ghost {
   width: var(--ball-hover-size);
   height: var(--ball-hover-size);
+}
+
+/* The trail: inside the ball's own layer, so the dots add up before the blend
+   and never turn each other back to front. */
+.ball-ghost {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: var(--ball-size);
+  height: var(--ball-size);
+  border-radius: 50%;
+  background: var(--ball-color);
+  transition:
+    width var(--ball-grow) var(--ball-grow-ease),
+    height var(--ball-grow) var(--ball-grow-ease);
 }
 
 .ball.is-down .ball-dot {
@@ -150,7 +189,8 @@ html:has(.cursor.is-visible) .ball.is-on {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ball-dot {
+  .ball-dot,
+  .ball-ghost {
     transition: none;
   }
 }

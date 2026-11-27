@@ -2,8 +2,8 @@ import { finePointer } from './env.ts';
 
 /**
  * The ball tuner: a panel for trying the pointer live — its size, how much it
- * grows over a link, how it trails the mouse, its colour and blend, and the
- * oil-drop wobble of its click.
+ * grows over a link, how it travels with the mouse (spring, stretch, trail),
+ * its colour and blend, and the oil-drop wobble of its click.
  */
 
 const ON = 'cv-ball-on';
@@ -28,9 +28,20 @@ const FIELDS: Field[] = [
   { kind: 'num', v: '--ball-hover-size', label: 'Size over a link', min: 2, max: 160, step: 1, unit: 'px', def: 30 },
   { kind: 'num', v: '--ball-press', label: 'Size while pressed', min: 0.2, max: 4, step: 0.05, unit: '×', def: 0.8 },
   { kind: 'num', v: '--ball-press-time', label: 'Press time', min: 0, max: 1, step: 0.01, unit: 's', def: 0.15 },
-  { kind: 'num', v: '--ball-follow', label: 'Follow (1 = glued)', min: 0.02, max: 1, step: 0.01, unit: '', def: 0.4 },
   { kind: 'num', v: '--ball-grow', label: 'Grow time', min: 0, max: 1.5, step: 0.01, unit: 's', def: 0.35 },
   { kind: 'pick', v: '--ball-grow-ease', label: 'Grow curve', options: EASES, def: 'var(--ease)' },
+  { group: 'Motion: how it follows', kind: 'num', v: '--ball-follow', label: 'Follow (1 = glued)', min: 0.02, max: 1, step: 0.01, unit: '', def: 0.4 },
+  { kind: 'flag', v: '--ball-spring', label: 'Springy follow (overshoots)', def: false },
+  { kind: 'num', v: '--ball-spring-swing', label: 'Spring swing', min: 100, max: 1500, step: 10, unit: 'ms', def: 450 },
+  { kind: 'num', v: '--ball-spring-bounce', label: 'Spring bounce', min: 0, max: 0.95, step: 0.01, unit: '', def: 0.5 },
+  { group: 'Motion: shape at speed', kind: 'num', v: '--ball-oil-stretch', label: 'Stretch with speed', min: 0, max: 4, step: 0.05, unit: '', def: 0 },
+  { kind: 'num', v: '--ball-move-stretch-max', label: 'Stretch limit', min: 0.05, max: 0.9, step: 0.01, unit: '×', def: 0.5 },
+  { kind: 'num', v: '--ball-move-size', label: 'Size with speed (− shrinks)', min: -1, max: 2, step: 0.05, unit: '', def: 0 },
+  { kind: 'num', v: '--ball-move-wobble', label: 'Wobble while moving', min: 0, max: 2, step: 0.05, unit: '', def: 0 },
+  { group: 'Motion: trail', kind: 'num', v: '--ball-trail', label: 'Trail dots', min: 0, max: 12, step: 1, unit: '', def: 0 },
+  { kind: 'num', v: '--ball-trail-follow', label: 'Trail tightness', min: 0.03, max: 0.9, step: 0.01, unit: '', def: 0.35 },
+  { kind: 'num', v: '--ball-trail-shrink', label: 'Trail shrink', min: 0, max: 1, step: 0.05, unit: '', def: 0.6 },
+  { kind: 'num', v: '--ball-trail-fade', label: 'Trail fade', min: 0, max: 1, step: 0.05, unit: '', def: 0 },
   { group: 'Look', kind: 'colour', v: '--ball-color', label: 'Colour', def: '#ffffff' },
   { kind: 'pick', v: '--ball-blend', label: 'Blend', options: [
     ['difference', 'Negative (difference)'], ['exclusion', 'Soft negative (exclusion)'], ['normal', 'Plain, no blend'],
@@ -47,7 +58,6 @@ const FIELDS: Field[] = [
   { kind: 'num', v: '--ball-oil-release', label: 'Second push on release', min: -1, max: 1.5, step: 0.05, unit: '×', def: 0.4 },
   { kind: 'num', v: '--ball-oil-speed', label: 'Speed of it all', min: 0.1, max: 3, step: 0.05, unit: '×', def: 1 },
   { kind: 'num', v: '--ball-oil-swirl', label: 'Swirl', min: -360, max: 360, step: 5, unit: '°/s', def: 0 },
-  { kind: 'num', v: '--ball-oil-stretch', label: 'Stretch when moved fast', min: 0, max: 3, step: 0.05, unit: '', def: 0 },
   { group: 'Click: ripple ring', kind: 'num', v: '--ball-oil-ring', label: 'Ring opacity (0 = none)', min: 0, max: 1, step: 0.05, unit: '', def: 0 },
   { kind: 'num', v: '--ball-oil-ring-size', label: 'Ring reach', min: 1.1, max: 2.9, step: 0.05, unit: '×', def: 2.4 },
   { kind: 'num', v: '--ball-oil-ring-time', label: 'Ring time', min: 100, max: 3000, step: 50, unit: 'ms', def: 600 },
@@ -119,7 +129,7 @@ export function initBallTuner(): void {
       <button type="button" data-act="fold">${open ? 'Hide' : 'Show'}</button>
       <button type="button" data-act="off">Off</button></div>
     <div class="tuner-body">
-      <p class="tuner-note">Move over links and buttons to see it grow; click anywhere to see the oil drop, or let it replay while you move the sliders.</p>
+      <p class="tuner-note">Move over links and buttons to see it grow; click anywhere to see the oil drop, or let it replay while you move the sliders. The Motion settings show when you sweep the mouse fast; the stretch, wobble and click share the spring further down.</p>
       <div class="tuner-section" data-fields></div>
       <div class="tuner-out">
         <button type="button" data-act="copy">Copy settings</button>
