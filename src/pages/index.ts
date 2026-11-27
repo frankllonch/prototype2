@@ -47,13 +47,11 @@ export function artworkPage(works: readonly Project[], years: readonly YearColou
     title: 'Artwork',
     description: TAGLINE,
     path: '/artwork/',
-    // Inquiries stands over the years and opens the same form the Colour Chart's order does, sent
-    // to the gallery.
-    rail: html`${sideInquiries()}${yearRail(years)}`,
+    // Years, Inquiries (the gallery form) and the grid's controls in one row along the foot.
+    rail: html`<div class="side-row">${yearRail(years)}${sideInquiries()}${gridControls([], true, works.length)}</div>`,
     overlays: inquiries('gallery'),
     // The pile fills the screen and does not read as the top of a document.
     cue: 'ink',
-    controls: gridControls([], true, works.length),
     children: html`
       <h1 class="sr-only">Claudia Valsells — Artwork</h1>
       <div class="hero" data-hero aria-hidden="true"></div>

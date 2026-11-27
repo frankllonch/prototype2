@@ -19,8 +19,7 @@ html:not(.js) .hero,
   flex-wrap: wrap;
   align-items: flex-start;
   gap: var(--grid-gap-y) var(--grid-gap-x);
-  /* Left inset clears the year rail; the mockup starts the grid well in. */
-  padding: 0 var(--pad) 62vh var(--rail);
+  padding: 0 var(--pad) 62vh;
 }
 
 /* The justified grid sets its own padding; excluded here so this more specific

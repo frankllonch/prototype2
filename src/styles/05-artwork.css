@@ -333,7 +333,7 @@ html.js .detail.is-ready :is(.detail-stage, .detail-caption) {
 
   /* Sizes and scale mean nothing in two fixed columns, and the chevron announced the pile. */
   .controls { display: none; }
-  .years ~ .scroll-cue { display: none; }
+  .side-row ~ .scroll-cue { display: none; }
 
 }
 
