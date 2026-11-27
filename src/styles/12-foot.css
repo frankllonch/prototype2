@@ -45,3 +45,9 @@ body:has(.years) .site-foot { padding-top: calc(80 * var(--u)); }
   body:has(.years) .grid { padding-bottom: 3.75rem; }
   body:has(.years) .site-foot { padding-top: 2rem; }
 }
+
+/* Color Chart: the footer half as far under the thanks. */
+.chart-body .site-foot { padding-top: calc(80 * var(--u)); }
+@media (max-width: 899px) {
+  .chart-body .site-foot { padding-top: 2rem; }
+}
