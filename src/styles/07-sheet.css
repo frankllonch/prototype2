@@ -165,6 +165,8 @@
 }
 /* The names keep their capitals, in the regular weight of the line. */
 .sheet-prose .is-style-note :is(b, strong, em) { font-weight: 400; }
+/* RBTA's Color Chart: the interview link at half the usual distance from the text. */
+#commissioned-color-chart-el-taller-de-arquitectura-rbta .sheet-prose .is-style-note { margin-top: calc(var(--type) * 2.6); }
 .sheet-prose .is-style-note .is-artist { font-size: calc(1em * 40 / 20); }
 /* A credit and thank-you list set apart at 20, all of it: What's Color? */
 .sheet-prose .is-style-thanks { font-size: var(--t-20); line-height: 1; }
