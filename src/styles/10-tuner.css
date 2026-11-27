@@ -1,6 +1,6 @@
 /* ---------------------------------------------------------- tuner panels */
 
-/* The ball tuner's panel (client/ball-tuner.ts, ?ball). */
+/* The tuner panels: the menu's hover (client/menu-tuner.ts) and the ball's (client/ball-tuner.ts). */
 .tuner {
   /* Clear of the bar, which it is there to watch. */
   position: fixed; right: 16px; bottom: 16px; z-index: 100000;
@@ -41,3 +41,6 @@
 }
 .tuner-small { margin-top: 6px; font-size: 11px !important; color: #aaa !important; }
 .tuner-copied { color: #9c9; align-self: center; }
+
+/* The menu tuner's row of hovers to choose from. */
+.tuner-fx { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px; }

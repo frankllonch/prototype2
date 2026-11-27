@@ -17,6 +17,9 @@ const RADIUS = 55;
 /** How much of that reach is the soft edge, as a fraction of it. */
 const EDGE = 1;
 
+/** The churn's settings as it reads them on each step; the menu tuner (client/menu-tuner.ts) rewrites them. */
+export const scramble = { on: true, glyphs: GLYPHS, step: STEP, radius: RADIUS, edge: EDGE };
+
 export function initScramble(): void {
   // Not on a phone, for the roll's reasons (client/text-roll.ts): nothing hovers there, and a
   // letter boxed on its own stops kerning.
@@ -141,7 +144,7 @@ function wire(root: HTMLElement, cells: readonly HTMLElement[]): void {
    */
   const keyed = () =>
     root === document.activeElement && root.matches(':focus-visible') && !('quietFocus' in root.dataset);
-  const wanted = () => (root.matches(':hover') && over(root)) || keyed();
+  const wanted = () => (root.matches(':hover') && over(root)) || keyed() || root.classList.contains('is-hot');
 
   /*
    * Still while the button is held: what is pressed is the word, and a word that
@@ -167,13 +170,15 @@ function wire(root: HTMLElement, cells: readonly HTMLElement[]): void {
     // Nor on a page that loaded wide and is below 900px now: the boxes are still in the words
     // there (09-phone.css lets them flow as plain text).
     if (reduceMotion.matches || phone.matches) return;
+    if (!scramble.on || 'fxOff' in root.dataset) return;
     if (frame) return;
     let piece = -1;
 
     const tick = () => {
       if (!wanted()) { settle(); return; }
       if (pressed) { frame = requestAnimationFrame(tick); return; }
-      const now = Math.floor(performance.now() / STEP);
+      const { glyphs, step, radius, edge } = scramble;
+      const now = Math.floor(performance.now() / step);
       if (now !== piece) {
         piece = now;
         const sets = boxes(root, cells.length);
@@ -181,10 +186,11 @@ function wire(root: HTMLElement, cells: readonly HTMLElement[]): void {
           const away = Math.abs((centres[i] ?? 0) - pointer);
           // Certain within the solid part of the reach, thinning to nothing at its edge, so the
           // churn frays rather than stopping at a line.
-          const solid = RADIUS * (1 - EDGE);
-          const chance = away <= solid ? 1 : 1 - (away - solid) / Math.max(1, RADIUS - solid);
-          const shown = chance > 0 && Math.random() < chance
-            ? GLYPHS[Math.floor(Math.random() * GLYPHS.length)] ?? ''
+          const solid = radius * (1 - edge);
+          const chance = away <= solid ? 1 : 1 - (away - solid) / Math.max(1, radius - solid);
+          const pool = [...glyphs];
+          const shown = chance > 0 && Math.random() < chance && pool.length
+            ? pool[Math.floor(Math.random() * pool.length)] ?? ''
             : cell.dataset.ch ?? '';
           for (const set of sets) { const box = set[i]; if (box) write(box, shown); }
         });

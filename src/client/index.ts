@@ -74,7 +74,11 @@ for (const init of modules) {
   try { init(); } catch (error) { console.error(error); }
 }
 
-// The ball's tuner is a development tool, fetched only when asked for with ?ball.
+// Development tools, fetched only on a local server: the menu's hover tuner (?menu=off hides it),
+// and the ball's (?ball), switched off for now.
+const local = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname) || location.hostname.endsWith('.local');
 const asked = new URLSearchParams(location.search);
 const stored = (key: string) => { try { return localStorage.getItem(key) === '1'; } catch { return false; } };
-if (asked.has('ball') || stored('cv-ball-on')) void import('./ball-tuner.ts').then((m) => m.initBallTuner());
+const BALL_TUNER = false;
+if (local && BALL_TUNER && (asked.has('ball') || stored('cv-ball-on'))) void import('./ball-tuner.ts').then((m) => m.initBallTuner());
+if (local) void import('./menu-tuner.ts').then((m) => m.initMenuTuner());
