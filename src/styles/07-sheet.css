@@ -136,9 +136,9 @@
 .sheet-prose .lede-tab { display: inline-block; width: 3.5em; }
 /* A quotation's credit: on the line under it, a tab in, at 20. */
 .sheet-prose .quote-credit { display: block; margin-left: 3.5em; font-size: var(--t-20); }
-/* What's Color II: who the lede's text was written for, an empty line under it and two above the text: thin 30 on 30. */
+/* What's Color II: who the lede's text was written for, an empty line under it and two above the text: regular 30 on 30. */
 .sheet-prose > p:has(> .lede-credit:only-child) { margin-bottom: calc(var(--s-lead) * 2em); }
-.sheet-prose .lede-credit { display: block; font-size: var(--t-30); font-weight: 100; line-height: 1; }
+.sheet-prose .lede-credit { display: block; font-size: var(--t-30); font-weight: 400; line-height: 1; }
 /* Transitions: the name under the closing poem, at 30. */
 .sheet-prose > p.sign-30 { font-size: var(--t-30); line-height: 1; }
 /* What's Color I-III: link to the edition's answers, highlighted as .wc-back. */
