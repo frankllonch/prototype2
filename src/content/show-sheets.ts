@@ -129,6 +129,7 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
   'color-dialogues': {
     lines: ['Solo show at Alzueta Gallery,', 'Madrid'],
     when: 'December 2021 to January 2022',
+    edits: [['<span>© Flavia Company </span>', '<span class="quote-credit">© Flavia Company</span>']],
   },
   t10: {
     lines: ['Solo exhibition', 'at Alzueta Gallery', 'Barcelona'],

@@ -134,6 +134,8 @@
 .sheet-prose .lede-gloss { font-style: italic; font-weight: inherit; }
 /* What's Color (II)'s lede picks up again on a new line after a tab, as its sheet sets it. */
 .sheet-prose .lede-tab { display: inline-block; width: 3.5em; }
+/* A quotation's credit, a tab after its closing mark, at 20. */
+.sheet-prose .quote-credit { margin-left: 3.5em; font-size: var(--t-20); }
 /* What's Color II: who the lede's text was written for, an empty line under it and two above the text: thin 30 on 30. */
 .sheet-prose > p:has(> .lede-credit:only-child) { margin-bottom: calc(var(--s-lead) * 2em); }
 .sheet-prose .lede-credit { display: block; font-size: var(--t-30); font-weight: 100; line-height: 1; }
