@@ -56,7 +56,7 @@ export function initBall(): void {
   /** The dots that trail behind, each chasing the one before it. */
   let ghosts: { el: HTMLElement; x: number; y: number; scale: number }[] = [];
 
-  /** The --ball-* motion settings, read again whenever the tuner changes them. */
+  /** The --ball-* motion settings. */
   const m = { follow: 0.4, spring: false, swing: 450, bounce: 0.5, trail: 0, trailFollow: 0.35, trailShrink: 0.6, trailFade: 0 };
   const read = () => {
     const style = getComputedStyle(root);

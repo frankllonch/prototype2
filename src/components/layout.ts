@@ -35,8 +35,8 @@ const MENU = [
   { label: 'About', href: '/#about', panel: 'about', phone: 5 },
 ] as const;
 
-/** Which hover the bar's words wear; settings at the head of client/scramble.ts. */
-const HOVER: 'roll' | 'scramble' = 'scramble';
+/** Which hover the bar's words wear: the sweep is in styles/08-hover.css and client/sweep.ts. */
+const HOVER: 'roll' | 'scramble' | 'sweep' = 'sweep';
 
 /*
  * The button is the phone's whole bar: three bars at the top right, drawn by the

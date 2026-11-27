@@ -3,20 +3,20 @@
 /* The site's pointer: a ball that follows the mouse and shows as the negative of
    whatever is under it (client/ball.ts). */
 :root {
-  --ball-size: 20px;
+  --ball-size: 46px;
   /* the ball at rest */
-  --ball-hover-size: 50px;
+  --ball-hover-size: 67px;
   /* over anything clickable */
   --ball-press: 2;
   /* while the button is held, as a share of its size */
-  --ball-follow: 0.5;
+  --ball-follow: 0.47;
   /* how fast it catches up: 1 = glued to the pointer, 0.1 = a slow trail */
   --ball-grow: 0.7s;
   /* how long it takes to grow and shrink */
   --ball-grow-ease: var(--ease);
-  /* White, with `difference`: the result is |backdrop − white|, the negative of
-     the backdrop, so the white page makes it black. */
-  --ball-color: #ffffff;
+  /* With `difference` the ball shows as |backdrop − colour|: this teal reads as
+     a warm red over the white page and turns over the paintings. */
+  --ball-color: #41b2b4;
   --ball-blend: difference;
   --ball-over-names: 0;
   /* over a painting its name stands in for the pointer: 0 hides the ball there, 1 keeps it */
@@ -29,17 +29,17 @@
   /* ms for one swing of that spring */
   --ball-spring-bounce: 0.5;
   /* how much it overshoots: 0 none, 0.9 a lot */
-  --ball-move-stretch-max: 0.5;
+  --ball-move-stretch-max: 0.05;
   /* the most it may stretch, as a share of its size */
-  --ball-move-size: 0;
+  --ball-move-size: -1;
   /* grows (above 0) or shrinks (below 0) the faster it goes */
-  --ball-move-wobble: 0;
+  --ball-move-wobble: 2;
   /* how much its outline shakes while it travels */
   --ball-trail: 0;
   /* how many dots follow behind */
-  --ball-trail-follow: 0.35;
+  --ball-trail-follow: 0.9;
   /* how closely each dot keeps to the one before: 1 = on top of it */
-  --ball-trail-shrink: 0.6;
+  --ball-trail-shrink: 1;
   /* how much smaller the last dot is than the ball */
   --ball-trail-fade: 0;
   /* how much fainter the last dot is than the ball */
@@ -49,33 +49,33 @@
   /* The click, a drop of oil in water (client/ball-oil.ts). */
   --ball-oil: 1;
   /* 0 turns the click's wobble off */
-  --ball-oil-expand: 0.35;
+  --ball-oil-expand: 0.67;
   /* how far it swells, as a share of its size */
-  --ball-oil-wobble: 0.25;
+  --ball-oil-wobble: 0.79;
   /* how far out of round it goes */
-  --ball-oil-lobes: 4;
+  --ball-oil-lobes: 8;
   /* how many bumps the wobble can have */
-  --ball-oil-bounce: 420;
+  --ball-oil-bounce: 730;
   /* ms for one swing out and back: lower is a stiffer spring */
   --ball-oil-settle: 1100;
   /* ms until it is round again: lower is more damping */
-  --ball-oil-tension: 0.6;
+  --ball-oil-tension: 0.75;
   /* how much quicker the small ripples are than the big ones */
   --ball-oil-release: 0.4;
   /* the second push as the button comes up, as a share of the first; below 0 pulls in */
   --ball-oil-swirl: 0;
   /* degrees a second the drop turns while it wobbles */
-  --ball-oil-stretch: 0;
+  --ball-oil-stretch: 2.1;
   /* how much it stretches along its way when moved fast */
   --ball-oil-speed: 1;
   /* the whole effect faster or slower */
   --ball-oil-ring: 0;
   /* a ripple ring let go on the click: its opacity, 0 for none */
-  --ball-oil-ring-size: 2.4;
+  --ball-oil-ring-size: 2.9;
   /* how far the ring travels, in ball sizes */
   --ball-oil-ring-time: 600;
   /* ms the ring lasts */
-  --ball-oil-ring-width: 0.12;
+  --ball-oil-ring-width: 0.6;
   /* the ring's line, as a share of the ball's radius */
 }
 
@@ -91,7 +91,7 @@ html.has-ball * {
   position: fixed;
   top: 0;
   left: 0;
-  /* Above everything, the tuners included. */
+  /* Above everything. */
   z-index: 2147483647;
   pointer-events: none;
   /* The blend goes on this outer layer, as with the painting names' `.cursor`:
@@ -200,20 +200,4 @@ html:has(.cursor.is-visible) .ball.is-on {
   .ball {
     display: none;
   }
-}
-
-/* The ball's tuner (client/ball-tuner.ts) wears the other tuners' clothes, in
-   the bottom left so it never covers theirs. */
-.tuner-ball {
-  right: auto;
-  left: 16px;
-  width: 320px;
-}
-
-.tuner-ball .tuner-row {
-  grid-template-columns: 1fr 130px 58px;
-}
-
-.tuner-ball .tuner-out {
-  flex-wrap: wrap;
 }
