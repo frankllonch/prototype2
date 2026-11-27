@@ -10,9 +10,10 @@ import { hues } from './palette.ts';
 /** The standing note about the project, set above the names. */
 export const LEAD =
   'I assign a color to people who inspire me \u2014 philosophers, historians, ' +
-  'thinkers, writers, architects and artists \u2014 and ask each of them a ' +
-  "simple question: WHAT\u2019S COLOR? It has run three times: Barcelona in " +
-  '2020, Madrid in 2021, and Llibreria Terranova in Barcelona in 2024.' +
+  'thinkers, writers, architects, photographers and other artists \u2014 and ask ' +
+  "each of them a simple question: WHAT\u2019S COLOR? It has run three times, " +
+  'twice in Barcelona (2020 and 2024) and once in Madrid (2021). The fourth ' +
+  'will be in April 2027.' +
   // A blank line, then the invitation: its own paragraph on the sheet, set semibold in capitals by
   // the stylesheet.
   '\n\nClick on their names to see what they said.';
