@@ -17446,6 +17446,37 @@
         }
       ],
       "metadata": {}
+    },
+    {
+      "slug": "solo-exhibition-2007",
+      "kind": "show",
+      "title": "Solo exhibition",
+      "sourceUrl": "official:solo-exhibition-2007",
+      "rows": [],
+      "cover": {
+        "id": "e7b25eca065c5991",
+        "source": "local/exhibitions/solo-exhibition-2007/01.png",
+        "alt": "",
+        "width": 1590,
+        "height": 2270
+      },
+      "images": [
+        {
+          "id": "e7b25eca065c5991",
+          "source": "local/exhibitions/solo-exhibition-2007/01.png",
+          "alt": "",
+          "width": 1590,
+          "height": 2270
+        },
+        {
+          "id": "208fb05277410431",
+          "source": "local/exhibitions/solo-exhibition-2007/02.png",
+          "alt": "",
+          "width": 1731,
+          "height": 2444
+        }
+      ],
+      "metadata": {}
     }
   ]
 }

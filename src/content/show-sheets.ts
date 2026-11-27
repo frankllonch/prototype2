@@ -161,6 +161,10 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
     lines: ['Solo exhibition', 'at Alzueta Gallery,', 'Barcelona'],
     when: 'February 2017',
   },
+  'solo-exhibition-2007': {
+    lines: ['Palau de Casavells,', 'Baix Empordà'],
+    when: 'July 2007',
+  },
   'el-color-no-existe': {
     title: 'El color no existe,\nexiste la luz',
     lines: ['Solo exhibition,', 'Sala Vinçon,', 'Barcelona'],

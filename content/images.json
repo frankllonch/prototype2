@@ -19834,5 +19834,71 @@
     "fallback": "/media/8151224d7dd0d94c-650.jpg",
     "width": 650,
     "height": 975
+  },
+  "208fb05277410431": {
+    "avif": [
+      {
+        "width": 400,
+        "url": "/media/208fb05277410431-400.avif"
+      },
+      {
+        "width": 800,
+        "url": "/media/208fb05277410431-800.avif"
+      },
+      {
+        "width": 1600,
+        "url": "/media/208fb05277410431-1600.avif"
+      }
+    ],
+    "webp": [
+      {
+        "width": 400,
+        "url": "/media/208fb05277410431-400.webp"
+      },
+      {
+        "width": 800,
+        "url": "/media/208fb05277410431-800.webp"
+      },
+      {
+        "width": 1600,
+        "url": "/media/208fb05277410431-1600.webp"
+      }
+    ],
+    "fallback": "/media/208fb05277410431-1600.jpg",
+    "width": 1731,
+    "height": 2444
+  },
+  "e7b25eca065c5991": {
+    "avif": [
+      {
+        "width": 400,
+        "url": "/media/e7b25eca065c5991-400.avif"
+      },
+      {
+        "width": 800,
+        "url": "/media/e7b25eca065c5991-800.avif"
+      },
+      {
+        "width": 1590,
+        "url": "/media/e7b25eca065c5991-1590.avif"
+      }
+    ],
+    "webp": [
+      {
+        "width": 400,
+        "url": "/media/e7b25eca065c5991-400.webp"
+      },
+      {
+        "width": 800,
+        "url": "/media/e7b25eca065c5991-800.webp"
+      },
+      {
+        "width": 1590,
+        "url": "/media/e7b25eca065c5991-1590.webp"
+      }
+    ],
+    "fallback": "/media/e7b25eca065c5991-1590.jpg",
+    "width": 1590,
+    "height": 2270
   }
 }
