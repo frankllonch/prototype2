@@ -14,8 +14,8 @@ type Mode = { k: number; a: number; b: number; va: number; vb: number; ta: numbe
 export type Oil = {
   /** A push outward, as a share of the full click. */
   kick(share?: number): void;
-  /** The ball's speed in px/ms, so the drop can trail behind itself. */
-  drag(vx: number, vy: number): void;
+  /** The ball's speed in px/ms over the last `ms`, so the drop can trail behind itself. */
+  drag(vx: number, vy: number, ms: number): void;
 };
 
 const COS: number[][] = [];
@@ -41,6 +41,7 @@ export function initOil(ball: HTMLElement, dot: HTMLElement): Oil {
   const s = {
     on: true, expand: 0.35, wobble: 0.25, lobes: 4, bounce: 420, settle: 1100, tension: 0.6,
     release: 0.4, swirl: 0, stretch: 0, speed: 1, ring: 0, ringSize: 2.4, ringTime: 600, ringWidth: 0.12,
+    stretchMax: 0.5, moveSize: 0, moveWobble: 0,
   };
   const read = () => {
     const style = getComputedStyle(document.documentElement);
@@ -59,6 +60,9 @@ export function initOil(ball: HTMLElement, dot: HTMLElement): Oil {
     s.swirl = n('--ball-oil-swirl', s.swirl, -720, 720);
     s.stretch = n('--ball-oil-stretch', s.stretch, 0, 3);
     s.speed = n('--ball-oil-speed', s.speed, 0.05, 4);
+    s.stretchMax = n('--ball-move-stretch-max', s.stretchMax, 0, 0.9);
+    s.moveSize = n('--ball-move-size', s.moveSize, -1, 2);
+    s.moveWobble = n('--ball-move-wobble', s.moveWobble, 0, 2);
     s.ring = n('--ball-oil-ring', s.ring, 0, 1);
     s.ringSize = n('--ball-oil-ring-size', s.ringSize, 1, REACH - 0.1);
     s.ringTime = n('--ball-oil-ring-time', s.ringTime, 50, 5000);
@@ -73,7 +77,7 @@ export function initOil(ball: HTMLElement, dot: HTMLElement): Oil {
     return [Math.min(((2 * Math.PI) / s.bounce) * scale, 1), Math.min((4 / s.settle) * scale, 1)];
   };
 
-  let frame = 0, at = 0, turn = 0, rippled = -1;
+  let frame = 0, at = 0, turn = 0, rippled = -1, shaken = 0;
 
   const draw = () => {
     let d = '';
@@ -161,14 +165,32 @@ export function initOil(ball: HTMLElement, dot: HTMLElement): Oil {
       if (s.ring > 0 && share > 0) rippled = 0;
       wake();
     },
-    drag(vx, vy) {
-      const pull = s.on && !reduceMotion.matches ? Math.min(s.stretch * Math.hypot(vx, vy) * 0.15, 0.5) : 0;
-      if (pull < 0.004) { long.ta = long.tb = 0; return; }
-      // The drawing is turned by `turn`, so the pull is aimed in its own frame.
-      const along = 2 * (Math.atan2(vy, vx) - turn);
-      long.ta = pull * Math.cos(along);
-      long.tb = pull * Math.sin(along);
-      wake();
+    drag(vx, vy, ms) {
+      const swell = modes[0];
+      const quick = s.on && !reduceMotion.matches ? Math.hypot(vx, vy) * 0.15 : 0;
+      const pull = Math.min(s.stretch * quick, s.stretchMax);
+      const size = Math.min(Math.max(s.moveSize * Math.min(quick, 1), -0.8), 1.5);
+      const shake = s.moveWobble * Math.min(quick, 1);
+      if (swell) swell.ta = Math.abs(size) < 0.004 ? 0 : size;
+      if (pull < 0.004) long.ta = long.tb = 0;
+      else {
+        // The drawing is turned by `turn`, so the pull is aimed in its own frame.
+        const along = 2 * (Math.atan2(vy, vx) - turn);
+        long.ta = pull * Math.cos(along);
+        long.tb = pull * Math.sin(along);
+      }
+      shaken += ms;
+      if (shake > 0.004 && shaken > 90) {
+        shaken = 0;
+        for (const m of modes) {
+          if (m.k < 2 || m.k > s.lobes + 1) continue;
+          const push = shake * 0.5 * (2 / m.k) * rates(m.k)[0];
+          const phase = Math.random() * 2 * Math.PI;
+          m.va += push * Math.cos(phase);
+          m.vb += push * Math.sin(phase);
+        }
+      }
+      if (pull >= 0.004 || Math.abs(size) >= 0.004 || shake > 0.004) wake();
     },
   };
 }

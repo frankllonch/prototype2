@@ -50,17 +50,49 @@ export function initBall(): void {
 
   const clickable = [...CLICKABLE, ...pointerRules()].join(', ');
 
-  /** --ball-follow, read again whenever the tuner changes it. */
-  let follow = 0.4;
+  let targetX = 0, targetY = 0, x = 0, y = 0, vx = 0, vy = 0;
+  let placed = false, frame = 0, tickedAt = 0;
+
+  /** The dots that trail behind, each chasing the one before it. */
+  let ghosts: { el: HTMLElement; x: number; y: number; scale: number }[] = [];
+
+  /** The --ball-* motion settings, read again whenever the tuner changes them. */
+  const m = { follow: 0.4, spring: false, swing: 450, bounce: 0.5, trail: 0, trailFollow: 0.35, trailShrink: 0.6, trailFade: 0 };
   const read = () => {
-    const v = parseFloat(getComputedStyle(root).getPropertyValue('--ball-follow'));
-    follow = Number.isFinite(v) ? Math.min(Math.max(v, 0.01), 1) : 0.4;
+    const style = getComputedStyle(root);
+    const n = (name: string, fallback: number, min: number, max: number) => {
+      const v = parseFloat(style.getPropertyValue(name));
+      return Number.isFinite(v) ? Math.min(Math.max(v, min), max) : fallback;
+    };
+    m.follow = n('--ball-follow', 0.4, 0.01, 1);
+    m.spring = n('--ball-spring', 0, 0, 1) > 0;
+    m.swing = n('--ball-spring-swing', 450, 60, 4000);
+    m.bounce = n('--ball-spring-bounce', 0.5, 0, 0.98);
+    m.trail = reduceMotion.matches ? 0 : Math.round(n('--ball-trail', 0, 0, 12));
+    m.trailFollow = n('--ball-trail-follow', 0.35, 0.01, 1);
+    m.trailShrink = n('--ball-trail-shrink', 0.6, 0, 1);
+    m.trailFade = n('--ball-trail-fade', 0, 0, 1);
+    while (ghosts.length > m.trail) ghosts.pop()!.el.remove();
+    while (ghosts.length < m.trail) {
+      const el = document.createElement('span');
+      el.className = 'ball-ghost';
+      ball.prepend(el);
+      ghosts.push({ el, x, y, scale: 1 });
+    }
+    ghosts.forEach((g, i) => {
+      const along = (i + 1) / ghosts.length;
+      g.scale = Math.max(1 - m.trailShrink * along, 0.04);
+      g.el.style.opacity = String(Math.max(1 - m.trailFade * along, 0.04));
+    });
+    trail();
+  };
+  const trail = () => {
+    for (const g of ghosts) {
+      g.el.style.transform = `translate(${(g.x - x).toFixed(1)}px, ${(g.y - y).toFixed(1)}px) translate(-50%, -50%) scale(${g.scale.toFixed(3)})`;
+    }
   };
   read();
   document.addEventListener('ballchange', read);
-
-  let targetX = 0, targetY = 0, x = 0, y = 0;
-  let placed = false, frame = 0, tickedAt = 0;
 
   const draw = webkit
     ? () => { ball.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`; }
@@ -71,13 +103,38 @@ export function initBall(): void {
     // same at 60fps (Safari) as at 120.
     const elapsed = tickedAt ? Math.min(time - tickedAt, 100) : 1000 / 120;
     tickedAt = time;
-    const ease = reduceMotion.matches || follow >= 1 ? 1 : 1 - Math.pow(1 - follow, elapsed / (1000 / 120));
-    const dx = (targetX - x) * ease, dy = (targetY - y) * ease;
-    x += dx;
-    y += dy;
+    const share = (rate: number) => rate >= 1 ? 1 : 1 - Math.pow(1 - rate, elapsed / (1000 / 120));
+    const fromX = x, fromY = y;
+    if (m.spring && !reduceMotion.matches) {
+      // Pulled to the pointer on a spring, so it can overshoot and swing back.
+      const pull = (2 * Math.PI) / m.swing, drag = 2 * (1 - m.bounce) * pull;
+      const steps = Math.min(Math.max(Math.ceil(elapsed * pull * 2.5), 1), 40), dt = elapsed / steps;
+      for (let i = 0; i < steps; i++) {
+        vx += (pull * pull * (targetX - x) - drag * vx) * dt;
+        vy += (pull * pull * (targetY - y) - drag * vy) * dt;
+        x += vx * dt;
+        y += vy * dt;
+      }
+    } else {
+      const ease = reduceMotion.matches ? 1 : share(m.follow);
+      x += (targetX - x) * ease;
+      y += (targetY - y) * ease;
+      vx = vy = 0;
+    }
     draw();
-    const moving = Math.abs(targetX - x) > 0.1 || Math.abs(targetY - y) > 0.1;
-    if (moving) oil.drag(dx / elapsed, dy / elapsed); else oil.drag(0, 0);
+    let trailing = false, leadX = x, leadY = y;
+    for (const g of ghosts) {
+      const ease = share(m.trailFollow);
+      g.x += (leadX - g.x) * ease;
+      g.y += (leadY - g.y) * ease;
+      leadX = g.x;
+      leadY = g.y;
+      if (Math.abs(g.x - x) > 0.1 || Math.abs(g.y - y) > 0.1) trailing = true;
+    }
+    trail();
+    const arriving = Math.abs(targetX - x) > 0.1 || Math.abs(targetY - y) > 0.1 || Math.hypot(vx, vy) > 0.004;
+    if (arriving) oil.drag((x - fromX) / elapsed, (y - fromY) / elapsed, elapsed); else oil.drag(0, 0, elapsed);
+    const moving = arriving || trailing;
     frame = moving ? requestAnimationFrame(tick) : 0;
     if (!frame) tickedAt = 0;
   };
@@ -93,7 +150,14 @@ export function initBall(): void {
     targetX = event.clientX;
     targetY = event.clientY;
     // Start where the pointer is, or it swoops in from the corner.
-    if (!placed) { placed = true; x = targetX; y = targetY; draw(); }
+    if (!placed) {
+      placed = true;
+      x = targetX;
+      y = targetY;
+      for (const g of ghosts) { g.x = x; g.y = y; }
+      draw();
+      trail();
+    }
     ball.classList.add('is-on');
     hover(targetElement(event));
     if (!frame) frame = requestAnimationFrame(tick);
