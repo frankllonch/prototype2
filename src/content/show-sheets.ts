@@ -87,6 +87,8 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
           'striped Oxford shirt.<br /><span class="lede-tab"></span>All this spectacle in the middle of a construction ' +
           'site to show respectively the color of the wood, the color of the carpet and the different shades of the ' +
           'walls, is an image that I remember with some nostalgia, but that cannot be repeated today.’',
+        '<span class="lede-credit">Text commissioned by the architect Cristian Cirici on the occasion of my first ' +
+          'color chart self edited in 2000.</span>',
         'From the scientific experiment to the artistic concern, from Munsell’s diagrams and Goethe’s studies to Le ' +
           'Corbusier’s Salubra and the almost infinite possible combinations of electronics, the color chart has always ' +
           'existed to facilitate the communication of color.',
