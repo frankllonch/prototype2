@@ -12,16 +12,17 @@
 
 /* A block from the What's Color list slides in under the word and out the far
    side, the letters knocked out of it (client/sweep.ts picks the colour). The
-   page you are on keeps its own block, which only changes colour. */
+   page you are on keeps its own block, which only changes colour; on the
+   opening page that block is not out yet, so its name sweeps like the rest. */
 @media (min-width: 900px) {
-  html[data-hover='sweep'] .top [data-roll]:not([aria-current='page']) {
+  html[data-hover='sweep'] :is(.top [data-roll]:not([aria-current='page']), .has-film:not(.is-film-past) .top [data-roll]) {
     --sweep-time: 790ms;
     --sweep-height: 1.05em;
     --sweep-drop: -0.13em;
     --sweep-side: 0em;
     position: relative;
   }
-  html[data-hover='sweep'] .top [data-roll]:not([aria-current='page'])::after {
+  html[data-hover='sweep'] :is(.top [data-roll]:not([aria-current='page']), .has-film:not(.is-film-past) .top [data-roll])::after {
     content: ''; position: absolute; z-index: -1; pointer-events: none;
     left: calc(-1 * var(--sweep-side)); right: calc(-1 * var(--sweep-side));
     top: calc(50% - var(--sweep-height) / 2 + var(--sweep-drop)); height: var(--sweep-height);
@@ -29,10 +30,10 @@
     transform: scaleX(0); transform-origin: right;
     transition: transform var(--sweep-time) var(--ease);
   }
-  html[data-hover='sweep'] .top [data-roll]:not([aria-current='page']):is(:hover, :focus-visible:not([data-quiet-focus]))::after {
+  html[data-hover='sweep'] :is(.top [data-roll]:not([aria-current='page']), .has-film:not(.is-film-past) .top [data-roll]):is(:hover, :focus-visible:not([data-quiet-focus]))::after {
     transform: none; transform-origin: left;
   }
-  html[data-hover='sweep'] .top [data-roll]:not([aria-current='page']):is(:hover, :focus-visible:not([data-quiet-focus])) {
+  html[data-hover='sweep'] :is(.top [data-roll]:not([aria-current='page']), .has-film:not(.is-film-past) .top [data-roll]):is(:hover, :focus-visible:not([data-quiet-focus])) {
     color: #000; --roll-color: #000;
     transition: color calc(var(--sweep-time) / 2) linear calc(var(--sweep-time) / 4);
   }
