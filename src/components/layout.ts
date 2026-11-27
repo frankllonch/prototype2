@@ -120,10 +120,7 @@ function aboutOverlay(): Html {
           </ul>
         </section>
       </div>
-      <address class="about-contact">
-        ${join(ABOUT_CARD.emails.map((email) => html`<a href="mailto:${email}">${email}</a>`))}
-      </address>
-      <p class="about-foot"><b>${ABOUT_CARD.name}</b> ${ABOUT_COPYRIGHT}</p>
+      ${siteFoot('about-site-foot')}
     </div>
     ${images.length ? aboutViewer() : ''}
   </section>
@@ -268,17 +265,17 @@ function lightbox(): Html {
 /**
  * The contact footer, after the designer's HOME sheet: who to write to, the
  * copyright line About closes on, and the credit, centred at the foot of the
- * page.
+ * page, About included. A heart stands either side of the credit.
  */
-function siteFoot(): Html {
+function siteFoot(className = ''): Html {
   const [inquiries, other] = ABOUT_CARD.emails;
-  return html`<footer class="site-foot">
+  return html`<footer class="site-foot${className ? ` ${className}` : ''}">
     <p>
-      For inquiries please contact to: <a href="mailto:${inquiries}">${inquiries}</a><br />
-      And any other issues: <a href="mailto:${other}">${other}</a>
+      Artwork inquiries: <a href="mailto:${inquiries}">${inquiries}</a><br />
+      Others: <a href="mailto:${other}">${other}</a>
     </p>
     <p><b>${ABOUT_CARD.name}</b> ${ABOUT_COPYRIGHT}</p>
-    <p>Web design by Frank Llonch &amp; Laia Puig</p>
+    <p><span class="site-foot-heart" aria-hidden="true">&#9829;&#xFE0E;</span> Web design by Frank Llonch &amp; Laia Puig <span class="site-foot-heart" aria-hidden="true">&#9829;&#xFE0E;</span></p>
   </footer>`;
 }
 

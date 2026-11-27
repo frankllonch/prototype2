@@ -58,7 +58,7 @@ export function initAbout(): void {
   const body = [...about.querySelectorAll<HTMLElement>('.about-text > p:not(.about-lead)')].flatMap(splitWords);
   const pops = [
     ...about.querySelectorAll<HTMLElement>(
-      '.about-label, .about-show, .about-collection, .about-contact, .about-foot',
+      '.about-label, .about-show, .about-collection, .about-site-foot',
     ),
   ];
   for (const el of pops) el.classList.add('about-pop');
