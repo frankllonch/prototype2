@@ -132,13 +132,21 @@
 .sheet-prose .lede-gloss { font-style: italic; font-weight: inherit; }
 /* What's Color (II)'s lede picks up again on a new line after a tab, as its sheet sets it. */
 .sheet-prose .lede-tab { display: inline-block; width: 3.5em; }
-/* A quotation's credit: on the line under it, a tab in, at 20. */
-.sheet-prose .quote-credit { display: block; margin-left: 3.5em; font-size: var(--t-20); }
+/* Who wrote the text: in the text's own box, at 20, two of the text's empty lines under it. */
+.sheet-prose .text-by {
+  display: block;
+  margin-top: 4em;
+  font-size: var(--t-20);
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1;
+  text-transform: none;
+}
+/* Color Atlas: the article link closing the text, in capitals. */
+.sheet-prose > p.read-more { text-transform: uppercase; }
 /* What's Color II: who the lede's text was written for, an empty line under it and two above the text: regular 30 on 30. */
 .sheet-prose > p:has(> .lede-credit:only-child) { margin-bottom: calc(var(--s-lead) * 2em); }
 .sheet-prose .lede-credit { display: block; font-size: var(--t-30); font-weight: 400; line-height: 1; }
-/* Transitions: the name under the closing poem, at 30. */
-.sheet-prose > p.sign-30 { font-size: var(--t-30); line-height: 1; }
 /* What's Color I-III: link to the edition's answers, highlighted as .wc-back. */
 .sheet-prose > p.sheet-answers {
   margin-top: calc(var(--s-lead) * var(--type));
@@ -168,16 +176,21 @@
 .sheet-prose a:focus-visible { text-decoration: underline; text-underline-offset: 0.15em; text-decoration-thickness: 1px; }
 /* The gallery's name, lit in colour like About's (02-overlays.css) rather than underlined. */
 .sheet-prose a.about-link:is(:hover, :focus-visible) { text-decoration: none; }
-.sheet-prose .is-style-note {
-  /* The same distance from the text as before the credits went to 30. */
+.sheet-prose :is(.is-style-note, .is-style-thanks) {
+  /* Text → roles: one distance on every sheet. */
   margin-top: calc(var(--type) * 5.2);
+}
+.sheet-prose .is-style-note {
   /* ROLS: regular 20 on 20. */
   font-size: var(--t-20);
   font-weight: 400;
   line-height: 1;
 }
-/* The names keep their capitals, in the regular weight of the line. */
-.sheet-prose .is-style-note :is(b, strong, em) { font-weight: 400; }
+/* One role to a line, set apart from the next; the names in medium. */
+.sheet-prose .is-style-note > span { display: block; }
+.sheet-prose .is-style-note > span + span { margin-top: 0.7em; }
+.sheet-prose :is(.is-style-note, .is-style-thanks) :is(b, strong, em) { font-weight: 500; }
+.sheet-prose .is-style-note b span { font-weight: 400; }
 /* RBTA's Color Chart: the interview link at half the usual distance from the text. */
 #commissioned-color-chart-el-taller-de-arquitectura-rbta .sheet-prose .is-style-note { margin-top: calc(var(--type) * 2.6); }
 .sheet-prose .is-style-note .is-artist { font-size: calc(1em * 40 / 20); }
@@ -689,13 +702,12 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
   #exhibition-what-s-color-ii-for-architects-and-designers > .sheet .sheet-prose > * div:not(:last-child) { margin-bottom: var(--sh-para); }
   .panel > .sheet .sheet-prose .lede-open { margin-bottom: var(--sh-para); }
   .panel > .sheet .sheet-prose .lede-credit { font-size: calc(var(--sh-type) * 0.75); }
-  .panel > .sheet .sheet-prose > p.sign-30 { font-size: calc(var(--sh-type) * 0.75); line-height: calc(var(--sh-type) * 0.75); }
   .panel > .sheet .sheet-prose > .sheet-answers { margin-top: calc(var(--sh-para) * 2); font-size: var(--sh-note); line-height: var(--sh-note); }
   .panel > .sheet .sheet-prose > :is(p:first-of-type, .is-style-lead) { font-size: var(--sh-lede); line-height: var(--sh-lede); }
   .panel > .sheet .sheet-prose > .is-style-note { font-size: var(--sh-note); line-height: var(--sh-note); }
-  .panel > .sheet .sheet-prose .quote-credit { font-size: var(--sh-note); }
+  .panel > .sheet .sheet-prose .text-by { font-size: var(--sh-note); line-height: var(--sh-note); }
   .panel > .sheet .sheet-prose > .is-quote { font-size: var(--sh-type); line-height: var(--sh-type); }
-  .panel > .sheet .sheet-prose > .is-style-thanks { font-size: var(--sh-note); line-height: var(--sh-note); }
+  .panel > .sheet .sheet-prose > .is-style-thanks { margin-top: calc(var(--sh-type) * 5.2); font-size: var(--sh-note); line-height: var(--sh-note); }
   .panel > .sheet .sheet-prose > .is-style-thanks p { margin: 0 0 1em; }
   .panel > .sheet .sheet-prose > .is-style-thanks p:last-child { margin-bottom: 0; }
   .panel > .sheet .sheet-prose > .is-style-thanks p.fn-gap2 { margin-bottom: 3em; }

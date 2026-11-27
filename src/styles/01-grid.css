@@ -436,7 +436,7 @@ html.js .hero[data-hero]+.grid[data-stack] {
 
 .xrow-when {
   font-weight: 400;
-  font-style: italic;
+  font-style: normal;
   white-space: nowrap;
 }
 

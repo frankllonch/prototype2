@@ -1,22 +1,22 @@
 /* ------------------------------------------------------------------ foot */
 
-/* The contact footer at the foot of every page but About and the detail pages:
-   centred, 20 on 20 in the 1920 frame, a blank line between its three parts, the
-   addresses and Claudia's name semibold. */
+/* The contact footer at the foot of every page but the detail pages: centred,
+   20 in the 1920 frame on a 1.4 line, two blocks apart as the Figma footer sets
+   them, the addresses, the handle and Claudia's name semibold. */
 .site-foot {
   --u: calc(100vw / 1920);
   position: relative;
   z-index: 1;
   padding: calc(160 * var(--u)) 1.25rem max(2.5rem, calc(76 * var(--u)));
   font-size: max(0.75rem, calc(20 * var(--u)));
-  line-height: 1;
+  line-height: 1.4;
   font-weight: 400;
   text-align: center;
   color: var(--ink);
   background: var(--paper);
 }
 .site-foot p { margin: 0; }
-.site-foot p + p { margin-top: 1em; }
+.site-foot p + p { margin-top: 2.3em; }
 .site-foot b,
 .site-foot a { font-weight: 600; }
 .site-foot a { color: inherit; text-decoration: none; }
@@ -27,8 +27,7 @@
 .about-site-foot { background: none; padding-left: 0; padding-right: 0; }
 
 @media (max-width: 899px) {
-  .site-foot { line-height: 1.25; padding-top: 4rem; }
-  .site-foot p + p { margin-top: 0.75rem; }
+  .site-foot { padding-top: 4rem; }
   /* Artwork keeps its years and Inquiries fixed along the phone's foot (about
      100px of it): the footer stops above them. */
   body:has(.years) .site-foot { padding-bottom: 8.5rem; }

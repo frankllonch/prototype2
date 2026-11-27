@@ -378,7 +378,8 @@
 }
 .wc-film-sound:focus-visible { outline: 1px solid currentColor; outline-offset: 0.6rem; }
 .wc-film-sound svg { display: block; width: 100%; height: auto; overflow: visible; }
-.wc-film-sound path { stroke-width: var(--cue-stroke); }
+/* A finer line than the scroll cue's, about 1.5pt lighter. */
+.wc-film-sound path { stroke-width: calc(var(--cue-stroke) - 1.25); }
 .wc-film-sound .wc-sound-on,
 .wc-film-sound[aria-pressed='true'] .wc-sound-off { display: none; }
 .wc-film-sound[aria-pressed='true'] .wc-sound-on { display: inline; }
