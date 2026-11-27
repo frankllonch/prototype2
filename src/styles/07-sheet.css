@@ -15,7 +15,8 @@
   display: grid;
   /* The reading column. */
   grid-template-columns: calc(var(--f) * 800) minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr);
+  /* The first row is the masthead's height (client/sheets.ts), so the round button keeps its place. */
+  grid-template-rows: var(--head-h, calc(var(--f) * 288)) minmax(0, 1fr);
   height: 100vh;
   height: 100dvh;
   color: var(--ink);
