@@ -48,7 +48,7 @@ export const SHOWS: readonly Show[] = [
   },
 
   // --------------------------------------------------------- group shows
-  { group: 'Group shows', title: 'Notas al pie', venue: 'Group exhibition, New York', from: 'December', year: 2026, slug: 'notas-al-pie' },
+  { group: 'Group shows', title: 'Notas al pie', venue: 'Group exhibition, Barcelona', from: 'December', year: 2026, slug: 'notas-al-pie' },
   { group: 'Group shows', title: '‘Shift towards coincidence’', venue: 'Group show, Palau de Casavells', from: 'June', to: 'July', year: 2026, slug: 'shift-towards-coincidence' },
   { group: 'Group shows', title: '‘Abstract paintings’', venue: 'Group exhibition, Scroll New York', from: 'June', year: 2026, slug: 'abstract-paintings' },
   { group: 'Group shows', title: 'Marco, Límite y Lugar', venue: 'Group exhibition, Alzueta Gallery Madrid', from: 'March', year: 2026, slug: 'marco-limite-y-lugar' },
