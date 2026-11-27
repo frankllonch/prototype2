@@ -28,11 +28,11 @@ interface LayoutProps {
 
 /** The menu, in document order. `phone` is the item's place on the phone's menu screen (CSS `order`). */
 const MENU = [
-  { label: 'Exhibitions', href: '/exhibitions/', phone: 5 },
-  { label: 'Commissioned', href: '/commissioned/', phone: 4 },
+  { label: 'Exhibitions', href: '/exhibitions/', phone: 1 },
+  { label: 'Commissioned', href: '/commissioned/', phone: 2 },
   { label: 'Artwork', href: '/artwork/', phone: 3 },
-  { label: 'Color Chart', href: '/color-chart/', phone: 2 },
-  { label: 'About', href: '/#about', panel: 'about', phone: 1 },
+  { label: 'Color Chart', href: '/color-chart/', phone: 4 },
+  { label: 'About', href: '/#about', panel: 'about', phone: 5 },
 ] as const;
 
 /** Which hover the bar's words wear; settings at the head of client/scramble.ts. */

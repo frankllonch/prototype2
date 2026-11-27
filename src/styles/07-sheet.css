@@ -692,6 +692,7 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
   .panel > .sheet .sheet-prose > .sheet-answers { margin-top: calc(var(--sh-para) * 2); font-size: var(--sh-note); line-height: var(--sh-note); }
   .panel > .sheet .sheet-prose > :is(p:first-of-type, .is-style-lead) { font-size: var(--sh-lede); line-height: var(--sh-lede); }
   .panel > .sheet .sheet-prose > .is-style-note { font-size: var(--sh-note); line-height: var(--sh-note); }
+  .panel > .sheet .sheet-prose .quote-credit { font-size: var(--sh-note); }
   .panel > .sheet .sheet-prose > .is-quote { font-size: var(--sh-type); line-height: var(--sh-type); }
   .panel > .sheet .sheet-prose > .is-style-thanks { font-size: var(--sh-note); line-height: var(--sh-note); }
   .panel > .sheet .sheet-prose > .is-style-thanks p { margin: 0 0 1em; }
@@ -758,6 +759,9 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
   .panel[id^='commissioned-'] .sheet-prose > :nth-child(-n + 2 of :not(.is-style-note)) { order: 2; }
   .panel[id^='commissioned-'] .sheet-prose > :nth-child(1 of :not(.is-style-note)) { margin-top: var(--sh-text-top); }
   .panel[id^='commissioned-'] .sheet-prose:not(:has(> .is-style-note)) > :first-child { margin-top: var(--sh-text-bare); }
+  /* RBTA's Color Chart: the interview link, above the text here, at half the usual distance from it. */
+  #commissioned-color-chart-el-taller-de-arquitectura-rbta .sheet-prose > .is-style-note { margin-top: var(--sh-note-top); }
+  #commissioned-color-chart-el-taller-de-arquitectura-rbta .sheet-prose > :nth-child(1 of :not(.is-style-note)) { margin-top: calc(var(--sh-text-top) / 2); }
   .panel[id^='commissioned-'] .sheet-figure:first-child { order: 3; margin-top: var(--sh-pic-top); }
   .panel[id^='commissioned-'] .sheet:has(.sheet-figure) .sheet-prose > :nth-child(3 of :not(.is-style-note)) { margin-top: var(--sh-pic-bottom); }
   /* The other photographs stand off the text as the first does; with no text
