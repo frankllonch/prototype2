@@ -265,8 +265,7 @@ function lightbox(): Html {
 /**
  * The contact footer, after the designer's HOME sheet: who to write to, the
  * copyright line About closes on, and the credit, centred at the foot of the
- * page. Two black hearts stand either side of the credit, at its own size
- * (Frank, 2026-11-27). About closes on the same footer as every other page.
+ * page, About included. A heart stands either side of the credit.
  */
 function siteFoot(className = ''): Html {
   const [inquiries, other] = ABOUT_CARD.emails;
