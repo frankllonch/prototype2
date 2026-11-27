@@ -141,6 +141,21 @@
 .sheet-prose .lede-credit { display: block; font-size: var(--t-30); font-weight: 100; line-height: 1; }
 /* What's Color I: her name under the text, at 20. */
 .sheet-prose .text-sign { font-size: var(--t-20); }
+/* What's Color I-III: the way to the edition's answers, an empty line under the text, set and
+   highlighted as the edition's own "All of What's Color?" (04-whats-color.css): capitals, medium,
+   the band tight to the letters. */
+.sheet-prose > p.sheet-answers {
+  margin-top: calc(var(--s-lead) * 1em);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+.sheet-prose .sheet-answers a { color: var(--ink); text-decoration: none; padding: 0 0 0 0.117em; margin-left: -0.117em; }
+.sheet-prose .sheet-answers a:is(:hover, :focus-visible) {
+  background: linear-gradient(var(--ink), var(--ink)) no-repeat 0 0.2em / calc(100% - 0.033em) 0.905em;
+  color: var(--paper);
+  text-decoration: none;
+  outline: none;
+}
 /* Some sheets leave a second empty line before a change of voice. */
 .sheet-prose .apart { margin-top: calc(var(--s-lead) * 1em); }
 /* The sheet decides the distribution, not the pasted markup. */
@@ -674,6 +689,7 @@ html:not(.js) .plates-figure { position: static; opacity: 1; }
   .panel > .sheet .sheet-prose .lede-open { margin-bottom: var(--sh-para); }
   .panel > .sheet .sheet-prose .lede-credit { font-size: calc(var(--sh-type) * 0.75); }
   .panel > .sheet .sheet-prose .text-sign { font-size: calc(var(--sh-type) * 0.5); }
+  .panel > .sheet .sheet-prose > .sheet-answers { margin-top: calc(var(--sh-para) * 2); }
   .panel > .sheet .sheet-prose > :is(p:first-of-type, .is-style-lead) { font-size: var(--sh-lede); line-height: var(--sh-lede); }
   .panel > .sheet .sheet-prose > .is-style-note { font-size: var(--sh-note); line-height: var(--sh-note); }
   .panel > .sheet .sheet-prose > .is-quote { font-size: var(--sh-type); line-height: var(--sh-type); }

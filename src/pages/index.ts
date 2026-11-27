@@ -126,9 +126,14 @@ export function exhibitionsPage(items: readonly Exhibition[], commissioned: read
     const images = reels.get(show.slug) ?? [];
     if (!images.length) return [];
 
-    const prose = design.text ?? (derived
+    const text = design.text ?? (derived
       ? applyEdits(setThanks(show.slug, splitOpening(derived.rows.flatMap((r) => r.columns).map((c) => (c.kind === 'text' ? c.html : '')).join(''))), design)
       : '');
+    // A What's Color sheet closes on the way to that edition's answers, highlighted as the
+    // edition's own way back to all of What's Color? is.
+    const prose = text.trim() && design.answers
+      ? `${text}<p class="sheet-answers"><a href="${withBase(`/whats-color/${design.answers.toLowerCase()}/`)}">See answers What’s Color ${design.answers}</a></p>`
+      : text;
 
     const title = design.title ?? show.title;
     if (!prose.trim()) {
