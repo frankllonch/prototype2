@@ -10,7 +10,7 @@ export interface ShowSheet {
   readonly artists?: string;
   readonly text?: string;
   readonly note?: string;
-  /** What's Color: the edition whose answers the sheet closes on a link to. */
+  /** What's Color edition whose answers the sheet links to. */
   readonly answers?: 'I' | 'II' | 'III';
   /** Exact replacements in the source's text, where the sheet sets it otherwise. */
   readonly edits?: readonly (readonly [string, string])[];
