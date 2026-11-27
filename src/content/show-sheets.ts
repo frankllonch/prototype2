@@ -76,7 +76,7 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
       'First of all, to open up a dialogue, to grasp new ways of seeing colors, other perspectives, but also to better ' +
         'understand the world.<br />I wanted to think of color in a broader context, outside of the artistic view, and ' +
         'to discover the notion of color as it is thought of by others.',
-      'Claudia Valsells',
+      '<span class="text-sign">Claudia Valsells</span>',
     ),
   },
   'what-s-color-ii-for-architects-and-designers': {
