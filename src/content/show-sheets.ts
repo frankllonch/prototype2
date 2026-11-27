@@ -155,7 +155,7 @@ export const SHOW_SHEETS: Readonly<Record<string, ShowSheet>> = {
 
   // ------------------------------------------------------------ group shows
   'notas-al-pie': {
-    lines: ['Group exhibition', 'at New York'],
+    lines: ['Group exhibition', 'at Barcelona'],
     when: 'December 2026',
   },
   'shift-towards-coincidence': {
