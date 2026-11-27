@@ -14,9 +14,9 @@
   --ball-grow: 0.7s;
   /* how long it takes to grow and shrink */
   --ball-grow-ease: var(--ease);
-  /* With `difference` the ball shows as |backdrop − colour|: this teal reads as
-     a warm red over the white page and turns over the paintings. */
-  --ball-color: #41b2b4;
+  /* White, with `difference`: the result is |backdrop − white|, the negative of
+     the backdrop, so the white page makes it black. */
+  --ball-color: #ffffff;
   --ball-blend: difference;
   --ball-over-names: 0;
   /* over a painting its name stands in for the pointer: 0 hides the ball there, 1 keeps it */
