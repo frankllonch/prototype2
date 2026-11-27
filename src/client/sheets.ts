@@ -8,6 +8,9 @@ export function initSheets(): void {
     const text = sheet.querySelector<HTMLElement>('[data-sheet-text]');
     if (!panel || !text) continue;
 
+    const head = sheet.querySelector<HTMLElement>('.sheet-head');
+    if (head) new ResizeObserver(() => sheet.style.setProperty('--head-h', `${head.offsetHeight}px`)).observe(head);
+
     const top = () => { text.scrollTop = 0; };
     /** What moves: the text in its column, or on a phone the whole page. */
     const scroller = () => (phone.matches ? panel : text);
