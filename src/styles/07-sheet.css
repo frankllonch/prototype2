@@ -40,12 +40,11 @@
 /* ---------------------------------------------------------------- masthead */
 
 /* The masthead's first baseline sits at 80 and the text's at 345, which leaves
-   the text starting at 288. */
+   the text starting at 288. It scrolls with the text, as one block. */
 .sheet-head {
-  grid-area: 1 / 1;
   box-sizing: border-box;
   min-height: calc(var(--f) * 288);
-  padding: calc(var(--f) * 80 - 0.95em) calc(var(--f) * 10) calc(var(--f) * 67) var(--s-pad);
+  padding: calc(var(--f) * 80 - 0.95em) calc(var(--f) * 10) calc(var(--f) * 67) 0;
   font-size: var(--type);
   line-height: var(--s-lead);
   z-index: 2;
@@ -83,18 +82,16 @@
 /* -------------------------------------------------------------------- text */
 
 .sheet-text {
-  grid-area: 2 / 1;
+  grid-area: 1 / 1 / 3 / 2;
   min-height: 0;
   box-sizing: border-box;
-  padding: calc(var(--f) * 20) 0 calc(var(--f) * 160) var(--s-pad);
+  padding: 0 0 calc(var(--f) * 160) var(--s-pad);
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: none;
-  /* The lines leave under a short fade rather than being cut at the top. */
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 calc(var(--f) * 20));
-          mask-image: linear-gradient(to bottom, transparent 0, #000 calc(var(--f) * 20));
   outline: none;
 }
+.sheet-head + .sheet-prose { margin-top: calc(var(--f) * 20); }
 .sheet-text::-webkit-scrollbar { display: none; }
 
 .sheet-prose {
@@ -323,7 +320,7 @@
   display: flex;
   align-items: baseline;
   min-height: calc(var(--f) * 153);
-  padding-right: calc(var(--f) * 300);
+  padding-right: calc(var(--f) * 300 - var(--s-pad));
   padding-bottom: calc(var(--f) * 34);
   line-height: 1;
 }
@@ -364,7 +361,7 @@
 /* At any width the sheet is then a plain page: the masthead, the text, then every photograph. */
 html:not(.js) .panel:has(.sheet) { position: relative; overflow: visible; }
 html:not(.js) .sheet { display: block; height: auto; }
-html:not(.js) .sheet-text { overflow: visible; padding-bottom: var(--gap); -webkit-mask-image: none; mask-image: none; }
+html:not(.js) .sheet-text { overflow: visible; padding-bottom: var(--gap); }
 html:not(.js) .sheet-stage { position: static; width: auto; margin: 0 var(--s-pad) var(--gap); }
 html:not(.js) .sheet-figure { margin-bottom: var(--gap); }
 html:not(.js) .sheet-more,

@@ -42,13 +42,14 @@ export function morphSheet(sheet: HTMLElement, change: () => void): void {
   const flow = prose.animate([{ width: `${wasWidth}px` }, { width: `${nowWidth}px` }], timing);
   flow.finished.then(() => { text.style.gridColumn = ''; }, () => {});
 
-  const dy = wasTop - nowTop;
-  if (Math.abs(dy) > 0.5) text.animate([{ transform: `translateY(${dy}px)` }, { transform: 'none' }], timing);
+  const dy = Math.abs(wasTop - nowTop) > 0.5 ? wasTop - nowTop : 0;
+  if (dy) text.animate([{ transform: `translateY(${dy}px)` }, { transform: 'none' }], timing);
 
   held.forEach((el, i) => {
     const a = was[i]!, b = now[i]!;
     if (!a.width || !b.width) return;
-    const x = a.left - b.left, y = a.top - b.top;
+    // The masthead rides inside the text, which already carries it by dy.
+    const x = a.left - b.left, y = a.top - b.top - (text.contains(el) ? dy : 0);
     if (Math.abs(x) < 0.5 && Math.abs(y) < 0.5) return;
     el.animate([{ transform: `translate(${x}px, ${y}px)` }, { transform: 'none' }], timing);
   });
