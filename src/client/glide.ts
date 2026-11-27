@@ -9,6 +9,7 @@ const MAX_MS = 2400;
 const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
 let journey = 0;
+let journeys = 0;
 const abandon = () => {
   journey = 0;
   window.removeEventListener('wheel', holdMomentum);
@@ -44,21 +45,23 @@ function holdMomentum(event: WheelEvent): void {
 }
 
 /** Take the page to a scroll position, gently. */
-export function glide(to: number, duration?: number): void {
+export function glide(to: number, duration?: number, done?: () => void): void {
   const max = document.documentElement.scrollHeight - window.innerHeight;
   const target = Math.max(0, Math.min(to, max));
   if (reduceMotion.matches) {
     window.scrollTo({ top: target, behavior: 'auto' });
+    done?.();
     return;
   }
   const from = window.scrollY;
   const distance = Math.abs(target - from);
-  if (distance < 1) return;
+  if (distance < 1) return void done?.();
   const ms = duration ?? Math.min(MAX_MS, BASE_MS + distance * PER_PX_MS);
-  const id = ++journey;
+  const id = journey = ++journeys;
   const t0 = performance.now();
   window.addEventListener('wheel', holdMomentum, { passive: false });
-  const arrive = () => { journey = 0; window.removeEventListener('wheel', holdMomentum); };
+  // Only a journey that arrives goes on to `done`: one the reader took over does not.
+  const arrive = () => { journey = 0; window.removeEventListener('wheel', holdMomentum); done?.(); };
   // Timed by the same clock throughout, never by the frame's own timestamp: one clock cannot
   // disagree with itself, and a frame stamp from another origin would make the first step read as
   // the last and jump to the end.

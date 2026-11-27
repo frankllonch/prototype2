@@ -39,6 +39,14 @@ export function initScrollCue(): void {
    */
   const chart = document.querySelector<HTMLElement>('[data-chart]');
   const chartEnd = () => Number.parseFloat(chart?.dataset.chartEnd ?? '');
+  const chartReel = () => Number.parseFloat(chart?.dataset.chartReel ?? '');
+  // Typed, the photographs are carried on in a little way, so they come into view.
+  const onToReel = (y = window.scrollY) => {
+    // Not if the reader has scrolled on their own while the last words were typed.
+    if (!chart || !Number.isFinite(chartReel()) || Math.abs(window.scrollY - y) > 2) return;
+    if (!chart.classList.contains('is-typed')) return void window.setTimeout(() => onToReel(y), 40);
+    if (chartReel() > y + 1) glide(chartReel());
+  };
   if (chart) {
     threshold = () => Math.max(
       document.documentElement.scrollHeight - window.innerHeight - 2,
@@ -75,19 +83,20 @@ export function initScrollCue(): void {
   cue.addEventListener('click', () => {
     const y = window.scrollY;
     const h = window.innerHeight;
-    const stops: [number, number?][] = [];
+    const stops: [number, number?, (() => void)?][] = [];
     if (write) {
       const written = writtenPoint();
       if (written !== null) stops.push([written, WRITE_MS]);
       const names = document.getElementById('whats-color');
       if (names) stops.push([topOf(names)]);
     } else if (chart && Number.isFinite(chartEnd())) {
-      stops.push([chartEnd(), CHART_TYPE_MS]);
+      stops.push([chartEnd(), CHART_TYPE_MS, () => onToReel()]);
+      if (Number.isFinite(chartReel())) stops.push([chartReel()]);
     } else if (document.querySelector('[data-hero]')) {
       stops.push([h * SCROLL_SPAN]);
     }
     const next = stops.find(([at]) => at > y + h * 0.05);
-    if (next) glide(next[0], next[1]);
+    if (next) glide(...next);
     else glide(y + h * 0.9);
   });
 

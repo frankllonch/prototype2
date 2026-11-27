@@ -27,6 +27,8 @@ const STAGGER_MS = 260;
 const REEL_LEAD = 0.1;
 const REEL_HOLD = 0.6;
 const REEL_DRIFT = 0.8;
+/** How far into its way in the chevron carries the reel once the words are typed. More is further. */
+const REEL_CUE = 0.45;
 /** How quickly the reel catches up with where the scroll has it. */
 const REEL_SETTLE_MS = 70;
 /** And how gently it comes in for a reader already past it as it starts. */
@@ -127,6 +129,7 @@ export function initChart(): void {
     holdRun.style.height = `${Math.round(h * REEL_HOLD)}px`;
     hold?.style.setProperty('--hold-top', `${at}px`);
     reelRun = { from: top + run - h * REEL_LEAD, to: top - at + h * REEL_HOLD };
+    chart.dataset.chartReel = String(reelRun.from + (reelRun.to - reelRun.from) * REEL_CUE);
   };
   measure();
   window.addEventListener('resize', measure);
@@ -153,6 +156,7 @@ export function initChart(): void {
     holdRun.remove();
     hold?.classList.remove('is-held');
     delete chart.dataset.chartEnd;
+    delete chart.dataset.chartReel;
     window.scrollTo({ top: window.scrollY + stage.getBoundingClientRect().top - was, behavior: 'instant' });
     reel?.settled(y - window.scrollY);
     requestAnimationFrame(() => root.style.removeProperty('overflow-anchor'));
