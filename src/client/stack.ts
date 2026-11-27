@@ -9,6 +9,8 @@ import { MOTION, SCATTER, WATER, scrollSpan, seeded } from './pile.ts';
  */
 /* The opening's settings live in client/pile.ts. */
 export const SCROLL_SPAN = scrollSpan();
+/** Where a glide into the gallery lands: a little past the opening's end, as a whole pixel short of it leaves the grid unsettled. */
+export const gridAt = (): number => Math.ceil(window.innerHeight * SCROLL_SPAN) + 8;
 const WATCHDOG = 4000;      // ms: if the pile cannot be measured by now, show the grid
 
 /* WebKit — Safari, and every browser on iOS. */
@@ -177,7 +179,7 @@ export function initStack(): void {
       const r = pictures[i]!.getBoundingClientRect();
       return event.clientX >= r.left && event.clientX <= r.right && event.clientY >= r.top && event.clientY <= r.bottom;
     });
-    if (hit) glide(window.innerHeight * SCROLL_SPAN);
+    if (hit) glide(gridAt());
   });
 
   let counted = false;

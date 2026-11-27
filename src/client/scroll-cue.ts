@@ -1,6 +1,6 @@
 import { scrollWrites } from './env.ts';
 import { glide, topOf } from './glide.ts';
-import { SCROLL_SPAN } from './stack.ts';
+import { SCROLL_SPAN, gridAt } from './stack.ts';
 import { WRITE_MS, writtenPoint } from './write.ts';
 
 /** The tap down the Colour Chart's run: long enough to watch it type. */
@@ -93,7 +93,7 @@ export function initScrollCue(): void {
       stops.push([chartEnd(), CHART_TYPE_MS, () => onToReel()]);
       if (Number.isFinite(chartReel())) stops.push([chartReel()]);
     } else if (document.querySelector('[data-hero]')) {
-      stops.push([h * SCROLL_SPAN]);
+      stops.push([gridAt()]);
     }
     const next = stops.find(([at]) => at > y + h * 0.05);
     if (next) glide(...next);
