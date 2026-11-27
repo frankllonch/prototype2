@@ -35,7 +35,7 @@ export const SHOWS: readonly Show[] = [
   { group: 'Solo shows', title: 'Almost perfect,', venue: 'Solo exhibition, Tokyo, Japan', from: 'November', year: 2019 },
   { group: 'Solo shows', title: 'Solo exhibition', venue: 'Palau de Casavells, Barcelona', from: 'November', year: 2018 },
   { group: 'Solo shows', title: 'Color y forma', venue: 'Solo exhibition, Alzueta Gallery, Barcelona', from: 'February', year: 2017, slug: 'color-y-forma' },
-  { group: 'Solo shows', title: 'Solo exhibition', venue: 'Palau de Casavells,', from: 'May', year: 2007 },
+  { group: 'Solo shows', title: 'Solo exhibition', venue: 'Palau de Casavells,', from: 'May', year: 2007, slug: 'solo-exhibition-2007' },
   { group: 'Solo shows', title: '‘Expresions de mur’ abstract in formalism paintings', venue: 'Solo exhibition, Galeria Miquel Alzueta, Barcelona', from: 'March', year: 2005 },
   {
     group: 'Solo shows',
