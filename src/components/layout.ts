@@ -265,7 +265,7 @@ function lightbox(): Html {
 /**
  * The contact footer, after the designer's HOME sheet: who to write to, the
  * copyright line About closes on, and the credit, centred at the foot of the
- * page, About included. A heart stands either side of the credit.
+ * page, About included.
  */
 function siteFoot(className = ''): Html {
   const [inquiries, other] = ABOUT_CARD.emails;
@@ -275,7 +275,7 @@ function siteFoot(className = ''): Html {
       Others: <a href="mailto:${other}">${other}</a>
     </p>
     <p><b>${ABOUT_CARD.name}</b> ${ABOUT_COPYRIGHT}</p>
-    <p><span class="site-foot-heart" aria-hidden="true">&#9829;&#xFE0E;</span> Web design by Frank Llonch &amp; Laia Puig <span class="site-foot-heart" aria-hidden="true">&#9829;&#xFE0E;</span></p>
+    <p>Web design by Frank Llonch &amp; Laia Puig</p>
   </footer>`;
 }
 

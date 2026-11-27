@@ -23,9 +23,6 @@
 .site-foot a:hover,
 .site-foot a:focus-visible { background: var(--ink); color: var(--paper); outline: none; }
 
-/* The hearts either side of the credit: the credit's own size, in the ink. */
-.site-foot-heart { font-family: 'Apple Symbols', 'Segoe UI Symbol', 'Noto Sans Symbols 2', 'DejaVu Sans', sans-serif; font-variant-emoji: text; }
-
 /* About closes on the same footer, on its own ground and inside its own sheet. */
 .about-site-foot { background: none; padding-left: 0; padding-right: 0; }
 
