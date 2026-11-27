@@ -15177,6 +15177,13 @@
           "height": 867
         },
         {
+          "id": "5a5cea5454036355",
+          "source": "local/commissioned/santa-cole-color-palette-2023/02b.jpg",
+          "alt": "",
+          "width": 1541,
+          "height": 867
+        },
+        {
           "id": "2228d8b78135ed1e",
           "source": "local/commissioned/santa-cole-color-palette-2023/03.png",
           "alt": "",
@@ -15188,6 +15195,13 @@
           "source": "local/commissioned/santa-cole-color-palette-2023/04.png",
           "alt": "",
           "width": 650,
+          "height": 867
+        },
+        {
+          "id": "d209ba5f7e6a135f",
+          "source": "local/commissioned/santa-cole-color-palette-2023/04b.jpg",
+          "alt": "",
+          "width": 734,
           "height": 867
         },
         {
@@ -15205,6 +15219,13 @@
           "height": 867
         },
         {
+          "id": "b124034349c68d95",
+          "source": "local/commissioned/santa-cole-color-palette-2023/06b.jpg",
+          "alt": "",
+          "width": 1541,
+          "height": 867
+        },
+        {
           "id": "6a2ea6b80b6dc728",
           "source": "local/commissioned/santa-cole-color-palette-2023/07.png",
           "alt": "",
@@ -15216,6 +15237,13 @@
           "source": "local/commissioned/santa-cole-color-palette-2023/08.png",
           "alt": "",
           "width": 650,
+          "height": 867
+        },
+        {
+          "id": "2e0c134ad33e296e",
+          "source": "local/commissioned/santa-cole-color-palette-2023/08b.jpg",
+          "alt": "",
+          "width": 867,
           "height": 867
         },
         {
@@ -15240,6 +15268,13 @@
           "height": 1024
         },
         {
+          "id": "fd4329bec66cc120",
+          "source": "local/commissioned/santa-cole-color-palette-2023/11b.jpg",
+          "alt": "",
+          "width": 598,
+          "height": 867
+        },
+        {
           "id": "bf56f5f006cef74c",
           "source": "local/commissioned/santa-cole-color-palette-2023/12.png",
           "alt": "",
@@ -15252,6 +15287,13 @@
           "alt": "",
           "width": 648,
           "height": 864
+        },
+        {
+          "id": "289cfefc8a18ffc9",
+          "source": "local/commissioned/santa-cole-color-palette-2023/13b.jpg",
+          "alt": "",
+          "width": 488,
+          "height": 867
         },
         {
           "id": "101707c194f96992",
