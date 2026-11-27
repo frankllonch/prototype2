@@ -18,8 +18,8 @@
   --chart-head-gap: calc(var(--pt) * 40);       /* a section's title to its text */
   --chart-col-gap: calc(var(--pt) * 20);        /* between the columns */
   --chart-thanks-gap: calc(var(--pt) * 150);    /* the last section to the thanks */
-  --chart-foot-gap: calc(var(--pt) * 104);      /* the thanks to the line at the foot */
-  --chart-end: calc(var(--pt) * 170);           /* under the line at the foot */
+  --chart-foot-gap: calc(var(--pt) * 52);       /* under the thanks */
+  --chart-end: calc(var(--pt) * 85);            /* the page's foot, over the footer */
 
   /* The new text: 20 on 20. */
   --chart-small: calc(var(--pt) * 20);
@@ -243,7 +243,7 @@
     --chart-phone-thanks-gap: calc(120 * var(--p));   /* the last section to the thanks */
     --chart-phone-rule: calc(1.5 * var(--p));         /* the line under the thanks: how thick */
     --chart-phone-rule-drop: calc(3.75 * var(--p));   /* and how far under the baseline */
-    --chart-phone-foot: calc(185.5 * var(--p));       /* under the thanks to the end of the page */
+    --chart-phone-foot: calc(92.75 * var(--p));       /* under the thanks to the end of the page */
   }
 
   .chart-page {
