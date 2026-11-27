@@ -71,7 +71,7 @@ export const SHEETS: Readonly<Record<string, Sheet>> = {
       <p>The collection boasts an infinite richness of tonalities, highlighting the chromatic harmony that in a certain way refers to musical notes.</p>
       <p>The colors of the Tones collection are born from the instruments of an orchestra, the tan colors of the stringed instruments, the colors of the wind instruments, the grays and blues, the ochers of the percussion, etc. From this chromatic universe the forms appeared and then I only had to play to compose them in a way that was reproducible in different scales and harmonies.</p>
       <p>Going from my usual medium, painting, to the nuances and textures provided by fibers and wool has been a very interesting challenge.</p>
-      <p class="is-style-note">To discover the collection link <a href="https://nanimarquina.com/es/"><em>Nani Marquina</em></a></p>`,
+      <p class="is-style-note">To discover the collection link <a href="https://nanimarquina.com/en/collections/tones"><em>Nani Marquina</em></a></p>`,
   },
 
   'dada-workshops-2017-2': {
